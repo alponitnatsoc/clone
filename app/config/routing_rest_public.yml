@@ -1,0 +1,3 @@
+Rest_Public : 
+    type : rest
+    resource: "@RocketSellerTwoPickBundle/Resources/config/routing_rest_public.yml"

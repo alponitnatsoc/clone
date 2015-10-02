@@ -1,0 +1,9 @@
+services:
+#    rocket_seller_two_pick.example:
+#        class: RocketSeller\TwoPickBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    form.type.translatable:
+        class: RocketSeller\TwoPickBundle\Form\Type\TranslatedFieldType
+        arguments: [ @service_container ]
+        tags:
+            - { name: form.type, alias: translated_field }

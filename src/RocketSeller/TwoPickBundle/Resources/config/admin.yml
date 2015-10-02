@@ -1,0 +1,23 @@
+services:
+    sonata.admin.currency:
+        class: RocketSeller\TwoPickBundle\Admin\CurrencyAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Picks", label: "Currency" }
+        arguments:
+            - ~
+            - RocketSeller\TwoPickBundle\Entity\Currency
+            - ~
+        calls:
+            - [ setTranslationDomain, [RocketSellerTwoPickBundle]]
+    sonata.admin.user:
+        class: RocketSeller\TwoPickBundle\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "User", label: "Name" }
+        arguments:
+            - ~
+            - RocketSeller\TwoPickBundle\Entity\User
+            - ~
+        calls:
+            - [ setTranslationDomain, [RocketSellerTwoPickBundle]]
+
+

@@ -1,0 +1,3 @@
+Rest_Secured : 
+    type : rest
+    resource: "@RocketSellerTwoPickBundle/Resources/config/routing_rest_secured.yml"

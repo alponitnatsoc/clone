@@ -1,0 +1,62 @@
+rocket_seller_two_pick:
+    resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
+    prefix:   /
+#OAuth
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+hwi_facebook_login:
+    pattern: /login/check-facebook
+    
+hwi_google_login:
+    pattern: /login/check-google
+    
+hwi_twitter_login:
+    pattern: /login/check-twitter
+#
+#FOSRest 
+rest_secured: 
+    type : rest 
+    resource : "routing_rest_secured.yml"
+    prefix : /api/secured/v1
+
+rest_public: 
+    type : rest 
+    resource : "routing_rest_public.yml"
+    prefix : /api/public/v1
+#
+#Api Doc
+nelmio_apidoc:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc/
+#
+#FOSUser
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+#
+#Sonata Admin
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin
+#
+gallery:
+    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+    prefix: /media/gallery
+
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media

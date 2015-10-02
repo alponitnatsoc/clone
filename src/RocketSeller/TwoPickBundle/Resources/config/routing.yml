@@ -1,0 +1,3 @@
+rocket_seller_two_pick_homepage:
+    path:     /
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:index }

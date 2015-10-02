@@ -1,0 +1,10 @@
+
+{% extends "::base.html.twig" %}
+{% block body%}
+	{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+		<a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+		Welcome {{ app.user.username }}
+	{% else %}
+		Welcome Visitor!!
+	{% endif %}
+{% endblock %}
