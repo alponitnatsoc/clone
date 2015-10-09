@@ -1,0 +1,62 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EmployeeHasBeneficiary
+ *
+ * @ORM\Table(name="employee_has_beneficiary", indexes={@ORM\Index(name="fk_employee_has_beneficiary_employee1", columns={"employee_id_employee"}), @ORM\Index(name="fk_employee_has_beneficiary_beneficiary1", columns={"beneficiary_id_beneficiary"}), @ORM\Index(name="fk_employee_has_beneficiary_entity1", columns={"entity_id_entity"})})
+ * @ORM\Entity
+ */
+class EmployeeHasBeneficiary
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_employee_has_beneficiary", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idEmployeeHasBeneficiary;
+
+    /**
+     * @var \AppBundle\Entity\Entity
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
+     * })
+     */
+    private $entityEntity;
+
+    /**
+     * @var \AppBundle\Entity\Employee
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
+     * })
+     */
+    private $employeeEmployee;
+
+    /**
+     * @var \AppBundle\Entity\Beneficiary
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Beneficiary")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="beneficiary_id_beneficiary", referencedColumnName="id_beneficiary")
+     * })
+     */
+    private $beneficiaryBeneficiary;
+
+
+}
+

@@ -1,0 +1,62 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Procedure
+ *
+ * @ORM\Table(name="procedure", indexes={@ORM\Index(name="fk_procedure_procedure_type1", columns={"procedure_type_id_procedure_type"}), @ORM\Index(name="fk_procedure_user1", columns={"user_id_user"}), @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"})})
+ * @ORM\Entity
+ */
+class Procedure
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_procedure", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idProcedure;
+
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
+     * })
+     */
+    private $userUser;
+
+    /**
+     * @var \AppBundle\Entity\ProcedureType
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ProcedureType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="procedure_type_id_procedure_type", referencedColumnName="id_procedure_type")
+     * })
+     */
+    private $procedureTypeProcedureType;
+
+    /**
+     * @var \AppBundle\Entity\Employer
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employer")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
+     * })
+     */
+    private $employerEmployer;
+
+
+}
+

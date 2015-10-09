@@ -1,0 +1,121 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TaxHasCountry
+ *
+ * @ORM\Table(name="tax_has_country", indexes={@ORM\Index(name="fk_tax_has_country_tax1", columns={"tax_id_tax"}), @ORM\Index(name="fk_tax_has_country_country1", columns={"country_id_country"})})
+ * @ORM\Entity
+ */
+class TaxHasCountry
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_tax_has_country", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idTaxHasCountry;
+
+    /**
+     * @var \AppBundle\Entity\Tax
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Tax")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
+     * })
+     */
+    private $taxTax;
+
+    /**
+     * @var \AppBundle\Entity\Country
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
+     * })
+     */
+    private $countryCountry;
+
+
+
+    /**
+     * Set idTaxHasCountry
+     *
+     * @param integer $idTaxHasCountry
+     *
+     * @return TaxHasCountry
+     */
+    public function setIdTaxHasCountry($idTaxHasCountry)
+    {
+        $this->idTaxHasCountry = $idTaxHasCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get idTaxHasCountry
+     *
+     * @return integer
+     */
+    public function getIdTaxHasCountry()
+    {
+        return $this->idTaxHasCountry;
+    }
+
+    /**
+     * Set taxTax
+     *
+     * @param \AppBundle\Entity\Tax $taxTax
+     *
+     * @return TaxHasCountry
+     */
+    public function setTaxTax(\AppBundle\Entity\Tax $taxTax)
+    {
+        $this->taxTax = $taxTax;
+
+        return $this;
+    }
+
+    /**
+     * Get taxTax
+     *
+     * @return \AppBundle\Entity\Tax
+     */
+    public function getTaxTax()
+    {
+        return $this->taxTax;
+    }
+
+    /**
+     * Set countryCountry
+     *
+     * @param \AppBundle\Entity\Country $countryCountry
+     *
+     * @return TaxHasCountry
+     */
+    public function setCountryCountry(\AppBundle\Entity\Country $countryCountry)
+    {
+        $this->countryCountry = $countryCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get countryCountry
+     *
+     * @return \AppBundle\Entity\Country
+     */
+    public function getCountryCountry()
+    {
+        return $this->countryCountry;
+    }
+}

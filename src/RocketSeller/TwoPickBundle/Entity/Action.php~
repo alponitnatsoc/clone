@@ -1,0 +1,62 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Action
+ *
+ * @ORM\Table(name="action", indexes={@ORM\Index(name="fk_action_procedure1", columns={"procedure_id_procedure"}), @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}), @ORM\Index(name="fk_action_user1", columns={"user_id_user"})})
+ * @ORM\Entity
+ */
+class Action
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_action", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idAction;
+
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
+     * })
+     */
+    private $userUser;
+
+    /**
+     * @var \AppBundle\Entity\Procedure
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Procedure")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="procedure_id_procedure", referencedColumnName="id_procedure")
+     * })
+     */
+    private $procedureProcedure;
+
+    /**
+     * @var \AppBundle\Entity\ActionType
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ActionType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="action_type_id_action_type", referencedColumnName="id_action_type")
+     * })
+     */
+    private $actionTypeActionType;
+
+
+}
+

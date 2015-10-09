@@ -5,21 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * Beneficiary
  *
- * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_user_person1", columns={"person_id_person"})})
+ * @ORM\Table(name="beneficiary", indexes={@ORM\Index(name="fk_beneficiary_person1", columns={"person_id_person"})})
  * @ORM\Entity
  */
-class User
+class Beneficiary
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_user", type="integer")
+     * @ORM\Column(name="id_beneficiary", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $idUser;
+    private $idBeneficiary;
 
     /**
      * @var \AppBundle\Entity\Person
@@ -36,27 +36,27 @@ class User
 
 
     /**
-     * Set idUser
+     * Set idBeneficiary
      *
-     * @param integer $idUser
+     * @param integer $idBeneficiary
      *
-     * @return User
+     * @return Beneficiary
      */
-    public function setIdUser($idUser)
+    public function setIdBeneficiary($idBeneficiary)
     {
-        $this->idUser = $idUser;
+        $this->idBeneficiary = $idBeneficiary;
 
         return $this;
     }
 
     /**
-     * Get idUser
+     * Get idBeneficiary
      *
      * @return integer
      */
-    public function getIdUser()
+    public function getIdBeneficiary()
     {
-        return $this->idUser;
+        return $this->idBeneficiary;
     }
 
     /**
@@ -64,7 +64,7 @@ class User
      *
      * @param \AppBundle\Entity\Person $personPerson
      *
-     * @return User
+     * @return Beneficiary
      */
     public function setPersonPerson(\AppBundle\Entity\Person $personPerson)
     {

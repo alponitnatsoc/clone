@@ -1,0 +1,50 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Contract
+ *
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_employer_has_employee1", columns={"employer_has_employee_id_employer_has_employee"}), @ORM\Index(name="fk_contract_contract_type1", columns={"contract_type_id_contract_type"})})
+ * @ORM\Entity
+ */
+class Contract
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_contract", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idContract;
+
+    /**
+     * @var \AppBundle\Entity\EmployerHasEmployee
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\EmployerHasEmployee")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
+     * })
+     */
+    private $employerHasEmployeeEmployerHasEmployee;
+
+    /**
+     * @var \AppBundle\Entity\ContractType
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContractType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
+     * })
+     */
+    private $contractTypeContractType;
+
+
+}
+

@@ -1,0 +1,38 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PayrollDetail
+ *
+ * @ORM\Table(name="payroll_detail", indexes={@ORM\Index(name="fk_payroll_detail_payroll1", columns={"payroll_id_payroll"})})
+ * @ORM\Entity
+ */
+class PayrollDetail
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_payroll_detail", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idPayrollDetail;
+
+    /**
+     * @var \AppBundle\Entity\Payroll
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Payroll")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
+     * })
+     */
+    private $payrollPayroll;
+
+
+}
+

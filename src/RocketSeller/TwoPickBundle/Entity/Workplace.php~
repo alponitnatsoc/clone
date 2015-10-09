@@ -1,0 +1,50 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Workplace
+ *
+ * @ORM\Table(name="workplace", indexes={@ORM\Index(name="fk_workplace_contract1", columns={"contract_id_contract"}), @ORM\Index(name="fk_workplace_employee1", columns={"employee_id_employee"})})
+ * @ORM\Entity
+ */
+class Workplace
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_workplace", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idWorkplace;
+
+    /**
+     * @var \AppBundle\Entity\Employee
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
+     * })
+     */
+    private $employeeEmployee;
+
+    /**
+     * @var \AppBundle\Entity\Contract
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contract")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
+     * })
+     */
+    private $contractContract;
+
+
+}
+

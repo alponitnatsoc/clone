@@ -1,0 +1,74 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Office
+ *
+ * @ORM\Table(name="office", indexes={@ORM\Index(name="fk_office_city1", columns={"city_id_city"}), @ORM\Index(name="fk_office_department1", columns={"department_id_department"}), @ORM\Index(name="fk_office_country1", columns={"country_id_country"}), @ORM\Index(name="fk_office_entity1", columns={"entity_id_entity"})})
+ * @ORM\Entity
+ */
+class Office
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_office", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idOffice;
+
+    /**
+     * @var \AppBundle\Entity\Entity
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
+     * })
+     */
+    private $entityEntity;
+
+    /**
+     * @var \AppBundle\Entity\Department
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
+     * })
+     */
+    private $departmentDepartment;
+
+    /**
+     * @var \AppBundle\Entity\Country
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
+     * })
+     */
+    private $countryCountry;
+
+    /**
+     * @var \AppBundle\Entity\City
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\City")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="city_id_city", referencedColumnName="id_city")
+     * })
+     */
+    private $cityCity;
+
+
+}
+

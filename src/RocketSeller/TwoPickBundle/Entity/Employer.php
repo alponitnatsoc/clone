@@ -5,21 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * Employer
  *
- * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_user_person1", columns={"person_id_person"})})
+ * @ORM\Table(name="employer", indexes={@ORM\Index(name="fk_employer_person1", columns={"person_id_person"})})
  * @ORM\Entity
  */
-class User
+class Employer
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_user", type="integer")
+     * @ORM\Column(name="id_employer", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $idUser;
+    private $idEmployer;
 
     /**
      * @var \AppBundle\Entity\Person
@@ -36,27 +36,27 @@ class User
 
 
     /**
-     * Set idUser
+     * Set idEmployer
      *
-     * @param integer $idUser
+     * @param integer $idEmployer
      *
-     * @return User
+     * @return Employer
      */
-    public function setIdUser($idUser)
+    public function setIdEmployer($idEmployer)
     {
-        $this->idUser = $idUser;
+        $this->idEmployer = $idEmployer;
 
         return $this;
     }
 
     /**
-     * Get idUser
+     * Get idEmployer
      *
      * @return integer
      */
-    public function getIdUser()
+    public function getIdEmployer()
     {
-        return $this->idUser;
+        return $this->idEmployer;
     }
 
     /**
@@ -64,7 +64,7 @@ class User
      *
      * @param \AppBundle\Entity\Person $personPerson
      *
-     * @return User
+     * @return Employer
      */
     public function setPersonPerson(\AppBundle\Entity\Person $personPerson)
     {

@@ -1,0 +1,38 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Department
+ *
+ * @ORM\Table(name="department", indexes={@ORM\Index(name="fk_department_country1", columns={"country_id_country"})})
+ * @ORM\Entity
+ */
+class Department
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_department", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $idDepartment;
+
+    /**
+     * @var \AppBundle\Entity\Country
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
+     * })
+     */
+    private $countryCountry;
+
+
+}
+
