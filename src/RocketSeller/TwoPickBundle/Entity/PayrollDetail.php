@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class PayrollDetail
     private $idPayrollDetail;
 
     /**
-     * @var \AppBundle\Entity\Payroll
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Payroll")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
@@ -62,11 +62,11 @@ class PayrollDetail
     /**
      * Set payrollPayroll
      *
-     * @param \AppBundle\Entity\Payroll $payrollPayroll
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
      *
      * @return PayrollDetail
      */
-    public function setPayrollPayroll(\AppBundle\Entity\Payroll $payrollPayroll)
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
     {
         $this->payrollPayroll = $payrollPayroll;
 
@@ -76,7 +76,7 @@ class PayrollDetail
     /**
      * Get payrollPayroll
      *
-     * @return \AppBundle\Entity\Payroll
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
      */
     public function getPayrollPayroll()
     {

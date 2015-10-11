@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Pay
     private $idPay;
 
     /**
-     * @var \AppBundle\Entity\PurchaseOrders
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PurchaseOrders")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
@@ -34,11 +34,11 @@ class Pay
     private $purchaseOrdersPurchaseOrders;
 
     /**
-     * @var \AppBundle\Entity\PayType
+     * @var \RocketSeller\TwoPickBundle\Entity\PayType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PayType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_type_id_pay_type", referencedColumnName="id_pay_type")
      * })
@@ -46,11 +46,11 @@ class Pay
     private $payTypePayType;
 
     /**
-     * @var \AppBundle\Entity\PayMethod
+     * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PayMethod")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
      * })
@@ -86,11 +86,11 @@ class Pay
     /**
      * Set purchaseOrdersPurchaseOrders
      *
-     * @param \AppBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
      *
      * @return Pay
      */
-    public function setPurchaseOrdersPurchaseOrders(\AppBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
+    public function setPurchaseOrdersPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
     {
         $this->purchaseOrdersPurchaseOrders = $purchaseOrdersPurchaseOrders;
 
@@ -100,7 +100,7 @@ class Pay
     /**
      * Get purchaseOrdersPurchaseOrders
      *
-     * @return \AppBundle\Entity\PurchaseOrders
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      */
     public function getPurchaseOrdersPurchaseOrders()
     {
@@ -110,11 +110,11 @@ class Pay
     /**
      * Set payTypePayType
      *
-     * @param \AppBundle\Entity\PayType $payTypePayType
+     * @param \RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType
      *
      * @return Pay
      */
-    public function setPayTypePayType(\AppBundle\Entity\PayType $payTypePayType)
+    public function setPayTypePayType(\RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType)
     {
         $this->payTypePayType = $payTypePayType;
 
@@ -124,7 +124,7 @@ class Pay
     /**
      * Get payTypePayType
      *
-     * @return \AppBundle\Entity\PayType
+     * @return \RocketSeller\TwoPickBundle\Entity\PayType
      */
     public function getPayTypePayType()
     {
@@ -134,11 +134,11 @@ class Pay
     /**
      * Set payMethodPayMethod
      *
-     * @param \AppBundle\Entity\PayMethod $payMethodPayMethod
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethod $payMethodPayMethod
      *
      * @return Pay
      */
-    public function setPayMethodPayMethod(\AppBundle\Entity\PayMethod $payMethodPayMethod)
+    public function setPayMethodPayMethod(\RocketSeller\TwoPickBundle\Entity\PayMethod $payMethodPayMethod)
     {
         $this->payMethodPayMethod = $payMethodPayMethod;
 
@@ -148,7 +148,7 @@ class Pay
     /**
      * Get payMethodPayMethod
      *
-     * @return \AppBundle\Entity\PayMethod
+     * @return \RocketSeller\TwoPickBundle\Entity\PayMethod
      */
     public function getPayMethodPayMethod()
     {

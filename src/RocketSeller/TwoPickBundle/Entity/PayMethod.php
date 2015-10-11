@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class PayMethod
     private $idPayMethod;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \RocketSeller\TwoPickBundle\Entity\User
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
      * })
@@ -34,11 +34,11 @@ class PayMethod
     private $userUser;
 
     /**
-     * @var \AppBundle\Entity\PayType
+     * @var \RocketSeller\TwoPickBundle\Entity\PayType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PayType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_type_id_pay_type", referencedColumnName="id_pay_type")
      * })
@@ -46,11 +46,11 @@ class PayMethod
     private $payTypePayType;
 
     /**
-     * @var \AppBundle\Entity\Bank
+     * @var \RocketSeller\TwoPickBundle\Entity\Bank
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Bank")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Bank")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="bank_id_bank", referencedColumnName="id_bank")
      * })
@@ -58,11 +58,11 @@ class PayMethod
     private $bankBank;
 
     /**
-     * @var \AppBundle\Entity\AccountType
+     * @var \RocketSeller\TwoPickBundle\Entity\AccountType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\AccountType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\AccountType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="account_type_id_account_type", referencedColumnName="id_account_type")
      * })
@@ -98,11 +98,11 @@ class PayMethod
     /**
      * Set userUser
      *
-     * @param \AppBundle\Entity\User $userUser
+     * @param \RocketSeller\TwoPickBundle\Entity\User $userUser
      *
      * @return PayMethod
      */
-    public function setUserUser(\AppBundle\Entity\User $userUser)
+    public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
 
@@ -112,7 +112,7 @@ class PayMethod
     /**
      * Get userUser
      *
-     * @return \AppBundle\Entity\User
+     * @return \RocketSeller\TwoPickBundle\Entity\User
      */
     public function getUserUser()
     {
@@ -122,11 +122,11 @@ class PayMethod
     /**
      * Set payTypePayType
      *
-     * @param \AppBundle\Entity\PayType $payTypePayType
+     * @param \RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType
      *
      * @return PayMethod
      */
-    public function setPayTypePayType(\AppBundle\Entity\PayType $payTypePayType)
+    public function setPayTypePayType(\RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType)
     {
         $this->payTypePayType = $payTypePayType;
 
@@ -136,7 +136,7 @@ class PayMethod
     /**
      * Get payTypePayType
      *
-     * @return \AppBundle\Entity\PayType
+     * @return \RocketSeller\TwoPickBundle\Entity\PayType
      */
     public function getPayTypePayType()
     {
@@ -146,11 +146,11 @@ class PayMethod
     /**
      * Set bankBank
      *
-     * @param \AppBundle\Entity\Bank $bankBank
+     * @param \RocketSeller\TwoPickBundle\Entity\Bank $bankBank
      *
      * @return PayMethod
      */
-    public function setBankBank(\AppBundle\Entity\Bank $bankBank)
+    public function setBankBank(\RocketSeller\TwoPickBundle\Entity\Bank $bankBank)
     {
         $this->bankBank = $bankBank;
 
@@ -160,7 +160,7 @@ class PayMethod
     /**
      * Get bankBank
      *
-     * @return \AppBundle\Entity\Bank
+     * @return \RocketSeller\TwoPickBundle\Entity\Bank
      */
     public function getBankBank()
     {
@@ -170,11 +170,11 @@ class PayMethod
     /**
      * Set accountTypeAccountType
      *
-     * @param \AppBundle\Entity\AccountType $accountTypeAccountType
+     * @param \RocketSeller\TwoPickBundle\Entity\AccountType $accountTypeAccountType
      *
      * @return PayMethod
      */
-    public function setAccountTypeAccountType(\AppBundle\Entity\AccountType $accountTypeAccountType)
+    public function setAccountTypeAccountType(\RocketSeller\TwoPickBundle\Entity\AccountType $accountTypeAccountType)
     {
         $this->accountTypeAccountType = $accountTypeAccountType;
 
@@ -184,7 +184,7 @@ class PayMethod
     /**
      * Get accountTypeAccountType
      *
-     * @return \AppBundle\Entity\AccountType
+     * @return \RocketSeller\TwoPickBundle\Entity\AccountType
      */
     public function getAccountTypeAccountType()
     {

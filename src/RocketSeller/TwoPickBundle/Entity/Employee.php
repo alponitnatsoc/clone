@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Employee
     private $idEmployee;
 
     /**
-     * @var \AppBundle\Entity\Person
+     * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
@@ -62,11 +62,11 @@ class Employee
     /**
      * Set personPerson
      *
-     * @param \AppBundle\Entity\Person $personPerson
+     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
      *
      * @return Employee
      */
-    public function setPersonPerson(\AppBundle\Entity\Person $personPerson)
+    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson)
     {
         $this->personPerson = $personPerson;
 
@@ -76,7 +76,7 @@ class Employee
     /**
      * Get personPerson
      *
-     * @return \AppBundle\Entity\Person
+     * @return \RocketSeller\TwoPickBundle\Entity\Person
      */
     public function getPersonPerson()
     {

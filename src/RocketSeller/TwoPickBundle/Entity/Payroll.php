@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Payroll
     private $idPayroll;
 
     /**
-     * @var \AppBundle\Entity\Contract
+     * @var \RocketSeller\TwoPickBundle\Entity\Contract
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contract")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -62,11 +62,11 @@ class Payroll
     /**
      * Set contractContract
      *
-     * @param \AppBundle\Entity\Contract $contractContract
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
      *
      * @return Payroll
      */
-    public function setContractContract(\AppBundle\Entity\Contract $contractContract)
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
     {
         $this->contractContract = $contractContract;
 
@@ -76,7 +76,7 @@ class Payroll
     /**
      * Get contractContract
      *
-     * @return \AppBundle\Entity\Contract
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
     public function getContractContract()
     {

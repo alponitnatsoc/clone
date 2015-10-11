@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class EmployeeHasBeneficiary
     private $idEmployeeHasBeneficiary;
 
     /**
-     * @var \AppBundle\Entity\Entity
+     * @var \RocketSeller\TwoPickBundle\Entity\Entity
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -34,11 +34,11 @@ class EmployeeHasBeneficiary
     private $entityEntity;
 
     /**
-     * @var \AppBundle\Entity\Employee
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
@@ -46,11 +46,11 @@ class EmployeeHasBeneficiary
     private $employeeEmployee;
 
     /**
-     * @var \AppBundle\Entity\Beneficiary
+     * @var \RocketSeller\TwoPickBundle\Entity\Beneficiary
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Beneficiary")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Beneficiary")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="beneficiary_id_beneficiary", referencedColumnName="id_beneficiary")
      * })
@@ -86,11 +86,11 @@ class EmployeeHasBeneficiary
     /**
      * Set entityEntity
      *
-     * @param \AppBundle\Entity\Entity $entityEntity
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
      *
      * @return EmployeeHasBeneficiary
      */
-    public function setEntityEntity(\AppBundle\Entity\Entity $entityEntity)
+    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity)
     {
         $this->entityEntity = $entityEntity;
 
@@ -100,7 +100,7 @@ class EmployeeHasBeneficiary
     /**
      * Get entityEntity
      *
-     * @return \AppBundle\Entity\Entity
+     * @return \RocketSeller\TwoPickBundle\Entity\Entity
      */
     public function getEntityEntity()
     {
@@ -110,11 +110,11 @@ class EmployeeHasBeneficiary
     /**
      * Set employeeEmployee
      *
-     * @param \AppBundle\Entity\Employee $employeeEmployee
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee
      *
      * @return EmployeeHasBeneficiary
      */
-    public function setEmployeeEmployee(\AppBundle\Entity\Employee $employeeEmployee)
+    public function setEmployeeEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee)
     {
         $this->employeeEmployee = $employeeEmployee;
 
@@ -124,7 +124,7 @@ class EmployeeHasBeneficiary
     /**
      * Get employeeEmployee
      *
-     * @return \AppBundle\Entity\Employee
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
      */
     public function getEmployeeEmployee()
     {
@@ -134,11 +134,11 @@ class EmployeeHasBeneficiary
     /**
      * Set beneficiaryBeneficiary
      *
-     * @param \AppBundle\Entity\Beneficiary $beneficiaryBeneficiary
+     * @param \RocketSeller\TwoPickBundle\Entity\Beneficiary $beneficiaryBeneficiary
      *
      * @return EmployeeHasBeneficiary
      */
-    public function setBeneficiaryBeneficiary(\AppBundle\Entity\Beneficiary $beneficiaryBeneficiary)
+    public function setBeneficiaryBeneficiary(\RocketSeller\TwoPickBundle\Entity\Beneficiary $beneficiaryBeneficiary)
     {
         $this->beneficiaryBeneficiary = $beneficiaryBeneficiary;
 
@@ -148,7 +148,7 @@ class EmployeeHasBeneficiary
     /**
      * Get beneficiaryBeneficiary
      *
-     * @return \AppBundle\Entity\Beneficiary
+     * @return \RocketSeller\TwoPickBundle\Entity\Beneficiary
      */
     public function getBeneficiaryBeneficiary()
     {

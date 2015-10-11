@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class EmployeeHasBeneficiary
     private $idEmployeeHasBeneficiary;
 
     /**
-     * @var \AppBundle\Entity\Entity
+     * @var \RocketSeller\TwoPickBundle\Entity\Entity
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -34,11 +34,11 @@ class EmployeeHasBeneficiary
     private $entityEntity;
 
     /**
-     * @var \AppBundle\Entity\Employee
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
@@ -46,11 +46,11 @@ class EmployeeHasBeneficiary
     private $employeeEmployee;
 
     /**
-     * @var \AppBundle\Entity\Beneficiary
+     * @var \RocketSeller\TwoPickBundle\Entity\Beneficiary
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Beneficiary")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Beneficiary")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="beneficiary_id_beneficiary", referencedColumnName="id_beneficiary")
      * })
@@ -58,5 +58,100 @@ class EmployeeHasBeneficiary
     private $beneficiaryBeneficiary;
 
 
-}
 
+    /**
+     * Set idEmployeeHasBeneficiary
+     *
+     * @param integer $idEmployeeHasBeneficiary
+     *
+     * @return EmployeeHasBeneficiary
+     */
+    public function setIdEmployeeHasBeneficiary($idEmployeeHasBeneficiary)
+    {
+        $this->idEmployeeHasBeneficiary = $idEmployeeHasBeneficiary;
+
+        return $this;
+    }
+
+    /**
+     * Get idEmployeeHasBeneficiary
+     *
+     * @return integer
+     */
+    public function getIdEmployeeHasBeneficiary()
+    {
+        return $this->idEmployeeHasBeneficiary;
+    }
+
+    /**
+     * Set entityEntity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
+     *
+     * @return EmployeeHasBeneficiary
+     */
+    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity)
+    {
+        $this->entityEntity = $entityEntity;
+
+        return $this;
+    }
+
+    /**
+     * Get entityEntity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Entity
+     */
+    public function getEntityEntity()
+    {
+        return $this->entityEntity;
+    }
+
+    /**
+     * Set employeeEmployee
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee
+     *
+     * @return EmployeeHasBeneficiary
+     */
+    public function setEmployeeEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee)
+    {
+        $this->employeeEmployee = $employeeEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeEmployee
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
+     */
+    public function getEmployeeEmployee()
+    {
+        return $this->employeeEmployee;
+    }
+
+    /**
+     * Set beneficiaryBeneficiary
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Beneficiary $beneficiaryBeneficiary
+     *
+     * @return EmployeeHasBeneficiary
+     */
+    public function setBeneficiaryBeneficiary(\RocketSeller\TwoPickBundle\Entity\Beneficiary $beneficiaryBeneficiary)
+    {
+        $this->beneficiaryBeneficiary = $beneficiaryBeneficiary;
+
+        return $this;
+    }
+
+    /**
+     * Get beneficiaryBeneficiary
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Beneficiary
+     */
+    public function getBeneficiaryBeneficiary()
+    {
+        return $this->beneficiaryBeneficiary;
+    }
+}

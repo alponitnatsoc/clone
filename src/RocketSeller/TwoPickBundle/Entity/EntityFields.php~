@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class EntityFields
     private $idEntityFields;
 
     /**
-     * @var \AppBundle\Entity\Entity
+     * @var \RocketSeller\TwoPickBundle\Entity\Entity
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -34,5 +34,52 @@ class EntityFields
     private $entityEntity;
 
 
-}
 
+    /**
+     * Set idEntityFields
+     *
+     * @param integer $idEntityFields
+     *
+     * @return EntityFields
+     */
+    public function setIdEntityFields($idEntityFields)
+    {
+        $this->idEntityFields = $idEntityFields;
+
+        return $this;
+    }
+
+    /**
+     * Get idEntityFields
+     *
+     * @return integer
+     */
+    public function getIdEntityFields()
+    {
+        return $this->idEntityFields;
+    }
+
+    /**
+     * Set entityEntity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
+     *
+     * @return EntityFields
+     */
+    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity)
+    {
+        $this->entityEntity = $entityEntity;
+
+        return $this;
+    }
+
+    /**
+     * Get entityEntity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Entity
+     */
+    public function getEntityEntity()
+    {
+        return $this->entityEntity;
+    }
+}

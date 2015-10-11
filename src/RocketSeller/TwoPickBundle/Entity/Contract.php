@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Contract
     private $idContract;
 
     /**
-     * @var \AppBundle\Entity\EmployerHasEmployee
+     * @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\EmployerHasEmployee")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
      * })
@@ -34,11 +34,11 @@ class Contract
     private $employerHasEmployeeEmployerHasEmployee;
 
     /**
-     * @var \AppBundle\Entity\ContractType
+     * @var \RocketSeller\TwoPickBundle\Entity\ContractType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ContractType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
      * })
@@ -74,11 +74,11 @@ class Contract
     /**
      * Set employerHasEmployeeEmployerHasEmployee
      *
-     * @param \AppBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee
      *
      * @return Contract
      */
-    public function setEmployerHasEmployeeEmployerHasEmployee(\AppBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee)
+    public function setEmployerHasEmployeeEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee)
     {
         $this->employerHasEmployeeEmployerHasEmployee = $employerHasEmployeeEmployerHasEmployee;
 
@@ -88,7 +88,7 @@ class Contract
     /**
      * Get employerHasEmployeeEmployerHasEmployee
      *
-     * @return \AppBundle\Entity\EmployerHasEmployee
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
      */
     public function getEmployerHasEmployeeEmployerHasEmployee()
     {
@@ -98,11 +98,11 @@ class Contract
     /**
      * Set contractTypeContractType
      *
-     * @param \AppBundle\Entity\ContractType $contractTypeContractType
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractType $contractTypeContractType
      *
      * @return Contract
      */
-    public function setContractTypeContractType(\AppBundle\Entity\ContractType $contractTypeContractType)
+    public function setContractTypeContractType(\RocketSeller\TwoPickBundle\Entity\ContractType $contractTypeContractType)
     {
         $this->contractTypeContractType = $contractTypeContractType;
 
@@ -112,7 +112,7 @@ class Contract
     /**
      * Get contractTypeContractType
      *
-     * @return \AppBundle\Entity\ContractType
+     * @return \RocketSeller\TwoPickBundle\Entity\ContractType
      */
     public function getContractTypeContractType()
     {

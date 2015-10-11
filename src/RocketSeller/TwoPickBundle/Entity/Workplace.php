@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Workplace
     private $idWorkplace;
 
     /**
-     * @var \AppBundle\Entity\Employee
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
@@ -34,11 +34,11 @@ class Workplace
     private $employeeEmployee;
 
     /**
-     * @var \AppBundle\Entity\Contract
+     * @var \RocketSeller\TwoPickBundle\Entity\Contract
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contract")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -74,11 +74,11 @@ class Workplace
     /**
      * Set employeeEmployee
      *
-     * @param \AppBundle\Entity\Employee $employeeEmployee
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee
      *
      * @return Workplace
      */
-    public function setEmployeeEmployee(\AppBundle\Entity\Employee $employeeEmployee)
+    public function setEmployeeEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee)
     {
         $this->employeeEmployee = $employeeEmployee;
 
@@ -88,7 +88,7 @@ class Workplace
     /**
      * Get employeeEmployee
      *
-     * @return \AppBundle\Entity\Employee
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
      */
     public function getEmployeeEmployee()
     {
@@ -98,11 +98,11 @@ class Workplace
     /**
      * Set contractContract
      *
-     * @param \AppBundle\Entity\Contract $contractContract
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
      *
      * @return Workplace
      */
-    public function setContractContract(\AppBundle\Entity\Contract $contractContract)
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
     {
         $this->contractContract = $contractContract;
 
@@ -112,7 +112,7 @@ class Workplace
     /**
      * Get contractContract
      *
-     * @return \AppBundle\Entity\Contract
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
     public function getContractContract()
     {

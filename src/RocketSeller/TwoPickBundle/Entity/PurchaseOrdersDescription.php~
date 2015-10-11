@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class PurchaseOrdersDescription
     private $idPurchaseOrdersDescription;
 
     /**
-     * @var \AppBundle\Entity\Tax
+     * @var \RocketSeller\TwoPickBundle\Entity\Tax
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Tax")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
      * })
@@ -34,11 +34,11 @@ class PurchaseOrdersDescription
     private $taxTax;
 
     /**
-     * @var \AppBundle\Entity\PurchaseOrders
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PurchaseOrders")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
@@ -46,11 +46,11 @@ class PurchaseOrdersDescription
     private $purchaseOrdersPurchaseOrders;
 
     /**
-     * @var \AppBundle\Entity\Product
+     * @var \RocketSeller\TwoPickBundle\Entity\Product
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Product")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Product")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id_product", referencedColumnName="id_product")
      * })
@@ -58,5 +58,100 @@ class PurchaseOrdersDescription
     private $productProduct;
 
 
-}
 
+    /**
+     * Set idPurchaseOrdersDescription
+     *
+     * @param integer $idPurchaseOrdersDescription
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setIdPurchaseOrdersDescription($idPurchaseOrdersDescription)
+    {
+        $this->idPurchaseOrdersDescription = $idPurchaseOrdersDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get idPurchaseOrdersDescription
+     *
+     * @return integer
+     */
+    public function getIdPurchaseOrdersDescription()
+    {
+        return $this->idPurchaseOrdersDescription;
+    }
+
+    /**
+     * Set taxTax
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax)
+    {
+        $this->taxTax = $taxTax;
+
+        return $this;
+    }
+
+    /**
+     * Get taxTax
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Tax
+     */
+    public function getTaxTax()
+    {
+        return $this->taxTax;
+    }
+
+    /**
+     * Set purchaseOrdersPurchaseOrders
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPurchaseOrdersPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
+    {
+        $this->purchaseOrdersPurchaseOrders = $purchaseOrdersPurchaseOrders;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersPurchaseOrders
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
+     */
+    public function getPurchaseOrdersPurchaseOrders()
+    {
+        return $this->purchaseOrdersPurchaseOrders;
+    }
+
+    /**
+     * Set productProduct
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Product $productProduct
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setProductProduct(\RocketSeller\TwoPickBundle\Entity\Product $productProduct)
+    {
+        $this->productProduct = $productProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get productProduct
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Product
+     */
+    public function getProductProduct()
+    {
+        return $this->productProduct;
+    }
+}

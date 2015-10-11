@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class PurchaseOrders
     private $idPurchaseOrders;
 
     /**
-     * @var \AppBundle\Entity\PurchaseOrdersType
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PurchaseOrdersType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_type_id_purchase_orders_type", referencedColumnName="id_purchase_orders_type")
      * })
@@ -34,11 +34,11 @@ class PurchaseOrders
     private $purchaseOrdersTypePurchaseOrdersType;
 
     /**
-     * @var \AppBundle\Entity\Payroll
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Payroll")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
@@ -74,11 +74,11 @@ class PurchaseOrders
     /**
      * Set purchaseOrdersTypePurchaseOrdersType
      *
-     * @param \AppBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType
      *
      * @return PurchaseOrders
      */
-    public function setPurchaseOrdersTypePurchaseOrdersType(\AppBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType)
+    public function setPurchaseOrdersTypePurchaseOrdersType(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType)
     {
         $this->purchaseOrdersTypePurchaseOrdersType = $purchaseOrdersTypePurchaseOrdersType;
 
@@ -88,7 +88,7 @@ class PurchaseOrders
     /**
      * Get purchaseOrdersTypePurchaseOrdersType
      *
-     * @return \AppBundle\Entity\PurchaseOrdersType
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType
      */
     public function getPurchaseOrdersTypePurchaseOrdersType()
     {
@@ -98,11 +98,11 @@ class PurchaseOrders
     /**
      * Set payrollPayroll
      *
-     * @param \AppBundle\Entity\Payroll $payrollPayroll
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
      *
      * @return PurchaseOrders
      */
-    public function setPayrollPayroll(\AppBundle\Entity\Payroll $payrollPayroll)
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
     {
         $this->payrollPayroll = $payrollPayroll;
 
@@ -112,7 +112,7 @@ class PurchaseOrders
     /**
      * Get payrollPayroll
      *
-     * @return \AppBundle\Entity\Payroll
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
      */
     public function getPayrollPayroll()
     {

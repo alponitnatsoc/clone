@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class TaxHasCountry
     private $idTaxHasCountry;
 
     /**
-     * @var \AppBundle\Entity\Tax
+     * @var \RocketSeller\TwoPickBundle\Entity\Tax
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Tax")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
      * })
@@ -34,11 +34,11 @@ class TaxHasCountry
     private $taxTax;
 
     /**
-     * @var \AppBundle\Entity\Country
+     * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
@@ -46,5 +46,76 @@ class TaxHasCountry
     private $countryCountry;
 
 
-}
 
+    /**
+     * Set idTaxHasCountry
+     *
+     * @param integer $idTaxHasCountry
+     *
+     * @return TaxHasCountry
+     */
+    public function setIdTaxHasCountry($idTaxHasCountry)
+    {
+        $this->idTaxHasCountry = $idTaxHasCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get idTaxHasCountry
+     *
+     * @return integer
+     */
+    public function getIdTaxHasCountry()
+    {
+        return $this->idTaxHasCountry;
+    }
+
+    /**
+     * Set taxTax
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
+     *
+     * @return TaxHasCountry
+     */
+    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax)
+    {
+        $this->taxTax = $taxTax;
+
+        return $this;
+    }
+
+    /**
+     * Get taxTax
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Tax
+     */
+    public function getTaxTax()
+    {
+        return $this->taxTax;
+    }
+
+    /**
+     * Set countryCountry
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
+     *
+     * @return TaxHasCountry
+     */
+    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry)
+    {
+        $this->countryCountry = $countryCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get countryCountry
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
+     */
+    public function getCountryCountry()
+    {
+        return $this->countryCountry;
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Novelty
     private $idNovelty;
 
     /**
-     * @var \AppBundle\Entity\PayrollDetail
+     * @var \RocketSeller\TwoPickBundle\Entity\PayrollDetail
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PayrollDetail")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayrollDetail")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_detail_id_payroll_detail", referencedColumnName="id_payroll_detail")
      * })
@@ -34,5 +34,52 @@ class Novelty
     private $payrollDetailPayrollDetail;
 
 
-}
 
+    /**
+     * Set idNovelty
+     *
+     * @param integer $idNovelty
+     *
+     * @return Novelty
+     */
+    public function setIdNovelty($idNovelty)
+    {
+        $this->idNovelty = $idNovelty;
+
+        return $this;
+    }
+
+    /**
+     * Get idNovelty
+     *
+     * @return integer
+     */
+    public function getIdNovelty()
+    {
+        return $this->idNovelty;
+    }
+
+    /**
+     * Set payrollDetailPayrollDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail
+     *
+     * @return Novelty
+     */
+    public function setPayrollDetailPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail)
+    {
+        $this->payrollDetailPayrollDetail = $payrollDetailPayrollDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollDetailPayrollDetail
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PayrollDetail
+     */
+    public function getPayrollDetailPayrollDetail()
+    {
+        return $this->payrollDetailPayrollDetail;
+    }
+}

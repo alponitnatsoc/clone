@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class ContractHasBenefits
     private $idContractHasBenefits;
 
     /**
-     * @var \AppBundle\Entity\Contract
+     * @var \RocketSeller\TwoPickBundle\Entity\Contract
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contract")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -34,11 +34,11 @@ class ContractHasBenefits
     private $contractContract;
 
     /**
-     * @var \AppBundle\Entity\Benefits
+     * @var \RocketSeller\TwoPickBundle\Entity\Benefits
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Benefits")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Benefits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="benefits_id_benefits", referencedColumnName="id_benefits")
      * })
@@ -74,11 +74,11 @@ class ContractHasBenefits
     /**
      * Set contractContract
      *
-     * @param \AppBundle\Entity\Contract $contractContract
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
      *
      * @return ContractHasBenefits
      */
-    public function setContractContract(\AppBundle\Entity\Contract $contractContract)
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
     {
         $this->contractContract = $contractContract;
 
@@ -88,7 +88,7 @@ class ContractHasBenefits
     /**
      * Get contractContract
      *
-     * @return \AppBundle\Entity\Contract
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
     public function getContractContract()
     {
@@ -98,11 +98,11 @@ class ContractHasBenefits
     /**
      * Set benefitsBenefits
      *
-     * @param \AppBundle\Entity\Benefits $benefitsBenefits
+     * @param \RocketSeller\TwoPickBundle\Entity\Benefits $benefitsBenefits
      *
      * @return ContractHasBenefits
      */
-    public function setBenefitsBenefits(\AppBundle\Entity\Benefits $benefitsBenefits)
+    public function setBenefitsBenefits(\RocketSeller\TwoPickBundle\Entity\Benefits $benefitsBenefits)
     {
         $this->benefitsBenefits = $benefitsBenefits;
 
@@ -112,7 +112,7 @@ class ContractHasBenefits
     /**
      * Get benefitsBenefits
      *
-     * @return \AppBundle\Entity\Benefits
+     * @return \RocketSeller\TwoPickBundle\Entity\Benefits
      */
     public function getBenefitsBenefits()
     {

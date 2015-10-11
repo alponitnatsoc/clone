@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Office
     private $idOffice;
 
     /**
-     * @var \AppBundle\Entity\Entity
+     * @var \RocketSeller\TwoPickBundle\Entity\Entity
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Entity")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -34,11 +34,11 @@ class Office
     private $entityEntity;
 
     /**
-     * @var \AppBundle\Entity\Department
+     * @var \RocketSeller\TwoPickBundle\Entity\Department
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Department")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
      * })
@@ -46,11 +46,11 @@ class Office
     private $departmentDepartment;
 
     /**
-     * @var \AppBundle\Entity\Country
+     * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
@@ -58,11 +58,11 @@ class Office
     private $countryCountry;
 
     /**
-     * @var \AppBundle\Entity\City
+     * @var \RocketSeller\TwoPickBundle\Entity\City
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\City")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\City")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="city_id_city", referencedColumnName="id_city")
      * })
@@ -98,11 +98,11 @@ class Office
     /**
      * Set entityEntity
      *
-     * @param \AppBundle\Entity\Entity $entityEntity
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
      *
      * @return Office
      */
-    public function setEntityEntity(\AppBundle\Entity\Entity $entityEntity)
+    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity)
     {
         $this->entityEntity = $entityEntity;
 
@@ -112,7 +112,7 @@ class Office
     /**
      * Get entityEntity
      *
-     * @return \AppBundle\Entity\Entity
+     * @return \RocketSeller\TwoPickBundle\Entity\Entity
      */
     public function getEntityEntity()
     {
@@ -122,11 +122,11 @@ class Office
     /**
      * Set departmentDepartment
      *
-     * @param \AppBundle\Entity\Department $departmentDepartment
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmentDepartment
      *
      * @return Office
      */
-    public function setDepartmentDepartment(\AppBundle\Entity\Department $departmentDepartment)
+    public function setDepartmentDepartment(\RocketSeller\TwoPickBundle\Entity\Department $departmentDepartment)
     {
         $this->departmentDepartment = $departmentDepartment;
 
@@ -136,7 +136,7 @@ class Office
     /**
      * Get departmentDepartment
      *
-     * @return \AppBundle\Entity\Department
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
      */
     public function getDepartmentDepartment()
     {
@@ -146,11 +146,11 @@ class Office
     /**
      * Set countryCountry
      *
-     * @param \AppBundle\Entity\Country $countryCountry
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
      *
      * @return Office
      */
-    public function setCountryCountry(\AppBundle\Entity\Country $countryCountry)
+    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry)
     {
         $this->countryCountry = $countryCountry;
 
@@ -160,7 +160,7 @@ class Office
     /**
      * Get countryCountry
      *
-     * @return \AppBundle\Entity\Country
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
      */
     public function getCountryCountry()
     {
@@ -170,11 +170,11 @@ class Office
     /**
      * Set cityCity
      *
-     * @param \AppBundle\Entity\City $cityCity
+     * @param \RocketSeller\TwoPickBundle\Entity\City $cityCity
      *
      * @return Office
      */
-    public function setCityCity(\AppBundle\Entity\City $cityCity)
+    public function setCityCity(\RocketSeller\TwoPickBundle\Entity\City $cityCity)
     {
         $this->cityCity = $cityCity;
 
@@ -184,7 +184,7 @@ class Office
     /**
      * Get cityCity
      *
-     * @return \AppBundle\Entity\City
+     * @return \RocketSeller\TwoPickBundle\Entity\City
      */
     public function getCityCity()
     {

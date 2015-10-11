@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class PurchaseOrdersDescription
     private $idPurchaseOrdersDescription;
 
     /**
-     * @var \AppBundle\Entity\Tax
+     * @var \RocketSeller\TwoPickBundle\Entity\Tax
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Tax")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
      * })
@@ -34,11 +34,11 @@ class PurchaseOrdersDescription
     private $taxTax;
 
     /**
-     * @var \AppBundle\Entity\PurchaseOrders
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\PurchaseOrders")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
@@ -46,11 +46,11 @@ class PurchaseOrdersDescription
     private $purchaseOrdersPurchaseOrders;
 
     /**
-     * @var \AppBundle\Entity\Product
+     * @var \RocketSeller\TwoPickBundle\Entity\Product
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Product")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Product")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id_product", referencedColumnName="id_product")
      * })
@@ -86,11 +86,11 @@ class PurchaseOrdersDescription
     /**
      * Set taxTax
      *
-     * @param \AppBundle\Entity\Tax $taxTax
+     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
      *
      * @return PurchaseOrdersDescription
      */
-    public function setTaxTax(\AppBundle\Entity\Tax $taxTax)
+    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax)
     {
         $this->taxTax = $taxTax;
 
@@ -100,7 +100,7 @@ class PurchaseOrdersDescription
     /**
      * Get taxTax
      *
-     * @return \AppBundle\Entity\Tax
+     * @return \RocketSeller\TwoPickBundle\Entity\Tax
      */
     public function getTaxTax()
     {
@@ -110,11 +110,11 @@ class PurchaseOrdersDescription
     /**
      * Set purchaseOrdersPurchaseOrders
      *
-     * @param \AppBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
      *
      * @return PurchaseOrdersDescription
      */
-    public function setPurchaseOrdersPurchaseOrders(\AppBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
+    public function setPurchaseOrdersPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
     {
         $this->purchaseOrdersPurchaseOrders = $purchaseOrdersPurchaseOrders;
 
@@ -124,7 +124,7 @@ class PurchaseOrdersDescription
     /**
      * Get purchaseOrdersPurchaseOrders
      *
-     * @return \AppBundle\Entity\PurchaseOrders
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      */
     public function getPurchaseOrdersPurchaseOrders()
     {
@@ -134,11 +134,11 @@ class PurchaseOrdersDescription
     /**
      * Set productProduct
      *
-     * @param \AppBundle\Entity\Product $productProduct
+     * @param \RocketSeller\TwoPickBundle\Entity\Product $productProduct
      *
      * @return PurchaseOrdersDescription
      */
-    public function setProductProduct(\AppBundle\Entity\Product $productProduct)
+    public function setProductProduct(\RocketSeller\TwoPickBundle\Entity\Product $productProduct)
     {
         $this->productProduct = $productProduct;
 
@@ -148,7 +148,7 @@ class PurchaseOrdersDescription
     /**
      * Get productProduct
      *
-     * @return \AppBundle\Entity\Product
+     * @return \RocketSeller\TwoPickBundle\Entity\Product
      */
     public function getProductProduct()
     {

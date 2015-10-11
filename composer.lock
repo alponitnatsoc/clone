@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d6df78ceb7422b1ddb653fdce7604a3a",
+    "hash": "00cd23189b1587e259815e941c33441a",
     "content-hash": "12c4ece864def60dffee4f504ef7562c",
     "packages": [
         {
             "name": "abraham/twitteroauth",
-            "version": "0.6.0",
+            "version": "0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abraham/twitteroauth.git",
-                "reference": "e87fe829f28043a809dc764b0591d273014ac862"
+                "reference": "3ebfb5bbc3a75a5b44b77371204076cfe1d585ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/e87fe829f28043a809dc764b0591d273014ac862",
-                "reference": "e87fe829f28043a809dc764b0591d273014ac862",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/3ebfb5bbc3a75a5b44b77371204076cfe1d585ef",
+                "reference": "3ebfb5bbc3a75a5b44b77371204076cfe1d585ef",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "social",
                 "twitter"
             ],
-            "time": "2015-09-08 17:28:41"
+            "time": "2015-10-07 14:15:19"
         },
         {
             "name": "behat/transliterator",
@@ -1820,16 +1820,16 @@
         },
         {
             "name": "jackalope/jackalope",
-            "version": "1.2.2",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jackalope/jackalope.git",
-                "reference": "69a0c661cc2116651a24b712af27f98453bba833"
+                "reference": "75cd273ed693b6c077c9856709ebac6ca3252e25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jackalope/jackalope/zipball/69a0c661cc2116651a24b712af27f98453bba833",
-                "reference": "69a0c661cc2116651a24b712af27f98453bba833",
+                "url": "https://api.github.com/repos/jackalope/jackalope/zipball/75cd273ed693b6c077c9856709ebac6ca3252e25",
+                "reference": "75cd273ed693b6c077c9856709ebac6ca3252e25",
                 "shasum": ""
             },
             "require": {
@@ -1869,7 +1869,7 @@
             "keywords": [
                 "phpcr"
             ],
-            "time": "2015-08-15 08:18:17"
+            "time": "2015-10-09 16:37:07"
         },
         {
             "name": "jackalope/jackalope-doctrine-dbal",
@@ -2852,16 +2852,16 @@
         },
         {
             "name": "phpcr/phpcr-utils",
-            "version": "1.2.7",
+            "version": "1.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpcr/phpcr-utils.git",
-                "reference": "647eb896f98e461d063170fc1642df659ea38290"
+                "reference": "778fc1cdffacb0ee99f52790e656a2acb85b9dfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpcr/phpcr-utils/zipball/647eb896f98e461d063170fc1642df659ea38290",
-                "reference": "647eb896f98e461d063170fc1642df659ea38290",
+                "url": "https://api.github.com/repos/phpcr/phpcr-utils/zipball/778fc1cdffacb0ee99f52790e656a2acb85b9dfa",
+                "reference": "778fc1cdffacb0ee99f52790e656a2acb85b9dfa",
                 "shasum": ""
             },
             "require": {
@@ -2872,6 +2872,12 @@
             "conflict": {
                 "jackalope/jackalope-jackrabbit": "<1.2.1"
             },
+            "suggest": {
+                "ramsey/uuid": "A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID)."
+            },
+            "bin": [
+                "bin/phpcr"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2913,7 +2919,7 @@
                 "contentrepository",
                 "phpcr"
             ],
-            "time": "2015-07-14 06:15:24"
+            "time": "2015-10-10 08:53:20"
         },
         {
             "name": "phpoption/phpoption",
@@ -3837,12 +3843,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataIntlBundle.git",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb"
+                "reference": "49be46e200cd1990f775046c84342d31c06f6c75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
-                "reference": "c50bda8f661aee2336aab1b9f61db9a93e5bf1cb",
+                "url": "https://api.github.com/repos/sonata-project/SonataIntlBundle/zipball/49be46e200cd1990f775046c84342d31c06f6c75",
+                "reference": "49be46e200cd1990f775046c84342d31c06f6c75",
                 "shasum": ""
             },
             "require": {
@@ -3892,7 +3898,7 @@
                 "sonata",
                 "time"
             ],
-            "time": "2015-08-26 14:55:43"
+            "time": "2015-10-06 07:59:50"
         },
         {
             "name": "sonata-project/media-bundle",
@@ -4233,16 +4239,16 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "v2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "78883d8c1cfa523ac3a28a482b7793036b243f7d"
+                "reference": "7117b9a145722e3c5768db4585f6ad0643ed5c4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/78883d8c1cfa523ac3a28a482b7793036b243f7d",
-                "reference": "78883d8c1cfa523ac3a28a482b7793036b243f7d",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/7117b9a145722e3c5768db4585f6ad0643ed5c4a",
+                "reference": "7117b9a145722e3c5768db4585f6ad0643ed5c4a",
                 "shasum": ""
             },
             "require": {
@@ -4288,7 +4294,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2015-09-29 17:13:11"
+            "time": "2015-10-02 11:51:59"
         },
         {
             "name": "symfony/swiftmailer-bundle",
@@ -4624,16 +4630,16 @@
         },
         {
             "name": "willdurand/negotiation",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3"
+                "reference": "2a59f2376557303e3fa91465ab691abb82945edf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/8a84c5956e765f432542fc52a8c6e9aff4508eb3",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/2a59f2376557303e3fa91465ab691abb82945edf",
+                "reference": "2a59f2376557303e3fa91465ab691abb82945edf",
                 "shasum": ""
             },
             "require": {
@@ -4642,7 +4648,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -4669,7 +4675,7 @@
                 "header",
                 "negotiation"
             ],
-            "time": "2015-07-28 13:10:50"
+            "time": "2015-10-01 07:42:40"
         }
     ],
     "packages-dev": [],

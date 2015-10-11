@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Department
     private $idDepartment;
 
     /**
-     * @var \AppBundle\Entity\Country
+     * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
@@ -62,11 +62,11 @@ class Department
     /**
      * Set countryCountry
      *
-     * @param \AppBundle\Entity\Country $countryCountry
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
      *
      * @return Department
      */
-    public function setCountryCountry(\AppBundle\Entity\Country $countryCountry)
+    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry)
     {
         $this->countryCountry = $countryCountry;
 
@@ -76,7 +76,7 @@ class Department
     /**
      * Get countryCountry
      *
-     * @return \AppBundle\Entity\Country
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
      */
     public function getCountryCountry()
     {

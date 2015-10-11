@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Document
     private $idDocument;
 
     /**
-     * @var \AppBundle\Entity\Person
+     * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Person")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
@@ -34,11 +34,11 @@ class Document
     private $personPerson;
 
     /**
-     * @var \AppBundle\Entity\Contract
+     * @var \RocketSeller\TwoPickBundle\Entity\Contract
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Contract")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -46,11 +46,11 @@ class Document
     private $contractContract;
 
     /**
-     * @var \AppBundle\Entity\DocumentType
+     * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\DocumentType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
      * })
@@ -58,5 +58,100 @@ class Document
     private $documentTypeDocumentType;
 
 
-}
 
+    /**
+     * Set idDocument
+     *
+     * @param integer $idDocument
+     *
+     * @return Document
+     */
+    public function setIdDocument($idDocument)
+    {
+        $this->idDocument = $idDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get idDocument
+     *
+     * @return integer
+     */
+    public function getIdDocument()
+    {
+        return $this->idDocument;
+    }
+
+    /**
+     * Set personPerson
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
+     *
+     * @return Document
+     */
+    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson)
+    {
+        $this->personPerson = $personPerson;
+
+        return $this;
+    }
+
+    /**
+     * Get personPerson
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Person
+     */
+    public function getPersonPerson()
+    {
+        return $this->personPerson;
+    }
+
+    /**
+     * Set contractContract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
+     *
+     * @return Document
+     */
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
+    {
+        $this->contractContract = $contractContract;
+
+        return $this;
+    }
+
+    /**
+     * Get contractContract
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
+     */
+    public function getContractContract()
+    {
+        return $this->contractContract;
+    }
+
+    /**
+     * Set documentTypeDocumentType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType
+     *
+     * @return Document
+     */
+    public function setDocumentTypeDocumentType(\RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType)
+    {
+        $this->documentTypeDocumentType = $documentTypeDocumentType;
+
+        return $this;
+    }
+
+    /**
+     * Get documentTypeDocumentType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\DocumentType
+     */
+    public function getDocumentTypeDocumentType()
+    {
+        return $this->documentTypeDocumentType;
+    }
+}

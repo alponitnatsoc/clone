@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,5 +22,14 @@ class Person
     private $idPerson;
 
 
-}
 
+    /**
+     * Get idPerson
+     *
+     * @return integer
+     */
+    public function getIdPerson()
+    {
+        return $this->idPerson;
+    }
+}

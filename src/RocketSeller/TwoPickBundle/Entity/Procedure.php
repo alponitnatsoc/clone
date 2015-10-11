@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Procedure
     private $idProcedure;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \RocketSeller\TwoPickBundle\Entity\User
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
      * })
@@ -34,11 +34,11 @@ class Procedure
     private $userUser;
 
     /**
-     * @var \AppBundle\Entity\ProcedureType
+     * @var \RocketSeller\TwoPickBundle\Entity\ProcedureType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ProcedureType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ProcedureType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="procedure_type_id_procedure_type", referencedColumnName="id_procedure_type")
      * })
@@ -46,11 +46,11 @@ class Procedure
     private $procedureTypeProcedureType;
 
     /**
-     * @var \AppBundle\Entity\Employer
+     * @var \RocketSeller\TwoPickBundle\Entity\Employer
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employer")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
@@ -86,11 +86,11 @@ class Procedure
     /**
      * Set userUser
      *
-     * @param \AppBundle\Entity\User $userUser
+     * @param \RocketSeller\TwoPickBundle\Entity\User $userUser
      *
      * @return Procedure
      */
-    public function setUserUser(\AppBundle\Entity\User $userUser)
+    public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
 
@@ -100,7 +100,7 @@ class Procedure
     /**
      * Get userUser
      *
-     * @return \AppBundle\Entity\User
+     * @return \RocketSeller\TwoPickBundle\Entity\User
      */
     public function getUserUser()
     {
@@ -110,11 +110,11 @@ class Procedure
     /**
      * Set procedureTypeProcedureType
      *
-     * @param \AppBundle\Entity\ProcedureType $procedureTypeProcedureType
+     * @param \RocketSeller\TwoPickBundle\Entity\ProcedureType $procedureTypeProcedureType
      *
      * @return Procedure
      */
-    public function setProcedureTypeProcedureType(\AppBundle\Entity\ProcedureType $procedureTypeProcedureType)
+    public function setProcedureTypeProcedureType(\RocketSeller\TwoPickBundle\Entity\ProcedureType $procedureTypeProcedureType)
     {
         $this->procedureTypeProcedureType = $procedureTypeProcedureType;
 
@@ -124,7 +124,7 @@ class Procedure
     /**
      * Get procedureTypeProcedureType
      *
-     * @return \AppBundle\Entity\ProcedureType
+     * @return \RocketSeller\TwoPickBundle\Entity\ProcedureType
      */
     public function getProcedureTypeProcedureType()
     {
@@ -134,11 +134,11 @@ class Procedure
     /**
      * Set employerEmployer
      *
-     * @param \AppBundle\Entity\Employer $employerEmployer
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer
      *
      * @return Procedure
      */
-    public function setEmployerEmployer(\AppBundle\Entity\Employer $employerEmployer)
+    public function setEmployerEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer)
     {
         $this->employerEmployer = $employerEmployer;
 
@@ -148,7 +148,7 @@ class Procedure
     /**
      * Get employerEmployer
      *
-     * @return \AppBundle\Entity\Employer
+     * @return \RocketSeller\TwoPickBundle\Entity\Employer
      */
     public function getEmployerEmployer()
     {

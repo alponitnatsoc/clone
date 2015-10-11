@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class UserHasRole
     private $idUserHasRole;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \RocketSeller\TwoPickBundle\Entity\User
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
      * })
@@ -34,11 +34,11 @@ class UserHasRole
     private $userUser;
 
     /**
-     * @var \AppBundle\Entity\Role
+     * @var \RocketSeller\TwoPickBundle\Entity\Role
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Role")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Role")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="role_id_role", referencedColumnName="id_role")
      * })
@@ -74,11 +74,11 @@ class UserHasRole
     /**
      * Set userUser
      *
-     * @param \AppBundle\Entity\User $userUser
+     * @param \RocketSeller\TwoPickBundle\Entity\User $userUser
      *
      * @return UserHasRole
      */
-    public function setUserUser(\AppBundle\Entity\User $userUser)
+    public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
 
@@ -88,7 +88,7 @@ class UserHasRole
     /**
      * Get userUser
      *
-     * @return \AppBundle\Entity\User
+     * @return \RocketSeller\TwoPickBundle\Entity\User
      */
     public function getUserUser()
     {
@@ -98,11 +98,11 @@ class UserHasRole
     /**
      * Set roleRole
      *
-     * @param \AppBundle\Entity\Role $roleRole
+     * @param \RocketSeller\TwoPickBundle\Entity\Role $roleRole
      *
      * @return UserHasRole
      */
-    public function setRoleRole(\AppBundle\Entity\Role $roleRole)
+    public function setRoleRole(\RocketSeller\TwoPickBundle\Entity\Role $roleRole)
     {
         $this->roleRole = $roleRole;
 
@@ -112,7 +112,7 @@ class UserHasRole
     /**
      * Get roleRole
      *
-     * @return \AppBundle\Entity\Role
+     * @return \RocketSeller\TwoPickBundle\Entity\Role
      */
     public function getRoleRole()
     {

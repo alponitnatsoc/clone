@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Action
     private $idAction;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \RocketSeller\TwoPickBundle\Entity\User
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
      * })
@@ -34,11 +34,11 @@ class Action
     private $userUser;
 
     /**
-     * @var \AppBundle\Entity\Procedure
+     * @var \RocketSeller\TwoPickBundle\Entity\Procedure
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Procedure")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Procedure")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="procedure_id_procedure", referencedColumnName="id_procedure")
      * })
@@ -46,11 +46,11 @@ class Action
     private $procedureProcedure;
 
     /**
-     * @var \AppBundle\Entity\ActionType
+     * @var \RocketSeller\TwoPickBundle\Entity\ActionType
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ActionType")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="action_type_id_action_type", referencedColumnName="id_action_type")
      * })
@@ -86,11 +86,11 @@ class Action
     /**
      * Set userUser
      *
-     * @param \AppBundle\Entity\User $userUser
+     * @param \RocketSeller\TwoPickBundle\Entity\User $userUser
      *
      * @return Action
      */
-    public function setUserUser(\AppBundle\Entity\User $userUser)
+    public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
 
@@ -100,7 +100,7 @@ class Action
     /**
      * Get userUser
      *
-     * @return \AppBundle\Entity\User
+     * @return \RocketSeller\TwoPickBundle\Entity\User
      */
     public function getUserUser()
     {
@@ -110,11 +110,11 @@ class Action
     /**
      * Set procedureProcedure
      *
-     * @param \AppBundle\Entity\Procedure $procedureProcedure
+     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedureProcedure
      *
      * @return Action
      */
-    public function setProcedureProcedure(\AppBundle\Entity\Procedure $procedureProcedure)
+    public function setProcedureProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedureProcedure)
     {
         $this->procedureProcedure = $procedureProcedure;
 
@@ -124,7 +124,7 @@ class Action
     /**
      * Get procedureProcedure
      *
-     * @return \AppBundle\Entity\Procedure
+     * @return \RocketSeller\TwoPickBundle\Entity\Procedure
      */
     public function getProcedureProcedure()
     {
@@ -134,11 +134,11 @@ class Action
     /**
      * Set actionTypeActionType
      *
-     * @param \AppBundle\Entity\ActionType $actionTypeActionType
+     * @param \RocketSeller\TwoPickBundle\Entity\ActionType $actionTypeActionType
      *
      * @return Action
      */
-    public function setActionTypeActionType(\AppBundle\Entity\ActionType $actionTypeActionType)
+    public function setActionTypeActionType(\RocketSeller\TwoPickBundle\Entity\ActionType $actionTypeActionType)
     {
         $this->actionTypeActionType = $actionTypeActionType;
 
@@ -148,7 +148,7 @@ class Action
     /**
      * Get actionTypeActionType
      *
-     * @return \AppBundle\Entity\ActionType
+     * @return \RocketSeller\TwoPickBundle\Entity\ActionType
      */
     public function getActionTypeActionType()
     {

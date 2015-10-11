@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class Department
     private $idDepartment;
 
     /**
-     * @var \AppBundle\Entity\Country
+     * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Country")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
@@ -34,5 +34,52 @@ class Department
     private $countryCountry;
 
 
-}
 
+    /**
+     * Set idDepartment
+     *
+     * @param integer $idDepartment
+     *
+     * @return Department
+     */
+    public function setIdDepartment($idDepartment)
+    {
+        $this->idDepartment = $idDepartment;
+
+        return $this;
+    }
+
+    /**
+     * Get idDepartment
+     *
+     * @return integer
+     */
+    public function getIdDepartment()
+    {
+        return $this->idDepartment;
+    }
+
+    /**
+     * Set countryCountry
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
+     *
+     * @return Department
+     */
+    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry)
+    {
+        $this->countryCountry = $countryCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get countryCountry
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
+     */
+    public function getCountryCountry()
+    {
+        return $this->countryCountry;
+    }
+}

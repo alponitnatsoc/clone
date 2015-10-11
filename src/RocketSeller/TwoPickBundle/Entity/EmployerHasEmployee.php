@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class EmployerHasEmployee
     private $idEmployerHasEmployee;
 
     /**
-     * @var \AppBundle\Entity\Employer
+     * @var \RocketSeller\TwoPickBundle\Entity\Employer
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employer")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
@@ -34,11 +34,11 @@ class EmployerHasEmployee
     private $employerEmployer;
 
     /**
-     * @var \AppBundle\Entity\Employee
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Employee")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
@@ -74,11 +74,11 @@ class EmployerHasEmployee
     /**
      * Set employerEmployer
      *
-     * @param \AppBundle\Entity\Employer $employerEmployer
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer
      *
      * @return EmployerHasEmployee
      */
-    public function setEmployerEmployer(\AppBundle\Entity\Employer $employerEmployer)
+    public function setEmployerEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer)
     {
         $this->employerEmployer = $employerEmployer;
 
@@ -88,7 +88,7 @@ class EmployerHasEmployee
     /**
      * Get employerEmployer
      *
-     * @return \AppBundle\Entity\Employer
+     * @return \RocketSeller\TwoPickBundle\Entity\Employer
      */
     public function getEmployerEmployer()
     {
@@ -98,11 +98,11 @@ class EmployerHasEmployee
     /**
      * Set employeeEmployee
      *
-     * @param \AppBundle\Entity\Employee $employeeEmployee
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee
      *
      * @return EmployerHasEmployee
      */
-    public function setEmployeeEmployee(\AppBundle\Entity\Employee $employeeEmployee)
+    public function setEmployeeEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employeeEmployee)
     {
         $this->employeeEmployee = $employeeEmployee;
 
@@ -112,7 +112,7 @@ class EmployerHasEmployee
     /**
      * Get employeeEmployee
      *
-     * @return \AppBundle\Entity\Employee
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
      */
     public function getEmployeeEmployee()
     {

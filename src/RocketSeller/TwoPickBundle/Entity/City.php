@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,11 +22,11 @@ class City
     private $idCity;
 
     /**
-     * @var \AppBundle\Entity\Department
+     * @var \RocketSeller\TwoPickBundle\Entity\Department
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Department")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
      * })
@@ -62,11 +62,11 @@ class City
     /**
      * Set departmentDepartment
      *
-     * @param \AppBundle\Entity\Department $departmentDepartment
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmentDepartment
      *
      * @return City
      */
-    public function setDepartmentDepartment(\AppBundle\Entity\Department $departmentDepartment)
+    public function setDepartmentDepartment(\RocketSeller\TwoPickBundle\Entity\Department $departmentDepartment)
     {
         $this->departmentDepartment = $departmentDepartment;
 
@@ -76,7 +76,7 @@ class City
     /**
      * Get departmentDepartment
      *
-     * @return \AppBundle\Entity\Department
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
      */
     public function getDepartmentDepartment()
     {
