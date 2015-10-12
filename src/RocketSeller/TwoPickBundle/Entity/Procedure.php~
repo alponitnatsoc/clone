@@ -28,7 +28,7 @@ class Procedure
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id_user")
+     *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
      */
     private $userUser;

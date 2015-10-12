@@ -21,7 +21,20 @@ class Person
      */
     private $idPerson;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $fisrtName;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $surName;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=TRUE)
+     */
+    private $lastName;
 
     /**
      * Get idPerson

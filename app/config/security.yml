@@ -37,7 +37,7 @@ security:
                 resource_owners:
                     facebook: hwi_facebook_login
                     google: hwi_google_login
-                    twitter: hwi_twitter_login
+                    linkedin: hwi_linkedin_login
                 oauth_user_provider:
                     #this is my custom user provider, created from FOSUBUserProvider - will manage the
                     #automatic user registration on your site, with data from the provider (facebook. google, etc.)

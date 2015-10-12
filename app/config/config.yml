@@ -179,6 +179,10 @@ hwi_oauth:
             type:                facebook
             client_id:           %app_fb_id%
             client_secret:       %app_fb_secret%
+            scope:               %app_fb_permissions%
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,email"
+            paths:
+                email:          email
             options:
                 display: popup #dialog is optimized for popup window
         google:
@@ -186,10 +190,15 @@ hwi_oauth:
             client_id:           %app_google_id%
             client_secret:       %app_google_secret%
             scope:               %app_google_permissions%
-        twitter:
-            type:                twitter
-            client_id:           %app_twitter_id%
-            client_secret:       %app_twitter_secret%
+            paths:
+                email:           email
+                profilepicture:  picture
+        linkedin:
+            type:           linkedin
+            client_id:      %app_linkedin_id%
+            client_secret:  %app_linkedin_secret%
+            scope:          %app_linkedin_permissions%
+            infos_url:     "http://api.linkedin.com/v1/people/~:(id,formatted-name)"
 
     fosub:
         # try 30 times to check if a username is available (foo, foo1, foo2 etc)
@@ -199,7 +208,7 @@ hwi_oauth:
         properties:
             facebook: facebook_id
             google: google_id
-            twitter: twitter_id
+            linkedin: linkedin_id
             
 fs_solr:
     endpoints:

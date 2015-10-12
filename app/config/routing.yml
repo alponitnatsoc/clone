@@ -1,3 +1,6 @@
+register_incomplete:
+    path:      /register/complete
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
