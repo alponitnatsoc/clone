@@ -29,7 +29,7 @@ class RegistrationConfirmListener implements EventSubscriberInterface
 
     public function onRegistrationConfirm(FormEvent $event)
     {
-        $url = $this->router->generate('register_incomplete');
+        $url = $this->router->generate('show_dashboard');
 
         $event->setResponse(new RedirectResponse($url));
         return $event;

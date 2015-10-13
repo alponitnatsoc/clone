@@ -1,0 +1,27 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% block fos_user_content %}
+{% for step in steps %}
+	
+	
+		<div id='' class='col-xs-12'>
+			<a id='' class='btn col-xs-12 {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %}' href="{{step.url}}">
+				<div id='' class='col-xs-2'>
+					{{step.state}}% Done
+				</div>
+				<div id='' class='col-xs-5'>
+					<div id='' class='text-left' >
+						{{step.name}}
+					</div>
+				</div>
+				<div id='' class='col-xs-5'>
+					<div id='' class='text-right' >
+						{{step.stateMessage}}
+					</div>
+					
+				</div>
+			</a>
+		</div>
+
+{% endfor %}
+
+{% endblock fos_user_content %}

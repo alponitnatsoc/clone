@@ -1,6 +1,11 @@
+#Customs
+show_dashboard:
+    path:      /dashBoard
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
 register_incomplete:
     path:      /register/complete
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
+
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
@@ -24,7 +29,7 @@ hwi_google_login:
     pattern: /login/check-google
     
 hwi_twitter_login:
-    pattern: /login/check-twitter
+    pattern: /login/check-linkedin
 #
 #FOSRest 
 rest_secured: 

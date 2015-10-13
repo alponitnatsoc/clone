@@ -24,18 +24,34 @@ class Person
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
-    private $fisrtName;
+    private $names;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
-    private $surName;
+    private $lastName1;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=TRUE)
      */
-    private $lastName;
+    private $lastName2;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $documentType;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $document;
+    /**
+     * @ORM\Column(type="date", length=20, nullable=TRUE)
+     */
+    private $birthDate;
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $address;
     /**
      * Get idPerson
      *
@@ -46,75 +62,173 @@ class Person
         return $this->idPerson;
     }
 
+
+
     /**
-     * Set fisrtName
+     * Set names
      *
-     * @param string $fisrtName
+     * @param string $names
      *
      * @return Person
      */
-    public function setFisrtName($fisrtName)
+    public function setNames($names)
     {
-        $this->fisrtName = $fisrtName;
+        $this->names = $names;
 
         return $this;
     }
 
     /**
-     * Get fisrtName
+     * Get names
      *
      * @return string
      */
-    public function getFisrtName()
+    public function getNames()
     {
-        return $this->fisrtName;
+        return $this->names;
     }
 
     /**
-     * Set surName
+     * Set lastName1
      *
-     * @param string $surName
+     * @param string $lastName1
      *
      * @return Person
      */
-    public function setSurName($surName)
+    public function setLastName1($lastName1)
     {
-        $this->surName = $surName;
+        $this->lastName1 = $lastName1;
 
         return $this;
     }
 
     /**
-     * Get surName
+     * Get lastName1
      *
      * @return string
      */
-    public function getSurName()
+    public function getLastName1()
     {
-        return $this->surName;
+        return $this->lastName1;
     }
 
     /**
-     * Set lastName
+     * Set lastName2
      *
-     * @param string $lastName
+     * @param string $lastName2
      *
      * @return Person
      */
-    public function setLastName($lastName)
+    public function setLastName2($lastName2)
     {
-        $this->lastName = $lastName;
+        $this->lastName2 = $lastName2;
 
         return $this;
     }
 
     /**
-     * Get lastName
+     * Get lastName2
      *
      * @return string
      */
-    public function getLastName()
+    public function getLastName2()
     {
-        return $this->lastName;
+        return $this->lastName2;
+    }
+
+    /**
+     * Set documentType
+     *
+     * @param string $documentType
+     *
+     * @return Person
+     */
+    public function setDocumentType($documentType)
+    {
+        $this->documentType = $documentType;
+
+        return $this;
+    }
+
+    /**
+     * Get documentType
+     *
+     * @return string
+     */
+    public function getDocumentType()
+    {
+        return $this->documentType;
+    }
+
+    /**
+     * Set document
+     *
+     * @param string $document
+     *
+     * @return Person
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return string
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set birthDate
+     *
+     * @param \DateTime $birthDate
+     *
+     * @return Person
+     */
+    public function setBirthDate($birthDate)
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDate
+     *
+     * @return \DateTime
+     */
+    public function getBirthDate()
+    {
+        return $this->birthDate;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return Person
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 }

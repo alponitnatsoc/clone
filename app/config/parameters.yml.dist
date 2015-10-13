@@ -25,5 +25,6 @@ parameters:
     app_google_permissions: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
     app_google_id: 439833410509-sqoj86nkrm2jqv1iq8h8mp7q0sfi4d8r.apps.googleusercontent.com
     app_google_secret: oNQG9mjefu-SNBPNoG_7WmtS
-    app_twitter_id: TdQgVL1p4iKmvhvevOwgdKji0
-    app_twitter_secret: yShMnSRqqZPSAMLSJRTKsCAK696DQjtzof4mFN5avO7dsSOI6c
+    app_linkedin_id: 77m70qobsa435c
+    app_linkedin_secret: X5uOLUwEtUch8rxL
+    app_linkedin_permissions: r_fullprofile
