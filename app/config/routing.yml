@@ -9,6 +9,13 @@ register_incomplete:
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
+
+#Beneficiary
+
+add_beneficiary:
+    path:     /beneficiary/add
+    defaults: { _controller: RocketSellerTwoPickBundle:Beneficiary:addBeneficiary }
+    
 #OAuth
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
