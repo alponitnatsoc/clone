@@ -55,9 +55,6 @@ class AppKernel extends Kernel
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
-            //
-            //Mopa Bundle
-            new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
 
 
 

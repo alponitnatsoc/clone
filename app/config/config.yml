@@ -260,5 +260,4 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
-mopa_bootstrap:
-    form: ~  # Adds twig form theme  support
+
