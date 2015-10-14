@@ -21,7 +21,10 @@ class Country
      */
     private $idCountry;
 
-
+    /**
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     */
+    private $name;
 
     /**
      * Get idCountry
@@ -31,5 +34,29 @@ class Country
     public function getIdCountry()
     {
         return $this->idCountry;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Country
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

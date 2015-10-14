@@ -23,10 +23,7 @@ class Workplace
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee",  inversedBy="workplaces")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
@@ -35,10 +32,7 @@ class Workplace
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="workplaces")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })

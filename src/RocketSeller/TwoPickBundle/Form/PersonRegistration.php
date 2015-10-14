@@ -10,15 +10,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PersonRegistration extends AbstractType
 {
+    private $citys;
+    private $departments;
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $basicData = $builder->create('basic', 'tab', array(
-            'label' => 'Datos básicos',
-            'icon' => 'pencil',
-            'inherit_data' => true,
-        ));
 
-        $basicData
+
+        $builder
             ->add('tuEres', 'choice', array(
 			    'choices' => array(
 			        'persona'   => 'Persona',
@@ -31,6 +30,7 @@ class PersonRegistration extends AbstractType
 			    'choices' => array(
 			        'cedulaCiudadania'   => 'Cedula Ciudadania',
 			        'cedulaExtrangeria' => 'Cedula Extrangeria',
+                    'pasaporte' => 'Pasaporte',
 			    ),
 			    'multiple' => false,
 			    'expanded' => false,
@@ -57,29 +57,41 @@ class PersonRegistration extends AbstractType
             ->add('birthDate', 'date', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),));
-
-        $contact = $builder->create('contact', 'tab', array(
-            'label' => 'Datos de Contacto',
-            'icon' => 'user',
-            'inherit_data' => true,
-        ));
-
-        $contact
-        	->add('address', 'text', array(
+                ),))
+            //Tab 2
+        	
+            ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
                 ),))
+            ->add('neighborhood', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                ),))
+            ->add('phone', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                ),))
+            ->add('department', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Department',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'documentType',
+                ))
+            ->add('city', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'documentType',
+                ))
+
             ;
 
         
 
-        /**
-         * Add both tabs to the main form
-         */
-        $builder
-            ->add($basicData)
-            ->add($contact);
+
     }
 
 
@@ -90,7 +102,6 @@ class PersonRegistration extends AbstractType
         	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person',
         ));
     }
-
     
     public function getName()
     {

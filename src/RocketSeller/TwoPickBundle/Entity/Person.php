@@ -51,7 +51,29 @@ class Person
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
-    private $address;
+    private $mainAddress;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $neighborhood;
+    /**
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_department", referencedColumnName="id_department")
+     * })
+     */
+    private $department;
+    /**
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     */
+    private $phone;
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
+     */
+    private $city;
+
     /**
      * Get idPerson
      *
@@ -208,27 +230,126 @@ class Person
         return $this->birthDate;
     }
 
+
+
     /**
-     * Set address
+     * Set mainAddress
      *
-     * @param string $address
+     * @param string $mainAddress
      *
      * @return Person
      */
-    public function setAddress($address)
+    public function setMainAddress($mainAddress)
     {
-        $this->address = $address;
+        $this->mainAddress = $mainAddress;
 
         return $this;
     }
 
     /**
-     * Get address
+     * Get mainAddress
      *
      * @return string
      */
-    public function getAddress()
+    public function getMainAddress()
     {
-        return $this->address;
+        return $this->mainAddress;
+    }
+
+    /**
+     * Set neighborhood
+     *
+     * @param string $neighborhood
+     *
+     * @return Person
+     */
+    public function setNeighborhood($neighborhood)
+    {
+        $this->neighborhood = $neighborhood;
+
+        return $this;
+    }
+
+    /**
+     * Get neighborhood
+     *
+     * @return string
+     */
+    public function getNeighborhood()
+    {
+        return $this->neighborhood;
+    }
+
+    /**
+     * Set department
+     *
+     * @param string $department
+     *
+     * @return Person
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * Get department
+     *
+     * @return string
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     *
+     * @return Person
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+
+    /**
+     * Set city
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\City $city
+     *
+     * @return Person
+     */
+    public function setCity(\RocketSeller\TwoPickBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

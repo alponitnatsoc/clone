@@ -27,10 +27,10 @@ class PersonController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $user=$this->getUser();
             $em = $this->getDoctrine()->getManager();
             $em->persist($people);
             $em->flush();
+            $user=$this->getUser();
             $realUser = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy( array('username' => $user->getUsername()) );
             $realUser->setPersonPerson($people);
             $em->persist($people);

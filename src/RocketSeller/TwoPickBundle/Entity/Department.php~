@@ -17,22 +17,23 @@ class Department
      *
      * @ORM\Column(name="id_department", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idDepartment;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Country
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
      */
     private $countryCountry;
-
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
 
 
     /**
@@ -81,5 +82,29 @@ class Department
     public function getCountryCountry()
     {
         return $this->countryCountry;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Department
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
