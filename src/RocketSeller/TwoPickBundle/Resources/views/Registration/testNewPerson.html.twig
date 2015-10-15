@@ -1,6 +1,56 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 {% block fos_user_content %}
 {{ form_start(form) }}
-{{ form_widget(form) }}
+
+    {# render the task's only field: description #}
+    {{ form_row(form.youAre) }}
+    {{ form_row(form.documentType) }}
+    {{ form_row(form.document) }}
+    {{ form_row(form.names) }}
+    {{ form_row(form.lastName1) }}
+    {{ form_row(form.lastName2) }}
+    {{ form_row(form.birthDate) }}
+    {{ form_row(form.mainAddress) }}
+    {{ form_row(form.neighborhood) }}
+    {{ form_row(form.phone) }}
+    {{ form_row(form.department) }}
+    {{ form_row(form.city) }}
+    <h3>Workplaces</h3>
+    {# iterate over each existing workplaces and render its fields #}
+    {% for employer in form.employer %}
+    	<ul class="workplaces" data-prototype="{{ form_widget(form.employer.wokrplaces.vars.prototype)|e }}">
+       	{% for wokrplace in employer.wokrplaces %}
+            <li>{{ form_row(wokrplace.mainAddress) }}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+
 {{ form_end(form) }}
 {% endblock fos_user_content %}
+{% block javascripts%}
+<script>
+var $department = $('#register_person_tabs_department');
+// When department gets selected ...
+$department.change(function() {
+  // ... retrieve the corresponding form.
+  var $form = $(this).closest('form');
+  // Simulate form data, but only include the selected department value.
+  var data = {};
+  data[$department.attr('name')] = $department.val();
+  // Submit data via AJAX to the form's action path.
+  $.ajax({
+    url : $form.attr('action'),
+    type: $form.attr('method'),
+    data : data,
+    success: function(html) {
+      // Replace current position field ...
+      $('#register_person_tabs_city').replaceWith(
+        // ... with the returned one from the AJAX response.
+        $(html).find('#register_person_tabs_city')
+      );
+      // Position field now displays the appropriate positions.
+    }
+  });
+});
+</script>
+{% endblock javascripts %}

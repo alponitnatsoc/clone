@@ -75,6 +75,12 @@ class Person
     private $city;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Employer
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="personPerson")
+     */
+    private $employer;
+
+    /**
      * Get idPerson
      *
      * @return integer
@@ -351,5 +357,31 @@ class Person
     public function getCity()
     {
         return $this->city;
+    }
+
+
+
+    /**
+     * Set employer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employer
+     *
+     * @return Person
+     */
+    public function setEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer = null)
+    {
+        $this->employer = $employer;
+
+        return $this;
+    }
+
+    /**
+     * Get employer
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employer
+     */
+    public function getEmployer()
+    {
+        return $this->employer;
     }
 }

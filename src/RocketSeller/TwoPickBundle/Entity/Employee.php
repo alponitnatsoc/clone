@@ -32,10 +32,6 @@ class Employee
      * })
      */
     private $personPerson;
-    /**
-     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="employeeEmployee")
-     */
-    private $workplaces;
 
 
 
@@ -94,37 +90,5 @@ class Employee
         $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Add workplace
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
-     *
-     * @return Employee
-     */
-    public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
-    {
-        $this->workplaces[] = $workplace;
 
-        return $this;
-    }
-
-    /**
-     * Remove workplace
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
-     */
-    public function removeWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
-    {
-        $this->workplaces->removeElement($workplace);
-    }
-
-    /**
-     * Get workplaces
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getWorkplaces()
-    {
-        return $this->workplaces;
-    }
 }

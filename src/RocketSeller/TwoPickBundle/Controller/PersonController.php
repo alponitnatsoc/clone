@@ -48,15 +48,19 @@ class PersonController extends Controller
     public function newPersonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $form = $this->createForm(new PersonRegistration(), new Person());
+        $people = new Person();
+        $form = $this->createForm(new PersonRegistration(), $people);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $registration = $form->getData();
-
-            $em->persist($registration->getUser());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($people);
+            $em->flush();
+            $user=$this->getUser();
+            $user->setPersonPerson($people);
+            $em->persist($people);
+            $em->persist($user);
             $em->flush();
 
             return $this->redirectToRoute('rocket_seller_two_pick_homepage');

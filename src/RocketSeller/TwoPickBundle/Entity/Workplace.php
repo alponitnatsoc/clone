@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Workplace
  *
- * @ORM\Table(name="workplace", indexes={@ORM\Index(name="fk_workplace_contract1", columns={"contract_id_contract"}), @ORM\Index(name="fk_workplace_employee1", columns={"employee_id_employee"})})
+ * @ORM\Table(name="workplace")
  * @ORM\Entity
  */
 class Workplace
@@ -22,13 +22,13 @@ class Workplace
     private $idWorkplace;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee",  inversedBy="workplaces")
+     * @var \RocketSeller\TwoPickBundle\Entity\Employer
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer",  inversedBy="workplaces")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
+     *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
      */
-    private $employeeEmployee;
+    private $employerEmployer;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
@@ -38,6 +38,25 @@ class Workplace
      * })
      */
     private $contractContract;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $mainAddress;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_department", referencedColumnName="id_department")
+     * })
+     */
+    private $department;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
+     */
+    private $city;
 
 
 
@@ -111,5 +130,101 @@ class Workplace
     public function getContractContract()
     {
         return $this->contractContract;
+    }
+
+    /**
+     * Set employerEmployer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer
+     *
+     * @return Workplace
+     */
+    public function setEmployerEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer = null)
+    {
+        $this->employerEmployer = $employerEmployer;
+
+        return $this;
+    }
+
+    /**
+     * Get employerEmployer
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employer
+     */
+    public function getEmployerEmployer()
+    {
+        return $this->employerEmployer;
+    }
+
+    /**
+     * Set mainAddress
+     *
+     * @param string $mainAddress
+     *
+     * @return Workplace
+     */
+    public function setMainAddress($mainAddress)
+    {
+        $this->mainAddress = $mainAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get mainAddress
+     *
+     * @return string
+     */
+    public function getMainAddress()
+    {
+        return $this->mainAddress;
+    }
+
+    /**
+     * Set department
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
+     *
+     * @return Workplace
+     */
+    public function setDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department = null)
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * Get department
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\City $city
+     *
+     * @return Workplace
+     */
+    public function setCity(\RocketSeller\TwoPickBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

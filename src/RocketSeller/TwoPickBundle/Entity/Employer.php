@@ -17,21 +17,24 @@ class Employer
      *
      * @ORM\Column(name="id_employer", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployer;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
      */
     private $personPerson;
+    /**
+     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="employerEmployer" , cascade={"persist"})
+     */
+    private $workplaces;
+
+
 
 
 
@@ -82,4 +85,48 @@ class Employer
     {
         return $this->personPerson;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add workplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
+     *
+     * @return Employer
+     */
+    public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
+    {
+        $workplace->setEmployerEmployer($this);
+        $this->workplaces[] = $workplace;
+
+        return $this;
+    }
+
+    /**
+     * Remove workplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
+     */
+    public function removeWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
+    {
+        $this->workplaces->removeElement($workplace);
+    }
+
+    /**
+     * Get workplaces
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWorkplaces()
+    {
+        return $this->workplaces;
+    }
+
+
 }
