@@ -7,14 +7,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class UserAdmin extends Admin
+class BeneficiaryAdmin extends Admin
 {
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('username', 'text', array('label' => 'Username', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('email','email', array('label' => 'Email', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
+            ->add('id_beneficiary', 'text', array('label' => 'Id Beneficiary', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('personPerson', 'sonata_type_model_autocomplete', array(
                     'property' => 'document',
                     'label' => 'Person document',
@@ -23,15 +22,13 @@ class UserAdmin extends Admin
                         return $entity->getNames();
                     },
                 ))
-            ;
+        ;
     }
-
     // Fields to be shown on filter forms
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
-            ->add('email')
+            ->add('idBeneficiary', null, array('label'=>'id Beneficiary'), null, null)
             ->add('personPerson.document', null, array('label'=>'document'), null, null)
             ->add('personPerson.names', null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('personPerson.lastName1',null, array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
@@ -45,10 +42,7 @@ class UserAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
-            ->add('username')
-            ->add('email')
-            ->add('created_datetime','date', array('label'=>'Created date time','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->addIdentifier('id Beneficiary')
             ->add('personPerson.idPerson', 'text', array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('personPerson.names', 'text', array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
@@ -64,6 +58,8 @@ class UserAdmin extends Admin
                     'delete' => array(),
                 )
             ))
+
+            
             ;
     }
 }

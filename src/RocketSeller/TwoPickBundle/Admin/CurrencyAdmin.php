@@ -41,5 +41,12 @@ class CurrencyAdmin extends Admin
             ->add('name')
             ->add('code')
             ->add('created_datetime');
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'show' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
     }
 }
