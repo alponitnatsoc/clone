@@ -29,7 +29,37 @@ class WorkPlaceRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
+                ))
+            ->add('city', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'city',
                 ));
+            $formModifier = function (FormInterface $form, Department $department = null) {
+                $citys = null === $department ? array() : $department->getCitys();
+
+                $form->add('city', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'placeholder' => '',
+                'choices'     => $citys,
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'city',
+                ));
+                
+            };
+
+            $builder->get('department')->addEventListener(
+                FormEvents::POST_SUBMIT,
+                function (FormEvent $event) use ($formModifier) {
+                    $department = $event->getForm()->getData();
+                    $formModifier($event->getForm()->getParent(), $department);
+                }
+            );
 
 
     }

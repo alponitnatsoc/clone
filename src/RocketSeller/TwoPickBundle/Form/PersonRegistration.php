@@ -84,11 +84,7 @@ class PersonRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'department',
                 ))
-            ->add('employer', 'collection', array(
-                'type' => new EmployerRegistration(),
-                'allow_add'    => false,
-                'by_reference' => false,
-                ))
+            ->add('employer', new EmployerRegistration())
 
 
             ->add('save', 'submit', array(

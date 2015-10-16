@@ -1,42 +1,89 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 {% block fos_user_content %}
+
+<div id='registrationFormContainer' class=''>
 {{ form_start(form) }}
 
-    {# render the task's only field: description #}
-    {{ form_row(form.youAre) }}
-    {{ form_row(form.documentType) }}
-    {{ form_row(form.document) }}
-    {{ form_row(form.names) }}
-    {{ form_row(form.lastName1) }}
-    {{ form_row(form.lastName2) }}
-    {{ form_row(form.birthDate) }}
-    {{ form_row(form.mainAddress) }}
-    {{ form_row(form.neighborhood) }}
-    {{ form_row(form.phone) }}
-    {{ form_row(form.department) }}
-    {{ form_row(form.city) }}
-    <h3>Workplaces</h3>
-    {# iterate over each existing workplaces and render its fields #}
-    {% for employer in form.employer %}
-    	<ul class="workplaces" data-prototype="{{ form_widget(form.employer.wokrplaces.vars.prototype)|e }}">
-       	{% for wokrplace in employer.wokrplaces %}
-            <li>{{ form_row(wokrplace.mainAddress) }}</li>
-        {% endfor %}
-        </ul>
-    {% endfor %}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#basicData">Tab 1</a></li>
+  <li><a data-toggle="tab" href="#contactData">Tab 2</a></li>
+  <li><a data-toggle="tab" href="#workplacesData">Tab 3</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id="basicData" class="tab-pane fade in active">
+	    {# render the task's only field: description #}
+	    {{ form_row(form.youAre) }}
+	    {{ form_row(form.documentType) }}
+	    {{ form_row(form.document) }}
+	    {{ form_row(form.names) }}
+	    {{ form_row(form.lastName1) }}
+	    {{ form_row(form.lastName2) }}
+	    {{ form_row(form.birthDate) }}
+	    <a class="btn btn-primary btnNext" >Siguiente</a>
+
+	</div>
+
+	<div id="contactData" class="tab-pane fade in">
+	    {{ form_row(form.mainAddress) }}
+	    {{ form_row(form.neighborhood) }}
+	    {{ form_row(form.phone) }}
+	    {{ form_row(form.department) }}
+	    {{ form_row(form.city) }}
+	    <a class="btn btn-primary btnPrevious" >Anterior</a>
+	    <a class="btn btn-primary btnNext" >Siguiente</a>
+
+    </div>
+
+    <div id="workplacesData" class="tab-pane fade h3">
+	    <in>Workplaces</h3>
+	    {# iterate over each existing workplaces and render its fields #}
+		<ul class="workplaces" data-prototype="{{ form_widget(form.employer.workplaces.vars.prototype)|e }}" >
+	   	{% for workplace in form.employer.workplaces %}
+	        <li>
+	        	{{ form_row(workplace.mainAddress) }}
+	        	{{ form_row(workplace.department) }}
+	        	{{ form_row(workplace.city) }}
+	        </li>
+	    {% endfor %}
+	    </ul>
+	    <a class="btn btn-primary btnPrevious" >Anterior</a>
+	    {{ form_row(form.save) }}
+    </div>
+
+
+
+
+</div>    
+
+
 
 {{ form_end(form) }}
+</div>
+
 {% endblock fos_user_content %}
 {% block javascripts%}
 <script>
-var $department = $('#register_person_tabs_department');
-// When department gets selected ...
-$department.change(function() {
+
+	$('.btnNext').click(function(){
+	  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+	});
+	$('.btnPrevious').click(function(){
+	  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+	});
+
+
+$('select')
+    .filter(function() {
+        return this.id.match(/department/);
+    }).change(function() {
+  var $department = $(this);
   // ... retrieve the corresponding form.
   var $form = $(this).closest('form');
   // Simulate form data, but only include the selected department value.
   var data = {};
   data[$department.attr('name')] = $department.val();
+  var citySelectId = $department.attr("id").replace("_department", "_city");
   // Submit data via AJAX to the form's action path.
   $.ajax({
     url : $form.attr('action'),
@@ -44,13 +91,14 @@ $department.change(function() {
     data : data,
     success: function(html) {
       // Replace current position field ...
-      $('#register_person_tabs_city').replaceWith(
+      $('#'+citySelectId).replaceWith(
         // ... with the returned one from the AJAX response.
-        $(html).find('#register_person_tabs_city')
+        $(html).find('#'+citySelectId)
       );
       // Position field now displays the appropriate positions.
     }
   });
 });
+
 </script>
 {% endblock javascripts %}

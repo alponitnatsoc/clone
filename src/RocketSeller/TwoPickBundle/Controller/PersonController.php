@@ -1,6 +1,8 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\PersonRegistration;
@@ -49,6 +51,10 @@ class PersonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $people = new Person();
+        $employer = new Employer();
+        $workplace = new Workplace();
+        $employer->addWorkplace($workplace);
+        $people->setEmployer($employer);
         $form = $this->createForm(new PersonRegistration(), $people);
 
         $form->handleRequest($request);

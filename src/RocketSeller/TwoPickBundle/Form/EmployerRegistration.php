@@ -18,15 +18,11 @@ class EmployerRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('wokrplaces', 'collection', array(
+            ->add('workplaces', 'collection', array(
                 'type' => new WorkPlaceRegistration(),
                 'allow_add'    => true,
                 'by_reference' => false,
-                ))
-            ->add('test', 'number', array(
-                'constraints' => array(
-                    new NotBlank(),
-                ),));
+                ));
 
 
     }
