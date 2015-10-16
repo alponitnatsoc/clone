@@ -76,7 +76,7 @@ class Person
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="personPerson")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="personPerson", cascade={"persist"})
      */
     private $employer;
 
@@ -370,6 +370,7 @@ class Person
      */
     public function setEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer = null)
     {
+        $employer->setPersonPerson($this);
         $this->employer = $employer;
 
         return $this;

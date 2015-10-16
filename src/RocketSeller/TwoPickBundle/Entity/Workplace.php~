@@ -17,7 +17,7 @@ class Workplace
      *
      * @ORM\Column(name="id_workplace", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idWorkplace;
 
