@@ -41,7 +41,6 @@
         "sonata-project/intl-bundle": "2.2.x-dev",
 
         "jackalope/jackalope-doctrine-dbal": "^1.2",
-        "mopa/bootstrap-bundle": "^2.3",
         "twbs/bootstrap": "^3.3"
     },
 

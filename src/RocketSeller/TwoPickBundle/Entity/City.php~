@@ -17,22 +17,23 @@ class City
      *
      * @ORM\Column(name="id_city", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idCity;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Department
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
      * })
      */
     private $departmentDepartment;
-
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
 
 
     /**
@@ -81,5 +82,29 @@ class City
     public function getDepartmentDepartment()
     {
         return $this->departmentDepartment;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return City
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

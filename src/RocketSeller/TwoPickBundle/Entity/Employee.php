@@ -82,4 +82,13 @@ class Employee
     {
         return $this->personPerson;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
 }

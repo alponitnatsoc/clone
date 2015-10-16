@@ -45,6 +45,10 @@ class Contract
      */
     private $contractTypeContractType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="contractContract")
+     */
+    private $workplaces;
 
 
     /**
@@ -117,5 +121,46 @@ class Contract
     public function getContractTypeContractType()
     {
         return $this->contractTypeContractType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add workplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
+     *
+     * @return Contract
+     */
+    public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
+    {
+        $this->workplaces[] = $workplace;
+
+        return $this;
+    }
+
+    /**
+     * Remove workplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Workplace $workplace
+     */
+    public function removeWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
+    {
+        $this->workplaces->removeElement($workplace);
+    }
+
+    /**
+     * Get workplaces
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWorkplaces()
+    {
+        return $this->workplaces;
     }
 }
