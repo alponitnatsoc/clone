@@ -73,7 +73,7 @@ class PersonController extends Controller
         }
 
         return $this->render(
-            'RocketSellerTwoPickBundle:Registration:testNewPerson.html.twig',
+            'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
             array('form' => $form->createView())
         );
     }
