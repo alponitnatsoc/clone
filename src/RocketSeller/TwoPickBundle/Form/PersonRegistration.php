@@ -59,6 +59,7 @@ class PersonRegistration extends AbstractType
                     new NotBlank(),
                 ),))
             ->add('birthDate', 'date', array(
+                'years' => range(1900,2015),
                 'constraints' => array(
                     new NotBlank(),
                 ),))
