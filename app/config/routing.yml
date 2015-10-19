@@ -1,6 +1,6 @@
 #Customs
 show_dashboard:
-    path:      /dashBoard
+    path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
 register_incomplete:
     path:      /register/complete

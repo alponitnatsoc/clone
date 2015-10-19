@@ -18,9 +18,15 @@ class DashBoardController extends Controller
         $step1 = array(
                 'url' => "/register/complete", 
                 'name' => "Datos del empleador",
+                'state' => 100,
+                'stateMessage' => "Continuar",);
+        $step2 = array(
+                'url' => "/register/employee", 
+                'name' => "Datos del empleado",
                 'state' => 0,
                 'stateMessage' => "Continuar",);
         $steps [] =$step1;
+        $steps [] =$step2;
         return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', 
             array('steps' => $steps ) );
     }
