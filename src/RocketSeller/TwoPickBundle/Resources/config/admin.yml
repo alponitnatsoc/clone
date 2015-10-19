@@ -68,13 +68,13 @@ services:
         class: RocketSeller\TwoPickBundle\Admin\ContractHasBenefitsAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\ContractHasBenefits, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Persons Extra, label: ContractHasBenefits}
+            - {name: sonata.admin, manager_type: orm, group: Persons Extra, label: Contract  Benefits}
 
     rocket_seller_two_pick.admin.employee_has_beneficiary:
         class: RocketSeller\TwoPickBundle\Admin\EmployeeHasBeneficiaryAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Employee, label: EmployeeHasBeneficiary}
+            - {name: sonata.admin, manager_type: orm, group: Employee, label: Employee Beneficiary}
 
     rocket_seller_two_pick.admin.employee:
         class: RocketSeller\TwoPickBundle\Admin\EmployeeAdmin
@@ -86,10 +86,112 @@ services:
         class: RocketSeller\TwoPickBundle\Admin\EntityTypeAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\EntityType, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Entities, label: EntityType}
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: Entity Type}
 
     rocket_seller_two_pick.admin.entity:
         class: RocketSeller\TwoPickBundle\Admin\EntityAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Entity, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Entities, label: Entity}
+
+    rocket_seller_two_pick.admin.document:
+        class: RocketSeller\TwoPickBundle\Admin\DocumentAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Document, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Documents, label: Document}
+
+    rocket_seller_two_pick.admin.department:
+        class: RocketSeller\TwoPickBundle\Admin\DepartmentAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Department, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Other, label: Department}
+
+    rocket_seller_two_pick.admin.document_type:
+        class: RocketSeller\TwoPickBundle\Admin\DocumentTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\DocumentType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Documents, label: Document Type}
+
+    rocket_seller_two_pick.admin.employee_has_entity:
+        class: RocketSeller\TwoPickBundle\Admin\EmployeeHasEntityAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Employee, label: Employee Entitie}
+
+    rocket_seller_two_pick.admin.employer_has_employee:
+        class: RocketSeller\TwoPickBundle\Admin\EmployerHasEmployeeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Employer, label: Employer Employee}
+
+    rocket_seller_two_pick.admin.employer_has_entity:
+        class: RocketSeller\TwoPickBundle\Admin\EmployerHasEntityAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\EmployerHasEntity, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Employer, label: Employer Entity}
+
+    rocket_seller_two_pick.admin.entity_fields:
+        class: RocketSeller\TwoPickBundle\Admin\EntityFieldsAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\EntityFields, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: Entity Fields}
+
+    rocket_seller_two_pick.admin.novelty:
+        class: RocketSeller\TwoPickBundle\Admin\NoveltyAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Novelty, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: Novelty}
+
+    rocket_seller_two_pick.admin.office:
+        class: RocketSeller\TwoPickBundle\Admin\OfficeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Office, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: Office}
+
+    rocket_seller_two_pick.admin.pay:
+        class: RocketSeller\TwoPickBundle\Admin\PayAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Pay, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: Pay}
+
+    rocket_seller_two_pick.admin.pay_method:
+        class: RocketSeller\TwoPickBundle\Admin\PayMethodAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\PayMethod, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: PayMethod}
+
+    rocket_seller_two_pick.admin.pay_type:
+        class: RocketSeller\TwoPickBundle\Admin\PayTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\PayType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: PayType}
+
+    rocket_seller_two_pick.admin.payroll:
+        class: RocketSeller\TwoPickBundle\Admin\PayrollAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Payroll, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: Payroll}
+
+    rocket_seller_two_pick.admin.payroll_detail:
+        class: RocketSeller\TwoPickBundle\Admin\PayrollDetailAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\PayrollDetail, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Payments, label: PayrollDetail}
+
+    rocket_seller_two_pick.admin.procedure:
+        class: RocketSeller\TwoPickBundle\Admin\ProcedureAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Procedure, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Procedures, label: Procedure}
+
+    rocket_seller_two_pick.admin.procedure_type:
+        class: RocketSeller\TwoPickBundle\Admin\ProcedureTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\ProcedureType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Procedures, label: ProcedureType}
+
+    rocket_seller_two_pick.admin.product:
+        class: RocketSeller\TwoPickBundle\Admin\ProductAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Product, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Products, label: Product}

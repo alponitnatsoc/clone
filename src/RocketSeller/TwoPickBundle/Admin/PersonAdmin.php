@@ -19,7 +19,7 @@ class PersonAdmin extends Admin
             ->add('documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
             ->add('document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
             ->add('birthDate','date', array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('address','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ;
     }
 
@@ -42,7 +42,7 @@ class PersonAdmin extends Admin
             ->add('names')
             ->add('lastName1')
             ->add('lastName2')
-            ->add('address')
+            ->add('mainAddress')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

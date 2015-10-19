@@ -8,16 +8,15 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class BankAdmin extends Admin
+class PayrollAdmin extends Admin
 {
-    //
     /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idBank')
+            ->add('idPayroll')
         ;
     }
 
@@ -27,7 +26,7 @@ class BankAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idBank')
+            ->add('idPayroll')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -44,7 +43,7 @@ class BankAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idBank')
+            ->add('idPayroll')
         ;
     }
 
@@ -54,7 +53,7 @@ class BankAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idBank')
+            ->add('idPayroll')
         ;
     }
 }

@@ -16,7 +16,7 @@ class EntityAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idEntity')
+            ->add('entityTypeEntityType.idEntityType')
         ;
     }
 
@@ -43,14 +43,9 @@ class EntityAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idEntity')
-            ->add('entityTypeEntityType', 'sonata_type_model_autocomplete', array(
-                    'property' => 'idEntityType',
-                    'label' => 'id Entity',
-                    'placeholder'=> 'Search by entity id',
-                    'to_string_callback' => function($entity, $property) {
-                        return $entity->getidEntityType();
-                    },
+            ->add('entityTypeEntityType', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No entity selected'
                 ))
         ;
     }
@@ -62,6 +57,7 @@ class EntityAdmin extends Admin
     {
         $showMapper
             ->add('idEntity')
+            ->add('id entityTypeEntityType')
         ;
     }
 }

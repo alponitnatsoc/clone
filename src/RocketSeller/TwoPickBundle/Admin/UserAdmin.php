@@ -15,13 +15,9 @@ class UserAdmin extends Admin
         $formMapper
             ->add('username', 'text', array('label' => 'Username', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('email','email', array('label' => 'Email', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
-            ->add('personPerson', 'sonata_type_model_autocomplete', array(
-                    'property' => 'document',
-                    'label' => 'Person document',
-                    'placeholder'=> 'Search by document',
-                    'to_string_callback' => function($entity, $property) {
-                        return $entity->getNames();
-                    },
+            ->add('personPerson', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No author selected'
                 ))
             ;
     }
@@ -37,7 +33,7 @@ class UserAdmin extends Admin
             ->add('personPerson.lastName1',null, array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('personPerson.lastName2',null, array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))                  
             ->add('personPerson.birthDate',null, array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('personPerson.address',null, array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('personPerson.mainAddress',null, array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ;
     }
 
@@ -56,7 +52,7 @@ class UserAdmin extends Admin
             ->add('personPerson.documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
             ->add('personPerson.document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
             ->add('personPerson.birthDate','date', array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('personPerson.address','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('personPerson.mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

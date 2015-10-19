@@ -23,10 +23,7 @@ class Contract
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
      * })

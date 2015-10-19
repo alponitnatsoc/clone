@@ -17,16 +17,13 @@ class Entity
      *
      * @ORM\Column(name="id_entity", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEntity;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\EntityType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EntityType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EntityType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_type_id_entity_type", referencedColumnName="id_entity_type")
      * })

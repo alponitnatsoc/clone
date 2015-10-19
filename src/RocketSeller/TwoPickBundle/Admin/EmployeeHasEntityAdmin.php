@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class EmployeeHasBeneficiaryAdmin extends Admin
+class EmployeeHasEntityAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -16,7 +16,7 @@ class EmployeeHasBeneficiaryAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idEmployeeHasBeneficiary')
+            ->add('idEmployeeHasEntity')
             ->add('employeeEmployee.idEmployee')
             ->add('employeeEmployee.personPerson.idPerson', null, array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.names', null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
@@ -35,6 +35,7 @@ class EmployeeHasBeneficiaryAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('idEmployeeHasEntity')
             ->add('employeeEmployee.personPerson.names', 'text', array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('employeeEmployee.personPerson.lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
@@ -43,11 +44,6 @@ class EmployeeHasBeneficiaryAdmin extends Admin
 
             ->add('entityEntity.entityTypeEntityType.idEntityType', 'text', array('label' => 'Tipo entidad', 'translation_domain' => 'RocketSellerTwoPickBundle'))
 
-            ->add('beneficiaryBeneficiary.personPerson.names','text', array('label' => 'beneficiary name', 'translation_domain' => 'RocketSellerTwoPickBundle')) 
-            ->add('beneficiaryBeneficiary.personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
-            ->add('beneficiaryBeneficiary.personPerson.lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('beneficiaryBeneficiary.personPerson.documentType','text', array('label'=>'Document Type')) 
-            ->add('beneficiaryBeneficiary.personPerson.document','text', array('label'=>'Document'))
 
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -65,6 +61,7 @@ class EmployeeHasBeneficiaryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('idEmployeeHasEntity')
             ->add('employeeEmployee', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No employee selected'
@@ -73,14 +70,8 @@ class EmployeeHasBeneficiaryAdmin extends Admin
                 ), array(
                     'placeholder' => 'No entity selected'
                 ))
-            ->add('beneficiaryBeneficiary', 'sonata_type_model_list', array(
-                ), array(
-                    'placeholder' => 'No beneficiary selected'
-                ))
-
         ;
     }
-
 
     /**
      * @param ShowMapper $showMapper
@@ -88,7 +79,7 @@ class EmployeeHasBeneficiaryAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idEmployeeHasBeneficiary')
+            ->add('idEmployeeHasEntity')
         ;
     }
 }

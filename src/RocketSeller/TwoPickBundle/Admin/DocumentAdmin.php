@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class BankAdmin extends Admin
+class DocumentAdmin extends Admin
 {
     //
     /**
@@ -17,7 +17,7 @@ class BankAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idBank')
+            ->add('idDocument')
         ;
     }
 
@@ -27,7 +27,7 @@ class BankAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idBank')
+            ->add('idDocument')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -44,7 +44,7 @@ class BankAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idBank')
+            ->add('idDocument')
         ;
     }
 
@@ -54,7 +54,7 @@ class BankAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idBank')
+            ->add('idDocument')
         ;
     }
 }
