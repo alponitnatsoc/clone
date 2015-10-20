@@ -17,16 +17,13 @@ class Procedure
      *
      * @ORM\Column(name="id_procedure", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idProcedure;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="procedure")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -35,10 +32,7 @@ class Procedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ProcedureType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ProcedureType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ProcedureType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="procedure_type_id_procedure_type", referencedColumnName="id_procedure_type")
      * })
@@ -47,15 +41,17 @@ class Procedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="procedure")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
      */
     private $employerEmployer;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="procedureProcedure", cascade={"persist"})
+     */
+    private $action;
 
 
 
@@ -153,5 +149,46 @@ class Procedure
     public function getEmployerEmployer()
     {
         return $this->employerEmployer;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return Procedure
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action->removeElement($action);
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

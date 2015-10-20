@@ -17,16 +17,13 @@ class Action
      *
      * @ORM\Column(name="id_action", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idAction;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="action")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -35,10 +32,7 @@ class Action
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Procedure
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Procedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Procedure", inversedBy="action")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="procedure_id_procedure", referencedColumnName="id_procedure")
      * })
@@ -47,10 +41,7 @@ class Action
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="action_type_id_action_type", referencedColumnName="id_action_type")
      * })

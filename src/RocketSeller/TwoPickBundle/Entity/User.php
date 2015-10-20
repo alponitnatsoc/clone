@@ -67,6 +67,15 @@ class User extends BaseUser
      */
     private $personPerson;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="userUser", cascade={"persist"})
+     */
+    private $action;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Procedure", mappedBy="userUser", cascade={"persist"})
+     */
+    private $procedure;
 
     /**
      * Set personPerson
@@ -234,5 +243,73 @@ class User extends BaseUser
     public function getLinkedinAccessToken()
     {
         return $this->linkedin_access_token;
+    }
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return User
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action->removeElement($action);
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Add procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     *
+     * @return User
+     */
+    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    {
+        $this->procedure[] = $procedure;
+
+        return $this;
+    }
+
+    /**
+     * Remove procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     */
+    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    {
+        $this->procedure->removeElement($procedure);
+    }
+
+    /**
+     * Get procedure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcedure()
+    {
+        return $this->procedure;
     }
 }

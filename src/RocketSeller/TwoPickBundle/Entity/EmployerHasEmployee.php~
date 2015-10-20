@@ -17,15 +17,12 @@ class EmployerHasEmployee
      *
      * @ORM\Column(name="id_employer_has_employee", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployerHasEmployee;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
@@ -35,9 +32,6 @@ class EmployerHasEmployee
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")

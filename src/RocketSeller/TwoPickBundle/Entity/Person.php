@@ -85,6 +85,11 @@ class Person
     private $employer;
 
     /**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="personPerson", cascade={"persist"})
+     */
+    private $docs;
+
+    /**
      * Get idPerson
      *
      * @return integer
@@ -412,5 +417,46 @@ class Person
     public function getEmail()
     {
         return $this->email;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add doc
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $doc
+     *
+     * @return Person
+     */
+    public function addDoc(\RocketSeller\TwoPickBundle\Entity\Document $doc)
+    {
+        $this->docs[] = $doc;
+
+        return $this;
+    }
+
+    /**
+     * Remove doc
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $doc
+     */
+    public function removeDoc(\RocketSeller\TwoPickBundle\Entity\Document $doc)
+    {
+        $this->docs->removeElement($doc);
+    }
+
+    /**
+     * Get docs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocs()
+    {
+        return $this->docs;
     }
 }

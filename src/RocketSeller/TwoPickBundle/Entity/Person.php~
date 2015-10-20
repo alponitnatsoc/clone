@@ -85,6 +85,11 @@ class Person
     private $employer;
 
     /**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="personPerson", cascade={"persist"})
+     */
+    private $docs;
+
+    /**
      * Get idPerson
      *
      * @return integer

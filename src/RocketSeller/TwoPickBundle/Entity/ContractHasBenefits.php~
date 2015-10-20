@@ -17,15 +17,12 @@ class ContractHasBenefits
      *
      * @ORM\Column(name="id_contract_has_benefits", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idContractHasBenefits;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
@@ -35,9 +32,6 @@ class ContractHasBenefits
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Benefits
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Benefits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="benefits_id_benefits", referencedColumnName="id_benefits")

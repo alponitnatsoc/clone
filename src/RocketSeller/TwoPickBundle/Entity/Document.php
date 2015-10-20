@@ -17,16 +17,13 @@ class Document
      *
      * @ORM\Column(name="id_document", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idDocument;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="docs")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
@@ -35,9 +32,6 @@ class Document
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
@@ -47,9 +41,6 @@ class Document
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")

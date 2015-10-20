@@ -17,16 +17,13 @@ class Office
      *
      * @ORM\Column(name="id_office", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idOffice;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Entity
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity", inversedBy="office")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -35,9 +32,6 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Department
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
@@ -47,9 +41,6 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Country
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
@@ -59,9 +50,6 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\City
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\City")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="city_id_city", referencedColumnName="id_city")

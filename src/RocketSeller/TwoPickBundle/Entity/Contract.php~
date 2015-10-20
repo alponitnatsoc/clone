@@ -17,7 +17,7 @@ class Contract
      *
      * @ORM\Column(name="id_contract", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idContract;
 
@@ -32,9 +32,6 @@ class Contract
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ContractType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")

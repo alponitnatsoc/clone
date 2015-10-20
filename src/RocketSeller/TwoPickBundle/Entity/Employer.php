@@ -34,6 +34,10 @@ class Employer
      */
     private $workplaces;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Procedure", mappedBy="employerEmployer", cascade={"persist"})
+     */
+    private $procedure;
 
 
 
@@ -129,4 +133,38 @@ class Employer
     }
 
 
+
+    /**
+     * Add procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     *
+     * @return Employer
+     */
+    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    {
+        $this->procedure[] = $procedure;
+
+        return $this;
+    }
+
+    /**
+     * Remove procedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     */
+    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    {
+        $this->procedure->removeElement($procedure);
+    }
+
+    /**
+     * Get procedure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcedure()
+    {
+        return $this->procedure;
+    }
 }

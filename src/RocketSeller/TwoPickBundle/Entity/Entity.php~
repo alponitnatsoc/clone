@@ -30,6 +30,16 @@ class Entity
      */
     private $entityTypeEntityType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EntityFields", mappedBy="entityEntity", cascade={"persist"})
+     */
+    private $entityFields;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Office", mappedBy="entityEntity", cascade={"persist"})
+     */
+    private $office;
+
 
 
     /**
@@ -78,5 +88,81 @@ class Entity
     public function getEntityTypeEntityType()
     {
         return $this->entityTypeEntityType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->entityFields = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->office = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add entityField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityFields $entityField
+     *
+     * @return Entity
+     */
+    public function addEntityField(\RocketSeller\TwoPickBundle\Entity\EntityFields $entityField)
+    {
+        $this->entityFields[] = $entityField;
+
+        return $this;
+    }
+
+    /**
+     * Remove entityField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityFields $entityField
+     */
+    public function removeEntityField(\RocketSeller\TwoPickBundle\Entity\EntityFields $entityField)
+    {
+        $this->entityFields->removeElement($entityField);
+    }
+
+    /**
+     * Get entityFields
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntityFields()
+    {
+        return $this->entityFields;
+    }
+
+    /**
+     * Add office
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Office $office
+     *
+     * @return Entity
+     */
+    public function addOffice(\RocketSeller\TwoPickBundle\Entity\Office $office)
+    {
+        $this->office[] = $office;
+
+        return $this;
+    }
+
+    /**
+     * Remove office
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Office $office
+     */
+    public function removeOffice(\RocketSeller\TwoPickBundle\Entity\Office $office)
+    {
+        $this->office->removeElement($office);
+    }
+
+    /**
+     * Get office
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOffice()
+    {
+        return $this->office;
     }
 }

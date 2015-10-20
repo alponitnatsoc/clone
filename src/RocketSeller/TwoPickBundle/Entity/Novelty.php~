@@ -17,15 +17,12 @@ class Novelty
      *
      * @ORM\Column(name="id_novelty", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idNovelty;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayrollDetail
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayrollDetail")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_detail_id_payroll_detail", referencedColumnName="id_payroll_detail")
