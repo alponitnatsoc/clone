@@ -16,7 +16,7 @@ class RegistrationType extends AbstractType
     {
 
         $builder->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
-            ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
+            ->add('name', 'text', array('label' => 'Name', 'mapped' => false,))
             ->add('plainPassword','password', array('label' => 'form.password', 'translation_domain' => 'FOSUserBundle'))
         ;
     }

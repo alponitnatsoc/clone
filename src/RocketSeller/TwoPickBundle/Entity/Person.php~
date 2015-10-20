@@ -22,17 +22,17 @@ class Person
     private $idPerson;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $names;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $lastName1;
 
     /**
-     * @ORM\Column(type="string", length=40, nullable=TRUE)
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $lastName2;
 
@@ -44,6 +44,10 @@ class Person
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $document;
+    /**
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     */
+    private $email;
     /**
      * @ORM\Column(type="date", length=20, nullable=TRUE)
      */
@@ -384,5 +388,29 @@ class Person
     public function getEmployer()
     {
         return $this->employer;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Person
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

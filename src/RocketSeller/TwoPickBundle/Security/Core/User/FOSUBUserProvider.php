@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Security\Core\User;
 
+use RocketSeller\TwoPickBundle\Entity\Person;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
@@ -43,14 +44,17 @@ class FOSUBUserProvider extends BaseClass {
             $setter_token = $setter.'AccessToken';
             // create new user here
             $user = $this->userManager->createUser();
-            $user->$setter_id($username);
+            $user->$setter_id($response->getEmail());
             $user->$setter_token($response->getAccessToken());
+            $people = new Person();
             //I have set all requested data with the user's username
             //modify here with relevant data
-            $user->setUsername($username);
-            $user->setEmail($username);
+            $user->setUsername($response->getEmail());
+            $user->setEmail($response->getEmail());
             $user->setPassword(md5($username));
             $user->setEnabled(true);
+            $people->setNames($response->getRealname());
+            $user->setPersonPerson($people);
             $this->userManager->updateUser($user);
             return $user;
         }
