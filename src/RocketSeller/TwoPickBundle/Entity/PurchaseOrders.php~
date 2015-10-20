@@ -17,16 +17,13 @@ class PurchaseOrders
      *
      * @ORM\Column(name="id_purchase_orders", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrders;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_type_id_purchase_orders_type", referencedColumnName="id_purchase_orders_type")
      * })
@@ -35,9 +32,6 @@ class PurchaseOrders
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
