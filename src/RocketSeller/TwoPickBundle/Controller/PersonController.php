@@ -18,8 +18,9 @@ class PersonController extends Controller
     public function newPersonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
         $people = $user->getPersonPerson();
-        if ($people==null) {
+        if ($people!=null) {
             return $this->forward("RocketSellerTwoPickBundle:Person:editPerson", array('request' => $request));
         }
         $people = new Person();
@@ -62,9 +63,9 @@ class PersonController extends Controller
             $employer=new Employer();
         }
         $workplaces = $employer->getWorkplaces();
-        if ($workplaces==null) {
+        if (count($workplaces)==0) {
             $workplaces = new Workplace();
-            $employer->addWorkplace($workplace);
+            $employer->addWorkplace($workplaces);
             $people->setEmployer($employer);
         }
 
