@@ -30,7 +30,10 @@ class Payroll
      */
     private $contractContract;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="PayrollDetail", mappedBy="payrollPayroll", cascade={"persist"})
+     */
+    private $payrollDetails;
 
     /**
      * Set idPayroll

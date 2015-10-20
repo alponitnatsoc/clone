@@ -30,7 +30,10 @@ class Payroll
      */
     private $contractContract;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="PayrollDetail", mappedBy="payrollPayroll", cascade={"persist"})
+     */
+    private $payrollDetails;
 
     /**
      * Set idPayroll
@@ -78,5 +81,46 @@ class Payroll
     public function getContractContract()
     {
         return $this->contractContract;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add payrollDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetail
+     *
+     * @return Payroll
+     */
+    public function addPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetail)
+    {
+        $this->payrollDetails[] = $payrollDetail;
+
+        return $this;
+    }
+
+    /**
+     * Remove payrollDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetail
+     */
+    public function removePayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetail)
+    {
+        $this->payrollDetails->removeElement($payrollDetail);
+    }
+
+    /**
+     * Get payrollDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayrollDetails()
+    {
+        return $this->payrollDetails;
     }
 }

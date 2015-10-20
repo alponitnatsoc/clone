@@ -162,4 +162,38 @@ class Contract
     {
         return $this->workplaces;
     }
+
+    /**
+     * Add payroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payroll
+     *
+     * @return Contract
+     */
+    public function addPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payroll)
+    {
+        $this->payrolls[] = $payroll;
+
+        return $this;
+    }
+
+    /**
+     * Remove payroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payroll
+     */
+    public function removePayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payroll)
+    {
+        $this->payrolls->removeElement($payroll);
+    }
+
+    /**
+     * Get payrolls
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayrolls()
+    {
+        return $this->payrolls;
+    }
 }
