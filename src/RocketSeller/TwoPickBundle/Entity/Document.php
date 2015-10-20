@@ -41,7 +41,7 @@ class Document
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
      * })

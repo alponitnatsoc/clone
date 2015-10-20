@@ -32,7 +32,7 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Department
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
      * })
@@ -41,7 +41,7 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Country
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
@@ -50,7 +50,7 @@ class Office
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\City
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\City")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\City")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="city_id_city", referencedColumnName="id_city")
      * })

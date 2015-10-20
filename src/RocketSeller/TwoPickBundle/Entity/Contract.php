@@ -32,7 +32,7 @@ class Contract
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ContractType
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
      * })
@@ -40,9 +40,14 @@ class Contract
     private $contractTypeContractType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="contractContract")
+     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="contractContract", cascade={"persist"})
      */
     private $workplaces;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
+     */
+    private $payrolls;
 
 
     /**
@@ -156,5 +161,39 @@ class Contract
     public function getWorkplaces()
     {
         return $this->workplaces;
+    }
+
+    /**
+     * Add payroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payroll
+     *
+     * @return Contract
+     */
+    public function addPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payroll)
+    {
+        $this->payrolls[] = $payroll;
+
+        return $this;
+    }
+
+    /**
+     * Remove payroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payroll
+     */
+    public function removePayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payroll)
+    {
+        $this->payrolls->removeElement($payroll);
+    }
+
+    /**
+     * Get payrolls
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayrolls()
+    {
+        return $this->payrolls;
     }
 }
