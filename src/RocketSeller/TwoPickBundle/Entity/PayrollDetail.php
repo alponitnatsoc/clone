@@ -17,16 +17,13 @@ class PayrollDetail
      *
      * @ORM\Column(name="id_payroll_detail", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPayrollDetail;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="payrollDetails")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })

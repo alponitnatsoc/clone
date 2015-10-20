@@ -17,15 +17,12 @@ class UserHasRole
      *
      * @ORM\Column(name="id_user_has_role", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idUserHasRole;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
@@ -35,9 +32,6 @@ class UserHasRole
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Role
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Role")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="role_id_role", referencedColumnName="id_role")

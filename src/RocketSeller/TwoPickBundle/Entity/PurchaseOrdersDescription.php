@@ -17,16 +17,13 @@ class PurchaseOrdersDescription
      *
      * @ORM\Column(name="id_purchase_orders_description", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrdersDescription;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Tax
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
      * })
@@ -35,9 +32,6 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
@@ -47,10 +41,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Product
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Product")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Product")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id_product", referencedColumnName="id_product")
      * })
