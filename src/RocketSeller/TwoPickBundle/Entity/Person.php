@@ -80,7 +80,7 @@ class Person
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="personPerson", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", mappedBy="personPerson", cascade={"persist", "remove"})
      */
     private $employer;
 

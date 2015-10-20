@@ -60,7 +60,7 @@ class User extends BaseUser
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person",cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })

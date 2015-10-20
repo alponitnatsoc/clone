@@ -30,7 +30,7 @@ class Employer
      */
     private $personPerson;
     /**
-     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="employerEmployer" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="employerEmployer" , cascade={"persist", "remove"})
      */
     private $workplaces;
 
