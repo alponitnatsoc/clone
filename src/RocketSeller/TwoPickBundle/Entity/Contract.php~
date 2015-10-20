@@ -32,7 +32,7 @@ class Contract
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ContractType
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ContractType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_type_id_contract_type", referencedColumnName="id_contract_type")
      * })
