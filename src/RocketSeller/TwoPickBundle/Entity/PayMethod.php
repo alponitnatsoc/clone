@@ -17,16 +17,13 @@ class PayMethod
      *
      * @ORM\Column(name="id_pay_method", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPayMethod;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -35,10 +32,7 @@ class PayMethod
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_type_id_pay_type", referencedColumnName="id_pay_type")
      * })
@@ -47,10 +41,7 @@ class PayMethod
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Bank
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Bank")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Bank")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="bank_id_bank", referencedColumnName="id_bank")
      * })
@@ -59,10 +50,7 @@ class PayMethod
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\AccountType
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\AccountType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\AccountType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="account_type_id_account_type", referencedColumnName="id_account_type")
      * })
