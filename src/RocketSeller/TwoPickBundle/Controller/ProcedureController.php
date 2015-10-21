@@ -6,15 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Procedure;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-
 class ProcedureController extends Controller
 {
-    public function indexAction()
-    {        
-        return new Response('<html><body>Hello!</body></html>');
+    public function indexAction($name)
+    {
+        return $this->render(
+            'RocketSeller:TwoPickBundle:Default:index.html.twig',
+            array('name' => $name)
+        );
     }
     /**
      * estructura de tramite para generar vueltas y tramites
@@ -30,25 +33,53 @@ class ProcedureController extends Controller
      *                                 		->sort_order
      * @return integer $priority       prioridad del empleador (vip, regular)
      */
-    public function validateAction($id)
+    public function validateAction()
     {		
-		    $employee = $this->getDoctrine()
+    		//datos de prueba
+    		$id_employer =1;
+    		$id_procedure_type = "Inscripción";
+    		$priority = 1;
+    		$employes = array(
+    			array(
+    				'id_employee' => 1,
+    				'id_contrato' => 1,
+	    			'docs'  =>	array(
+		    					'id_doc1' => 'documento 1',
+		    					'id_doc2' => 2
+		    					),
+	    			'entities' => array(
+			    					'id_entidad' => 1,
+			    					'id_tipo_vuelta' => 1,
+			    					)	
+    				),
+    			array(
+    				'id_employee' => 2,
+    				'id_contrato' => 2,
+	    			'docs'  =>	array(
+		    					'id_doc1' => 'documento 1',
+		    					'id_doc2' => 2
+		    					),
+	    			'entities' => array(
+			    					'id_entidad' => 1,
+			    					'id_tipo_vuelta' => 1,
+			    					)	
+    				)
+    			);
+
+
+    		$employerSearch = $this->getDoctrine()
+    		->getRepository('RocketSellerTwoPickBundle:Employer')
+    		->find($id_employer);
+    		echo "El empleador". $employerSearch->getpersonPerson()->getNames(). '<br></br>';
+    		foreach ($employes as $employee) {
+			    $employeeSearch = $this->getDoctrine()
 		        ->getRepository('RocketSellerTwoPickBundle:Employee')
-		        ->find($id);
-
-		    if (!$employee) {
-    			/*$country = new Country();
-				$country->setName('otrolandia'.$id_employee);
-
-				$em = $this->getDoctrine()->getManager();
-
-				$em->persist($country);
-				$em->flush();*/
-				return new Response('No se encontro el empleado');
-		    }
-		    else{
-		    	return new Response('imported employee named: '.$employee->getpersonPerson()->getNames());
-		    }
-    		
+		        ->find($employee["id_employee"]);
+    			if(!$employeeSearch){
+    				echo "No se encontro el empleado con id: ". $employee["id_employee"] . '<br></br>' ;
+    			}else{
+    				echo "si se encontro el empleado: ". $employeeSearch->getpersonPerson()->getNames() . '<br></br>';
+    			}
+    		}		    
     }
 }
