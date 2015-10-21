@@ -42,7 +42,7 @@
 	    {# iterate over each existing workplaces and render its fields #}
 		<ul class="workplaces" data-prototype="{{ form_widget(form.employer.workplaces.vars.prototype)|e }}" >
 	   	{% for workplace in form.employer.workplaces %}
-	        <li id="workSpace_1" class="workSpaceLi">
+	        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
 	        	{{ form_row(workplace.mainAddress) }}
 	        	{{ form_row(workplace.department) }}
 	        	{{ form_row(workplace.city) }}
@@ -84,6 +84,9 @@ jQuery(document).ready(function() {
 	//funcion que agrega un listener a cada department 
 	addListeners();
 	
+	//colocar el select en el valor del tamaño del arreglo
+	$dropDownWork=$collectionHolder.data('index');
+	$('#register_person_tabs_employer_numberOfWorkplaces').val($dropDownWork);
 	//listener para el que agrega workplaces
 	$('#register_person_tabs_employer_numberOfWorkplaces').change(function() {
 		
@@ -96,9 +99,9 @@ jQuery(document).ready(function() {
 			//remove the diference of workplaces;
 			diference=diference+1;
 			for (var i = diference; i <= 0; i++) {
-				$('#workSpace_'+(workplacesCount-i)).remove();
-				index=parseInt(index)-1;
+				$('#workSpace_'+(index)).remove();
 				console.log("Index Dele:" + index );
+				index=parseInt(index)-1;
 			};
 			$collectionHolder.data('index', workplacesCount);
 

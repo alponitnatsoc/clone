@@ -7,6 +7,7 @@ use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\PersonRegistration;
+use Doctrine\Common\Collections\ArrayCollection;
 class PersonController extends Controller
 {	
 	/**
@@ -62,10 +63,14 @@ class PersonController extends Controller
         if ($employer==null) {
             $employer=new Employer();
         }
-        $workplaces = $employer->getWorkplaces();
+        $workplaces = new ArrayCollection();
+
+        foreach ($employer->getWorkplaces() as $work) {
+            $workplaces->add($work);
+        }
         if (count($workplaces)==0) {
-            $workplaces = new Workplace();
-            $employer->addWorkplace($workplaces);
+            $workplace = new Workplace();
+            $employer->addWorkplace($workplace);
             $people->setEmployer($employer);
         }
 
@@ -75,10 +80,14 @@ class PersonController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($people);
-            $em->flush();
-            $user->setPersonPerson($people);
-            $em->persist($people);
+            foreach ($workplaces as $work) {
+                if (false === $people->getEmployer()->getWorkplaces()->contains($work)) {
+                    // remove the Task from the Tag
+                    $work->setEmployerEmployer(null);
+                    $em->persist($work);
+                    $em->remove($work);
+                }
+            }
             $em->persist($user);
             $em->flush();
 
