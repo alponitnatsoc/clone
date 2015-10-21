@@ -20,7 +20,7 @@ class Action
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idAction;
-
+    
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="action")
@@ -29,7 +29,7 @@ class Action
      * })
      */
     private $userUser;
-
+    
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Procedure
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Procedure", inversedBy="action")
@@ -38,7 +38,7 @@ class Action
      * })
      */
     private $procedureProcedure;
-
+    
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionType")
@@ -47,9 +47,7 @@ class Action
      * })
      */
     private $actionTypeActionType;
-
-
-
+    
     /**
      * Set idAction
      *
@@ -60,10 +58,10 @@ class Action
     public function setIdAction($idAction)
     {
         $this->idAction = $idAction;
-
+        
         return $this;
     }
-
+    
     /**
      * Get idAction
      *
@@ -73,7 +71,7 @@ class Action
     {
         return $this->idAction;
     }
-
+    
     /**
      * Set userUser
      *
@@ -84,10 +82,10 @@ class Action
     public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
         $this->userUser = $userUser;
-
+        
         return $this;
     }
-
+    
     /**
      * Get userUser
      *
@@ -97,7 +95,7 @@ class Action
     {
         return $this->userUser;
     }
-
+    
     /**
      * Set procedureProcedure
      *
@@ -108,10 +106,10 @@ class Action
     public function setProcedureProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedureProcedure)
     {
         $this->procedureProcedure = $procedureProcedure;
-
+        
         return $this;
     }
-
+    
     /**
      * Get procedureProcedure
      *
@@ -121,7 +119,7 @@ class Action
     {
         return $this->procedureProcedure;
     }
-
+    
     /**
      * Set actionTypeActionType
      *
@@ -132,10 +130,10 @@ class Action
     public function setActionTypeActionType(\RocketSeller\TwoPickBundle\Entity\ActionType $actionTypeActionType)
     {
         $this->actionTypeActionType = $actionTypeActionType;
-
+        
         return $this;
     }
-
+    
     /**
      * Get actionTypeActionType
      *

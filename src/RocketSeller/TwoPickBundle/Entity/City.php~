@@ -24,7 +24,7 @@ class City
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Department
      *
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Department", inversedBy="citys")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")
      * })
