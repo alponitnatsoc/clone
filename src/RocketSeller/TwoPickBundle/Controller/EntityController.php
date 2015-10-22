@@ -12,9 +12,11 @@ class EntityController extends Controller
     * @param 
     * @return 
 	**/
-    public function printFormAction(Request $request)
+    public function printFormAction(Request $request, $id)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EntityFields');
         return $this->render('RocketSellerTwoPickBundle:Registration:entityForm.html.twig', 
             array('steps' => $steps ) );
     }

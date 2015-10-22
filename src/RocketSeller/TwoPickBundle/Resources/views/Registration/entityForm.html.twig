@@ -1,0 +1,6 @@
+{% extends "::base.html.twig" %}
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+    {{ form_row(form.dueDate) }}
+{{ form_end(form) }}

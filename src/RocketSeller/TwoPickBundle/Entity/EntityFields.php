@@ -46,7 +46,7 @@ class EntityFields
     /**
      * @ORM\Column(type="string", length=64, nullable=TRUE)
      */
-    private $tableRefecenced;
+    private $tableReferenced;
     /**
      * @ORM\Column(type="string", length=64, nullable=TRUE)
      */
@@ -239,5 +239,29 @@ class EntityFields
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set tableReferenced
+     *
+     * @param string $tableReferenced
+     *
+     * @return EntityFields
+     */
+    public function setTableReferenced($tableReferenced)
+    {
+        $this->tableReferenced = $tableReferenced;
+
+        return $this;
+    }
+
+    /**
+     * Get tableReferenced
+     *
+     * @return string
+     */
+    public function getTableReferenced()
+    {
+        return $this->tableReferenced;
     }
 }
