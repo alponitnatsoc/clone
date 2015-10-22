@@ -43,6 +43,14 @@ class EntityFields
      * @ORM\OneToMany(targetEntity="SpecificData", mappedBy="entityFieldsEntityFields", cascade={"persist"})
      */
     private $specificData;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $tableRefecenced;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $columnReferenced;
 
     /**
      * Set idEntityFields
@@ -155,5 +163,53 @@ class EntityFields
     public function getSpecificData()
     {
         return $this->specificData;
+    }
+
+    /**
+     * Set tableRefecenced
+     *
+     * @param string $tableRefecenced
+     *
+     * @return EntityFields
+     */
+    public function setTableRefecenced($tableRefecenced)
+    {
+        $this->tableRefecenced = $tableRefecenced;
+
+        return $this;
+    }
+
+    /**
+     * Get tableRefecenced
+     *
+     * @return string
+     */
+    public function getTableRefecenced()
+    {
+        return $this->tableRefecenced;
+    }
+
+    /**
+     * Set columnReferenced
+     *
+     * @param string $columnReferenced
+     *
+     * @return EntityFields
+     */
+    public function setColumnReferenced($columnReferenced)
+    {
+        $this->columnReferenced = $columnReferenced;
+
+        return $this;
+    }
+
+    /**
+     * Get columnReferenced
+     *
+     * @return string
+     */
+    public function getColumnReferenced()
+    {
+        return $this->columnReferenced;
     }
 }
