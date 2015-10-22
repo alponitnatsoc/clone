@@ -30,6 +30,15 @@ class EntityFields
      */
     private $entityEntity;
 
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\FilterType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\FilterType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="filter_type_id_filter_type", referencedColumnName="id_filter_type")
+     * })
+     */
+    private $filterTypeFilterType;
+
 
 
     /**
@@ -78,5 +87,29 @@ class EntityFields
     public function getEntityEntity()
     {
         return $this->entityEntity;
+    }
+
+    /**
+     * Set filterTypeFilterType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\FilterType $filterTypeFilterType
+     *
+     * @return EntityFields
+     */
+    public function setFilterTypeFilterType(\RocketSeller\TwoPickBundle\Entity\FilterType $filterTypeFilterType = null)
+    {
+        $this->filterTypeFilterType = $filterTypeFilterType;
+
+        return $this;
+    }
+
+    /**
+     * Get filterTypeFilterType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\FilterType
+     */
+    public function getFilterTypeFilterType()
+    {
+        return $this->filterTypeFilterType;
     }
 }
