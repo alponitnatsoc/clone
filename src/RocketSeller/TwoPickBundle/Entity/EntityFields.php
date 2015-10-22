@@ -44,13 +44,17 @@ class EntityFields
      */
     private $specificData;
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="string", length=64, nullable=TRUE)
      */
     private $tableRefecenced;
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="string", length=64, nullable=TRUE)
      */
     private $columnReferenced;
+    /**
+     * @ORM\Column(type="string", length=64, nullable=TRUE)
+     */
+    private $name;
 
     /**
      * Set idEntityFields
@@ -211,5 +215,29 @@ class EntityFields
     public function getColumnReferenced()
     {
         return $this->columnReferenced;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return EntityFields
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

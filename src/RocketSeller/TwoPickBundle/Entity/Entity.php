@@ -39,6 +39,10 @@ class Entity
      * @ORM\OneToMany(targetEntity="Office", mappedBy="entityEntity", cascade={"persist"})
      */
     private $office;
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
 
 
 
@@ -164,5 +168,29 @@ class Entity
     public function getOffice()
     {
         return $this->office;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Entity
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

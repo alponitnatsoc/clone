@@ -20,6 +20,10 @@ class EntityType
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idEntityType;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $name;
 
 
 
@@ -31,5 +35,29 @@ class EntityType
     public function getIdEntityType()
     {
         return $this->idEntityType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return EntityType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -21,6 +21,10 @@ class FilterType
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idFilterType;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $name;
 
     /**
      * Get idFilterType
@@ -30,5 +34,29 @@ class FilterType
     public function getIdFilterType()
     {
         return $this->idFilterType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return FilterType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

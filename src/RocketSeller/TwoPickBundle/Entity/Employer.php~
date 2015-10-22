@@ -27,14 +27,14 @@ class Employer
     /**
      * @ORM\ManyToOne(targetEntity="Department")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_department", referencedColumnName="id_department")
+     *   @ORM\JoinColumn(name="id_birth_department", referencedColumnName="id_department")
      * })
      */
     private $birthDepartment;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
+     * @ORM\JoinColumn(name="id_birth_city", referencedColumnName="id_city")
      */
     private $birthCity;
 
