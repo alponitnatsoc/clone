@@ -78,3 +78,7 @@ gallery:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
+
+home_products:
+    path:     /productos
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:products }

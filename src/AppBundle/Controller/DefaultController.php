@@ -48,5 +48,6 @@ class DefaultController extends Controller
     public function registerAction(Request $request){
         return $this->render('home/register.html.twig');
     }
+
     
 }
