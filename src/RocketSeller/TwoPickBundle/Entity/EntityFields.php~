@@ -39,7 +39,10 @@ class EntityFields
      */
     private $filterTypeFilterType;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="SpecificData", mappedBy="entityFieldsEntityFields", cascade={"persist"})
+     */
+    private $specificData;
 
     /**
      * Set idEntityFields
@@ -111,5 +114,46 @@ class EntityFields
     public function getFilterTypeFilterType()
     {
         return $this->filterTypeFilterType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add specificDatum
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum
+     *
+     * @return EntityFields
+     */
+    public function addSpecificDatum(\RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum)
+    {
+        $this->specificData[] = $specificDatum;
+
+        return $this;
+    }
+
+    /**
+     * Remove specificDatum
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum
+     */
+    public function removeSpecificDatum(\RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum)
+    {
+        $this->specificData->removeElement($specificDatum);
+    }
+
+    /**
+     * Get specificData
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSpecificData()
+    {
+        return $this->specificData;
     }
 }

@@ -90,6 +90,11 @@ class Person
     private $docs;
 
     /**
+     * @ORM\OneToMany(targetEntity="SpecificData", mappedBy="personPerson", cascade={"persist"})
+     */
+    private $specificData;
+
+    /**
      * Get idPerson
      *
      * @return integer
@@ -458,5 +463,39 @@ class Person
     public function getDocs()
     {
         return $this->docs;
+    }
+
+    /**
+     * Add specificDatum
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum
+     *
+     * @return Person
+     */
+    public function addSpecificDatum(\RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum)
+    {
+        $this->specificData[] = $specificDatum;
+
+        return $this;
+    }
+
+    /**
+     * Remove specificDatum
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum
+     */
+    public function removeSpecificDatum(\RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum)
+    {
+        $this->specificData->removeElement($specificDatum);
+    }
+
+    /**
+     * Get specificData
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSpecificData()
+    {
+        return $this->specificData;
     }
 }
