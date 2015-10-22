@@ -20,6 +20,23 @@ class Employer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployer;
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $birthAddress;
+    /**
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_department", referencedColumnName="id_department")
+     * })
+     */
+    private $birthDepartment;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
+     */
+    private $birthCity;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person

@@ -15,10 +15,20 @@ class DashBoardController extends Controller
     {
         //¿Cómo vamos a hacer para saber en que parte del form está el usuario?
         //para el render se envía un array steps en el cuals e le puede agregar el estado el usuario
+        $user=$this->getUser();
+        $stateRegister=0;
+        if ($user->getPersonPerson()->getEmployer()==null) {
+            $stateRegister+=10;
+            
+        }else{
+            $stateRegister+=100;
+        }
+
+        
         $step1 = array(
                 'url' => "/register/complete", 
                 'name' => "Datos del empleador",
-                'state' => 100,
+                'state' => $stateRegister,
                 'stateMessage' => "Continuar",);
         $step2 = array(
                 'url' => "/register/employee", 
