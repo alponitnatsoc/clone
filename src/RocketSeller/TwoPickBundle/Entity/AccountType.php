@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccountType
 {
+    
     /**
      * @var integer
      *
@@ -20,9 +21,7 @@ class AccountType
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idAccountType;
-
-
-
+    
     /**
      * Get idAccountType
      *
