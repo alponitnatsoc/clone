@@ -9,64 +9,111 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        <nav class="navbar navbar-dark bg-inverse">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <ul class="nav navbar-nav">
-                <li class="nav-item active">
-                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">About</a>
-                </li>
-               <li class="nav-item">
-                    <a class="nav-link" href="{{ path('home_products') }}">Products</a>
-                </li>
-                  {% if is_granted("IS_AUTHENTICATED_FULLY") %}
-                  
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ path('show_dashboard') }}">DashBoard</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ path('fos_user_security_logout') }}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ path('hwi_oauth_connect') }}">Connect Accounts</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ path('fos_user_security_login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ path('fos_user_registration_register') }}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <div class="container">
-            <div class="hero-unit">
-                <h1>Symplifica</h1>                
-            </div>
-            <div class="row">
-                <div class="span12">
-                    {% block fos_user_content %}{% endblock %}
+
+
+        {% block header %}
+            <header>
+                <div class="navbar navbar-default navbar-static-top" role="navigation">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/">
+                                Symplifica
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="nav-item active">
+                                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" href="#">Features</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" href="#">Pricing</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link" href="#">About</a>
+                                </li>
+                               <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('home_products') }}">Products</a>
+                                </li>
+                                  {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="{{ path('show_dashboard') }}">DashBoard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="{{ path('fos_user_security_logout') }}">Logout</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="{{ path('hwi_oauth_connect') }}">Connect Accounts</a>
+                                    </li>
+                                {% else %}
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="{{ path('fos_user_security_login') }}">Login</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="{{ path('fos_user_registration_register') }}">Register</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                {% block content %}{% endblock %}
-            </div>        
-            <footer>
-                
-            </footer>
+            </header>
+        {% endblock %}
+
+        <div class="container body-container">
+            {% block body %}
+                <div class="row">
+                    <div id="sidebar" class="col-sm-3">
+                        {% block sidebar %}
+                            <div class="section about">
+                                <div class="well well-lg">
+                                    SIDEBAR
+                                </div>
+                            </div>
+                        {% endblock %}
+                    </div>
+                    <div id="main" class="col-sm-9">
+                        {% block main %}
+                            <h1>Symplifica</h1>
+                            <div>
+                                {% block content %}{% endblock %}
+                            </div>
+                            <div class="span12">
+                                {% block fos_user_content %}{% endblock %}
+                            </div>
+                        {% endblock %}
+                    </div>
+                </div>
+            {% endblock %}
         </div>
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        {% block javascripts %}{% endblock %}
+
+        {% block footer %}
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div id="footer-copyright" class="col-md-6">
+                            <p>&copy; {{ 'now'|date('Y') }} - The Symfony Project</p>
+                            <p>{{ 'mit_license'|trans }}</p>
+                        </div>
+                        <div id="footer-resources" class="col-md-6">
+                            <p>
+                                <a href="https://twitter.com/symfony"><i class="fa fa-twitter"></i></a>
+                                <a href="https://www.facebook.com/SensioLabs"><i class="fa fa-facebook"></i></a>
+                                <a href="http://symfony.com/blog"><i class="fa fa-rss"></i></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+            <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        {% endblock %}
     </body>
 </html>

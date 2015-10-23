@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+    <h1>Listado de ordenes de compra</h1>
+    <ul class="list-group">
+        {% for order in orders %}
+            <li class="list-group-item">
+                <a class="badge">Ver detalle</a>
+                Orden de Compra {{ order.idPurchaseOrders }}
+            </li>
+        {% endfor %}
+    </ul>
+</ul>
+
+{% endblock %}

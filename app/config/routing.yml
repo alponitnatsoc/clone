@@ -11,7 +11,10 @@ show_dashboard:
 register_incomplete:
     path:      /register/complete
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
-
+purchase_orders_list:
+    path: /ordenes-de-compra
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:index}
+    
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
