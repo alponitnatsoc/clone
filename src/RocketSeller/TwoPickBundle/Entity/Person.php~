@@ -95,6 +95,11 @@ class Person
     private $specificData;
 
     /**
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="personPerson", cascade={"persist"})
+     */
+    private $action;
+
+    /**
      * Get idPerson
      *
      * @return integer
@@ -497,5 +502,39 @@ class Person
     public function getSpecificData()
     {
         return $this->specificData;
+    }
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return Person
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action->removeElement($action);
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }
