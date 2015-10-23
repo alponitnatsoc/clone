@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository;
 use FOS\UserBundle\Model\UserInterface;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PurchaseOrdersController extends Controller
 {
@@ -14,8 +14,6 @@ class PurchaseOrdersController extends Controller
     {
         if (is_object($this->getUser()) && $this->getUser() instanceof UserInterface ) {
 
-
-//             $purchaseOrdersRepository = new PurchaseOrdersRepository($em, $class);
             $em = $this->container->get('doctrine')->getEntityManager();
             $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
 
