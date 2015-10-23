@@ -56,7 +56,7 @@
 
 
 
-</div>    
+</div>
 
 
 
@@ -65,6 +65,7 @@
 
 {% endblock fos_user_content %}
 {% block javascripts%}
+{{ parent() }}
 <script>
 var $collectionHolder;
 jQuery(document).ready(function() {
@@ -81,15 +82,15 @@ jQuery(document).ready(function() {
 		  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
 		});
 
-	//funcion que agrega un listener a cada department 
+	//funcion que agrega un listener a cada department
 	addListeners();
-	
+
 	//colocar el select en el valor del tamaño del arreglo
 	$dropDownWork=$collectionHolder.data('index');
 	$('#register_person_tabs_employer_numberOfWorkplaces').val($dropDownWork);
 	//listener para el que agrega workplaces
 	$('#register_person_tabs_employer_numberOfWorkplaces').change(function() {
-		
+
 		// get the numberof Workplaces that the user wants
 		var workplacesCount= $(this).val();
 		// get the new index the numer of workplaces that the user has on screen
@@ -105,8 +106,8 @@ jQuery(document).ready(function() {
 			};
 			$collectionHolder.data('index', workplacesCount);
 
-			
-		} 
+
+		}
 		else{
 			//add the diference of workplaces
 			for (var i = 0; i < diference; i++) {
