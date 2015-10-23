@@ -24,4 +24,9 @@ class PurchaseOrdersRepository extends \Doctrine\ORM\EntityRepository
 		$order->setPurchaseOrdersTypePurchaseOrdersStatus($status);
 		$em->flush();
 	}
+
+	public function getOrders() {
+		
+		return $this->findAll();
+	}
 }

@@ -240,4 +240,28 @@ class EntityFields
     {
         return $this->name;
     }
+
+    /**
+     * Set tableReferenced
+     *
+     * @param string $tableReferenced
+     *
+     * @return EntityFields
+     */
+    public function setTableReferenced($tableReferenced)
+    {
+        $this->tableReferenced = $tableReferenced;
+
+        return $this;
+    }
+
+    /**
+     * Get tableReferenced
+     *
+     * @return string
+     */
+    public function getTableReferenced()
+    {
+        return $this->tableReferenced;
+    }
 }

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PurchaseOrders
  *
  * @ORM\Table(name="purchase_orders", indexes={@ORM\Index(name="fk_purchase_orders_purchase_orders_type1", columns={"purchase_orders_type_id_purchase_orders_type"}), @ORM\Index(name="fk_purchase_orders_payroll1", columns={"payroll_id_payroll"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository")
  */
 class PurchaseOrders
 {
@@ -40,6 +40,14 @@ class PurchaseOrders
     private $payrollPayroll;
 
 
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_type", referencedColumnName="id_purchase_orders_status")
+     * })
+     */
+    private $purchaseOrdersTypePurchaseOrdersStatus;
 
     /**
      * Set idPurchaseOrders
@@ -111,5 +119,29 @@ class PurchaseOrders
     public function getPayrollPayroll()
     {
         return $this->payrollPayroll;
+    }
+
+    /**
+     * Set purchaseOrdersTypePurchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersTypePurchaseOrdersStatus
+     *
+     * @return PurchaseOrders
+     */
+    public function setPurchaseOrdersTypePurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersTypePurchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersTypePurchaseOrdersStatus = $purchaseOrdersTypePurchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersTypePurchaseOrdersStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     */
+    public function getPurchaseOrdersTypePurchaseOrdersStatus()
+    {
+        return $this->purchaseOrdersTypePurchaseOrdersStatus;
     }
 }
