@@ -60,8 +60,7 @@ class EmployeeHasEntityAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->add('idEmployeeHasEntity')
+        $formMapper        
             ->add('employeeEmployee', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No employee selected'

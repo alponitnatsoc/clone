@@ -44,6 +44,7 @@ class EntityTypeAdmin extends Admin
     {
         $formMapper
             ->add('idEntityType')
+            ->add('name')
         ;
     }
 

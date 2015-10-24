@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Procedure;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,23 +24,27 @@ class ProcedureController extends Controller
      * estructura de tramite para generar vueltas y tramites
      * @param  $id $id_employer       id del empleador que genera el tramite
      * @param  $id $id_procedure_type id del tipo de tramite a realizar
+     * @param  $id $id_user 		   usuario que va a realizar el tramite
      * @param  Array() $employees      arreglo de empleados con:
      *                               ->id_employee
      *                          	 ->id_contrato
      *                               ->Array docs
      *                               ->Array entidades
-     *                                 		->id_entidad
-     *                                 		->id_tipo_vuelta
+     *                               		->id_employee_has_entity
+     *                                 		->id_action_type
      *                                 		->sort_order
      * @return integer $priority       prioridad del empleador (vip, regular)
      */
-    public function validateAction()
+    public function validateAction()//$id_employer, $id_procedure_type, $priority, $id_user, $employees)
     {		
-    		//datos de prueba
+    		//datos de prueba    		
     		$id_employer =1;
-    		$id_procedure_type = "Inscripción";
+    		$id_procedure_type = "Inscripcion";
     		$priority = 1;
-    		$employes = array(
+    		$id_user = 1;
+    		$id_contrato = 1; //preguntar para que el contrato?    
+    		$id_action_type = 1; //inscripción
+    		$employees = array(
     			array(
     				'id_employee' => 1,
     				'id_contrato' => 1,
@@ -47,10 +52,16 @@ class ProcedureController extends Controller
 		    					'id_doc1' => 'documento 1',
 		    					'id_doc2' => 2
 		    					),
-	    			'entities' => array(
-			    					'id_entidad' => 1,
-			    					'id_tipo_vuelta' => 1,
-			    					)	
+	    			"entities" => array(
+			    				array(				    					
+				    					'id_entity' => 1,
+				    					'id_action_type' => 2,
+				    					),
+			    				array(
+				    					'id_entity' => 2,
+				    					'id_action_type' => 2,
+				    					)
+		    				)
     				),
     			array(
     				'id_employee' => 2,
@@ -59,26 +70,61 @@ class ProcedureController extends Controller
 		    					'id_doc1' => 'documento 1',
 		    					'id_doc2' => 2
 		    					),
-	    			'entities' => array(
-			    					'id_entidad' => 1,
-			    					'id_tipo_vuelta' => 1,
-			    					)	
-    				)
+	    			"entities" => array(
+				    				array(
+					    					'id_entity' => 1,
+					    					'id_action_type' => 2,
+					    					),
+				    				array(
+					    					'id_entity' => 2,
+					    					'id_action_type' => 2,
+					    					)
+			    				)
+		    				)
     			);
 
-
-    		$employerSearch = $this->getDoctrine()
-    		->getRepository('RocketSellerTwoPickBundle:Employer')
-    		->find($id_employer);
-    		echo "El empleador". $employerSearch->getpersonPerson()->getNames(). '<br></br>';
-    		foreach ($employes as $employee) {
-			    $employeeSearch = $this->getDoctrine()
-		        ->getRepository('RocketSellerTwoPickBundle:Employee')
-		        ->find($employee["id_employee"]);
-    			if(!$employeeSearch){
-    				echo "No se encontro el empleado con id: ". $employee["id_employee"] . '<br></br>' ;
-    			}else{
-    				echo "si se encontro el empleado: ". $employeeSearch->getpersonPerson()->getNames() . '<br></br>';
+	    		$employerSearch = $this->getDoctrine()
+	    		->getRepository('RocketSellerTwoPickBundle:Employer')
+	    		->find($id_employer);
+	    		$userSearch = $this->getdoctrine()
+	    		->getRepository('RocketSellerTwoPickBundle:User')
+	    		->find($id_user);
+	    		$actionTypeSearch = $this->getdoctrine()
+	    		->getRepository('RocketSellerTwoPickBundle:ActionType')
+	    		->find($id_action_type);
+	    		$em = $this->getDoctrine()->getManager();										
+    		foreach ($employees as $employee) {
+    			foreach ($employee["entities"] as $entity) {
+    				$actionTypeFound = $this->getdoctrine()
+		    		->getRepository('RocketSellerTwoPickBundle:ActionType')
+		    		->find($entity["id_action_type"]);		    				
+		    		$employeeFound = $this->getDoctrine()
+		    		->getRepository('RocketSellerTwoPickBundle:Employee')
+		    		->find($employee["id_employee"]);
+    				$employeeHasEntityFound = $this->getDoctrine()
+			    		->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+			    		->findOneBy(
+			    			array(
+		    			 		"employeeEmployee" => $employeeFound
+		    			   	)
+	    			   	);		    		  		    	
+				    	if($employeeHasEntityFound && $employeeHasEntityFound->getEntityEntity()->getEntityTypeEntityType()->getIdEntityType() == $entity["id_entity"]){
+				    		echo "el empleado con id:". $employee["id_employee"]." esta afiliado a la entidad: ".$employeeHasEntityFound->getEntityEntity()->getEntityTypeEntityType()->getName().  "<br></br>";
+				    	}else{				    		
+		    				$action = new Action();	    		            
+				            $action->setUserUser($userSearch);
+				            $action->setActionTypeActionType($actionTypeSearch);
+				            $action->setPersonPerson($employeeFound->getPersonPerson());
+				            $em->persist($action);
+				            $em->flush();
+				            echo "el empleado con el id: " .$employee["id_employee"]. " no esta afiliado a la entidad con id: ". $entity["id_entity"]. "<br></br>";
+				    	}
+	    				$action = new Action();
+			            $action->setUserUser($userSearch);
+			            $action->setActionTypeActionType($actionTypeFound);
+			            $action->setPersonPerson($employeeFound->getPersonPerson());
+			            $em->persist($action);
+			            $em->flush();				 
     			}
     		}		    
     }

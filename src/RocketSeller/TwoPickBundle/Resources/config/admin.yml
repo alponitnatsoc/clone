@@ -195,3 +195,15 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Product, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Products, label: Product}
+
+    rocket_seller_two_pick.admin.action:
+        class: RocketSeller\TwoPickBundle\Admin\ActionAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Action, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Actions, label: Action}
+
+    rocket_seller_two_pick.admin.action_type:
+        class: RocketSeller\TwoPickBundle\Admin\ActionTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\ActionType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Actions, label: ActionType}

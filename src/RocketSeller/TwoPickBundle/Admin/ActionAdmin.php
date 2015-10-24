@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ProcedureAdmin extends Admin
+class ActionAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -16,7 +16,7 @@ class ProcedureAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idProcedure')
+            ->add('idAction')    
         ;
     }
 
@@ -26,7 +26,12 @@ class ProcedureAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idProcedure')
+            ->add('idAction')
+            ->add('personPerson.idPerson', 'text', array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('personPerson.names', 'text', array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))                       
+            ->add('userUser.personPerson.names','text', array('label' => 'In charge', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('actionTypeActionType.idActionType','text', array('label' => 'Id action type', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -45,25 +50,16 @@ class ProcedureAdmin extends Admin
         $formMapper
             ->add('userUser', 'sonata_type_model_list', array(
                 ), array(
-                    'placeholder' => 'No person selected'
+                    'placeholder' => 'No user selected'
                 ))
-            ->add('procedureTypeProcedureType', 'sonata_type_model_list', array(
+            ->add('actionTypeActionType', 'sonata_type_model_list', array(
                 ), array(
-                    'placeholder' => 'No person selected'
+                    'placeholder' => 'No procedure selected'
                 ))
-            ->add('employerEmployer', 'sonata_type_model_list', array(
+            ->add('personPerson', 'sonata_type_model_list', array(
                 ), array(
-                    'placeholder' => 'No person selected'                    
-                ))
-            ->add('action', 'sonata_type_collection', array(
-                    'by_reference' => false
-                ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'sortable'  => 'listOrder'
-            ))
-
-                            
+                    'placeholder' => 'No procedure selected'
+                ))                  
         ;
     }
 
@@ -73,7 +69,7 @@ class ProcedureAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idProcedure')
+            ->add('idAction')
         ;
     }
 }

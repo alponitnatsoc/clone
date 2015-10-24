@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ProcedureAdmin extends Admin
+class ActionTypeAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -16,7 +16,7 @@ class ProcedureAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idProcedure')
+            ->add('idActionType')
         ;
     }
 
@@ -26,7 +26,7 @@ class ProcedureAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idProcedure')
+            ->add('idActionType')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,27 +43,7 @@ class ProcedureAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('userUser', 'sonata_type_model_list', array(
-                ), array(
-                    'placeholder' => 'No person selected'
-                ))
-            ->add('procedureTypeProcedureType', 'sonata_type_model_list', array(
-                ), array(
-                    'placeholder' => 'No person selected'
-                ))
-            ->add('employerEmployer', 'sonata_type_model_list', array(
-                ), array(
-                    'placeholder' => 'No person selected'                    
-                ))
-            ->add('action', 'sonata_type_collection', array(
-                    'by_reference' => false
-                ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-                'sortable'  => 'listOrder'
-            ))
-
-                            
+            ->add('idActionType')
         ;
     }
 
@@ -73,7 +53,7 @@ class ProcedureAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idProcedure')
+            ->add('idActionType')
         ;
     }
 }
