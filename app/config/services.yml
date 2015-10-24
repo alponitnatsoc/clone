@@ -33,6 +33,6 @@ services:
         arguments: ["@security.token_storage", "@security.authentication.manager"]
         public: false
         
-    app.validate_procedure:
+    validate_procedure:
         class: RocketSeller\TwoPickBundle\Controller\ProcedureController
         arguments: [ "@templating" ]
