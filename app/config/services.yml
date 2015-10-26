@@ -32,7 +32,3 @@ services:
         class: RocketSeller\TwoPickBundle\Security\Authentication\Firewall\WsseListener
         arguments: ["@security.token_storage", "@security.authentication.manager"]
         public: false
-        
-    validate_procedure:
-        class: RocketSeller\TwoPickBundle\Controller\ProcedureController
-        arguments: [ "@templating" ]

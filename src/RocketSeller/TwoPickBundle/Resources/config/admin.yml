@@ -178,12 +178,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: Payments, label: PayrollDetail}
 
-    rocket_seller_two_pick.admin.procedure:
-        class: RocketSeller\TwoPickBundle\Admin\ProcedureAdmin
-        arguments: [~, RocketSeller\TwoPickBundle\Entity\RealProcedure, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: Procedures, label: Procedure}
-
     rocket_seller_two_pick.admin.procedure_type:
         class: RocketSeller\TwoPickBundle\Admin\ProcedureTypeAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\ProcedureType, SonataAdminBundle:CRUD]
@@ -207,3 +201,9 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\ActionType, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Actions, label: ActionType}
+
+    rocket_seller_two_pick.admin.real_procedure:
+        class: RocketSeller\TwoPickBundle\Admin\RealProcedureAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\RealProcedure, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Procedures, label: Real Procedure}
