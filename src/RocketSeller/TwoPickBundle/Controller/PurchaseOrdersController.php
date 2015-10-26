@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PurchaseOrdersController extends Controller
 {
@@ -24,5 +25,17 @@ class PurchaseOrdersController extends Controller
         } else {
             throw new AccessDeniedException('Debe estar logueado para ingresar a esta sección');
         }
+    }
+
+    public function detailAction()
+    {
+//         $em = $this->container->get('doctrine')->getEntityManager();
+//         $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+
+//         $data = $purchaseOrdersRepository->getDetail();
+        $data = array(
+            "test" => "test1"
+        );
+        return new JsonResponse($data);
     }
 }

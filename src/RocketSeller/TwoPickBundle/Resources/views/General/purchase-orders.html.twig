@@ -4,11 +4,52 @@
     <ul class="list-group">
         {% for order in orders %}
             <li class="list-group-item">
-                <a class="badge">Ver detalle</a>
+                <a class="badge loading" data-loading-text="Cargando..." data-complete-text="Cerrar" onclick="javascript:verDetalle('{{ order.idPurchaseOrders }}', $(this))">Ver detalle</a>
                 Orden de Compra {{ order.idPurchaseOrders }}
+                <div class="panel panel-default" id="purchaseOrderDetail{{ order.idPurchaseOrders }}" style="display:none">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Orden de compra {{ order.idPurchaseOrders }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        Detalle de la orden de compra {{ order.idPurchaseOrders }}
+                    </div>
+                </div>
             </li>
         {% endfor %}
     </ul>
 </ul>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+function verDetalle(idPurchaseOrder, event) {
+    var $btn = event;
+    $btn.button('loading');
+    // Then whatever you actually want to do i.e. submit form
+    // After that has finished, reset the button state using
+    $btn.on("closeLoading", function(event) {
+        $(this).button('reset');
+    });
 
+    divDetail = $("#purchaseOrderDetail" + idPurchaseOrder);
+
+    if (divDetail.css("display") == "none"){
+        $.getJSON( "/ordenes-de-compra/detalle/" + idPurchaseOrder )
+        .done(function( json ) {
+            $btn.trigger("closeLoading");
+            divDetail.show("slow");
+            $btn.button("complete");
+            console.log( "JSON Data: " + JSON.stringify(json) );
+        })
+        .fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            $btn.trigger("closeLoading");
+            console.log( "Request Failed: " + err );
+        });
+    } else {
+        $btn.trigger("closeLoading");
+        divDetail.hide("slow");
+    }
+}
+</script>
 {% endblock %}
