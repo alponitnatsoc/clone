@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Action;
 
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
@@ -61,12 +62,14 @@ class ProcedureController extends Controller
 				    		if($this->loadClassByArray(array(
 				    			"personPerson" => $employeeFound->getPersonPerson(),
 				    			"actionTypeActionType" => $this->loadClassById(
-				            	$entityInscription,"ActionType")
+				            	$entityInscription,"ActionType"),
+				            	"entityEntity" =>$this->loadClassById($entity["id_entity"],"EntityType")
 				    		),"Action")){
 				    			//se verifica que no hallan actions repetidos de inscripcion
 				    		}else{
 			    				$action = new Action();
 					            $action->setUserUser($userSearch);
+					            $action->setEntityEntity($this->loadClassById($entity["id_entity"],"Entity"));
 					            $action->setActionTypeActionType($this->loadClassById(
 					            	$entityInscription,"ActionType"));
 					            $action->setPersonPerson($employeeFound->getPersonPerson());
@@ -84,6 +87,7 @@ class ProcedureController extends Controller
 				    	}else{
 				    		$action = new Action();
 				            $action->setUserUser($userSearch);
+				            $action->setEntityEntity($this->loadClassById($entity["id_entity"],"Entity"));
 				            $action->setActionTypeActionType($actionTypeFound);
 				            $action->setPersonPerson($employeeFound->getPersonPerson());
 				            $em->persist($action);
