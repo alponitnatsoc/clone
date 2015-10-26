@@ -24,13 +24,17 @@ class Employee
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
      */
     private $personPerson;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $economicalTier;
 
 
     /**
@@ -89,4 +93,28 @@ class Employee
     }
 
 
+
+    /**
+     * Set economicalTier
+     *
+     * @param string $economicalTier
+     *
+     * @return Employee
+     */
+    public function setEconomicalTier($economicalTier)
+    {
+        $this->economicalTier = $economicalTier;
+
+        return $this;
+    }
+
+    /**
+     * Get economicalTier
+     *
+     * @return string
+     */
+    public function getEconomicalTier()
+    {
+        return $this->economicalTier;
+    }
 }

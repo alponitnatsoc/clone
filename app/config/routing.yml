@@ -1,4 +1,9 @@
 #Customs
+
+register_employee:
+    path:      /register/employee
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newEmployee }
+
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
@@ -16,7 +21,7 @@ register_incomplete:
 purchase_orders_list:
     path: /ordenes-de-compra
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:index}
-    
+
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
