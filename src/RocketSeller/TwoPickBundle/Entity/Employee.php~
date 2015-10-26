@@ -93,4 +93,28 @@ class Employee
     }
 
 
+
+    /**
+     * Set economicalTier
+     *
+     * @param string $economicalTier
+     *
+     * @return Employee
+     */
+    public function setEconomicalTier($economicalTier)
+    {
+        $this->economicalTier = $economicalTier;
+
+        return $this;
+    }
+
+    /**
+     * Get economicalTier
+     *
+     * @return string
+     */
+    public function getEconomicalTier()
+    {
+        return $this->economicalTier;
+    }
 }

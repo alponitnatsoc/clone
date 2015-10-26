@@ -58,6 +58,15 @@ class Action
     private $personPerson;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Entity
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity", inversedBy="action")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
+     * })
+     */
+    private $entityEntity;
+
+    /**
      * Set idAction
      *
      * @param integer $idAction
@@ -175,5 +184,29 @@ class Action
     public function getRealProcedureRealProcedure()
     {
         return $this->realProcedureRealProcedure;
+    }
+
+    /**
+     * Set entityEntity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entityEntity
+     *
+     * @return Action
+     */
+    public function setEntityEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entityEntity = null)
+    {
+        $this->entityEntity = $entityEntity;
+
+        return $this;
+    }
+
+    /**
+     * Get entityEntity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Entity
+     */
+    public function getEntityEntity()
+    {
+        return $this->entityEntity;
     }
 }

@@ -44,6 +44,11 @@ class Entity
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="entityEntity", cascade={"persist"})
+     */
+    private $action;
+
 
 
     /**
@@ -192,5 +197,39 @@ class Entity
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Add action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     *
+     * @return Entity
+     */
+    public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action[] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Remove action
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Action $action
+     */
+    public function removeAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
+    {
+        $this->action->removeElement($action);
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }
