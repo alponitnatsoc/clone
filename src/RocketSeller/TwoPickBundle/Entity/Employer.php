@@ -52,9 +52,9 @@ class Employer
     private $workplaces;
 
     /**
-     * @ORM\OneToMany(targetEntity="Procedure", mappedBy="employerEmployer", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="RealProcedure", mappedBy="employerEmployer", cascade={"persist"})
      */
-    private $procedure;
+    private $realProcedure;
 
 
 
@@ -149,42 +149,6 @@ class Employer
         return $this->workplaces;
     }
 
-
-
-    /**
-     * Add procedure
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
-     *
-     * @return Employer
-     */
-    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
-    {
-        $this->procedure[] = $procedure;
-
-        return $this;
-    }
-
-    /**
-     * Remove procedure
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
-     */
-    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
-    {
-        $this->procedure->removeElement($procedure);
-    }
-
-    /**
-     * Get procedure
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProcedure()
-    {
-        return $this->procedure;
-    }
-
     /**
      * Set birthAddress
      *
@@ -255,5 +219,39 @@ class Employer
     public function getBirthCity()
     {
         return $this->birthCity;
+    }
+
+    /**
+     * Add realProcedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
+     *
+     * @return Employer
+     */
+    public function addRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
+    {
+        $this->realProcedure[] = $realProcedure;
+
+        return $this;
+    }
+
+    /**
+     * Remove realProcedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
+     */
+    public function removeRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
+    {
+        $this->realProcedure->removeElement($realProcedure);
+    }
+
+    /**
+     * Get realProcedure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRealProcedure()
+    {
+        return $this->realProcedure;
     }
 }

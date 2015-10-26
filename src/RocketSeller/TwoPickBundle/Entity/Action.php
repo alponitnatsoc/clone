@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Action
  *
- * @ORM\Table(name="action", indexes={@ORM\Index(name="fk_action_procedure1", columns={"procedure_id_procedure"}), @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}), @ORM\Index(name="fk_action_user1", columns={"user_id_user"})})
+ * @ORM\Table(name="action", indexes={@ORM\Index(name="fk_action_procedure1", columns={"real_procedure_id_procedure"}), @ORM\Index(name="fk_action_action_type1", columns={"action_type_id_action_type"}), @ORM\Index(name="fk_action_user1", columns={"user_id_user"})})
  * @ORM\Entity
  */
 class Action
@@ -31,13 +31,13 @@ class Action
     private $userUser;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Procedure
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Procedure", inversedBy="action")
+     * @var \RocketSeller\TwoPickBundle\Entity\RealProcedure
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\RealProcedure", inversedBy="action")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="procedure_id_procedure", referencedColumnName="id_procedure")
+     *   @ORM\JoinColumn(name="real_procedure_id_procedure", referencedColumnName="id_procedure")
      * })
      */
-    private $procedureProcedure;
+    private $realProcedureRealProcedure;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\ActionType
@@ -106,30 +106,6 @@ class Action
     }
 
     /**
-     * Set procedureProcedure
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedureProcedure
-     *
-     * @return Action
-     */
-    public function setProcedureProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedureProcedure)
-    {
-        $this->procedureProcedure = $procedureProcedure;
-
-        return $this;
-    }
-
-    /**
-     * Get procedureProcedure
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Procedure
-     */
-    public function getProcedureProcedure()
-    {
-        return $this->procedureProcedure;
-    }
-
-    /**
      * Set actionTypeActionType
      *
      * @param \RocketSeller\TwoPickBundle\Entity\ActionType $actionTypeActionType
@@ -175,5 +151,29 @@ class Action
     public function getPersonPerson()
     {
         return $this->personPerson;
+    }
+
+    /**
+     * Set realProcedureRealProcedure
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedureRealProcedure
+     *
+     * @return Action
+     */
+    public function setRealProcedureRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedureRealProcedure = null)
+    {
+        $this->realProcedureRealProcedure = $realProcedureRealProcedure;
+
+        return $this;
+    }
+
+    /**
+     * Get realProcedureRealProcedure
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\RealProcedure
+     */
+    public function getRealProcedureRealProcedure()
+    {
+        return $this->realProcedureRealProcedure;
     }
 }

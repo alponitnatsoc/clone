@@ -7,7 +7,7 @@ use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Action;
-use RocketSeller\TwoPickBundle\Entity\Procedure;
+use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -36,20 +36,20 @@ class ProcedureController extends Controller
      * @return integer $priority       prioridad del empleador (vip, regular)
      */
     public function validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees, $id_action_type)
-    {		  		
+    {
     		$employerSearch = $this->loadClassById($id_employer,"Employer");
     		$userSearch = $this->loadClassById($id_user,"User");
     		$actionTypeSearch = $this->loadClassById($id_action_type,"ActionType");
-    		$em = $this->getDoctrine()->getManager();										
+    		$em = $this->getDoctrine()->getManager();
     		foreach ($employees as $employee) {
     			foreach ($employee["entities"] as $entity) {
-    				$actionTypeFound = $this->loadClassById($entity["id_action_type"],"ActionType");	    				
+    				$actionTypeFound = $this->loadClassById($entity["id_action_type"],"ActionType");
 		    		$employeeFound = $this->loadClassById($employee["id_employee"],"Employee");
-    				$employeeHasEntityFound = $this->loadClassByArray(array("employeeEmployee" => $employeeFound),"EmployeeHasEntity");    			  		  
+    				$employeeHasEntityFound = $this->loadClassByArray(array("employeeEmployee" => $employeeFound),"EmployeeHasEntity");
 				    	if($employeeHasEntityFound && $employeeHasEntityFound->getEntityEntity()->getEntityTypeEntityType()->getIdEntityType() == $entity["id_entity"]){
 				    		echo "el empleado con id:". $employee["id_employee"]." esta afiliado a la entidad: ".$employeeHasEntityFound->getEntityEntity()->getEntityTypeEntityType()->getName().  "<br></br>";
-				    	}else{				    		
-		    				$action = new Action();	    		            
+				    	}else{
+		    				$action = new Action();
 				            $action->setUserUser($userSearch);
 				            $action->setActionTypeActionType($actionTypeSearch);
 				            $action->setPersonPerson($employeeFound->getPersonPerson());
@@ -62,9 +62,9 @@ class ProcedureController extends Controller
 			            $action->setActionTypeActionType($actionTypeFound);
 			            $action->setPersonPerson($employeeFound->getPersonPerson());
 			            $em->persist($action);
-			            $em->flush();				 
+			            $em->flush();
     			}
-    		}		    
+    		}
     }
     /**
      * hace un query de la clase para instanciarla
@@ -76,7 +76,7 @@ class ProcedureController extends Controller
 		$loadedClass = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:'.$entity)
 		->find($parameter);
-		return $loadedClass;		
+		return $loadedClass;
     }
     /**
      * hace un query de la clase para instanciarla
@@ -88,10 +88,10 @@ class ProcedureController extends Controller
 		$loadedClass = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:'.$entity)
 		->findOneBy($array);
-		return $loadedClass;		
+		return $loadedClass;
     }
     /**
-     * metodo que llama el metodo validate con las variables inicializadas 
+     * metodo que llama el metodo validate con las variables inicializadas
      * tambien se describe la estructura que debe de tener el array de employees
      */
     public function testValidateAction()
@@ -100,7 +100,7 @@ class ProcedureController extends Controller
     		$id_procedure_type = "Inscripcion";
     		$priority = 1;
     		$id_user = 1;
-    		$id_contrato = 1; //preguntar para que el contrato?    
+    		$id_contrato = 1; //preguntar para que el contrato?
     		$id_action_type = 1; //inscripción
     		$employees = array(
     			array(
@@ -111,7 +111,7 @@ class ProcedureController extends Controller
 		    					'id_doc2' => 2
 		    					),
 	    			"entities" => array(
-			    				array(				    					
+			    				array(
 				    					'id_entity' => 1,
 				    					'id_action_type' => 2,
 				    					),

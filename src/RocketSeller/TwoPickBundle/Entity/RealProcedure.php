@@ -5,12 +5,12 @@ namespace RocketSeller\TwoPickBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Procedure
+ * RealProcedure
  *
- * @ORM\Table(name="procedure", indexes={@ORM\Index(name="fk_procedure_procedure_type1", columns={"procedure_type_id_procedure_type"}), @ORM\Index(name="fk_procedure_user1", columns={"user_id_user"}), @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"})})
+ * @ORM\Table(name="real_procedure", indexes={@ORM\Index(name="fk_procedure_procedure_type1", columns={"procedure_type_id_procedure_type"}), @ORM\Index(name="fk_procedure_user1", columns={"user_id_user"}), @ORM\Index(name="fk_procedure_employer1", columns={"employer_id_employer"})})
  * @ORM\Entity
  */
-class Procedure
+class RealProcedure
 {
     /**
      * @var integer
@@ -23,7 +23,7 @@ class Procedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="procedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="realProcedure")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
@@ -41,7 +41,7 @@ class Procedure
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="procedure")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="realProcedure")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
@@ -49,7 +49,7 @@ class Procedure
     private $employerEmployer;
 
     /**
-     * @ORM\OneToMany(targetEntity="Action", mappedBy="procedureProcedure", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Action", mappedBy="realProcedureRealProcedure", cascade={"persist"})
      */
     private $action;
 
@@ -60,7 +60,7 @@ class Procedure
      *
      * @param integer $idProcedure
      *
-     * @return Procedure
+     * @return RealProcedure
      */
     public function setIdProcedure($idProcedure)
     {
@@ -84,7 +84,7 @@ class Procedure
      *
      * @param \RocketSeller\TwoPickBundle\Entity\User $userUser
      *
-     * @return Procedure
+     * @return RealProcedure
      */
     public function setUserUser(\RocketSeller\TwoPickBundle\Entity\User $userUser)
     {
@@ -108,7 +108,7 @@ class Procedure
      *
      * @param \RocketSeller\TwoPickBundle\Entity\ProcedureType $procedureTypeProcedureType
      *
-     * @return Procedure
+     * @return RealProcedure
      */
     public function setProcedureTypeProcedureType(\RocketSeller\TwoPickBundle\Entity\ProcedureType $procedureTypeProcedureType)
     {
@@ -132,7 +132,7 @@ class Procedure
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer
      *
-     * @return Procedure
+     * @return RealProcedure
      */
     public function setEmployerEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employerEmployer)
     {
@@ -163,7 +163,7 @@ class Procedure
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Action $action
      *
-     * @return Procedure
+     * @return RealProcedure
      */
     public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
     {

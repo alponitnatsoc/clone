@@ -180,7 +180,7 @@ services:
 
     rocket_seller_two_pick.admin.procedure:
         class: RocketSeller\TwoPickBundle\Admin\ProcedureAdmin
-        arguments: [~, RocketSeller\TwoPickBundle\Entity\Procedure, SonataAdminBundle:CRUD]
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\RealProcedure, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Procedures, label: Procedure}
 

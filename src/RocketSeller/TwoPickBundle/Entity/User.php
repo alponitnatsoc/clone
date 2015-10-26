@@ -25,27 +25,27 @@ class User extends BaseUser
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     protected $facebook_id;
-    
+
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     protected $google_id;
-    
+
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     protected $linkedin_id;
-    
+
     /**
      * @ORM\Column(type="text",  nullable=true)
      */
     protected $facebook_access_token;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $google_access_token;
-    
+
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
@@ -73,9 +73,9 @@ class User extends BaseUser
     private $action;
 
     /**
-     * @ORM\OneToMany(targetEntity="Procedure", mappedBy="userUser", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="RealProcedure", mappedBy="userUser", cascade={"persist"})
      */
-    private $procedure;
+    private $realProcedure;
 
     /**
      * Set personPerson
@@ -280,36 +280,36 @@ class User extends BaseUser
     }
 
     /**
-     * Add procedure
+     * Add realProcedure
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
      *
      * @return User
      */
-    public function addProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    public function addRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
     {
-        $this->procedure[] = $procedure;
+        $this->realProcedure[] = $realProcedure;
 
         return $this;
     }
 
     /**
-     * Remove procedure
+     * Remove realProcedure
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Procedure $procedure
+     * @param \RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure
      */
-    public function removeProcedure(\RocketSeller\TwoPickBundle\Entity\Procedure $procedure)
+    public function removeRealProcedure(\RocketSeller\TwoPickBundle\Entity\RealProcedure $realProcedure)
     {
-        $this->procedure->removeElement($procedure);
+        $this->realProcedure->removeElement($realProcedure);
     }
 
     /**
-     * Get procedure
+     * Get realProcedure
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getProcedure()
+    public function getRealProcedure()
     {
-        return $this->procedure;
+        return $this->realProcedure;
     }
 }
