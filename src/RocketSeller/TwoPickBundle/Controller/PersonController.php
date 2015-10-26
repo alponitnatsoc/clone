@@ -46,7 +46,7 @@ class PersonController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('rocket_seller_two_pick_homepage');
+            return $this->redirectToRoute('show_dashboard');
         }
 
         return $this->render(
@@ -94,7 +94,7 @@ class PersonController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('rocket_seller_two_pick_homepage');
+            return $this->redirectToRoute('show_dashboard');
         }
 
         return $this->render(
@@ -109,10 +109,17 @@ class PersonController extends Controller
         $form = $this->createForm(new PersonEmployeeRegistration(), $employee);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            echo "YEY";
-            die();
+            $employerEmployee = new EmployerHasEmployee();
+            $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
+            $employerEmployee->setEmployeeEmployee($employee);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($employee);
+            $em->flush();
+            $em->persist($employerEmployee);
+            $em->flush();
+            return $this->redirectToRoute('show_dashboard');
         }
-        $employerEmployee = new EmployerHasEmployee();
+        
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig',
             array('form' => $form->createView())
