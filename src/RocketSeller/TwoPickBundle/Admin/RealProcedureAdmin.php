@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ProcedureAdmin extends Admin
+class RealProcedureAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -27,6 +27,7 @@ class ProcedureAdmin extends Admin
     {
         $listMapper
             ->add('idProcedure')
+            ->add('employerEmployer.personPerson.')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -62,8 +63,6 @@ class ProcedureAdmin extends Admin
                 'inline' => 'table',
                 'sortable'  => 'listOrder'
             ))
-
-                            
         ;
     }
 

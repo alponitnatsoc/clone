@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<p>Tramite No: {{ procedures.idProcedure }}</p>
+	<p>Person in charge: {{ procedures.userUser.username }}</p>
+	<table style="width:100%">
+	  <tr>
+	    <td>Id action </td>
+	    <td>Id type action</td> 
+	    <td>person name</td>
+	  </tr>	  
+  		{% for action in procedures.action %}
+  			<tr>				
+				<td>{{ action.idAction }}</td>
+				<td>{{ action.ActionTypeActionType.idActionType }}</td>
+				<td>{{ action.personPerson.names }}</td>
+		  	</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

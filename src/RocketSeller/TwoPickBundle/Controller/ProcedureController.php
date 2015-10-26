@@ -7,7 +7,10 @@ use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Action;
+
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
+use RocketSeller\TwoPickBundle\Entity\ProcedureType;
+
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -35,12 +38,21 @@ class ProcedureController extends Controller
      *                                 		->sort_order
      * @return integer $priority       prioridad del empleador (vip, regular)
      */
-    public function validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees, $id_action_type)
-    {
+
+    public function validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees)
+    {		  		
+    		$em = $this->getDoctrine()->getManager();	
     		$employerSearch = $this->loadClassById($id_employer,"Employer");
     		$userSearch = $this->loadClassById($id_user,"User");
-    		$actionTypeSearch = $this->loadClassById($id_action_type,"ActionType");
-    		$em = $this->getDoctrine()->getManager();
+    		$procedureTypeSearch = $this->loadClassById($id_procedure_type, "ProcedureType");
+			$procedure = new Procedure();
+			$procedure->setUserUser($userSearch);
+			$procedure->setProcedureTypeProcedureType($procedureTypeSearch);
+			$procedure->setEmployerEmployer($employerSearch);
+			$em->persist($procedure);
+			$em->flush();
+    											
+
     		foreach ($employees as $employee) {
     			foreach ($employee["entities"] as $entity) {
     				$actionTypeFound = $this->loadClassById($entity["id_action_type"],"ActionType");
@@ -51,11 +63,12 @@ class ProcedureController extends Controller
 				    	}else{
 		    				$action = new Action();
 				            $action->setUserUser($userSearch);
-				            $action->setActionTypeActionType($actionTypeSearch);
+				            $action->setActionTypeActionType($actionTypeFound);
 				            $action->setPersonPerson($employeeFound->getPersonPerson());
 				            $em->persist($action);
 				            $em->flush();
 				            echo "el empleado con el id: " .$employee["id_employee"]. " no esta afiliado a la entidad con id: ". $entity["id_entity"]. "<br></br>";
+				            $procedure->addAction($action);
 				    	}
 	    				$action = new Action();
 			            $action->setUserUser($userSearch);
@@ -63,6 +76,8 @@ class ProcedureController extends Controller
 			            $action->setPersonPerson($employeeFound->getPersonPerson());
 			            $em->persist($action);
 			            $em->flush();
+
+			            $procedure->addAction($action);				 
     			}
     		}
     }
@@ -97,7 +112,7 @@ class ProcedureController extends Controller
     public function testValidateAction()
     {
     		$id_employer =1;
-    		$id_procedure_type = "Inscripcion";
+    		$id_procedure_type = 1;
     		$priority = 1;
     		$id_user = 1;
     		$id_contrato = 1; //preguntar para que el contrato?
@@ -140,7 +155,7 @@ class ProcedureController extends Controller
 			    				)
 		    				)
     			);
-    		$this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees, $id_action_type);
+    		$this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
 
     }
 
