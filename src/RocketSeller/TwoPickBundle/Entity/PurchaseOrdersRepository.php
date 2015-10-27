@@ -27,6 +27,21 @@ class PurchaseOrdersRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getOrders() {
 		
+		
 		return $this->findAll();
+	}
+
+	public function getOrdersForEmployee($employee_id) {
+		$em = $this->getEntityManager();
+		$query = $em->createQuery("SELECT po FROM RocketSellerTwoPickBundle:PurchaseOrders po JOIN po.payrollPayroll p JOIN p.contractContract c JOIN c.employerHasEmployeeEmployerHasEmployee e WHERE e.employeeEmployee=?1");
+		$query->setParameter(1, $employee_id);
+		return $query->getResult();
+	}
+
+	public function getOrdersForEmployer($employer_id) {
+		$em = $this->getEntityManager();
+		$query = $em->createQuery("SELECT po FROM RocketSellerTwoPickBundle:PurchaseOrders po JOIN po.payrollPayroll p JOIN p.contractContract c JOIN c.employerHasEmployeeEmployerHasEmployee e WHERE e.employerEmployer=?1");
+		$query->setParameter(1, $employer_id);
+		return $query->getResult();
 	}
 }
