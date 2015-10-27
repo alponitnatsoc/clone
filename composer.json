@@ -41,7 +41,8 @@
         "sonata-project/intl-bundle": "2.2.x-dev",
 
         "jackalope/jackalope-doctrine-dbal": "^1.2",
-        "twbs/bootstrap": "^3.3"
+        "twbs/bootstrap": "^3.3",
+        "doctrine/doctrine-migrations-bundle": "^1.0"
     },
 
     "require-dev": {

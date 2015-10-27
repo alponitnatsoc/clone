@@ -56,7 +56,8 @@ class AppKernel extends Kernel
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
 
-
+            //Doctrine Migration Bundle
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
 
         );
 
