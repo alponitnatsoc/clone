@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PurchaseOrdersDescription
  *
  * @ORM\Table(name="purchase_orders_description", indexes={@ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}), @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescriptionRepository")
  */
 class PurchaseOrdersDescription
 {

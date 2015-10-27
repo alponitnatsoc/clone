@@ -18,7 +18,6 @@ class PurchaseOrdersRepository extends \Doctrine\ORM\EntityRepository
 	 * @return boolean true on success / false on error
 	 */
 	public function updateOrderStatus(PurchaseOrders $id, PurchaseOrdersStatus $status) {
-
 		$em = $this->getEntityManager();
 		$order = $this->find($id);
 		$order->setPurchaseOrdersTypePurchaseOrdersStatus($status);
@@ -27,12 +26,6 @@ class PurchaseOrdersRepository extends \Doctrine\ORM\EntityRepository
 
 	public function getOrders() {	
 		$purchaseOrders = $this->findAll();
-		foreach($purchaseOrders as $order) {
-			$em = $this->getEntityManager();
-			$query = $em->createQuery("SELECT pd FROM RocketSellerTwoPickBundle:PurchaseOrdersDescription pd WHERE pd.purchaseOrdersPurchaseOrders=?1");
-			$query->setParameter(1, $order->getIdPurchaseOrders());
-			$oder["purchase_order_description"] = $query->getResult();
-		}
 		return $purchaseOrders;
 	}
 
