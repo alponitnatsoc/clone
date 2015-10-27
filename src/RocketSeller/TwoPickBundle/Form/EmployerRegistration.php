@@ -18,6 +18,16 @@ class EmployerRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('youAre', 'choice', array(
+                'choices' => array(
+                    'persona'   => 'Persona',
+                    'empresa' => 'Empresa',
+                ),
+                'multiple' => false,
+                'expanded' => true,
+                'mapped' => false,))
+            ->add('person', new BasicPersonRegistration(), array(
+                'property_path' => 'personPerson'))
             ->add('numberOfWorkplaces', 'choice', array(
                 'choices' => array(
                     '1'   => '1',
@@ -35,6 +45,9 @@ class EmployerRegistration extends AbstractType
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                ))
+            ->add('save', 'submit', array(
+                'label' => 'Create',
                 ));
 
 

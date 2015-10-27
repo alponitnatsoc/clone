@@ -85,6 +85,13 @@ class Person
     private $employer;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee", mappedBy="personPerson", cascade={"persist", "remove"})
+     */
+    private $employee;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="personPerson", cascade={"persist"})
      */
     private $docs;

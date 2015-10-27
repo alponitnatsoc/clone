@@ -15,22 +15,22 @@
 	<div id="basicData" class="tab-pane fade in active">
 	    {# render the task's only field: description #}
 	    {{ form_row(form.youAre) }}
-	    {{ form_row(form.documentType) }}
-	    {{ form_row(form.document) }}
-	    {{ form_row(form.names) }}
-	    {{ form_row(form.lastName1) }}
-	    {{ form_row(form.lastName2) }}
-	    {{ form_row(form.birthDate) }}
+	    {{ form_row(form.person.documentType) }}
+	    {{ form_row(form.person.document) }}
+	    {{ form_row(form.person.names) }}
+	    {{ form_row(form.person.lastName1) }}
+	    {{ form_row(form.person.lastName2) }}
+	    {{ form_row(form.person.birthDate) }}
 	    <a class="btn btn-primary btnNext" >Siguiente</a>
 
 	</div>
 
 	<div id="contactData" class="tab-pane fade in">
-	    {{ form_row(form.mainAddress) }}
-	    {{ form_row(form.neighborhood) }}
-	    {{ form_row(form.phone) }}
-	    {{ form_row(form.department) }}
-	    {{ form_row(form.city) }}
+	    {{ form_row(form.person.mainAddress) }}
+	    {{ form_row(form.person.neighborhood) }}
+	    {{ form_row(form.person.phone) }}
+	    {{ form_row(form.person.department) }}
+	    {{ form_row(form.person.city) }}
 	    <a class="btn btn-primary btnPrevious" >Anterior</a>
 	    <a class="btn btn-primary btnNext" >Siguiente</a>
 
@@ -38,10 +38,10 @@
 
     <div id="workplacesData" class="tab-pane fade h3">
 	    <in>Workplaces</h3>
-	    	{{ form_row(form.employer.numberOfWorkplaces) }}
+	    	{{ form_row(form.numberOfWorkplaces) }}
 	    {# iterate over each existing workplaces and render its fields #}
-		<ul class="workplaces" data-prototype="{{ form_widget(form.employer.workplaces.vars.prototype)|e }}" >
-	   	{% for workplace in form.employer.workplaces %}
+		<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
+	   	{% for workplace in form.workplaces %}
 	        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
 	        	{{ form_row(workplace.mainAddress) }}
 	        	{{ form_row(workplace.department) }}
@@ -87,9 +87,9 @@ jQuery(document).ready(function() {
 
 	//colocar el select en el valor del tamaño del arreglo
 	$dropDownWork=$collectionHolder.data('index');
-	$('#register_person_tabs_employer_numberOfWorkplaces').val($dropDownWork);
+	$('#register_employer_numberOfWorkplaces').val($dropDownWork);
 	//listener para el que agrega workplaces
-	$('#register_person_tabs_employer_numberOfWorkplaces').change(function() {
+	$('#register_employer_numberOfWorkplaces').change(function() {
 
 		// get the numberof Workplaces that the user wants
 		var workplacesCount= $(this).val();

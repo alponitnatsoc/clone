@@ -85,6 +85,13 @@ class Person
     private $employer;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Employee
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee", mappedBy="personPerson", cascade={"persist", "remove"})
+     */
+    private $employee;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="personPerson", cascade={"persist"})
      */
     private $docs;
@@ -536,5 +543,29 @@ class Person
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * Set employee
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employee
+     *
+     * @return Person
+     */
+    public function setEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employee = null)
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    /**
+     * Get employee
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
     }
 }
