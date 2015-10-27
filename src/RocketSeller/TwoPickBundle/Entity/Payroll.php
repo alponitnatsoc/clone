@@ -36,6 +36,11 @@ class Payroll
     private $payrollDetails;
 
     /**
+     * @ORM\OneToMany(targetEntity="PurchaseOrders", mappedBy="payrollPayroll", cascade={"persist"})
+     */
+    private $purchaseOrders;
+
+    /**
      * Set idPayroll
      *
      * @param integer $idPayroll
@@ -122,5 +127,39 @@ class Payroll
     public function getPayrollDetails()
     {
         return $this->payrollDetails;
+    }
+
+    /**
+     * Add purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     *
+     * @return Payroll
+     */
+    public function addPurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     */
+    public function removePurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Get purchaseOrders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchaseOrders;
     }
 }

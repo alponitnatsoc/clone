@@ -36,10 +36,14 @@ function verDetalle(idPurchaseOrder, event) {
     if (divDetail.css("display") == "none"){
         $.getJSON( "/ordenes-de-compra/detalle/" + idPurchaseOrder )
         .done(function( json ) {
+//             json = JSON.stringify(json);
+//             alert($.parseJSON(json));
+            console.log( "JSON Data: " + json );
             $btn.trigger("closeLoading");
-            divDetail.show("slow");
+            divDetail.find(".panel-body").append("ID de la descripcion de la orden de compra " + json.idPurchaseOrdersDescription);
             $btn.button("complete");
-            console.log( "JSON Data: " + JSON.stringify(json) );
+            divDetail.show("highlight");
+            console.log( "JSON Data2: " + json );
         })
         .fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ", " + error;

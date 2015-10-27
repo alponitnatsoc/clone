@@ -20,11 +20,11 @@ class PurchaseOrdersRepository extends \Doctrine\ORM\EntityRepository
 	public function updateOrderStatus(PurchaseOrders $id, PurchaseOrdersStatus $status) {
 		$em = $this->getEntityManager();
 		$order = $this->find($id);
-		$order->setPurchaseOrdersTypePurchaseOrdersStatus($status);
+		$order->setPurchaseOrdersStatusPurchaseOrdersStatus($status);
 		$em->flush();
 	}
 
-	public function getOrders() {	
+	public function getOrders() {
 		$purchaseOrders = $this->findAll();
 		return $purchaseOrders;
 	}
