@@ -12,4 +12,4 @@
 /web/bundles/
 .DS_Store
 /web/uploads
-/src/RocketSeller/TwoPickBundle/Entity/*.php~
+*.php~
