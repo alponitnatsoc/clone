@@ -56,6 +56,11 @@ class Employer
      */
     private $realProcedure;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employerEmployer", cascade={"persist"})
+     */
+    private $employerHasEmployees;
+
 
 
 
@@ -253,5 +258,39 @@ class Employer
     public function getRealProcedure()
     {
         return $this->realProcedure;
+    }
+
+    /**
+     * Add employerHasEmployee
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee
+     *
+     * @return Employer
+     */
+    public function addEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee)
+    {
+        $this->employerHasEmployees[] = $employerHasEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Remove employerHasEmployee
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee
+     */
+    public function removeEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee)
+    {
+        $this->employerHasEmployees->removeElement($employerHasEmployee);
+    }
+
+    /**
+     * Get employerHasEmployees
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployerHasEmployees()
+    {
+        return $this->employerHasEmployees;
     }
 }
