@@ -32,7 +32,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
@@ -48,7 +48,10 @@ class PurchaseOrdersDescription
      */
     private $productProduct;
 
-
+    /**
+     * @ORM\Column(type="text", nullable=TRUE)
+     */
+    private $description;
 
     /**
      * Set idPurchaseOrdersDescription
@@ -144,5 +147,29 @@ class PurchaseOrdersDescription
     public function getProductProduct()
     {
         return $this->productProduct;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

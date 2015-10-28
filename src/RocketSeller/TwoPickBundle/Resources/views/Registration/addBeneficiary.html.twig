@@ -1,0 +1,84 @@
+{% extends "::base.html.twig" %}
+
+{% block fos_user_content %}
+
+<div id='registrationFormContainer' class=''>
+{{ form_start(form) }}
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#basicData">Tab 1</a></li>
+  <li><a data-toggle="tab" href="#contactData">Tab 2</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id="basicData" class="tab-pane fade in active">
+	    {# render the task's only field: description #}
+	    {{ form_row(form.person.documentType) }}
+	    {{ form_row(form.person.document) }}
+	    {{ form_row(form.person.names) }}
+	    {{ form_row(form.person.lastName1) }}
+	    {{ form_row(form.person.lastName2) }}
+	    {{ form_row(form.person.birthDate) }}
+	    <a class="btn btn-primary btnNext" >Siguiente</a>
+
+	</div>
+
+	<div id="contactData" class="tab-pane fade in">
+	    {{ form_row(form.person.mainAddress) }}
+	    {{ form_row(form.person.neighborhood) }}
+	    {{ form_row(form.person.phone) }}
+	    {{ form_row(form.person.department) }}
+	    {{ form_row(form.person.city) }}
+	    <a class="btn btn-primary btnPrevious" >Anterior</a>
+	    {{ form_row(form.save) }}
+    </div>
+
+
+
+
+</div>
+
+
+
+{{ form_end(form) }}
+</div>
+
+{% endblock fos_user_content %}
+{% block javascripts%}
+{{ parent() }}
+<script>
+jQuery(document).ready(function() {
+	//funcion que agrega un listener a cada department
+	addListeners();
+});
+
+function addListeners() {
+    $('select').filter(function() {
+	        return this.id.match(/department/);
+	    }).change(function() {
+	  var $department = $(this);
+	  // ... retrieve the corresponding form.
+	  var $form = $(this).closest('form');
+	  // Simulate form data, but only include the selected department value.
+	  var data = {};
+	  data[$department.attr('name')] = $department.val();
+	  var citySelectId = $department.attr("id").replace("_department", "_city");
+	  // Submit data via AJAX to the form's action path.
+	  $.ajax({
+	    url : $form.attr('action'),
+	    type: $form.attr('method'),
+	    data : data,
+	    success: function(html) {
+	      // Replace current position field ...
+	      $('#'+citySelectId).replaceWith(
+	        // ... with the returned one from the AJAX response.
+	        $(html).find('#'+citySelectId)
+	      );
+	      // Position field now displays the appropriate positions.
+	    }
+	  });
+	});
+}
+</script>
+
+{% endblock javascripts %}

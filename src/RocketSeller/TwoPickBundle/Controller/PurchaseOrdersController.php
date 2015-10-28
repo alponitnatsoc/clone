@@ -17,8 +17,18 @@ class PurchaseOrdersController extends Controller
 
             $em = $this->container->get('doctrine')->getEntityManager();
             $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+// echo $this->getUser()->getId();
+            $ordersByUser = $purchaseOrdersRepository->getOrdersForEmployer($this->getUser()->getId());
+// $orders = $purchaseOrdersRepository->getOrders();
+// var_dump($orders);
+            $orders = array();
+            foreach ($ordersByUser as $key => $order) {
+                $orders[$key]['idPurchaseOrders'] = $order->getIdPurchaseOrders();
+                $orders[$key]['purchaseOrdersTypePurchaseOrdersType'] = $order->getPurchaseOrdersTypePurchaseOrdersType();
+                $orders[$key]['payrollPayroll'] = $order->getPayrollPayroll();
+                $orders[$key]['purchaseOrdersStatusPurchaseOrdersStatus'] = $order->getPurchaseOrdersStatusPurchaseOrdersStatus();
+            }
 
-            $orders = $purchaseOrdersRepository->getOrders();
             return $this->render('RocketSellerTwoPickBundle:General:purchase-orders.html.twig', array(
                 'orders' => $orders
             ));
@@ -27,15 +37,20 @@ class PurchaseOrdersController extends Controller
         }
     }
 
-    public function detailAction()
+    public function detailAction($id)
     {
-//         $em = $this->container->get('doctrine')->getEntityManager();
-//         $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $em = $this->container->get('doctrine')->getEntityManager();
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
 
-//         $data = $purchaseOrdersRepository->getDetail();
-        $data = array(
-            "test" => "test1"
-        );
-        return new JsonResponse($data);
+        $data = $purchaseOrdersRepository->getPurchaseOrderDescription($id);
+        $detail = array();
+        foreach($data as $pod) {
+            $detail['idPurchaseOrdersDescription'] = $pod->getIdPurchaseOrdersDescription();
+            $detail['taxTax'] = $pod->getTaxTax();
+            $detail['purchaseOrdersPurchaseOrders'] = $pod->getPurchaseOrdersPurchaseOrders();
+            $prod = $pod->getProductProduct();
+            $detail['productProduct'] = $prod->getIdProduct();
+        }
+        return new JsonResponse($detail);
     }
 }
