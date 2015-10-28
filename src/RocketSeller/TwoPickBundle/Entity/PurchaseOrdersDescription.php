@@ -32,7 +32,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
@@ -47,8 +47,6 @@ class PurchaseOrdersDescription
      * })
      */
     private $productProduct;
-
-
 
     /**
      * Set idPurchaseOrdersDescription
