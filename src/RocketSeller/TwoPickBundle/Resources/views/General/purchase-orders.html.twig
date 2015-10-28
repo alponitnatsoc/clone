@@ -1,22 +1,21 @@
 {% extends "::base.html.twig" %}
 {% block content %}
     <h1>Listado de ordenes de compra</h1>
-    <ul class="list-group">
+    <div class="list-group">
         {% for order in orders %}
-            <li class="list-group-item">
+            <div class="list-group-item">
                 <a class="badge loading" data-loading-text="Cargando..." data-complete-text="Cerrar" onclick="javascript:verDetalle('{{ order.idPurchaseOrders }}', $(this))">Ver detalle</a>
-                Orden de Compra {{ order.idPurchaseOrders }}
-                <div class="panel panel-default" id="purchaseOrderDetail{{ order.idPurchaseOrders }}" style="display:none">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Orden de compra {{ order.idPurchaseOrders }}</h3>
-                    </div>
-                    <div class="panel-body">
-                        Detalle de la orden de compra {{ order.idPurchaseOrders }}
-                    </div>
-                </div>
-            </li>
+                <h3 class="panel-title">
+                    {{ order.idPurchaseOrders }} -
+                    Tipo: {{ order.purchaseOrderType }} -
+                    Fecha creación: {{ order.purchaseOrderDateCreated }}
+                </h3>
+            </div>
+            <div class="panel panel-default" id="purchaseOrderDetail{{ order.idPurchaseOrders }}" style="display:none">
+              <div class="panel-body"></div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 </ul>
 {% endblock %}
 {% block javascripts %}
@@ -25,10 +24,12 @@
 function verDetalle(idPurchaseOrder, event) {
     var $btn = event;
     $btn.button('loading');
+    $btn.parent().addClass('active');
     // Then whatever you actually want to do i.e. submit form
     // After that has finished, reset the button state using
     $btn.on("closeLoading", function(event) {
         $(this).button('reset');
+        $btn.parent().removeClass('active');
     });
 
     divDetail = $("#purchaseOrderDetail" + idPurchaseOrder);
@@ -36,16 +37,27 @@ function verDetalle(idPurchaseOrder, event) {
     if (divDetail.css("display") == "none"){
         $.getJSON( "/ordenes-de-compra/detalle/" + idPurchaseOrder )
         .done(function( json ) {
-//             json = JSON.stringify(json);
-//             alert($.parseJSON(json));
-            console.log( "JSON Data: " + json );
-            $btn.trigger("closeLoading");
-            divDetail.find(".panel-body").append("ID de la descripcion de la orden de compra " + json.idPurchaseOrdersDescription);
-            $btn.button("complete");
-            divDetail.show("highlight");
-            console.log( "JSON Data2: " + json );
-        })
-        .fail(function( jqxhr, textStatus, error ) {
+            if (!jQuery.isEmptyObject(json)) {
+
+                panelBody = divDetail.find(".panel-body");
+                panelBody.html('<ul class="list-group"></ul>');
+                ulPanelBody = panelBody.find(".list-group");
+                    $.each(json, function(indice, data){
+                        ulPanelBody.append('<li class="list-group-item">' +
+                                "Detalle: " + data.product + "</br>" +
+                                "Producto: " + data.product + "</br>" +
+                                "Descripción: " + data.description + "</br>" +
+                                '</li>');
+                    });
+                $btn.button("complete");
+                divDetail.show("highlight");
+            } else {
+                divDetail.find(".panel-body").html("Esta orden de compra no tiene ");
+                divDetail.find(".panel-body").append("detalle asociado");
+                $btn.button("complete");
+                divDetail.show("highlight");
+            }
+        }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ", " + error;
             $btn.trigger("closeLoading");
             console.log( "Request Failed: " + err );
