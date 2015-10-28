@@ -33,9 +33,12 @@ rocket_seller_two_pick:
 
 #Beneficiary
 
-add_beneficiary:
-    path:     /beneficiary/add
-    defaults: { _controller: RocketSellerTwoPickBundle:Beneficiary:addBeneficiary }
+add_beneficiary_select_entities:
+    path:     /register/employee/{employee}/beneficiary/
+    defaults: { _controller: RocketSellerTwoPickBundle:Person:addBeneficiary }
+add_beneficiary_entity_form:
+    path:     /register/employee/{employee}/entity/{entity}/beneficiary/
+    defaults: { _controller: RocketSellerTwoPickBundle:Person:addBeneficiary }
     
 #OAuth
 hwi_oauth_redirect:

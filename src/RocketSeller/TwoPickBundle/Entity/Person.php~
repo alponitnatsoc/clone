@@ -544,4 +544,28 @@ class Person
     {
         return $this->action;
     }
+
+    /**
+     * Set employee
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employee
+     *
+     * @return Person
+     */
+    public function setEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employee = null)
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    /**
+     * Get employee
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
 }

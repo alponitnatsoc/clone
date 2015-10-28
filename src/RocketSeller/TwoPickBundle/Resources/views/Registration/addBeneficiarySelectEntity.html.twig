@@ -1,0 +1,26 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RocketSellerTwoPickBundle:Beneficiary:addBeneficiary{% endblock %}
+
+{% block content %}
+<h1>Entidades</h1>
+<p>Seleccione de una de las entidades a las que se encuentra afiliado el empleado</p>
+<select id="entity">
+	<option value="-1">Seleccione una entidad</option>
+	{% for entity in entities %}
+		<option value="{{entity.getEntityEntity().getIdEntity()}}">{{entity.getEntityEntity().getEntityTypeEntityType().getName()}} - {{entity.getEntityEntity().getName()}}</option>
+	{% endfor %}
+</select>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+	var employee = {{employee.getIdEmployee()}};
+	$(document).ready(function() {
+		$('#entity').on('change', function() {
+			if(this.value>0)
+				document.location = "/register/employee/"+employee+"/entity/"+this.value+"/beneficiary";
+		})
+	});
+</script>
+{% endblock %}

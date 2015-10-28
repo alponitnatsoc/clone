@@ -4,13 +4,17 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
+use RocketSeller\TwoPickBundle\Form\PersonBeneficiaryRegistration;
 use Doctrine\Common\Collections\ArrayCollection;
+
 class PersonController extends Controller
 {	
 	/**
@@ -54,6 +58,35 @@ class PersonController extends Controller
             array('form' => $form->createView())
         );
     }
+
+    /**
+    * Maneja el registro de un beneficiario a un empleado con los datos básicos,
+    * @param el Request que maneja el form que se imprime
+    * @return La vista de el formulario de la nueva persona
+    **/
+    public function addBeneficiaryAction(Request $request, Employee $employee, Entity $entity=null) {
+
+        if(is_null($entity)) {
+            $entities = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+                ->findByEmployeeEmployee($employee);
+            return $this->render(
+                'RocketSellerTwoPickBundle:Registration:addBeneficiarySelectEntity.html.twig',
+                array(
+                    'entities' => $entities,
+                    'employee' => $employee
+                )
+            );
+        } else {
+            $beneficiary = new Beneficiary();
+            $form = $this->createForm(new PersonBeneficiaryRegistration(), $beneficiary);
+            return $this->render(
+                'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig',
+                array('form' => $form->createView())
+            );
+        }
+    }
+
     public function editPersonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
