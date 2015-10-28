@@ -63,6 +63,20 @@ class PurchaseOrders
     private $idUser;
 
     /**
+    * @var \DateTime
+    *
+    * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
+    */
+    private $date_created;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateModified", type="datetime", options={"default":"CURRENT_TIMESTAMP"})
+     */
+    private $date_modified;
+
+    /**
      * Set idPurchaseOrders
      *
      * @param integer $idPurchaseOrders
@@ -245,5 +259,53 @@ class PurchaseOrders
     public function getIdUser()
     {
         return $this->idUser;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param \DateTime $dateCreated
+     *
+     * @return PurchaseOrders
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->date_created = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return \DateTime
+     */
+    public function getDateCreated()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     *
+     * @return PurchaseOrders
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->date_modified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime
+     */
+    public function getDateModified()
+    {
+        return $this->date_modified;
     }
 }

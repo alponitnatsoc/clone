@@ -49,6 +49,11 @@ class PurchaseOrdersDescription
     private $productProduct;
 
     /**
+     * @ORM\Column(type="text", nullable=TRUE)
+     */
+    private $description;
+
+    /**
      * Set idPurchaseOrdersDescription
      *
      * @param integer $idPurchaseOrdersDescription
@@ -142,5 +147,29 @@ class PurchaseOrdersDescription
     public function getProductProduct()
     {
         return $this->productProduct;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

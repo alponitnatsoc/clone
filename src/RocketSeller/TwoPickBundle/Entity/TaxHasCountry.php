@@ -23,7 +23,7 @@ class TaxHasCountry
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Tax
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
      * })
@@ -32,14 +32,12 @@ class TaxHasCountry
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Country
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id_country", referencedColumnName="id_country")
      * })
      */
     private $countryCountry;
-
-
 
     /**
      * Set idTaxHasCountry
