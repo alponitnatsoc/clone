@@ -36,6 +36,11 @@ class Employee
      */
     private $economicalTier;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
+     */
+    private $employeeHasEmployers;
+
 
     /**
      * Set idEmployee
@@ -116,5 +121,39 @@ class Employee
     public function getEconomicalTier()
     {
         return $this->economicalTier;
+    }
+
+    /**
+     * Add employeeHasEmployer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employeeHasEmployer
+     *
+     * @return Employee
+     */
+    public function addEmployeeHasEmployer(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employeeHasEmployer)
+    {
+        $this->employeeHasEmployers[] = $employeeHasEmployer;
+
+        return $this;
+    }
+
+    /**
+     * Remove employeeHasEmployer
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employeeHasEmployer
+     */
+    public function removeEmployeeHasEmployer(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employeeHasEmployer)
+    {
+        $this->employeeHasEmployers->removeElement($employeeHasEmployer);
+    }
+
+    /**
+     * Get employeeHasEmployers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployeeHasEmployers()
+    {
+        return $this->employeeHasEmployers;
     }
 }

@@ -12,3 +12,4 @@
 /web/bundles/
 .DS_Store
 /web/uploads
+*.php~

@@ -32,7 +32,7 @@ class PurchaseOrders
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
@@ -44,10 +44,10 @@ class PurchaseOrders
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_type", referencedColumnName="id_purchase_orders_status")
+     *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_status", referencedColumnName="id_purchase_orders_status")
      * })
      */
-    private $purchaseOrdersTypePurchaseOrdersStatus;
+    private $purchaseOrdersStatusPurchaseOrdersStatus;
 
     /**
      * Set idPurchaseOrders
@@ -143,5 +143,29 @@ class PurchaseOrders
     public function getPurchaseOrdersTypePurchaseOrdersStatus()
     {
         return $this->purchaseOrdersTypePurchaseOrdersStatus;
+    }
+
+    /**
+     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return PurchaseOrders
+     */
+    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     */
+    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    {
+        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
     }
 }
