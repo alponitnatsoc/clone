@@ -19,7 +19,6 @@ class PersonController extends Controller
 {	
 	/**
     * Maneja el registro de una nueva persona con los datos básicos, 
-    * TODO agregar todos los campos de los wireframes
     * @param el Request que manjea el form que se imprime
     * @return La vista de el formulario de la nueva persona
 	**/
@@ -86,7 +85,11 @@ class PersonController extends Controller
             );
         }
     }
-
+    /**
+    * Maneja la edición de una  persona con los datos básicos, 
+    * @param el Request que manjea el form que se imprime
+    * @return La vista de el formulario de editar persona
+    **/
     public function editPersonAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -135,6 +138,11 @@ class PersonController extends Controller
             array('form' => $form->createView())
         );
     }
+    /**
+    * Maneja el formulario de un nuevo empleado
+    * @param el Request y el Id del empleado, si lo desean editar
+    * @return La vista de el formulario de la nuevo empleado
+    **/
     public function newEmployeeAction(Request $request, $id)
     {
         $user=$this->getUser();
@@ -165,7 +173,13 @@ class PersonController extends Controller
             array('form' => $form->createView())
         );
     }
-
+    /**
+    * el dashboard de los empleados de cada empleador que le permite editar la información
+    * y agregar nuevos empleados
+    * TODO eliminar empleados
+    * @param el Request que manjea el form que se imprime
+    * @return La vista de el formulario manager
+    **/
     public function manageEmployeesAction(Request $request)
     {
         $user=$this->getUser();
