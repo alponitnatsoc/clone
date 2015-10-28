@@ -28,7 +28,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'economicalTier'
             ))
             ->add('save', 'submit', array(
-                'label' => 'Create',
+                'label' => 'Save',
             ));
 
 

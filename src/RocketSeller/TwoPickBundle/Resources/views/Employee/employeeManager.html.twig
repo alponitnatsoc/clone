@@ -1,0 +1,43 @@
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+{% for employee in employees %}
+	
+	
+		<div id='' class='col-xs-12'>
+			<div class="panel panel-default">
+  				<div class="panel-body">
+					<div id='' class='col-xs-2'>
+						{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
+					</div>
+					<div id='' class='col-xs-5'>
+						<div id='' class='text-left' >
+							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
+						</div>
+					</div>
+					<div id='' class='col-xs-5'>
+						<a id='' class='' href="{{ path('register_employee' , 
+												{'id': employee.employeeEmployee.idEmployee}) }}">
+						<div id='' class='text-right' >
+							Ver
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+{% endfor %}
+		<div id='' class='col-xs-12'>
+			<div class="panel panel-default">
+  				<div class="panel-body">
+					<div id='' class='col-xs-12'>
+						<a id='' class='' href="{{ path('register_employee') }}">
+						<div id='' class='text-right' >
+							Add new employee
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock fos_user_content %}

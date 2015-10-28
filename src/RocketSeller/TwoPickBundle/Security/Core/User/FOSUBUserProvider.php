@@ -12,7 +12,7 @@ class FOSUBUserProvider extends BaseClass {
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
-        $username = $response->getUsername();
+        $username = $response->getEmail();
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
         $setter = 'set'.ucfirst($service);
@@ -34,7 +34,7 @@ class FOSUBUserProvider extends BaseClass {
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $username = $response->getUsername();
+        $username = $response->getEmail();
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
         //when the user is registrating
         if (null === $user) {
@@ -59,11 +59,11 @@ class FOSUBUserProvider extends BaseClass {
             return $user;
         }
         //if user exists - go with the HWIOAuth way
-        $user = parent::loadUserByOAuthUserResponse($response);
         $serviceName = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
         //update access token
         $user->$setter($response->getAccessToken());
+        $this->userManager->updateUser($user);
         return $user;
     }
 }

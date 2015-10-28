@@ -1,8 +1,13 @@
 #Customs
+manage_employees:
+    path:      /manage/employees
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:manageEmployees }
 
 register_employee:
-    path:      /register/employee
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newEmployee }
+    path:      /register/employee/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newEmployee, id: -1}
+    requirements:
+        id:     \d+
 
 show_form_entity:
     path:      /register/entity/{id}

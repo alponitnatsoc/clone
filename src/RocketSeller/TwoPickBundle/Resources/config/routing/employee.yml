@@ -1,0 +1,10 @@
+employee:
+    path:     /
+    defaults: { _controller: "RocketSellerTwoPickBundle:Employee:index" }
+
+employee_show:
+    path:     /{id}/show
+    defaults: { _controller: "RocketSellerTwoPickBundle:Employee:show" }
+
+
+

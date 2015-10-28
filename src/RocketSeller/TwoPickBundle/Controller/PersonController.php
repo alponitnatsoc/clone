@@ -102,10 +102,17 @@ class PersonController extends Controller
             array('form' => $form->createView())
         );
     }
-    public function newEmployeeAction(Request $request)
+    public function newEmployeeAction(Request $request, $id)
     {
         $user=$this->getUser();
-        $employee= new Employee();
+        $employee;
+        if ($id==-1) {
+            $employee= new Employee();
+        }else{
+            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+            $employee= $repository->find($id);
+        }
+        
         $form = $this->createForm(new PersonEmployeeRegistration(), $employee);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -117,7 +124,7 @@ class PersonController extends Controller
             $em->flush();
             $em->persist($employerEmployee);
             $em->flush();
-            return $this->redirectToRoute('show_dashboard');
+            return $this->redirectToRoute('manage_employees');
         }
         
         return $this->render(
@@ -126,5 +133,14 @@ class PersonController extends Controller
         );
     }
 
+    public function manageEmployeesAction(Request $request)
+    {
+        $user=$this->getUser();
+        $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        return $this->render(
+            'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
+                'employees'=>$employeesData)
+        );
+    }
 }
 ?>
