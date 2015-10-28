@@ -55,7 +55,7 @@ class PurchaseOrders
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="purchaseOrders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })

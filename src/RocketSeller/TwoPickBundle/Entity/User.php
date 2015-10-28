@@ -78,6 +78,11 @@ class User extends BaseUser
     private $realProcedure;
 
     /**
+     * @ORM\OneToMany(targetEntity="PurchaseOrders", mappedBy="idUser", cascade={"persist"})
+     */
+    private $purchaseOrders;
+
+    /**
      * Set personPerson
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
@@ -311,5 +316,39 @@ class User extends BaseUser
     public function getRealProcedure()
     {
         return $this->realProcedure;
+    }
+
+    /**
+     * Add purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     *
+     * @return User
+     */
+    public function addPurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     */
+    public function removePurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Get purchaseOrders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchaseOrders;
     }
 }

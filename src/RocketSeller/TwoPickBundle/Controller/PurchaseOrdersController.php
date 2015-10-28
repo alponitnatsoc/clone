@@ -15,13 +15,9 @@ class PurchaseOrdersController extends Controller
     {
         if (is_object($this->getUser()) && $this->getUser() instanceof UserInterface ) {
 
-            $em = $this->getDoctrine()->getManager();
-            $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
-//             $ordersByUser = $purchaseOrdersRepository->getOrdersForEmployer($this->getUser()->getId());
-
-            $ordersByUser = $purchaseOrdersRepository->findByIdUser(
-            	$this->getUser()->getId()
-            );
+//             $em = $this->getDoctrine()->getManager();
+//             $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+            $ordersByUser = $this->getUser()->getPurchaseOrders();
 
             $orders = array();
             foreach ($ordersByUser as $key => $order) {
@@ -48,8 +44,6 @@ class PurchaseOrdersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
-
-//         $data = $purchaseOrdersRepository->getPurchaseOrderDescription($id);
 
         $data = $purchaseOrdersRepository->findByPurchaseOrdersPurchaseOrders($id);
 
