@@ -72,7 +72,7 @@ class PurchaseOrders
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateModified", type="datetime", options={"default":"CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $date_modified;
 
