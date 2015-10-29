@@ -23,7 +23,7 @@ class Contract
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", inversedBy="contracts")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_has_employee_id_employer_has_employee", referencedColumnName="id_employer_has_employee")
      * })

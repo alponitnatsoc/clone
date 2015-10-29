@@ -20,7 +20,10 @@ class ContractType
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idContractType;
-
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
 
 
     /**
@@ -31,5 +34,29 @@ class ContractType
     public function getIdContractType()
     {
         return $this->idContractType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return ContractType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

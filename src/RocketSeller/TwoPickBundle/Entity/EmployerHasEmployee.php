@@ -39,6 +39,11 @@ class EmployerHasEmployee
      */
     private $employeeEmployee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Contract", mappedBy="employerHasEmployeeEmployerHasEmployee", cascade={"persist"})
+     */
+    private $contracts;
+
 
 
     /**
@@ -111,5 +116,46 @@ class EmployerHasEmployee
     public function getEmployeeEmployee()
     {
         return $this->employeeEmployee;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contracts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add contract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
+     *
+     * @return EmployerHasEmployee
+     */
+    public function addContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
+    {
+        $this->contracts[] = $contract;
+
+        return $this;
+    }
+
+    /**
+     * Remove contract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
+     */
+    public function removeContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
+    {
+        $this->contracts->removeElement($contract);
+    }
+
+    /**
+     * Get contracts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContracts()
+    {
+        return $this->contracts;
     }
 }

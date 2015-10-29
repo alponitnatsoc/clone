@@ -20,7 +20,11 @@ class Benefits
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idBenefits;
-
+    
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
 
 
     /**
@@ -31,5 +35,29 @@ class Benefits
     public function getIdBenefits()
     {
         return $this->idBenefits;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Benefits
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
