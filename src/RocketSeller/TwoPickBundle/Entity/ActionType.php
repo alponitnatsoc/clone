@@ -21,7 +21,10 @@ class ActionType
      */
     private $idActionType;
 
-
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
     /**
      * Get idActionType
@@ -31,5 +34,29 @@ class ActionType
     public function getIdActionType()
     {
         return $this->idActionType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return ActionType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

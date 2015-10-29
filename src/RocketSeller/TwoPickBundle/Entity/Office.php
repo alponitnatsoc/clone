@@ -57,6 +57,16 @@ class Office
      */
     private $cityCity;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $address;
+
 
 
     /**
@@ -177,5 +187,53 @@ class Office
     public function getCityCity()
     {
         return $this->cityCity;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Office
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return Office
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 }

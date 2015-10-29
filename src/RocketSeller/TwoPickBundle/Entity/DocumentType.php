@@ -21,7 +21,10 @@ class DocumentType
      */
     private $idDocumentType;
 
-
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
     /**
      * Get idDocumentType
@@ -31,5 +34,29 @@ class DocumentType
     public function getIdDocumentType()
     {
         return $this->idDocumentType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return DocumentType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

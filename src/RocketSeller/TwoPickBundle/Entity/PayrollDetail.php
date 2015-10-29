@@ -30,7 +30,10 @@ class PayrollDetail
      */
     private $payrollPayroll;
 
-
+    /**
+     * @ORM\Column(type="text", nullable=TRUE)
+     */
+    private $description;
 
     /**
      * Set idPayrollDetail
@@ -78,5 +81,29 @@ class PayrollDetail
     public function getPayrollPayroll()
     {
         return $this->payrollPayroll;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return PayrollDetail
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

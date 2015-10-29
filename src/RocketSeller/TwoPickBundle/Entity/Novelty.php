@@ -30,7 +30,10 @@ class Novelty
      */
     private $payrollDetailPayrollDetail;
 
-
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
     /**
      * Set idNovelty
@@ -78,5 +81,29 @@ class Novelty
     public function getPayrollDetailPayrollDetail()
     {
         return $this->payrollDetailPayrollDetail;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Novelty
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

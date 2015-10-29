@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccountType
 {
-    
+
     /**
      * @var integer
      *
@@ -21,7 +21,12 @@ class AccountType
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idAccountType;
-    
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
+
     /**
      * Get idAccountType
      *
@@ -30,5 +35,29 @@ class AccountType
     public function getIdAccountType()
     {
         return $this->idAccountType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return AccountType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

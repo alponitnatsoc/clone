@@ -21,7 +21,10 @@ class Bank
      */
     private $idBank;
 
-
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
     /**
      * Get idBank
@@ -31,5 +34,29 @@ class Bank
     public function getIdBank()
     {
         return $this->idBank;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Bank
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

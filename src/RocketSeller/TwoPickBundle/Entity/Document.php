@@ -48,7 +48,10 @@ class Document
      */
     private $documentTypeDocumentType;
 
-
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
     /**
      * Set idDocument
@@ -144,5 +147,29 @@ class Document
     public function getDocumentTypeDocumentType()
     {
         return $this->documentTypeDocumentType;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Document
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
