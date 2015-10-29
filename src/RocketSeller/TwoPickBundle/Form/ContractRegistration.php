@@ -25,6 +25,7 @@ class ContractRegistration extends AbstractType
                     'unactive' => 'unActive',
                     'standby' => 'standBy',
                 ),
+                'placeholder' => '',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'state',))
@@ -33,6 +34,14 @@ class ContractRegistration extends AbstractType
                     new NotBlank(),),
                 'currency' => 'COP',
                 'property_path' => 'salary',
+                ))
+            ->add('contractType', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:ContractType',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'contractTypeContractType',
                 ))
             ->add('benefits', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Benefits',
@@ -48,7 +57,7 @@ class ContractRegistration extends AbstractType
                 'property' => 'mainAddress',
                 'multiple' => true,
                 'expanded' => true,
-                'property_path' => 'workplaces',
+                'mapped' => false,
                 ))
             ->add('save', 'submit', array(
                 'label' => 'Save',

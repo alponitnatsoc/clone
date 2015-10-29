@@ -1,6 +1,7 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\ContractHasBenefits;
+use RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ class ContractController extends Controller
         	$contract= new Contract();
         }
 
-		$form = $this->createForm(new ContractRegistration());
+		$form = $this->createForm(new ContractRegistration(),$contract);
 
 		$form->handleRequest($request);
 
@@ -38,7 +39,11 @@ class ContractController extends Controller
         	foreach ($benefits as $key => $value) {
         		$contract->addBenefit(new ContractHasBenefits($contract,$value));
         	}
-        	setEmployerHasEmployeeEmployerHasEmployee($user->getPersonPerson()->getEmployer());
+        	$workplaces=$form->get('workplaces')->getData();
+        	foreach ($workplaces as $key => $value) {
+        		$contract->addWorkplace(new ContractHasWorkplace($contract,$value));
+        	}
+        	$contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);
             $em = $this->getDoctrine()->getManager();
             $em->persist($contract);
             $em->flush();

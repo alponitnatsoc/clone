@@ -30,14 +30,7 @@ class Workplace
      */
     private $employerEmployer;
 
-//     /**
-//      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-//      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="workplaces")
-//      * @ORM\JoinColumns({
-//      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
-//      * })
-//      */
-//     private $contractContract;
+
 
     /**
      * @ORM\OneToMany(targetEntity="ContractHasWorkplace", mappedBy="workplaceWorkplace", cascade={"persist"})

@@ -23,7 +23,7 @@ class ContractHasWorkplace
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="contractHasWorkplaces")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="workplaces")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -38,6 +38,11 @@ class ContractHasWorkplace
      * })
      */
     private $workplaceWorkplace;
+
+    function __construct($contract, $workplace){
+        $this->setContractContract($contract);
+        $this->setWorkplaceWorkplace($workplace);
+    }
 
     /**
      * Get idContractHasWorkplace
