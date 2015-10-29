@@ -15,8 +15,6 @@ class PurchaseOrdersController extends Controller
     {
         if (is_object($this->getUser()) && $this->getUser() instanceof UserInterface ) {
 
-//             $em = $this->getDoctrine()->getManager();
-//             $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
             $ordersByUser = $this->getUser()->getPurchaseOrders();
 
             $orders = array();
