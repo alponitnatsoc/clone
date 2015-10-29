@@ -30,14 +30,19 @@ class Workplace
      */
     private $employerEmployer;
 
+//     /**
+//      * @var \RocketSeller\TwoPickBundle\Entity\Contract
+//      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="workplaces")
+//      * @ORM\JoinColumns({
+//      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
+//      * })
+//      */
+//     private $contractContract;
+
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="workplaces")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
-     * })
+     * @ORM\OneToMany(targetEntity="ContractHasWorkplace", mappedBy="workplaceWorkplace", cascade={"persist"})
      */
-    private $contractContract;
+    private $workplaceHasContracts;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
@@ -226,5 +231,46 @@ class Workplace
     public function getCity()
     {
         return $this->city;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workplaceHasContracts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add workplaceHasContract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplaceHasContract
+     *
+     * @return Workplace
+     */
+    public function addWorkplaceHasContract(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplaceHasContract)
+    {
+        $this->workplaceHasContracts[] = $workplaceHasContract;
+
+        return $this;
+    }
+
+    /**
+     * Remove workplaceHasContract
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplaceHasContract
+     */
+    public function removeWorkplaceHasContract(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplaceHasContract)
+    {
+        $this->workplaceHasContracts->removeElement($workplaceHasContract);
+    }
+
+    /**
+     * Get workplaceHasContracts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWorkplaceHasContracts()
+    {
+        return $this->workplaceHasContracts;
     }
 }

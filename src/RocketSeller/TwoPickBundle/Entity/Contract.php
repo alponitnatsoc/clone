@@ -39,10 +39,14 @@ class Contract
      */
     private $contractTypeContractType;
 
+//     /**
+//      * @ORM\OneToMany(targetEntity="Workplace", mappedBy="contractContract", cascade={"persist"})
+//      */
+//     private $workplaces;
     /**
-     * @ORM\OneToMany(targetEntity="Workplace", mappedBy="contractContract", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ContractHasWorkplace", mappedBy="contractContract", cascade={"persist"})
      */
-    private $workplaces;
+    private $contractHasWorkplaces;
 
     /**
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
@@ -292,5 +296,39 @@ class Contract
     public function getBenefits()
     {
         return $this->benefits;
+    }
+
+    /**
+     * Add contractHasWorkplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $contractHasWorkplace
+     *
+     * @return Contract
+     */
+    public function addContractHasWorkplace(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $contractHasWorkplace)
+    {
+        $this->contractHasWorkplaces[] = $contractHasWorkplace;
+
+        return $this;
+    }
+
+    /**
+     * Remove contractHasWorkplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $contractHasWorkplace
+     */
+    public function removeContractHasWorkplace(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $contractHasWorkplace)
+    {
+        $this->contractHasWorkplaces->removeElement($contractHasWorkplace);
+    }
+
+    /**
+     * Get contractHasWorkplaces
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContractHasWorkplaces()
+    {
+        return $this->contractHasWorkplaces;
     }
 }
