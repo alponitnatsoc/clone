@@ -1,4 +1,8 @@
-#Customs
+#Customs 
+add_contract:
+    path:      /register/contract/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContract }
+
 manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:manageEmployees }

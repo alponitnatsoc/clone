@@ -48,6 +48,20 @@ class Contract
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
      */
     private $payrolls;
+    /**
+     * @ORM\OneToMany(targetEntity="ContractHasBenefits", mappedBy="contractContract", cascade={"persist"})
+     */
+    private $benefits;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $state;
+
+    /**
+     * @ORM\Column(type="float",  nullable=TRUE)
+     */
+    private $salary;
 
 
     /**
@@ -138,6 +152,7 @@ class Contract
      */
     public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\Workplace $workplace)
     {
+        $workplace->setContractContract($this);
         $this->workplaces[] = $workplace;
 
         return $this;
@@ -195,5 +210,87 @@ class Contract
     public function getPayrolls()
     {
         return $this->payrolls;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return Contract
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set salary
+     *
+     * @param float $salary
+     *
+     * @return Contract
+     */
+    public function setSalary($salary)
+    {
+        $this->salary = $salary;
+
+        return $this;
+    }
+
+    /**
+     * Get salary
+     *
+     * @return float
+     */
+    public function getSalary()
+    {
+        return $this->salary;
+    }
+
+    /**
+     * Add benefit
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit
+     *
+     * @return Contract
+     */
+    public function addBenefit(\RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit)
+    {
+        $this->benefits[] = $benefit;
+
+        return $this;
+    }
+
+    /**
+     * Remove benefit
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit
+     */
+    public function removeBenefit(\RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit)
+    {
+        $this->benefits->removeElement($benefit);
+    }
+
+    /**
+     * Get benefits
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBenefits()
+    {
+        return $this->benefits;
     }
 }

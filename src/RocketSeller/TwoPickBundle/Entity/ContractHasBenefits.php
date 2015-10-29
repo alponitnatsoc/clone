@@ -23,7 +23,7 @@ class ContractHasBenefits
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="benefits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
      * })
@@ -32,7 +32,7 @@ class ContractHasBenefits
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Benefits
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Benefits")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Benefits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="benefits_id_benefits", referencedColumnName="id_benefits")
      * })
@@ -40,7 +40,10 @@ class ContractHasBenefits
     private $benefitsBenefits;
 
 
-
+    function __construct($contract, $benefit){
+        $this->setContractContract($contract);
+        $this->setBenefitsBenefits($benefit);
+    }
     /**
      * Set idContractHasBenefits
      *
