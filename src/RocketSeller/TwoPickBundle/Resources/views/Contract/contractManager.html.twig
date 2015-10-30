@@ -1,22 +1,22 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-{% for employee in employees %}
+{% for contract in contracts %}
 	
 	
 		<div id='' class='col-xs-12'>
 			<div class="panel panel-default">
   				<div class="panel-body">
 					<div id='' class='col-xs-5'>
-						{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
+						Contract State {{contract.state}}
 					</div>
 					<div id='' class='col-xs-5'>
 						<div id='' class='text-left' >
-							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
+							Salary {{contract.salary}}
 						</div>
 					</div>
 					<div id='' class='col-xs-2'>
-						<a id='' class='' href="{{ path('register_employee' , 
-												{'id': employee.employeeEmployee.idEmployee}) }}">
+						<a id='' class='' href="{{ path('edit_contract' , 
+												{'id': contract.idContract}) }}">
 						<div id='' class='text-right' >
 							Ver
 						</div>
@@ -31,9 +31,10 @@
 			<div class="panel panel-default">
   				<div class="panel-body">
 					<div id='' class='col-xs-12'>
-						<a id='' class='' href="{{ path('register_employee') }}">
+						<a id='' class='' href="{{ path('add_contract', 
+												{'id': idEmployerEmployee}) }}">
 						<div id='' class='text-right' >
-							Add new employee
+							Add new contract
 						</div>
 						</a>
 					</div>
