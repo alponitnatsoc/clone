@@ -149,30 +149,6 @@ class PurchaseOrders
     }
 
     /**
-     * Set purchaseOrdersTypePurchaseOrdersStatus
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersTypePurchaseOrdersStatus
-     *
-     * @return PurchaseOrders
-     */
-    public function setPurchaseOrdersTypePurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersTypePurchaseOrdersStatus = null)
-    {
-        $this->purchaseOrdersTypePurchaseOrdersStatus = $purchaseOrdersTypePurchaseOrdersStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseOrdersTypePurchaseOrdersStatus
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
-     */
-    public function getPurchaseOrdersTypePurchaseOrdersStatus()
-    {
-        return $this->purchaseOrdersTypePurchaseOrdersStatus;
-    }
-
-    /**
      * Set purchaseOrdersStatusPurchaseOrdersStatus
      *
      * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
