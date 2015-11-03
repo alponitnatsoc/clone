@@ -1,7 +1,13 @@
 #Customs 
+manage_contracts:
+    path:      /manage/contract/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Contract:showContracts }
 add_contract:
     path:      /register/contract/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContract }
+edit_contract:
+    path:      /edit/contract/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Contract:editContract }
 
 manage_employees:
     path:      /manage/employees
@@ -35,6 +41,9 @@ purchase_orders_detail:
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:detail }
     requirements:
         id: \d+
+purchase_orders_create:
+    path: /ordenes-de-compra/crear
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:create }
 
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
