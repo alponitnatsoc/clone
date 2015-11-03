@@ -9,8 +9,24 @@ class PaymentMethodController extends Controller
     public function indexAction(Request $request)
     {
 
-        return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig'
-            );
+        $form = $this->createFormBuilder()
+            ->add('credit_card', 'text')
+            ->add('expiry_date', 'text')
+            ->add('cvv', 'text')
+            ->add('name_on_card', 'text')
+            ->add('save', 'submit', array('label' => 'Submit'))
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {     
+            $data = $form->getData();      
+            return $this->render('RocketSellerTwoPickBundle:Registration:cardSuccess.html.twig', array(
+                'data' => $data,
+                ));
+        }
+            return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig', array(
+                'form' => $form->createView(),
+        ));
     }
 }
 ?>

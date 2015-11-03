@@ -4,10 +4,33 @@
 	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
 {% endblock %}
 {% block content %}
-	<form>
-		<label>CC number <input></label>
-
-		<p class="log"></p>
+	<div class="col-md-4">
+	  	{{ form_start(form) }}
+		<div class="col-md-12">
+			{{ form_label(form.credit_card) }}
+			{{ form_errors(form.credit_card) }}
+			{{ form_widget(form.credit_card) }}
+		</div>
+		<div class="col-md-6">
+			{{ form_label(form.expiry_date) }}
+			{{ form_errors(form.expiry_date) }}
+			{{ form_widget(form.expiry_date) }}
+		</div>
+		<div class="col-md-6">
+			{{ form_label(form.cvv) }}
+			{{ form_errors(form.cvv) }}
+			{{ form_widget(form.cvv) }}
+		</div>
+		<div class="col-md-12">
+			{{ form_label(form.name_on_card) }}
+			{{ form_errors(form.name_on_card) }}
+			{{ form_widget(form.name_on_card) }}
+		</div>
+		<div class="col-md-4">
+			{{ form_end(form) }}	
+		</div>		
+	</div>
+	<p class="log"></p>
 	</form>
 {% endblock %}
 {% block javascripts %}

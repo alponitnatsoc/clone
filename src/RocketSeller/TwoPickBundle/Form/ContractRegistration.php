@@ -14,7 +14,11 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 
 class ContractRegistration extends AbstractType
 {
-
+    private $workplaces;
+    private $benefits;
+    function __construct($workplaces){
+        $this->workplaces=$workplaces;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
@@ -54,6 +58,7 @@ class ContractRegistration extends AbstractType
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'placeholder' => '',
+                'choices' => $this->workplaces,
                 'property' => 'mainAddress',
                 'multiple' => true,
                 'expanded' => true,
