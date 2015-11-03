@@ -8,13 +8,17 @@
 	    <h3>Benefits</h3>
 	    <ul id='' class="benefits" data-prototype="{{ form_widget(form.benefits.vars.prototype)|e }}">
 	        {% for benefit in form.benefits %}
-	            <li id="benefits_{{loop.index}}" class="benefitLi">{{ form_row(benefit.benefits) }}</li>
+	            <li id="benefits_{{loop.index}}" class="benefitLi">
+	            	{{ form_row(benefit.benefits) }}
+	            </li>
 	        {% endfor %}
 	    </ul>
-	    <h3>Work  places</h3>
+	    <h3>Work places</h3>
 	    <ul id='' class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}">
 	        {% for workplace in form.workplaces %}
-	            <li>{{ form_row(workplace.workplaces) }}</li>
+	            <li id="workplaces_{{loop.index}}" class="benefitLi">
+	            	{{ form_row(workplace.workplaces) }}
+	            </li>
 	        {% endfor %}
 	    </ul>
 	    
@@ -23,3 +27,51 @@
 	    {{ form_widget(form) }}
 	{{ form_end(form) }}
 {% endblock fos_user_content %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+var $collectionHolderB;
+var $collectionHolderW;
+var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
+var $newLinkLi = $('<li></li>').append($addBenefitLink);
+var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Add workplace</a>');
+var $newLinkLink = $('<li></li>').append($addWorkplaceLink);
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of benefits
+	$collectionHolderB = $('ul.benefits');
+	$collectionHolderW = $('ul.workplaces');
+    // add the "add a tag" anchor and li to the tags ul
+    $collectionHolderB.append($newLinkLi);
+    $collectionHolderW.append($newLinkLink);
+    // count the current form inputs we have (e.g. 2), use that as the new
+    $collectionHolderB.data('index', $collectionHolderB.find(':input').length);
+    $collectionHolderW.data('index', $collectionHolderW.find(':input').length);
+    $addBenefitLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        addBenefitForm($collectionHolderB, $newLinkLi);
+    });
+    $addWorkplaceLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        addWorkplaceForm($collectionHolderW, $newLinkLink);
+    });
+});
+function addBenefitForm($collectionHolderB, $newLinkLi) {
+    var prototype = $collectionHolderB.data('prototype');
+    var index = $collectionHolderB.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $collectionHolderB.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+}
+function addWorkplaceForm($collectionHolderB, $newLinkLink) {
+    var prototype = $collectionHolderB.data('prototype');
+    var index = $collectionHolderB.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $collectionHolderB.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLink.before($newFormLi);
+}
+</script>
+{% endblock javascripts %}
