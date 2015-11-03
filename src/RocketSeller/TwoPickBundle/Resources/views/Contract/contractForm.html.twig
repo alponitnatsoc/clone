@@ -2,6 +2,24 @@
 {% block fos_user_content %}
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
+	    {{ form_row(form.currentState) }}
+	    {{ form_row(form.salary) }}
+	    {{ form_row(form.contractType) }}
+	    <h3>Benefits</h3>
+	    <ul id='' class="benefits" data-prototype="{{ form_widget(form.benefits.vars.prototype)|e }}">
+	        {% for benefit in form.benefits %}
+	            <li id="benefits_{{loop.index}}" class="benefitLi">{{ form_row(benefit.benefits) }}</li>
+	        {% endfor %}
+	    </ul>
+	    <h3>Work  places</h3>
+	    <ul id='' class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}">
+	        {% for workplace in form.workplaces %}
+	            <li>{{ form_row(workplace.workplaces) }}</li>
+	        {% endfor %}
+	    </ul>
+	    
+	    {{ form_row(form.save) }}
+
 	    {{ form_widget(form) }}
 	{{ form_end(form) }}
 {% endblock fos_user_content %}

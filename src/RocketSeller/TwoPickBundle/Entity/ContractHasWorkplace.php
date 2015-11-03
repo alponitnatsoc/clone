@@ -39,9 +39,12 @@ class ContractHasWorkplace
      */
     private $workplaceWorkplace;
 
+
     function __construct($contract, $workplace){
         $this->setContractContract($contract);
-        $this->setWorkplaceWorkplace($workplace);
+        if ($workplace) {
+            $this->setWorkplaceWorkplace($workplace);
+        }
     }
 
     /**

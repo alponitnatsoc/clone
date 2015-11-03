@@ -42,7 +42,10 @@ class ContractHasBenefits
 
     function __construct($contract, $benefit){
         $this->setContractContract($contract);
-        $this->setBenefitsBenefits($benefit);
+        if ($benefit) {
+            $this->setBenefitsBenefits($benefit);
+        }
+        
     }
     /**
      * Set idContractHasBenefits

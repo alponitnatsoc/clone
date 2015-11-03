@@ -21,7 +21,11 @@ class ContractController extends Controller
         $employerHasEmployee=$repository->find($id);
         $contracts=$employerHasEmployee->getContracts();
         $contract= new Contract();
-        
+
+        $contract->addWorkplace(new ContractHasWorkplace($contract,null));
+        $contract->addBenefit(new ContractHasBenefits($contract,null));
+
+
         //modificar los workplaces
 		$form = $this->createForm(new ContractRegistration($userWorkplaces),$contract);
 
