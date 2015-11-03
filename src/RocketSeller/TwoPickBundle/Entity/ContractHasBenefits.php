@@ -40,8 +40,10 @@ class ContractHasBenefits
     private $benefitsBenefits;
 
 
-    function __construct($contract, $benefit){
-        $this->setContractContract($contract);
+    function __construct($contract=null, $benefit=null){
+        if ($contract) {
+            $this->setContractContract($contract);
+        }
         if ($benefit) {
             $this->setBenefitsBenefits($benefit);
         }
