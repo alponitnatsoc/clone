@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Form\PersonBeneficiaryRegistration;
+use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
+use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 
 /**
  * Employee controller.

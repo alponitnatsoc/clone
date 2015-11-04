@@ -9,17 +9,25 @@
 					<div id='' class='col-xs-5'>
 						{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
 					</div>
-					<div id='' class='col-xs-5'>
+					<div id='' class='col-xs-3'>
 						<div id='' class='text-left' >
 							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
 						</div>
 					</div>
 					<div id='' class='col-xs-2'>
-						<a id='' class='' href="{{ path('register_employee' , 
+						<a id='' class='' href="{{ path('manage_contracts' , 
 												{'id': employee.employeeEmployee.idEmployee}) }}">
-						<div id='' class='text-right' >
-							Ver
-						</div>
+							<div id='' class='text-right' >
+								Contracts
+							</div>
+						</a>
+					</div>
+					<div id='' class='col-xs-2'>
+						<a id='' class='' href="{{ path('register_employee' , 
+												{'id': employee.idEmployerHasEmployee}) }}">
+							<div id='' class='text-right' >
+								Edit
+							</div>
 						</a>
 					</div>
 				</div>
