@@ -77,6 +77,16 @@ class PurchaseOrders
     private $date_modified;
 
     /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $invoice_number;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $name;
+
+    /**
      * Set idPurchaseOrders
      *
      * @param integer $idPurchaseOrders
@@ -283,5 +293,53 @@ class PurchaseOrders
     public function getDateModified()
     {
         return $this->date_modified;
+    }
+
+    /**
+     * Set invoiceNumber
+     *
+     * @param string $invoiceNumber
+     *
+     * @return PurchaseOrders
+     */
+    public function setInvoiceNumber($invoiceNumber)
+    {
+        $this->invoice_number = $invoiceNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get invoiceNumber
+     *
+     * @return string
+     */
+    public function getInvoiceNumber()
+    {
+        return $this->invoice_number;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return PurchaseOrders
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

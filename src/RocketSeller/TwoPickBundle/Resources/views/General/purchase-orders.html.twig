@@ -9,6 +9,7 @@
                     {{ order.idPurchaseOrders }} -
                     Tipo: {{ order.purchaseOrderType }} -
                     Fecha creación: {{ order.purchaseOrderDateCreated }}
+                    Ultima modificación: {{ order.lastModified }}
                 </h3>
             </div>
             <div class="panel panel-default" id="purchaseOrderDetail{{ order.idPurchaseOrders }}" style="display:none">
@@ -42,13 +43,29 @@ function verDetalle(idPurchaseOrder, event) {
                 panelBody = divDetail.find(".panel-body");
                 panelBody.html('<ul class="list-group"></ul>');
                 ulPanelBody = panelBody.find(".list-group");
-                    $.each(json, function(indice, data){
+
+                if (json.purchaseOrder) {
+                    po = json.purchaseOrder[0];
+                    if (po.invoiceNumber == null) {
+                        invoiceNumber = "No hay factura asociada <a class='badge loading' data-loading-text='Cargando...' data-complete-text='Orden actualizada' onclick='javascript:updateInvoiceNumber(" + idPurchaseOrder + ", $(this))'>Actualizar número de Factura</a>";
+                    } else {
+                        invoiceNumber = po.invoiceNumber;
+                    }
+                    ulPanelBody.append('<li class="list-group-item">' +
+                            "Fecha de creación: " + po.purchaseOrderDateCreated + "</br>" +
+                            "Última modificación: " + po.lastModified + "</br>" +
+                            "Número de factura: " + invoiceNumber + "</br>" +
+                            '</li>');
+                }
+                if (json.details){
+                    $.each(json.details, function(indice, data){
                         ulPanelBody.append('<li class="list-group-item">' +
                                 "Detalle: " + data.product + "</br>" +
                                 "Producto: " + data.product + "</br>" +
                                 "Descripción: " + data.description + "</br>" +
                                 '</li>');
                     });
+                }
                 $btn.button("complete");
                 divDetail.show("highlight");
             } else {
@@ -66,6 +83,15 @@ function verDetalle(idPurchaseOrder, event) {
         $btn.trigger("closeLoading");
         divDetail.hide("slow");
     }
+}
+
+function updateInvoiceNumber(idPurchaseOrder, event) {
+    var $btn = event;
+    $btn.button('loading');
+    $.post( "/ordenes-de-compra/actualizar", {idPO: idPurchaseOrder, invoiceNumber: "234243"})
+    .done(function( data ) {
+        $btn.button('complete');
+    });
 }
 </script>
 {% endblock %}
