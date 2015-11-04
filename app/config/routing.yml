@@ -15,7 +15,7 @@ manage_employees:
 
 register_employee:
     path:      /register/employee/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newEmployee, id: -1}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
 

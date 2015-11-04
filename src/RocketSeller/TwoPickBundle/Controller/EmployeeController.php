@@ -95,4 +95,39 @@ class EmployeeController extends Controller
                 'employees'=>$employeesData)
         );
     }
+    /**
+    * Maneja el formulario de un nuevo empleado
+    * @param el Request y el Id del empleado, si lo desean editar
+    * @return La vista de el formulario de la nuevo empleado
+    **/
+    public function newEmployeeAction(Request $request, $id)
+    {
+        $user=$this->getUser();
+        $employee;
+        if ($id==-1) {
+            $employee= new Employee();
+        }else{
+            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+            $employee= $repository->find($id);
+        }
+        
+        $form = $this->createForm(new PersonEmployeeRegistration(), $employee);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $employerEmployee = new EmployerHasEmployee();
+            $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
+            $employerEmployee->setEmployeeEmployee($employee);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($employee);
+            $em->flush();
+            $em->persist($employerEmployee);
+            $em->flush();
+            return $this->redirectToRoute('manage_employees');
+        }
+        
+        return $this->render(
+            'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig',
+            array('form' => $form->createView())
+        );
+    }
 }
