@@ -11,7 +11,7 @@ edit_contract:
 
 manage_employees:
     path:      /manage/employees
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:manageEmployees }
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
 register_employee:
     path:      /register/employee/{id}

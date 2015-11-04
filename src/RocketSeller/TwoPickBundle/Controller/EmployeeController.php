@@ -79,4 +79,20 @@ class EmployeeController extends Controller
             );
         }
     }
+        /**
+    * el dashboard de los empleados de cada empleador que le permite editar la información
+    * y agregar nuevos empleados
+    * TODO eliminar empleados
+    * @param el Request que manjea el form que se imprime
+    * @return La vista de el formulario manager
+    **/
+    public function manageEmployeesAction(Request $request)
+    {
+        $user=$this->getUser();
+        $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        return $this->render(
+            'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
+                'employees'=>$employeesData)
+        );
+    }
 }
