@@ -11,11 +11,11 @@ edit_contract:
 
 manage_employees:
     path:      /manage/employees
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:manageEmployees }
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
 register_employee:
     path:      /register/employee/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newEmployee, id: -1}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
 

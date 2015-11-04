@@ -40,7 +40,7 @@ class ContractHasWorkplace
     private $workplaceWorkplace;
 
 
-    function __construct($contract, $workplace){
+    function __construct($contract=null, $workplace=null){
         $this->setContractContract($contract);
         if ($workplace) {
             $this->setWorkplaceWorkplace($workplace);

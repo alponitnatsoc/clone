@@ -31,7 +31,7 @@ class DashBoardController extends Controller
                 'state' => $stateRegister,
                 'stateMessage' => "Continuar",);
         $step2 = array(
-                'url' => "/register/employee", 
+                'url' => "/manage/employees", 
                 'name' => "Datos del empleado",
                 'state' => 0,
                 'stateMessage' => "Continuar",);
