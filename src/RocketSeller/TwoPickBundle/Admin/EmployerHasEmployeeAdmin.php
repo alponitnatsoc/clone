@@ -36,15 +36,13 @@ class EmployerHasEmployeeAdmin extends Admin
     {
         $listMapper
             ->add('idEmployerHasEmployee')
-            ->add('employeeEmployee.personPerson.names', 'text', array('label' => 'Employee Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('employeeEmployee.personPerson',null,array('label' => 'Employee Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.lastName1','text', array('label' => 'Employee LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
-            ->add('employeeEmployee.personPerson.lastName2','text', array('label' => 'Employee LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('employeeEmployee.personPerson.documentType','text', array('label'=>'Employee Document Type')) 
+            ->add('employeeEmployee.personPerson.lastName2','text', array('label' => 'Employee LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))                   
             ->add('employeeEmployee.personPerson.document','text', array('label'=>'Employee Document'))
-            ->add('employerEmployer.personPerson.names', 'text', array('label' => 'Employer Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('employerEmployer.personPerson',null, array('label' => 'Employer Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employerEmployer.personPerson.lastName1','text', array('label' => 'Employer LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
-            ->add('employerEmployer.personPerson.lastName2','text', array('label' => 'Employer LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('employerEmployer.personPerson.documentType','text', array('label'=>'Employer Document Type')) 
+            ->add('employerEmployer.personPerson.lastName2','text', array('label' => 'Employer LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))                   
             ->add('employerEmployer.personPerson.document','text', array('label'=>'Employer Document'))
 
             ->add('_action', 'actions', array(
@@ -63,7 +61,6 @@ class EmployerHasEmployeeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idEmployerHasEmployee')
             ->add('employeeEmployee', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No employee selected'

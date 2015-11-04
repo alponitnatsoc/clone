@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class EmployerAdmin extends Admin
 {
@@ -41,8 +42,7 @@ class EmployerAdmin extends Admin
     {
         $listMapper
             ->add('idEmployer', 'text', array('label' => 'Employer id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('personPerson.idPerson', 'text', array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('personPerson.names', 'text', array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('personPerson',null,array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))                        
             ->add('personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('personPerson.lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
             ->add('personPerson.documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
@@ -57,5 +57,15 @@ class EmployerAdmin extends Admin
                 )
             ))
             ;
+    }
+    /**
+     * @param ShowMapper $showMapper
+     */
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('idEmployer')
+            ->add('personPerson.names')
+        ;
     }
 }
