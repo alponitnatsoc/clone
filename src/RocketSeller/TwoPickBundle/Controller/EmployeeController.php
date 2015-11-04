@@ -9,7 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
-use RocketSeller\TwoPickBundle\Form\PersonBeneficiaryRegistration;
+use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 
@@ -60,7 +60,6 @@ class EmployeeController extends Controller
     * @return La vista de el formulario de la nueva persona
     **/
     public function addBeneficiaryAction(Request $request, Employee $employee, Entity $entity=null) {
-
         if(is_null($entity)) {
             $entities = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
@@ -74,7 +73,7 @@ class EmployeeController extends Controller
             );
         } else {
             $beneficiary = new Beneficiary();
-            $form = $this->createForm(new PersonBeneficiaryRegistration(), $beneficiary);
+            $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
             return $this->render(
                 'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig',
                 array('form' => $form->createView())

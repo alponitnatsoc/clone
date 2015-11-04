@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormEvents;
 use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Form\BasicPersonRegistration;
 
-class PersonBeneficiaryRegistration extends AbstractType
+class EmployeeBeneficiaryRegistration extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
