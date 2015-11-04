@@ -17,11 +17,26 @@ class DashBoardController extends Controller
         //para el render se envía un array steps en el cuals e le puede agregar el estado el usuario
         $user=$this->getUser();
         $stateRegister=0;
+        $stateEmployees=0;
+        $employer=$user->getPersonPerson()->getEmployer();
         if ($user->getPersonPerson()->getEmployer()==null) {
             $stateRegister+=10;
             
         }else{
             $stateRegister+=100;
+            $employees=$employer->getEmployerHasEmployees();
+            $numEmployees=count($employees);
+            $minUnit=100/($numEmployees*2);
+            if ($numEmployees>0) {
+                foreach ($employees as $key => $value) {
+                    if (count($value->getContracts())>0) {
+                        $stateEmployees+=$minUnit*2;
+                    } else {
+                        $stateEmployees+=$minUnit;
+                    }
+                }
+            }
+            
         }
 
         
@@ -32,8 +47,8 @@ class DashBoardController extends Controller
                 'stateMessage' => "Continuar",);
         $step2 = array(
                 'url' => "/manage/employees", 
-                'name' => "Datos del empleado",
-                'state' => 0,
+                'name' => "Datos de los empleados",
+                'state' => $stateEmployees,
                 'stateMessage' => "Continuar",);
         $steps [] =$step1;
         $steps [] =$step2;
