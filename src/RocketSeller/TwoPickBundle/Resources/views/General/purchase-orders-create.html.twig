@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+    <h1>Crear orden de compra</h1>
+    <div class="list-group">
+{#     {{ form_row(form.purchaseOrdersType) }}#}
+{#     {{ form_row(form.payroll) }}#}
+{#     {{ form_rest(form) }}#}
+    <form method="POST" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" />
+    </form>
+    </div>
+</ul>
+{% endblock %}

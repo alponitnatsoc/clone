@@ -21,22 +21,17 @@ class ContractController extends Controller
         $employerHasEmployee=$repository->find($id);
         $contracts=$employerHasEmployee->getContracts();
         $contract= new Contract();
-        
+
+        $contract->addWorkplace(new ContractHasWorkplace($contract,null));
+        $contract->addBenefit(new ContractHasBenefits($contract,null));
+
+
         //modificar los workplaces
 		$form = $this->createForm(new ContractRegistration($userWorkplaces),$contract);
 
 		$form->handleRequest($request);
 
         if ($form->isValid()) {
-        	$benefits=$form->get('benefits')->getData();
-
-        	foreach ($benefits as $key => $value) {
-        		$contract->addBenefit(new ContractHasBenefits($contract,$value));
-        	}
-        	$workplaces=$form->get('workplaces')->getData();
-        	foreach ($workplaces as $key => $value) {
-        		$contract->addWorkplace(new ContractHasWorkplace($contract,$value));
-        	}
         	$contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);
             $em = $this->getDoctrine()->getManager();
             $em->persist($contract);
@@ -81,15 +76,6 @@ class ContractController extends Controller
 		$form->handleRequest($request);
 
         if ($form->isValid()) {
-        	$benefits=$form->get('benefits')->getData();
-
-        	foreach ($benefits as $key => $value) {
-        		$contract->addBenefit(new ContractHasBenefits($contract,$value));
-        	}
-        	$workplaces=$form->get('workplaces')->getData();
-        	foreach ($workplaces as $key => $value) {
-        		$contract->addWorkplace(new ContractHasWorkplace($contract,$value));
-        	}
         	$contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);
             $em = $this->getDoctrine()->getManager();
             $em->persist($contract);

@@ -8,6 +8,9 @@ use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use RocketSeller\TwoPickBundle\Form\PurchaseOrders as FormPurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 
 class PurchaseOrdersController extends Controller
 {
@@ -54,5 +57,32 @@ class PurchaseOrdersController extends Controller
             $detail[$key]['product'] = $prod->getName();
         }
         return new JsonResponse($detail);
+    }
+
+    public function createAction(Request $request)
+    {
+        $form = $this->createForm(new FormPurchaseOrders());
+
+//         var_dump($form->isSubmitted());
+        $form->handleRequest($request);
+//         var_dump($form->isSubmitted());
+        if ($form->isSubmitted() && $form->isValid()) {
+//             $em = $this->getDoctrine()->getManager();
+//             $em->persist($form);
+//             $em->flush();
+            $purchaseOrder = new PurchaseOrders();
+            $purchaseOrdersTypePurchaseOrdersType = $form->get('purchaseOrdersType');
+            $payroll = $form->get('payroll');
+            $pos = $form->get('purchaseOrdersStatus');
+
+            $purchaseOrder->setPayrollPayroll($payrollPayroll);
+            $purchaseOrder->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
+            $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersTypePurchaseOrdersType);
+        }
+
+
+        return $this->render('RocketSellerTwoPickBundle:General:purchase-orders-create.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }

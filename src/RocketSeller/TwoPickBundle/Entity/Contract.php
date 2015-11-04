@@ -235,6 +235,7 @@ class Contract
      */
     public function addBenefit(\RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit)
     {
+        $benefit->setContractContract($this);
         $this->benefits[] = $benefit;
 
         return $this;
@@ -271,6 +272,7 @@ class Contract
      */
     public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplace)
     {
+        $workplace->setContractContract($this);
         $this->workplaces[] = $workplace;
 
         return $this;

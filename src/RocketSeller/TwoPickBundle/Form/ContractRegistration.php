@@ -47,22 +47,19 @@ class ContractRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
                 ))
-            ->add('benefits', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Benefits',
-                'placeholder' => '',
-                'property' => 'name',
-                'multiple' => true,
-                'expanded' => true,
-                'mapped' => false,
+            ->add('benefits', 'collection', array(
+                'type' => new BenefitPick(),
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
                 ))
-            ->add('workplaces', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Workplace',
-                'placeholder' => '',
-                'choices' => $this->workplaces,
-                'property' => 'mainAddress',
-                'multiple' => true,
-                'expanded' => true,
-                'mapped' => false,
+
+            
+            ->add('workplaces', 'collection', array(
+                'type' => new WorkPlacePick($this->workplaces),
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
                 ))
             ->add('save', 'submit', array(
                 'label' => 'Save',
