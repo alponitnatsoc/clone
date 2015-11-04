@@ -6,6 +6,7 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\ContractRegistration;
+use Doctrine\Common\Collections\ArrayCollection;
 class ContractController extends Controller
 {	
 	/**
@@ -72,11 +73,28 @@ class ContractController extends Controller
         $contract=$repository->find($id);
 
         $form = $this->createForm(new ContractRegistration($userWorkplaces),$contract);
-
+        $current= new ArrayCollection();
+        $current['benefits']= new ArrayCollection();
+        $current['workplaces']= new ArrayCollection();
+        foreach ($contract->getBenefits() as $value) {
+        	$current['benefits']->add($value);
+        }
+        foreach ($contract->getWorkplaces() as $key =>  $value) {
+        	$current['workplaces']->add($value);
+        }
 		$form->handleRequest($request);
 
         if ($form->isValid()) {
-        	$contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);
+        	foreach ($current['benefits'] as $benefit) {
+	            if (false === $contract->getBenefits()->contains($benefit)) {
+                    $em->remove($benefit);
+	            }
+	        }
+	        foreach ($current['workplaces'] as $workplace) {
+	            if (false === $contract->getWorkplaces()->contains($workplace)) {
+                    $em->remove($workplace);
+	            }
+	        }
             $em = $this->getDoctrine()->getManager();
             $em->persist($contract);
             $em->flush();
