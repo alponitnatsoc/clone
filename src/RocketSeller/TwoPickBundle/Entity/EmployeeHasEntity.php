@@ -23,7 +23,7 @@ class EmployeeHasEntity
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Entity
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")
      * })
@@ -32,7 +32,7 @@ class EmployeeHasEntity
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
