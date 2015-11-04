@@ -23,15 +23,25 @@ class DashBoardController extends Controller
             $stateRegister+=10;
             
         }else{
+            //el registro del empleador está completo
             $stateRegister+=100;
+            //ahora vamos a ver el de los empleados
             $employees=$employer->getEmployerHasEmployees();
+            //se calcula cuantos empleados tenemos 0 ó *
             $numEmployees=count($employees);
+            //para agregar procentajes respectivos la minima unidad es el registro del 
+            //empleado sin el contrato, cuando se le agrega el contrato es otra unidad 
+            //minima de un 100%
             $minUnit=100/($numEmployees*2);
+            //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees>0) {
                 foreach ($employees as $key => $value) {
+                    //para cada empleado se mira si tiene por lo menos 1 contrato
                     if (count($value->getContracts())>0) {
                         $stateEmployees+=$minUnit*2;
                     } else {
+                        //si nó el contrato todavía no se ha diligenciado y solo se
+                        //puede sumar 1 unidad minima al porcentaje
                         $stateEmployees+=$minUnit;
                     }
                 }
