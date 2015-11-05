@@ -22,10 +22,10 @@ class PurchaseOrdersController extends Controller
 
             $orders = array();
             foreach ($ordersByUser as $key => $order) {
-                $orders[$key]['idPurchaseOrders'] = $order->getIdPurchaseOrders();
-                $orders[$key]['purchaseOrderType'] = $order->getPurchaseOrdersTypePurchaseOrdersType()->getName();
+                $orders[$key]['id'] = $order->getIdPurchaseOrders();
+                $orders[$key]['type'] = $order->getPurchaseOrdersTypePurchaseOrdersType()->getName();
                 $dateCreated = $order->getDateCreated()->format('d/m/Y');
-                $orders[$key]['purchaseOrderDateCreated'] = $dateCreated;
+                $orders[$key]['dateCreated'] = $dateCreated;
                 $lastModified = $order->getDateModified()->format('d/m/Y');
                 $orders[$key]['lastModified'] = $lastModified;
             }
@@ -54,16 +54,35 @@ class PurchaseOrdersController extends Controller
 
         $data = array();
         foreach ($dataPO as $key => $po) {
-            $data[$key]['purchaseOrderType'] = $po->getPurchaseOrdersTypePurchaseOrdersType()->getName();
+            $data[$key]['type'] = $po->getPurchaseOrdersTypePurchaseOrdersType()->getName();
             $dateCreated = $po->getDateCreated()->format('d/m/Y');
-            $data[$key]['purchaseOrderDateCreated'] = $dateCreated;
+            $data[$key]['dateCreated'] = $dateCreated;
             $lastModified = $po->getDateModified()->format('d/m/Y');
             $data[$key]['lastModified'] = $lastModified;
             $data[$key]['invoiceNumber'] = $po->getInvoiceNumber();
+            $data[$key]['id'] = $po->getIdPurchaseOrders();
+            $data[$key]['name'] = $po->getName();
+            $data[$key]['user'] = $po->getIdUser()->getId();
+            $payroll = $po->getPayrollPayroll();
+            if ($payroll) {
+                $data[$key]['idPayroll'] = $payroll->getIdPayroll();
+            } else {
+                $data[$key]['idPayroll'] = null;
+            }
+            $descriptions = $po->getPurchaseOrderDescriptions();
+            if ($descriptions && count($descriptions) > 0) {
+                foreach ($descriptions as $k => $description) {
+                    $data[$key]['descriptions']['ids'][$k] = $description->getIdPurchaseOrdersDescription();
+                }
+            } else {
+                $data[$key]['descriptions'] = null;
+            }
+            $status = $po->getPurchaseOrdersStatusPurchaseOrdersStatus();
+            $data[$key]['idStatus'] = $status->getIdPurchaseOrdersStatus();
         }
         $detail = array();
         foreach($dataDescription as $key => $pod) {
-            $detail[$key]['idPurchaseOrdersDescription'] = $pod->getIdPurchaseOrdersDescription();
+            $detail[$key]['idDescription'] = $pod->getIdPurchaseOrdersDescription();
             $detail[$key]['taxName'] = $pod->getTaxTax()->getName();
             $detail[$key]['description'] = $pod->getDescription();
             $prod = $pod->getProductProduct();
@@ -71,7 +90,7 @@ class PurchaseOrdersController extends Controller
         }
 
         $details = array(
-            'purchaseOrder' => $data,
+            'purchaseOrderData' => $data,
             'details' => $detail
         );
         return new JsonResponse($details);
