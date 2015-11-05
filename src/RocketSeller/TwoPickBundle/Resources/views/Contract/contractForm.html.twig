@@ -30,13 +30,14 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-var $collectionHolderB;
-var $collectionHolderW;
-var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
-var $newLinkLi = $('<li></li>').append($addBenefitLink);
-var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Add workplace</a>');
-var $newLinkLink = $('<li></li>').append($addWorkplaceLink);
+
 jQuery(document).ready(function() {
+    var $collectionHolderB;
+    var $collectionHolderW;
+    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
+    var $newLinkLi = $('<li></li>').append($addBenefitLink);
+    var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Add workplace</a>');
+    var $newLinkLink = $('<li></li>').append($addWorkplaceLink);
     // Get the ul that holds the collection of benefits
 	$collectionHolderB = $('ul.benefits');
 	$collectionHolderW = $('ul.workplaces');

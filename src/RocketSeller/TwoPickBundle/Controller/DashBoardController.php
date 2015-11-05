@@ -32,9 +32,10 @@ class DashBoardController extends Controller
             //para agregar procentajes respectivos la minima unidad es el registro del 
             //empleado sin el contrato, cuando se le agrega el contrato es otra unidad 
             //minima de un 100%
-            $minUnit=100/($numEmployees*2);
+            
             //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees>0) {
+                $minUnit=100/($numEmployees*2);
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
                     if (count($value->getContracts())>0) {
