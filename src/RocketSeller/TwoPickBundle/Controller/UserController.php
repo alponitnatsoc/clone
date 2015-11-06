@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\UserType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * User controller.
@@ -243,5 +244,43 @@ class UserController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Metodo para actualizar el estado de la suscripcion de un usuario.
+     *
+     * @param Request $request
+     * @param unknown $id
+     *
+     * @return status:
+     *              0 - No se recibió status nuevo para actualizar
+     *              1 - Se actualiza el estado del usuario
+     *              2 - No se puede actualizar el estado del usuario
+     */
+    public function updateUserStatusAction(Request $request, $id)
+    {
+        $status = $request->request->get("status");
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
+        $user = $userRepository->find($id);
+
+        $response = 0;
+        if ($status) {
+            try {
+                $em->persist($user);
+                $em->flush();
+                $user->setStatus($status);
+                $em->persist($user);
+                $em->flush();
+                $response = 1;
+            } catch (\Exception $e) {
+                $response = 2;
+            }
+        }
+
+        $res = array(
+            "status" => $response
+        );
+        return new JsonResponse($res);
     }
 }
