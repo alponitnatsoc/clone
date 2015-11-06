@@ -16,6 +16,12 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
+register_employee_submit:
+    path:      /register/employee/submit/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployeeSubmit, id: -1}
+    requirements:
+        id:     \d+
+
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
