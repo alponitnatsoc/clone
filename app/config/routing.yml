@@ -1,5 +1,5 @@
 #Customs 
-register_employee:
+ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
 manage_contracts:
