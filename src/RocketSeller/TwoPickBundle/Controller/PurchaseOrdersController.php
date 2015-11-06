@@ -141,7 +141,6 @@ class PurchaseOrdersController extends Controller
         $dataPO = $purchaseOrdersRepository->findByIdPurchaseOrders($idPO);
 
         foreach ($dataPO as $po) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($po);
             $em->flush();
             try {
