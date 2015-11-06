@@ -1,0 +1,57 @@
+
+{% extends "::base.html.twig" %}
+{% block fos_user_content%}
+
+
+{% endblock fos_user_content%}
+{% block javascripts %}
+{{ parent() }}
+<script>
+var state="/";
+
+jQuery(document).ready(function() {
+	$(".nav-link").on("click",function(e){
+		e.preventDefault();
+		sendAjax($(this).attr('href'));
+	});
+	{# ajax que maneja los requests #}
+	sendAjax(state);
+});
+function sendAjax (url) {
+	$.ajax({
+		url : url,
+		}).done(function(data) {
+			$('#main').replaceWith(
+			// ... with the returned one from the AJAX response.
+			$(data).find('#main'));
+			addClick();
+			addSumbit();
+		});
+}
+function sendAjax (url, form) {
+	$.ajax({
+		url : url,
+		type: $(form).attr('method'),
+		data: $(form).serializeArray(),
+		}).done(function(data) {
+			$('#main').replaceWith(
+			// ... with the returned one from the AJAX response.
+			$(data).find('#main'));
+			addClick();
+			addSumbit();
+		});
+}
+function addClick () {
+	$("#main .nav-link").on("click",function(e){
+		e.preventDefault();
+		sendAjax($(this).attr('href'));
+	});
+}
+function addSumbit () {
+	$("form").on("submit",function(e){
+		e.preventDefault();
+		sendAjax($(this).attr('action'), $(this));
+	});
+}
+</script>
+{% endblock javascripts %}
