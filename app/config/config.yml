@@ -247,7 +247,21 @@ sonata_media:
             formats:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
+            download:
+                strategy: sonata.media.security.superadmin_strategy
+                mode: http
+        person:
+            providers:
+                - sonata.media.provider.image
+                - sonata.media.provider.file
 
+            formats:
+                preview:   { width: 100, quality: 100}
+                small:     { width: 200, quality: 100}
+                large:     { width: 600, quality: 100}
+            download:
+                strategy: sonata.media.security.superadmin_strategy
+                mode: http
     cdn:
         server:
             path: /uploads/media # http://media.sonata-project.org/

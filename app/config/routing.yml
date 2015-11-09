@@ -44,6 +44,14 @@ purchase_orders_detail:
 purchase_orders_create:
     path: /ordenes-de-compra/crear
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:create }
+purchase_orders_update:
+    path: /ordenes-de-compra/actualizar
+    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:updateInvoiceNumber }
+user_status_update:
+    path: /usuario/{id}/actualizar-estado
+    defaults: { _controller: RocketSellerTwoPickBundle:User:updateUserStatus }
+    requirements:
+        id: \d+
 
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"

@@ -106,6 +106,13 @@ class Person
      */
     private $action;
 
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Gallery
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", cascade={"persist"}, fetch="LAZY")
+     */
+    protected $gallery;
+
     /**
      * Get idPerson
      *
@@ -567,5 +574,34 @@ class Person
     public function getEmployee()
     {
         return $this->employee;
+    }
+    public function __toString()
+    {
+        return (string) $this->names;
+    }
+
+
+    /**
+     * Set gallery
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Gallery $gallery
+     *
+     * @return Person
+     */
+    public function setGallery(\Application\Sonata\MediaBundle\Entity\Gallery $gallery = null)
+    {
+        $this->gallery = $gallery;
+
+        return $this;
+    }
+
+    /**
+     * Get gallery
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Gallery
+     */
+    public function getGallery()
+    {
+        return $this->gallery;
     }
 }

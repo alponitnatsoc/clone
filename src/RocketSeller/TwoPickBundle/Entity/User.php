@@ -83,6 +83,14 @@ class User extends BaseUser
     private $purchaseOrders;
 
     /**
+     * Columna utilizada para conocer el estado de la suscripcion del usuario
+     * 0 Inactivo
+     * 1 Activo
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $status;
+
+    /**
      * Set personPerson
      *
      * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
@@ -350,5 +358,29 @@ class User extends BaseUser
     public function getPurchaseOrders()
     {
         return $this->purchaseOrders;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return User
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

@@ -6,10 +6,13 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class PersonAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
+    /**
+     * {@inheritdoc}
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -19,7 +22,8 @@ class PersonAdmin extends Admin
             ->add('documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
             ->add('document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
             ->add('birthDate','date', array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))      
+            ->add('gallery', 'sonata_type_model_list', array('required' => false), array('link_parameters'   => array('context' => 'person')))
             ;
     }
 
@@ -43,6 +47,7 @@ class PersonAdmin extends Admin
             ->add('lastName1')
             ->add('lastName2')
             ->add('mainAddress')
+            ->add('gallery',null,array('label'=>'Documents'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -51,5 +56,14 @@ class PersonAdmin extends Admin
                 )
             ))
             ;
+    }
+    /**
+     * @param ShowMapper $showMapper
+     */
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('names')
+        ;
     }
 }

@@ -22,10 +22,12 @@ class PurchaseOrdersController extends Controller
 
             $orders = array();
             foreach ($ordersByUser as $key => $order) {
-                $orders[$key]['idPurchaseOrders'] = $order->getIdPurchaseOrders();
-                $orders[$key]['purchaseOrderType'] = $order->getPurchaseOrdersTypePurchaseOrdersType()->getName();
-                $newDate = $order->getDateCreated()->format('d/m/Y');
-                $orders[$key]['purchaseOrderDateCreated'] = $newDate;
+                $orders[$key]['id'] = $order->getIdPurchaseOrders();
+                $orders[$key]['type'] = $order->getPurchaseOrdersTypePurchaseOrdersType()->getName();
+                $dateCreated = $order->getDateCreated()->format('d/m/Y');
+                $orders[$key]['dateCreated'] = $dateCreated;
+                $lastModified = $order->getDateModified()->format('d/m/Y');
+                $orders[$key]['lastModified'] = $lastModified;
             }
 
             return $this->render('RocketSellerTwoPickBundle:General:purchase-orders.html.twig', array(
@@ -37,26 +39,61 @@ class PurchaseOrdersController extends Controller
     }
 
     /**
-     * Obtener el detalle de una orden de compra
+     * Obtener todos los datos de una orden de compra
      * @param int $id - Id de la orden de compra para obtener su correspondiente detalle
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function detailAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $purchaseOrdersDescriptionRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
 
-        $data = $purchaseOrdersRepository->findByPurchaseOrdersPurchaseOrders($id);
+        $dataDescription = $purchaseOrdersDescriptionRepository->findByPurchaseOrdersPurchaseOrders($id);
+        $dataPO = $purchaseOrdersRepository->findByIdPurchaseOrders($id);
 
+        $data = array();
+        foreach ($dataPO as $key => $po) {
+            $data[$key]['type'] = $po->getPurchaseOrdersTypePurchaseOrdersType()->getName();
+            $dateCreated = $po->getDateCreated()->format('d/m/Y');
+            $data[$key]['dateCreated'] = $dateCreated;
+            $lastModified = $po->getDateModified()->format('d/m/Y');
+            $data[$key]['lastModified'] = $lastModified;
+            $data[$key]['invoiceNumber'] = $po->getInvoiceNumber();
+            $data[$key]['id'] = $po->getIdPurchaseOrders();
+            $data[$key]['name'] = $po->getName();
+            $data[$key]['user'] = $po->getIdUser()->getId();
+            $payroll = $po->getPayrollPayroll();
+            if ($payroll) {
+                $data[$key]['idPayroll'] = $payroll->getIdPayroll();
+            } else {
+                $data[$key]['idPayroll'] = null;
+            }
+            $descriptions = $po->getPurchaseOrderDescriptions();
+            if ($descriptions && count($descriptions) > 0) {
+                foreach ($descriptions as $k => $description) {
+                    $data[$key]['descriptions']['ids'][$k] = $description->getIdPurchaseOrdersDescription();
+                }
+            } else {
+                $data[$key]['descriptions'] = null;
+            }
+            $status = $po->getPurchaseOrdersStatusPurchaseOrdersStatus();
+            $data[$key]['idStatus'] = $status->getIdPurchaseOrdersStatus();
+        }
         $detail = array();
-        foreach($data as $key => $pod) {
-            $detail[$key]['idPurchaseOrdersDescription'] = $pod->getIdPurchaseOrdersDescription();
+        foreach($dataDescription as $key => $pod) {
+            $detail[$key]['idDescription'] = $pod->getIdPurchaseOrdersDescription();
             $detail[$key]['taxName'] = $pod->getTaxTax()->getName();
             $detail[$key]['description'] = $pod->getDescription();
             $prod = $pod->getProductProduct();
             $detail[$key]['product'] = $prod->getName();
         }
-        return new JsonResponse($detail);
+
+        $details = array(
+            'purchaseOrderData' => $data,
+            'details' => $detail
+        );
+        return new JsonResponse($details);
     }
 
     public function createAction(Request $request)
@@ -72,7 +109,7 @@ class PurchaseOrdersController extends Controller
 //             $em->flush();
             $purchaseOrder = new PurchaseOrders();
             $purchaseOrdersTypePurchaseOrdersType = $form->get('purchaseOrdersType');
-            $payroll = $form->get('payroll');
+            $payrollPayroll = $form->get('payroll');
             $pos = $form->get('purchaseOrdersStatus');
 
             $purchaseOrder->setPayrollPayroll($payrollPayroll);
@@ -84,5 +121,41 @@ class PurchaseOrdersController extends Controller
         return $this->render('RocketSellerTwoPickBundle:General:purchase-orders-create.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * Metodo que se utiliza para actualizar el numero de la factura en una orden de compra
+     * @param Request $request
+     * @param idPO - Parametro recibido por POST, indica el ID de la orden de compra a actualizar
+     * @param invoiceNumber - Parametro recibido por POST, indica el numero de la factura que se va
+     *                      a agregar a la orden de compra
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * Retorna un json con los estados de la transaccion, success = 1, error = 2
+     */
+    public function updateInvoiceNumberAction(Request $request) {
+
+        $idPO = $request->request->get('idPO');
+        $invoiceNumber = $request->request->get('invoiceNumber');
+        $em = $this->getDoctrine()->getManager();
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $dataPO = $purchaseOrdersRepository->findByIdPurchaseOrders($idPO);
+
+        foreach ($dataPO as $po) {
+            $em->persist($po);
+            $em->flush();
+            try {
+                $status = 1;
+                $po->setInvoiceNumber($invoiceNumber);
+            } catch(\Exception $e) {
+                $status = 2;
+            }
+            $em->persist($po);
+            $em->flush();
+        }
+
+        $res = array(
+            'status' => $status
+        );
+        return new JsonResponse($res);
     }
 }
