@@ -4,7 +4,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
-{   
+{
     public function __construct($environment, $debug)
     {
         date_default_timezone_set('America/Bogota');
@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            
+
             new RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle(),
             //FOSUser
             new FOS\UserBundle\FOSUserBundle(),
@@ -58,6 +58,9 @@ class AppKernel extends Kernel
 
             //Doctrine Migration Bundle
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+
+            //Integration with Mandrill - MandrillSwiftMailerBundle
+            new Accord\MandrillSwiftMailerBundle\AccordMandrillSwiftMailerBundle(),
 
         );
 
