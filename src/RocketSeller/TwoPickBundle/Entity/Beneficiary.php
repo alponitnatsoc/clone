@@ -23,7 +23,7 @@ class Beneficiary
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person",cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * })
