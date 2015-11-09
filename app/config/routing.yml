@@ -13,6 +13,10 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
+show_beneficiary:
+    path:      /manage/employee/{id}/beneficiary
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:showBeneficiary}
+
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
