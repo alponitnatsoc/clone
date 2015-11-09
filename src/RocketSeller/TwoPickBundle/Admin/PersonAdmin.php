@@ -22,11 +22,8 @@ class PersonAdmin extends Admin
             ->add('documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
             ->add('document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
             ->add('birthDate','date', array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('media', 'sonata_media_type', array(
-                 'provider' => 'sonata.media.provider.file',
-                 'context'  => 'person'
-            ))            
+            ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))      
+            ->add('gallery', 'sonata_type_model_list', array('required' => false), array('link_parameters'   => array('context' => 'person')))
             ;
     }
 
@@ -50,7 +47,7 @@ class PersonAdmin extends Admin
             ->add('lastName1')
             ->add('lastName2')
             ->add('mainAddress')
-            ->add('media')
+            ->add('gallery',null,array('label'=>'Documents'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
