@@ -136,3 +136,7 @@ media:
 home_products:
     path:     /productos
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
+
+home_landing:
+    path:     /landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }

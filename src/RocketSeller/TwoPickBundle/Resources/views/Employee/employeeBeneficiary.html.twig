@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+	{% block content %}
+		<h3>El empleado: {{ employee.personPerson.names }}</h3>
+		<table style="width:100%">
+		  <tr>
+		    <td>Beneficiary name</td>
+		    <td>Beneficiary last name</td> 
+		    <td>Entity</td>
+		  </tr>	  
+	  		{% for beneficiary in beneficiaries %}
+	  			<tr>				
+					<td>{{ beneficiary.beneficiaryBeneficiary.personPerson.names }}</td>
+					<td>{{ beneficiary.beneficiaryBeneficiary.personPerson.lastName1 }}</td>
+					<td>{{ beneficiary.entityEntity.entityTypeEntityType.name }}</td>
+			  	</tr>
+			{% endfor %}
+		</table>	
+	{% endblock %}
+	
