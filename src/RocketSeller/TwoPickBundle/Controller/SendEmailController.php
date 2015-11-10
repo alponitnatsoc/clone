@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SendEmailController extends Controller
 {
-    const MANDRILL_API_KEY = "yHsfD-NztDn4JOPbhD2VYg";
-
     /**
      * Servicio para enviar correos, recibe parametros por POST con los datos necesarios para envair el correo.
      *
@@ -35,7 +33,7 @@ class SendEmailController extends Controller
         }
 
         try {
-            $mandrill = new Mandrill(self::MANDRILL_API_KEY);
+            $mandrill = new Mandrill($this->container->getParameter("mandrill_api_key"));
             $template_name = $template_name;
             $message = array(
                 'subject' => 'Email enviado a *|USER|*',
