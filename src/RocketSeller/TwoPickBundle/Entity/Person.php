@@ -1,13 +1,13 @@
 <?php
 
 namespace RocketSeller\TwoPickBundle\Entity;
-
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Person
  *
- * @ORM\Table(name="person")
+ * @ORM\Table(name="person" , uniqueConstraints={@UniqueConstraint(name="documentUnique", columns={"document_type", "document"})})
  * @ORM\Entity
  */
 class Person

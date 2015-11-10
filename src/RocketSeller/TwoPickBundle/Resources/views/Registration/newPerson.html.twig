@@ -151,9 +151,7 @@ jQuery(document).ready(function() {
 				city: 			$(form).find("select[name='register_employer[person][city]']").val()
 			}
 		}).done(function(data) {
-			$('#main').replaceWith(
-					// ... with the returned one from the AJAX response.
-					$(data).find('#main'));
+			console.log(data);
 		});
 	});
 });
