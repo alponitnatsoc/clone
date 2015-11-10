@@ -13,4 +13,8 @@ class HomeController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:General:products.html.twig');
     }
+    public function landingAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:General:landing.html.twig');
+    }
 }

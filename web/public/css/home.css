@@ -1,0 +1,49 @@
+body {
+	background-image: url("../img/background.jpg");
+}
+.mid-content{
+	padding-top: 0px;
+
+}
+@font-face {
+    font-family: myFirstFont;
+    src: url("../fonts/OpenSans-Light.ttf");
+}
+
+.text {
+    font-family: myFirstFont;
+    color: white; 
+}
+.text p{
+	margin-bottom: 1px;
+}
+.more-info{
+	font-size: 150%;
+	padding-top: 20px;
+	font-family: myFirstFont;
+	color: white;
+}
+.submit{
+	padding-left: 0px;
+}
+.submit-button{
+	background-color: #00CFBD;
+	color: white;
+	border: #00CFBD;
+	width: 110px;
+}
+.middle-image{
+	left:-130px;
+	width: 750px;
+}
+
+.middle-line1{
+	padding: 0px;
+	position: relative;
+	top: 400px;
+}
+.middle-line2{
+	padding: 0px;
+	position: relative;
+	top: 385px;
+}
