@@ -40,7 +40,7 @@ class PersonController extends Controller
         }
 
         $form = $this->createForm(new EmployerRegistration(), $employer, array(
-            'action' => $this->generateUrl('edit_profile_submit'),
+            'action' => $this->generateUrl('api_public_post_edit_person_submit'),
             'method' => 'POST',
         ));
 
@@ -69,7 +69,7 @@ class PersonController extends Controller
             $people->setEmployer($employer);
         }
         $form = $this->createForm(new EmployerRegistration(), $employer, array(
-            'action' => $this->generateUrl('edit_profile_submit'),
+            'action' => $this->generateUrl('edit_profile_submit' , array('format'=>'json')),
             'method' => 'POST',
         ));
         $form->handleRequest($request);

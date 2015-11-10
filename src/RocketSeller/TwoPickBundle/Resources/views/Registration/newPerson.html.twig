@@ -37,7 +37,7 @@
     </div>
 
     <div id="workplacesData" class="tab-pane fade h3">
-	    <in>Workplaces</h3>
+	    <h3>Workplaces</h3>
 	    	{{ form_row(form.numberOfWorkplaces) }}
 	    {# iterate over each existing workplaces and render its fields #}
 		<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
@@ -127,6 +127,34 @@ jQuery(document).ready(function() {
 			//add the correspondig listeners
 			addListeners();
 		};
+	});
+	$("form").on("submit",function(e){
+		e.preventDefault();
+		var form =$("form");
+		$.ajax({
+			url : form.attr('action'),
+			type: $(form).attr('method'),
+			data: {
+				youAre: 		$(form).find("input[name='register_employer[youAre]']").val(),
+				documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
+				document: 		$(form).find("input[name='register_employer[person][document]']").val(),
+				names:			$(form).find("input[name='register_employer[person][names]']").val(),
+				lastName1: 		$(form).find("input[name='register_employer[person][lastName1]']").val(),
+				lastName2: 		$(form).find("input[name='register_employer[person][lastName2]']").val(),
+				year: 			$(form).find("select[name='register_employer[person][birthDate][year]']").val(),
+				month: 			$(form).find("select[name='register_employer[person][birthDate][month]']").val(),
+				day: 			$(form).find("select[name='register_employer[person][birthDate][day]']").val(),
+				mainAddress: 	$(form).find("input[name='register_employer[person][mainAddress]']").val(),
+				neighborhood: 	$(form).find("input[name='register_employer[person][neighborhood]']").val(),
+				phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
+				department: 	$(form).find("select[name='register_employer[person][department]']").val(),
+				city: 			$(form).find("select[name='register_employer[person][city]']").val()
+			}
+		}).done(function(data) {
+			$('#main').replaceWith(
+					// ... with the returned one from the AJAX response.
+					$(data).find('#main'));
+		});
 	});
 });
 function addListeners() {

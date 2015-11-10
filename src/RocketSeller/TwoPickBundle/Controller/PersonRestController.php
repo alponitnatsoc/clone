@@ -12,7 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
 
-class PersonController extends FOSRestController
+class PersonRestController extends FOSRestController
 {	
     /**
      * Create a Person from the submitted data.<br/>
@@ -42,13 +42,10 @@ class PersonController extends FOSRestController
      * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
      * @RequestParam(name="city", nullable=false, strict=true, description="city.")
-     * @RequestParam(array=true, name="workplacesMain", nullable=false, strict=true, description="workplacesMain.")
-     * @RequestParam(array=true, name="workplacesDepartment", nullable=false, strict=true, description="workplacesDepartment.")
-     * @RequestParam(array=true, name="workplacesCity", nullable=false, strict=true, description="workplacesCity.")
      *
      * @return View
      */
-    public function editPersonSubmitAction(ParamFetcher $paramFetcher)
+    public function postEditPersonSubmitAction(ParamFetcher $paramFetcher)
     {
         $user=$this->getUser();
         $people =$this->getPerson($user);
@@ -75,9 +72,12 @@ class PersonController extends FOSRestController
             // TODO Check if null
             $people->setCity($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City')->find($paramFetcher->get('city')));
             $people->setDepartment($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department')->find($paramFetcher->get('department')));
+
             $em = $this->getDoctrine()->getManager();
-            $workplaces = new ArrayCollection();
-            foreach ($user->getPersonPerson()->getEmployer()->getWorkplaces() as $work) {
+
+
+            /*$workplaces = new ArrayCollection();
+            foreach ($employer->getWorkplaces() as $work) {
                 $workplaces->add($work);
             }
 
@@ -87,11 +87,21 @@ class PersonController extends FOSRestController
                     $em->persist($work);
                     $em->remove($work);
                 }
-            }
-            $em->persist($user);
-            $em->flush();
+            }*/
 
-            return $this->redirectToRoute('show_dashboard');
+
+            $view = View::create();
+            $errors = $this->get('validator')->validate($user, array('Update'));
+
+            if (count($errors) == 0) {
+                $em->persist($user);
+                $em->flush();
+                $view->setData($user)->setStatusCode(200);
+                return $view;
+            } else {
+                $view = $this->getErrorsView($errors);
+                return $view;
+            }
         }
     }
     /**
@@ -100,7 +110,28 @@ class PersonController extends FOSRestController
      */
 
     public function getPerson($user){
-        return $user->getgetPersonPerson();
+        return $user->getPersonPerson();
+    }
+    /**
+     * Get the validation errors
+     *
+     * @param ConstraintViolationList $errors Validator error list
+     *
+     * @return View
+     */
+    protected function getErrorsView(ConstraintViolationList $errors)
+    {
+        $msgs = array();
+        $errorIterator = $errors->getIterator();
+        foreach ($errorIterator as $validationError) {
+            $msg = $validationError->getMessage();
+            $params = $validationError->getMessageParameters();
+            $msgs[$validationError->getPropertyPath()][] = $this->get('translator')->trans($msg, $params, 'validators');
+        }
+        $view = View::create($msgs);
+        $view->setStatusCode(400);
+
+        return $view;
     }
 
 

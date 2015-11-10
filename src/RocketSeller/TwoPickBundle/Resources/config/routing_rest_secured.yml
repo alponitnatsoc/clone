@@ -1,4 +1,4 @@
 users : 
     type: rest
     resource:     "RocketSellerTwoPickBundle:UserRest"
-    name_prefix:  api_secured
+    name_prefix:  api_secured_
