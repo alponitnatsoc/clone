@@ -23,7 +23,6 @@
         "doctrine/dbal": ">=2.4",
         "twig/extensions": "~1.0",
         "friendsofsymfony/rest-bundle": "^1.7",
-        "jms/serializer-bundle": "^1.0",
         "nelmio/api-doc-bundle": "2.7.0",
         "eightpoints/guzzle-bundle": "^4.1",
         "sonata-project/admin-bundle": "^2.3",
@@ -42,7 +41,12 @@
 
         "jackalope/jackalope-doctrine-dbal": "^1.2",
         "twbs/bootstrap": "^3.3",
-        "doctrine/doctrine-migrations-bundle": "^1.0"
+        "doctrine/doctrine-migrations-bundle": "^1.0",
+
+
+        "jms/security-extra-bundle": "1.5.*",
+        "jms/di-extra-bundle": "1.5.*",
+        "jms/serializer-bundle": "0.13.*"
     },
 
     "require-dev": {

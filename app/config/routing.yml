@@ -62,6 +62,8 @@ rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
 
+
+
 #Beneficiary
 
 add_beneficiary_select_entities:
