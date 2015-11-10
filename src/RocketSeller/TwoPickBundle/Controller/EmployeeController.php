@@ -145,4 +145,33 @@ class EmployeeController extends Controller
             array('form' => $form->createView())
         );
     }
+    /**
+     * Muestra los beneficiarios del empleado
+     * @return la vista de los beneficiarios
+     */
+    public function showBeneficiaryAction($id)
+    {
+        $employee = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Employee')
+        ->find($id);
+        if($employee){
+            $beneficiaries = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+            ->findByEmployeeEmployee($employee);
+            if($beneficiaries){
+                return $this->render(
+                'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
+                array('beneficiaries' => $beneficiaries,
+                      'employee' => $employee
+                        ));
+            }else{
+
+            }
+        }else{
+
+        }
+
+
+
+    }
 }

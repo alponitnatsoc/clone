@@ -13,11 +13,18 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
+show_beneficiary:
+    path:      /manage/employee/{id}/beneficiary
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:showBeneficiary}
+
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
+swiftmailer_test:
+    path: /send-email
+    defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:index}
 
 show_form_entity:
     path:      /register/entity/{id}
@@ -129,3 +136,7 @@ media:
 home_products:
     path:     /productos
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
+
+home_landing:
+    path:     /landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
