@@ -62,6 +62,80 @@ class PurchaseOrdersRestController extends FOSRestController
     }
 
     /**
+     * Obtener todos los datos de una orden de compra.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $id - Id de la orden de compra para obtener su correspondiente detalle
+     *
+     * @return View
+     */
+    public function getDetailAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $purchaseOrdersDescriptionRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+
+        $dataDescription = $purchaseOrdersDescriptionRepository->findByPurchaseOrdersPurchaseOrders($id);
+        $po = $purchaseOrdersRepository->findOneBy(
+            array('idPurchaseOrders' => $id)
+        );
+
+        $data = array();
+        $data['type'] = $po->getPurchaseOrdersTypePurchaseOrdersType()->getName();
+        $dateCreated = $po->getDateCreated()->format('d/m/Y');
+        $data['dateCreated'] = $dateCreated;
+        $lastModified = $po->getDateModified()->format('d/m/Y');
+        $data['lastModified'] = $lastModified;
+        $data['invoiceNumber'] = $po->getInvoiceNumber();
+        $data['id'] = $po->getIdPurchaseOrders();
+        $data['name'] = $po->getName();
+        $data['user'] = $po->getIdUser()->getId();
+        $payroll = $po->getPayrollPayroll();
+        if ($payroll) {
+            $data['idPayroll'] = $payroll->getIdPayroll();
+        } else {
+            $data['idPayroll'] = null;
+        }
+        $descriptions = $po->getPurchaseOrderDescriptions();
+        if ($descriptions && count($descriptions) > 0) {
+            foreach ($descriptions as $k => $description) {
+                $data['descriptions']['ids'][$k] = $description->getIdPurchaseOrdersDescription();
+            }
+        } else {
+            $data['descriptions'] = null;
+        }
+        $status = $po->getPurchaseOrdersStatusPurchaseOrdersStatus();
+        $data['idStatus'] = $status->getIdPurchaseOrdersStatus();
+
+        $detail = array();
+        foreach($dataDescription as $key => $pod) {
+            $detail[$key]['idDescription'] = $pod->getIdPurchaseOrdersDescription();
+            $detail[$key]['taxName'] = $pod->getTaxTax()->getName();
+            $detail[$key]['description'] = $pod->getDescription();
+            $prod = $pod->getProductProduct();
+            $detail[$key]['product'] = $prod->getName();
+        }
+
+        $details = array(
+            'purchaseOrderData' => $data,
+            'details' => $detail
+        );
+
+        $view = View::create();
+        $view->setData($details)->setStatusCode(200);
+
+        return $view;
+    }
+
+    /**
      * Get the validation errors
      *
      * @param ConstraintViolationList $errors Validator error list

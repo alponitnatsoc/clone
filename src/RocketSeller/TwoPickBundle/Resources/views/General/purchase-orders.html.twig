@@ -4,7 +4,7 @@
     <div class="list-group">
         {% for order in orders %}
             <div class="list-group-item">
-                <a class="badge loading" data-loading-text="Cargando..." data-complete-text="Cerrar" onclick="javascript:verDetalle('{{ order.id }}', $(this))">Ver detalle</a>
+                <a class="badge loading" data-loading-text="Cargando..." data-complete-text="Cerrar" onclick="javascript:verDetalle('{{ path("api_public_get_detail", {"id": order.id }) }}', {{ order.id }}, $(this))">Ver detalle</a>
                 <h3 class="panel-title">
                     {{ order.id }} -
                     Tipo: {{ order.type }} -
@@ -22,7 +22,7 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-function verDetalle(idPurchaseOrder, event) {
+function verDetalle(url, idPurchaseOrder, event) {
     var $btn = event;
     $btn.button('loading');
     $btn.parent().addClass('active');
@@ -36,7 +36,7 @@ function verDetalle(idPurchaseOrder, event) {
     divDetail = $("#purchaseOrderDetail" + idPurchaseOrder);
 
     if (divDetail.css("display") == "none"){
-        $.getJSON( "/ordenes-de-compra/detalle/" + idPurchaseOrder )
+        $.getJSON( url )
         .done(function( json ) {
             if (!jQuery.isEmptyObject(json)) {
 
@@ -45,7 +45,7 @@ function verDetalle(idPurchaseOrder, event) {
                 ulPanelBody = panelBody.find(".list-group");
 
                 if (json.purchaseOrderData) {
-                    po = json.purchaseOrderData[0];
+                    po = json.purchaseOrderData;
                     if (po.invoiceNumber == null) {
                         invoiceNumber = "No hay factura asociada <a class='badge loading' data-loading-text='Cargando...' data-complete-text='Orden actualizada' onclick='javascript:updateInvoiceNumber(" + idPurchaseOrder + ", $(this))'>Actualizar número de Factura</a>";
                     } else {
