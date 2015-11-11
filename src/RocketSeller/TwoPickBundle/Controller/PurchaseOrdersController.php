@@ -31,7 +31,8 @@ class PurchaseOrdersController extends Controller
             }
 
             return $this->render('RocketSellerTwoPickBundle:General:purchase-orders.html.twig', array(
-                'orders' => $orders
+                'orders' => $orders,
+                'updateInvoiceNumberService' => $this->generateUrl("api_public_put_update_invoice_number")
             ));
         } else {
             throw new AccessDeniedException('Debe estar logueado para ingresar a esta sección');
@@ -121,41 +122,5 @@ class PurchaseOrdersController extends Controller
         return $this->render('RocketSellerTwoPickBundle:General:purchase-orders-create.html.twig', array(
             'form' => $form->createView()
         ));
-    }
-
-    /**
-     * Metodo que se utiliza para actualizar el numero de la factura en una orden de compra
-     * @param Request $request
-     * @param idPO - Parametro recibido por POST, indica el ID de la orden de compra a actualizar
-     * @param invoiceNumber - Parametro recibido por POST, indica el numero de la factura que se va
-     *                      a agregar a la orden de compra
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * Retorna un json con los estados de la transaccion, success = 1, error = 2
-     */
-    public function updateInvoiceNumberAction(Request $request) {
-
-        $idPO = $request->request->get('idPO');
-        $invoiceNumber = $request->request->get('invoiceNumber');
-        $em = $this->getDoctrine()->getManager();
-        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
-        $dataPO = $purchaseOrdersRepository->findByIdPurchaseOrders($idPO);
-
-        foreach ($dataPO as $po) {
-            $em->persist($po);
-            $em->flush();
-            try {
-                $status = 1;
-                $po->setInvoiceNumber($invoiceNumber);
-            } catch(\Exception $e) {
-                $status = 2;
-            }
-            $em->persist($po);
-            $em->flush();
-        }
-
-        $res = array(
-            'status' => $status
-        );
-        return new JsonResponse($res);
     }
 }

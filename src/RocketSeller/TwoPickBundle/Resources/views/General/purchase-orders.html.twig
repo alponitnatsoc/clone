@@ -88,9 +88,14 @@ function verDetalle(idPurchaseOrder, event) {
 function updateInvoiceNumber(idPurchaseOrder, event) {
     var $btn = event;
     $btn.button('loading');
-    $.post( "/ordenes-de-compra/actualizar", {idPO: idPurchaseOrder, invoiceNumber: "234243"})
-    .done(function( data ) {
-        $btn.button('complete');
+
+    $.ajax({
+        url: "{{ updateInvoiceNumberService }}",
+        type: 'PUT',
+        data: {idPO: idPurchaseOrder, invoiceNumber: "234243"},
+        success: function(data) {
+            $btn.button('complete');
+        }
     });
 }
 </script>
