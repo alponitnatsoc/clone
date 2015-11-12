@@ -28,7 +28,7 @@ class PurchaseOrdersController extends Controller
                 $orders[$key]['lastModified'] = $lastModified;
             }
 
-            return $this->render('RocketSellerTwoPickBundle:General:purchase-orders.html.twig', array(
+            return $this->render('RocketSellerTwoPickBundle:PurchaseOrders:purchase-orders.html.twig', array(
                 'orders' => $orders,
                 'updateInvoiceNumberService' => $this->generateUrl("api_public_put_update_invoice_number")
             ));
@@ -59,7 +59,7 @@ class PurchaseOrdersController extends Controller
         }
 
 
-        return $this->render('RocketSellerTwoPickBundle:General:purchase-orders-create.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:PurchaseOrders:purchase-orders-create.html.twig', array(
             'form' => $form->createView()
         ));
     }

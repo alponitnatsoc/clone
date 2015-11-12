@@ -11,56 +11,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 
 class PurchaseOrdersRestController extends FOSRestController
 {
-
-    /**
-     * Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.<br/>
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when the form has errors"
-     *   }
-     * )
-     *
-     * @param ParamFetcher $paramFetcher Paramfetcher
-     *
-     * @RequestParam(name="idPO", nullable=false, strict=true, description="ID de la orden de compra a actualizar.")
-     * @RequestParam(name="invoiceNumber", nullable=false, strict=true, description="numero de la factura que se va
-     *                      a agregar a la orden de compra.")
-     *
-     * @return View
-     */
-    public function putUpdateInvoiceNumberAction(ParamFetcher $paramFetcher) {
-
-        $idPO = $paramFetcher->get('idPO');
-        $invoiceNumber = $paramFetcher->get('invoiceNumber');
-        $em = $this->getDoctrine()->getManager();
-        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
-        $dataPO = $purchaseOrdersRepository->findOneBy(
-            array('idPurchaseOrders' => $idPO)
-        );
-
-        $em->persist($dataPO);
-        $em->flush();
-        $dataPO->setInvoiceNumber($invoiceNumber);
-
-        $view = View::create();
-
-        $errors = $this->get('validator')->validate($dataPO, array('Update'));
-
-        if (count($errors) == 0) {
-            $em->persist($dataPO);
-            $em->flush();
-            $view->setData($dataPO)->setStatusCode(200);
-            return $view;
-        } else {
-            $view = $this->getErrorsView($errors);
-            return $view;
-        }
-    }
-
     /**
      * Obtener todos los datos de una orden de compra.<br/>
      *
@@ -133,6 +83,55 @@ class PurchaseOrdersRestController extends FOSRestController
         $view->setData($details)->setStatusCode(200);
 
         return $view;
+    }
+
+    /**
+     * Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idPO", nullable=false, strict=true, description="ID de la orden de compra a actualizar.")
+     * @RequestParam(name="invoiceNumber", nullable=false, strict=true, description="numero de la factura que se va
+     *                      a agregar a la orden de compra.")
+     *
+     * @return View
+     */
+    public function putUpdateInvoiceNumberAction(ParamFetcher $paramFetcher) {
+
+        $idPO = $paramFetcher->get('idPO');
+        $invoiceNumber = $paramFetcher->get('invoiceNumber');
+        $em = $this->getDoctrine()->getManager();
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+        $dataPO = $purchaseOrdersRepository->findOneBy(
+            array('idPurchaseOrders' => $idPO)
+            );
+
+        $em->persist($dataPO);
+        $em->flush();
+        $dataPO->setInvoiceNumber($invoiceNumber);
+
+        $view = View::create();
+
+        $errors = $this->get('validator')->validate($dataPO, array('Update'));
+
+        if (count($errors) == 0) {
+            $em->persist($dataPO);
+            $em->flush();
+            $view->setData($dataPO)->setStatusCode(200);
+            return $view;
+        } else {
+            $view = $this->getErrorsView($errors);
+            return $view;
+        }
     }
 
     /**
