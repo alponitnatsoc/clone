@@ -24,6 +24,7 @@ security:
             pattern:   ^/api/secured/.*
             stateless: true
             wsse:      { lifetime: 30 }
+            anonymous:    true
         main:
             pattern: ^/
             form_login:

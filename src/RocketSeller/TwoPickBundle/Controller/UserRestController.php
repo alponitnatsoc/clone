@@ -146,6 +146,7 @@ class UserRestController extends FOSRestController
      * @RequestParam(name="name", nullable=true, strict=true, description="Name.")
      * @RequestParam(name="lastname", nullable=true, strict=true, description="Lastname.")
      * @RequestParam(name="password", nullable=true, strict=true, description="Plain Password.")
+     * @RequestParam(name="status", nullable=true, strict=true, description="Estado de la suscripcion del usuario")
      *
      * @return View
      */
@@ -164,6 +165,7 @@ class UserRestController extends FOSRestController
         if($paramFetcher->get('password')){$user->setPlainPassword($paramFetcher->get('password')); }
         if($paramFetcher->get('name')){$user->setName($paramFetcher->get('name')); }
         if($paramFetcher->get('lastname')){$user->setLastname($paramFetcher->get('lastname')); }
+        if($paramFetcher->get('status')){$user->setStatus($paramFetcher->get('status')); }
 
         $view = View::create();
 
@@ -182,7 +184,7 @@ class UserRestController extends FOSRestController
     /**
      * Delete an user identified by username/email.
      *
-     * 
+     *
      * @ApiDoc(
      *   resource = true,
      *   description = "Delete an user identified by username/email",
@@ -247,7 +249,6 @@ class UserRestController extends FOSRestController
 
         return $view;
     }
-
 
     /**
      * Get the validation errors
