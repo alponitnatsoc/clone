@@ -22,9 +22,6 @@ register_employee:
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
-send_email:
-    path: /send-email
-    defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:index}
 send_email_test:
     path: /send-email/test
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:testSendEmail}
