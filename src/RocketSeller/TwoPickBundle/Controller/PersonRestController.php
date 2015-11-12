@@ -9,6 +9,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
 
@@ -31,9 +32,9 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="youAre", nullable=false, strict=true, description="you Are.")
      * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
      * @RequestParam(name="document", nullable=false, strict=true, description="document.")
-     * @RequestParam(name="names", nullable=false, strict=true, description="names.")
-     * @RequestParam(name="lastName1", nullable=false, strict=true, description="last Name 1.")
-     * @RequestParam(name="lastName2", nullable=false, strict=true, description="last Name 2.")
+     * @RequestParam(name="names", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="names.")
+     * @RequestParam(name="lastName1", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last Name 1.")
+     * @RequestParam(name="lastName2", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last Name 2.")
      * @RequestParam(name="year", nullable=false, strict=true, description="year.")
      * @RequestParam(name="month", nullable=false, strict=true, description="month.")
      * @RequestParam(name="day", nullable=false, strict=true, description="day.")
@@ -42,7 +43,9 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
      * @RequestParam(name="city", nullable=false, strict=true, description="city.")
-     *
+     * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="mainAddress.")
      * @return View
      */
     public function postEditPersonSubmitAction(ParamFetcher $paramFetcher)
@@ -70,19 +73,53 @@ class PersonRestController extends FOSRestController
             // TODO validate Date
             $people->setBirthDate($datetime);
             // TODO Check if null
-            $people->setCity($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City')->find($paramFetcher->get('city')));
-            $people->setDepartment($this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department')->find($paramFetcher->get('department')));
+            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $people->setCity($cityRepo->find($paramFetcher->get('city')));
+            $people->setDepartment($depRepo->find($paramFetcher->get('department')));
 
             $em = $this->getDoctrine()->getManager();
-
-
-            /*$workplaces = new ArrayCollection();
-            foreach ($employer->getWorkplaces() as $work) {
-                $workplaces->add($work);
+            $actualWorkplacesAdd=$paramFetcher->get('workMainAddress');
+            $actualWorkplacesCity=$paramFetcher->get('workCity');
+            $actualWorkplacesDept=$paramFetcher->get('workDepartment');
+            $actualWorkplaces= new ArrayCollection();
+            for($i=0;$i<count($actualWorkplacesAdd);$i++){
+                $tempWorkplace=new Workplace();
+                $tempWorkplace->setMainAddress($actualWorkplacesAdd[$i]);
+                $tempWorkplace->setCity($cityRepo->find($actualWorkplacesCity[$i]));
+                $tempWorkplace->setDepartment($depRepo->find($actualWorkplacesDept[$i]));
+                $actualWorkplaces->add($tempWorkplace);
             }
-
-            foreach ($workplaces as $work) {
-                if (false === $employer->getWorkplaces()->contains($work)) {
+            $workplaces = $employer->getWorkplaces();
+            /** @var Workplace $work */
+            foreach($workplaces as $work){
+                /** @var Workplace $actWork */
+                $flag=false;
+                foreach($actualWorkplaces as $actWork){
+                    if($work->getMainAddress()==$actWork->getMainAddress()AND $work->getCity()==$actWork->getCity()){
+                        $flag=true;
+                        $actualWorkplaces->removeElement($actWork);
+                        continue;
+                    }
+                }
+                if(!$flag){
+                    $work->setEmployerEmployer(null);
+                    $em->persist($work);
+                    $em->remove($work);
+                    $em->flush();
+                    $workplaces->removeElement($work);
+                }
+            }
+            foreach($actualWorkplaces as $work){
+                $employer->addWorkplace($work);
+            }
+            /*foreach ($workplaces as $work) {
+                $flag=false;
+                foreach($actualWorkplaces as $actual){
+                    if($actual->getMainAddress()===$work->getMainAddress())
+                        $flag=true;
+                }
+                if (!$flag) {
                     $work->setEmployerEmployer(null);
                     $em->persist($work);
                     $em->remove($work);
@@ -96,7 +133,7 @@ class PersonRestController extends FOSRestController
             if (count($errors) == 0) {
                 $em->persist($user);
                 $em->flush();
-                $view->setData($user)->setStatusCode(200);
+                $view->setData($this->generateUrl('show_dashboard') )->setStatusCode(200);
                 return $view;
             } else {
                 $view = $this->getErrorsView($errors);

@@ -19,6 +19,7 @@ jQuery(document).ready(function() {
 });
 
 function sendAjax (url, form) {
+
 	$.ajax({
 		url : url,
 		type: $(form).attr('method'),
@@ -28,7 +29,9 @@ function sendAjax (url, form) {
 			// ... with the returned one from the AJAX response.
 			$(data).find('#main'));
 			addClick();
-			addSumbit();
+			if (!jsLoader(url)) {
+				addSumbit();
+			}
 		});
 }
 function addClick () {
@@ -42,6 +45,16 @@ function addSumbit () {
 		e.preventDefault();
 		sendAjax($(this).attr('action'), $(this));
 	});
+}
+function jsLoader(url){
+	if(url=="{{ path('edit_profile') }}"){
+		$.getScript( "{{ asset('public/js/newEmployer.js') }}").done(function(){
+			startEmployer();
+		})
+
+		return true;
+	}
+	return false;
 }
 </script>
 {% endblock javascripts %}

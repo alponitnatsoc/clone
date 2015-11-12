@@ -149,9 +149,19 @@ jQuery(document).ready(function() {
 				phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
 				department: 	$(form).find("select[name='register_employer[person][department]']").val(),
 				city: 			$(form).find("select[name='register_employer[person][city]']").val()
+			},
+			statusCode:{
+				200: function(data){
+					console.log(data);
+				},
+				400 : function(data, textStatus, errorThrown){
+					alert("400 :"+errorThrown);
+					console.log(data);
+					console.log(textStatus);
+					console.log(errorThrown);
+				}
+
 			}
-		}).done(function(data) {
-			console.log(data);
 		});
 	});
 });
