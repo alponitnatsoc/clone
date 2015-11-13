@@ -52,12 +52,12 @@ class DashBoardController extends Controller
 
         
         $step1 = array(
-                'url' => "/register/complete", 
+                'url' => $this->generateUrl('edit_profile'), 
                 'name' => "Datos del empleador",
                 'state' => $stateRegister,
                 'stateMessage' => "Continuar",);
         $step2 = array(
-                'url' => "/manage/employees", 
+                'url' => $this->generateUrl('manage_employees'), 
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
                 'stateMessage' => "Continuar",);

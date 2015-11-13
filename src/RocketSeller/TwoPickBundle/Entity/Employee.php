@@ -173,4 +173,100 @@ class Employee
     {
         return $this->employeeHasEmployers;
     }
+
+    /**
+     * Set civilStatus
+     *
+     * @param string $civilStatus
+     *
+     * @return Employee
+     */
+    public function setCivilStatus($civilStatus)
+    {
+        $this->civilStatus = $civilStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get civilStatus
+     *
+     * @return string
+     */
+    public function getCivilStatus()
+    {
+        return $this->civilStatus;
+    }
+
+    /**
+     * Set birthAddress
+     *
+     * @param string $birthAddress
+     *
+     * @return Employee
+     */
+    public function setBirthAddress($birthAddress)
+    {
+        $this->birthAddress = $birthAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get birthAddress
+     *
+     * @return string
+     */
+    public function getBirthAddress()
+    {
+        return $this->birthAddress;
+    }
+
+    /**
+     * Set birthDepartment
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $birthDepartment
+     *
+     * @return Employee
+     */
+    public function setBirthDepartment(\RocketSeller\TwoPickBundle\Entity\Department $birthDepartment = null)
+    {
+        $this->birthDepartment = $birthDepartment;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDepartment
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
+     */
+    public function getBirthDepartment()
+    {
+        return $this->birthDepartment;
+    }
+
+    /**
+     * Set birthCity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\City $birthCity
+     *
+     * @return Employee
+     */
+    public function setBirthCity(\RocketSeller\TwoPickBundle\Entity\City $birthCity = null)
+    {
+        $this->birthCity = $birthCity;
+
+        return $this;
+    }
+
+    /**
+     * Get birthCity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\City
+     */
+    public function getBirthCity()
+    {
+        return $this->birthCity;
+    }
 }
