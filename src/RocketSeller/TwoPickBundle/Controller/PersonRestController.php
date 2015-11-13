@@ -43,15 +43,17 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
      * @RequestParam(name="city", nullable=false, strict=true, description="city.")
-     * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="mainAddress.")
-     * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="mainAddress.")
-     * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(array=true, name="workId", nullable=false, strict=true, description="id if exist else -1.")
+     * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
+     * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="workplace city.")
+     * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="workplace department.")
      * @return View
      */
     public function postEditPersonSubmitAction(ParamFetcher $paramFetcher)
     {
         $user=$this->getUser();
-        $people =$this->getPerson($user);
+        /** @var Person $people */
+        $people =$this->$user->getPersonPerson();
         $employer=$people->getEmployer();
         if ($employer==null) {
             $employer=new Employer();
@@ -75,16 +77,29 @@ class PersonRestController extends FOSRestController
             // TODO Check if null
             $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
             $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $workRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
             $people->setCity($cityRepo->find($paramFetcher->get('city')));
             $people->setDepartment($depRepo->find($paramFetcher->get('department')));
 
             $em = $this->getDoctrine()->getManager();
+            $actualWorkplacesId=$paramFetcher->get('workId');
             $actualWorkplacesAdd=$paramFetcher->get('workMainAddress');
             $actualWorkplacesCity=$paramFetcher->get('workCity');
             $actualWorkplacesDept=$paramFetcher->get('workDepartment');
             $actualWorkplaces= new ArrayCollection();
             for($i=0;$i<count($actualWorkplacesAdd);$i++){
-                $tempWorkplace=new Workplace();
+                $tempWorkplace=null;
+                if($actualWorkplacesId[$i]!=""){
+                    /** @var Workplace $tempWorkplace */
+                    $tempWorkplace=$workRepo->find($actualWorkplacesId[$i]);
+                    if($tempWorkplace->getEmployerEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
+                        $view = View::create()->setStatusCode(400);
+                        return $view;
+                    }
+
+                }else{
+                    $tempWorkplace=new Workplace();
+                }
                 $tempWorkplace->setMainAddress($actualWorkplacesAdd[$i]);
                 $tempWorkplace->setCity($cityRepo->find($actualWorkplacesCity[$i]));
                 $tempWorkplace->setDepartment($depRepo->find($actualWorkplacesDept[$i]));
@@ -96,8 +111,9 @@ class PersonRestController extends FOSRestController
                 /** @var Workplace $actWork */
                 $flag=false;
                 foreach($actualWorkplaces as $actWork){
-                    if($work->getMainAddress()==$actWork->getMainAddress()AND $work->getCity()==$actWork->getCity()){
+                    if($work->getIdWorkplace()==$actWork->getIdWorkplace()){
                         $flag=true;
+                        $work=$actWork;
                         $actualWorkplaces->removeElement($actWork);
                         continue;
                     }
@@ -142,13 +158,46 @@ class PersonRestController extends FOSRestController
         }
     }
     /**
-     * @return Person
-     * @param $user
+     * Get the cities of a department.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Finds the cities of a department.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     404 = "Returned when the department id doesn't exists "
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="department", nullable=false,  requirements="\d+", strict=true, description="the desired cities department.")
+     * @return View
      */
+    public function postCitiesAction(ParamFetcher $paramFetcher)
+    {
+        $idDepartment=$paramFetcher->get('department');
+        $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+        $query = $cityRepo->createQueryBuilder('c')
+            ->where('c.departmentDepartment = :department')
+            ->setParameter('department', $idDepartment)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery();
 
-    public function getPerson($user){
-        return $user->getPersonPerson();
+
+        $cities= $query->getResult();
+        $view = View::create();
+
+        if ( count($cities)!= 0) {
+            $view->setData($cities)->setStatusCode(200);
+            return $view;
+        } else {
+            $view->setStatusCode(404)->setHeader("error","Department does't exist");
+            return $view;
+        }
     }
+
     /**
      * Get the validation errors
      *

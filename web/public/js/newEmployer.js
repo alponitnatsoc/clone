@@ -7,7 +7,7 @@ function startEmployer(){
     $collectionHolder = $('ul.workplaces');
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', ($collectionHolder.find(':input').length)/3);
+    $collectionHolder.data('index', ($collectionHolder.find(':input').length)/4);
     //el cambio de tabs entre el formulario de registro
     $('.btnNext').click(function(){
         $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -65,9 +65,13 @@ function startEmployer(){
     $("form").on("submit",function(e){
         e.preventDefault();
         var form =$("form");
-        var addresses =[],citys=[],departments=[];
+        var addresses =[],citys=[],departments=[],ids=[];
         var i =0;
-        $(form).find("ul.workplaces input").each(function(){
+        $(form).find("ul.workplaces input[name*='id']").each(function(){
+            ids[i++]=$(this).val();
+        });
+        i=0;
+        $(form).find("ul.workplaces input[name*='mainAddress']").each(function(){
             addresses[i++]=$(this).val();
         });
         i=0;
@@ -96,6 +100,7 @@ function startEmployer(){
                 phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),
                 city: 			$(form).find("select[name='register_employer[person][city]']").val(),
+                workId:         ids,
                 workMainAddress:addresses,
                 workCity:       citys,
                 workDepartment: departments
@@ -118,6 +123,13 @@ function startEmployer(){
 }
 
 
+function jsonToHTML(data) {
+    var htmls="<option value=''></option>";
+    for(var i=0;i<data.length;i++){
+        htmls+="<option value='"+data[i].id_city+"'>"+data[i].name+"</option>";
+    }
+    return htmls;
+}
 function addListeners() {
     $('select').filter(function() {
         return this.id.match(/department/);
@@ -131,17 +143,14 @@ function addListeners() {
         var citySelectId = $department.attr("id").replace("_department", "_city");
         // Submit data via AJAX to the form's action path.
         $.ajax({
-            url : $form.attr('action'),
-            type: $form.attr('method'),
-            data : data,
-            success: function(html) {
-                // Replace current position field ...
-                $('#'+citySelectId).replaceWith(
-                    // ... with the returned one from the AJAX response.
-                    $(html).find('#'+citySelectId)
-                );
-                // Position field now displays the appropriate positions.
-            }
-        });
+            method: "POST",
+            url: "/api/public/v1/cities",
+            data: { department: $department.val()}
+        }).done(function(data){
+            $('#'+citySelectId).html(
+            // ... with the returned one from the AJAX response.
+            jsonToHTML(data)
+        );});
+
     });
 }

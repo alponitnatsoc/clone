@@ -22,6 +22,9 @@ class WorkPlaceRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank(),
                 ),))
+            ->add('id', 'hidden', array(
+                'property_path' => 'idWorkplace',
+            ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'placeholder' => '',
@@ -38,28 +41,6 @@ class WorkPlaceRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'city',
                 ));
-            $formModifier = function (FormInterface $form, Department $department = null) {
-                $citys = null === $department ? array() : $department->getCitys();
-
-                $form->add('city', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:City',
-                'placeholder' => '',
-                'choices'     => $citys,
-                'property' => 'name',
-                'multiple' => false,
-                'expanded' => false,
-                'property_path' => 'city',
-                ));
-                
-            };
-
-            $builder->get('department')->addEventListener(
-                FormEvents::POST_SUBMIT,
-                function (FormEvent $event) use ($formModifier) {
-                    $department = $event->getForm()->getData();
-                    $formModifier($event->getForm()->getParent(), $department);
-                }
-            );
 
 
     }
