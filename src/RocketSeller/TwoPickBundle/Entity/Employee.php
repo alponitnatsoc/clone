@@ -34,12 +34,29 @@ class Employee
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
-    private $economicalTier;
+    private $civilStatus;
 
     /**
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
      */
     private $employeeHasEmployers;
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $birthAddress;
+    /**
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_birth_department", referencedColumnName="id_department")
+     * })
+     */
+    private $birthDepartment;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="id_birth_city", referencedColumnName="id_city")
+     */
+    private $birthCity;
 
 
     /**

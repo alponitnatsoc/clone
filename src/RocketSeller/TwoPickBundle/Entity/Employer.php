@@ -20,23 +20,7 @@ class Employer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployer;
-    /**
-     * @ORM\Column(type="string", length=200, nullable=TRUE)
-     */
-    private $birthAddress;
-    /**
-     * @ORM\ManyToOne(targetEntity="Department")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_birth_department", referencedColumnName="id_department")
-     * })
-     */
-    private $birthDepartment;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="id_birth_city", referencedColumnName="id_city")
-     */
-    private $birthCity;
+    
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
@@ -154,77 +138,7 @@ class Employer
         return $this->workplaces;
     }
 
-    /**
-     * Set birthAddress
-     *
-     * @param string $birthAddress
-     *
-     * @return Employer
-     */
-    public function setBirthAddress($birthAddress)
-    {
-        $this->birthAddress = $birthAddress;
 
-        return $this;
-    }
-
-    /**
-     * Get birthAddress
-     *
-     * @return string
-     */
-    public function getBirthAddress()
-    {
-        return $this->birthAddress;
-    }
-
-    /**
-     * Set birthDepartment
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Department $birthDepartment
-     *
-     * @return Employer
-     */
-    public function setBirthDepartment(\RocketSeller\TwoPickBundle\Entity\Department $birthDepartment = null)
-    {
-        $this->birthDepartment = $birthDepartment;
-
-        return $this;
-    }
-
-    /**
-     * Get birthDepartment
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Department
-     */
-    public function getBirthDepartment()
-    {
-        return $this->birthDepartment;
-    }
-
-    /**
-     * Set birthCity
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\City $birthCity
-     *
-     * @return Employer
-     */
-    public function setBirthCity(\RocketSeller\TwoPickBundle\Entity\City $birthCity = null)
-    {
-        $this->birthCity = $birthCity;
-
-        return $this;
-    }
-
-    /**
-     * Get birthCity
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\City
-     */
-    public function getBirthCity()
-    {
-        return $this->birthCity;
-    }
 
     /**
      * Add realProcedure
