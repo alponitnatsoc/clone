@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
@@ -75,6 +76,18 @@ class EmployeeController extends Controller
         } else {
             $beneficiary = new Beneficiary();
             $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $employeeBeneficiary = new EmployeeHasBeneficiary();
+                $employeeBeneficiary->setEmployeeEmployee($employee);
+                $employeeBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($beneficiary);
+                $em->flush();
+                $em->persist($employeeBeneficiary);
+                $em->flush();
+                return $this->redirectToRoute('manage_employees');
+            }
             return $this->render(
                 'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig',
                 array('form' => $form->createView())
@@ -151,6 +164,35 @@ class EmployeeController extends Controller
             }
             return $this->redirectToRoute('manage_employees');
         }
+
+    }
+    /**
+     * Muestra los beneficiarios del empleado
+     * @return la vista de los beneficiarios
+     */
+    public function showBeneficiaryAction($id)
+    {
+        $employee = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Employee')
+        ->find($id);
+        if($employee){
+            $beneficiaries = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+            ->findByEmployeeEmployee($employee);
+            if($beneficiaries){
+                return $this->render(
+                'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
+                array('beneficiaries' => $beneficiaries,
+                      'employee' => $employee
+                        ));
+            }else{
+
+            }
+        }else{
+
+        }
+
+
 
     }
 }

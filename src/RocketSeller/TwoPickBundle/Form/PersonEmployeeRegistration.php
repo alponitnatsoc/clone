@@ -23,12 +23,33 @@ class PersonEmployeeRegistration extends AbstractType
             ->setMethod($options['method'])
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
-            ->add('economicalTier', 'text', array(
-                'constraints' => array(
-                    new NotBlank(),
+            ->add('documentType', 'choice', array(
+                'choices' => array(
+                    'soltero'   => 'Soltero',
+                    'casado' => 'Casado',
+                    'unionLibre' => 'Union Libre',
+                    'viudo' => 'Viudo',
                 ),
-                'property_path' => 'economicalTier'
-            ))
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'documentType',)
+            )
+            ->add('birthDepartment', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Department',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'birthCity',
+                ))
+            ->add('birthCity', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'birthDepartment',
+                ))
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

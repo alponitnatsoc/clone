@@ -66,6 +66,13 @@ class EmployerAdmin extends Admin
         $showMapper
             ->add('idEmployer')
             ->add('personPerson.names')
+            ->add('employerHasEmployees.employeeEmployee.personPerson.names', 'sonata_type_collection', array(
+                    'by_reference' => false
+                ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable'  => 'listOrder'
+            ))
         ;
     }
 }

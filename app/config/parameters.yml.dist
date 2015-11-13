@@ -28,3 +28,5 @@ parameters:
     app_linkedin_id: 77m70qobsa435c
     app_linkedin_secret: X5uOLUwEtUch8rxL
     app_linkedin_permissions: r_fullprofile
+    
+    mandrill_api_key: mandrill_api

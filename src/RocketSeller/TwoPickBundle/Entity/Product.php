@@ -37,6 +37,11 @@ class Product
     private $description;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $validity;
+
+    /**
      * Get idProduct
      *
      * @return integer
@@ -116,5 +121,29 @@ class Product
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set validity
+     *
+     * @param string $validity
+     *
+     * @return Product
+     */
+    public function setValidity($validity)
+    {
+        $this->validity = $validity;
+
+        return $this;
+    }
+
+    /**
+     * Get validity
+     *
+     * @return string
+     */
+    public function getValidity()
+    {
+        return $this->validity;
     }
 }

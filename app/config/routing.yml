@@ -16,17 +16,14 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
-register_employee_submit:
-    path:      /register/employee/submit/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployeeSubmit, id: -1}
-    requirements:
-        id:     \d+
-
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
+send_email_test:
+    path: /send-email/test
+    defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:testSendEmail}
 
 show_form_entity:
     path:      /register/entity/{id}
@@ -42,7 +39,9 @@ edit_profile:
 show_dashboard:
     path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
-
+register_incomplete:
+    path:      /register/complete
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
 purchase_orders_list:
     path: /ordenes-de-compra
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:index}
@@ -54,15 +53,15 @@ purchase_orders_detail:
 purchase_orders_create:
     path: /ordenes-de-compra/crear
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:create }
-purchase_orders_update:
-    path: /ordenes-de-compra/actualizar
-    defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:updateInvoiceNumber }
+user_status_update:
+    path: /usuario/{id}/actualizar-estado
+    defaults: { _controller: RocketSellerTwoPickBundle:User:updateUserStatus }
+    requirements:
+        id: \d+
 
 rocket_seller_two_pick:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing.yml"
     prefix:   /
-
-
 
 #Beneficiary
 
@@ -136,3 +135,7 @@ media:
 home_products:
     path:     /productos
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
+
+home_landing:
+    path:     /landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }

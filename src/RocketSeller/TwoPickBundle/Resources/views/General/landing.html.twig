@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Landing</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+	<link rel="stylesheet" href="{{ asset('public/css/home.css') }}" />       
+</head>
+<body>
+	<canvas id="myCanvas" width="2000" height="4" class="middle-line1">
+	Your browser does not support the HTML5 canvas tag.</canvas>
+	<canvas id="myCanvas2" width="2000" height="2" class="middle-line2">
+	Your browser does not support the HTML5 canvas tag.</canvas>
+	<div class="col-md-3"></div>
+	<div class="col-md-6 mid-content">
+		<div>
+			<img class="col-md-6 mid-content-logo" src="{{ asset('public/img/symplifica_logo.png') }}">
+		</div>
+		<div class="col-md-6 text">
+			<p>La manera mas simple de gestionar</p>
+			<p>a tus empleados con tranquilidad</p>
+			<p>de cumplir los requisitos de ley</p>
+		</div>
+		<div class="col-md-12 more-info">
+			<p>¿Quieres mas información?</p>
+		</div>
+		<div class="col-md-6 input-field">
+			<input type="text" class="form-control" placeholder="Enviarme un email cuando este listo">
+		</div>
+		<div class="col-md-6 submit">
+			<button type="button" class="btn btn-default submit-button">Enviar ></button>
+		</div>
+		<img class="col-md-12 middle-image" src="{{ asset('public/img/computer.png') }}">
+	</div>
+	<div class="col-md-3"></div>	
+
+	<script>
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.moveTo(0,1);
+	ctx.lineTo(2000,1);
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = '#4EB657';   
+	ctx.stroke();
+	</script>
+	<script>
+	var c = document.getElementById("myCanvas2");
+	var ctx = c.getContext("2d");
+	ctx.moveTo(0,1);
+	ctx.lineTo(2000,1);
+	ctx.lineWidth = 0.5;
+	ctx.strokeStyle = '#00CFBF';   
+	ctx.stroke();
+	</script>
+</body>
+</html>

@@ -53,7 +53,7 @@ class PersonRestController extends FOSRestController
     {
         $user=$this->getUser();
         /** @var Person $people */
-        $people =$this->$user->getPersonPerson();
+        $people =$user->getPersonPerson();
         $employer=$people->getEmployer();
         if ($employer==null) {
             $employer=new Employer();

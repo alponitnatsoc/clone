@@ -158,4 +158,5 @@ class EmployerHasEmployee
     {
         return $this->contracts;
     }
+
 }
