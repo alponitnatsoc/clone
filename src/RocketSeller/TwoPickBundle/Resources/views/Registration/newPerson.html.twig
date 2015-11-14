@@ -37,12 +37,13 @@
     </div>
 
     <div id="workplacesData" class="tab-pane fade h3">
-	    <in>Workplaces</h3>
+	    <h3>Workplaces</h3>
 	    	{{ form_row(form.numberOfWorkplaces) }}
 	    {# iterate over each existing workplaces and render its fields #}
 		<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
 	   	{% for workplace in form.workplaces %}
 	        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
+				{{ form_row(workplace.id) }}
 	        	{{ form_row(workplace.mainAddress) }}
 	        	{{ form_row(workplace.department) }}
 	        	{{ form_row(workplace.city) }}
@@ -62,99 +63,4 @@
 
 {{ form_end(form) }}
 </div>
-
-{% endblock fos_user_content %}
-{% block javascripts%}
-{{ parent() }}
-<script>
-var $collectionHolder;
-jQuery(document).ready(function() {
-
-	$collectionHolder = $('ul.workplaces');
-	    // count the current form inputs we have (e.g. 2), use that as the new
-	    // index when inserting a new item (e.g. 2)
-	$collectionHolder.data('index', ($collectionHolder.find(':input').length)/3);
-	//el cambio de tabs entre el formulario de registro
-		$('.btnNext').click(function(){
-		  $('.nav-tabs > .active').next('li').find('a').trigger('click');
-		});
-		$('.btnPrevious').click(function(){
-		  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-		});
-
-	//funcion que agrega un listener a cada department
-	addListeners();
-
-	//colocar el select en el valor del tamaño del arreglo
-	$dropDownWork=$collectionHolder.data('index');
-	$('#register_employer_numberOfWorkplaces').val($dropDownWork);
-	//listener para el que agrega workplaces
-	$('#register_employer_numberOfWorkplaces').change(function() {
-
-		// get the numberof Workplaces that the user wants
-		var workplacesCount= $(this).val();
-		// get the new index the numer of workplaces that the user has on screen
-		var index = parseInt($collectionHolder.data('index'));
-		var diference=workplacesCount-index;
-		if (diference<0) {
-			//remove the diference of workplaces;
-			diference=diference+1;
-			for (var i = diference; i <= 0; i++) {
-				$('#workSpace_'+(index)).remove();
-				console.log("Index Dele:" + index );
-				index=parseInt(index)-1;
-			};
-			$collectionHolder.data('index', workplacesCount);
-
-
-		}
-		else{
-			//add the diference of workplaces
-			for (var i = 0; i < diference; i++) {
-				// Get the data-prototype explained earlier
-			    var prototype = $collectionHolder.data('prototype');
-			    // Replace '__name__' in the prototype's HTML to
-			    // instead be a number based on how many items we have
-			    var newForm = prototype.replace(/__name__/g, index);
-			    // increase the index with one for the next item
-			    $collectionHolder.data('index', index + 1);
-			    index=parseInt(index)+1;
-			    console.log("Index New:" + index );
-			    // Display the form in the page in an li, before the "Add a tag" link li
-			    var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append(newForm);
-			    $collectionHolder.append($newFormLi);
-			};
-			//add the correspondig listeners
-			addListeners();
-		};
-	});
-});
-function addListeners() {
-    $('select').filter(function() {
-	        return this.id.match(/department/);
-	    }).change(function() {
-	  var $department = $(this);
-	  // ... retrieve the corresponding form.
-	  var $form = $(this).closest('form');
-	  // Simulate form data, but only include the selected department value.
-	  var data = {};
-	  data[$department.attr('name')] = $department.val();
-	  var citySelectId = $department.attr("id").replace("_department", "_city");
-	  // Submit data via AJAX to the form's action path.
-	  $.ajax({
-	    url : $form.attr('action'),
-	    type: $form.attr('method'),
-	    data : data,
-	    success: function(html) {
-	      // Replace current position field ...
-	      $('#'+citySelectId).replaceWith(
-	        // ... with the returned one from the AJAX response.
-	        $(html).find('#'+citySelectId)
-	      );
-	      // Position field now displays the appropriate positions.
-	    }
-	  });
-	});
-}
-</script>
-{% endblock javascripts %}
+{% endblock fos_user_content%}

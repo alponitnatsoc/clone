@@ -19,6 +19,8 @@ class PersonEmployeeRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setAction($options['action'])
+            ->setMethod($options['method'])
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
             ->add('documentType', 'choice', array(
