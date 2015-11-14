@@ -43,6 +43,8 @@
         "jackalope/jackalope-doctrine-dbal": "^1.2",
         "twbs/bootstrap": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^1.0",
+        "jms/security-extra-bundle": "1.5.*",
+        "jms/di-extra-bundle": "1.5.*",
         "accord/mandrill-swiftmailer-bundle": "^1.2"
     },
 
