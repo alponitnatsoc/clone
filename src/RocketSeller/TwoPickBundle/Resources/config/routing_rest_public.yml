@@ -1,7 +1,11 @@
 tokens : 
     type: rest
     resource:     "RocketSellerTwoPickBundle:TokenRest"
-    name_prefix:  api_public
+    name_prefix:  api_public_
+employer :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:PersonRest"
+    name_prefix:  api_public_
 purchase_orders_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:PurchaseOrdersRest"
