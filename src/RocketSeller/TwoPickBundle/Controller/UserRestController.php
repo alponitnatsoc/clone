@@ -8,6 +8,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolation;
 
 class UserRestController extends FOSRestController
 {
@@ -247,6 +248,72 @@ class UserRestController extends FOSRestController
         $view = View::create();
         $view->setData(array('salt' => $salt))->setStatusCode(200);
 
+        return $view;
+    }
+
+    /**
+     * Obtener las ordenes de compra de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $id - Id del usuario
+     *
+     * @return \FOS\RestBundle\View\View
+     */
+    public function getUserPurchaseorderAction($id)
+    {
+        $userManager = $this->container->get("fos_user.user_manager");
+
+        $user = $userManager->findUserBy(array('id'=>$id));
+        $ordersByUser = $user->getPurchaseOrders();
+
+        $view = View::create();
+
+        if (isset($ordersByUser)) {
+            $view->setData($ordersByUser)->setStatusCode(200);
+            return $view;
+        } else {
+            $errors = new ConstraintViolationList();
+            $view = $this->getErrorsView($errors);
+            return $view;
+        }
+    }
+
+    /**
+     * Obtener el estado de la suscripcion de un usuario.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $id - Id del usuario
+     *
+     * @return \FOS\RestBundle\View\View
+     */
+    public function getUserActiveSuscriptionAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $purchaseOrdersRepository = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
+
+        $data = $purchaseOrdersRepository->findOneBy(
+            array("idUser" => $id, "purchaseOrdersTypePurchaseOrdersType" => 2),
+            array("date_modified" => "DESC")
+        );
+
+        $view = View::create();
+        $view->setData($data)->setStatusCode(200);
         return $view;
     }
 

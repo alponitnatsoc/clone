@@ -13,3 +13,5 @@
 *.DS_Store
 /web/uploads
 *.php~
+.idea/*
+.settings/*
