@@ -91,6 +91,25 @@
       </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Lo sentimos</h4>
+          </div>
+          <div class="modal-body">
+            En estos momentos no hemos podido registrar tu correo en nuestra base de datos, intentalo más tarde
+          </div>
+{#           <div class="modal-footer">#}
+{#             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+{#             <button type="button" class="btn btn-primary">Save changes</button>#}
+{#           </div>#}
+        </div>
+      </div>
+    </div>
+
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -121,12 +140,15 @@
 
         $.post( "/api/public/v1/suscribes/users", { email: email })
         .done(function( data ) {
-            $btn.button("complete");
+            $btn.button("reset");
             $('#myModal').modal({
                 keyboard: false
             })
         }).fail(function(data){
             $btn.button('reset');
+            $('#myModalError').modal({
+                keyboard: false
+            })
         });
     }
 	</script>
