@@ -157,58 +157,6 @@ class SendEmailRestController extends FOSRestController
     }
 
     /**
-     * Suscribir usuario a lista de Mailchimp
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when the form has errors"
-     *   }
-     * )
-     *
-     * @return \FOS\RestBundle\View\View
-     */
-    public function getSuscribeUserAction()
-    {
-        $apikey = 'e8b66f8315143a6625b8a6dc7a25a97b-us12';
-        $auth = base64_encode( 'user:'.$apikey );
-
-        $data = array(
-            'apikey'        => $apikey,
-            'email_address' => "pogopomu4@yhg.biz",
-            'status'        => 'subscribed',
-            'merge_fields'  => array(
-                'FNAME' => "pogopomu3@yhg.biz"
-            )
-        );
-        $json_data = json_encode($data);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://us12.api.mailchimp.com/3.0/lists/436a3dc090/members/');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json',
-            'Authorization: Basic '.$auth));
-        curl_setopt($ch, CURLOPT_USERAGENT, 'PHP-MCAPI/2.0');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-
-        $result = curl_exec($ch);
-// var_dump(utf8_encode($result));
-//         if($errno = curl_errno($ch)) {
-//             $error_message = curl_strerror($errno);
-//             echo "cURL error ({$errno}):\n {$error_message}";
-//         }
-
-        $view = View::create();
-        $view->setData($result)->setStatusCode(200);
-        return $view;
-    }
-
-    /**
      * Get the validation errors
      *
      * @param ConstraintViolationList $errors Validator error list
