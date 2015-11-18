@@ -12,44 +12,28 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Form\BasicPersonRegistration;
+use RocketSeller\TwoPickBundle\Form\PersonExtraData;
 
 class PersonEmployeeRegistration extends AbstractType
 {
+    private $idEmployee;
+    function __construct($idEmployee){
+        $this->idEmployee=$idEmployee;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->setAction($options['action'])
             ->setMethod($options['method'])
+            ->add('idEmployee', 'hidden', array(
+                'data' => $this->idEmployee,
+                'mapped' => false,
+            ))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
-            ->add('documentType', 'choice', array(
-                'choices' => array(
-                    'soltero'   => 'Soltero',
-                    'casado' => 'Casado',
-                    'unionLibre' => 'Union Libre',
-                    'viudo' => 'Viudo',
-                ),
-                'multiple' => false,
-                'expanded' => false,
-                'property_path' => 'documentType',)
-            )
-            ->add('birthDepartment', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Department',
-                'placeholder' => '',
-                'property' => 'name',
-                'multiple' => false,
-                'expanded' => false,
-                'property_path' => 'birthCity',
-                ))
-            ->add('birthCity', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:City',
-                'placeholder' => '',
-                'property' => 'name',
-                'multiple' => false,
-                'expanded' => false,
-                'property_path' => 'birthDepartment',
-                ))
+            ->add('personExtra', new PersonExtraData(), array(
+                'property_path' => 'personPerson'))
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

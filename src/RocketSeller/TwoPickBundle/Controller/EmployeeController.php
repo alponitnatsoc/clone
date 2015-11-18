@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
@@ -116,16 +117,34 @@ class EmployeeController extends Controller
     **/
     public function newEmployeeAction( $id)
     {
-        $employee;
+        /** @var User $user */
+        $user=$this->getUser();
+        $employee=null;
         if ($id==-1) {
             $employee= new Employee();
         }else{
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+            //verify if the Id exists or it belongs to the logged user
+            /** @var Employee $employee */
             $employee= $repository->find($id);
+            /** @var EmployerHasEmployee $ee */
+            $idEmployer=$user->getPersonPerson()->getEmployer()->getIdEmployer();
+            $flag=false;
+            foreach($employee->getEmployeeHasEmployers() as $ee){
+                if($ee->getEmployerEmployer()->getIdEmployer()==$idEmployer){
+                    $flag=true;
+                    break;
+                }
+            }
+            if($employee==null||!$flag){
+                $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                return $this->render(
+                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
+                    'employees'=>$employeesData));
+            }
         }
-        $form = $this->createForm(new PersonEmployeeRegistration(), $employee, array(
-            'action' => $this->generateUrl('register_employee_submit',array(
-                'id' => $id )),
+        $form = $this->createForm(new PersonEmployeeRegistration($id), $employee, array(
+            'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
         return $this->render(
@@ -137,7 +156,7 @@ class EmployeeController extends Controller
     * Maneja el formulario de un nuevo empleado
     * @param el Request y el Id del empleado, si lo desean editar
     * @return La vista de el formulario de la nuevo empleado
-    **/
+
     public function newEmployeeSubmitAction(Request $request, $id)
     {
         $user=$this->getUser();
@@ -148,7 +167,7 @@ class EmployeeController extends Controller
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
             $employee= $repository->find($id);
         }
-        
+
         $form = $this->createForm(new PersonEmployeeRegistration(), $employee);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -166,6 +185,7 @@ class EmployeeController extends Controller
         }
 
     }
+     */
     /**
      * Muestra los beneficiarios del empleado
      * @return la vista de los beneficiarios

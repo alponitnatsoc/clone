@@ -34,9 +34,9 @@ show_form_entity:
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
     requirements:
         id:     \d+
-edit_profile_submit:
-    path:      /register/edit/submit
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
+#edit_profile_submit:
+#    path:      /register/edit/submit
+#    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
 edit_profile:
     path:      /register/edit
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson }

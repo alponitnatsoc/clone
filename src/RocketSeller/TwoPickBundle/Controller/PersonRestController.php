@@ -129,18 +129,6 @@ class PersonRestController extends FOSRestController
             foreach($actualWorkplaces as $work){
                 $employer->addWorkplace($work);
             }
-            /*foreach ($workplaces as $work) {
-                $flag=false;
-                foreach($actualWorkplaces as $actual){
-                    if($actual->getMainAddress()===$work->getMainAddress())
-                        $flag=true;
-                }
-                if (!$flag) {
-                    $work->setEmployerEmployer(null);
-                    $em->persist($work);
-                    $em->remove($work);
-                }
-            }*/
 
 
             $view = View::create();

@@ -50,11 +50,12 @@ class PersonController extends Controller
             array('form' => $form->createView())
         );
     }
+    /*
     /**
-    * persiste la edición de una  persona con los datos básicos, 
+    * persiste la edición de una  persona con los datos básicos,
     * @param el Request que manjea el form que se envia por post
     * @return La vista de el formulario de editar persona
-    **/
+    *
     public function editPersonSubmitAction(Request $request)
     {
         $user=$this->getUser();
@@ -94,7 +95,7 @@ class PersonController extends Controller
 
             return $this->redirectToRoute('show_dashboard');
         }
-    }
+    }*/
 
 
 }
