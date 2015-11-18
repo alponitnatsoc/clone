@@ -15,6 +15,8 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 
+
+
 /**
  * Employee controller.
  *
@@ -172,6 +174,7 @@ class EmployeeController extends Controller
      */
     public function showBeneficiaryAction($id)
     {
+
         $employee = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Employee')
         ->find($id);
@@ -191,8 +194,6 @@ class EmployeeController extends Controller
         }else{
 
         }
-
-
 
     }
 }

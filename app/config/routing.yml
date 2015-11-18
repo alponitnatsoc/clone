@@ -1,7 +1,4 @@
-#Customs
-ajax:
-    path:      /pages
-    defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+#Customs 
 manage_contracts:
     path:      /manage/contracts/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:showContracts }
@@ -25,6 +22,9 @@ register_employee:
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
     requirements:
         id:     \d+
+send_email:
+    path: /send-email
+    defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:index}
 send_email_test:
     path: /send-email/test
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:testSendEmail}
@@ -34,9 +34,6 @@ show_form_entity:
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
     requirements:
         id:     \d+
-edit_profile_submit:
-    path:      /register/edit/submit
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
 edit_profile:
     path:      /register/edit
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson }
@@ -141,5 +138,9 @@ home_products:
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
 
 home_landing:
-    path:     /
+    path:     /landing
     defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
+
+documents_upload:
+    path:   /doc
+    defaults: {_controller: RocketSellerTwoPickBundle:Documents:media }
