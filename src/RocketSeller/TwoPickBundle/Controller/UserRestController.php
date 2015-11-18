@@ -375,10 +375,9 @@ class UserRestController extends FOSRestController
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function getUserStatusAction(ParamFetcher $paramFetcher)
+    public function putUserStatusAction(ParamFetcher $paramFetcher)
     {
-//         $id = $paramFetcher->get("id");
-$id = 1;
+        $id = $paramFetcher->get("id");
         $status = $this->getUserActiveSuscriptionAction($id);
 
         $data = $status->getData();

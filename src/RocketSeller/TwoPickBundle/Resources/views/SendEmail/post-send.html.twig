@@ -8,4 +8,17 @@ To 3: <input value="" name="to[2][email]" type="text" />
 To 4: <input value="" name="to[3][email]" type="text" />
 <input type="submit" />
 </form>
+<a href="javascript:void(0)" onclick="javascript:test()">TEST</a>
+<script>
+function test() {
+    $.ajax({
+        url: "/api/secured/v1/user/status",
+        type: 'PUT',
+        data: {id: 1},
+        success: function(data) {
+            alert(data);
+        }
+    });
+}
+</script>
 {%  endblock %}
