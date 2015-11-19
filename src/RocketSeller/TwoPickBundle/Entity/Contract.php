@@ -63,6 +63,41 @@ class Contract
      */
     private $salary;
 
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_contract_type_id_employee_contract_type", referencedColumnName="id_employee_contract_type")
+     * })
+     */
+    private $employeeContractTypeEmployeeContractType;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\TimeCommitment
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\TimeCommitment")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="time_commitment_id_time_commitment", referencedColumnName="id_time_commitment")
+     * })
+     */
+    private $timeCommitmentTimeCommitment;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Position
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Position")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="position_id_position", referencedColumnName="id_position")
+     * })
+     */
+    private $positionPosition;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
+     * })
+     */
+    private $payMethodPayMethod;
 
     /**
      * Set idContract
@@ -296,5 +331,101 @@ class Contract
     public function getWorkplaces()
     {
         return $this->workplaces;
+    }
+
+    /**
+     * Set employeeContractTypeEmployeeContractType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType
+     *
+     * @return Contract
+     */
+    public function setEmployeeContractTypeEmployeeContractType(\RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType = null)
+    {
+        $this->employeeContractTypeEmployeeContractType = $employeeContractTypeEmployeeContractType;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeContractTypeEmployeeContractType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     */
+    public function getEmployeeContractTypeEmployeeContractType()
+    {
+        return $this->employeeContractTypeEmployeeContractType;
+    }
+
+    /**
+     * Set timeCommitmentTimeCommitment
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\TimeCommitment $timeCommitmentTimeCommitment
+     *
+     * @return Contract
+     */
+    public function setTimeCommitmentTimeCommitment(\RocketSeller\TwoPickBundle\Entity\TimeCommitment $timeCommitmentTimeCommitment = null)
+    {
+        $this->timeCommitmentTimeCommitment = $timeCommitmentTimeCommitment;
+
+        return $this;
+    }
+
+    /**
+     * Get timeCommitmentTimeCommitment
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\TimeCommitment
+     */
+    public function getTimeCommitmentTimeCommitment()
+    {
+        return $this->timeCommitmentTimeCommitment;
+    }
+
+    /**
+     * Set positionPosition
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Position $positionPosition
+     *
+     * @return Contract
+     */
+    public function setPositionPosition(\RocketSeller\TwoPickBundle\Entity\Position $positionPosition = null)
+    {
+        $this->positionPosition = $positionPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get positionPosition
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Position
+     */
+    public function getPositionPosition()
+    {
+        return $this->positionPosition;
+    }
+
+    /**
+     * Set payMethodPayMethod
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethod $payMethodPayMethod
+     *
+     * @return Contract
+     */
+    public function setPayMethodPayMethod(\RocketSeller\TwoPickBundle\Entity\PayMethod $payMethodPayMethod = null)
+    {
+        $this->payMethodPayMethod = $payMethodPayMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get payMethodPayMethod
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PayMethod
+     */
+    public function getPayMethodPayMethod()
+    {
+        return $this->payMethodPayMethod;
     }
 }

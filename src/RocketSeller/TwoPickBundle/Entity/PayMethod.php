@@ -57,6 +57,26 @@ class PayMethod
      */
     private $accountTypeAccountType;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $frecuency;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $accountNumber;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cellPhone;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payMethodPayMethod", cascade={"persist"})
+     */
+    private $payMethodFields;
+
 
 
     /**
@@ -177,5 +197,118 @@ class PayMethod
     public function getAccountTypeAccountType()
     {
         return $this->accountTypeAccountType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payMethodFields = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set frecuency
+     *
+     * @param integer $frecuency
+     *
+     * @return PayMethod
+     */
+    public function setFrecuency($frecuency)
+    {
+        $this->frecuency = $frecuency;
+
+        return $this;
+    }
+
+    /**
+     * Get frecuency
+     *
+     * @return integer
+     */
+    public function getFrecuency()
+    {
+        return $this->frecuency;
+    }
+
+    /**
+     * Set accountNumber
+     *
+     * @param string $accountNumber
+     *
+     * @return PayMethod
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNumber
+     *
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * Set cellPhone
+     *
+     * @param integer $cellPhone
+     *
+     * @return PayMethod
+     */
+    public function setCellPhone($cellPhone)
+    {
+        $this->cellPhone = $cellPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get cellPhone
+     *
+     * @return integer
+     */
+    public function getCellPhone()
+    {
+        return $this->cellPhone;
+    }
+
+    /**
+     * Add payMethodField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
+     *
+     * @return PayMethod
+     */
+    public function addPayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
+    {
+        $this->payMethodFields[] = $payMethodField;
+
+        return $this;
+    }
+
+    /**
+     * Remove payMethodField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
+     */
+    public function removePayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
+    {
+        $this->payMethodFields->removeElement($payMethodField);
+    }
+
+    /**
+     * Get payMethodFields
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayMethodFields()
+    {
+        return $this->payMethodFields;
     }
 }
