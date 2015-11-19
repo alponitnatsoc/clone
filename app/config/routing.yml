@@ -144,7 +144,7 @@ home_products:
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
 
 home_landing:
-    path:     /landing
+    path:     /
     defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
 
 documents_upload:
