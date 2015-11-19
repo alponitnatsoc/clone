@@ -72,10 +72,7 @@ class PayMethod
      */
     private $cellPhone;
 
-    /**
-     * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payMethodPayMethod", cascade={"persist"})
-     */
-    private $payMethodFields;
+
 
 
 
@@ -278,37 +275,5 @@ class PayMethod
         return $this->cellPhone;
     }
 
-    /**
-     * Add payMethodField
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
-     *
-     * @return PayMethod
-     */
-    public function addPayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
-    {
-        $this->payMethodFields[] = $payMethodField;
-
-        return $this;
-    }
-
-    /**
-     * Remove payMethodField
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
-     */
-    public function removePayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
-    {
-        $this->payMethodFields->removeElement($payMethodField);
-    }
-
-    /**
-     * Get payMethodFields
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPayMethodFields()
-    {
-        return $this->payMethodFields;
-    }
+    
 }

@@ -22,13 +22,13 @@ class PayMethodFields
     private $idPayMethodFields;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod", inversedBy="payMethodFields")
+     * @var \RocketSeller\TwoPickBundle\Entity\PayType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType", inversedBy="payMethodFields")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
+     *   @ORM\JoinColumn(name="pay_type_id_pay_type", referencedColumnName="id_pay_type")
      * })
      */
-    private $payMethodPayMethod;
+    private $payTypePayType;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -93,5 +93,29 @@ class PayMethodFields
     public function getPayMethodPayMethod()
     {
         return $this->payMethodPayMethod;
+    }
+
+    /**
+     * Set payTypePayType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType
+     *
+     * @return PayMethodFields
+     */
+    public function setPayTypePayType(\RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType = null)
+    {
+        $this->payTypePayType = $payTypePayType;
+
+        return $this;
+    }
+
+    /**
+     * Get payTypePayType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PayType
+     */
+    public function getPayTypePayType()
+    {
+        return $this->payTypePayType;
     }
 }
