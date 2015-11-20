@@ -394,19 +394,19 @@ class UserRestController extends FOSRestController
                 case 0: //Suscripcion Activa
                     $this->updateUserStatus($id, 1);
                     $resCode = 2;
-                    $msgCode = "La suscripción del usuario se ha activado";
+                    $msgCode = "La suscripcion del usuario se ha activado";
                     break;
                 case 1: //Sucripicion Inactiva
                 case 2: //No tiene suscripcion
                 default:
                     $this->updateUserStatus($id, 0);
                     $resCode = 1;
-                    $msgCode = "La suscripción del usuario se ha desactivado";
+                    $msgCode = "La suscripcion del usuario se ha desactivado";
                     break;
             }
         } else {
             $resCode = 0;
-            $msgCode = "La suscripción del usuario no ha cambiado de estado";
+            $msgCode = "La suscripcion del usuario no ha cambiado de estado";
         }
 
         $response = array(
