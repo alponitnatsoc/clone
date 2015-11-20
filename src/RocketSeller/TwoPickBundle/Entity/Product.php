@@ -126,11 +126,11 @@ class Product
     /**
      * Set validity
      *
-     * @param \straing $validity
+     * @param string $validity
      *
      * @return Product
      */
-    public function setValidity(\straing $validity)
+    public function setValidity($validity)
     {
         $this->validity = $validity;
 
@@ -140,7 +140,7 @@ class Product
     /**
      * Get validity
      *
-     * @return \straing
+     * @return string
      */
     public function getValidity()
     {

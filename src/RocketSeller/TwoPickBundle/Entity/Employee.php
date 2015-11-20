@@ -32,11 +32,6 @@ class Employee
     private $personPerson;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
-     */
-    private $economicalTier;
-
-    /**
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
      */
     private $employeeHasEmployers;
@@ -156,4 +151,6 @@ class Employee
     {
         return $this->employeeHasEmployers;
     }
+
+
 }

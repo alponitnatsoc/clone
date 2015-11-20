@@ -18,6 +18,8 @@ class EmployerRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setAction($options['action'])
+            ->setMethod($options['method'])
             ->add('youAre', 'choice', array(
                 'choices' => array(
                     'persona'   => 'Persona',

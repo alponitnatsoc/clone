@@ -27,6 +27,11 @@ class PayType
     private $name;
 
     /**
+     * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payMethodPayMethod", cascade={"persist"})
+     */
+    private $payMethodFields;
+
+    /**
      * Get idPayType
      *
      * @return integer
@@ -58,5 +63,46 @@ class PayType
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payMethodFields = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add payMethodField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
+     *
+     * @return PayType
+     */
+    public function addPayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
+    {
+        $this->payMethodFields[] = $payMethodField;
+
+        return $this;
+    }
+
+    /**
+     * Remove payMethodField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField
+     */
+    public function removePayMethodField(\RocketSeller\TwoPickBundle\Entity\PayMethodFields $payMethodField)
+    {
+        $this->payMethodFields->removeElement($payMethodField);
+    }
+
+    /**
+     * Get payMethodFields
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayMethodFields()
+    {
+        return $this->payMethodFields;
     }
 }

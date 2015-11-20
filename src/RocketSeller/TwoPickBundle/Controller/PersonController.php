@@ -17,81 +17,71 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class PersonController extends Controller
 {	
-	/**
-    * Maneja el registro de una nueva persona con los datos básicos, 
-    * @param el Request que manjea el form que se imprime
-    * @return La vista de el formulario de la nueva persona
-	**/
-    public function newPersonAction(Request $request)
+	
+
+    /**
+    * Maneja la edición de una  persona con los datos básicos, 
+    * @return La vista de el formulario de editar persona
+    **/
+    public function editPersonAction()
     {
         $em = $this->getDoctrine()->getManager();
         $user=$this->getUser();
         $people = $user->getPersonPerson();
-        if ($people!=null) {
-            return $this->forward("RocketSellerTwoPickBundle:Person:editPerson", array('request' => $request));
+        $employer = $people->getEmployer();
+        if ($employer==null) {
+            $employer=new Employer();
         }
-        $people = new Person();
-        $employer = new Employer();
-        $workplace = new Workplace();
-        $employer->addWorkplace($workplace);
-        $people->setEmployer($employer);
-        $form = $this->createForm(new PersonRegistration(), $people);
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($people);
-            $em->flush();
-            $user=$this->getUser();
-            $user->setPersonPerson($people);
-            $em->persist($people);
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('show_dashboard');
+        
+        if (count($employer->getWorkplaces())==0) {
+            $workplace = new Workplace();
+            $employer->addWorkplace($workplace);
+            $people->setEmployer($employer);
         }
+
+        $form = $this->createForm(new EmployerRegistration(), $employer, array(
+            'action' => $this->generateUrl('api_public_post_edit_person_submit', array('format'=>'json')),
+            'method' => 'POST',
+        ));
+
 
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
             array('form' => $form->createView())
         );
     }
-
+    /*
     /**
-    * Maneja la edición de una  persona con los datos básicos, 
-    * @param el Request que manjea el form que se imprime
+    * persiste la edición de una  persona con los datos básicos,
+    * @param el Request que manjea el form que se envia por post
     * @return La vista de el formulario de editar persona
-    **/
-    public function editPersonAction(Request $request)
+    *
+    public function editPersonSubmitAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $user=$this->getUser();
         $people = $user->getPersonPerson();
-        if ($people==null) {
-            return $this->forward("RocketSellerTwoPickBundle:Person:newPerson", array('request' => $request));
-        }
-        $employer = $people->getEmployer();
+        $employer=$people->getEmployer();
         if ($employer==null) {
             $employer=new Employer();
         }
-        $workplaces = new ArrayCollection();
-
-        foreach ($employer->getWorkplaces() as $work) {
-            $workplaces->add($work);
-        }
-        if (count($workplaces)==0) {
+        if (count($employer->getWorkplaces())==0) {
             $workplace = new Workplace();
             $employer->addWorkplace($workplace);
             $people->setEmployer($employer);
         }
-
-        $form = $this->createForm(new EmployerRegistration(), $employer);
-
+        $form = $this->createForm(new EmployerRegistration(), $employer, array(
+            'action' => $this->generateUrl('edit_profile_submit') ,
+            'method' => 'POST',
+        ));
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $workplaces = new ArrayCollection();
+            foreach ($user->getPersonPerson()->getEmployer()->getWorkplaces() as $work) {
+                $workplaces->add($work);
+            }
+
             foreach ($workplaces as $work) {
                 if (false === $employer->getWorkplaces()->contains($work)) {
                     // remove the Task from the Tag
@@ -105,12 +95,7 @@ class PersonController extends Controller
 
             return $this->redirectToRoute('show_dashboard');
         }
-
-        return $this->render(
-            'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
-            array('form' => $form->createView())
-        );
-    }
+    }*/
 
 
 }

@@ -9,7 +9,8 @@ class PagesController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
+    	
+        return $this->render('RocketSellerTwoPickBundle:Default:pages.html.twig');
     }
 }
 ?>

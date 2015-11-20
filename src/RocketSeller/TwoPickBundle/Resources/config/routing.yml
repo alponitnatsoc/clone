@@ -1,5 +1,5 @@
 rocket_seller_two_pick_homepage:
-    path:     /
+    path:     /old
     defaults: { _controller: RocketSellerTwoPickBundle:Default:index }
 procedure_test:
     path:     /protest

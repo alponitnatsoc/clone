@@ -37,4 +37,21 @@ class Gallery extends BaseGallery
     {
         return $this->id;
     }
+    protected $name;
+    protected $description;
+    private $urlName;
+    public $files; // the array which will contain the array of Uploadedfiles
+
+    // GETTERS & SETTERS ...
+
+    public function getFiles() {
+        return $this->files;
+    }
+    public function setFiles(array $files) {
+        $this->files = $files;
+    }
+
+    public function __construct() {
+        $files = array();
+    }
 }

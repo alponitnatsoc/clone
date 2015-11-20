@@ -57,6 +57,23 @@ class PayMethod
      */
     private $accountTypeAccountType;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $frecuency;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $accountNumber;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $cellPhone;
+
+
+
 
 
     /**
@@ -178,4 +195,85 @@ class PayMethod
     {
         return $this->accountTypeAccountType;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payMethodFields = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set frecuency
+     *
+     * @param integer $frecuency
+     *
+     * @return PayMethod
+     */
+    public function setFrecuency($frecuency)
+    {
+        $this->frecuency = $frecuency;
+
+        return $this;
+    }
+
+    /**
+     * Get frecuency
+     *
+     * @return integer
+     */
+    public function getFrecuency()
+    {
+        return $this->frecuency;
+    }
+
+    /**
+     * Set accountNumber
+     *
+     * @param string $accountNumber
+     *
+     * @return PayMethod
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNumber
+     *
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * Set cellPhone
+     *
+     * @param integer $cellPhone
+     *
+     * @return PayMethod
+     */
+    public function setCellPhone($cellPhone)
+    {
+        $this->cellPhone = $cellPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get cellPhone
+     *
+     * @return integer
+     */
+    public function getCellPhone()
+    {
+        return $this->cellPhone;
+    }
+
+    
 }

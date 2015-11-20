@@ -1,7 +1,60 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-	{{ form_start(form) }}
-	    {{ form_errors(form) }}
-	    {{ form_widget(form) }}
-	{{ form_end(form) }}
+	<div id='registrationFormContainer' class=''>
+		{{ form_errors(form) }}
+		{{ form_start(form) }}
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
+			<li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
+			<li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
+			<li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="basicData" class="tab-pane fade in active">
+				{{ form_row(form.person.documentType) }}
+				{{ form_row(form.person.document) }}
+				{{ form_row(form.personExtra.civilStatus) }}
+				{{ form_row(form.person.names) }}
+				{{ form_row(form.person.lastName1) }}
+				{{ form_row(form.person.lastName2) }}
+				{{ form_row(form.person.birthDate) }}
+				{{ form_row(form.personExtra.birthDepartment) }}
+				{{ form_row(form.personExtra.birthCity) }}
+				{{ form_row(form.personExtra.birthCountry) }}
+				<a class="btn btn-primary btnNext" >Siguiente</a>
+
+			</div>
+
+			<div id="contactData" class="tab-pane fade in">
+				{{ form_row(form.person.mainAddress) }}
+				{{ form_row(form.person.neighborhood) }}
+				{{ form_row(form.person.phone) }}
+				{{ form_row(form.person.department) }}
+				{{ form_row(form.person.city) }}
+				{{ form_row(form.personExtra.email) }}
+				<a class="btn btn-primary btnPrevious" >Anterior</a>
+				<a class="btn btn-primary btnNext" >Siguiente</a>
+
+			</div>
+
+			<div id="contractData" class="tab-pane fade h3">
+				<a class="btn btn-primary btnPrevious" >Anterior</a>
+				<a class="btn btn-primary btnNext" >Siguiente</a>
+			</div>
+			<div id="paymentMethod" class="tab-pane fade h3">
+				<a class="btn btn-primary btnPrevious" >Anterior</a>
+				{{ form_row(form.save) }}
+			</div>
+
+
+
+
+		</div>
+
+
+
+		{{ form_end(form) }}
+	</div>
 {% endblock fos_user_content %}

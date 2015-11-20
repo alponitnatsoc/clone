@@ -1,13 +1,13 @@
 <?php
 
 namespace RocketSeller\TwoPickBundle\Entity;
-
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Person
  *
- * @ORM\Table(name="person")
+ * @ORM\Table(name="person" , uniqueConstraints={@UniqueConstraint(name="documentUnique", columns={"document_type", "document"})})
  * @ORM\Entity
  */
 class Person
@@ -112,6 +112,33 @@ class Person
      * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", cascade={"persist"}, fetch="LAZY")
      */
     protected $gallery;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_birth_country", referencedColumnName="id_country")
+     * })
+     */
+    private $birthCountry;
+    /**
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_birth_department", referencedColumnName="id_department")
+     * })
+     */
+    private $birthDepartment;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="id_birth_city", referencedColumnName="id_city")
+     */
+    private $birthCity;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $civilStatus;
+
 
     /**
      * Get idPerson
@@ -603,5 +630,102 @@ class Person
     public function getGallery()
     {
         return $this->gallery;
+    }
+    
+
+    /**
+     * Set civilStatus
+     *
+     * @param string $civilStatus
+     *
+     * @return Person
+     */
+    public function setCivilStatus($civilStatus)
+    {
+        $this->civilStatus = $civilStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get civilStatus
+     *
+     * @return string
+     */
+    public function getCivilStatus()
+    {
+        return $this->civilStatus;
+    }
+
+    /**
+     * Set birthDepartment
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $birthDepartment
+     *
+     * @return Person
+     */
+    public function setBirthDepartment(\RocketSeller\TwoPickBundle\Entity\Department $birthDepartment = null)
+    {
+        $this->birthDepartment = $birthDepartment;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDepartment
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
+     */
+    public function getBirthDepartment()
+    {
+        return $this->birthDepartment;
+    }
+
+    /**
+     * Set birthCity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\City $birthCity
+     *
+     * @return Person
+     */
+    public function setBirthCity(\RocketSeller\TwoPickBundle\Entity\City $birthCity = null)
+    {
+        $this->birthCity = $birthCity;
+
+        return $this;
+    }
+
+    /**
+     * Get birthCity
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\City
+     */
+    public function getBirthCity()
+    {
+        return $this->birthCity;
+    }
+
+    /**
+     * Set birthCountry
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $birthCountry
+     *
+     * @return Person
+     */
+    public function setBirthCountry(\RocketSeller\TwoPickBundle\Entity\Country $birthCountry = null)
+    {
+        $this->birthCountry = $birthCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get birthCountry
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
+     */
+    public function getBirthCountry()
+    {
+        return $this->birthCountry;
     }
 }
