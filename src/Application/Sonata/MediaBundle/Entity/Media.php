@@ -37,4 +37,35 @@ class Media extends BaseMedia
     {
         return $this->id;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->galleryHasMedias = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add galleryHasMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedia
+     *
+     * @return Media
+     */
+    public function addGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedia)
+    {
+        $this->galleryHasMedias[] = $galleryHasMedia;
+
+        return $this;
+    }
+
+    /**
+     * Remove galleryHasMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedia
+     */
+    public function removeGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedia)
+    {
+        $this->galleryHasMedias->removeElement($galleryHasMedia);
+    }
 }

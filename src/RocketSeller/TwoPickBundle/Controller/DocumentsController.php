@@ -15,7 +15,8 @@ class DocumentsController extends Controller
 
     public function mediaAction(Request $request) {
             if ($request->getMethod() == 'POST') {            
-            $files = $this->get('request')->files;
+            $files = $this->get('request')->files;                        
+            $employee = $this->loadClassById($this->get('request')->request->get('employees'),"Employee");            
             $status = 'success';
             $uploadedURL='';
             $message='';
@@ -62,11 +63,28 @@ class DocumentsController extends Controller
 	                    echo $message. $status;
 	                }
             }
+            $employee->getPersonPerson()->setGallery($gallery);
             $em->flush();
-            return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig');
+            return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('employee'=>$employee));
         } else {
-            return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig');
+        	$employerHasEmployees = $this->getEmployees();
+            return $this->render('RocketSellerTwoPickBundle:Employee:addDocuments.html.twig',array('employerHasEmployees'=>$employerHasEmployees));
         }
 
-    }    
+    }
+    public function getEmployees(){
+    	$persons = $this->getdoctrine()
+			->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findBy(
+    		array('employerEmployer' => $this->getUser()->getPersonPerson()->getEmployer())    		
+		);
+		return $persons;
+    }
+    public function loadClassById($parameter, $entity)
+    {
+		$loadedClass = $this->getdoctrine()
+		->getRepository('RocketSellerTwoPickBundle:'.$entity)
+		->find($parameter);
+		return $loadedClass;
+    }   
+
 }
