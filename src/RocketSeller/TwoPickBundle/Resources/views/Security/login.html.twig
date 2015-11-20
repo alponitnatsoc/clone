@@ -1,34 +1,101 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "::base.html.twig" %}
 
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% block fos_user_content %}
-{% if error %}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+{# {% block fos_user_content %}#}
+{# {% if error %}#}
+{#     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+{# {% endif %}#}
+{# <form action="{{ path("fos_user_security_check") }}" method="post">#}
+{# 	<div>#}
+{# 		<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
+{# 	</div>#}
+{#     	<label for="username">{{ 'security.login.username'|trans }}</label>#}
+{# 	<div>#}
+{# 		<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />#}
+{# 	</div>#}
+{# 	<div>#}
+{# 		<label for="password">{{ 'security.login.password'|trans }}</label>#}
+{# 	</div>#}
+{# 	<div>#}
+{# 		 <input type="password" id="password" name="_password" required="required" />#}
+{# 	</div>#}
+{#     <div>#}
+{#     	<input type="checkbox" id="remember_me" name="_remember_me" value="on" />#}
+{#     </div>#}
+{#     <div>#}
+{#     	<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+{#     </div>#}
+{#     <div>#}
+{#     	<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />#}
+{#     </div>#}
+{# </form>#}
+{# {% endblock fos_user_content %}#}
 
-<form action="{{ path("fos_user_security_check") }}" method="post">
-	<div>
-		<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+{% block content %}
+{# 	{% if error %}#}
+{# 	    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+{# 	{% endif %}#}
+{#     <div class="container">#}
+{#       <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post">#}
+{#         <h2 class="form-signin-heading">Please sign in</h2>#}
+{#         <div>#}
+{# 			<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
+{# 		</div>#}
+{#         <label for="username" class="sr-only">Username</label>#}
+{#         <input type="text" id="username" class="form-control" placeholder="Username" name="_username" required="required" autofocus="">#}
+{#         <label for="inputPassword" class="sr-only">Password</label>#}
+{#         <input type="password" id="password" name="_password" class="form-control" placeholder="Password" required="required">#}
+{#         <div class="checkbox">#}
+{#           <label>#}
+{#             <input type="checkbox" value="remember-me"> Remember me#}
+{#           </label>#}
+{#         </div>#}
+{#         <button class="btn btn-lg btn-primary btn-block" id="_submit" name="_submit" type="submit">{{ 'security.login.submit'|trans }}</button>#}
+{#       </form>#}
+{#     </div> #}
+
+<div class="middlePage">
+	<div class="page-header">
+		<h1 class="logo"><small>Welcome to our place!</small></h1>
 	</div>
-    	<label for="username">{{ 'security.login.username'|trans }}</label>
-	<div>
-		<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+	<div class="panel panel-info">
+		<div class="panel-heading">
+	    	<h3 class="panel-title">Please Sign In</h3>
+	  	</div>
+  		<div class="panel-body">
+  			<div class="row">
+				<div class="col-md-5" >
+					<a href="/connect/facebook" class="btn btn-block btn-social btn-facebook">
+						<span class="fa fa-facebook"></span>Sign in with Facebook
+					</a>
+					<a href="/connect/linkedin" class="btn btn-block btn-social btn-linkedin">
+						<span class="fa fa-linkedin"></span>Sign in with Twitter
+					</a>
+					<a href="/connect/google" class="btn btn-block btn-social btn-google">
+						<span class="fa fa-google"></span>Sign in with Google+
+					</a>
+				</div>
+    			<div class="col-md-7" style="border-left:1px solid #ccc;height:160px">
+	    			{% if error %}
+					    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+					{% endif %}
+					<form class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post">
+						<fieldset>
+							<div>
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+							</div>
+					  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="Enter User Name" class="form-control input-md">
+					  		<div class="spacing"><input type="checkbox" name="checkboxes" id="checkboxes-0" value="1"><small> Remember me</small></div>
+					  		<input id="password" name="_password" type="password" placeholder="Enter Password" class="form-control input-md" required="required">
+					  		<div class="spacing"><a href="#"><small> Forgot Password?</small></a><br/></div>
+					  		<button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right">{{ 'security.login.submit'|trans }}</button>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div>
-		<label for="password">{{ 'security.login.password'|trans }}</label>
-	</div>
-	<div>
-		 <input type="password" id="password" name="_password" required="required" />
-	</div>
-    <div>
-    	<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    </div>
-    <div>
-    	<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
-    </div>
-    <div>
-    	<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-    </div>
-</form>
-{% endblock fos_user_content %}
+</div>
+{% endblock content %}
