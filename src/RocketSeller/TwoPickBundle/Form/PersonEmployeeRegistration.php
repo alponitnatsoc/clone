@@ -34,6 +34,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))
+
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

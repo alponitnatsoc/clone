@@ -23,22 +23,14 @@ class ContractRegistration extends AbstractType
     {
 
         $builder
-            ->add('currentState', 'choice', array(
-                'choices' => array(
-                    'active'   => 'Active',
-                    'unactive' => 'unActive',
-                    'standby' => 'standBy',
-                ),
+            ->add('employeeType', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:EmployeeContractType',
                 'placeholder' => '',
+                'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'state',))
-            ->add('salary', 'money', array(
-                'constraints' => array(
-                    new NotBlank(),),
-                'currency' => 'COP',
-                'property_path' => 'salary',
-                ))
+                'property_path' => 'employeeContractTypeEmployeeContractType',
+            ))
             ->add('contractType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:ContractType',
                 'placeholder' => '',
@@ -46,7 +38,30 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
+            ))
+            ->add('timeCommitment', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'timeCommitmentTimeCommitment',
+            ))
+            ->add('position', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'positionPosition',
+            ))
+            ->add('salary', 'money', array(
+                'constraints' => array(
+                    new NotBlank(),),
+                'currency' => 'COP',
+                'property_path' => 'salary',
                 ))
+
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),
                 'allow_add'    => true,
@@ -61,6 +76,14 @@ class ContractRegistration extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 ))
+            ->add('payMethod', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:PayMethod',
+                'placeholder' => '',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'payMethodPayMethod',
+            ))
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));
