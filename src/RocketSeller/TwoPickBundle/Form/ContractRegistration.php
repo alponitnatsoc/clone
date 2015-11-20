@@ -77,15 +77,12 @@ class ContractRegistration extends AbstractType
                 'by_reference' => false,
                 ))
             ->add('payMethod', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:PayMethod',
+                'class' => 'RocketSellerTwoPickBundle:PayType',
                 'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'payMethodPayMethod',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Save',
+                'property_path' => 'payTypePayType',
             ));
 
 

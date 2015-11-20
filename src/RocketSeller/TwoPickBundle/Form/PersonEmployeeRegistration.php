@@ -13,12 +13,15 @@ use Symfony\Component\Form\FormEvents;
 use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Form\BasicPersonRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonExtraData;
+use RocketSeller\TwoPickBundle\Form\ContractRegistration;
 
 class PersonEmployeeRegistration extends AbstractType
 {
     private $idEmployee;
-    function __construct($idEmployee){
+    private $workplaces;
+    function __construct($idEmployee,$workplaces){
         $this->idEmployee=$idEmployee;
+        $this->workplaces=$workplaces;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -34,7 +37,8 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))
-
+            ->add('employeeHasEmployers', new ContractRegistration($this->workplaces), array(
+                'mapped' => false))
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

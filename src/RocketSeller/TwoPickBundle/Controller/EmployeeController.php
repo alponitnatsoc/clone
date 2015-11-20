@@ -188,7 +188,8 @@ class EmployeeController extends Controller
                     'employees'=>$employeesData));
             }
         }
-        $form = $this->createForm(new PersonEmployeeRegistration($id), $employee, array(
+        $userWorkplaces= $user->getPersonPerson()->getEmployer()->getWorkplaces();
+        $form = $this->createForm(new PersonEmployeeRegistration($id,$userWorkplaces), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
