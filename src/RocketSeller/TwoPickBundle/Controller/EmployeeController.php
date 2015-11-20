@@ -94,6 +94,49 @@ class EmployeeController extends Controller
             );
         }
     }
+
+
+    /**
+    * Maneja el registro de un beneficiario a un empleado con los datos básicos,
+    * @param el Request que maneja el form que se imprime
+    * @return La vista de el formulario de la nueva persona
+    **/
+    public function manageBeneficiaryAction(Request $request, Employee $employee, Beneficiary $beneficiary=null) {
+        if(is_null($beneficiary)) {
+            $beneficiaries = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+                ->findByEmployeeEmployee($employee);
+                if($beneficiaries){
+                    return $this->render(
+                        'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
+                        array(
+                            'beneficiaries' => $beneficiaries,
+                            'employee' => $employee
+                        )
+                    );
+                }
+        } else {
+            $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $employeeBeneficiary = new EmployeeHasBeneficiary();
+                $employeeBeneficiary->setEmployeeEmployee($employee);
+                $employeeBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($beneficiary);
+                $em->flush();
+                $em->persist($employeeBeneficiary);
+                $em->flush();
+                return $this->redirectToRoute('manage_employees');
+            }
+            return $this->render(
+                'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig',
+                array('form' => $form->createView())
+            );
+        }
+    }
+
+
         /**
     * el dashboard de los empleados de cada empleador que le permite editar la información
     * y agregar nuevos empleados
