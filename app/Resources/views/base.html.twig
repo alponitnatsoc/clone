@@ -4,7 +4,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+{#             <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />#}
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css" />
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous" />
+            <style type="text/css">
+            .footer {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				/* Set the fixed height of the footer here */
+				height: 60px;
+				background-color: #f5f5f5;
+			}
+            </style>
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />        
     </head>
@@ -91,12 +104,12 @@
         </div>
 
         {% block footer %}
-            <footer>
+            <footer class="footer">
                 <div class="container">
                     <div class="row">
                         <div id="footer-copyright" class="col-md-6">
-                            <p>&copy; {{ 'now'|date('Y') }} - The Symfony Project</p>
-                            <p>{{ 'mit_license'|trans }}</p>
+                            <p class="text-muted">&copy; {{ 'now'|date('Y') }} - symplifica</p>
+                            <p class="text-muted">Todos los derechos reservados</p>
                         </div>
                         <div id="footer-resources" class="col-md-6">
                             <p>
@@ -113,7 +126,7 @@
         {% block javascripts %}
             <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
             <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
         {% endblock %}
     </body>
 </html>
