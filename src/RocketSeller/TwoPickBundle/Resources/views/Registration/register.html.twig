@@ -1,5 +1,17 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "::base.html.twig" %}
 
 {% block fos_user_content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+<div id='' class='col-sm-12 col-md-6'>
+	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+</div>
+<div id='' class='col-sm-12 col-md-6'>
+	<div id='' class='txt-center'>
+		<a href="/connect/facebook"><img id='' class='center-block' src="http://tiendaazul.cl/2015/images/facebook-connect-button.png" height="30"></a>
+		<br/>
+	    <a href="/connect/google"><img id='' class='center-block' src="http://www.socialmedianews.com.au/wp-content/uploads/2013/02/googleplussignin.png" height="30"></a>
+	    <br/>
+	    <a href="/connect/linkedin"><img id='' class='center-block' src="http://www.youwebinc.com/img/front/li_button.png" height="30"></a>
+	    <br/>
+	</div>
+</div>
 {% endblock fos_user_content %}
