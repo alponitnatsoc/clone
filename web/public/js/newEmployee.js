@@ -14,6 +14,17 @@ function startEmployee(){
     //funcion que agrega un listener a cada department
     addListeners();
 
+    $('#register_employee_employeeHasEmployers_payMethod').on('change', function(){
+        var payMethod = $(this);
+        $.ajax({
+            url : '/pay/method/fields/'+payMethod.val(),
+            type: 'GET'
+        }).done(function(data) {
+            $('#payMethodFields').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(data).find('#formFields'));
+        });
+    });
 
     $("form").on("submit",function(e){
         e.preventDefault();
