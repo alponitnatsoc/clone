@@ -60,7 +60,7 @@ class PayMethod
     /**
      * @ORM\Column(type="integer")
      */
-    private $frecuency;
+    private $frequency;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -206,13 +206,13 @@ class PayMethod
     /**
      * Set frecuency
      *
-     * @param integer $frecuency
+     * @param integer $frequency
      *
      * @return PayMethod
      */
-    public function setFrecuency($frecuency)
+    public function setFrequency($frequency)
     {
-        $this->frecuency = $frecuency;
+        $this->frequency = $frequency;
 
         return $this;
     }
@@ -222,9 +222,9 @@ class PayMethod
      *
      * @return integer
      */
-    public function getFrecuency()
+    public function getFrequency()
     {
-        return $this->frecuency;
+        return $this->frequency;
     }
 
     /**
