@@ -22,7 +22,11 @@ show_beneficiaries:
 edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
-
+pay_method_fields:
+    path:      /pay/method/fields/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:postPayMethod, id: -1}
+    requirements:
+        id:     \d+
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}

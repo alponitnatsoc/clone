@@ -31,10 +31,14 @@ class PayMethodFields
     private $payTypePayType;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=64)
      */
     private $columnName;
 
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $dataType;
 
 
     /**
@@ -117,5 +121,29 @@ class PayMethodFields
     public function getPayTypePayType()
     {
         return $this->payTypePayType;
+    }
+
+    /**
+     * Set dataType
+     *
+     * @param string $dataType
+     *
+     * @return PayMethodFields
+     */
+    public function setDataType($dataType)
+    {
+        $this->dataType = $dataType;
+
+        return $this;
+    }
+
+    /**
+     * Get dataType
+     *
+     * @return string
+     */
+    public function getDataType()
+    {
+        return $this->dataType;
     }
 }

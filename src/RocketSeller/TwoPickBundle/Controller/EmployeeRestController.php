@@ -8,6 +8,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -58,6 +59,21 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="birthCountry", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="birthDepartment", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="birthCity", nullable=false, strict=true, description="workplace department.")
+     *
+     * @RequestParam(name="employeeType", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="contractType", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="timeCommitment", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="position", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="salary", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="idsBenefits", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="idsWorkplaces", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="frequency", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
+     *
      * @return View
      */
     public function postNewEmployeeSubmitAction(ParamFetcher $paramFetcher)
@@ -67,6 +83,8 @@ class EmployeeRestController extends FOSRestController
         /** @var Employee $employee */
         $employee=null;
         $id=$paramFetcher->get("employeeId");
+        /** @var EmployerHasEmployee $employerEmployee */
+        $employerEmployee=null;
         $view = View::create();
         if ($id==-1) {
             $employee= new Employee();
@@ -82,8 +100,10 @@ class EmployeeRestController extends FOSRestController
             //verify if the Id exists or it belongs to the logged user
             $idEmployer=$user->getPersonPerson()->getEmployer()->getIdEmployer();
             $flag=false;
+            /** @var EmployerHasEmployee $ee */
             foreach($employee->getEmployeeHasEmployers() as $ee){
                 if($ee->getEmployerEmployer()->getIdEmployer()==$idEmployer){
+                    $employerEmployee=$ee;
                     $flag=true;
                     break;
                 }
@@ -112,11 +132,60 @@ class EmployeeRestController extends FOSRestController
         $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
         // TODO validate Date
         $person->setBirthDate($datetime);
-        // TODO Check if null
+
+        //Create the contract
+
+        $contract=new Contract();
+        $contract->setSalary($paramFetcher->get('salary'));
+
         $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
         $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
         $conRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
 
+        $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        $contractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ContractType');
+        $employeeContractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeContractType');
+        $payMethodRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayMethod');
+        $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
+        $timeCommitmentRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TimeCommitment');
+
+        // Checking if all the contract fields are valid
+
+
+        $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractTypeId'));
+        if($tempContractType==null){
+            $view->setStatusCode(404)->setHeader("error","The contractTypeId ID ".$paramFetcher->get('contractTypeId')." is invalid");
+            return $view;
+        }
+        $contract->setContractTypeContractType($tempContractType);
+
+        $tempEmployeeContractType=$employeeContractTypeRepo->find($paramFetcher->get('employeeType'));
+        if($tempEmployeeContractType==null){
+            $view->setStatusCode(404)->setHeader("error","The employeeType ID ".$paramFetcher->get('employeeType')." is invalid");
+            return $view;
+        }
+        $contract->setEmployeeContractTypeEmployeeContractType($tempEmployeeContractType);
+
+        $tempPosition=$positionRepo->find($paramFetcher->get('position'));
+        if($tempPosition==null){
+            $view->setStatusCode(404)->setHeader("error","The position ID ".$paramFetcher->get('position')." is invalid");
+            return $view;
+        }
+        $contract->setPositionPosition($tempPosition);
+
+        $tempTimeCommitment=$timeCommitmentRepo->find($paramFetcher->get('timeCommitment'));
+        if($tempTimeCommitment==null){
+            $view->setStatusCode(404)->setHeader("error","The timeCommitment ID ".$paramFetcher->get('timeCommitment')." is invalid");
+            return $view;
+        }
+        $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
+
+
+        //Now for the payType and Pay Method
+        //TODO AQUI VOYYYYY ASKDNASDKASM
+
+
+        $employerEmployee->addContract($contract);
         // Checking if all the cities deps, and countries are valid
 
         $tempCity=$cityRepo->find($paramFetcher->get('city'));
@@ -149,6 +218,8 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
         $person->setBirthCountry($tempBCou);
+
+        //Final Entity Validation
         $errors = $this->get('validator')->validate($employee, array('Update'));
         $em = $this->getDoctrine()->getManager();
         if (count($errors) == 0) {

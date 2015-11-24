@@ -1,5 +1,10 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+{% extends "::base.html.twig" %}
 
 {% block fos_user_content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+<div id='' class='col-sm-12 col-md-6'>
+	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+</div>
+<div id='' class='col-sm-12 col-md-6'>
+    {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
+</div>
 {% endblock fos_user_content %}

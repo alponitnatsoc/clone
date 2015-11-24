@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use RocketSeller\TwoPickBundle\Form\PayMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Employee;
@@ -15,7 +16,7 @@ use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
-
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -199,39 +200,25 @@ class EmployeeController extends Controller
         );
     }
     /**
-    * Maneja el formulario de un nuevo empleado
-    * @param el Request y el Id del empleado, si lo desean editar
-    * @return La vista de el formulario de la nuevo empleado
-
-    public function newEmployeeSubmitAction(Request $request, $id)
-    {
-        $user=$this->getUser();
-        $employee;
-        if ($id==-1) {
-            $employee= new Employee();
-        }else{
-            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
-            $employee= $repository->find($id);
-        }
-
-        $form = $this->createForm(new PersonEmployeeRegistration(), $employee);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($employee);
-            $em->flush();
-            if ($id==-1) {
-                $employerEmployee = new EmployerHasEmployee();
-                $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
-                $employerEmployee->setEmployeeEmployee($employee);
-                $em->persist($employerEmployee);
-                $em->flush();
-            }
-            return $this->redirectToRoute('manage_employees');
-        }
-
-    }
+     * Retorna los campos especificos para el metodo de pago solicitado
+     *
+     * @param $id
+     * @return Response
      */
+    public function postPayMethodAction($id){
+        $repository=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayMethodFields");
+        $fields=$repository->findBy(array('payTypePayType'=> $id));
+        $options=array();
+        foreach($fields as $field){
+            $options[]=$field;
+        }
+        $form = $this->createForm(new PayMethod($fields));
+        return $this->render(
+            'RocketSellerTwoPickBundle:Registration:generalFormRender.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
     /**
      * Muestra los beneficiarios del empleado
      * @return la vista de los beneficiarios

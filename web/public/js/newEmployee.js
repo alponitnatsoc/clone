@@ -14,10 +14,31 @@ function startEmployee(){
     //funcion que agrega un listener a cada department
     addListeners();
 
+    $('#register_employee_employeeHasEmployers_payMethod').on('change', function(){
+        var payMethod = $(this);
+        $.ajax({
+            url : '/pay/method/fields/'+payMethod.val(),
+            type: 'GET'
+        }).done(function(data) {
+            $('#payMethodFields').html(
+                // ... with the returned one from the AJAX response.
+                $(data).find('#formFields'));
+        });
+    });
 
     $("form").on("submit",function(e){
         e.preventDefault();
         var form =$("form");
+        var idsBenef=[],idsWorkpl=[];
+        var i =0;
+        $(form).find("ul.benefits select[name*='benefits']").each(function(){
+            idsBenef[i++]=$(this).val();
+        });
+        i=0;
+        $(form).find("ul.workplaces select[name*='workplaces']").each(function(){
+            idsWorkpl[i++]=$(this).val();
+        });
+
         $.ajax({
             url : form.attr('action'),
             type: $(form).attr('method'),
@@ -42,6 +63,22 @@ function startEmployee(){
                 city: 			$(form).find("select[name='register_employee[person][city]']").val(),
                 email:          $(form).find("input[name='register_employee[personExtra][email]']").val(),
                 employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
+
+                employeeType:   $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']").val(),
+                contractType:   $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']").val(),
+                timeCommitment: $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']").val(),
+                position:       $(form).find("select[name='register_employee[employeeHasEmployers][position]']").val(),
+                salary:         $(form).find("input[name='register_employee[employeeHasEmployers][salary]']").val(),
+                idsBenefits:    idsBenef,
+                idsWorkplaces:  idsWorkpl,
+
+
+                payTypeId:      $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']").val(),
+                bankId:         $(form).find("input[name='method_type_fields[Bank]']").val(),
+                accountTypeId:  $(form).find("input[name='method_type_fields[AccountType]']").val(),
+                frequency:      $(form).find("input[name='method_type_fields[frecuency]']").val(),
+                accountNumber:  $(form).find("input[name='method_type_fields[account_number]']").val(),
+                cellphone:      $(form).find("input[name='method_type_fields[cellphone]']").val(),
             },
             statusCode:{
                 200: function(data){
