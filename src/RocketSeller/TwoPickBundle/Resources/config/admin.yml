@@ -207,3 +207,9 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\RealProcedure, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Procedures, label: Real Procedure}
+
+    rocket_seller_two_pick.admin.notification:
+        class: RocketSeller\TwoPickBundle\Admin\NotificationAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Notification, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Notification}

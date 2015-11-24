@@ -24,9 +24,13 @@ documents_upload:
     path:   /manage/employee/{id}/documents/upload
     defaults: {_controller: RocketSellerTwoPickBundle:Documents:media }
 
+show_notifications:
+    path:   /notifications
+    defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
+
 show_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBenefPiciary}
 edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
