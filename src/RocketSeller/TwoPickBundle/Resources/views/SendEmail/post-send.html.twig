@@ -9,7 +9,7 @@ To 4: <input value="" name="to[3][email]" type="text" />
 <input type="submit" />
 </form>
 <a href="javascript:void(0)" onclick="javascript:test()">TEST</a>
-<script>
+<script type='text/javascript'>
 function test() {
     $.ajax({
         url: "/api/secured/v1/user/status",
@@ -19,6 +19,39 @@ function test() {
             alert(data);
         }
     });
+
+    getAuthorizationHeader = function (username, password) {
+        var up = $.base64.encode(username + ":" + password);
+        authType = "Basic " + up;
+        return authType;
+    },
+
+
+    $.ajax({
+        url: "/api/secured/v1/user/status",
+        data: {id: 1},
+        type: "PUT",
+        beforeSend: function (xhr) {
+//             xhr.setRequestHeader("Authorization", getAuthorizationHeader("cakego@freeletter.me", "cakego@freeletter.me"));
+            xhr.setRequestHeader(
+                    "Authorization",'WSSE profile="UsernameToken"'
+            );
+            xhr.setRequestHeader(
+                    "X-WSSE", generateWsseToken(username, secret)
+            );
+        },
+        headers: config.getApiHeaders(),
+        success: function (data) {
+            alert(data);
+        },
+        error: function (xhr, textError) {
+            alert(xhr.responseText);
+        }
+    });
 }
 </script>
 {%  endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="/public/js/jquery.base64.min.js"></script>
+{% endblock %}

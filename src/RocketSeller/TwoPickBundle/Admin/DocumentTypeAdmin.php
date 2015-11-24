@@ -27,6 +27,7 @@ class DocumentTypeAdmin extends Admin
     {
         $listMapper
             ->add('idDocumentType')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +44,7 @@ class DocumentTypeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idDocumentType')
+            ->add('name')
         ;
     }
 

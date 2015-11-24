@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Listener;
 
 use FOS\UserBundle\Event\FormEvent;

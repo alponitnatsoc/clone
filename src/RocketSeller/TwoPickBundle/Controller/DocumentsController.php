@@ -12,34 +12,53 @@ use Application\Sonata\MediaBundle\Entity\GalleryHasMedia;
 
 class DocumentsController extends Controller
 {
+	public function showDocumentsAction($id){
+        $employee = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Employee')
+        ->find($id);
+        $galleryHasMedia = $this->getGalleryHasMedia($employee->getPersonPerson()->getGallery());
 
-    public function mediaAction(Request $request) {
+            return $this->render(
+                'RocketSellerTwoPickBundle:Employee:documents.html.twig',
+                array(
+                      'employee' => $employee,
+                      'galleryHasMedia' => $galleryHasMedia
+                        ));
+	}
+    public function mediaAction($id,Request $request) {
             if ($request->getMethod() == 'POST') {            
             $files = $this->get('request')->files;                        
-            $employee = $this->loadClassById($this->get('request')->request->get('employees'),"Employee");            
+            $employee = $this->loadClassById($id,"Employee");
+            $documentType = $this->loadClassById($this->get('request')->request->get('documents'),"DocumentType");                       
             $status = 'success';
             $uploadedURL='';
             $message='';
             $em = $this->getDoctrine()->getManager();
-            if(!sizeof($files->get('files'))==0){				
-				$gallery = new Gallery();
-				$gallery->setName('Documentos prue');
-				$gallery->setContext('person');
-				$gallery->setDefaultFormat('person_preview');
-				$gallery->setEnabled(0);
-				$em->persist($gallery);
-				$em->flush();
+            if(!sizeof($files->get('files'))==0){
+            	$gallery = $employee->getPersonPerson()->getGallery();
+            	if(!$gallery){				
+					$gallery = new Gallery();
+					$gallery->setName('Documentos');
+					$gallery->setContext('person');
+					$gallery->setDefaultFormat('person_preview');
+					$gallery->setEnabled(0);
+					$gallery->setPerson($employee->getPersonPerson());
+					$em->persist($gallery);
+
+	        	}
+					$galleryHasMedia = new GalleryHasMedia();
+					$galleryHasMedia->setGallery($gallery);
+					$em->persist($galleryHasMedia);	
+					$mediaManager = $this->container->get('sonata.media.manager.media');
+					$em->flush();
             }
             foreach ($files->get('files') as $file) {
             	if (($file instanceof UploadedFile) && ($file->getError() == '0')) {
-	                if (($file->getSize() < 20000000000)) {												
-						$galleryHasMedia = new GalleryHasMedia();
-						$galleryHasMedia->setGallery($gallery);
-						$em->persist($galleryHasMedia);	
-						$mediaManager = $this->container->get('sonata.media.manager.media');					
+	                if (($file->getSize() < 200000000)) {																	
 						$media = new Media();
 						$media->setBinaryContent($file);
-						$media->setContext('default'); 
+						$media->setDocumentType($documentType);
+						$media->setContext('person');						 
 						$ImagemimeTypes = array('image/jpeg', 'image/png');
 						$FilemimeTypes = array('application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 						    'application/msword', 'application/pdf', 'application/x-pdf');
@@ -65,12 +84,28 @@ class DocumentsController extends Controller
             }
             $employee->getPersonPerson()->setGallery($gallery);
             $em->flush();
-            return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('employee'=>$employee));
+            return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('employee'=>$employee,
+            			'galleryHasMedia' => $galleryHasMedia,
+
+            			));
         } else {
         	$employerHasEmployees = $this->getEmployees();
-            return $this->render('RocketSellerTwoPickBundle:Employee:addDocuments.html.twig',array('employerHasEmployees'=>$employerHasEmployees));
+        	$documentTypes = $this->getDocumentTypes();
+            return $this->render('RocketSellerTwoPickBundle:Employee:addDocuments.html.twig',array('employerHasEmployees'=>$employerHasEmployees, 'documentTypes'=>$documentTypes, 'employee_id' => $id));
         }
 
+    }
+    public function getDocumentTypes(){
+			$documents = $this->getdoctrine()
+			->getRepository('RocketSellerTwoPickBundle:DocumentType')
+			->findAll();
+    	return $documents;
+    }
+    public function getGalleryHasMedia($gallery){
+    	$galleryHasMedia = $this->getdoctrine()
+			->getRepository('ApplicationSonataMediaBundle:GalleryHasMedia')
+			->findByGallery($gallery);
+    	return $galleryHasMedia;
     }
     public function getEmployees(){
     	$persons = $this->getdoctrine()
@@ -86,5 +121,11 @@ class DocumentsController extends Controller
 		->find($parameter);
 		return $loadedClass;
     }   
-
+    public function loadClassByArray($array, $entity)
+    {
+		$loadedClass = $this->getdoctrine()
+		->getRepository('RocketSellerTwoPickBundle:'.$entity)
+		->findOneBy($array);
+		return $loadedClass;
+    }
 }

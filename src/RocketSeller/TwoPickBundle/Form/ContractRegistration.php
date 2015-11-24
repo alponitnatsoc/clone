@@ -48,7 +48,7 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'timeCommitmentTimeCommitment',
             ))
             ->add('position', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
+                'class' => 'RocketSellerTwoPickBundle:Position',
                 'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,

@@ -16,9 +16,21 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
+show_documents:
+    path:      /manage/employee/{id}/documents
+    defaults:  { _controller: RocketSellerTwoPickBundle:Documents:showDocuments}
+
+documents_upload:
+    path:   /manage/employee/{id}/documents/upload
+    defaults: {_controller: RocketSellerTwoPickBundle:Documents:media }
+
+show_notifications:
+    path:   /notifications
+    defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
+
 show_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBenefPiciary}
 edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
@@ -38,6 +50,9 @@ send_email:
 send_email_test:
     path: /send-email/test
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:testSendEmail}
+send_email_test_send:
+    path: /send-email/send
+    defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:sendEmail}
 
 show_form_entity:
     path:      /register/entity/{id}
@@ -154,6 +169,3 @@ home_landing:
     path:     /
     defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
 
-documents_upload:
-    path:   /doc
-    defaults: {_controller: RocketSellerTwoPickBundle:Documents:media }

@@ -11,6 +11,9 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
+parameters:
+    locale: es
+
 monolog:
     handlers:
         main:
