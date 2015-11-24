@@ -14,6 +14,8 @@ parameters:
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
+    mailer_port: ~
+    mailer_encrypt: ~
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
@@ -30,3 +32,7 @@ parameters:
     app_linkedin_permissions: r_fullprofile
     
     mandrill_api_key: mandrill_api
+    from_email_address_registration: registro@symplifica.com
+    from_email_sender_name_registration: Registro Symplficia
+    from_email_address_resetting: resetting@symplifica.com
+    from_email_sender_name_resetting: Resetting Symplifica
