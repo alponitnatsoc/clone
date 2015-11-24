@@ -87,4 +87,8 @@ class CronTask
         $this->lastrun = $lastrun;
         return $this;
     }
+
+    public function __toString() {
+        return $this->name;
+    }
 }
