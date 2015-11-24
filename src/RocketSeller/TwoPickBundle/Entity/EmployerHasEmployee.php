@@ -135,7 +135,7 @@ class EmployerHasEmployee
     public function addContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract)
     {
         $this->contracts[] = $contract;
-
+        $contract->setEmployerHasEmployeeEmployerHasEmployee($this);
         return $this;
     }
 

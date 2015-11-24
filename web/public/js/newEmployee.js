@@ -73,9 +73,9 @@ function startEmployee(){
                 idsWorkplaces:  idsWorkpl,
 
 
-                payTypeId:      $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']").val(),
-                bankId:         $(form).find("input[name='method_type_fields[Bank]']").val(),
-                accountTypeId:  $(form).find("input[name='method_type_fields[AccountType]']").val(),
+                payTypeId:      $(form).find("select[name='register_employee[employeeHasEmployers][payMethod]']").val(),
+                bankId:         $(form).find("select[name='method_type_fields[Bank]']").val(),
+                accountTypeId:  $(form).find("select[name='method_type_fields[AccountType]']").val(),
                 frequency:      $(form).find("input[name='method_type_fields[frecuency]']").val(),
                 accountNumber:  $(form).find("input[name='method_type_fields[account_number]']").val(),
                 cellphone:      $(form).find("input[name='method_type_fields[cellphone]']").val(),

@@ -8,6 +8,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\AccountType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\ContractType;
@@ -163,9 +164,9 @@ class EmployeeRestController extends FOSRestController
 
 
         /** @var ContractType $tempContractType */
-        $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractTypeId'));
+        $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractType'));
         if($tempContractType==null){
-            $view->setStatusCode(404)->setHeader("error","The contractTypeId ID ".$paramFetcher->get('contractTypeId')." is invalid");
+            $view->setStatusCode(404)->setHeader("error","The contractType ID ".$paramFetcher->get('contractType')." is invalid");
             return $view;
         }
         $contract->setContractTypeContractType($tempContractType);
@@ -200,31 +201,42 @@ class EmployeeRestController extends FOSRestController
         $payMethod->setCellPhone($paramFetcher->get('cellphone'));
         // frecuency in days
         $payMethod->setFrequency($paramFetcher->get('frequency'));
+        $payMethod->setUserUser($user);
 
         //check if the Pay Method Ids are valid: Bank payType and AccountType
 
-        /** @var Bank $tempBank */
-        $tempBank=$bankRepo->find($paramFetcher->get('bankId'));
-        if($tempBank==null){
-            $view->setStatusCode(404)->setHeader("error","The bankId ID ".$paramFetcher->get('bankId')." is invalid");
-            return $view;
-        }
-        $payMethod->setBankBank($tempBank);
 
-        /** @var PayType $tempPayType */
-        $tempPayType=$payTypeRepo->find($paramFetcher->get('payTypeId'));
-        if($tempPayType==null){
-            $view->setStatusCode(404)->setHeader("error","The payTypeId ID ".$paramFetcher->get('payTypeId')." is invalid");
-            return $view;
+        if($paramFetcher->get('bankId')){
+            /** @var Bank $tempBank */
+            $tempBank=$bankRepo->find($paramFetcher->get('bankId'));
+            if($tempBank==null){
+                $view->setStatusCode(404)->setHeader("error","The bankId ID ".$paramFetcher->get('bankId')." is invalid");
+                return $view;
+            }
+            $payMethod->setBankBank($tempBank);
         }
-        $payMethod->setPayTypePayType($tempPayType);
 
-        $tempAccountType=$accountTypeRepo->find($paramFetcher->get('accountTypeId'));
-        if($tempAccountType==null){
-            $view->setStatusCode(404)->setHeader("error","The accountTypeId ID ".$paramFetcher->get('accountTypeId')." is invalid");
-            return $view;
+
+        if($paramFetcher->get('payTypeId')){
+            /** @var PayType $tempPayType */
+            $tempPayType=$payTypeRepo->find($paramFetcher->get('payTypeId'));
+            if($tempPayType==null){
+                $view->setStatusCode(404)->setHeader("error","The payTypeId ID ".$paramFetcher->get('payTypeId')." is invalid");
+                return $view;
+            }
+            $payMethod->setPayTypePayType($tempPayType);
         }
-        $payMethod->setAccountTypeAccountType($tempAccountType);
+
+        if($paramFetcher->get('accountTypeId')){
+            /** @var AccountType $tempAccountType */
+            $tempAccountType=$accountTypeRepo->find($paramFetcher->get('accountTypeId'));
+            if($tempAccountType==null){
+                $view->setStatusCode(404)->setHeader("error","The accountTypeId ID ".$paramFetcher->get('accountTypeId')." is invalid");
+                return $view;
+            }
+            $payMethod->setAccountTypeAccountType($tempAccountType);
+        }
+
 
         //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
