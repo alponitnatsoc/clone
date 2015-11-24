@@ -1,6 +1,41 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-	{{ employee.personPerson.Gallery }}
+
+	<div class="col-md-12">
+	<h1>{{ employee.personPerson.names}} {{employee.personPerson.lastName1}}</h1>
+	{% if employee.personPerson.Gallery == false %}		
+		
+		<p>No tiene documentos</p>						
+	{% else %}
+
+		<p>tiene documentos</p>
+		<table style="width:100%">
+		  <tr>
+		    <td>file name </td>
+		    <td>Type</td>		    
+		    <td>Action</td>
+		  </tr>	  
+				{% for media in galleryHasMedia %}
+					{% if media.media %}
+						<tr>				
+							{##% media media.media, 'small' %##}
+							<td>{{ media.media.name }}</td>
+							{% if media.media.documentType %}
+								<td>{{ media.media.documentType.name }}</td>	
+							{% else %}
+								<td>Default</td>
+							{% endif %}					
+							<td><a href="/media/download/{{ media.media.id }}" class="btn btn-success" role="button">Download file</a></td>
+					  	</tr>
+					{% endif %}
+			{% endfor %}
+		</table>				
+	{% endif %}
+	</div>
+	<div class="col-md-4">
+		<a href="{{ path('documents_upload',{id : employee.idEmployee}) }}" class="btn btn-primary" role="button">Upload documents</a>	
+	</div>	
+
 {% endblock %}
 
 
