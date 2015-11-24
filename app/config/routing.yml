@@ -169,3 +169,7 @@ home_landing:
     path:     /
     defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
 
+show_logs:
+    path:     /logs
+    defaults: { _controller: RocketSellerTwoPickBundle:Log:index }
+

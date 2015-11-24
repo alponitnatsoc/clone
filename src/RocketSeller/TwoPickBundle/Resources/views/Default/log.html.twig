@@ -1,0 +1,23 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	{% if logs %}
+		<table style="width:100%">
+		  <tr>
+		    <td>Nombre </td>
+		    <td>Type</td>		    
+		    <td>Data sent</td>
+		    <td>Data receive</td>
+		  </tr>	  
+				{% for log in logs %}
+					<tr>				
+						<td>{{ log.personperson.names }}</td>								
+						<td>{{ log.type}}</td>
+						<td>{{ log.data.sent }}</td>
+						<td>{{ log.data.receive }}</td>						
+				  	</tr>
+				{% endfor %}
+		</table>
+	{% else %}
+		<p>No hay logs </p>
+	{% endif %}
+{% endblock %}
