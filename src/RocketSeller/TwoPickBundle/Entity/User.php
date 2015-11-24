@@ -383,4 +383,14 @@ class User extends BaseUser
     {
         return $this->status;
     }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    } 
 }
