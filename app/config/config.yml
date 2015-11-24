@@ -124,15 +124,15 @@ fos_user:
             name:               app_user_registration_form
             validation_groups:  [Registration, Default]
     resetting:
-        token_ttl: 60
+        token_ttl: 120
         email:
             from_email: # Use this node only if you don't want the global email address for the resetting email
                 address:        "%from_email_address_resetting%"
                 sender_name:    "%from_email_sender_name_resetting%"
             template:   FOSUserBundle:Resetting:email.txt.twig
         form:
-            type:               app_user_resetting
-            name:               app_user_resetting_form
+            type:               fos_user_resetting
+            name:               fos_user_resetting_form
             validation_groups:  [ResetPassword, Default]
     service:
         mailer:                 fos_user.mailer.twig_swift
