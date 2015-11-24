@@ -145,6 +145,8 @@ class EmployeeRestController extends FOSRestController
 
         $contract=new Contract();
         $contract->setSalary($paramFetcher->get('salary'));
+        $contract->setState("Active");
+
         //birth repos
         $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
         $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
@@ -160,9 +162,40 @@ class EmployeeRestController extends FOSRestController
         $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
 
 
+
+        // Checking if all the cities deps, and countries are valid
+
+        $tempCity=$cityRepo->find($paramFetcher->get('city'));
+        if($tempCity==null){
+            $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('city')." is invalid");
+            return $view;
+        }
+        $person->setCity($tempCity);
+        $tempDep=$depRepo->find($paramFetcher->get('department'));
+        if($tempDep==null){
+            $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('department')." is invalid");
+            return $view;
+        }
+        $person->setDepartment($tempDep);
+        $tempBCity=$cityRepo->find($paramFetcher->get('birthCity'));
+        if($tempBCity==null){
+            $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('birthCity')." is invalid");
+            return $view;
+        }
+        $person->setBirthCity($tempBCity);
+        $tempBDep=$depRepo->find($paramFetcher->get('birthDepartment'));
+        if($tempBDep==null){
+            $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('birthDepartment')." is invalid");
+            return $view;
+        }
+        $person->setBirthDepartment($tempBDep);
+        $tempBCou=$conRepo->find($paramFetcher->get('birthCountry'));
+        if($tempBCou==null){
+            $view->setStatusCode(404)->setHeader("error","The country ID ".$paramFetcher->get('birthCountry')." is invalid");
+            return $view;
+        }
+        $person->setBirthCountry($tempBCou);
         // Checking if all the contract fields are valid
-
-
         /** @var ContractType $tempContractType */
         $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractType'));
         if($tempContractType==null){
@@ -241,42 +274,19 @@ class EmployeeRestController extends FOSRestController
         //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
         $contract->setPayMethodPayMethod($payMethod);
-        $employerEmployee->addContract($contract);
-        // Checking if all the cities deps, and countries are valid
 
-        $tempCity=$cityRepo->find($paramFetcher->get('city'));
-        if($tempCity==null){
-            $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('city')." is invalid");
-            return $view;
-        }
-        $person->setCity($tempCity);
-        $tempDep=$depRepo->find($paramFetcher->get('department'));
-        if($tempDep==null){
-            $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('department')." is invalid");
-            return $view;
-        }
-        $person->setDepartment($tempDep);
-        $tempBCity=$cityRepo->find($paramFetcher->get('birthCity'));
-        if($tempBCity==null){
-            $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('birthCity')." is invalid");
-            return $view;
-        }
-        $person->setBirthCity($tempBCity);
-        $tempBDep=$depRepo->find($paramFetcher->get('birthDepartment'));
-        if($tempBDep==null){
-            $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('birthDepartment')." is invalid");
-            return $view;
-        }
-        $person->setBirthDepartment($tempBDep);
-        $tempBCou=$conRepo->find($paramFetcher->get('birthCountry'));
-        if($tempBCou==null){
-            $view->setStatusCode(404)->setHeader("error","The country ID ".$paramFetcher->get('birthCountry')." is invalid");
-            return $view;
-        }
-        $person->setBirthCountry($tempBCou);
+
 
         //Final Entity Validation
         $errors = $this->get('validator')->validate($employee, array('Update'));
+        //ShutDown previos contracts of the employer with the current employee
+        $contracts= $employerEmployee->getContracts();
+        /** @var Contract $cont */
+        foreach($contracts as $cont){
+            $cont->setState("UnActive");
+        }
+        //turn on current contract
+        $employerEmployee->addContract($contract);
         $em = $this->getDoctrine()->getManager();
         if (count($errors) == 0) {
             $em->persist($employee);
