@@ -24,6 +24,11 @@ function sendAjax (url, form) {
 		url : url,
 		type: $(form).attr('method'),
 		data: $(form).serializeArray(),
+		statusCode: {
+			500: function() {
+				alert(" 500 Server might not handle That yet");
+			}
+		}
 		}).done(function(data) {
 			$('#main').replaceWith(
 			// ... with the returned one from the AJAX response.
