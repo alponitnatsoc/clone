@@ -7,12 +7,13 @@
 	    margin: 10px 5px 0 0;
 	  }
 	</style>
-	<form class="form" method="POST" enctype="multipart/form-data" action="{{path('documents_upload')}}">
+	<form class="form" method="POST" enctype="multipart/form-data" action="{{path('documents_upload',{id : employee_id})}}">
+		
 		<div class="form-group">
-		  <label for="sel1">Select employee:</label>
-		  <select class="form-control" name="employees">
-			{% for Employee in employerHasEmployees %}
-				<option value="{{Employee.employeeEmployee.idEmployee}}">{{ Employee.employeeEmployee.personPerson.names }}</option>
+		  <label for="sel1">Select document type:</label>
+		  <select class="form-control" name="documents">
+			{% for document in documentTypes %}
+				<option value="{{document.idDocumentType}}">{{ document.name }}</option>
 			{% endfor %}
 		  </select>
 		</div>

@@ -1,0 +1,13 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	{% if notifications %}
+		{% for notification in notifications %}
+			<p>funcionó</p>				
+			{{ notification.id }}
+			{{ notification.sawDate|date("m/d/Y") }}
+			{{ notification.personperson.names }}
+		{% endfor %}
+	{% else %}
+		<p>No tienes notificaciones</p>
+	{% endif %}
+{% endblock %}
