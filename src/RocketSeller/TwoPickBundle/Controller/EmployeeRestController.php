@@ -8,9 +8,13 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Admin\ContractHasBenefitsAdmin;
 use RocketSeller\TwoPickBundle\Entity\AccountType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
+use RocketSeller\TwoPickBundle\Entity\Benefits;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\ContractHasBenefits;
+use RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace;
 use RocketSeller\TwoPickBundle\Entity\ContractType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -72,7 +76,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="timeCommitment", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="position", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="salary", nullable=false, strict=true, description="workplace department.")
-     * @RequestParam(array=true, name="idsBenefits", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(array=true, name="idsBenefits", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(array=true, name="idsWorkplaces", nullable=false, strict=true, description="workplace department.")
      *
      * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
@@ -156,6 +160,8 @@ class EmployeeRestController extends FOSRestController
         $employeeContractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeContractType');
         $timeCommitmentRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TimeCommitment');
         $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
+        $workplaceRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
+        $benefitRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Benefits');
         //payMethod repos
         $bankRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
         $accountTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
@@ -225,6 +231,31 @@ class EmployeeRestController extends FOSRestController
         }
         $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
 
+        //Workplaces and Benefits
+        $benefits=$paramFetcher->get("idsBenefits");
+        $workplaces=$paramFetcher->get("idsWorkplaces");
+        foreach($workplaces as $work){
+            /** @var Workplace $realWorkplace */
+            $realWorkplace=$workplaceRepo->find($work);
+            if($realWorkplace==null){
+                $view->setStatusCode(404)->setHeader("error","The workplace ID ".$work." is invalid");
+                return $view;
+            }
+            $tempContractHasWorkplaces=new ContractHasWorkplace();
+            $tempContractHasWorkplaces->setWorkplaceWorkplace($realWorkplace);
+            $contract->addWorkplace($tempContractHasWorkplaces);
+        }
+        foreach($benefits as $benefit){
+            /** @var Benefits $realBenefit */
+            $realBenefit=$benefitRepo->find($benefit);
+            if($realBenefit==null){
+                $view->setStatusCode(404)->setHeader("error","The Benefit ID ".$benefit." is invalid");
+                return $view;
+            }
+            $tempContractHasBenefit=new ContractHasBenefits();
+            $tempContractHasBenefit->setBenefitsBenefits($realBenefit);
+            $contract->addBenefit($tempContractHasBenefit);
+        }
 
         //Now for the payType and Pay Method
         $payMethod=new PayMethod();
