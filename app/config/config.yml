@@ -41,7 +41,6 @@ twig:
     form:
         resources: ['bootstrap_3_layout.html.twig']
 
-
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
@@ -99,9 +98,12 @@ doctrine:
 swiftmailer:
     transport: "%mailer_transport%"
     host:      "%mailer_host%"
+    port:      "%mailer_port%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
+    encryption: "%mailer_encrypt%"
     spool:     { type: memory }
+    auth_mode:  login
 
 accord_mandrill_swift_mailer:
     api_key: "%mandrill_api_key%"
@@ -111,8 +113,29 @@ fos_user:
     firewall_name: main
     user_class: RocketSeller\TwoPickBundle\Entity\User
     registration:
+        confirmation:
+            from_email: # Use this node only if you don't want the global email address for the confirmation email
+                address:        "%from_email_address_registration%"
+                sender_name:    "%from_email_sender_name_registration%"
+            enabled:    true # change to true for required email confirmation
+            template:   FOSUserBundle:Registration:email.txt.twig
         form:
-            type: app_user_registration
+            type:               app_user_registration
+            name:               app_user_registration_form
+            validation_groups:  [Registration, Default]
+    resetting:
+        token_ttl: 60
+        email:
+            from_email: # Use this node only if you don't want the global email address for the resetting email
+                address:        "%from_email_address_resetting%"
+                sender_name:    "%from_email_sender_name_resetting%"
+            template:   FOSUserBundle:Resetting:email.txt.twig
+        form:
+            type:               app_user_resetting
+            name:               app_user_resetting_form
+            validation_groups:  [ResetPassword, Default]
+    service:
+        mailer:                 fos_user.mailer.twig_swift
 
 sonata_block:
     default_contexts: [cms]
@@ -124,7 +147,6 @@ sonata_block:
         sonata.block.service.text:
         sonata.block.service.rss:
         sonata.admin.block.search_result:
-    
             
 fos_rest:
     param_fetcher_listener: true
@@ -277,4 +299,3 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
-
