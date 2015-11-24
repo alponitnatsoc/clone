@@ -8,7 +8,9 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\ContractType;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +18,8 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\PayMethod;
+use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -48,25 +52,28 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="year", nullable=false, strict=true, description="year.")
      * @RequestParam(name="month", nullable=false, strict=true, description="month.")
      * @RequestParam(name="day", nullable=false, strict=true, description="day.")
+     * @RequestParam(name="birthCountry", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="birthDepartment", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="birthCity", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="civilStatus", nullable=false, strict=true, description="")
+     *
      * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
      * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
      * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
      * @RequestParam(name="city", nullable=false, strict=true, description="city.")
-     * @RequestParam(name="civilStatus", nullable=false, strict=true, description="")
      * @RequestParam(name="employeeId", nullable=false, strict=true, description="id if exist else -1.")
      * @RequestParam(name="email", nullable=false, strict=true, description="workplace city.")
-     * @RequestParam(name="birthCountry", nullable=false, strict=true, description="workplace department.")
-     * @RequestParam(name="birthDepartment", nullable=false, strict=true, description="workplace department.")
-     * @RequestParam(name="birthCity", nullable=false, strict=true, description="workplace department.")
+
      *
      * @RequestParam(name="employeeType", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="contractType", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="timeCommitment", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="position", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="salary", nullable=false, strict=true, description="workplace department.")
-     * @RequestParam(name="idsBenefits", nullable=false, strict=true, description="workplace department.")
-     * @RequestParam(name="idsWorkplaces", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(array=true, name="idsBenefits", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(array=true, name="idsWorkplaces", nullable=false, strict=true, description="workplace department.")
+     *
      * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
@@ -137,21 +144,25 @@ class EmployeeRestController extends FOSRestController
 
         $contract=new Contract();
         $contract->setSalary($paramFetcher->get('salary'));
-
+        //birth repos
         $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
         $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
         $conRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
-
-        $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        //contract repos
         $contractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ContractType');
         $employeeContractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeContractType');
-        $payMethodRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayMethod');
-        $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
         $timeCommitmentRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TimeCommitment');
+        $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
+        //payMethod repos
+        $bankRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
+        $accountTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
+        $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+
 
         // Checking if all the contract fields are valid
 
 
+        /** @var ContractType $tempContractType */
         $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractTypeId'));
         if($tempContractType==null){
             $view->setStatusCode(404)->setHeader("error","The contractTypeId ID ".$paramFetcher->get('contractTypeId')." is invalid");
@@ -182,9 +193,42 @@ class EmployeeRestController extends FOSRestController
 
 
         //Now for the payType and Pay Method
-        //TODO AQUI VOYYYYY ASKDNASDKASM
+        $payMethod=new PayMethod();
+        //TODO check if valid??
+        $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
+        //TODO check if vaild??
+        $payMethod->setCellPhone($paramFetcher->get('cellphone'));
+        // frecuency in days
+        $payMethod->setFrequency($paramFetcher->get('frequency'));
 
+        //check if the Pay Method Ids are valid: Bank payType and AccountType
 
+        /** @var Bank $tempBank */
+        $tempBank=$bankRepo->find($paramFetcher->get('bankId'));
+        if($tempBank==null){
+            $view->setStatusCode(404)->setHeader("error","The bankId ID ".$paramFetcher->get('bankId')." is invalid");
+            return $view;
+        }
+        $payMethod->setBankBank($tempBank);
+
+        /** @var PayType $tempPayType */
+        $tempPayType=$payTypeRepo->find($paramFetcher->get('payTypeId'));
+        if($tempPayType==null){
+            $view->setStatusCode(404)->setHeader("error","The payTypeId ID ".$paramFetcher->get('payTypeId')." is invalid");
+            return $view;
+        }
+        $payMethod->setPayTypePayType($tempPayType);
+
+        $tempAccountType=$accountTypeRepo->find($paramFetcher->get('accountTypeId'));
+        if($tempAccountType==null){
+            $view->setStatusCode(404)->setHeader("error","The accountTypeId ID ".$paramFetcher->get('accountTypeId')." is invalid");
+            return $view;
+        }
+        $payMethod->setAccountTypeAccountType($tempAccountType);
+
+        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
+        // relation that is been created
+        $contract->setPayMethodPayMethod($payMethod);
         $employerEmployee->addContract($contract);
         // Checking if all the cities deps, and countries are valid
 
