@@ -21,14 +21,13 @@ class LogController extends Controller
     	$logs = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Log')
 		->findAll();
-		$datas = array();
-		foreach ($logs as $log) {		
+		if($logs){
+			foreach ($logs as $log) {		
 			$log->setData(json_decode($log->getData()));
+			}
 		}
-
         return $this->render('RocketSellerTwoPickBundle:Default:log.html.twig',array(
-        	'logs'=>$logs,
-        	'datas'=>$datas
+        	'logs'=>$logs        	
         	));
     }
 
