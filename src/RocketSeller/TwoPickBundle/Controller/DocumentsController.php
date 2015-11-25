@@ -75,11 +75,13 @@ class DocumentsController extends Controller
 	                        $status = 'failed';
 	                        $message = 'Size exceeds limit';
 	                        echo $message . $status;
+
 	                    }
 	                } else {
 	                    $status = 'failed';
 	                    $message = 'invalid file type';
 	                    echo $message. $status;
+
 	                }
             }
             $employee->getPersonPerson()->setGallery($gallery);
