@@ -127,4 +127,3 @@ class Log
         return $this->data;
     }
 }
-

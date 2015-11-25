@@ -127,4 +127,3 @@ class Notification
         return $this->status;
     }
 }
-

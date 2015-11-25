@@ -28,8 +28,6 @@ class Media extends BaseMedia
      * @var integer $id
      */
     protected $id;
-
-    protected $documentType;
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
@@ -37,7 +35,7 @@ class Media extends BaseMedia
      *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
      * })
      */
-    private $documentTypeDocumentType;
+    protected $documentType;
     /**
      * Get id
      *
