@@ -1,0 +1,79 @@
+body {
+	background-image: url("../img/background.jpg");
+}
+
+.mainLandingContainer {
+	margin: 20px auto;
+}
+
+.submit {
+	padding-left: 15px !important;
+	margin: 10px auto;
+}
+
+.mid-content{
+	padding-top: 0px;
+}
+
+.middle-image{
+	width: 100%;
+}
+
+.mid-content-logo {
+	width: 100%;
+}
+
+.text {
+    font-family: 'Open Sans', sans-serif;
+    color: white; 
+}
+.text p{
+	margin-bottom: 1px;
+}
+.more-info{
+	font-size: 150%;
+	padding-top: 20px;
+	font-family: 'Open Sans', sans-serif;
+	color: white;
+}
+.submit{
+	padding-left: 0px;
+}
+.submit-button{
+	background-color: #00CFBD;
+	color: white;
+	border: #00CFBD;
+	width: 110px;
+}
+
+
+.middle-line1{
+	padding: 0px;
+	position: relative;
+	top: 400px;
+}
+.middle-line2{
+	padding: 0px;
+	position: relative;
+	top: 385px;
+}
+
+/* Tha big scraans */
+@media screen and (min-width: 768px) {
+
+	.mid-content-logo {
+		width: 345px;
+	}
+
+	.submit {
+		padding-left: 0px;
+	}
+
+	.middle-image{
+		left:-130px;
+		width: 750px;
+	}
+
+
+
+}
