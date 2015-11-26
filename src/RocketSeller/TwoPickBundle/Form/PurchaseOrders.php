@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PurchaseOrders extends AbstractType
 {
@@ -12,6 +13,10 @@ class PurchaseOrders extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                ),))
             ->add('purchaseOrdersType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PurchaseOrdersType',
                 'placeholder' => '',
