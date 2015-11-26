@@ -25,11 +25,6 @@ class DocumentType
      * @ORM\Column(type="string", length=100)
      */
     private $name;
-    /**
-     * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media",mappedBy="documentType", cascade={"persist"}, fetch="LAZY")
-     */
-    protected $media;
 
     /**
      * Get idDocumentType
@@ -65,58 +60,4 @@ class DocumentType
         return $this->name;
     }
 
-    /**
-     * Set media
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $media
-     *
-     * @return DocumentType
-     */
-    public function setMedia(\Application\Sonata\MediaBundle\Entity\Media $media = null)
-    {
-        $this->media = $media;
-
-        return $this;
-    }
-
-    /**
-     * Get media
-     *
-     * @return \Application\Sonata\MediaBundle\Entity\Media
-     */
-    public function getMedia()
-    {
-        return $this->media;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->media = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add medium
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $medium
-     *
-     * @return DocumentType
-     */
-    public function addMedia(\Application\Sonata\MediaBundle\Entity\Media $medium)
-    {
-        $this->media[] = $medium;
-
-        return $this;
-    }
-
-    /**
-     * Remove medium
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $medium
-     */
-    public function removeMedia(\Application\Sonata\MediaBundle\Entity\Media $medium)
-    {
-        $this->media->removeElement($medium);
-    }
 }
