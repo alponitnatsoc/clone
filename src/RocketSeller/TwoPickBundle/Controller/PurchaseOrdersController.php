@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use RocketSeller\TwoPickBundle\Form\PurchaseOrders as FormPurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
+use Symfony\Component\Validator\Constraints\Date;
 
 class PurchaseOrdersController extends Controller
 {
@@ -41,21 +42,32 @@ class PurchaseOrdersController extends Controller
     {
         $form = $this->createForm(new FormPurchaseOrders());
 
-//         var_dump($form->isSubmitted());
         $form->handleRequest($request);
-//         var_dump($form->isSubmitted());
         if ($form->isSubmitted() && $form->isValid()) {
-//             $em = $this->getDoctrine()->getManager();
-//             $em->persist($form);
-//             $em->flush();
+            $em = $this->getDoctrine()->getManager();
+
             $purchaseOrder = new PurchaseOrders();
+
             $purchaseOrdersTypePurchaseOrdersType = $form->get('purchaseOrdersType');
             $payrollPayroll = $form->get('payroll');
             $pos = $form->get('purchaseOrdersStatus');
+            $purchaseOrder->setPayrollPayroll($payrollPayroll->getData());
+            $purchaseOrder->setPurchaseOrdersStatusPurchaseOrdersStatus($pos->getData());
+            $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersTypePurchaseOrdersType->getData());
 
-            $purchaseOrder->setPayrollPayroll($payrollPayroll);
-            $purchaseOrder->setPurchaseOrdersStatusPurchaseOrdersStatus($pos);
-            $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersTypePurchaseOrdersType);
+            $dateCreated = date("Y-m-d H:i:s");
+            $purchaseOrder->setDateCreated(new \DateTime($dateCreated));
+            $dateModified = date("Y-m-d H:i:s");
+            $purchaseOrder->setDateModified(new \DateTime($dateModified));
+            $idUser = $this->getUser();
+            $purchaseOrder->setIdUser($idUser);
+            $name = $form->get("name");
+            $purchaseOrder->setName($name->getData());
+
+            $em->persist($purchaseOrder);
+            $em->flush();
+
+            return $this->render('RocketSellerTwoPickBundle:PurchaseOrders:purchase-orders-success.html.twig');
         }
 
 
