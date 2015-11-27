@@ -152,4 +152,8 @@ class Department
     {
         return $this->citys;
     }
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
 }

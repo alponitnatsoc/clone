@@ -27,6 +27,7 @@ class EntityAdmin extends Admin
     {
         $listMapper
             ->add('idEntity')
+            ->add('name')            
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class EmployerHasEntityAdmin extends Admin
+class CountryAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -16,7 +16,8 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idEmployerHasEntity')
+            ->add('idCountry')
+            ->add('name')
         ;
     }
 
@@ -26,7 +27,8 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idEmployerHasEntity')
+            ->add('idCountry')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,16 +45,7 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('employerEmployer', 'sonata_type_model_list', array(
-                'label'=>'Employer'
-                ), array(
-                    'placeholder' => 'No employer selected',                                
-                ))
-            ->add('entityEntity', 'sonata_type_model_list', array(
-                'label'=>'Entity'
-                ), array(
-                    'placeholder' => 'No entity selected',                                
-                ))
+            ->add('name')
         ;
     }
 
@@ -62,7 +55,8 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idEmployerHasEntity')
+            ->add('idCountry')
+            ->add('name')
         ;
     }
 }

@@ -212,4 +212,10 @@ services:
         class: RocketSeller\TwoPickBundle\Admin\NotificationAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Notification, SonataAdminBundle:CRUD]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: admin, label: Notification}
+            - {name: sonata.admin, manager_type: orm, group: Persons, label: Notification}
+
+    rocket_seller_two_pick.admin.country:
+        class: RocketSeller\TwoPickBundle\Admin\CountryAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Country, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Other, label: Country}

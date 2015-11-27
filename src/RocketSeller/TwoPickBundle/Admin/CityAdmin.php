@@ -27,6 +27,8 @@ class CityAdmin extends Admin
     {
         $listMapper
             ->add('idCity')
+            ->add('departmentDepartment',null,array('label' => 'Department', 'translation_domain' => 'RocketSellerTwoPickBundle'))                                
+            ->add('departmentDepartment.countryCountry',null,array('label' => 'Country', 'translation_domain' => 'RocketSellerTwoPickBundle'))                        
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +45,12 @@ class CityAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idCity')
+            ->add('name')
+            ->add('departmentDepartment', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No author selected'
+                ))
+            ;
         ;
     }
 

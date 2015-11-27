@@ -27,6 +27,7 @@ class EntityTypeAdmin extends Admin
     {
         $listMapper
             ->add('idEntityType')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +44,6 @@ class EntityTypeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idEntityType')
             ->add('name')
         ;
     }

@@ -17,7 +17,7 @@ class BankAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idBank')
+            ->add('name')
         ;
     }
 
@@ -27,7 +27,7 @@ class BankAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idBank')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -44,7 +44,7 @@ class BankAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idBank')
+            ->add('name')
         ;
     }
 
@@ -54,7 +54,7 @@ class BankAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idBank')
+            ->add('name')
         ;
     }
 }

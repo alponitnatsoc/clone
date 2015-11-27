@@ -29,6 +29,7 @@ class DepartmentAdmin extends Admin
         $listMapper
             ->add('idDepartment')
             ->add('name')
+            ->add('countryCountry',null,array('label' => 'Country', 'translation_domain' => 'RocketSellerTwoPickBundle'))                        
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -45,8 +46,11 @@ class DepartmentAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idDepartment')
             ->add('name')
+            ->add('countryCountry', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No author selected'
+                ))
         ;
     }
 
@@ -58,6 +62,7 @@ class DepartmentAdmin extends Admin
         $showMapper
             ->add('idDepartment')
             ->add('name')
+            ->add('countryCountry')
         ;
     }
 }

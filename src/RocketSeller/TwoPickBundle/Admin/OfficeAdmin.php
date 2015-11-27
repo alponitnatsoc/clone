@@ -27,6 +27,11 @@ class OfficeAdmin extends Admin
     {
         $listMapper
             ->add('idOffice')
+            ->add('name')
+            ->add('address')
+            ->add('countryCountry',null,array('label'=>'Country'))
+            ->add('departmentDepartment',null,array('label'=>'Department'))
+            ->add('cityCity',null,array('label'=>'City'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +48,28 @@ class OfficeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idOffice')
+            ->add('name',null,array('label'=>'Name'))
+            ->add('address',null,array('label'=>'Address'))
+            ->add('entityEntity', 'sonata_type_model_list', array(
+                'label'=>'Entity'
+                ), array(
+                    'placeholder' => 'No entity selected',                                
+                ))
+            ->add('departmentDepartment', 'sonata_type_model_list', array(
+                'label'=>'Department'
+                ), array(
+                    'placeholder' => 'No department selected',                                
+                ))
+            ->add('countryCountry', 'sonata_type_model_list', array(
+                'label'=>'Country'
+                ), array(
+                    'placeholder' => 'No country selected',                                
+                ))
+            ->add('cityCity', 'sonata_type_model_list', array(
+                'label'=>'City'
+                ), array(
+                    'placeholder' => 'No city selected',                                
+                ))
         ;
     }
 
@@ -54,6 +80,11 @@ class OfficeAdmin extends Admin
     {
         $showMapper
             ->add('idOffice')
+            ->add('name')
+            ->add('address')
+            ->add('countryCountry',null,array('label'=>'Country'))
+            ->add('departmentDepartment',null,array('label'=>'Department'))
+            ->add('cityCity',null,array('label'=>'City'))
         ;
     }
 }

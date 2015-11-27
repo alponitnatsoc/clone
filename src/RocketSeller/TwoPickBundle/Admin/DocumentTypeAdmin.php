@@ -16,7 +16,7 @@ class DocumentTypeAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idDocumentType')
+            ->add('name')
         ;
     }
 
@@ -55,6 +55,7 @@ class DocumentTypeAdmin extends Admin
     {
         $showMapper
             ->add('idDocumentType')
+            ->add('name')
         ;
     }
 }
