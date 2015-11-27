@@ -176,3 +176,7 @@ show_logs:
     path:     /logs
     defaults: { _controller: RocketSellerTwoPickBundle:Log:index }
 
+test_pdf:
+    path:     /pdf
+    defaults: { _controller: RocketSellerTwoPickBundle:Pdf:index }
+
