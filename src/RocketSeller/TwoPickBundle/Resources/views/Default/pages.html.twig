@@ -10,7 +10,7 @@
 var state="/old";
 
 jQuery(document).ready(function() {
-	$(".nav-link").on("click",function(e){
+	$("a").on("click",function(e){
 		e.preventDefault();
 		sendAjax($(this).attr('href'));
 	});

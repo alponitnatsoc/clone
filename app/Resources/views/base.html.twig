@@ -52,14 +52,14 @@
 		    				<li><a href="#">Beneficios</a></li>
 		    				<li><a href="#">Funcionalidades</a></li>
 		    				<li><a href="#">Precios</a></li>
-		    				<li><a href="#">Registro</a></li>
+		    				<li><a href="{{ path('fos_user_registration_register') }}">Registro</a></li>
 		    				<li><a href="#">Empresa</a></li>
 		    				<li><a href="#">Ayuda</a></li>
 		    			{% endif %}
 	    			</ul>
 	    			{% if not is_granted("IS_AUTHENTICATED_FULLY") %}
 		    			<ul class="nav navbar-nav navbar-right">
-		    				<li><a href="#" class="btn btn-ingresar pull-right">Ingresar <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+		    				<li><a href="{{ path('fos_user_security_login') }}" class="btn btn-ingresar pull-right">Ingresar <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
 		    			</ul>
 		    		{% else %}
 		    			<ul class="nav navbar-nav navbar-right">
