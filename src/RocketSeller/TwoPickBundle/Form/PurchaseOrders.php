@@ -23,7 +23,7 @@ class PurchaseOrders extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'purchaseOrdersTypePurchaseOrdersType',
+                'property_path' => 'purchaseOrdersTypePurchaseOrdersType'
                 ))
             ->add('payroll', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Payroll',
@@ -31,7 +31,8 @@ class PurchaseOrders extends AbstractType
                 'property' => 'idPayroll',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'payrollPayroll',
+                'required'    => false,
+                'property_path' => 'payrollPayroll'
                 ))
             ->add('purchaseOrdersStatus', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PurchaseOrdersStatus',
@@ -39,7 +40,7 @@ class PurchaseOrders extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'purchaseOrdersStatusPurchaseOrdersStatus',
+                'property_path' => 'purchaseOrdersStatusPurchaseOrdersStatus'
                 ));
     }
 
@@ -47,7 +48,7 @@ class PurchaseOrders extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\PurchaseOrders',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\PurchaseOrders'
         ));
     }
 

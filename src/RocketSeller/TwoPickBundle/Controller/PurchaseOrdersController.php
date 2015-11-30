@@ -51,7 +51,10 @@ class PurchaseOrdersController extends Controller
             $purchaseOrdersTypePurchaseOrdersType = $form->get('purchaseOrdersType');
             $payrollPayroll = $form->get('payroll');
             $pos = $form->get('purchaseOrdersStatus');
-            $purchaseOrder->setPayrollPayroll($payrollPayroll->getData());
+
+            if ($payrollPayroll->getData()) {
+                $purchaseOrder->setPayrollPayroll($payrollPayroll->getData());
+            }
             $purchaseOrder->setPurchaseOrdersStatusPurchaseOrdersStatus($pos->getData());
             $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersTypePurchaseOrdersType->getData());
 
