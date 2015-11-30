@@ -14,10 +14,10 @@ class LogController extends Controller
     	/*$person = $this->getUser()->getPersonPerson();
     	$array = array(
     		'sent' => 'mande cualqueir cosa',
-    		'receive' => 'No recibi esto'
+    		'receive' => 'Si recibi esto'
     		);
     	$data = json_encode($array);
-    	$log = $this->createLog($person,"Otro",$data);*/    
+    	$log = $this->createLog($person,"Se inscribio",$data);*/
     	$logs = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Log')
 		->findAll();
