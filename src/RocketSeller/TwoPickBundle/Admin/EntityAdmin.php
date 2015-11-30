@@ -15,8 +15,10 @@ class EntityAdmin extends Admin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper
-            ->add('entityTypeEntityType.idEntityType')
+        $datagridMapper            
+            ->add('name')
+            ->add('entityTypeEntityType',null,array('label'=>'Entity type'))
+            ->add('office')
         ;
     }
 
@@ -27,7 +29,9 @@ class EntityAdmin extends Admin
     {
         $listMapper
             ->add('idEntity')
-            ->add('name')            
+            ->add('name')
+            ->add('office',null,array('label'=>'Offices'))
+            ->add('entityTypeEntityType',null,array('label'=>'Entity Type'))            
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -44,10 +48,29 @@ class EntityAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('name',null,array('label'=>'Name'))
             ->add('entityTypeEntityType', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No entity selected'
                 ))
+            ->add('office',null, array(
+                ), array(
+                'edit' => 'inline',                
+                'inline' => 'table',
+                'sortable'  => 'position'
+            ))
+            ->add('action', null, array(                    
+                ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable'  => 'listOrder'
+            ))
+            ->add('entityFields', null, array(                    
+                ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable'  => 'listOrder'
+            ))
         ;
     }
 
@@ -58,7 +81,10 @@ class EntityAdmin extends Admin
     {
         $showMapper
             ->add('idEntity')
-            ->add('id entityTypeEntityType')
+            ->add('entityTypeEntityType',null,array('label'=>'Entity type'))
+            ->add('action')
+            ->add('entityFields')
+            ->add('office',null,array('label'=>'Offices'))
         ;
     }
 }

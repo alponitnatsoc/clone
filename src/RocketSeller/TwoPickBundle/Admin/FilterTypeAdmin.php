@@ -8,15 +8,16 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ProcedureTypeAdmin extends Admin
+class FilterTypeAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper            
-            ->add('name',null,array('label'=>'Procedure Type name'))
+        $datagridMapper
+            ->add('idFilterType')
+            ->add('name')
         ;
     }
 
@@ -26,8 +27,8 @@ class ProcedureTypeAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('idProcedureType',null,array('label'=>'Id'))
-            ->add('name',null,array('label'=>'Procedure type name'))
+            ->add('idFilterType')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -44,6 +45,7 @@ class ProcedureTypeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('idFilterType')
             ->add('name')
         ;
     }
@@ -54,8 +56,8 @@ class ProcedureTypeAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idProcedureType',null,array('label'=>'Id'))
-            ->add('name',null,array('label'=>'Procedure type name'))
+            ->add('idFilterType')
+            ->add('name')
         ;
     }
 }

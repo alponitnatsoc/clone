@@ -94,12 +94,6 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: Entities, label: Entity}
 
-    rocket_seller_two_pick.admin.document:
-        class: RocketSeller\TwoPickBundle\Admin\DocumentAdmin
-        arguments: [~, RocketSeller\TwoPickBundle\Entity\Document, SonataAdminBundle:CRUD]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: Documents, label: Document}
-
     rocket_seller_two_pick.admin.department:
         class: RocketSeller\TwoPickBundle\Admin\DepartmentAdmin
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Department, SonataAdminBundle:CRUD]
@@ -219,3 +213,15 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Country, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Other, label: Country}
+
+    rocket_seller_two_pick.admin.filter_type:
+        class: RocketSeller\TwoPickBundle\Admin\FilterTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\FilterType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: FilterType}
+
+    rocket_seller_two_pick.admin.specific_data:
+        class: RocketSeller\TwoPickBundle\Admin\SpecificDataAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\SpecificData, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: SpecificData}

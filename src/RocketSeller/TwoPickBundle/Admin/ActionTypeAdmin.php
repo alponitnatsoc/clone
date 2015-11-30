@@ -17,6 +17,7 @@ class ActionTypeAdmin extends Admin
     {
         $datagridMapper
             ->add('idActionType')
+            ->add('name')
         ;
     }
 
@@ -27,6 +28,7 @@ class ActionTypeAdmin extends Admin
     {
         $listMapper
             ->add('idActionType')
+            ->add('name')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +45,7 @@ class ActionTypeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idActionType')
+            ->add('name')
         ;
     }
 
@@ -54,6 +56,7 @@ class ActionTypeAdmin extends Admin
     {
         $showMapper
             ->add('idActionType')
+            ->add('name')
         ;
     }
 }

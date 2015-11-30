@@ -60,4 +60,8 @@ class EntityType
     {
         return $this->name;
     }
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
 }

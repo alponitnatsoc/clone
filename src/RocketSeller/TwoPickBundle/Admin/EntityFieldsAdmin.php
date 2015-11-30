@@ -43,7 +43,24 @@ class EntityFieldsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idEntityFields')
+            ->add('name')
+            ->add('entityEntity', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No entity selected'
+                ))
+            ->add('filterTypeFilterType', 'sonata_type_model_list', array(
+                ), array(
+                    'placeholder' => 'No entity selected'
+                ))
+            ->add('specificData', null, array(                    
+                ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+                'sortable'  => 'listOrder'
+            ))
+            ->add('tableReferenced')
+            ->add('columnReferenced')
+
         ;
     }
 

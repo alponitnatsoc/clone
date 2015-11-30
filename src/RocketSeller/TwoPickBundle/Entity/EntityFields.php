@@ -264,4 +264,8 @@ class EntityFields
     {
         return $this->tableReferenced;
     }
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
 }

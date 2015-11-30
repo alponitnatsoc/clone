@@ -19,7 +19,7 @@ class EmployeeHasBeneficiaryAdmin extends Admin
             ->add('idEmployeeHasBeneficiary')
             ->add('employeeEmployee.idEmployee')
             ->add('employeeEmployee.personPerson.idPerson', null, array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('employeeEmployee.personPerson.names', null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('employeeEmployee.personPerson', null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.lastName1',null, array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('employeeEmployee.personPerson.lastName2',null, array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
             ->add('employeeEmployee.personPerson.documentType',null, array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
@@ -35,19 +35,18 @@ class EmployeeHasBeneficiaryAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('employeeEmployee.personPerson.names', 'text', array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('employeeEmployee.personPerson',null, array('label' => 'Employee name', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('employeeEmployee.personPerson.lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('employeeEmployee.personPerson.documentType','text', array('label'=>'Document Type')) 
-            ->add('employeeEmployee.personPerson.document','text', array('label'=>'Document'))
+
 
             ->add('entityEntity.entityTypeEntityType.idEntityType', 'text', array('label' => 'Tipo entidad', 'translation_domain' => 'RocketSellerTwoPickBundle'))
 
-            ->add('beneficiaryBeneficiary.personPerson.names','text', array('label' => 'beneficiary name', 'translation_domain' => 'RocketSellerTwoPickBundle')) 
+            ->add('beneficiaryBeneficiary.personPerson',null, array('label' => 'Beneficiary name', 'translation_domain' => 'RocketSellerTwoPickBundle')) 
             ->add('beneficiaryBeneficiary.personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('beneficiaryBeneficiary.personPerson.lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('beneficiaryBeneficiary.personPerson.documentType','text', array('label'=>'Document Type')) 
-            ->add('beneficiaryBeneficiary.personPerson.document','text', array('label'=>'Document'))
+            
+            
 
             ->add('_action', 'actions', array(
                 'actions' => array(

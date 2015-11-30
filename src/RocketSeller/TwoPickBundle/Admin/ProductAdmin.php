@@ -15,8 +15,11 @@ class ProductAdmin extends Admin
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper
-            ->add('idProduct')
+        $datagridMapper            
+            ->add('name',null,array('label'=>'Product name'))
+            ->add('price',null,array('label'=>'Price'))
+            ->add('description',null,array('label'=>'Description'))
+            ->add('validity',null,array('label'=>'Validity'))
         ;
     }
 
@@ -25,8 +28,11 @@ class ProductAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->add('idProduct')
+        $listMapper            
+            ->add('name',null,array('label'=>'Product name'))
+            ->add('price',null,array('label'=>'Price'))
+            ->add('description',null,array('label'=>'Description'))
+            ->add('validity',null,array('label'=>'Validity'))            
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -43,7 +49,10 @@ class ProductAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('idProduct')
+            ->add('name',null,array('label'=>'Product name'))
+            ->add('price',null,array('label'=>'Price'))
+            ->add('description',null,array('label'=>'Description'))
+            ->add('validity',null,array('label'=>'Validity'))
         ;
     }
 
@@ -54,6 +63,10 @@ class ProductAdmin extends Admin
     {
         $showMapper
             ->add('idProduct')
+            ->add('name',null,array('label'=>'Product name'))
+            ->add('price',null,array('label'=>'Price'))
+            ->add('description',null,array('label'=>'Description'))
+            ->add('validity',null,array('label'=>'Validity'))
         ;
     }
 }

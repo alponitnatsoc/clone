@@ -1,13 +1,16 @@
 {% extends "::base.html.twig" %}
 	{% block content %}
-		<h3>El empleado: {{ employee.personPerson.names }}</h3>
+		{% if employee %}
+			<h3>El empleado: {{ employee.personPerson.names }}</h3>
+		{% endif %}
 		<table style="width:100%">
 		  <tr>
 		    <td>Beneficiary name</td>
 		    <td>Beneficiary last name</td> 
 		    <td>Entity</td>
 		    <td>Actions</td>
-		  </tr>	  
+		  </tr>	
+	  	{% if beneficiaries %}  
 	  		{% for beneficiary in beneficiaries %}
 	  			<tr>				
 					<td>{{ beneficiary.beneficiaryBeneficiary.personPerson.names }}</td>
@@ -16,5 +19,8 @@
 					<td><a href="/manage/employee/{{employee.idEmployee}}/beneficiary/{{beneficiary.beneficiaryBeneficiary.idBeneficiary}}">Editar</a></td>
 			  	</tr>
 			{% endfor %}
+		{% else %}
+			<p>No hay beneficiarios</p>
+		{% endif %}
 		</table>	
 	{% endblock %}

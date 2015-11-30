@@ -16,7 +16,12 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('idEmployerHasEntity')
+            ->add('employerEmployer.personPerson.names',null,array('label'=>'Employer'))
+            ->add('employerEmployer.personPerson.lastName1',null,array('label'=>'Last name'))
+            ->add('employerEmployer.personPerson.lastName2',null,array('label'=>'Second last name'))
+            ->add('employerEmployer.personPerson.document',null,array('label'=>'Document'))
+            ->add('entityEntity',null,array('label'=>'Entity'))
+            ->add('entityEntity.entityTypeEntityType',null,array('label'=>'Entity type'))
         ;
     }
 
@@ -25,8 +30,13 @@ class EmployerHasEntityAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper
-            ->add('idEmployerHasEntity')
+        $listMapper            
+            ->add('employerEmployer.personPerson',null,array('label'=>'Employer'))
+            ->add('employerEmployer.personPerson.lastName1',null,array('label'=>'Last name'))
+            ->add('employerEmployer.personPerson.lastName2',null,array('label'=>'Second last name'))
+            ->add('employerEmployer.personPerson.document',null,array('label'=>'Document'))
+            ->add('entityEntity',null,array('label'=>'Entity'))
+            ->add('entityEntity.entityTypeEntityType',null,array('label'=>'Entity type'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

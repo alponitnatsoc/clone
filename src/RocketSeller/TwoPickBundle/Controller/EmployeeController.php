@@ -17,6 +17,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
@@ -232,18 +233,18 @@ class EmployeeController extends Controller
         if($employee){
             $beneficiaries = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
-            ->findByEmployeeEmployee($employee);
-            if($beneficiaries){
+            ->findByEmployeeEmployee($employee);            
+            if(!$beneficiaries){
+                return $this->redirectToRoute('manage_employees');
+            }else{
                 return $this->render(
                 'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
                 array('beneficiaries' => $beneficiaries,
                       'employee' => $employee
                         ));
-            }else{
-
             }
         }else{
-
+            return $this->redirectToRoute('manage_employees');
         }
 
     }
