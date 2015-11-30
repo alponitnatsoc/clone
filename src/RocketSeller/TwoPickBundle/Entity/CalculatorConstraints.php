@@ -16,7 +16,7 @@ class CalculatorConstraints
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_account_type", type="integer")
+     * @ORM\Column(name="id_calculator_constraints", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -30,6 +30,14 @@ class CalculatorConstraints
      * @ORM\Column(type="float")
      */
     private $value;
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType", inversedBy="constraints")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_contract_type_id_employee_contract_type", referencedColumnName="id_employee_contract_type")
+     * })
+     */
+    private $employeeContractTypeEmployeeContractType;
 
 
 
@@ -90,5 +98,29 @@ class CalculatorConstraints
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Set employeeContractTypeEmployeeContractType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType
+     *
+     * @return CalculatorConstraints
+     */
+    public function setEmployeeContractTypeEmployeeContractType(\RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType = null)
+    {
+        $this->employeeContractTypeEmployeeContractType = $employeeContractTypeEmployeeContractType;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeContractTypeEmployeeContractType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     */
+    public function getEmployeeContractTypeEmployeeContractType()
+    {
+        return $this->employeeContractTypeEmployeeContractType;
     }
 }

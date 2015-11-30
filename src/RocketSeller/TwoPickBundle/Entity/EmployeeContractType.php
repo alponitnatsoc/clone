@@ -25,7 +25,10 @@ class EmployeeContractType
      * @ORM\Column(type="string", length=100)
      */
     private $name;
-
+    /**
+     * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="$employeeContractTypeEmployeeContractType")
+     */
+    private $constraints;
 
 
     /**
@@ -60,5 +63,46 @@ class EmployeeContractType
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->constraints = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add constraint
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\CalculatorConstraints $constraint
+     *
+     * @return EmployeeContractType
+     */
+    public function addConstraint(\RocketSeller\TwoPickBundle\Entity\CalculatorConstraints $constraint)
+    {
+        $this->constraints[] = $constraint;
+
+        return $this;
+    }
+
+    /**
+     * Remove constraint
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\CalculatorConstraints $constraint
+     */
+    public function removeConstraint(\RocketSeller\TwoPickBundle\Entity\CalculatorConstraints $constraint)
+    {
+        $this->constraints->removeElement($constraint);
+    }
+
+    /**
+     * Get constraints
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConstraints()
+    {
+        return $this->constraints;
     }
 }
