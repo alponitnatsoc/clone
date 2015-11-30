@@ -235,7 +235,6 @@ class EmployeeController extends Controller
             ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
             ->findByEmployeeEmployee($employee);            
             if(!$beneficiaries){
-                return $this->redirectToRoute('manage_employees');
             }else{
                 return $this->render(
                 'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
