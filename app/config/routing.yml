@@ -56,6 +56,9 @@ send_email_test:
 send_email_test_send:
     path: /send-email/send
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:sendEmail}
+contact:
+    path: /contact
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
 
 show_form_entity:
     path:      /register/entity/{id}

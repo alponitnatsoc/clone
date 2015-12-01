@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Contact{% endblock%}
+
+{% block body %}
+    <header>
+        <h1>Contact symblog</h1>
+    </header>
+
+    <p>Want to contact symblog?</p>
+
+{#     <form action="{{ path('contact') }}" method="post" {{ form_enctype(form) }} class="blogger">#}
+{#         {{ form_errors(form) }}#}
+
+{#         {{ form_row(form.name) }}#}
+{#         {{ form_row(form.email) }}#}
+{#         {{ form_row(form.subject) }}#}
+{#         {{ form_row(form.message) }}#}
+
+{#         {{ form_rest(form) }}#}
+
+{#         <input type="submit" value="Submit" />#}
+{#     </form>#}
+
+    {% for label, flashes in app.session.flashbag.all %}
+        {% for flash in flashes %}
+            <div class="alert alert-{{ label }}">
+                {{ flash }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <form action="{{ path('contact') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {{ form_widget(form) }}
+    <input type="submit" value="Submit" />
+    </form>
+    <script>
+    function setSubject(element) {
+        $("form #contact_subject").val(element.selectedOptions[0].label);
+    }
+    </script>
+{% endblock %}
