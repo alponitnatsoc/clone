@@ -40,7 +40,7 @@ class LogAdmin extends Admin
             ->add('id')
             ->add('type')
             ->add('personPerson')
-            ->add('data')
+            ->add('data','json')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array()

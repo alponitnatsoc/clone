@@ -1,0 +1,16 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<form class="form col-md-6" method="POST" action="{{path('employee_login')}}">	
+		<div class="form-group col-md-12">
+		  <label>Número de documento:</label>
+		  <input class="form-control" name="document">
+		  </input>
+		</div>
+		<div class="form-group col-md-12">
+		  <label>Número telefónico:</label>
+		  <input class="form-control" name="cellphone">
+		  </input>
+		</div>
+		<button class="btn btn-large btn-primary" type="submit">Ingresar</button>
+	</form>
+{% endblock %}

@@ -183,3 +183,15 @@ test_pdf:
     path:     /pdf
     defaults: { _controller: RocketSellerTwoPickBundle:Pdf:index }
 
+sms_send:
+    path:     /sms
+    defaults: { _controller: RocketSellerTwoPickBundle:Sms:call }
+
+employee_login:
+    path:     /employee/login
+    defaults: { _controller: RocketSellerTwoPickBundle:Employee:login }
+
+employee_login_two_auth:
+    path:     /employee/login/two/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employee:twoFactorLogin }
+

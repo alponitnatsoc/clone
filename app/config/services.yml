@@ -32,3 +32,6 @@ services:
         class: RocketSeller\TwoPickBundle\Security\Authentication\Firewall\WsseListener
         arguments: ["@security.token_storage", "@security.authentication.manager"]
         public: false
+
+    send_sms:
+        class: RocketSeller\TwoPickBundle\Controller\SmsController

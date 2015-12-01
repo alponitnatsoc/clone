@@ -60,7 +60,9 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
 
             //Integration with Mandrill - MandrillSwiftMailerBundle
-            new Accord\MandrillSwiftMailerBundle\AccordMandrillSwiftMailerBundle()
+            new Accord\MandrillSwiftMailerBundle\AccordMandrillSwiftMailerBundle(),
+            //twilio
+            new Vresh\TwilioBundle\VreshTwilioBundle()
 
         );
 

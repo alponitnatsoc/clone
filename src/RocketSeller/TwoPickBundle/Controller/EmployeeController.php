@@ -226,7 +226,6 @@ class EmployeeController extends Controller
      */
     public function showBeneficiaryAction($id)
     {
-
         $employee = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Employee')
         ->find($id);
@@ -234,17 +233,71 @@ class EmployeeController extends Controller
             $beneficiaries = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
             ->findByEmployeeEmployee($employee);            
-            if(!$beneficiaries){
-            }else{
+            if($beneficiaries){
                 return $this->render(
                 'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
                 array('beneficiaries' => $beneficiaries,
                       'employee' => $employee
                         ));
+            }else{
+                throw $this->createNotFoundException('Unable to find Beneficiaries.');
             }
         }else{
-            return $this->redirectToRoute('manage_employees');
-        }
 
+        }
     }
+    public function loginAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+
+            $document = $this->get('request')->request->get('document');
+            $cellphone = $this->get('request')->request->get('cellphone');
+
+            $em = $this->getDoctrine()->getManager();
+            $person = $em->getRepository('RocketSellerTwoPickBundle:Person')
+            ->findByDocument($document);
+            $employee = $this->loadClassByArray(array('personPerson'=>$person),"Employee");
+            if($employee){
+                $employee->setTwoFactorCode(12412412);
+                $em->flush($employee);                                         
+                return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig',
+                    array('employee'=>$employee)
+                    );
+                return $this->redirect('employee_login_two_auth', array('employee' => $employee));               
+            }else{
+                throw $this->createNotFoundException('Unable to find Employee.');
+            }
+                
+        }else{
+            return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee.html.twig');    
+        }        
+    }
+
+    public function twoFactorLoginAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {            
+            $code = $this->get('request')->request->get('codigoTwo');
+            $id = $request->query->get('id');       
+            if($code == 12412412){
+                return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
+            }else{                
+                var_dump($id);
+                throw $this->createNotFoundException('Unable to find.');
+            }                
+        }
+    }
+    public function loadClassByArray($array, $entity)
+    {
+        $loadedClass = $this->getdoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:'.$entity)
+        ->findOneBy($array);
+        return $loadedClass;
+    }
+    public function loadClassById($parameter, $entity)
+    {
+        $loadedClass = $this->getdoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:'.$entity)
+        ->find($parameter);
+        return $loadedClass;
+    }   
 }

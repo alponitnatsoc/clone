@@ -35,7 +35,17 @@ class Employee
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
      */
     private $employeeHasEmployers;
-
+    /**
+     * @var boolean $twoFactorAuthentication Enabled yes/no
+     * @ORM\Column(type="boolean")
+     */
+    private $twoFactorAuthentication = false;
+     
+    /**
+     * @var integer $twoFactorCode Current authentication code
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $twoFactorCode;
 
     /**
      * Set idEmployee
@@ -153,4 +163,52 @@ class Employee
     }
 
 
+
+    /**
+     * Set twoFactorAuthentication
+     *
+     * @param boolean $twoFactorAuthentication
+     *
+     * @return Employee
+     */
+    public function setTwoFactorAuthentication($twoFactorAuthentication)
+    {
+        $this->twoFactorAuthentication = $twoFactorAuthentication;
+
+        return $this;
+    }
+
+    /**
+     * Get twoFactorAuthentication
+     *
+     * @return boolean
+     */
+    public function getTwoFactorAuthentication()
+    {
+        return $this->twoFactorAuthentication;
+    }
+
+    /**
+     * Set twoFactorCode
+     *
+     * @param integer $twoFactorCode
+     *
+     * @return Employee
+     */
+    public function setTwoFactorCode($twoFactorCode)
+    {
+        $this->twoFactorCode = $twoFactorCode;
+
+        return $this;
+    }
+
+    /**
+     * Get twoFactorCode
+     *
+     * @return integer
+     */
+    public function getTwoFactorCode()
+    {
+        return $this->twoFactorCode;
+    }
 }
