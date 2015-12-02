@@ -111,15 +111,14 @@ class EmployeeController extends Controller
             $beneficiaries = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
                 ->findByEmployeeEmployee($employee);
-                if($beneficiaries){
-                    return $this->render(
-                        'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
-                        array(
-                            'beneficiaries' => $beneficiaries,
-                            'employee' => $employee
-                        )
-                    );
-                }
+                
+                return $this->render(
+                    'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig',
+                    array(
+                        'beneficiaries' => $beneficiaries,
+                        'employee' => $employee
+                    )
+                );
         } else {
             $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
             $form->handleRequest($request);
