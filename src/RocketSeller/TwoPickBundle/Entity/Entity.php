@@ -49,6 +49,11 @@ class Entity
      */
     private $action;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EntityHasDocumentType", mappedBy="entityEntity", cascade={"persist"})
+     */
+    private $entityHasDocumentType;
+
 
 
     /**
@@ -235,5 +240,39 @@ class Entity
     public function __toString()
     {
         return (string) $this->name;
+    }
+
+    /**
+     * Add entityHasDocumentType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityHasDocumentType $entityHasDocumentType
+     *
+     * @return Entity
+     */
+    public function addEntityHasDocumentType(\RocketSeller\TwoPickBundle\Entity\EntityHasDocumentType $entityHasDocumentType)
+    {
+        $this->entityHasDocumentType[] = $entityHasDocumentType;
+
+        return $this;
+    }
+
+    /**
+     * Remove entityHasDocumentType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EntityHasDocumentType $entityHasDocumentType
+     */
+    public function removeEntityHasDocumentType(\RocketSeller\TwoPickBundle\Entity\EntityHasDocumentType $entityHasDocumentType)
+    {
+        $this->entityHasDocumentType->removeElement($entityHasDocumentType);
+    }
+
+    /**
+     * Get entityHasDocumentType
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntityHasDocumentType()
+    {
+        return $this->entityHasDocumentType;
     }
 }
