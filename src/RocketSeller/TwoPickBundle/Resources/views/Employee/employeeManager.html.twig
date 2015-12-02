@@ -6,10 +6,10 @@
 		<div id='' class='col-xs-12'>
 			<div class="panel panel-default">
   				<div class="panel-body">
-					<div id='' class='col-xs-5'>
+					<div id='' class='col-xs-2'>
 						{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
 					</div>
-					<div id='' class='col-xs-3'>
+					<div id='' class='col-xs-2'>
 						<div id='' class='text-left' >
 							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
 						</div>
@@ -19,6 +19,22 @@
 												{'id': employee.idEmployerHasEmployee}) }}">
 							<div id='' class='text-right' >
 								Contracts
+							</div>
+						</a>
+					</div>
+					<div id='' class='col-xs-2'>
+						<a id='' class='nav-link' href="{{ path('show_documents' , 
+												{'id': employee.idEmployerHasEmployee}) }}">
+							<div id='' class='text-right' >
+								Documents
+							</div>
+						</a>
+					</div>
+					<div id='' class='col-xs-2'>
+						<a id='' class='nav-link' href="{{ path('show_beneficiaries' , 
+												{'employee': employee.idEmployerHasEmployee }) }}">
+							<div id='' class='text-right' >
+								Beneficiaries
 							</div>
 						</a>
 					</div>
