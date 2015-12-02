@@ -25,10 +25,13 @@
 							<div>
 								<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 							</div>
-					  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="Enter User Name" class="form-control input-md">
-					  		<div class="spacing"><input type="checkbox" name="checkboxes" id="checkboxes-0" value="1"><small> Remember me</small></div>
-					  		<input id="password" name="_password" type="password" placeholder="Enter Password" class="form-control input-md" required="required">
-					  		<div class="spacing"><a href="/resetting/request"><small> Forgot Password?</small></a><br/></div>
+					  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="{{ 'security.login.username'|trans }}" class="form-control input-md" value="{{ last_username }}" />
+					  		<div class="spacing">
+                                <input type="checkbox" name="_remember_me" id="remember_me" value="on" />
+                                <small>{{ 'security.login.remember_me'|trans }}</small>
+                            </div>
+					  		<input id="password" name="_password" type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control input-md" required="required" />
+					  		<div class="spacing"><a href="{{ path('fos_user_resetting_request') }}"><small> Forgot Password?</small></a><br/></div>
 					  		<button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right">{{ 'security.login.submit'|trans }}</button>
 						</fieldset>
 					</form>
