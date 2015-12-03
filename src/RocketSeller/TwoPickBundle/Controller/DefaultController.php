@@ -65,4 +65,9 @@ class DefaultController extends Controller
             'form'   => $form->createView()
         ));
     }
+
+    public function activarSuscripcionAction()
+    {
+        return $this->render("RocketSellerTwoPickBundle:Default:active.html.twig");
+    }
 }
