@@ -67,6 +67,7 @@ body {
 
 	.submit {
 		padding-left: 0px;
+		margin: 0px auto !important;
 	}
 
 	.middle-image{
