@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('download_certificate',{'id': employee.idEmployee })}}">		
+		<div class="certificate">
+			<h3>{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</h3>
+			<p>{{ employer.personPerson.document }}</p>
+			<h3>CERTIFICA QUE</h3>
+			<P>La persona {{ employee.personPerson.names }} {{employee.personPerson.lastName1 }} identificada con {{ employee.personPerson.documentType }} número {{ employee.personPerson.document }} de Bogotá desempeñó labores de servicio doméstico durante el periodo SEPTIEMBRE 1 de 2015 hasta {{ "now"|date("F")|upper }} {{ "now"|date("d") }} de {{ "now"|date("Y") }}, de acuerdo a la relación contractual que se encuentra establecida conmigo, con una asignación salarial de $45.000 pesos colombianos diarios.</P>
+		 
+			<P>La anterior certificación se expide a solicitud del interesado, a los {{ "now"|date("d") }} días del mes de {{ "now"|date("F") }} de {{ "now"|date("Y") }}.</P>	
+
+		</div>		
+		<div class="col-md-12">
+			<input type="hidden" name="id" value="{{ employee.idEmployee }}">
+			<button class="btn btn-large btn-primary" type="submit">Imprimir</button>	
+		</div>		
+	</form>
+{% endblock %}
