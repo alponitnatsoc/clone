@@ -92,7 +92,8 @@ class Person
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="personPerson", cascade={"persist"})
+     * @var \Application\Sonata\MediaBundle\Entity\GalleryHasMedia
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\GalleryHasMedia", mappedBy="personPerson", cascade={"persist"})
      */
     private $docs;
 

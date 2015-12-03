@@ -47,6 +47,11 @@ class Document
      * })
      */
     private $documentTypeDocumentType;
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="documentDocument", cascade={"persist"})
+     */
+    private $mediaMedia;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -171,5 +176,60 @@ class Document
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set mediaMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     *
+     * @return Document
+     */
+    public function setMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia = null)
+    {
+        $this->mediaMedia = $mediaMedia;
+
+        return $this;
+    }
+
+    /**
+     * Get mediaMedia
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getMediaMedia()
+    {
+        return $this->mediaMedia;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mediaMedia = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add mediaMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     *
+     * @return Document
+     */
+    public function addMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia)
+    {
+        $this->mediaMedia[] = $mediaMedia;
+
+        return $this;
+    }
+
+    /**
+     * Remove mediaMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     */
+    public function removeMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia)
+    {
+        $this->mediaMedia->removeElement($mediaMedia);
     }
 }

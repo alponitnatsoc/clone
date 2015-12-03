@@ -1,5 +1,4 @@
 <?php
-
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
