@@ -72,6 +72,14 @@
 	    		</div><!--/.navbar-collapse -->
 	    	</div>
 	    </nav>
+        {% if app.user %}
+            {% if not app.user.status %}
+                <div class="alert alert-danger" role="alert">
+                    Tu cuenta se encuentra inactiva
+                    <a href="#" class="alert-link"> Adquirir suscripción</a>
+                </div>
+            {% endif %}
+        {% endif %}
     {% endblock %}
     <div>
     	<div class="container body-container">

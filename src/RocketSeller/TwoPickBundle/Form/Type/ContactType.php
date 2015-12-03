@@ -41,7 +41,7 @@ class ContactType extends AbstractType
             'label' => 'Tema de contacto',
             'multiple' => false,
             'expanded' => false,
-            'empty_value' => 'Please select option'
+            'empty_value' => 'Selecciona una opción'
         ))
         ->add('subject', 'hidden', array(
         ))
