@@ -65,6 +65,9 @@ show_form_entity:
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
     requirements:
         id:     \d+
+inactive_user:
+    path: /activar-suscripcion
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
 #edit_profile_submit:
 #    path:      /register/edit/submit
 #    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
