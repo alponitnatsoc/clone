@@ -36,9 +36,6 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	color: white;
 }
-.submit{
-	padding-left: 0px;
-}
 .submit-button{
 	background-color: #00CFBD;
 	color: white;
@@ -58,15 +55,30 @@ body {
 	top: 385px;
 }
 
+.tradeCopy {
+	color: #ADB2B1;
+
+
+
+}
+
 /* Tha big scraans */
 @media screen and (min-width: 768px) {
 
+
+	.tradeCopy {
+		position: absolute;
+    	top: 550px;
+    	margin: 0 0 0 15px;
+		
+	}
 	.mid-content-logo {
-		width: 345px;
+		width: 320px;
 	}
 
 	.submit {
 		padding-left: 0px;
+		margin: 0px auto !important;
 	}
 
 	.middle-image{
