@@ -2,6 +2,9 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+documentos:
+    path:      /document/add
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}

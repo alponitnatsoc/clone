@@ -51,7 +51,7 @@ class Document
      * @var \Application\Sonata\MediaBundle\Entity\Media
      * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="documentDocument", cascade={"persist"})
      */
-    private $mediaMedia;
+    private $mediaMedium;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -178,29 +178,7 @@ class Document
         return $this->name;
     }
 
-    /**
-     * Set mediaMedia
-     *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
-     *
-     * @return Document
-     */
-    public function setMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia = null)
-    {
-        $this->mediaMedia = $mediaMedia;
-
-        return $this;
-    }
-
-    /**
-     * Get mediaMedia
-     *
-     * @return \Application\Sonata\MediaBundle\Entity\Media
-     */
-    public function getMediaMedia()
-    {
-        return $this->mediaMedia;
-    }
+    
     /**
      * Constructor
      */
@@ -209,27 +187,38 @@ class Document
         $this->mediaMedia = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
     /**
-     * Add mediaMedia
+     * Add mediaMedium
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedium
      *
      * @return Document
      */
-    public function addMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia)
+    public function addMediaMedium(\Application\Sonata\MediaBundle\Entity\Media $mediaMedium)
     {
-        $this->mediaMedia[] = $mediaMedia;
+        $this->mediaMedium[] = $mediaMedium;
 
         return $this;
     }
 
     /**
-     * Remove mediaMedia
+     * Remove mediaMedium
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedium
      */
-    public function removeMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia)
+    public function removeMediaMedium(\Application\Sonata\MediaBundle\Entity\Media $mediaMedium)
     {
-        $this->mediaMedia->removeElement($mediaMedia);
+        $this->mediaMedium->removeElement($mediaMedium);
+    }
+
+    /**
+     * Get mediaMedium
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMediaMedium()
+    {
+        return $this->mediaMedium;
     }
 }
