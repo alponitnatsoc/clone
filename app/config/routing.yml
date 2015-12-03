@@ -195,3 +195,16 @@ employee_login_two_auth:
     path:     /employee/login/two/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:twoFactorLogin }
 
+show_certificates:
+    path:     /employee/generate/certificate
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }
+
+generate_certificate:
+    path:     /employee/generate/certificate/{employee}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:generateCertificate }
+
+download_certificate:
+    path:     /certificate
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
+
+

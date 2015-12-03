@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use RocketSeller\TwoPickBundle\pdf\cafeSalud;
+use RocketSeller\TwoPickBundle\pdf\PDF_HTML;
+use Symfony\Component\HttpFoundation\Request;
+
+
 class PdfController extends Controller
 {
     public function indexAction()
@@ -24,5 +28,15 @@ class PdfController extends Controller
 		return new Response($pd->Output(), 200, array(
         'Content-Type' => 'application/pdf'));
         
+    }
+    public function generatePdfAction(Request $request){
+    	$pdf = new PDF_HTML();
+    	$pdf->AddPage();
+		$pdf->SetFont('Arial');
+		$html = $this->get('request')->request->get('content');
+		$pdf->WriteHTML($html);
+		
+		return new Response($pdf->Output(), 200, array(
+        'Content-Type' => 'application/pdf'));
     }
 }

@@ -285,6 +285,7 @@ class EmployeeController extends Controller
             }                
         }
     }
+
     public function loadClassByArray($array, $entity)
     {
         $loadedClass = $this->getdoctrine()
@@ -298,5 +299,5 @@ class EmployeeController extends Controller
         ->getRepository('RocketSellerTwoPickBundle:'.$entity)
         ->find($parameter);
         return $loadedClass;
-    }   
+    }  
 }
