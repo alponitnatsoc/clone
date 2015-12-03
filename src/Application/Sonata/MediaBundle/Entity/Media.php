@@ -100,4 +100,33 @@ class Media extends BaseMedia
     {
         return $this->documentType;
     }
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    private $documentDocument;
+
+
+    /**
+     * Set documentDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $documentDocument
+     *
+     * @return Media
+     */
+    public function setDocumentDocument(\RocketSeller\TwoPickBundle\Entity\Document $documentDocument = null)
+    {
+        $this->documentDocument = $documentDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get documentDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getDocumentDocument()
+    {
+        return $this->documentDocument;
+    }
 }

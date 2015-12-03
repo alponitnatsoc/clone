@@ -16,8 +16,8 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <many-to-one field="documentType" target-entity="RocketSeller\TwoPickBundle\Entity\DocumentType" inversed-by="media">
-            <join-column name="document_type_id_document_type" referenced-column-name="id_document_type" />
+        <many-to-one field="documentDocument" target-entity="RocketSeller\TwoPickBundle\Entity\Document" inversed-by="mediaMedia">
+            <join-column name="document_id_document" referenced-column-name="id_document" />
         </many-to-one>
 
     </entity>
