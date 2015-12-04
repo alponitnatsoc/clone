@@ -8,7 +8,7 @@ To 3: <input value="" name="to[2][email]" type="text" />
 To 4: <input value="" name="to[3][email]" type="text" />
 <input type="submit" />
 </form>
-<a href="javascript:void(0)" onclick="javascript:test()">TEST</a>
+<a href="javascript:void(0)" onclick="javascript:test2()">TEST</a>
 <script type='text/javascript'>
 function test() {
     $.ajax({
@@ -49,9 +49,18 @@ function test() {
         }
     });
 }
+
+function test2() {
+    var email = "romero.p.mfc@gmail.com";
+
+    $.post( "/api/public/v1/suscribes/users", { email: email })
+    .done(function( data ) {
+        var arrayData = {email:email, name:email, type:"to"};
+        alert(arrayData);
+
+    }).fail(function(data){
+        alert("bud");
+    });
+}
 </script>
 {%  endblock %}
-{% block javascripts %}
-{{ parent() }}
-<script src="/public/js/jquery.base64.min.js"></script>
-{% endblock %}
