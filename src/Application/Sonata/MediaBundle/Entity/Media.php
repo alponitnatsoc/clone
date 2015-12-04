@@ -29,14 +29,6 @@ class Media extends BaseMedia
      */
     protected $id;
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
-     * })
-     */
-    protected $documentType;
-    /**
      * Get id
      *
      * @return integer $id
@@ -77,29 +69,7 @@ class Media extends BaseMedia
         $this->galleryHasMedias->removeElement($galleryHasMedia);
     }
 
-    /**
-     * Set documentType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\DocumentType $documentType
-     *
-     * @return Media
-     */
-    public function setDocumentType(\RocketSeller\TwoPickBundle\Entity\DocumentType $documentType = null)
-    {
-        $this->documentType = $documentType;
 
-        return $this;
-    }
-
-    /**
-     * Get documentType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\DocumentType
-     */
-    public function getDocumentType()
-    {
-        return $this->documentType;
-    }
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      */

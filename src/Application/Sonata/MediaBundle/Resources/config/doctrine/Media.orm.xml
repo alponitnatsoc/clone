@@ -16,9 +16,9 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <many-to-one field="documentDocument" target-entity="RocketSeller\TwoPickBundle\Entity\Document" inversed-by="mediaMedia">
+        <one-to-one field="documentDocument" target-entity="RocketSeller\TwoPickBundle\Entity\Document" inversed-by="mediaMedia">
             <join-column name="document_id_document" referenced-column-name="id_document" />
-        </many-to-one>
+        </one-to-one>
 
     </entity>
 </doctrine-mapping>

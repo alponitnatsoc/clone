@@ -2,12 +2,6 @@
 {% block fos_user_content %}
     {{ form_start(form) }}
     {{ form_errors(form) }}
-    <ul class="tags" data-prototype="{{ form_widget(form.mediaMedia.vars.prototype)|e }}">
-        {# iterate over each existing tag and render its only field: name #}
-        {% for media in form.mediaMedia %}
-            <li>{{ form_row(media.name) }}</li>
-        {% endfor %}
-    </ul>
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock fos_user_content %}

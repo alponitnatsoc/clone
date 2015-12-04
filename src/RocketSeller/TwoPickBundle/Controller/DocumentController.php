@@ -30,20 +30,6 @@ class DocumentController extends Controller
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
-			$medias=$document->getMediaMedium();
-			/** @var Media $media */
-			foreach ($medias as $media) {
-				print_r($media);
-				die();
-				$media->setBinaryContent($media);
-
-				$media->setProviderName("sonata.media.provider.image");
-				$media->setName($document->getName());
-				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());
-
-				$em->persist($media);
-			}
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($document);
 			$em->flush();

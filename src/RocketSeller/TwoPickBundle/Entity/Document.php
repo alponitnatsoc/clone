@@ -49,28 +49,16 @@ class Document
     private $documentTypeDocumentType;
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Media
-     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="documentDocument", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", mappedBy="documentDocument", cascade={"persist"}, fetch="LAZY")
      */
-    private $mediaMedium;
+    private $mediaMedia;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
     private $name;
 
-    /**
-     * Set idDocument
-     *
-     * @param integer $idDocument
-     *
-     * @return Document
-     */
-    public function setIdDocument($idDocument)
-    {
-        $this->idDocument = $idDocument;
-
-        return $this;
-    }
+    
 
     /**
      * Get idDocument
@@ -80,78 +68,6 @@ class Document
     public function getIdDocument()
     {
         return $this->idDocument;
-    }
-
-    /**
-     * Set personPerson
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
-     *
-     * @return Document
-     */
-    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson)
-    {
-        $this->personPerson = $personPerson;
-
-        return $this;
-    }
-
-    /**
-     * Get personPerson
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Person
-     */
-    public function getPersonPerson()
-    {
-        return $this->personPerson;
-    }
-
-    /**
-     * Set contractContract
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
-     *
-     * @return Document
-     */
-    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
-    {
-        $this->contractContract = $contractContract;
-
-        return $this;
-    }
-
-    /**
-     * Get contractContract
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Contract
-     */
-    public function getContractContract()
-    {
-        return $this->contractContract;
-    }
-
-    /**
-     * Set documentTypeDocumentType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType
-     *
-     * @return Document
-     */
-    public function setDocumentTypeDocumentType(\RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType)
-    {
-        $this->documentTypeDocumentType = $documentTypeDocumentType;
-
-        return $this;
-    }
-
-    /**
-     * Get documentTypeDocumentType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\DocumentType
-     */
-    public function getDocumentTypeDocumentType()
-    {
-        return $this->documentTypeDocumentType;
     }
 
     /**
@@ -178,47 +94,100 @@ class Document
         return $this->name;
     }
 
-    
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->mediaMedia = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-    /**
-     * Add mediaMedium
+     * Set personPerson
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedium
+     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
      *
      * @return Document
      */
-    public function addMediaMedium(\Application\Sonata\MediaBundle\Entity\Media $mediaMedium)
+    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson = null)
     {
-        $this->mediaMedium[] = $mediaMedium;
+        $this->personPerson = $personPerson;
 
         return $this;
     }
 
     /**
-     * Remove mediaMedium
+     * Get personPerson
      *
-     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedium
+     * @return \RocketSeller\TwoPickBundle\Entity\Person
      */
-    public function removeMediaMedium(\Application\Sonata\MediaBundle\Entity\Media $mediaMedium)
+    public function getPersonPerson()
     {
-        $this->mediaMedium->removeElement($mediaMedium);
+        return $this->personPerson;
     }
 
     /**
-     * Get mediaMedium
+     * Set contractContract
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contractContract
+     *
+     * @return Document
      */
-    public function getMediaMedium()
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract = null)
     {
-        return $this->mediaMedium;
+        $this->contractContract = $contractContract;
+
+        return $this;
+    }
+
+    /**
+     * Get contractContract
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
+     */
+    public function getContractContract()
+    {
+        return $this->contractContract;
+    }
+
+    /**
+     * Set documentTypeDocumentType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType
+     *
+     * @return Document
+     */
+    public function setDocumentTypeDocumentType(\RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType = null)
+    {
+        $this->documentTypeDocumentType = $documentTypeDocumentType;
+
+        return $this;
+    }
+
+    /**
+     * Get documentTypeDocumentType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\DocumentType
+     */
+    public function getDocumentTypeDocumentType()
+    {
+        return $this->documentTypeDocumentType;
+    }
+
+
+    /**
+     * Set mediaMedia
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaMedia
+     *
+     * @return Document
+     */
+    public function setMediaMedia(\Application\Sonata\MediaBundle\Entity\Media $mediaMedia = null)
+    {
+        $this->mediaMedia = $mediaMedia;
+        $mediaMedia->setDocumentDocument($this);
+        return $this;
+    }
+
+    /**
+     * Get mediaMedia
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getMediaMedia()
+    {
+        return $this->mediaMedia;
     }
 }

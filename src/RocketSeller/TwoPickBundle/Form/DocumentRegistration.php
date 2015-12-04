@@ -19,13 +19,10 @@ class DocumentRegistration extends AbstractType
     {
 
         $builder
-            ->add('mediaMedia', 'collection', array(
-                'type' => new MediaForm(),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'property_path' => 'mediaMedia',
-                ))
+            ->add('mediaMedia', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'engine'
+            ))
             ->add('documentTypeDocumentType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:DocumentType',
                 'placeholder' => '',
