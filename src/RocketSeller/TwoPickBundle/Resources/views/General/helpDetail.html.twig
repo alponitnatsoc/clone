@@ -1,0 +1,13 @@
+{% extends "::base.html.twig" %}
+{% block stylesheet %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('public/css/help.css') }}">	
+{% endblock %}
+{% block content %}	
+	{{ helpCategory.name }}
+	{% for helpArticle in helpCategory.helpArticles %}
+		{{ helpArticle.title }}
+		{{ helpArticle.description }}
+		<img class="help_icon" src="{{ asset('public/img/' ~ helpArticle.image) }}"/>			
+	{% endfor %}
+{% endblock %}

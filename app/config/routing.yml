@@ -213,4 +213,12 @@ download_certificate:
     path:     /certificate
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
 
+show_help:
+    path:     /help
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:help }
+
+help_detail:
+    path:     /help/detail/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:helpDetail }
+
 

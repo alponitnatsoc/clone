@@ -2,6 +2,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\HelpCategory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,5 +17,19 @@ class HomeController extends Controller
     public function landingAction()
     {
         return $this->render('RocketSellerTwoPickBundle:General:landing.html.twig');
+    }
+    public function helpAction()
+    {
+		$helpCategories = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:HelpCategory')
+		->findAll();
+    	return $this->render('RocketSellerTwoPickBundle:General:help.html.twig',array('helpCategories'=>$helpCategories));
+    }
+    public function helpDetailAction($id)
+    {
+		$helpCategory = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:HelpCategory')
+		->find($id);
+		return $this->render('RocketSellerTwoPickBundle:General:helpDetail.html.twig',array('helpCategory'=>$helpCategory));    	
     }
 }
