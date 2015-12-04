@@ -31,9 +31,10 @@ class ContactType extends AbstractType
                 'onchange' => 'javascript:setSubject(this);'
             ),
             'choices'  => array(
-                'plinio.romero@symplifica.com' => 'Facturacion',
-                'romero.p.mfc@gmail.com' => 'Preguntas Laborales',
-                'blue_dark1987@hotmail.com' => 'Problemas técnicos'
+                'contactanos@symplifica.com' => 'Facturacion',
+                'info@symplifica.com' => 'Preguntas Laborales',
+                'it@symplifica.com' => 'Problemas técnicos con la plataforma',
+                'servicioalcliente@symplifica.com' => 'PQR'
             ),
             'choice_attr' => function($val, $key, $index) {
                 return array("label" => $key);
