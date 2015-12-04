@@ -2,37 +2,21 @@
 {% block content %}
 
 	<div class="col-md-12">
-	<h1>{{ employee.personPerson.names}} {{employee.personPerson.lastName1}}</h1>
-	{% if employee.personPerson.Gallery == false %}		
-		
-		<p>No tiene documentos</p>						
+	<h1>{{ person.names}} {{ person.lastName1}}</h1>
+	{% if documents %}		
+		<p>Tiene documentos</p>
+		{% for doc in documents %}
+			<p>{{ doc.documentTypeDocumentType.name }}</p>
+			<p>{{ doc.mediaMedia.name }}</p>			
+		{% endfor %}	
 	{% else %}
 
-		<p>tiene documentos</p>
-		<table style="width:100%">
-		  <tr>
-		    <td>file name </td>
-		    <td>Type</td>		    
-		    <td>Action</td>
-		  </tr>	  
-				{% for media in galleryHasMedia %}
-					{% if media.media %}
-						<tr>				
-							{##% media media.media, 'small' %##}
-							<td>{{ media.media.name }}</td>
-							{% if media.media.documentType %}
-								<td>{{ media.media.documentType.name }}</td>	
-							{% else %}
-								<td>Default</td>
-							{% endif %}					
-					  	</tr>
-					{% endif %}
-			{% endfor %}
-		</table>				
+		<p>No tiene documentos</p>
+				
 	{% endif %}
 	</div>
 	<div class="col-md-4">
-		<a href="{{ path('documents_upload',{id : employee.idEmployee}) }}" class="btn btn-primary" role="button">Upload documents</a>	
+		<a href="{{ path('documentos',{id : person.idPerson}) }}" class="btn btn-primary" role="button">Upload documents</a>	
 	</div>	
 
 {% endblock %}

@@ -16,13 +16,26 @@ use Application\Sonata\MediaBundle\Entity\GalleryHasMedia;
 
 class DocumentController extends Controller
 {
-	public function addDocumentAction(Request $request){
+	public function showDocumentsAction($id){
+		$person = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Person')
+		->find($id);		
+		
+		$documents = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Document')
+		->findByPersonPerson($person);
+		return $this->render(
+			'RocketSellerTwoPickBundle:Employee:documents.html.twig',
+			array(
+				'person' => $person,
+				'documents' => $documents
+				));
+	}
+	public function addDocumentAction($id,Request $request){
 		$em = $this->getDoctrine()->getManager();
-
-		/** @var User $user */
-		$user=$this->getUser();
-		/** @var Person $person */
-		$person=$user->getPersonPerson();
+		$person = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Person')
+		->find($id);
 		$document=new Document();
 		$document->setPersonPerson($person);
 
@@ -30,18 +43,15 @@ class DocumentController extends Controller
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
-			$medias=$document->getMediaMedium();
+			$medias=$document->getMediaMedia();
 			/** @var Media $media */
 			foreach ($medias as $media) {
-				//print_r($media);
-				//die();
 				$media->setBinaryContent($media);
 
 				$media->setProviderName("sonata.media.provider.image");
 				$media->setName($document->getName());
 				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());
-
+				$media->setProviderReference($media->getBinaryContent());				
 				$em->persist($media);
 				$em->flush();
 			}
@@ -49,7 +59,7 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirectToRoute('show_dashboard');
+			return $this->redirectToRoute('show_documents');
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',

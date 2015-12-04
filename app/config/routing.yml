@@ -3,7 +3,7 @@ ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
 documentos:
-    path:      /document/add
+    path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 show_calculator_form:
     path:      /calculator/calculate
@@ -24,7 +24,7 @@ manage_employees:
 
 show_documents:
     path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Documents:showDocuments}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:showDocuments}
 
 documents_upload:
     path:   /manage/employee/{id}/documents/upload
