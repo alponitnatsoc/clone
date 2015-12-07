@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+	{{ form_start(form) }}
+	    {{ form_errors(form) }}
+		<div id="formFields">
+			{{ form_widget(form) }}
+		</div>
+	{{ form_end(form) }}
+{% endblock fos_user_content %}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+
+		$("input[name='form[noveltyType]']").change(function(){
+
+		});
+	</script>
+{% endblock javascripts %}

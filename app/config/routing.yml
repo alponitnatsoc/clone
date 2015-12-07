@@ -2,6 +2,9 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+novelty_add:
+    path:      /novelty/add/{idPayroll}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNoveltyShow}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
@@ -49,6 +52,11 @@ pay_method_fields:
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:postPayMethod, id: -1}
     requirements:
         id:     \d+
+novelty_fields:
+    path:      /novelty/fields/{noveltyId}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:noveltyTypeFields}
+    requirements:
+        noveltyId:     \d+
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
