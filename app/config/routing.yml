@@ -106,6 +106,12 @@ add_beneficiary_select_entities:
 add_beneficiary_entity_form:
     path:     /register/employee/{employee}/entity/{entity}/beneficiary/
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:addBeneficiary }
+
+#Settings
+
+manage_settings:
+    path: /settings
+    defaults: { _controller: RocketSellerTwoPickBundle:Settings:manageSettings }
     
 #OAuth
 hwi_oauth_redirect:

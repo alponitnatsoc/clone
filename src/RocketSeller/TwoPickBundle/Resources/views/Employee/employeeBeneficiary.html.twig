@@ -20,7 +20,7 @@
 			  	</tr>
 			{% endfor %}
 		{% else %}
-			<p>No hay beneficiarios</p>
+			<p>No hay beneficiarios (<a href="/register/employee/{{employee.idEmployee}}/beneficiary/">Agregar Beneficiarios</a>)</p>
 		{% endif %}
 		</table>	
 	{% endblock %}
