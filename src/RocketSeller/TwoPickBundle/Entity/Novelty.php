@@ -29,11 +29,24 @@ class Novelty
      * })
      */
     private $payrollDetailPayrollDetail;
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\NoveltyType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="novelty_type_id_novelty_type", referencedColumnName="id_novelty_type")
+     * })
+     */
+    private $noveltyTypeNoveltyType;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="NoveltyHasDocument", mappedBy="noveltyTypeNoveltyType", cascade={"persist"})
+     */
+    private $documents;
 
     /**
      * Set idNovelty
@@ -105,5 +118,70 @@ class Novelty
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set noveltyTypeNoveltyType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType
+     *
+     * @return Novelty
+     */
+    public function setNoveltyTypeNoveltyType(\RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType = null)
+    {
+        $this->noveltyTypeNoveltyType = $noveltyTypeNoveltyType;
+
+        return $this;
+    }
+
+    /**
+     * Get noveltyTypeNoveltyType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\NoveltyType
+     */
+    public function getNoveltyTypeNoveltyType()
+    {
+        return $this->noveltyTypeNoveltyType;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add document
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document
+     *
+     * @return Novelty
+     */
+    public function addDocument(\RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document
+     */
+    public function removeDocument(\RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document)
+    {
+        $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 }
