@@ -18,15 +18,14 @@ class EmployeeHasEntityAdmin extends Admin
         $datagridMapper
             ->add('idEmployeeHasEntity')
             ->add('employeeEmployee.idEmployee')
-            ->add('employeeEmployee.personPerson.idPerson', null, array('label' => 'Person id', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.names', null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('employeeEmployee.personPerson.lastName1',null, array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('employeeEmployee.personPerson.lastName2',null, array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
-            ->add('employeeEmployee.personPerson.documentType',null, array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
-            ->add('employeeEmployee.personPerson.document')              
-            ->add('employeeEmployee.personPerson.birthDate',null, array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('employeeEmployee.personPerson.mainAddress',null, array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-        ;
+            ->add('employeeEmployee.personPerson.document',null,array('label'=>'Document'))              
+           ->add('entityEntity',null, array('label' => 'Entity', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('entityEntity.entityTypeEntityType',null, array('label' => 'entity Type', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+        ;    
+
     }
 
     /**
@@ -42,7 +41,8 @@ class EmployeeHasEntityAdmin extends Admin
             ->add('employeeEmployee.personPerson.documentType','text', array('label'=>'Document Type')) 
             ->add('employeeEmployee.personPerson.document','text', array('label'=>'Document'))
 
-            ->add('entityEntity.entityTypeEntityType.idEntityType', 'text', array('label' => 'Tipo entidad', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('entityEntity',null, array('label' => 'Entity', 'translation_domain' => 'RocketSellerTwoPickBundle'))
+            ->add('entityEntity.entityTypeEntityType','text', array('label' => 'entity Type', 'translation_domain' => 'RocketSellerTwoPickBundle'))
 
 
             ->add('_action', 'actions', array(

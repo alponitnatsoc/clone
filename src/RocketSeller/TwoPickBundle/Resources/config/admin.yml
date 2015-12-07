@@ -243,3 +243,9 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\HelpArticle, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Help, label: HelpArticle}
+
+    rocket_seller_two_pick.admin.entity_has_document_type:
+        class: RocketSeller\TwoPickBundle\Admin\EntityHasDocumentTypeAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\EntityHasDocumentType, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Entities, label: EntityHasDocumentType}

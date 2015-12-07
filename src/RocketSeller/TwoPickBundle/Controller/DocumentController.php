@@ -40,6 +40,7 @@ class DocumentController extends Controller
 		$document->setPersonPerson($person);
 
 		$form = $this->createForm(new DocumentRegistration(),$document);
+
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
@@ -47,8 +48,6 @@ class DocumentController extends Controller
 			/** @var Media $media */
 			foreach ($medias as $media) {
 				$media->setBinaryContent($media);
-
-				$media->setProviderName("sonata.media.provider.image");
 				$media->setName($document->getName());
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setProviderReference($media->getBinaryContent());				
@@ -59,7 +58,7 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirectToRoute('show_documents');
+			return $this->redirectToRoute('manage_employees');
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',

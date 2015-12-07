@@ -56,8 +56,24 @@ class EmployerController extends Controller
 	    	return $this->render('RocketSellerTwoPickBundle:Employer:certificates.html.twig',array('employerHasEmployees'=>$employerHasEmployees));
    		}
     }
-    public function createTestAction(Request $request){
+    public function viewDocumentsAction()
+    {
+        $documentTypeByEmployee = array();
+        $person = $this->getUser()->getPersonPerson();
+        $employer = $this->loadClassByArray(array('personPerson'=>$person),"Employer");
+        $em = $this->getDoctrine()->getManager();
+        $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                ->findByEmployerEmployer($employer);        
+        foreach ($employerHasEmployees as $employerHasEmployee) {
+            $employeeHasEntities = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+                ->findByEmployeeEmployee($employerHasEmployee->getEmployeeEmployee());
+            array_push($documentTypeByEmployee, $employeeHasEntities);
+            foreach ($employeeHasEntities as $EmployeeHasEntity) {
+                # code...
+            }
 
+        }        
+        return $this->render('RocketSellerTwoPickBundle:Employer:viewDocuments.html.twig',array('employerHasEmployees'=>$employerHasEmployees , 'documentTypeByEmployee'=>$documentTypeByEmployee));
     }
     public function loadClassByArray($array, $entity)
     {

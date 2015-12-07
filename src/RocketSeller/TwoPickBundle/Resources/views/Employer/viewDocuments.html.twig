@@ -1,0 +1,37 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<div class="container">          
+	  <table class="table">
+	    <thead>
+	      <tr>
+	      <th></th>	      	
+	      	{% for employerHasEmployee in employerHasEmployees %}
+		        <th>{{employerHasEmployee.employeeEmployee.personPerson.names}} {{employerHasEmployee.employeeEmployee.personPerson.lastName1}}</th>
+            {% endfor %}	        
+	      </tr>
+	    </thead>	    	
+		    <tbody>
+		      <tr>
+		        <td>Cedula</td>
+		        <td></td>
+		        <td>Foto</td>
+		      </tr>
+		      <tr>
+		        <td>Contrato</td>
+		        <td></td>
+		        <td>mary@example.com</td>
+		      </tr>
+		      <tr>
+		        <td>Foto</td>
+		        <td>Dooley</td>
+		        <td>july@example.com</td>
+		      </tr>
+		    </tbody>
+	  </table>	 
+	  {% for employee in documentTypeByEmployee %}	  	
+  		{% for entity in employee %}
+  			{{ entity.entityEntity.name }}
+	  	{% endfor %}
+	  {% endfor %}
+	</div>
+{% endblock %}

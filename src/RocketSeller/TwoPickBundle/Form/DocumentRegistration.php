@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use RocketSeller\TwoPickBundle\Form\MediaForm;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class DocumentRegistration extends AbstractType
 {
@@ -21,7 +22,7 @@ class DocumentRegistration extends AbstractType
         $builder
             ->add('mediaMedia', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'engine'
+                'context'  => 'person'
             ))
             ->add('documentTypeDocumentType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:DocumentType',
