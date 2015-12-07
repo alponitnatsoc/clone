@@ -2,9 +2,67 @@
 {% block fos_user_content %}
     {{ form_start(form) }}
     {{ form_errors(form) }}
+    {{ form_row(form.tipo) }}
+    <div class="all">
+        <div class="days">
+            {{ form_row(form.salarioD) }}
+        </div>
+        <div class="complete">
+            {{ form_row(form.salarioM) }}
+        </div>
+
+        <div class="days">
+            {{ form_row(form.numberOfDays) }}
+            {{ form_row(form.sisben) }}
+        </div>
+        <div class="common">
+            {{ form_row(form.auxilio) }}
+            <div class="aid">
+                {{ form_row(form.auxilioD) }}
+            </div>
+            {{ form_row(form.transporte) }}
+            {{ form_row(form.save) }}
+        </div>
+    </div>
+
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock fos_user_content %}
-{% block javascript %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function() {
+            $("form").on("submit", function (e) {
+                e.preventDefault();
+                var form = $("form");
+                $.ajax({
+                    url: form.attr('action'),
+                    type: $(form).attr('method'),
+                    data: {
+                        tipo: $(form).find("input[name='form[tipo]']").val(),
+                        salarioM: $(form).find("input[name='form[salarioM]']").val(),
+                        salarioD: $(form).find("input[name='form[salarioD]']").val(),
+                        numberOfDays: $(form).find("select[name='form[numberOfDays]']").val(),
+                        transporte: $(form).find("input[name='form[transporte]']").val(),
+                        auxilio: $(form).find("input[name='form[auxilio]']").val(),
+                        auxilioD: $(form).find("input[name='form[auxilioD]']").val(),
+                        sisben: $(form).find("input[name='form[sisben]']").val(),
+                    },
+                    statusCode: {
+                        200: function (data) {
+                            console.log(data);
+                            sendAjax(data);
+                        },
+                        400: function (data, textStatus, errorThrown) {
+                            alert("400 :" + errorThrown + "\n" + data.responseJSON.error.exception[0].message);
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                        }
 
-{% endblock javascript %}
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock javascripts %}

@@ -35,3 +35,11 @@ services:
 
     send_sms:
         class: RocketSeller\TwoPickBundle\Controller\SmsController
+        
+    validate.user.onload:
+        class: RocketSeller\TwoPickBundle\Listener\ValidateUserOnloadListener
+        arguments: [@router, @doctrine.orm.entity_manager]
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

@@ -35,6 +35,7 @@ class SendEmailRestController extends FOSRestController
      *              'name' => Nombre del propietario del email, si no se envia se toma el email (opcional),
      *              'type' => Tipo de envio, puede ser to, cc, bcc (opcional)
      *          )")
+     * @RequestParam(name="subject", description="Recibe el nombre subject del correo a enviar")
      *
      * @throws Mandrill_Error
      * @return \FOS\RestBundle\View\View
@@ -42,46 +43,58 @@ class SendEmailRestController extends FOSRestController
     public function postSendEmailAction(ParamFetcher $paramFetcher) {
 
         $template_name = ($paramFetcher->get("template_name"))?:"New Symplifica";
+        $subject = ($paramFetcher->get("subject"))?:"Email enviado a *|USER|*";
         $to = $paramFetcher->get("to");
 
         $view = View::create();
+
+        $mergeVars = array();
+        foreach($to as $key => $t) {
+            $mergeVars[$key]["rcpt"] = $t["email"];
+            $mergeVars[$key]["vars"][0]["name"] = "USER";
+            $mergeVars[$key]["vars"][0]["content"] = $t["email"];
+        }
 
         try {
             $mandrill = new Mandrill($this->container->getParameter("mandrill_api_key"));
             $template_name = $template_name;
             $message = array(
-                'subject' => 'Email enviado a *|USER|*',
+                'subject' => $subject,
                 'from_email' => 'info@symplifica.com',
                 'from_name' => 'Symplifica',
                 'to' => $to,
-                'headers' => array('Reply-To' => 'reply@symplifica.com'),
+                'headers' => array('Reply-To' => 'info@symplifica.com'),
                 'merge_language' => 'mailchimp',
+                'track_opens' => true,
+                'track_clicks' => true,
                 'global_merge_vars' => array(
                     array(
-                        'name' => 'COM',
-                        'content' => 'Symplifica S.A.S.'
+                        'name' => 'USER',
+                        'content' => '!'
                     )
                 ),
-                'merge_vars' => array(
-                    array(
-                        'rcpt' => 'plinio.romero@symplifica.com',
-                        'vars' => array(
-                            array(
-                                'name' => 'USER',
-                                'content' => 'Plinio Romero Symplifica'
-                            )
-                        )
-                    ),
-                    array(
-                        'rcpt' => 'romero.p.mfc@gmail.com',
-                        'vars' => array(
-                            array(
-                                'name' => 'USER',
-                                'content' => 'Plinio Romero Gmail'
-                            )
-                        )
-                    )
-                ),
+                'merge_vars' =>
+//                 array(
+                    $mergeVars,
+//                     array(
+//                         'rcpt' => 'plinio.romero@symplifica.com',
+//                         'vars' => array(
+//                             array(
+//                                 'name' => 'USER',
+//                                 'content' => 'Plinio Romero Symplifica'
+//                             )
+//                         )
+//                     ),
+//                     array(
+//                         'rcpt' => 'romero.p.mfc@gmail.com',
+//                         'vars' => array(
+//                             array(
+//                                 'name' => 'USER',
+//                                 'content' => 'Plinio Romero Gmail'
+//                             )
+//                         )
+//                     )
+//                 ),
                 'metadata' => array('website' => 'www.symplifica.com'),
                 'recipient_metadata' => array(
                     array(
@@ -90,6 +103,7 @@ class SendEmailRestController extends FOSRestController
                     )
                 )
             );
+            var_dump($message);
             $send = $mandrill->messages->sendTemplate($template_name, null, $message);
             $view->setData($send)->setStatusCode(200);
         } catch(Mandrill_Error $e) {
@@ -134,7 +148,8 @@ class SendEmailRestController extends FOSRestController
             'status'        => 'subscribed',
             'merge_fields'  => array(
                 'FNAME' => $email
-            )
+            ),
+            "send_welcome" => true
         );
         $json_data = json_encode($data);
 

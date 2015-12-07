@@ -64,6 +64,12 @@ function jsLoader(url){
 		})
 
 		return true;
+	}else if(url.indexOf("{{ path('show_calculator_form') }}")!==-1){
+		$.getScript( "{{ asset('public/js/calculator.js') }}").done(function(){
+			calculatorCalculate();
+		})
+
+		return true;
 	}
 	return false;
 }

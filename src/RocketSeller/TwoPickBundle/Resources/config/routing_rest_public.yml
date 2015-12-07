@@ -6,6 +6,10 @@ employer :
     type: rest
     resource:     "RocketSellerTwoPickBundle:PersonRest"
     name_prefix:  api_public_
+calculator :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:CalculatorRest"
+    name_prefix:  api_public_
 employee :
     type: rest
     resource:     "RocketSellerTwoPickBundle:EmployeeRest"

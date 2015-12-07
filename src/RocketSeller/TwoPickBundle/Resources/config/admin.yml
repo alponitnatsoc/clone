@@ -231,3 +231,15 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Log, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Admin, label: Logs}
+
+    rocket_seller_two_pick.admin.help_category:
+        class: RocketSeller\TwoPickBundle\Admin\HelpCategoryAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\HelpCategory, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Help, label: HelpCategory}
+
+    rocket_seller_two_pick.admin.help_article:
+        class: RocketSeller\TwoPickBundle\Admin\HelpArticleAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\HelpArticle, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Help, label: HelpArticle}

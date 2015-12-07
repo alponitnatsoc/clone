@@ -37,4 +37,33 @@ class GalleryHasMedia extends BaseGalleryHasMedia
     {
         return $this->id;
     }
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Person
+     */
+    private $personPerson;
+
+
+    /**
+     * Set personPerson
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
+     *
+     * @return GalleryHasMedia
+     */
+    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson = null)
+    {
+        $this->personPerson = $personPerson;
+
+        return $this;
+    }
+
+    /**
+     * Get personPerson
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Person
+     */
+    public function getPersonPerson()
+    {
+        return $this->personPerson;
+    }
 }

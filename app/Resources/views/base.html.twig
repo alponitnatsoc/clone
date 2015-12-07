@@ -8,6 +8,7 @@
 	<title>{% block title %}Welcome!{% endblock %}</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous" />
@@ -15,6 +16,7 @@
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/main.css') }}">
+	{% endblock %}	
 	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	<script src="{{ asset('js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
 </head>
@@ -55,6 +57,7 @@
 		    				<li><a href="{{ path('fos_user_registration_register') }}">Registro</a></li>
 		    				<li><a href="#">Empresa</a></li>
 		    				<li><a href="#">Ayuda</a></li>
+							<li><a href="{{ path('show_calculator_form') }}">Calculadora</a></li>
 		    			{% endif %}
 	    			</ul>
 	    			{% if not is_granted("IS_AUTHENTICATED_FULLY") %}
@@ -71,6 +74,14 @@
 	    		</div><!--/.navbar-collapse -->
 	    	</div>
 	    </nav>
+        {% if app.user %}
+            {% if not app.user.status %}
+                <div class="alert alert-danger" role="alert">
+                    Tu cuenta se encuentra inactiva
+                    <a href="#" class="alert-link"> Adquirir suscripción</a>
+                </div>
+            {% endif %}
+        {% endif %}
     {% endblock %}
     <div>
     	<div class="container body-container">

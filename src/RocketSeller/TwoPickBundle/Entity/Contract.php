@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_employer_has_employee1", columns={"employer_has_employee_id_employer_has_employee"}), @ORM\Index(name="fk_contract_contract_type1", columns={"contract_type_id_contract_type"})})
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_employer_has_employee1", columns={"employer_has_employee_id_employer_has_employee"}), @ORM\Index(name="fk_contract_contract_type1", columns={"contract_type_id_contract_type"}), @ORM\Index(name="fk_contract_document1", columns={"document_id_document"})})
  * @ORM\Entity
  */
 class Contract
@@ -98,6 +98,14 @@ class Contract
      * })
      */
     private $payMethodPayMethod;
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Document
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")
+     * })
+     */
+    private $documentDocument;
 
     /**
      * Set idContract
@@ -427,5 +435,29 @@ class Contract
     public function getPayMethodPayMethod()
     {
         return $this->payMethodPayMethod;
+    }
+
+    /**
+     * Set documentDocument
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $documentDocument
+     *
+     * @return Contract
+     */
+    public function setDocumentDocument(\RocketSeller\TwoPickBundle\Entity\Document $documentDocument = null)
+    {
+        $this->documentDocument = $documentDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get documentDocument
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Document
+     */
+    public function getDocumentDocument()
+    {
+        return $this->documentDocument;
     }
 }

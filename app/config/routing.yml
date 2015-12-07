@@ -2,6 +2,9 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+documentos:
+    path:      /document/add/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
@@ -21,7 +24,7 @@ manage_employees:
 
 show_documents:
     path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Documents:showDocuments}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:showDocuments}
 
 documents_upload:
     path:   /manage/employee/{id}/documents/upload
@@ -65,6 +68,9 @@ show_form_entity:
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
     requirements:
         id:     \d+
+inactive_user:
+    path: /activar-suscripcion
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
 #edit_profile_submit:
 #    path:      /register/edit/submit
 #    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
@@ -200,4 +206,25 @@ employee_login:
 employee_login_two_auth:
     path:     /employee/login/two/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:twoFactorLogin }
+
+show_certificates:
+    path:     /employee/generate/certificate
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }
+
+generate_certificate:
+    path:     /employee/generate/certificate/{employee}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:generateCertificate }
+
+download_certificate:
+    path:     /certificate
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
+
+show_help:
+    path:     /help
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:help }
+
+help_detail:
+    path:     /help/detail/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:helpDetail }
+
 

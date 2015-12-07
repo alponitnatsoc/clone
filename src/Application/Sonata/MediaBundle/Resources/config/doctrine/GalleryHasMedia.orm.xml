@@ -16,6 +16,9 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <many-to-one field="personPerson" target-entity="RocketSeller\TwoPickBundle\Entity\Person" inversed-by="docs">
+            <join-column name="person_id_person" referenced-column-name="id_person" />
+        </many-to-one>
 
     </entity>
 </doctrine-mapping>

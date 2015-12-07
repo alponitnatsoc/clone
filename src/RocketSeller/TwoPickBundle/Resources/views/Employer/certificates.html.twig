@@ -1,0 +1,30 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<h3 class="col-md-12">Certificados</h3>
+	<p>Desde esta herramienta podrá generar los certificados que requiera para usted o cada uno de sus empleados registrados</p>
+	<br></br>
+	<form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates')}}">		
+		<div class="col-md-2"></div>
+		<div class="form-group col-md-4">
+			<label for="sel1">Para quien es el certificado:</label>
+			<select class="form-control" name="employee">
+				{% for employerHasEmployee in employerHasEmployees %}
+					<option value="{{ employerHasEmployee.employeeEmployee.idEmployee }}">{{ employerHasEmployee.employeeEmployee.personPerson.names }}</option>
+				{% endfor %}
+			</select>		  	
+		</div>
+		<div class="form-group col-md-4">
+			<label for="sel1">Tipo de certificado:</label>
+			<select class="form-control" name="certificate">
+				  <option value="1">Certificado laboral</option>
+				  <option value="2">Certificado de aportes</option>
+				  <option value="3">Otro certificado</option>
+				  <option value="4">Otro certiticado mas</option>
+			</select>		  	
+		</div>
+		<div class="col-md-2"></div>
+		<div class="col-md-12">
+			<button class="btn btn-large btn-primary" type="submit">Upload</button>	
+		</div>		
+	</form>
+{% endblock %}

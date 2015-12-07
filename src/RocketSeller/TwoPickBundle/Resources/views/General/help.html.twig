@@ -1,0 +1,32 @@
+{% extends "::base.html.twig" %}
+{% block stylesheet %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('public/css/help.css') }}">	
+{% endblock %}
+{% block content %}	
+		<h2 class="help_title">Symplifica te ayuda</h2>
+        <div class="search col-md-12">
+	        <div class="col-md-10 input-field">
+	            <input type="text" class="form-control" placeholder="Envíenme un email cuando esté listo" id="emailSus">
+	        </div>
+	        <div class="col-md-2 submit">
+	            <button type="button" class="btn btn-default submit-button loading" onclick="javascript:suscribirme($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar">Enviar ></button>
+	        </div>
+        </div>
+        <div class="container col-md-12">		        
+			{% for helpCategory in helpCategories %}
+				<div class="col-md-4 help_container">
+						<img class="help_icon" src="{{ asset('public/img/' ~ helpCategory.icon) }}"/>			    
+				 		<p>{{ helpCategory.name }}</p>											    
+				</div>
+				<div id='' class='col-xs-2'>
+						<a id='' class='nav-link' href="{{ path('help_detail' , 
+												{'id': helpCategory.idHelpCategory}) }}">
+							<div id='' class='text-right' >
+								view Articles
+							</div>
+						</a>
+					</div>
+			{% endfor %}
+        </div>
+{% endblock %}

@@ -25,6 +25,9 @@ security:
             stateless: true
             wsse:      { lifetime: 30 }
             anonymous:    true
+    #    remember_me:
+    #        key:      symplifica
+    #        lifetime: 604800
         main:
             pattern: ^/
             form_login:
