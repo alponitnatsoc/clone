@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Document
  *
- * @ORM\Table(name="document", indexes={@ORM\Index(name="fk_Document_document_type1", columns={"document_type_id_document_type"}), @ORM\Index(name="fk_document_contract1", columns={"contract_id_contract"}), @ORM\Index(name="fk_document_person1", columns={"person_id_person"})})
+ * @ORM\Table(name="document", indexes={@ORM\Index(name="fk_Document_document_type1", columns={"document_type_id_document_type"}), @ORM\Index(name="fk_document_person1", columns={"person_id_person"})})
  * @ORM\Entity
  */
 class Document
@@ -30,14 +30,7 @@ class Document
      */
     private $personPerson;
 
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="contract_id_contract", referencedColumnName="id_contract")
-     * })
-     */
-    private $contractContract;
+
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
