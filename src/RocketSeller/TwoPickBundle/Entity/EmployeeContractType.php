@@ -26,7 +26,7 @@ class EmployeeContractType
      */
     private $name;
     /**
-     * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="$employeeContractTypeEmployeeContractType")
+     * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="employeeContractTypeEmployeeContractType")
      */
     private $constraints;
 

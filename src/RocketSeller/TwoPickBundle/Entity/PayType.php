@@ -27,7 +27,7 @@ class PayType
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payMethodPayMethod", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payTypePayType", cascade={"persist"})
      */
     private $payMethodFields;
 
