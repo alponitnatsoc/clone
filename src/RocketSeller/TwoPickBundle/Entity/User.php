@@ -83,6 +83,11 @@ class User extends BaseUser
     private $purchaseOrders;
 
     /**
+     * @ORM\OneToMany(targetEntity="Pay", mappedBy="userIdUser", cascade={"persist"})
+     */
+    private $payments;
+
+    /**
      * Columna utilizada para conocer el estado de la suscripcion del usuario
      * 0 Inactivo
      * 1 Activo
@@ -392,5 +397,39 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
-    } 
+    }
+
+    /**
+     * Add payment
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Pay $payment
+     *
+     * @return User
+     */
+    public function addPayment(\RocketSeller\TwoPickBundle\Entity\Pay $payment)
+    {
+        $this->payments[] = $payment;
+
+        return $this;
+    }
+
+    /**
+     * Remove payment
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Pay $payment
+     */
+    public function removePayment(\RocketSeller\TwoPickBundle\Entity\Pay $payment)
+    {
+        $this->payments->removeElement($payment);
+    }
+
+    /**
+     * Get payments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
 }
