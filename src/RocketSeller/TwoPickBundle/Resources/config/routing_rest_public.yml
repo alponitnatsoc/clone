@@ -25,7 +25,7 @@ send_email_rest:
 employer_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:EmployerRest"
-    name_prefix: api_plublic_
+    name_prefix: api_public_
 novelty_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:NoveltyRest"

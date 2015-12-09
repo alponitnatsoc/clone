@@ -10,6 +10,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\User;
 
 class EmployerRestController extends FOSRestController
 {
@@ -79,6 +80,51 @@ class EmployerRestController extends FOSRestController
 
         $view = View::create();
         $view->setData($details)->setStatusCode(200);
+
+        return $view;
+    }
+
+    /**
+     * Obtener el listado de Pagos o Contratos de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param string $type - Tipo de información a listar (pagos o contratos)
+     * @param integer $id - Id del usuario
+     *
+     *  @return View
+     */
+    public function getListByUserAction($type, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $data = array();
+        switch ($type) {
+            case "pagos":
+                $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
+                /** @var User $user */
+                $user = $userRepository->findOneBy(
+                    array(
+                        "id" => $id
+                    )
+                );
+                $data = $user->getPayments();
+                break;
+            case "contratos":
+                break;
+            default:
+                break;
+        }
+
+        $view = View::create();
+        $view->setData($data)->setStatusCode(200);
 
         return $view;
     }
