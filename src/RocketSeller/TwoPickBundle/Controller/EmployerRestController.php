@@ -9,6 +9,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 
 class EmployerRestController extends FOSRestController
 {
@@ -57,7 +58,19 @@ class EmployerRestController extends FOSRestController
                 $details["state"] = $contract->getState();
                 $details["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment();
                 $details["workplaces"] = $contract->getWorkplaces();
-            break;
+                break;
+            case "pago":
+                $payRepository = $em->getRepository("RocketSellerTwoPickBundle:Pay");
+                /** @var Pay $pay */
+                $pay = $payRepository->findOneBy(
+                    array(
+                        "idPay" => $id
+                    )
+                );
+                $details["purchaseOrder"] = $pay->getPurchaseOrdersPurchaseOrders();
+                $details["payType"] = $pay->getPayTypePayType();
+                $details["payMethod"] = $pay->getPayMethodPayMethod();
+                break;
 
             default:
                 ;
