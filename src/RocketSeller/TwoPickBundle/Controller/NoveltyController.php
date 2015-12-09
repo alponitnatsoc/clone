@@ -4,6 +4,8 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
+use RocketSeller\TwoPickBundle\Entity\PayrollDetail;
 use RocketSeller\TwoPickBundle\Form\NoveltyForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,8 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 class NoveltyController extends Controller
 {
 
-    public function addNoveltyShowAction($idPayroll)
+    public function addNoveltyShowAction($idPayroll,Request $request)
     {
+        $user=$this->getUser();
+        $payRollRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayRoll");
+        /** @var Payroll $payRol */
+        $payRol=$payRollRepo->find($idPayroll);
+        $payRollDetail= new PayrollDetail();
+        $novelty=new Novelty();
+        $novelty->setPayrollDetailPayrollDetail($payRollDetail);
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('api_plublic_post_novelty_add', array('format'=>'json')))
             ->setMethod('POST')
@@ -29,7 +38,10 @@ class NoveltyController extends Controller
                 'label' => 'Create',
             ))
             ->getForm();
-
+        $form->handleRequest($novelty);
+        if($form->isValid()){
+            $payRol->getPayrollDetails()->add($payRollDetail);
+        }
         return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig',
             array('form' => $form->createView()));
     }
