@@ -3,6 +3,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Form\NoveltyForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ class NoveltyController extends Controller
     public function addNoveltyShowAction($idPayroll)
     {
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('api_public_post_calculator_submit', array('format'=>'json')))
+            ->setAction($this->generateUrl('api_plublic_post_novelty_add', array('format'=>'json')))
             ->setMethod('POST')
             ->add('noveltyType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:NoveltyType',
@@ -23,7 +24,9 @@ class NoveltyController extends Controller
                 'multiple' => false,
                 'expanded' => false,
                 'label' => 'Tipo de novedad',
-                'property_path' => 'noveltyTypeNoveltyType',
+                'property_path' => 'noveltyTypeNoveltyType'))
+            ->add('save', 'submit', array(
+                'label' => 'Create',
             ))
             ->getForm();
 
@@ -39,7 +42,6 @@ class NoveltyController extends Controller
         /** @var NoveltyType $novelty */
         $novelty= $noveltyTypeRepo->find($idNoveltyType);
         $requiredDocuments=$novelty->getRequiredDocuments();
-
         $form = $this->createForm(new NoveltyForm($requiredDocuments));
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:generalFormRender.html.twig',
