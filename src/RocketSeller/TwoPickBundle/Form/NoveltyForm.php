@@ -23,7 +23,7 @@ class NoveltyForm extends AbstractType
     {
         /** @var NoveltyTypeHasDocumentType $field */
         foreach ($this->fields as $field){
-            $builder->add($field->getNoveltyTypeNoveltyType()->getName(), 'sonata_media_type', array(
+            $builder->add( str_replace(" ", "_", $field->getDocumentTypeDocumentType()->getName()), 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
                 'context'  => 'person'
             ));

@@ -3,6 +3,9 @@
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
 		<div id="formFields">
+			{{ form_row(form.noveltyType) }}
+			<div id="noveltyTypeDetails">
+			</div>
 			{{ form_widget(form) }}
 		</div>
 	{{ form_end(form) }}
@@ -10,9 +13,49 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script>
+		var select=$("select[name='form[noveltyType]']");
+		select.change(function(){
+			var selectedValue=select.find("option:selected").val();
+			$.ajax({
+				url : '/novelty/fields/'+selectedValue,
+				type: 'GET'
+			}).done(function(data) {
+				$('#noveltyTypeDetails').html(
+						// ... with the returned one from the AJAX response.
+						$(data).find('#formFields'));
+			});
+		});
+		jQuery(document).ready(function() {
+			$("form").on("submit", function (e) {
+				e.preventDefault();
+				var form = $("form");
+				var files=[];
+				var i =0;
+				$("input[name*='[binaryContent]']").each(function(){
+					files[i++]=$(this).val();
+				});
+				$.ajax({
+					url: form.attr('action'),
+					type: $(form).attr('method'),
+					data: {
+						tipo: $(form).find("input[name='form[tipo]']").val(),
+						salarioM: files,
+					},
+					statusCode: {
+						200: function (data) {
+							console.log(data);
+							sendAjax(data);
+						},
+						400: function (data, textStatus, errorThrown) {
+							alert("400 :" + errorThrown + "\n" + data.responseJSON.error.exception[0].message);
+							console.log(data);
+							console.log(textStatus);
+							console.log(errorThrown);
+						}
 
-		$("input[name='form[noveltyType]']").change(function(){
-
+					}
+				});
+			});
 		});
 	</script>
 {% endblock javascripts %}

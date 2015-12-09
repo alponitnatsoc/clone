@@ -51,7 +51,7 @@ class FOSUBUserProvider extends BaseClass {
             //modify here with relevant data
             $user->setUsername($response->getEmail());
             $user->setEmail($response->getEmail());
-            $user->setPassword(md5($username));
+            $user->setPassword(md5($username+rand(0,1000000000)));
             $user->setEnabled(true);
             $people->setNames($response->getRealname());
             $user->setPersonPerson($people);

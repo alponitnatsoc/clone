@@ -49,11 +49,11 @@ class TokenRestController extends FOSRestController
 
             return $view;
         }
-        if(!$user->hasRole('ROLE_SUPER_ADMIN')) {
+        /*if(!$user->hasRole('ROLE_SUPER_ADMIN')) {
             $view->setStatusCode(403)->setData("You don't have the proper role to get a Token.");
 
             return $view;
-        }
+        }*/
 
         $factory = $this->get('security.encoder_factory');
 
