@@ -11,6 +11,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 
 class EmployerRestController extends FOSRestController
 {
@@ -104,20 +105,33 @@ class EmployerRestController extends FOSRestController
     public function getListByUserAction($type, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $user */
+        $user = $userRepository->findOneBy(
+            array(
+                "id" => $id
+            )
+        );
 
         $data = array();
         switch ($type) {
             case "pagos":
-                $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
-                /** @var User $user */
-                $user = $userRepository->findOneBy(
-                    array(
-                        "id" => $id
-                    )
-                );
-                $data = $user->getPayments();
+                if ($user) {
+                    $data = $user->getPayments();
+                }
                 break;
             case "contratos":
+                if ($user) {
+                    $employerHasEmployee = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                    $contracts = array();
+                    foreach($employerHasEmployee as $ehe) {
+                        $contracts[] = $ehe->getContracts();
+                    }
+                    foreach($contracts as $contract) {
+                        /** @var Contract $contract */
+                        $data[] = $contract;
+                    }
+                }
                 break;
             default:
                 break;
