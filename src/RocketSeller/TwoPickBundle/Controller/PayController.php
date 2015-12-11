@@ -1,0 +1,94 @@
+<?php
+namespace RocketSeller\TwoPickBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\Pay;
+
+class PayController extends Controller
+{
+
+    /**
+     * @param Request $request
+     * @param integer $id - Id del empleado
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showPaymentsAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employeeRepository = $em->getRepository("RocketSellerTwoPickBundle:Employee");
+        /** @var Employee $employee */
+        $employee = $employeeRepository->findOneBy(
+            array(
+                "idEmployee" => $id
+            )
+        );
+
+        /** @var User $user */
+        $user=$this->getUser();
+        $idUser = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+
+        $employerHasEmployeeRepository = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+
+        /** @var EmployerHasEmployee $relEmployerEmployee */
+        $relEmployerEmployee = $employerHasEmployeeRepository->findBy(
+            array(
+                "employerEmployer" => $idUser,
+                "employeeEmployee" => $id
+            )
+        );
+
+        $employeeHasEmployers = $employee->getEmployeeHasEmployers()->getValues();
+        /** @var EmployerHasEmployee $employeeHasEmployer */
+        /** @var EmployerHasEmployee $thisEmployeeHasEmployer */
+        foreach($employeeHasEmployers as $employeeHasEmployer) {
+            if ($employeeHasEmployer->getEmployerEmployer()->getIdEmployer() == $idUser) {
+                $thisEmployeeHasEmployer = $employeeHasEmployer;
+                break;
+            }
+        }
+
+        $contracts = $thisEmployeeHasEmployer->getContracts()->getValues();
+        /** @var Contract $contract */
+        foreach($contracts as $contract) {
+            if ($contract->getState() == "Active") {
+                $payrolls = $contract->getPayrolls()->getValues();
+                break;
+            }
+        }
+
+        /** @var Payroll $payroll */
+        foreach($payrolls as $payroll) {
+            $purchaseOrders = $payroll->getPurchaseOrders()->getValues();
+            /** @var PurchaseOrders $po */
+            foreach($purchaseOrders as $key => $po) {
+                echo $po->getIdPurchaseOrders();
+                if ($po->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdPurchaseOrdersStatus() == 1) {
+                    $pagosRecibidos[$key]["dateCreated"] = $po->getDateCreated();
+                    $pagosRecibidos[$key]["dateModified"] = $po->getDateModified();
+                    $pagosRecibidos[$key]["valor"] = $po->getValue();
+                    $idPO = $po->getIdPurchaseOrders();
+                    $payRepository = $em->getRepository("RocketSellerTwoPickBundle:Pay");
+                    /** @var Pay $pay */
+                    $pay = $payRepository->findOneBy(
+                        array(
+                            "purchaseOrdersPurchaseOrders" => $idPO
+                        )
+                    );
+                    $pagosRecibidos[$key]["idPay"] = $pay->getIdPay();
+                }
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:Pay:showPayments.html.twig', array(
+            "pagos" => $pagosRecibidos
+        ));
+    }
+}

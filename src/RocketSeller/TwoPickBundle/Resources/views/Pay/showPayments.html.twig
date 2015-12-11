@@ -1,0 +1,38 @@
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+    <div class="page-header">
+        <h1>Pagos realizados </h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="caption">
+                <div class="col-sm-6 col-md-4">
+                    Fecha
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    Valor
+                </div
+                <div class="col-sm-6 col-md-4">
+                    Detalle
+                </div>
+            </div>
+        </div>
+        {% for key, data in pagos %}
+            <div class="col-sm-12 col-md-12">
+                <div class="caption">
+{#                     <h3>{{ key }}</h3>#}
+                    <div class="col-sm-6 col-md-4">
+                        {{ data["dateModified"].date }}
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        {{ data["valor"] }}
+                    </div
+                    <div class="col-sm-6 col-md-4">
+                        <a class="btn btn-default" href="{{ path('api_public_get_transaction_detail', {"type": "pago", 'id': data["idPay"]}) }}" role="button">Ver Detalle</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock fos_user_content %}

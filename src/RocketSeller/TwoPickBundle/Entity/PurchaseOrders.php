@@ -87,6 +87,11 @@ class PurchaseOrders
     private $name;
 
     /**
+     * @ORM\Column(type="integer", length=100, nullable=TRUE)
+     */
+    private $value;
+
+    /**
      * Set idPurchaseOrders
      *
      * @param integer $idPurchaseOrders
@@ -341,5 +346,29 @@ class PurchaseOrders
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set value
+     *
+     * @param integer $value
+     *
+     * @return PurchaseOrders
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return integer
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }
