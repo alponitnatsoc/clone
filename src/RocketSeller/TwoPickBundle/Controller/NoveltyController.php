@@ -92,6 +92,7 @@ class NoveltyController extends Controller
             $em=$this->getDoctrine()->getEntityManager();
             $em->persist($novelty);
             $em->flush();
+            return $this->redirectToRoute('ajax', array(), 301);
         }
         return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig',
             array('form' => $form->createView()));
