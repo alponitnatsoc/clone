@@ -69,7 +69,6 @@ class PayController extends Controller
             $purchaseOrders = $payroll->getPurchaseOrders()->getValues();
             /** @var PurchaseOrders $po */
             foreach($purchaseOrders as $key => $po) {
-                echo $po->getIdPurchaseOrders();
                 if ($po->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdPurchaseOrdersStatus() == 1) {
                     $pagosRecibidos[$key]["dateCreated"] = $po->getDateCreated();
                     $pagosRecibidos[$key]["dateModified"] = $po->getDateModified();
