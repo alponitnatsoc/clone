@@ -8,6 +8,11 @@ novelty_add:
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
+
+documentos_employee:
+    path:      /document/add/{id}/{idDocumentType}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc}
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
