@@ -15,7 +15,7 @@ class Novelty
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_novelty", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -23,7 +23,7 @@ class Novelty
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayrollDetail
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayrollDetail")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayrollDetail", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_detail_id_payroll_detail", referencedColumnName="id_payroll_detail")
      * })
@@ -44,22 +44,30 @@ class Novelty
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="NoveltyHasDocument", mappedBy="noveltyTypeNoveltyType", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Document", cascade={"persist"})
+     * @ORM\JoinColumn(name="document_id_document", referencedColumnName="id")
      */
     private $documents;
 
     /**
-     * Set idNovelty
-     *
-     * @param integer $idNovelty
-     *
-     * @return Novelty
+     * @ORM\Column(type="date", length=20, nullable=TRUE, name="pay_date")
      */
-    public function setIdNovelty($idNovelty)
-    {
-        $this->idNovelty = $idNovelty;
+    private $payDate;
+    /**
+     * @ORM\Column(type="float", length=20, nullable=TRUE, name="ammount_borrowed")
+     */
+    private $ammountBorrowed;
 
-        return $this;
+
+
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -70,30 +78,6 @@ class Novelty
     public function getIdNovelty()
     {
         return $this->idNovelty;
-    }
-
-    /**
-     * Set payrollDetailPayrollDetail
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail
-     *
-     * @return Novelty
-     */
-    public function setPayrollDetailPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail)
-    {
-        $this->payrollDetailPayrollDetail = $payrollDetailPayrollDetail;
-
-        return $this;
-    }
-
-    /**
-     * Get payrollDetailPayrollDetail
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PayrollDetail
-     */
-    public function getPayrollDetailPayrollDetail()
-    {
-        return $this->payrollDetailPayrollDetail;
     }
 
     /**
@@ -121,6 +105,30 @@ class Novelty
     }
 
     /**
+     * Set payrollDetailPayrollDetail
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail
+     *
+     * @return Novelty
+     */
+    public function setPayrollDetailPayrollDetail(\RocketSeller\TwoPickBundle\Entity\PayrollDetail $payrollDetailPayrollDetail = null)
+    {
+        $this->payrollDetailPayrollDetail = $payrollDetailPayrollDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollDetailPayrollDetail
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PayrollDetail
+     */
+    public function getPayrollDetailPayrollDetail()
+    {
+        return $this->payrollDetailPayrollDetail;
+    }
+
+    /**
      * Set noveltyTypeNoveltyType
      *
      * @param \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyTypeNoveltyType
@@ -143,22 +151,15 @@ class Novelty
     {
         return $this->noveltyTypeNoveltyType;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add document
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
      *
      * @return Novelty
      */
-    public function addDocument(\RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document)
+    public function addDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
     {
         $this->documents[] = $document;
 
@@ -168,9 +169,9 @@ class Novelty
     /**
      * Remove document
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document
+     * @param \RocketSeller\TwoPickBundle\Entity\Document $document
      */
-    public function removeDocument(\RocketSeller\TwoPickBundle\Entity\NoveltyHasDocument $document)
+    public function removeDocument(\RocketSeller\TwoPickBundle\Entity\Document $document)
     {
         $this->documents->removeElement($document);
     }
@@ -183,5 +184,57 @@ class Novelty
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+
+
+
+
+    /**
+     * Set payDate
+     *
+     * @param \DateTime $payDate
+     *
+     * @return Novelty
+     */
+    public function setPayDate($payDate)
+    {
+        $this->payDate = $payDate;
+
+        return $this;
+    }
+
+    /**
+     * Get payDate
+     *
+     * @return \DateTime
+     */
+    public function getPayDate()
+    {
+        return $this->payDate;
+    }
+
+    /**
+     * Set ammountBorrowed
+     *
+     * @param float $ammountBorrowed
+     *
+     * @return Novelty
+     */
+    public function setAmmountBorrowed($ammountBorrowed)
+    {
+        $this->ammountBorrowed = $ammountBorrowed;
+
+        return $this;
+    }
+
+    /**
+     * Get ammountBorrowed
+     *
+     * @return float
+     */
+    public function getAmmountBorrowed()
+    {
+        return $this->ammountBorrowed;
     }
 }

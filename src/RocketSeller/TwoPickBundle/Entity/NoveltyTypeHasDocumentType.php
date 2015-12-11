@@ -23,7 +23,7 @@ class NoveltyTypeHasDocumentType
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\NoveltyType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType", inversedBy="requiredDocuments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="novelty_type_id_novelty_type", referencedColumnName="id_novelty_type")
      * })

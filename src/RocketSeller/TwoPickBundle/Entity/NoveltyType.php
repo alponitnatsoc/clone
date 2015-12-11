@@ -31,6 +31,10 @@ class NoveltyType
      */
     private $requiredDocuments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="NoveltyTypeFields", mappedBy="noveltyTypeNoveltyType", cascade={"persist"})
+     */
+    private $requiredFields;
 
     /**
      * Constructor
@@ -106,5 +110,39 @@ class NoveltyType
     public function getRequiredDocuments()
     {
         return $this->requiredDocuments;
+    }
+
+    /**
+     * Add requiredField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields $requiredField
+     *
+     * @return NoveltyType
+     */
+    public function addRequiredField(\RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields $requiredField)
+    {
+        $this->requiredFields[] = $requiredField;
+
+        return $this;
+    }
+
+    /**
+     * Remove requiredField
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields $requiredField
+     */
+    public function removeRequiredField(\RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields $requiredField)
+    {
+        $this->requiredFields->removeElement($requiredField);
+    }
+
+    /**
+     * Get requiredFields
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRequiredFields()
+    {
+        return $this->requiredFields;
     }
 }
