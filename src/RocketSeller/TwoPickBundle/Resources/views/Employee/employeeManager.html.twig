@@ -2,8 +2,8 @@
 {% block fos_user_content %}
 
 {% for employee in employees %}
-	
-	
+
+
 		<div id='' class='col-xs-12'>
 			<div class="panel panel-default">
   				<div class="panel-body">
@@ -15,8 +15,8 @@
 							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
 						</div>
 					</div>
-					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('manage_contracts' , 
+					<div id='' class='col-xs-1'>
+						<a id='' class='nav-link' href="{{ path('manage_contracts' ,
 												{'id': employee.idEmployerHasEmployee}) }}">
 							<div id='' class='text-right' >
 								Contracts
@@ -24,23 +24,31 @@
 						</a>
 					</div>
 					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('show_documents' , 
+						<a id='' class='nav-link' href="{{ path('show_documents' ,
 												{'id': employee.employeeEmployee.personPerson.idPerson}) }}">
 							<div id='' class='text-right' >
 								Documents
 							</div>
 						</a>
 					</div>
-					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('show_beneficiaries' , 
+					<div id='' class='col-xs-1'>
+						<a id='' class='nav-link' href="{{ path('show_beneficiaries' ,
 												{'employee': employee.idEmployerHasEmployee }) }}">
 							<div id='' class='text-right' >
 								Beneficiaries
 							</div>
 						</a>
 					</div>
+                    <div id='' class='col-xs-2'>
+                        <a id='' class='nav-link' href="{{ path('show_payments' ,
+                                                {'id': employee.employeeEmployee.idEmployee}) }}">
+                            <div id='' class='text-right' >
+                                Payments
+                            </div>
+                        </a>
+                    </div>
 					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('register_employee' , 
+						<a id='' class='nav-link' href="{{ path('register_employee' ,
 												{'id': employee.employeeEmployee.idEmployee}) }}">
 							<div id='' class='text-right' >
 								Edit
@@ -61,7 +69,7 @@
 								Generate certificates
 							</div>
 						</a>
-  					</div> 
+  					</div>
  					<div class="col-xs-4">
 						<a id='' class='nav-link' href="{{ path('employees_documents') }}">
 							<div>
@@ -75,7 +83,7 @@
 							Add new employee
 						</div>
 						</a>
-					</div>			
+					</div>
 				</div>
 			</div>
 		</div>
