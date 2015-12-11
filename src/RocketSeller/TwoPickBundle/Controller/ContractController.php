@@ -1,5 +1,6 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Controller;
+
 use RocketSeller\TwoPickBundle\Entity\ContractHasBenefits;
 use RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -7,11 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\ContractRegistration;
 use Doctrine\Common\Collections\ArrayCollection;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
+use FOS\RestBundle\Routing\Loader\Reader\RestActionReader;
+use RocketSeller\TwoPickBundle\Entity\Workplace;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
+
 class ContractController extends Controller
-{	
+{
 	/**
     * @param Id el id de la relación entre empleado y empleador EmployerHasEmployee
-    * @return 
+    * @return
 	**/
     public function addContractAction(Request $request, $id)
     {
@@ -41,11 +48,12 @@ class ContractController extends Controller
             return $this->redirectToRoute('show_dashboard');
         }
         return $this->render('RocketSellerTwoPickBundle:Contract:contractForm.html.twig',
-            array('form' => $form->createView()));
+            array('form' => $form->createView())
+        );
     }
     /**
     * @param Id el id de la relación entre empleado y empleador EmployerHasEmployee
-    * @return 
+    * @return
 	**/
     public function showContractsAction(Request $request, $id)
     {
@@ -60,9 +68,79 @@ class ContractController extends Controller
                 'idEmployerEmployee' =>$id)
         );
     }
+
+    /**
+     * @param Request $request
+     * @param integer $id El Id del contrato a ver
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewContractAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $details = array();
+
+        $contractRepository = $em->getRepository("RocketSellerTwoPickBundle:Contract");
+        /** @var Contract $contract */
+        $contract = $contractRepository->findOneBy(
+            array(
+                "idContract" => $id
+            )
+        );
+
+        $employee = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+
+        $details["employee"]["name"] = $employee->getNames() . " " . $employee->getLastName1() . " " . $employee->getLastName2();
+        $details["employee"]["document"]["type"] = $employee->getDocumentType();
+        $details["employee"]["document"]["number"] = $employee->getDocument();
+
+        $details["contract"]["type"] = $contract->getContractTypeContractType()->getName();
+        $benefits = $contract->getBenefits();
+        if (is_array($benefits)) {
+            foreach($benefits as $benefit) {
+                $details["contract"]["benefits"][] = $benefit;
+            }
+        }
+
+        $documents = $contract->getDocumentDocument();
+        if ($documents) {
+            $details["contract"]["document"] = $documents->getName();
+        }
+
+        $details["contract"]["employeeType"] = $contract->getEmployeeContractTypeEmployeeContractType()->getName();
+        $details["contract"]["salary"] = $contract->getSalary();
+        $details["contract"]["payMethod"] = $contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+
+        $payrolls = $contract->getPayrolls()->getValues();
+        if (is_array($payrolls)) {
+            /** @var Payroll $payroll */
+            foreach($payrolls as $key => $payroll) {
+                $details["contract"]["payrolls"][$key] = $payroll;
+            }
+        }
+        $details["contract"]["position"] = $contract->getPositionPosition()->getName();
+        $details["contract"]["state"] = $contract->getState();
+        $details["contract"]["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment()->getName();
+
+        $workplaces = $contract->getWorkplaces()->getValues();
+        if (is_array($workplaces)) {
+            /** @var ContractHasWorkplace $workplace */
+            foreach($workplaces as $key => $workplace) {
+                $details["contract"]["workplaces"][$key]["city"] = $workplace->getWorkplaceWorkplace()->getCity();
+                $details["contract"]["workplaces"][$key]["mainAddress"] = $workplace->getWorkplaceWorkplace()->getMainAddress();
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:Contract:view-contract.html.twig',
+            array(
+                "contract" => $details,
+                'idContract' => $id
+            )
+        );
+    }
+
     /**
     * @param Id el id de la relación entre empleado y empleador EmployerHasEmployee
-    * @return 
+    * @return
 	**/
     public function editContractAction(Request $request, $id)
     {
@@ -105,4 +183,3 @@ class ContractController extends Controller
             array('form' => $form->createView()));
     }
 }
- ?>
