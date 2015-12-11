@@ -3,24 +3,60 @@
 		{% if employee %}
 			<h3>El empleado: {{ employee.personPerson.names }}</h3>
 		{% endif %}
-		<table style="width:100%">
-		  <tr>
-		    <td>Beneficiary name</td>
-		    <td>Beneficiary last name</td> 
-		    <td>Entity</td>
-		    <td>Actions</td>
-		  </tr>	
 	  	{% if beneficiaries %}  
-	  		{% for beneficiary in beneficiaries %}
-	  			<tr>				
-					<td>{{ beneficiary.beneficiaryBeneficiary.personPerson.names }}</td>
-					<td>{{ beneficiary.beneficiaryBeneficiary.personPerson.lastName1 }}</td>
-					<td>{{ beneficiary.entityEntity.name }}</td>
-					<td><a href="/manage/employee/{{employee.idEmployee}}/beneficiary/{{beneficiary.beneficiaryBeneficiary.idBeneficiary}}">Editar</a></td>
-			  	</tr>
-			{% endfor %}
+			{% for beneficiary in beneficiaries %}	
+				<div id='' class='col-xs-12'>
+					<div class="panel panel-default">
+		  				<div class="panel-body">
+							<div id='' class='col-xs-2'>
+								{{ beneficiary.beneficiaryBeneficiary.personPerson.names }}{{ beneficiary.beneficiaryBeneficiary.personPerson.lastName1 }}
+							</div>
+							<div id='' class='col-xs-2'>
+								<div id='' class='text-left' >
+									{{ beneficiary.entityEntity.entityTypeEntityType.name }}: {{ beneficiary.entityEntity.name }}
+								</div>
+							</div>
+							<div id='' class='col-xs-2'>
+								<a id='' class='nav-link' href="{{ path('show_documents' , 
+														{'id': beneficiary.beneficiaryBeneficiary.personPerson.idPerson}) }}">
+									<div id='' class='text-right' >
+										Documents
+									</div>
+								</a>
+							</div>
+							<div id='' class='col-xs-2'>
+								<a id='' class='nav-link' href="{{ path('edit_beneficiaries' , 
+														{'employee': employee.idEmployee,'beneficiary':beneficiary.beneficiaryBeneficiary.idBeneficiary}) }}">
+									<div id='' class='text-right' >
+										Editar
+									</div>
+								</a>
+							</div>					
+						</div>
+					</div>
+				</div>
+		{% endfor %}
 		{% else %}
-			<p>No hay beneficiarios (<a href="/register/employee/{{employee.idEmployee}}/beneficiary/">Agregar Beneficiarios</a>)</p>
+			<p>No hay beneficiarios (<a href="{{ path('add_beneficiary_select_entities',{'employee':employee.idEmployee}) }}">Agregar Beneficiarios</a>)</p>
 		{% endif %}
-		</table>	
+		<div id='' class='col-xs-12'>
+			<div class="panel panel-default">
+  				<div class="panel-body">
+ 					<div class="col-xs-4">
+						<a id='' class='nav-link' href="{{ path('employees_documents') }}">
+							<div>
+								Missing documents
+							</div>
+						</a>
+  					</div>
+					<div id='' class='col-xs-4'>
+						<a id='' class='nav-link' href="{{ path('add_beneficiary_select_entities',{'employee':employee.idEmployee}) }}">
+						<div id='' class='text-right' >
+							Add new Beneficiary
+						</div>
+						</a>
+					</div>			
+				</div>
+			</div>
+		</div>	
 	{% endblock %}

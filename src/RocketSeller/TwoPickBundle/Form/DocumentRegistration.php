@@ -21,7 +21,7 @@ class DocumentRegistration extends AbstractType
 
         $builder
             ->add('mediaMedia', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
+                'provider' => 'sonata.media.provider.file',
                 'context'  => 'person'
             ))
             ->add('documentTypeDocumentType', 'entity', array(
