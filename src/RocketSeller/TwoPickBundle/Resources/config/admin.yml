@@ -207,6 +207,12 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Notification, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Persons, label: Notification}
+            
+    rocket_seller_two_pick.admin.notification_employer:
+        class: RocketSeller\TwoPickBundle\Admin\NotificationEmployerAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\NotificationEmployer, RocketSellerTwoPickBundle:NotificationEmployerAdminCRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Notifications, label: Employer}
 
     rocket_seller_two_pick.admin.country:
         class: RocketSeller\TwoPickBundle\Admin\CountryAdmin
