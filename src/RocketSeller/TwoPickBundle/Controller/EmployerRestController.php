@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 class EmployerRestController extends FOSRestController
 {
@@ -73,10 +74,18 @@ class EmployerRestController extends FOSRestController
                 $details["payType"] = $pay->getPayTypePayType();
                 $details["payMethod"] = $pay->getPayMethodPayMethod();
                 break;
-
+            case "liquidation":
+                $liquidationRepository = $em->getRepository("RocketSellerTwoPickBundle:Liquidation");
+                /** @var Liquidation $liquidation */
+                $liquidation = $liquidationRepository->findOneBy(
+                    array(
+                        "id" => $id
+                    )
+                );
+                $details = $liquidation;
+                break;
             default:
-                ;
-            break;
+                break;
         }
 
         $view = View::create();
