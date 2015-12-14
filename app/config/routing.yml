@@ -41,6 +41,11 @@ show_notifications:
     path:   /notifications
     defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
 
+show_notificationsEmployer:
+    path:   /notificationsEmployer
+    defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:index }
+
+
 show_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}

@@ -18,3 +18,4 @@
 .buildpath
 .project
 .gitignore
+/nbproject/private/
