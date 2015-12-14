@@ -15,7 +15,7 @@ class Novelty
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id_novelty", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -45,7 +45,10 @@ class Novelty
 
     /**
      * @ORM\ManyToMany(targetEntity="Document", cascade={"persist"})
-     * @ORM\JoinColumn(name="document_id_document", referencedColumnName="id")
+     * @ORM\JoinTable(name="novelty_has_documents",
+     *      joinColumns={ @ORM\JoinColumn(name="novelty_id_novelty", referencedColumnName="id_novelty")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")}
+     *      )
      */
     private $documents;
 

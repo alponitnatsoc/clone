@@ -17,7 +17,7 @@
             <generator strategy="AUTO"/>
         </id>
         <one-to-one field="documentDocument" target-entity="RocketSeller\TwoPickBundle\Entity\Document" inversed-by="mediaMedia">
-            <join-column name="document_id_document" referenced-column-name="id" />
+            <join-column name="document_id_document" referenced-column-name="id_document" />
         </one-to-one>
 
     </entity>

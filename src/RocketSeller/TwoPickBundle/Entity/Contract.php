@@ -102,7 +102,7 @@ class Contract
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")
      * })
      */
     private $documentDocument;
