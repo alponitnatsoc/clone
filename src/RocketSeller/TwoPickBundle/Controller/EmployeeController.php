@@ -299,5 +299,127 @@ class EmployeeController extends Controller
         ->getRepository('RocketSellerTwoPickBundle:'.$entity)
         ->find($parameter);
         return $loadedClass;
-    }  
+    } 
+    public function missingDocumentsAction($employee)
+    {
+        $documentTypeByEntity = array();
+        $entityByEmployee = array();
+        $beneficiaries = array();
+        $documentTypeAll = array();
+        $employees = array();
+        $result = array();
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')
+                ->find($employee);
+        $employeeHasBeneficiaries = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+                ->findByEmployeeEmployee($employee); 
+        foreach ($employeeHasBeneficiaries as $employeeHasBeneficiary) {                    
+                    $entitiesDocuments = $em->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
+                        ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
+                    foreach ($entitiesDocuments as $document) {                        
+                        array_push($documentTypeByEntity, $document);
+                        array_push($documentTypeAll, $document);     
+                    }
+                array_push($beneficiaries,$employeeHasBeneficiary->getBeneficiaryBeneficiary());
+               }               
+        foreach ($documentTypeAll as $document) {            
+            if(!in_array($document->getDocumentTypeDocumentType(), $result)){
+                array_push($result, $document->getDocumentTypeDocumentType());
+            }
+        }         
+        $documentsPerBeneficiary = $this->fillArray($result,$employeeHasBeneficiaries);
+        $documentsByBeneficiary = $this->documentsTypeByBeneficiary($beneficiaries);                               
+       return $this->render('RocketSellerTwoPickBundle:Employee:beneficiaryDocuments.html.twig', array('beneficiaries'=>$beneficiaries,'result'=>$result ,'documentsPerBeneficiary'=>$documentsPerBeneficiary , 'documentsByBeneficiary'=>$documentsByBeneficiary));
+    }
+    public function documentsTypeByBeneficiary($beneficiaries)
+    {        
+        $documentsByBeneficiary = array();
+        $docs = array();        
+        foreach ($beneficiaries as $beneficiary) {            
+            $person = $beneficiary->getPersonPerson();
+            $em = $this->getDoctrine()->getManager();
+            $documents = $em->getRepository('RocketSellerTwoPickBundle:Document')
+                ->findByPersonPerson($person);                           
+            foreach ($documents as $document) {
+                array_push($docs,$document->getDocumentTypeDocumentType());   
+            }
+            array_push($documentsByBeneficiary, $docs);
+            $docs = array();                                
+        }                
+        return $documentsByBeneficiary;
+    }
+    //se eliminan los documentos repetidos por empleado 
+    public function removeDuplicated($beneficiaryDocs)
+    {        
+        $nonRepeated = array();
+        $beneficiaryDoc = array();
+        foreach ($beneficiaryDocs as $documents) {
+
+            foreach ($documents as $document) {
+                if(!in_array($document->getName(), $beneficiaryDoc)){                    
+                    array_push($beneficiaryDoc, $document);
+                }
+            }         
+            array_push($nonRepeated, $beneficiaryDoc);            
+            $beneficiaryDoc = array();
+        }   
+        
+        return $nonRepeated;
+    }
+    //se llenan los documentos que no necesita el empleado con respecto
+    //a los documentos necesaris de las entidades
+    public function fieldNotRequired($result,$documentsByBeneficiary)
+    {
+        $nonRepeated = array();
+        $beneficiaryDoc = array();
+        foreach ($documentsByBeneficiary as $documents){            
+            foreach ($result as $base) {
+                if(in_array($base->getName(), $documents)){                    
+                    array_push($beneficiaryDoc, $base);
+                }else{
+                    array_push($beneficiaryDoc,'-');
+                }
+            }                  
+            array_push($nonRepeated, $beneficiaryDoc);            
+            $beneficiaryDoc = array();
+
+        }  
+        return $nonRepeated;
+    }
+    public function benefDocs($employeeHasBeneficiary){
+        $benefDocs = array();
+        $em = $this->getDoctrine()->getManager();
+        $entitiesHasDocumentType = $em->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
+                        ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
+        foreach ($entitiesHasDocumentType as $entityHasDocumentType) {
+            array_push($benefDocs, $entityHasDocumentType->getDocumentTypeDocumentType());
+        }
+        return $benefDocs;
+    }
+    public function fillArray($result,$employeeHasBeneficiaries)
+    {
+        $filled = array();        
+        foreach ($employeeHasBeneficiaries as $employeeHasBeneficiary) {
+            $docs = array();
+            $beneficiaryId = $employeeHasBeneficiary->getBeneficiaryBeneficiary()->getIdBeneficiary();
+            $benefDocs = $this->benefDocs($employeeHasBeneficiary);
+            if(array_key_exists ($beneficiaryId ,$filled))
+            {
+                foreach ($result as $base) {            
+                    if(in_array($base->getName(), $benefDocs)){
+                        array_push($filled[$employeeId],$base);                    
+                    }
+
+                }                                 
+            }else{
+                $filled[$beneficiaryId] = array();                
+                foreach ($result as $base) {            
+                    if(in_array($base->getName(), $benefDocs)){
+                        array_push($filled[$beneficiaryId],$base);                    
+                    }
+                }                                                             
+            }
+        }   
+        return $this->fieldNotRequired($result,$this->removeDuplicated($filled));
+    }
 }

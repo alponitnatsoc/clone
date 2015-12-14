@@ -57,8 +57,7 @@ class EmployerController extends Controller
    		}
     }
     public function viewDocumentsAction()
-    {
-        
+    {        
         $documentTypeByEntity = array();
         $entityByEmployee = array();
         $documentTypeAll = array();
@@ -88,11 +87,14 @@ class EmployerController extends Controller
             if(!in_array($document->getDocumentTypeDocumentType(), $result)){
                 array_push($result, $document->getDocumentTypeDocumentType());
             }
-        }        
+        }
+        //documentos que necesita por empleado         
         $documentsPerEmployee = $this->fillArray($result,$entityByEmployee);
+        //documentos que tiene por empleado
         $documentsByEmployee = $this->documentsTypeByEmployee($employees);                       
         return $this->render('RocketSellerTwoPickBundle:Employer:viewDocuments.html.twig',array('employees'=>$employees,'documentsByEmployee'=>$documentsByEmployee , 'result'=>$result , 'documentsPerEmployee'=>$documentsPerEmployee));
     }
+    //se traen los documento por empleado
     public function documentsTypeByEmployee($employees)
     {        
         $documentsByEmployee = array();
@@ -110,6 +112,7 @@ class EmployerController extends Controller
         }                
         return $documentsByEmployee;
     }
+    //se eliminan los documentos repetidos por empleado 
     public function removeDuplicated($employeeDocs)
     {        
         $nonRepeated = array();
@@ -127,6 +130,8 @@ class EmployerController extends Controller
         
         return $nonRepeated;
     }
+    //se llenan los documentos que no necesita el empleado con respecto
+    //a los documentos necesaris de las entidades
     public function fieldNotRequired($result,$documentsByEmployee)
     {
         $nonRepeated = array();
@@ -145,6 +150,7 @@ class EmployerController extends Controller
         }  
         return $nonRepeated;
     }
+    //se llena array con documentos y empleados
     public function fillArray($result,$entityByEmployee)
     {
         $filled = array();
@@ -170,8 +176,8 @@ class EmployerController extends Controller
             }
         }        
         return $this->fieldNotRequired($result,$this->removeDuplicated($filled));
-        //return $filled;
     }
+    //se agregan los documentos por empleado 
     public function employeeDocuments($entityEmployee)
     {
         $empDocs = array();

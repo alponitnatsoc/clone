@@ -63,6 +63,11 @@ show_notificationsEmployer:
 show_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
+
+show_beneficiaries_documents:
+    path:      /manage/employee/{employee}/beneficiaries/documents
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:missingDocuments}
+
 edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
