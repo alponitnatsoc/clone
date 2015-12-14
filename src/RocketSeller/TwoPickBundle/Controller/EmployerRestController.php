@@ -9,6 +9,10 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 class EmployerRestController extends FOSRestController
 {
@@ -57,15 +61,93 @@ class EmployerRestController extends FOSRestController
                 $details["state"] = $contract->getState();
                 $details["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment();
                 $details["workplaces"] = $contract->getWorkplaces();
-            break;
-
+                break;
+            case "pago":
+                $payRepository = $em->getRepository("RocketSellerTwoPickBundle:Pay");
+                /** @var Pay $pay */
+                $pay = $payRepository->findOneBy(
+                    array(
+                        "idPay" => $id
+                    )
+                );
+                $details["purchaseOrder"] = $pay->getPurchaseOrdersPurchaseOrders();
+                $details["payType"] = $pay->getPayTypePayType();
+                $details["payMethod"] = $pay->getPayMethodPayMethod();
+                break;
+            case "liquidation":
+                $liquidationRepository = $em->getRepository("RocketSellerTwoPickBundle:Liquidation");
+                /** @var Liquidation $liquidation */
+                $liquidation = $liquidationRepository->findOneBy(
+                    array(
+                        "id" => $id
+                    )
+                );
+                $details = $liquidation;
+                break;
             default:
-                ;
-            break;
+                break;
         }
 
         $view = View::create();
         $view->setData($details)->setStatusCode(200);
+
+        return $view;
+    }
+
+    /**
+     * Obtener el listado de Pagos o Contratos de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param string $type - Tipo de información a listar (pagos o contratos)
+     * @param integer $id - Id del usuario
+     *
+     *  @return View
+     */
+    public function getListByUserAction($type, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $user */
+        $user = $userRepository->findOneBy(
+            array(
+                "id" => $id
+            )
+        );
+
+        $data = array();
+        switch ($type) {
+            case "pagos":
+                if ($user) {
+                    $data = $user->getPayments();
+                }
+                break;
+            case "contratos":
+                if ($user) {
+                    $employerHasEmployee = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                    $contracts = array();
+                    foreach($employerHasEmployee as $ehe) {
+                        $contracts[] = $ehe->getContracts();
+                    }
+                    foreach($contracts as $contract) {
+                        /** @var Contract $contract */
+                        $data[] = $contract;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+
+        $view = View::create();
+        $view->setData($data)->setStatusCode(200);
 
         return $view;
     }

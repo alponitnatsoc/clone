@@ -1,8 +1,8 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
 {% for contract in contracts %}
-	
-	
+
+
 		<div id='' class='col-xs-12'>
 			<div class="panel panel-default">
   				<div class="panel-body">
@@ -15,7 +15,7 @@
 						</div>
 					</div>
 					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('edit_contract' , 
+						<a id='' class='nav-link' href="{{ path('view_contract' ,
 												{'id': contract.idContract}) }}">
 						<div id='' class='text-right' >
 							Ver
@@ -31,7 +31,7 @@
 			<div class="panel panel-default">
   				<div class="panel-body">
 					<div id='' class='col-xs-12'>
-						<a id='' class='' href="{{ path('add_contract', 
+						<a id='' class='' href="{{ path('add_contract',
 												{'id': idEmployerEmployee}) }}">
 						<div id='' class='text-right' >
 							Add new contract

@@ -48,7 +48,14 @@ class Pay
      */
     private $payMethodPayMethod;
 
-
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\User", inversedBy="payments")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
+     * })
+     */
+    private $userIdUser;
 
     /**
      * Set idPay
@@ -144,5 +151,29 @@ class Pay
     public function getPayMethodPayMethod()
     {
         return $this->payMethodPayMethod;
+    }
+
+    /**
+     * Set userIdUser
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\User $userIdUser
+     *
+     * @return Pay
+     */
+    public function setUserIdUser(\RocketSeller\TwoPickBundle\Entity\User $userIdUser = null)
+    {
+        $this->userIdUser = $userIdUser;
+
+        return $this;
+    }
+
+    /**
+     * Get userIdUser
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\User
+     */
+    public function getUserIdUser()
+    {
+        return $this->userIdUser;
     }
 }

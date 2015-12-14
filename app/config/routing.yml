@@ -3,11 +3,19 @@ ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
 novelty_add:
-    path:      /novelty/add/{idPayroll}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNoveltyShow}
+    path:      /novelty/add/{idPayroll}/{noveltyTypeId}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNovelty}
+novelty_select:
+    path:      /novelty/select/{idPayroll}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
+
+documentos_employee:
+    path:      /document/add/{id}/{idDocumentType}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc}
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
@@ -20,6 +28,12 @@ add_contract:
 edit_contract:
     path:      /edit/contract/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:editContract }
+view_contract:
+    path: /view/contract/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Contract:viewContract}
+show_payments:
+    path: /show/payments/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPayments }
 
 manage_employees:
     path:      /manage/employees

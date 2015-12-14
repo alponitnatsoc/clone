@@ -17,7 +17,7 @@ class NoveltyRestController extends FOSRestController
 {	
 
     /**
-     * Get the fields of the desired novelty.<br/>
+     * Add the novelty<br/>
      *
      * @ApiDoc(
      *   resource = true,
@@ -31,13 +31,15 @@ class NoveltyRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="noveltyId", nullable=false,  requirements="\d+", strict=true, description="the desired novelty fields id.")
+     * @RequestParam(name="noveltyTypeId", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
+     * @RequestParam(array=true, name="requiredDocuments", nullable=true, strict=true, description="the required documents if they apply to the novelty type id")
      * @return View
      */
-    public function noveltyTypeFieldsAction(ParamFetcher $paramFetcher)
+    public function postNoveltyAddAction(ParamFetcher $paramFetcher)
     {
-
         $view = View::create();
+        $view->setStatusCode(200);
+        return $view;
 
         if ( count($cities)!= 0) {
             $view->setData($cities)->setStatusCode(200);

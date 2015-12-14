@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Form;
 
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
+use RocketSeller\TwoPickBundle\Form\DocumentPick;
+use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Entity\PayMethodFields;
 use Solarium\QueryType\Select\Result\Debug\Document;
@@ -16,18 +18,64 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class NoveltyForm extends AbstractType
 {
     private $fields;
-    function __construct($fields){
+    private $hasDocuments;
+    function __construct($fields,$hasDocuments){
         $this->fields=$fields;
+        $this->hasDocuments=$hasDocuments;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var NoveltyTypeHasDocumentType $field */
-        foreach ($this->fields as $field){
-            $builder->add($field->getNoveltyTypeNoveltyType()->getName(), 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.image',
-                'context'  => 'person'
-            ));
+        $builder->add('noveltyType', 'entity', array(
+            'class' => 'RocketSellerTwoPickBundle:NoveltyType',
+            'placeholder' => '',
+            'property' => 'name',
+            'multiple' => false,
+            'expanded' => false,
+            'read_only' =>true,
+            'label' => 'Tipo de novedad',
+            'property_path' => 'noveltyTypeNoveltyType'));
+        //if has documents add the form for the medias
+        if($this->hasDocuments){
+            $builder->add('documents', 'collection', array(
+                'type' => new DocumentPick(),
+                'by_reference' => false,));
         }
+        //if has extra fields add te fields to the main form
+        /** @var NoveltyTypeFields $field */
+        foreach ($this->fields as $field){
+            // leading letter means that is an entity
+            if($field->getDataType()[0]<="Z"){
+                $builder
+                    ->add($field->getDataType(), 'entity', array(
+                        'class' => 'RocketSellerTwoPickBundle:'.$field->getDataType(),
+                        'placeholder' => '',
+                        'property' => 'name',
+                        'multiple' => false,
+                        'expanded' => false,
+                    ));
+            }else{
+                if($field->getDataType()=='money'){
+                    $builder
+                        ->add($field->getColumnName(), $field->getDataType(), array(
+                            'constraints' => array(
+                                new NotBlank(),),
+                            'label' => $field->getName(),
+                            'currency' => 'COP',
+
+                        ));
+                }else{
+                    $builder
+                        ->add($field->getColumnName(), $field->getDataType(), array(
+                            'constraints' => array(
+                                new NotBlank(),),
+                            'label' => $field->getName(),
+
+                        ));
+                }
+            }
+        }
+        $builder->add('save', 'submit', array(
+            'label' => 'Create',));
 
 
     }
@@ -36,6 +84,7 @@ class NoveltyForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\Novelty',
         ));
     }
     

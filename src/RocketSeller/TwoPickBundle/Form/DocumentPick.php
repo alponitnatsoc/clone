@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormEvents;
 use RocketSeller\TwoPickBundle\Form\MediaForm;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class DocumentRegistration extends AbstractType
+class DocumentPick extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -21,7 +21,7 @@ class DocumentRegistration extends AbstractType
 
         $builder
             ->add('mediaMedia', 'sonata_media_type', array(
-                'provider' => 'sonata.media.provider.file',
+                'provider' => 'sonata.media.provider.image',
                 'context'  => 'person'
             ))
             ->add('documentTypeDocumentType', 'entity', array(
@@ -30,13 +30,12 @@ class DocumentRegistration extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'documentTypeDocumentType'
+                'property_path' => 'documentTypeDocumentType',
+                'read_only' =>true,
             ))
             ->add('name', 'text', array(
                 'label' => 'name',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Create',
+                'read_only' =>true,
             ));
     }
 
@@ -50,7 +49,7 @@ class DocumentRegistration extends AbstractType
     
     public function getName()
     {
-        return 'add_document';
+        return 'pick_document';
     }
 } 
 ?>
