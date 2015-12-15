@@ -58,19 +58,15 @@ class NoveltyForm extends AbstractType
                 if($field->getDataType()=='money'){
                     $builder
                         ->add($field->getColumnName(), $field->getDataType(), array(
-                            'constraints' => array(
-                                new NotBlank(),),
                             'label' => $field->getName(),
                             'currency' => 'COP',
-
+                            'required' => false
                         ));
                 }else{
                     $builder
                         ->add($field->getColumnName(), $field->getDataType(), array(
-                            'constraints' => array(
-                                new NotBlank(),),
                             'label' => $field->getName(),
-
+                            'required' => false
                         ));
                 }
             }

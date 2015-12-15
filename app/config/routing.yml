@@ -5,6 +5,9 @@ ajax:
 novelty_add:
     path:      /novelty/add/{idPayroll}/{noveltyTypeId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNovelty}
+novelty_edit:
+    path:      /novelty/edit/{noveltyId}/{notificationReferenced}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:editNovelty, notificationReferenced: -1}
 novelty_select:
     path:      /novelty/select/{idPayroll}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty}
@@ -45,7 +48,7 @@ employees_documents:
 
 show_documents:
     path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Document:showDocuments}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments}
 
 documents_upload:
     path:   /manage/employee/{id}/documents/upload

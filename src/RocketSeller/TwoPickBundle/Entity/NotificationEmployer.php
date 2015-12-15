@@ -34,7 +34,7 @@ class NotificationEmployer
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sawDate", type="datetime")
+     * @ORM\Column(name="sawDate", type="datetime", nullable=TRUE)
      */
     private $sawDate;
 
@@ -44,6 +44,19 @@ class NotificationEmployer
      * @ORM\Column(name="status", type="smallint")
      */
     private $status = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="related_link", type="string", length=100, nullable=TRUE)
+     */
+    private $relatedLink;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="description", type="string", length=100, nullable=TRUE)
+     */
+    private $description;
 
     /**
      * Get id
@@ -127,4 +140,52 @@ class NotificationEmployer
         return $this->employerEmployer;
     }
 
+
+    /**
+     * Set relatedLink
+     *
+     * @param string $relatedLink
+     *
+     * @return NotificationEmployer
+     */
+    public function setRelatedLink($relatedLink)
+    {
+        $this->relatedLink = $relatedLink;
+
+        return $this;
+    }
+
+    /**
+     * Get relatedLink
+     *
+     * @return string
+     */
+    public function getRelatedLink()
+    {
+        return $this->relatedLink;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return NotificationEmployer
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 }
