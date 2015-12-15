@@ -64,6 +64,7 @@ class PayController extends Controller
             }
         }
 
+        $pagosRecibidos = array();
         /** @var Payroll $payroll */
         foreach($payrolls as $payroll) {
             $purchaseOrders = $payroll->getPurchaseOrders()->getValues();

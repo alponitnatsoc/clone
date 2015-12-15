@@ -371,6 +371,10 @@ class User extends BaseUser
      * @param integer $status
      *
      * @return User
+     * Estados del usuario:
+     *      0 - Inactivo / Suscripcion desactivada o inactiva
+     *      1 - Activo / Suscripcion activa
+     *
      */
     public function setStatus($status)
     {

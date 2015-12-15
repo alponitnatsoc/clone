@@ -1,0 +1,47 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<div class="container col-md-12">
+		<div class="col-md-4">
+			<table class="table">
+				<thead>
+					<tr><th>Documentos</th></tr>
+				</thead>
+				<tbody>
+				  {% for document in result %}	  	
+			  			<tr>
+				  			<td>
+				  				{{ document.name }}			
+				  			</td>
+				  		</tr>	  			
+				  {% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+	{% for i in 0..beneficiaries|length-1  %}
+  		<div class="col-md-4">
+	  		<table class="table">
+			    <thead>
+			      <tr>	           
+			        <th>{{beneficiaries[i].personPerson.names}} {{beneficiaries[i].personPerson.lastName1}}</th>          	       
+			      </tr>		      
+			    </thead>	    	
+				    <tbody>
+				    	<tbody>		  			
+			  				{% for document  in documentsPerBeneficiary[i] %}
+			  					{% if document in documentsByBeneficiary[i] %}
+			  						<tr><td>Ya lo tienes perra</td></tr>
+			  					{% else %}
+				  					{% if document == '-'%}
+			  							<tr><td>No lo necesitas perra</td></tr>
+			  						{% else %}
+			  							<tr class="danger"><td><a href="{{ path('documentos_employee', {'id': beneficiaries[i].personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subelo perra</a></td></tr>
+			  						{% endif %}			  						
+			  					{% endif %}		  											
+							{% endfor %}		  		  		
+			  			</tbody>	          	  	     
+				    </tbody>
+	  		</table>
+  		</div>	  	
+	{% endfor %}	
+{% endblock %}
