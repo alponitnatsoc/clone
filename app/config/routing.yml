@@ -48,7 +48,7 @@ employees_documents:
 
 show_documents:
     path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Document:showDocuments}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments}
 
 documents_upload:
     path:   /manage/employee/{id}/documents/upload
