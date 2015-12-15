@@ -444,11 +444,21 @@ class EmployeeController extends Controller
                 foreach ($entityHasDocumentsType as $entityHasDocumentType) {
                     array_push($documentTypeByEmployee,$entityHasDocumentType->getDocumentTypeDocumentType());
                 }            
-            }                      
-
+            }                                  
             foreach ($documentsEmployee as $doc) {                
                 array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
-            }                           
+            }
+            $documentTypeByEmployee = $this->simpleRemoveDuplicated($documentTypeByEmployee);                           
         return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('documentTypeByEmployee'=>$documentTypeByEmployee , 'employee'=>$employee ,'documentsPerEmployee'=>$documentsPerEmployee));
-    }    
+    } 
+    public function simpleRemoveDuplicated($array)
+    {
+        $docs = array();
+        foreach ($array as $doc) {
+            if (!in_array($doc,$docs)) {
+                array_push($docs,$doc);
+            }
+        }
+        return $docs;
+    }   
 }
