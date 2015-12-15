@@ -41,7 +41,7 @@ class EmployerRestController extends FOSRestController
         $details = array();
 
         switch ($type) {
-            case "contrato":
+            case "contract":
 
                 $contractRepository = $em->getRepository("RocketSellerTwoPickBundle:Contract");
                 /** @var Contract $contract */
@@ -62,7 +62,7 @@ class EmployerRestController extends FOSRestController
                 $details["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment();
                 $details["workplaces"] = $contract->getWorkplaces();
                 break;
-            case "pago":
+            case "pay":
                 $payRepository = $em->getRepository("RocketSellerTwoPickBundle:Pay");
                 /** @var Pay $pay */
                 $pay = $payRepository->findOneBy(
@@ -83,6 +83,8 @@ class EmployerRestController extends FOSRestController
                     )
                 );
                 $details = $liquidation;
+                break;
+            case "novelty":
                 break;
             default:
                 break;
@@ -106,7 +108,7 @@ class EmployerRestController extends FOSRestController
      *   }
      * )
      *
-     * @param string $type - Tipo de información a listar (pagos o contratos)
+     * @param string $type - Tipo de información a listar (pagos, contratos, novedades)
      * @param integer $id - Id del usuario
      *
      *  @return View
@@ -124,12 +126,12 @@ class EmployerRestController extends FOSRestController
 
         $data = array();
         switch ($type) {
-            case "pagos":
+            case "payments":
                 if ($user) {
                     $data = $user->getPayments();
                 }
                 break;
-            case "contratos":
+            case "contracts":
                 if ($user) {
                     $employerHasEmployee = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     $contracts = array();
@@ -141,6 +143,10 @@ class EmployerRestController extends FOSRestController
                         $data[] = $contract;
                     }
                 }
+                break;
+            case "liquidations":
+                break;
+            case "novelties":
                 break;
             default:
                 break;

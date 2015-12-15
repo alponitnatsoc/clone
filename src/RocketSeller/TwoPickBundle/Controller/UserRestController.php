@@ -307,6 +307,10 @@ class UserRestController extends FOSRestController
      * @param integer $id - Id del usuario
      *
      * @return \FOS\RestBundle\View\View
+     * Codigos de respuesta:
+     *      0 - Suscripcion inactiva
+     *      1 - Suscripcion activa
+     *      2 - No hay suscripcion
      */
     public function getUserActiveSuscriptionAction($id)
     {
@@ -317,7 +321,7 @@ class UserRestController extends FOSRestController
         $data = $purchaseOrdersRepository->findOneBy(
             array(
                 "idUser" => $id,
-                "purchaseOrdersTypePurchaseOrdersType" => 2, //Tipo de orden de compra Servicio de Symplifica
+                "purchaseOrdersTypePurchaseOrdersType" => 1, //Tipo de orden de compra Servicio de Symplifica
                 "purchaseOrdersStatusPurchaseOrdersStatus" => 1 //Estatus de orden de compra Pagada
             ),
             array("date_created" => "DESC")
@@ -374,6 +378,10 @@ class UserRestController extends FOSRestController
      * @RequestParam(name="id", nullable=false, strict=true, description="id del usuario")
      *
      * @return \FOS\RestBundle\View\View
+     * Codigos de respuesta:
+     *      0 - La suscripcion no cambia de estado
+     *      1 - Suscripcion desactivada
+     *      2 - Suscripcion activada
      */
     public function putUserStatusAction(ParamFetcher $paramFetcher)
     {
@@ -391,12 +399,12 @@ class UserRestController extends FOSRestController
 
         if ($code != $statusActual) {
             switch ($code) {
-                case 0: //Suscripcion Activa
+                case 1: //Suscripcion Activa
                     $this->updateUserStatus($id, 1);
                     $resCode = 2;
                     $msgCode = "La suscripcion del usuario se ha activado";
                     break;
-                case 1: //Sucripicion Inactiva
+                case 0: //Sucripicion Inactiva
                 case 2: //No tiene suscripcion
                 default:
                     $this->updateUserStatus($id, 0);

@@ -18,6 +18,10 @@ class HomeController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:General:landing.html.twig');
     }
+    public function newLandingAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:General:landing_new.html.twig');
+    }
     public function helpAction()
     {
 		$helpCategories = $this->getDoctrine()
@@ -30,6 +34,6 @@ class HomeController extends Controller
 		$helpCategory = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:HelpCategory')
 		->find($id);
-		return $this->render('RocketSellerTwoPickBundle:General:helpDetail.html.twig',array('helpCategory'=>$helpCategory));    	
+		return $this->render('RocketSellerTwoPickBundle:General:helpDetail.html.twig',array('helpCategory'=>$helpCategory));
     }
 }
