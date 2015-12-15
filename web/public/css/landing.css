@@ -1,0 +1,308 @@
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height:100%;
+    font-family: "open sans" !important;
+
+}
+
+br {
+    display: none;
+}
+
+#general {
+
+    min-height:100%;
+    position:relative;
+}
+
+#header {
+    text-align:center
+}
+
+#header img {
+    width: 300px;
+    margin-right: 30px;
+    vertical-align: bottom;
+}
+
+#header_texto {
+    display:inline-block;
+    line-height: 5px;
+    color: #8E8E8E;
+}
+
+#franja_oscura1 {
+    background-color: #3B4B5A;
+    width: 100%;
+    height: 140px;
+    margin-top: 50px;
+}
+
+#franja_clara {
+    background-color: #3Acdcb;
+    width: 100%;
+    height: 70px;
+}
+
+#franja_oscura2 {
+    background-color: #3B4B5A;
+    width: 100%;
+    height: 300px;
+    position: relative;
+    text-align: center;
+    padding-bottom: 33px;
+}
+
+#franja_oscura_movil {
+    background-color: #3B4B5A;
+    width: 100%;
+    height: 300px;
+    display: none;
+}
+
+#franja_clara_movil {
+    background-color: #3Acdcb;
+    width: 100%;
+    height: 70px;
+    display: none;
+}
+
+#mail_wrapper {
+    position: absolute;
+    bottom: 0;
+    left:0;
+    right:0;
+    margin-bottom: 20px;
+    color: #C3C3C3;
+}
+
+#emailSus {
+    width: 427px;
+    height: 30px;
+    background-color: #3B4B5A;
+    border-color: #969696;
+    border-style: solid;
+    font-size: 14px;
+    display: inline;
+    color: #FCFCFC;
+}
+
+#boton_enviar {
+    background-color: #11CCCB;
+    height: 30px;
+    vertical-align: bottom;
+    color: white;
+    width: 110px;
+    padding: 0px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+#foto_muestra {
+    width: 650px;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 44px;
+    top: 74px;
+}
+
+#foto_muestra_mac {
+    width: 300px;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 44px;
+    top: 146px;
+    display: none;
+}
+
+#foto_muestra_ipad {
+    width: 250px;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 44px;
+    top: 435px;
+    display: none;
+}
+
+#footer {
+    color: #AEB2B1;
+     text-align: center;
+}
+
+/*Mensajes envio de correo*/
+.modal-header {
+    min-height: 16.43px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #3Acdcb;
+    color: white;
+}
+
+.modal-title {
+    margin-left: 113px !important;
+    font-size: 32px;
+}
+
+#cruz {
+    width: 103px;
+    position: absolute;
+    margin-top: 41px;
+}
+
+.modal-body {
+    margin-left: 111px;
+    padding-top: 17px !important;
+    padding-bottom: 31px !important;
+    font-size: 15px;
+    color: #7C7C7C !important;
+}
+
+@media screen and (max-width: 810px) {
+    br {
+        display: block;
+    }
+
+    #header_texto {
+        display: inline;
+    }
+
+    #header img {
+        margin-bottom: 25px;
+    }
+
+    #foto_muestra {
+        width: 490px;
+        top: 158px;
+    }
+
+    #franja_oscura2 {
+        height: 480px;
+        padding-bottom: 0px;
+    }
+
+    #mail_wrapper {
+        font-size: 27px;
+        margin-top: 164px;
+        top: 80px;
+        color: #FCFCFC;
+    }
+
+    #emailSus {
+        height: 55px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    #boton_enviar {
+        width: 427px;
+        height: 50px;
+        font-size: 23px;
+        margin-top: 10px;
+    }
+
+    .modal-dialog {
+        width: 400px !important;
+        margin: 30px auto !important;
+    }
+
+    #cruz {
+        width: 89px;
+        margin-top: 32px;
+        margin-left: -15px;
+    }
+
+    .modal-title {
+        margin-left: 113px !important;
+        font-size: 21px;
+    }
+}
+
+
+@media screen and (max-width: 500px) {
+    #franja_oscura_movil {
+        display: block;
+    }
+
+    #franja_clara_movil {
+        display: block;
+    }
+
+    #foto_muestra {
+        width: 326px;
+        display: none;
+    }
+
+    #foto_muestra_mac {
+        display: block;
+    }
+
+    #foto_muestra_ipad {
+        display: block;
+    }
+
+    #mail_wrapper {
+        font-size: 20px;
+        margin-top: 0px;
+        top: 45px;
+    }
+
+    #emailSus {
+        height: 52px;
+        font-size: 15px;
+        text-align: center;
+        width: 93%;
+        border-radius: 0px;
+    }
+
+    #boton_enviar {
+        width: 93%;
+
+    }
+
+    #franja_oscura2 {
+        height: 281px;
+        padding-bottom: 0px;
+    }
+
+    #header_texto {
+        font-size: 12px;
+    }
+
+    .modal-dialog {
+        width: 276px !important;
+        margin: 30px auto !important;
+    }
+
+    .modal-title {
+        margin-left: 84px !important;
+        font-size: 18px;
+    }
+
+    .modal-body {
+        margin-left: 84px;
+        padding-top: 17px !important;
+    }
+}
