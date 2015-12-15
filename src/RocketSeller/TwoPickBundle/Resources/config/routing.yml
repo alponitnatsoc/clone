@@ -7,3 +7,10 @@ procedure_test:
 payments_method:
     path:     /paymentmethod
     defaults: { _controller: RocketSellerTwoPickBundle:PaymentMethod:index }
+#Payments
+show_payments:
+    path: /show/payments/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPayments }
+show_pay_detail:
+    path: /show/pay/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Pay:viewPayDetail }

@@ -31,9 +31,6 @@ edit_contract:
 view_contract:
     path: /view/contract/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Contract:viewContract}
-show_payments:
-    path: /show/payments/{id}
-    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPayments }
 
 manage_employees:
     path:      /manage/employees
