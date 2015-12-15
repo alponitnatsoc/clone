@@ -81,12 +81,14 @@ class NoveltyController extends Controller
             $tempDoc->setName(str_replace(" ", "_", $rd->getDocumentTypeDocumentType()->getName()));
             $novelty->addDocument($tempDoc);
         }
-        //AQUI VOY GET THE FIELDS
         $requiredFields=$noveltyType->getRequiredFields();
 
         $form = $this->createForm(new NoveltyForm($requiredFields,$hasDocuments),$novelty);
         $form->handleRequest($request);
         if($form->isValid()){
+            if ($form->get('later')->isClicked()) {
+                //add new notification
+            }
             $novelty->setName($noveltyType->getName());
             $payRollDetail->setPayrollPayroll($payRol);
             $em=$this->getDoctrine()->getEntityManager();

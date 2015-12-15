@@ -38,7 +38,8 @@ class NoveltyForm extends AbstractType
         if($this->hasDocuments){
             $builder->add('documents', 'collection', array(
                 'type' => new DocumentPick(),
-                'by_reference' => false,));
+                'by_reference' => false,
+                'required' => false));
         }
         //if has extra fields add te fields to the main form
         /** @var NoveltyTypeFields $field */
@@ -76,6 +77,8 @@ class NoveltyForm extends AbstractType
         }
         $builder->add('save', 'submit', array(
             'label' => 'Create',));
+        $builder->add('later', 'submit', array(
+            'label' => 'Later',));
 
 
     }
