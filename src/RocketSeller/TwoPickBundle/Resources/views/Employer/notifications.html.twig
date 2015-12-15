@@ -2,12 +2,29 @@
 {% block content %}
     {% if notifications %}
         <p>Funcionó</p>	
-        {% for notification in notifications %}	
-            <div>
-                {{ notification.id }}
-                {{ notification.sawDate|date("d/m/Y H:m") }}
-                {{ notification.employerEmployer.personPerson.names }}
-            </div>
+        {% for notification in notifications %}
+            {% if notification.status != 1 %}
+                <div id='' class='col-xs-12'>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div id='' class='col-xs-2'>
+                                {{ notification.id }}
+                            </div>
+                            <div id='' class='col-xs-6'>
+                                <div id='' class='text-left' >
+                                    {{ notification.sawDate|date("d/m/Y H:m") }}: {{ notification.description }}
+                                </div>
+                            </div>
+                            <div id='' class='col-xs-4'>
+                                {% if notification.relatedLink != null %}
+                                    <a href="{{ notification.relatedLink }}">View</a>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         {% endfor %}
     {% else %}
         <p>No tienes notificaciones</p>
