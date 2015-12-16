@@ -1,6 +1,10 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\Liquidation;
+
 trait GetTransactionDetailTrait
 {
     protected function transactionDetail($type, $id)
@@ -18,7 +22,7 @@ trait GetTransactionDetailTrait
                     array(
                         "idContract" => $id
                     )
-                    );
+                );
                 $details["benefics"] = $contract->getBenefits();
                 $details["contractType"] = $contract->getContractTypeContractType();
                 $details["document"] = $contract->getDocumentDocument();
@@ -38,7 +42,7 @@ trait GetTransactionDetailTrait
                     array(
                         "idPay" => $id
                     )
-                    );
+                );
                 $details["purchaseOrder"] = $pay->getPurchaseOrdersPurchaseOrders();
                 $details["payType"] = $pay->getPayTypePayType();
                 $details["payMethod"] = $pay->getPayMethodPayMethod();

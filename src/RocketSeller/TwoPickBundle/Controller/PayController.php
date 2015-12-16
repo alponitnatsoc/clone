@@ -12,8 +12,12 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 
+use RocketSeller\TwoPickBundle\Traits\GetTransactionDetailTrait;
+
 class PayController extends Controller
 {
+
+    use GetTransactionDetailTrait;
 
     /**
      * @param Request $request
@@ -98,6 +102,7 @@ class PayController extends Controller
     public function viewPayDetailAction($id)
     {
         $detail = array();
+        $detail = $this->transactionDetail("pay", $id);
         return $this->render('RocketSellerTwoPickBundle:Pay:detail-pay.html.twig', array(
             "pay" => $detail
         ));

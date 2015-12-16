@@ -1,4 +1,118 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-Detail pay
+{# {{ dump(pay) }}#}
+    <div class="page-header">
+        <small>Detalle de pago</small>
+    </div>
+    <div class="row">
+        <div class="panel-heading">
+            <h3 class="panel-title">Orden de compra</h3>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fecha de creacion</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.purchaseOrder.dateCreated.date }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fecha modificacion</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.purchaseOrder.dateModified.date }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Valor</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.purchaseOrder.value }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Numero de factura</h3>
+                </div>
+                <div class="panel-body">
+                    {% if pay.purchaseOrder.invoiceNumber is not null %}
+                        pay.purchaseOrder.invoiceNumber
+                    {% else %}
+                        No hay factura asociada
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Estado</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.purchaseOrder.purchaseOrdersStatusPurchaseOrdersStatus.name }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tipo</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.purchaseOrder.purchaseOrdersTypePurchaseOrdersType.name }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="panel-heading">
+            <h3 class="panel-title">Tipo de pago</h3>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Forma de pago</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.payType.name }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="panel-heading">
+            <h3 class="panel-title">Metodo de pago</h3>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Banco</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.payMethod.bankBank.name }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tipo de cuenta</h3>
+                </div>
+                <div class="panel-body">
+                    {{ pay.payMethod.accountTypeAccountType.name }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
