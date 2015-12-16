@@ -41,22 +41,56 @@ class NotificationEmployer
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="smallint")
+     * @ORM\Column(name="status", type="smallint", nullable=FALSE)
      */
-    private $status = 0;
+    private $status = 1;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="related_link", type="string", length=100, nullable=TRUE)
+     * @ORM\Column(name="relatedlink", type="string", length=100, nullable=TRUE)
      */
     private $relatedLink;
+
     /**
-     * @var integer
+     * @var string
+     *
+     * @ORM\Column(name="relatedlinkName", type="string", length=100, nullable=TRUE)
+     */
+    private $relatedLinkName;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="deadline", type="datetime", nullable=TRUE)
+     */
+    private $deadline;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100, nullable=TRUE)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=100, nullable=TRUE)
+     */
+    private $type;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=100, nullable=TRUE)
      */
     private $description;
+
+    public function __construct()
+    {
+        $this->sawDate = new \DateTime();
+    }
 
     /**
      * Get id
@@ -140,7 +174,6 @@ class NotificationEmployer
         return $this->employerEmployer;
     }
 
-
     /**
      * Set relatedLink
      *
@@ -188,4 +221,101 @@ class NotificationEmployer
     {
         return $this->description;
     }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return NotificationEmployer
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return NotificationEmployer
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set relatedLinkName
+     *
+     * @param string $relatedLinkName
+     *
+     * @return NotificationEmployer
+     */
+    public function setRelatedLinkName($relatedLinkName)
+    {
+        $this->relatedLinkName = $relatedLinkName;
+
+        return $this;
+    }
+
+    /**
+     * Get relatedLinkName
+     *
+     * @return string
+     */
+    public function getRelatedLinkName()
+    {
+        return $this->relatedLinkName;
+    }
+
+    /**
+     * Set deadline
+     *
+     * @param string $deadline
+     *
+     * @return NotificationEmployer
+     */
+    public function setDeadline($deadline)
+    {
+        $this->deadline = $deadline;
+
+        return $this;
+    }
+
+    /**
+     * Get deadline
+     *
+     * @return string
+     */
+    public function getDeadline()
+    {
+        return $this->deadline;
+    }
+
 }
