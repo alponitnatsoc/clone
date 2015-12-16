@@ -251,13 +251,28 @@ class EmployeeController extends Controller
 
             $document = $this->get('request')->request->get('document');
             $cellphone = $this->get('request')->request->get('cellphone');
+            $lastName1 = $this->get('request')->request->get('lastName1');
 
-            $em = $this->getDoctrine()->getManager();
-            $person = $em->getRepository('RocketSellerTwoPickBundle:Person')
-            ->findByDocument($document);
+            $em = $this->getDoctrine()->getManager();            
+            $person = $this->loadClassByArray(array('document'=>$document ,'phone'=>$cellphone , 'lastName1' =>$lastName1),"Person");
             $employee = $this->loadClassByArray(array('personPerson'=>$person),"Employee");
             if($employee){
                 $employee->setTwoFactorCode(12412412);
+                $twilio = $this->get('twilio.api');
+                /*$twilio->account->messages->sendMessage(                 
+                    // Step 6: Change the 'From' number below to be a valid Twilio number
+                    // that you've purchased, or the (deprecated) Sandbox number
+                        "+19562671001",
+                 
+                        // the number we are sending to - Any phone number
+                        "+573155964774",
+                 
+                        // the sms body
+                        "Hey Monkey Party at 6PM. Bring Bananas!",
+                 
+                        // Step 7: Add a url to the image media you want to send
+                        array("https://demo.twilio.com/owl.png", "https://demo.twilio.com/logo.png")
+                    );*/
                 $em->flush($employee);                                         
                 return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig',
                     array('employee'=>$employee)

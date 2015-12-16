@@ -302,9 +302,9 @@ sonata_media:
             resizer: sonata.media.resizer.square
 vresh_twilio:
     #(Required) Your Account SID from www.twilio.com/user/account
-    sid: 'AC41079f0b8ccbeea0d4b05440a1c22522'
+    sid: 'AC1cbb80c722300b240bce151c107f927a'
     #(Required) Your Auth Token from www.twilio.com/user/account
-    authToken: 'c154c50214e5ea0b814dbfd07b12b474'
+    authToken: '35539b53c1cdbd4f1cfccfa1bc558e34'
     #(Optional, default: '2010-04-01') Twilio API version
     version: '2010-04-01'
     #(Optional, default: 1) Number of times to retry failed requests

@@ -1,9 +1,14 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-	<form class="form col-md-6" method="POST" action="{{path('employee_login')}}">	
+	<form data-toggle="validator" role="form" class="form col-md-6" method="POST" action="{{path('employee_login')}}">	
 		<div class="form-group col-md-12">
 		  <label>Número de documento:</label>
-		  <input class="form-control" name="document">
+		  <input class="form-control" name="document" required>
+		  </input>
+		</div>
+		<div class="form-group col-md-12">
+		  <label>Primer apellido:</label>
+		  <input class="form-control" name="lastName1">
 		  </input>
 		</div>
 		<div class="form-group col-md-12">
@@ -11,6 +16,12 @@
 		  <input class="form-control" name="cellphone">
 		  </input>
 		</div>
-		<button class="btn btn-large btn-primary" type="submit">Ingresar</button>
+		<button class="col-md-12 btn btn-large btn-primary" type="submit">Solicitar codigo</button>
 	</form>
+	<div class="col-md-6">
+		<div class="col-md-12">
+			<h2>Registrate con tu cuenta de Facebook</h2>		
+		</div>
+		<button class="col-md-12 btn btn-large btn-primary">iniciar session con FACEBOOK</button>
+	</div>
 {% endblock %}

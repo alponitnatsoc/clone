@@ -50,6 +50,10 @@ class Document
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $status;
 
     
 
@@ -182,5 +186,29 @@ class Document
     public function getMediaMedia()
     {
         return $this->mediaMedia;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     *
+     * @return Document
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
