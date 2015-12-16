@@ -54,7 +54,7 @@ trait GetTransactionDetailTrait
                     array(
                         "id" => $id
                     )
-                    );
+                );
                 $details = $liquidation;
                 break;
             case "novelty":

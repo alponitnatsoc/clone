@@ -37,11 +37,12 @@ class Liquidation
      */
     private $daysToLiquidate;
 
-//  @todo Validar si un contrato puede tener varias liquidaciones o es onetoone
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_contract", type="integer")
+     * @var \RocketSeller\TwoPickBundle\Entity\Contract
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_contract", referencedColumnName="id_contract")
+     * })
      */
     private $idContract;
 
@@ -134,11 +135,11 @@ class Liquidation
     /**
      * Set idContract
      *
-     * @param integer $idContract
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $idContract
      *
      * @return Liquidation
      */
-    public function setIdContract($idContract)
+    public function setIdContract(\RocketSeller\TwoPickBundle\Entity\Contract $idContract = null)
     {
         $this->idContract = $idContract;
 
@@ -148,7 +149,7 @@ class Liquidation
     /**
      * Get idContract
      *
-     * @return integer
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
     public function getIdContract()
     {
