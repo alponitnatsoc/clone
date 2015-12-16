@@ -12,6 +12,9 @@ ajax:
 novelty_add:
     path:      /novelty/add/{idPayroll}/{noveltyTypeId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNovelty}
+novelty_edit:
+    path:      /novelty/edit/{noveltyId}/{notificationReferenced}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:editNovelty, notificationReferenced: -1}
 novelty_select:
     path:      /novelty/select/{idPayroll}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty}
@@ -38,9 +41,6 @@ edit_contract:
 view_contract:
     path: /view/contract/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Contract:viewContract}
-show_payments:
-    path: /show/payments/{id}
-    defaults: { _controller: RocketSellerTwoPickBundle:Pay:showPayments }
 
 manage_employees:
     path:      /manage/employees
@@ -52,7 +52,7 @@ employees_documents:
 
 show_documents:
     path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Document:showDocuments}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments}
 
 documents_upload:
     path:   /manage/employee/{id}/documents/upload
@@ -172,7 +172,7 @@ add_beneficiary_entity_form:
 manage_settings:
     path: /settings
     defaults: { _controller: RocketSellerTwoPickBundle:Settings:manageSettings }
-    
+
 #OAuth
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
@@ -188,21 +188,21 @@ hwi_oauth_connect:
 
 hwi_facebook_login:
     pattern: /login/check-facebook
-    
+
 hwi_google_login:
     pattern: /login/check-google
-    
+
 hwi_twitter_login:
     pattern: /login/check-linkedin
 #
-#FOSRest 
-rest_secured: 
-    type : rest 
+#FOSRest
+rest_secured:
+    type : rest
     resource : "routing_rest_secured.yml"
     prefix : /api/secured/v1
 
-rest_public: 
-    type : rest 
+rest_public:
+    type : rest
     resource : "routing_rest_public.yml"
     prefix : /api/public/v1
 #
@@ -240,6 +240,10 @@ home_products:
 home_landing:
     path:     /
     defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
+
+home_landing_new:
+    path:     /landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:newLanding }
 
 show_logs:
     path:     /logs
@@ -280,6 +284,3 @@ show_help:
 help_detail:
     path:     /help/detail/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Home:helpDetail }
-
-
-

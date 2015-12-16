@@ -1,24 +1,41 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-
-	<div class="col-md-12">
-	<h1>{{ person.names}} {{ person.lastName1}}</h1>
-	{% if documents %}		
-		<p>Tiene documentos</p>
-		{% for doc in documents %}
-			<p>{{ doc.documentTypeDocumentType.name }}</p>
-			<p>{{ doc.mediaMedia.name }}</p>			
-		{% endfor %}	
-	{% else %}
-
-		<p>No tiene documentos</p>
-				
-	{% endif %}
-	</div>
-	<div class="col-md-4">
-		<a href="{{ path('documentos',{id : person.idPerson}) }}" class="btn btn-primary" role="button">Upload documents</a>	
-	</div>	
-
+	<div class="container col-md-12">
+		<div class="col-md-4">
+			<table class="table">
+				<thead>
+					<tr><th>Documentos</th></tr>
+				</thead>
+				<tbody>
+				  {% for documentType in documentTypeByEmployee %}	  	
+			  			<tr>
+				  			<td>
+				  				{{ documentType.name }}			
+				  			</td>
+				  		</tr>	  			
+				  {% endfor %}
+				</tbody>
+			</table>
+		</div>
+  		<div class="col-md-4">
+	  		<table class="table">
+			    <thead>
+			      <tr>	           
+			        <th>{{employee.personPerson.names}} {{employee.personPerson.lastName1}}</th>          	       
+			      </tr>		      
+			    </thead>	    	
+				    <tbody>
+				    	<tbody>
+							{% for document  in documentTypeByEmployee %}
+								{% if document in documentsPerEmployee %}
+									<tr><td>Ya lo tienes</td></tr>
+								{% else %}
+									<tr class="danger"><td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td></tr>
+								{% endif %}									  							  											
+							{% endfor %}
+			  			</tbody>	          	  	     
+				    </tbody>
+	  		</table>
+  		</div>	  		
 {% endblock %}
-
 

@@ -87,8 +87,19 @@ class PayController extends Controller
             }
         }
 
-        return $this->render('RocketSellerTwoPickBundle:Pay:showPayments.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Pay:show-payments.html.twig', array(
             "pagos" => $pagosRecibidos
+        ));
+    }
+
+    /**
+     * @param integer $id - Id del pago para mostrar su detalle
+     */
+    public function viewPayDetailAction($id)
+    {
+        $detail = array();
+        return $this->render('RocketSellerTwoPickBundle:Pay:detail-pay.html.twig', array(
+            "pay" => $detail
         ));
     }
 }

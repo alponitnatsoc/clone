@@ -422,4 +422,43 @@ class EmployeeController extends Controller
         }   
         return $this->fieldNotRequired($result,$this->removeDuplicated($filled));
     }
+    public function employeeDocumentsAction($id)
+    {
+        $documentsPerEmployee = array();
+        $person = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Person')
+        ->find($id);
+        $documentsEmployee = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Document')
+        ->findByPersonPerson($person);
+        $employee = $this->loadClassByArray(array('personPerson'=>$person),'Employee');
+            $employeeHasEntities = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+            ->findByEmployeeEmployee($employee);
+            $documentTypeByEmployee = array();
+            foreach ($employeeHasEntities as $employeeHasEntity) {
+                $entity = $employeeHasEntity->getEntityEntity();
+                $entityHasDocumentsType = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
+                ->findByEntityEntity($entity);
+                foreach ($entityHasDocumentsType as $entityHasDocumentType) {
+                    array_push($documentTypeByEmployee,$entityHasDocumentType->getDocumentTypeDocumentType());
+                }            
+            }                                  
+            foreach ($documentsEmployee as $doc) {                
+                array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
+            }
+            $documentTypeByEmployee = $this->simpleRemoveDuplicated($documentTypeByEmployee);                           
+        return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('documentTypeByEmployee'=>$documentTypeByEmployee , 'employee'=>$employee ,'documentsPerEmployee'=>$documentsPerEmployee));
+    } 
+    public function simpleRemoveDuplicated($array)
+    {
+        $docs = array();
+        foreach ($array as $doc) {
+            if (!in_array($doc,$docs)) {
+                array_push($docs,$doc);
+            }
+        }
+        return $docs;
+    }   
 }

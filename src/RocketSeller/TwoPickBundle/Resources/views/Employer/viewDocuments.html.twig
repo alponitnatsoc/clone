@@ -30,12 +30,12 @@
 				    	<tbody>		  			
 			  				{% for document  in documentsPerEmployee[i] %}
 			  					{% if document in documentsByEmployee[i] %}
-			  						<tr><td>Ya lo tienes perra</td></tr>
+			  						<tr><td>Ya lo tienes</td></tr>
 			  					{% else %}
 				  					{% if document == '-'%}
-			  							<tr><td>No lo necesitas perra</td></tr>
+			  							<tr><td>No lo necesitas</td></tr>
 			  						{% else %}
-			  							<tr class="danger"><td><a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subelo perra</a></td></tr>
+			  							<tr class="danger"><td><a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td></tr>
 			  						{% endif %}			  						
 			  					{% endif %}		  											
 							{% endfor %}		  		  		

@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="purchase_orders_status")
  * @ORM\Entity
+ *
+ * Estados de las ordenes de compra:
+ *      1 - Pagada ID: 1
+ *      2 - Pendiente / Por pagar ID: 2
+ *      3 - Cancelada / Rechazada ID: 3
  */
 class PurchaseOrdersStatus
 {

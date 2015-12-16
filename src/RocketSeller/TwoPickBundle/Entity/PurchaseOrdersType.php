@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="purchase_orders_type")
  * @ORM\Entity
+ *
+ * Tipos de ordenes de compra:
+ *      1 - Servicio de symplifica ID: 1
+ *      2 - Pago de nómina ID: 2
  */
 class PurchaseOrdersType
 {

@@ -16,11 +16,10 @@ use Application\Sonata\MediaBundle\Entity\GalleryHasMedia;
 
 class DocumentController extends Controller
 {
-	public function showDocumentsAction($id){
+	public function showDocumentsAction($id){		
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
 		->find($id);		
-		
 		$documents = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Document')
 		->findByPersonPerson($person);
@@ -95,7 +94,8 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirectToRoute('employees_documents');
+			//return $this->redirectToRoute('employees_documents');
+			$this->redirect($request->server->get('HTTP_REFERER'));
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
