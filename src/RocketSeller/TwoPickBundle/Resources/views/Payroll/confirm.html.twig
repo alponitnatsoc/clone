@@ -1,0 +1,108 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RocketSellerTwoPickBundle:Payroll:pay{% endblock %}
+
+{% block fos_user_content %}
+	<div class="payroll confirm">
+		<div class="row reminder">
+			<div class="alert alert-success clearfix" role="alert">
+				<div class="media">
+				  <div class="media-left">
+				    <span class="glyphicon glyphicon-ok"></span>
+				  </div>
+				  <div class="media-body">
+				    <h4 class="media-heading">El pago de sueldo y aportes a Seguridad social para la 2ª Quincena de Octubre 2015 fue realizado exitosamente</h4>
+				  </div>
+				</div>
+			</div>
+		</div>
+		<div class="row details">
+			<div class="col-md-10 col-md-push-1">
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="media">
+						  <div class="media-left">
+						    <i class="fa fa-refresh fa-2x"></i>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading">Fecha Pago</h4>
+						    {{ "now"|localizeddate('long', 'short', "es") }}
+						  </div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="media">
+						  <div class="media-left">
+						    <i class="fa fa-credit-card fa-2x"></i>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading">Total pagado</h4>
+						    <span id="totalPay">${{total|number_format}}</span>
+						  </div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="media">
+						  <div class="media-left">
+						    <i class="fa fa-users fa-2x"></i>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading">Total Personas</h4>
+						    {{employees|length}}
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			{% for employee in employees %}
+				<div class="col-sm-6">
+					<div class="row-fluid clearfix employee">
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
+								</div>
+							</div>
+							<div class="row aportes">
+								<div class="col-md-6">
+									<h4>Salario</h4>
+									${{salaries[employee.idEmployerHasEmployee]|number_format}}
+								</div>
+								<div class="col-md-6">
+									<h4>Aportes Seguridad Social</h4>
+									$0
+								</div>
+							</div>
+							<div class="total row-fluid clearfix">
+								<div class="col-xs-12 text-center">
+									<h4>Pago final</h4>
+									${{salaries[employee.idEmployerHasEmployee]|number_format}}
+								</div>
+							</div>
+							<div class="row novedades">
+								<div class="col-xs-12">
+									<h2>Comprobante de pago</h2>
+								</div>
+								<div class="col-xs-12 text-center botones">
+									<input type="button" class="btn btn-default" value="Ver/Imprimir" /> <input type="button" class="btn btn-primary" value="Enviar" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="row buttons">
+			<div class="col-xs-12 text-center">
+				<input type="button" class="btn btn-primary" value="Imprimir" /> <input type="button" class="btn btn-default" value="Volver Atrás" />
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block stylesheet %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+{% endblock %}

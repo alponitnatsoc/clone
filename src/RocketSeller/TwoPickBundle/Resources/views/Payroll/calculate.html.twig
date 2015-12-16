@@ -1,0 +1,192 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RocketSellerTwoPickBundle:Payroll:pay{% endblock %}
+
+{% block fos_user_content %}
+	<div class="payroll calculate">
+		<form method="post" id="formPay" action="/payroll/confirm" id="form_calculate">
+			<div class="row reminder">
+				<div class="alert alert-success clearfix" role="alert">
+					<div class="media">
+					  <div class="media-left">
+					    <span class="glyphicon glyphicon-ok"></span>
+					  </div>
+					  <div class="media-body">
+					    <h4 class="media-heading">El cálculo final para efectuar el pago fue realizado existosamente. Verifique a continuación la información.</h4>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="row details">
+				<div class="col-md-10 col-md-push-1">
+					<div class="row">
+						<div class="col-xs-4">
+							<div class="media">
+							  <div class="media-left">
+							    <i class="fa fa-refresh fa-2x"></i>
+							  </div>
+							  <div class="media-body">
+							    <h4 class="media-heading">Fecha Pago</h4>
+							    {{ "now"|localizeddate('long', 'short', "es") }}
+							  </div>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="media">
+							  <div class="media-left">
+							    <i class="fa fa-credit-card fa-2x"></i>
+							  </div>
+							  <div class="media-body">
+							    <h4 class="media-heading">Total por pagar</h4>
+							    <span id="totalPay">${{total|number_format}}</span>
+							  </div>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="media">
+							  <div class="media-left">
+							    <i class="fa fa-users fa-2x"></i>
+							  </div>
+							  <div class="media-body">
+							    <h4 class="media-heading">Total Personas</h4>
+							    <span id="totalEmployees">{{employees|length}}</span>
+							  </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				{% for employee in employees %}
+					<div class="col-xs-12">
+						<div class="row-fluid clearfix employee">
+							<div class="col-xs-1">
+								icono
+							</div>
+							<div class="col-xs-11">
+								<span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
+								<span class="pull-right">
+									Pagar <input type="checkbox" class="pay" name="employee[]" value="{{employee.idEmployerHasEmployee}}" checked="checked">
+								</span>
+								<div class="row info">
+									<div class="col-md-3">
+										<h4>Salario:</h4>
+										${{salaries[employee.idEmployerHasEmployee]|number_format}}
+										<h4>Novedades:</h4>
+										$0
+									</div>
+									<div class="col-md-3">
+										<h4>Pago a empleado:</h4>
+										$0
+										<h5>Forma de pago:</h5>
+										<span>Transferencia bancaria</span>
+									</div>
+									<div class="col-md-3">
+										<h4>Pago aportes Seguridad Socia:</h4>
+										$0
+									</div>
+									<div class="col-md-3">
+										<h3>Pago final:</h3>
+										<span>${{salaries[employee.idEmployerHasEmployee]|number_format}}</span>
+									</div>
+								</div>
+								<strong>Medio de pago por defecto: </strong> Tarjeta de crédito terminada en 3751 <a href="#">&gt; Cambiar</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="row buttons">
+				<div class="col-xs-12 text-center">
+					<input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" /> <input type="button" id="btnPay" class="btn btn-primary" value="Pagar ${{total|number_format}}" />
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block stylesheet %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			
+			updateValues();
+
+			$('#btnPay').click(function() {
+				var total=0;
+				$('.employee .pay').each(function(index, element) {
+					if($(element)[0].checked) {
+						total += salaries[$(element)[0].value]
+
+					}
+				});
+				var dialog = bootbox.dialog({
+	                title: "Confirmación de pago",
+	                message: '<div class="row">  ' +
+	                    '<div class="col-md-12 text-center"> ' +
+	                    'La suma total para pago corresponde a <h2>' + numeral(total).format('$0,0') +'</h2>' +
+	                    '</div>' +
+	                    '<div class="col-md-12"> ' +
+	                    ' <input type="checkbox" class="chkAccept" /> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.' +
+	                    '</div>  </div>',
+	                buttons: {
+	                	cancel: {
+	                		label: "Cancelar",
+	                        className: "btn-default",
+	                        callback: function() {
+	                        	console.log("Prueba");
+	                        }
+	                	},
+	                    success: {
+	                        label: "Pagar",
+	                        className: "btn-primary",
+	                        callback: function () {
+	                            $('#formPay').submit();
+	                        }
+	                    }
+	                }
+	            });
+				
+				$(dialog.find('.btn-primary')[0]).prop('disabled', true);
+				$(dialog.find('.chkAccept')).change(function(e) {
+					$(dialog.find('.btn-primary')[0]).prop('disabled', !e.currentTarget.checked);
+				});
+			});
+
+			$('#btnBack').click(function() {
+				console.log("click");
+				document.location = "/payroll";
+			});
+		});
+		var salaries = [];
+		{% for employee in employees %}
+		salaries[{{employee.idEmployerHasEmployee}}] = {{salaries[employee.idEmployerHasEmployee]}};
+		{% endfor %}
+		$('.employee .pay').on('change', updateValues);
+
+		function updateValues() {
+			var i=0;
+			var total=0;
+			$('.employee .pay').each(function(index, element) {
+				if($(element)[0].checked) {
+					i++;
+					total += salaries[$(element)[0].value]
+
+				}
+			});
+
+			$('#totalPay').html(numeral(total).format('$0,0'));
+			$('#totalEmployees').html(i);
+
+			$('#btnPay').val("Pagar "+numeral(total).format('$0,0'));
+			$('#btnPay').prop('disabled', i==0 || total==0);
+		}
+	</script>
+{% endblock %}

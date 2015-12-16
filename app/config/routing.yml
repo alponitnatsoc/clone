@@ -1,4 +1,11 @@
 #Customs
+
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: RocketSellerTwoPickBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+    methods: [GET]
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
@@ -98,6 +105,17 @@ send_email_test_send:
 contact:
     path: /contact
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
+payroll:
+    path: /payroll
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
+
+payroll_calculate:
+    path: /payroll/calculate
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
+
+payroll_confirm:
+    path: /payroll/confirm
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:confirm}
 
 show_form_entity:
     path:      /register/entity/{id}

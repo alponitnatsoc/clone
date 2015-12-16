@@ -1,0 +1,217 @@
+.payroll {
+	&.pay {
+		h2 {
+			font-size: 14px;
+			border-bottom: 1px dotted #000;
+			padding-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.employee {
+			border: 1px solid #000;
+			margin-bottom: 15px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			
+			.name {
+				font-size: 16px;
+				margin: 0;
+				font-weight: bold;
+			}
+
+			h2 {
+				text-align: center;
+				border: none;
+				font-size: 16px;
+			}
+
+			h4 {
+				font-weight: bold;
+				margin: 0;
+				font-size: 14px;
+			}
+
+			.aportes {
+				margin-top: 5px;
+				> div {
+					&:nth-child(2) {
+						@media (min-width: 992px) {
+							border-right: 1px dotted #000;
+							border-left: 1px dotted #000;
+						}
+					}
+				}
+			}
+
+			.detail {
+				> div {
+					padding-top: 5px;
+					padding-bottom: 15px;
+					border-bottom: 1px dotted #000;
+				}
+			}
+
+			.novedades {
+				.row-centered {
+	    			text-align:center;
+				}
+				.col-centered {
+					@media (min-width: 992px) {
+		    			display:inline-block;
+		    			float:none;
+		    			/* reset the text-align */
+		    			text-align:left;
+		    			/* inline-block space fix */
+		    			margin-right:-4px;
+		    		}
+				}
+
+				.novedad {
+					text-align: center;
+					margin-bottom: 10px;
+					> div {
+						border: 1px solid #000;
+					}
+				}
+			}
+
+			.add {
+				margin-top: 20px;
+			}
+		}
+	}
+
+	&.calculate {
+		.details  {
+			padding-top: 30px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #000;
+		}
+
+		.employee {
+			padding-top: 20px;
+			padding-bottom: 20px;
+			border-bottom: 1px dotted #000;
+			.name {
+				font-size: 16px;
+				margin: 0;
+				font-weight: bold;
+			}
+
+			.info {
+				margin-bottom: 15px;
+				h3 {
+					margin: 0;
+					margin-top: 5px;
+					&+span {
+						font-size: 18px;
+					}
+				}
+				h4 {
+					margin: 0;
+					margin-top: 5px;
+				}
+				h5 {
+					margin: 0;
+					margin-top: 5px;
+					font-size: 12px;
+					font-weight: bold;
+					&+span {
+						font-size: 12px;
+					}
+				}
+				> div {
+					@media (min-width: 992px) {
+						border-right: 1px dotted #000;
+					}
+					&:last-child {
+						border: none;
+					}
+				}
+
+			}
+
+		}
+
+		.buttons {
+			margin-top: 30px;
+			input[type="button"] {
+				&:first-child {
+					margin-right: 30px;
+				}
+			}
+		}
+	}
+
+	&.confirm {
+		.details  {
+			padding-top: 30px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #000;
+		}
+
+		.employee {
+			margin-top: 20px;
+			border: 1px solid #000;
+			margin-bottom: 15px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			
+			.name {
+				font-size: 16px;
+				margin: 0;
+				font-weight: bold;
+			}
+
+			h2 {
+				text-align: center;;
+				border: none;
+				font-size: 16px;
+			}
+
+			h4 {
+				margin: 0;
+				font-size: 18px;
+			}
+
+			.aportes {
+				margin-top: 5px;
+				> div {
+					&:first-child {
+						@media (min-width: 992px) {
+							border-right: 1px dotted #000;
+						}
+					}
+				}
+			}
+
+			.total {
+				margin-top: 20px;
+				margin-bottom: 20px;
+				>div {
+					padding-top: 20px;
+					padding-bottom: 20px;
+					border-top: 1px dotted #000;
+					border-bottom: 1px dotted #000;
+				}
+			}
+
+			.botones {
+				input[type="button"] {
+					&:first-child {
+						margin-right: 30px;
+					}
+				}
+			}
+		}
+
+		.buttons {
+			margin-top: 30px;
+			input[type="button"] {
+				&:first-child {
+					margin-right: 30px;
+				}
+			}
+		}
+	}
+}

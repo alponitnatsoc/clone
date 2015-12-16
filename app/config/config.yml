@@ -309,3 +309,9 @@ vresh_twilio:
     version: '2010-04-01'
     #(Optional, default: 1) Number of times to retry failed requests
     retryAttempts: 3
+
+services:
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }

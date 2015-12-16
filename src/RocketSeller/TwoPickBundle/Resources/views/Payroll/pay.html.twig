@@ -1,0 +1,120 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RocketSellerTwoPickBundle:Payroll:pay{% endblock %}
+
+{% block fos_user_content %}
+	<div class="payroll pay">
+		<form method="post" action="/payroll/calculate" id="form_calculate">
+			<h1>Pagar a empleados</h1>
+			<h2>Diciembre 2015 I (2ª Quincena)</h2>
+			<div class="row">
+				{% for employee in employees %}
+					<div class="col-sm-6">
+						<div class="row-fluid clearfix employee">
+							<div class="col-xs-12">
+								<div class="row">
+									<div class="col-xs-8">
+										<span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
+									</div>
+									<div class="col-xs-4 text-right">
+										Pagar <input type="checkbox" class="pay" name="employee[]" value="{{employee.idEmployerHasEmployee}}" checked="checked">
+									</div>
+								</div>
+								<div class="row aportes">
+									<div class="col-md-4">
+										<h4>Salario</h4>
+										${{salaries[employee.idEmployerHasEmployee]|number_format}}
+									</div>
+									<div class="col-md-4">
+										<h4>Aportes Seguridad Social</h4>
+										$0
+									</div>
+									<div class="col-md-4">
+										<h4>Total</h4>
+										${{salaries[employee.idEmployerHasEmployee]|number_format}}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12 detail">
+										<div class="row-fluid">
+											<a href="#">&gt; Ver detalle de la liquidación</a>
+										</div>
+									</div>
+								</div>
+								<div class="row novedades">
+									<div class="col-xs-12">
+										<h2>Novedades reportadas en este periodo</h2>
+									</div>
+									<div class="col-xs-12">
+										<div class="row row-centered">
+											{% for novelty in novelties[employee.idEmployerHasEmployee] %}
+												<div class="col-md-4 col-centered novedad">
+													<div class="row-fluid clearfix">
+														<div class="col-xs-12">
+															{{novelty.name}} <br/>
+															{{novelty.payDate}}
+														</div>
+													</div>
+												</div>
+											{% else %}
+												<div class="col-xs-12 text-center">
+													<span style="font-size: 12px; font-style: italic;">No hay novedades reportadas para este empleado</span>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+									<div class="col-xs-12 add">
+										<input type="button" class="btn btn-default center-block" value="Agregar Novedad" onClick="addNovelty({{payrolls[employee.idEmployerHasEmployee].idPayroll}})"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="row reminder">
+				<div class="alert alert-success clearfix" role="alert">
+					<div class="media">
+					  <div class="media-left">
+					    <i class="fa fa-lightbulb-o"></i>
+					  </div>
+					  <div class="media-body">
+					    <h4 class="media-heading">Importante</h4>
+					    Evite cualquier inconveniente a futuro reportando las novedades a las que haya a lugar, ya sea porque afectan a la nómina o a los aportes a Seguridad Social los cuales son regulados por entidades del estado.
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="row buttons">
+					<div class="col-xs-12">
+						<input type="submit" id="btnCalculate" class="btn btn-primary center-block" value="Cálculo final del pago" />
+					</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}
+
+{% block stylesheet %}
+{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+	<script>
+		$('.employee .pay').on('change', function(e) {
+			var i = 0;
+			$('.employee .pay').each(function(index, element) {
+				if($(element)[0].checked) {
+					i++;
+				}
+			});
+			$('#btnCalculate').prop('disabled', i==0);
+		});
+
+		function addNovelty(payroll) {
+			document.location = "/novelty/select/"+payroll;
+		}
+	</script>
+{% endblock %}
