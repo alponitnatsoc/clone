@@ -39,6 +39,11 @@ class NoveltyTypeHasDocumentType
      */
     private $documentTypeDocumentType;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $personType;
+
 
 
     /**
@@ -97,5 +102,29 @@ class NoveltyTypeHasDocumentType
     public function getDocumentTypeDocumentType()
     {
         return $this->documentTypeDocumentType;
+    }
+
+    /**
+     * Set personType
+     *
+     * @param string $personType
+     *
+     * @return NoveltyTypeHasDocumentType
+     */
+    public function setPersonType($personType)
+    {
+        $this->personType = $personType;
+
+        return $this;
+    }
+
+    /**
+     * Get personType
+     *
+     * @return string
+     */
+    public function getPersonType()
+    {
+        return $this->personType;
     }
 }

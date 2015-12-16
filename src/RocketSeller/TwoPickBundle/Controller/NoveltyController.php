@@ -82,10 +82,18 @@ class NoveltyController extends Controller
         $novelty->setNoveltyTypeNoveltyType($noveltyType);
         $requiredDocuments=$noveltyType->getRequiredDocuments();
         $hasDocuments=false;
+        $user=$this->getUser();
         /** @var NoveltyTypeHasDocumentType $rd */
         foreach($requiredDocuments as $rd){
             $hasDocuments=true;
             $tempDoc=new Document();
+            if($rd->getPersonType()=="employer"){
+                $tempDoc->setPersonPerson($payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson());
+            }else if($rd->getPersonType()=="employee"){
+                $tempDoc->setPersonPerson($payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson());
+            }else{
+                $tempDoc->setContractContract($payRol->getContractContract());
+            }
             $tempDoc->setDocumentTypeDocumentType($rd->getDocumentTypeDocumentType());
             $tempDoc->setName(str_replace(" ", "_", $rd->getDocumentTypeDocumentType()->getName()));
             $novelty->addDocument($tempDoc);
