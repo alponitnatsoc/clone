@@ -59,6 +59,7 @@ class LiquidationController extends Controller
     public function listByEhEAction($id)
     {
         $entities = $this->showLiquidations($id);
+
         return $this->render("RocketSellerTwoPickBundle:Liquidation:list.html.twig", array(
             "entities" => $entities,
             "idEhE" => $id
