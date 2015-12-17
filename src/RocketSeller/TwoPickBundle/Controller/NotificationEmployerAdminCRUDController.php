@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class NotificationEmployerAdminCRUDController extends CRUDController
 {
@@ -106,8 +107,9 @@ class NotificationEmployerAdminCRUDController extends CRUDController
                                 "Inserted " . ($i + 1) . " objects in " . ($e - $s) . " seconds.")
                         );
 
-                        // redirect to edit mode
-                        return $this->redirectTo($object);
+                        // redirect to list mode
+                        $url = $this->admin->generateUrl('list');
+                        return new RedirectResponse($url);
                     }
                 } catch (ModelManagerException $e) {
                     $this->logModelManagerException($e);

@@ -137,6 +137,9 @@ edit_profile:
 show_dashboard:
     path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
+show_dashboard_employer:
+    path:      /dashboard/employer
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard }
 register_incomplete:
     path:      /register/complete
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
