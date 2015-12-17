@@ -44,6 +44,10 @@ class EmployerHasEmployee
      */
     private $contracts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Liquidation", mappedBy="employerHasEmployee", cascade={"persist"})
+     */
+    private $liquidations;
 
 
     /**
@@ -159,4 +163,38 @@ class EmployerHasEmployee
         return $this->contracts;
     }
 
+
+    /**
+     * Add liquidation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation
+     *
+     * @return EmployerHasEmployee
+     */
+    public function addLiquidation(\RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation)
+    {
+        $this->liquidations[] = $liquidation;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation
+     */
+    public function removeLiquidation(\RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation)
+    {
+        $this->liquidations->removeElement($liquidation);
+    }
+
+    /**
+     * Get liquidations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidations()
+    {
+        return $this->liquidations;
+    }
 }

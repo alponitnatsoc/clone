@@ -1,0 +1,10 @@
+#Liquidation
+liquidation:
+    path: /
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:index }
+liquidations_by_ehe:
+    path: /{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:listByEhE }
+liquidation_show:
+    path: /show/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:show }

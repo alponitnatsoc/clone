@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+
+{% block content -%}
+    <h1>Liquidation list by ehe</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Daystoliquidate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a class="nav-link" href="{{ path('liquidation_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.daysToLiquidate }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a class="nav-link" href="{{ path('liquidation_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}

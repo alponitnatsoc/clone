@@ -1,3 +1,6 @@
+rocket_seller_two_pick_liquidation:
+    resource: "@RocketSellerTwoPickBundle/Resources/config/routing/liquidation.yml"
+    prefix:   /liquidations
 rocket_seller_two_pick_homepage:
     path:     /old
     defaults: { _controller: RocketSellerTwoPickBundle:Default:index }
