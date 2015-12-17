@@ -39,12 +39,12 @@ class Liquidation
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="liquidations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_contract", referencedColumnName="id_contract")
+     *   @ORM\JoinColumn(name="contract", referencedColumnName="id_contract")
      * })
      */
-    private $idContract;
+    private $contract;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\LiquidationType
@@ -56,22 +56,13 @@ class Liquidation
     private $liquidationType;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", cascade={"persist", "remove"})
+     * @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", inversedBy="liquidations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_employer", referencedColumnName="id_employer")
+     *   @ORM\JoinColumn(name="employer_has_employee", referencedColumnName="id_employer_has_employee")
      * })
      */
-    private $idEmployer;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee", cascade={"persist", "remove"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_employee", referencedColumnName="id_employee")
-     * })
-     */
-    private $idEmployee;
+    private $employerHasEmployee;
 
 
     /**
@@ -181,50 +172,50 @@ class Liquidation
     }
 
     /**
-     * Set idEmployer
+     * Set contract
      *
-     * @param integer $idEmployer
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
      *
      * @return Liquidation
      */
-    public function setIdEmployer($idEmployer)
+    public function setContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract = null)
     {
-        $this->idEmployer = $idEmployer;
+        $this->contract = $contract;
 
         return $this;
     }
 
     /**
-     * Get idEmployer
+     * Get contract
      *
-     * @return integer
+     * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
-    public function getIdEmployer()
+    public function getContract()
     {
-        return $this->idEmployer;
+        return $this->contract;
     }
 
     /**
-     * Set idEmployee
+     * Set employerHasEmployee
      *
-     * @param integer $idEmployee
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee
      *
      * @return Liquidation
      */
-    public function setIdEmployee($idEmployee)
+    public function setEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee = null)
     {
-        $this->idEmployee = $idEmployee;
+        $this->employerHasEmployee = $employerHasEmployee;
 
         return $this;
     }
 
     /**
-     * Get idEmployee
+     * Get employerHasEmployee
      *
-     * @return integer
+     * @return \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
      */
-    public function getIdEmployee()
+    public function getEmployerHasEmployee()
     {
-        return $this->idEmployee;
+        return $this->employerHasEmployee;
     }
 }

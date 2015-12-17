@@ -1,4 +1,4 @@
-tokens : 
+tokens :
     type: rest
     resource:     "RocketSellerTwoPickBundle:TokenRest"
     name_prefix:  api_public_
@@ -29,4 +29,8 @@ employer_services:
 novelty_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:NoveltyRest"
+    name_prefix: api_plublic_
+payments_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PaymentsRest"
     name_prefix: api_plublic_

@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% block content -%}
+    <h1>Liquidation</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Daystoliquidate</th>
+                <td>{{ entity.daysToLiquidate }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a class="nav-link" href="{{ path('liquidations_by_ehe', { "id": entity.employerHasEmployee.idEmployerHasEmployee } ) }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

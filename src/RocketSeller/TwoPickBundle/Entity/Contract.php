@@ -108,6 +108,12 @@ class Contract
     private $documentDocument;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Liquidation
+     * @ORM\OneToMany(targetEntity="Liquidation", mappedBy="contract", cascade={"persist", "remove"})
+     */
+    private $liquidations;
+
+    /**
      * Set idContract
      *
      * @param integer $idContract
@@ -304,7 +310,7 @@ class Contract
         return $this->benefits;
     }
 
-    
+
 
     /**
      * Add workplace
@@ -459,5 +465,39 @@ class Contract
     public function getDocumentDocument()
     {
         return $this->documentDocument;
+    }
+
+    /**
+     * Add liquidation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation
+     *
+     * @return Contract
+     */
+    public function addLiquidation(\RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation)
+    {
+        $this->liquidations[] = $liquidation;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation
+     */
+    public function removeLiquidation(\RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation)
+    {
+        $this->liquidations->removeElement($liquidation);
+    }
+
+    /**
+     * Get liquidations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidations()
+    {
+        return $this->liquidations;
     }
 }

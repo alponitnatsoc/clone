@@ -14,8 +14,13 @@ use FOS\RestBundle\Routing\Loader\Reader\RestActionReader;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 
+use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
+
 class ContractController extends Controller
 {
+
+    use EmployerHasEmployeeMethodsTrait;
+
 	/**
     * @param Id el id de la relación entre empleado y empleador EmployerHasEmployee
     * @return
@@ -57,10 +62,8 @@ class ContractController extends Controller
 	**/
     public function showContractsAction(Request $request, $id)
     {
-        $user=$this->getUser();
-        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-        $employerHasEmployee=$repository->find($id);
-        $contracts=$employerHasEmployee->getContracts();
+
+        $contracts = $this->showContracts($id);
 
         return $this->render(
             'RocketSellerTwoPickBundle:Contract:contractManager.html.twig',array(

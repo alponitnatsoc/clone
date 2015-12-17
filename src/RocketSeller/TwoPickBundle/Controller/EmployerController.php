@@ -84,7 +84,7 @@ class EmployerController extends Controller
         }
         
         foreach ($documentTypeAll as $document) {            
-            if(!in_array($document->getDocumentTypeDocumentType(), $result)){
+            if(!in_array($document->getDocumentTypeDocumentType(), $result)){                
                 array_push($result, $document->getDocumentTypeDocumentType());
             }
         }
@@ -105,7 +105,9 @@ class EmployerController extends Controller
             $documents = $em->getRepository('RocketSellerTwoPickBundle:Document')
                 ->findByPersonPerson($person);                           
             foreach ($documents as $document) {
-                array_push($docs,$document->getDocumentTypeDocumentType());   
+                if ($document->getStatus()) {
+                    array_push($docs,$document->getDocumentTypeDocumentType());       
+                }
             }
             array_push($documentsByEmployee, $docs);
             $docs = array();                                

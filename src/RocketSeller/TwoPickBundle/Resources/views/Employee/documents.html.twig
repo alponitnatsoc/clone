@@ -17,7 +17,7 @@
 				</tbody>
 			</table>
 		</div>
-  		<div class="col-md-4">
+  		<div class="col-md-6">
 	  		<table class="table">
 			    <thead>
 			      <tr>	           
@@ -28,11 +28,34 @@
 				    	<tbody>
 							{% for document  in documentTypeByEmployee %}
 								{% if document in documentsPerEmployee %}
-									<tr><td>Ya lo tienes</td></tr>
+									<tr>
+										<td>Ya lo tienes</td>
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Editar</a></td>
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Descargar</a></td>
+									</tr>									
 								{% else %}
-									<tr class="danger"><td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td></tr>
+									<tr class="danger">
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
 								{% endif %}									  							  											
 							{% endfor %}
+							{#% for document  in documentsPerEmployee %}
+								{% if document in documentTypeByEmployee %}
+									<tr>
+										<td>Ya lo tienes</td>
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Editar</a></td>
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Descargar</a></td>
+									</tr>									
+								{% else %}
+									<tr class="danger">
+										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+								{% endif %}									  							  											
+							{% endfor %#}
 			  			</tbody>	          	  	     
 				    </tbody>
 	  		</table>
