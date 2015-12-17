@@ -257,22 +257,15 @@ class EmployeeController extends Controller
             $person = $this->loadClassByArray(array('document'=>$document ,'phone'=>$cellphone , 'lastName1' =>$lastName1),"Person");
             $employee = $this->loadClassByArray(array('personPerson'=>$person),"Employee");
             if($employee){
-                $employee->setTwoFactorCode(12412412);
+                $code = rand (100000 , 999999);
+                $employee->setTwoFactorCode($code);
                 $twilio = $this->get('twilio.api');
-                /*$twilio->account->messages->sendMessage(                 
-                    // Step 6: Change the 'From' number below to be a valid Twilio number
-                    // that you've purchased, or the (deprecated) Sandbox number
-                        "+19562671001",
-                 
-                        // the number we are sending to - Any phone number
-                        "+573155964774",
-                 
-                        // the sms body
-                        "Hey Monkey Party at 6PM. Bring Bananas!",
-                 
-                        // Step 7: Add a url to the image media you want to send
-                        array("https://demo.twilio.com/owl.png", "https://demo.twilio.com/logo.png")
-                    );*/
+
+                $twilio->account->messages->sendMessage(                                     
+                        "+19562671001",                                         
+                        "+57".$cellphone,                                         
+                        "Hola este es tu codigo de autenticación: ".$code
+                    );
                 $em->flush($employee);                                         
                 return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig',
                     array('employee'=>$employee)
@@ -287,12 +280,13 @@ class EmployeeController extends Controller
         }        
     }
 
-    public function twoFactorLoginAction(Request $request)
+    public function twoFactorLoginAction($id,Request $request)
     {
+        $employee = $this->loadClassById($id,"Employee");
         if ($request->getMethod() == 'POST') {            
             $code = $this->get('request')->request->get('codigoTwo');
             $id = $request->query->get('id');       
-            if($code == 12412412){
+            if($code == $employee->getTwoFactorCode()){
                 return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
             }else{                
                 var_dump($id);
@@ -460,8 +454,11 @@ class EmployeeController extends Controller
                     array_push($documentTypeByEmployee,$entityHasDocumentType->getDocumentTypeDocumentType());
                 }            
             }                                  
-            foreach ($documentsEmployee as $doc) {                
-                array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
+            foreach ($documentsEmployee as $doc) {
+                if ($doc->getStatus()) {                                    
+                    array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
+                }                
+                
             }
             $documentTypeByEmployee = $this->simpleRemoveDuplicated($documentTypeByEmployee);                           
         return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('documentTypeByEmployee'=>$documentTypeByEmployee , 'employee'=>$employee ,'documentsPerEmployee'=>$documentsPerEmployee));
