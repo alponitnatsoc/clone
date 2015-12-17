@@ -5,6 +5,9 @@ ajax:
 testzip:
     path:      /export/user/documents
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:exportDocuments}
+testcvs:
+    path:      /export/user/fields
+    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsv}
 novelty_add:
     path:      /novelty/add/{idPayroll}/{noveltyTypeId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNovelty}

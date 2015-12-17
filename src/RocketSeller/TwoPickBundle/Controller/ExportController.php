@@ -3,13 +3,14 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use RocketSeller\TwoPickBundle\pdf\cafeSalud;
-use RocketSeller\TwoPickBundle\pdf\ConcatPdf;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipArchive;
 
 
@@ -24,7 +25,7 @@ class ExportController extends Controller
     {
 		/** @var User $user */
 		$user = $this->getUser();
-			$userDocuments=$user->getPersonPerson()->getDocs();
+		$userDocuments=$user->getPersonPerson()->getDocs();
 		$files = array();
 		$files[0] = array();
 		$files[1] = array();
@@ -77,8 +78,94 @@ class ExportController extends Controller
 			unlink($tmp_file);
 		}
 		return $this->redirectToRoute('ajax', array(), 301);
-
-
-        
     }
+	public function generateCsvAction(){
+		/** @var User $user */
+		$user = $this->getUser();
+		$tmp_file="tempcsv.csv";
+		$handle = fopen($tmp_file, 'w+');
+
+		// Add the header of the CSV file
+		fputcsv($handle, array('Campo', 'Dato'),';');
+		fputcsv($handle, array('Persona', 'Empleador'),';');
+		//first the user info
+		/** @var User $user */
+		$person=$user->getPersonPerson();
+		$em = $this->getDoctrine()->getEntityManager();
+		$connection = $em->getConnection();
+		$statement = $connection->prepare("SELECT * FROM person WHERE id_person = :id");
+		$statement->bindValue('id', $person->getIdPerson());
+		$statement->execute();
+		// Add the data queried from database
+		while( $row = $statement->fetch() )
+		{
+			foreach ($row as $key => $value) {
+				fputcsv(
+					$handle, // The file pointer
+					array($key, $value), // The fields
+					';' // The delimiter
+				);
+			}
+		}
+		//now for his empoyees
+		$employer=$person->getEmployer();
+		$employerHasEmployees=$employer->getEmployerHasEmployees();
+		/** @var EmployerHasEmployee $eHE */
+		foreach ($employerHasEmployees as $eHE) {
+			fputcsv($handle, array('Persona', 'Empleado'),';');
+			$employee=$eHE->getEmployeeEmployee();
+			$statement = $connection->prepare("SELECT * FROM person WHERE id_person = :id");
+			$statement->bindValue('id', $employee->getPersonPerson()->getIdPerson());
+			$statement->execute();
+			// Add the data queried from database
+			while( $row = $statement->fetch() )
+			{
+				foreach ($row as $key => $value) {
+					fputcsv(
+						$handle, // The file pointer
+						array($key, $value), // The fields
+						';' // The delimiter
+					);
+				}
+			}
+			$benefs=$employee->getEmployeeHasBeneficiary();
+			/** @var EmployeeHasBeneficiary $beneficiary */
+			foreach ($benefs as $beneficiary) {
+				fputcsv($handle, array('Persona', 'Beneficiario'),';');
+				$beneficiaryPerson=$beneficiary->getBeneficiaryBeneficiary()->getPersonPerson();
+				$statement = $connection->prepare("SELECT * FROM person WHERE id_person = :id");
+				$statement->bindValue('id', $beneficiaryPerson->getIdPerson());
+				$statement->execute();
+				// Add the data queried from database
+				while( $row = $statement->fetch() )
+				{
+					foreach ($row as $key => $value) {
+						fputcsv(
+							$handle, // The file pointer
+							array($key, $value), // The fields
+							';' // The delimiter
+						);
+					}
+				}
+			}
+
+
+		}
+
+
+
+		fclose($handle);
+
+		header("Content-disposition: attachment; filename=$tmp_file");
+		header('Content-type: application/zip');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: '.filesize($tmp_file));
+		ob_clean();
+		flush();
+		readfile($tmp_file);
+		ignore_user_abort(true);
+		unlink($tmp_file);
+	}
 }
