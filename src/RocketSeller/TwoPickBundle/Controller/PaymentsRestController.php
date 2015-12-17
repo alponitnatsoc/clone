@@ -823,7 +823,7 @@ class PaymentsRestController extends FOSRestController
    *   resource = true,
    *   description = "Dispersion of beneficiary payment by client.",
    *   statusCodes = {
-   *     200 = "OK"
+   *     200 = "OK",
    *     201 = "Accepted",
    *     400 = "Bad Request",
    *     401 = "Unauthorized"
@@ -938,7 +938,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getChargeByClientAction(ParamFetcher $paramFetcher)
+  public function getDetailedChargeByClientAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -983,7 +983,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getChargeByClientAction(ParamFetcher $paramFetcher)
+  public function getDispersionByClientAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
