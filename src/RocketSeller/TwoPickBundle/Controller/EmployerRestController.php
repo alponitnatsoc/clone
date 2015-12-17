@@ -95,10 +95,6 @@ class EmployerRestController extends FOSRestController
                     }
                 }
                 break;
-            case "liquidations":
-                break;
-            case "novelties":
-                break;
             default:
                 break;
         }

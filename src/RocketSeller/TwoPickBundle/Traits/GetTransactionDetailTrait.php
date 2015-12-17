@@ -47,18 +47,6 @@ trait GetTransactionDetailTrait
                 $details["payType"] = $pay->getPayTypePayType();
                 $details["payMethod"] = $pay->getPayMethodPayMethod();
                 break;
-            case "liquidation":
-                $liquidationRepository = $em->getRepository("RocketSellerTwoPickBundle:Liquidation");
-                /** @var Liquidation $liquidation */
-                $liquidation = $liquidationRepository->findOneBy(
-                    array(
-                        "id" => $id
-                    )
-                );
-                $details = $liquidation;
-                break;
-            case "novelty":
-                break;
             default:
                 break;
         }

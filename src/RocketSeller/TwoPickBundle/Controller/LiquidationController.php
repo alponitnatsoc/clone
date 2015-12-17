@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 
 /**
  * Liquidation controller.
@@ -17,6 +18,7 @@ class LiquidationController extends Controller
 {
 
     use EmployerHasEmployeeMethodsTrait;
+    use LiquidationMethodsTrait;
 
     /**
      * Lists all Liquidation entities.
@@ -39,16 +41,17 @@ class LiquidationController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+//         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('RocketSellerTwoPickBundle:Liquidation')->find($id);
+//         $entity = $em->getRepository('RocketSellerTwoPickBundle:Liquidation')->find($id);
+        $entity = $this->liquidationDetail($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Liquidation entity.');
         }
 
         return $this->render('RocketSellerTwoPickBundle:Liquidation:show.html.twig', array(
-            'entity'      => $entity
+            'entity' => $entity
         ));
     }
 
