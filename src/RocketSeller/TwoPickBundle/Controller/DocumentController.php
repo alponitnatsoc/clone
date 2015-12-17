@@ -63,6 +63,10 @@ class DocumentController extends Controller
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
 				array('form' => $form->createView()));
 	}
+	public function editDocAction($id,$idDocument, Request $request)
+	{
+		return true;
+	}
 	public function addDocAction($id,$idDocumentType,Request $request){
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()
@@ -73,6 +77,7 @@ class DocumentController extends Controller
 		->find($idDocumentType);
 		$document=new Document();
 		$document->setPersonPerson($person);
+		$document->setStatus(1);
 		$document->setDocumentTypeDocumentType($documentType);
 
 		$form = $this->createForm(new DocumentRegistration(),$document);
