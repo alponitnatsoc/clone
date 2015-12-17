@@ -1,11 +1,4 @@
 #Customs
-
-remove_trailing_slash:
-    path: /{url}
-    defaults: { _controller: RocketSellerTwoPickBundle:Redirecting:removeTrailingSlash }
-    requirements:
-        url: .*/$
-    methods: [GET]
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
