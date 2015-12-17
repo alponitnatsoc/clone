@@ -9,6 +9,9 @@ remove_trailing_slash:
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+testzip:
+    path:      /testzip
+    defaults:  { _controller: RocketSellerTwoPickBundle:Export:test}
 novelty_add:
     path:      /novelty/add/{idPayroll}/{noveltyTypeId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:addNovelty}

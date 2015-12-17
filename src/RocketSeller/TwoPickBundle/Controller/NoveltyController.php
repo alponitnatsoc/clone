@@ -96,6 +96,7 @@ class NoveltyController extends Controller
             }
             $tempDoc->setDocumentTypeDocumentType($rd->getDocumentTypeDocumentType());
             $tempDoc->setName(str_replace(" ", "_", $rd->getDocumentTypeDocumentType()->getName()));
+            $tempDoc->setStatus(true);
             $novelty->addDocument($tempDoc);
         }
         $requiredFields=$noveltyType->getRequiredFields();

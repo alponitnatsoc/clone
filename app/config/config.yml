@@ -286,7 +286,7 @@ sonata_media:
                 small:     { width: 200, quality: 100}
                 large:     { width: 600, quality: 100}
             download:
-                strategy: sonata.media.security.superadmin_strategy
+                strategy: sonata.media.security.connected_strategy
                 mode: http
     cdn:
         server:
