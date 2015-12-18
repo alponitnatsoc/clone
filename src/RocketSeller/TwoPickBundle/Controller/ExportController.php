@@ -86,6 +86,7 @@ class ExportController extends Controller
 		$handle = fopen($tmp_file, 'w+');
 
 		// Add the header of the CSV file
+		fputcsv($handle, array('sep=;'));
 		fputcsv($handle, array('Campo', 'Dato'),';');
 		fputcsv($handle, array('Persona', 'Empleador'),';');
 		//first the user info
