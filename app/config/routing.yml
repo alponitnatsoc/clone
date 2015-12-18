@@ -57,6 +57,10 @@ edit_documents:
     path:      /manage/employee/{id}/documents/edit/{idDocument}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:editDocument}
 
+download_document:
+    path:      /manage/employee/{id}/documents/download/{idDocument}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadDoc}
+
 documents_upload:
     path:   /manage/employee/{id}/documents/upload
     defaults: {_controller: RocketSellerTwoPickBundle:Documents:media }

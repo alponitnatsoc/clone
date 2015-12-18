@@ -32,7 +32,8 @@
 								{% if document in documentsPerEmployee %}
 									<tr>											
 										<td>Ya lo tienes</td>
-										<td><a href="{{ path('edit_documents', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">Editar</a></td>	
+										<td><a href="{{ path('edit_documents', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">Editar</a></td>
+										<td><a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">Descargar</a></td>	
 									</tr>									
 								{% else %}
 									<tr class="danger">

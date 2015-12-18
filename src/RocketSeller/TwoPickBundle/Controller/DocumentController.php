@@ -149,4 +149,12 @@ class DocumentController extends Controller
 				array('form' => $form->createView()));
 		return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
 	}
+	public function downloadDocAction($idDocument)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$document = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Document')
+		->find($idDocument);
+		return $this->redirect('/media/download/'.$document->getMediaMedia()->getId());
+	}
 }
