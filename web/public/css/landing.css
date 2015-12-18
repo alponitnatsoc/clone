@@ -3,7 +3,6 @@ html, body {
     padding: 0 !important;
     height:100%;
     font-family: "open sans" !important;
-
 }
 
 ::-webkit-input-placeholder {
@@ -59,10 +58,11 @@ br {
 #franja_oscura2 {
     background-color: #3B4B5A;
     width: 100%;
-    height: 300px;
+    height: 340px;
     position: relative;
     text-align: center;
     padding-bottom: 33px;
+    font-size: 20px;
 }
 
 #franja_oscura_movil {
@@ -143,12 +143,12 @@ br {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 44px;
-    top: 146px;
+    top: 152px;
     display: none;
 }
 
 #foto_muestra_ipad {
-    width: 250px;
+    width: 210px;
     z-index: 1;
     position: absolute;
     left: 0;
@@ -156,7 +156,7 @@ br {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 44px;
-    top: 435px;
+    top: 451px;
     display: none;
 }
 
@@ -189,8 +189,10 @@ br {
     margin-left: 111px;
     padding-top: 17px !important;
     padding-bottom: 31px !important;
-    font-size: 15px;
+    font-size: 20px;
     color: #7C7C7C !important;
+    height: 100px;
+    width: 488px;
 }
 
 @media screen and (max-width: 810px) {
@@ -204,23 +206,25 @@ br {
 
     #header img {
         margin-bottom: 25px;
-        width: 348px;
+        width: 390px;
         margin-right: 0px;
     }
 
     #foto_muestra {
         width: 490px;
-        top: 158px;
+        top: 190px;
     }
-
+    #franja_oscura1 {
+        height: 190px;
+    }
     #franja_oscura2 {
-        height: 480px;
+        height: 305px;
         padding-bottom: 0px;
     }
 
     #mail_wrapper {
-        font-size: 27px;
-        margin-top: 164px;
+        font-size: 24px;
+        margin-top: 27px;
         top: 80px;
         color: #FCFCFC;
     }
@@ -253,15 +257,24 @@ br {
         margin-left: 113px !important;
         font-size: 21px;
     }
+    .modal-body {
+        font-size: 17px;
+        width: 286px;
+    }
 }
 
 
 @media screen and (max-width: 500px) {
     #header img {
         width: 307px;
+        margin-bottom: 15px;
     }
     #franja_oscura_movil {
         display: block;
+        height: 271px;
+    }
+    #franja_oscura1 {
+        height: 140px;
     }
 
     #franja_clara_movil {
@@ -283,8 +296,8 @@ br {
 
     #mail_wrapper {
         font-size: 17px;
-        margin-top: 20px;
-        top: 45px;
+        margin-top: 0px;
+        top: 62px;
     }
 
     #emailSus {
@@ -306,7 +319,7 @@ br {
     }
 
     #header_texto {
-        font-size: 14px;
+        font-size: 17px;
         line-height: 7px;
     }
 
@@ -319,9 +332,27 @@ br {
         margin-left: 84px !important;
         font-size: 18px;
     }
-    
+
     .modal-body {
-       margin-left: 84px;
-       padding-top: 17px !important;
-   }
+        margin-left: 84px;
+        padding-top: 17px !important;
+        width: 189px;
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #header_texto p {
+        display:inline;
+    }
+    #header_texto{
+            font-size: 15px;
+            line-height: 18px!important;
+            display: inline-block!important;
+            margin-left: 5px;
+            margin-right: 5px;
+    }
+    #header img {
+        width: 287px;
+    }
 }

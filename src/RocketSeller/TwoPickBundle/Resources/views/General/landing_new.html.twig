@@ -13,150 +13,149 @@
     <body>
 
 
+      <!-- Modal Error-->
+     <div class="modal fade" id="myModalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/cruz.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Algo salió mal.</h4>
+             <div style="clear: both"></div>
+           </div>
 
-    <!-- Modal Error-->
-    <div class="modal fade" id="myModalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <img id = "cruz" src="{{ asset('public/img/cruz.png') }}">
-            <h4 class="modal-title" id="myModalLabel">NO RECIBIMOS TU INFORMACIÓN</h4>
-            <div style="clear: both"></div>
-          </div>
-
-          <div class="modal-body">
-              Verifica tu correo electrónico para que podamos enviarte noticias sobre cómo <p style="color: #11CCCB;    display: inline;">Symplifica</p> te puede ayudar a gestionar tus empleados.
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Modal Success-->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <img id = "cruz" src="{{ asset('public/img/bien.png') }}">
-            <h4 class="modal-title" id="myModalLabel">HEMOS RECIBIDO TU INFORMACIÓN</h4>
-            <div style="clear: both"></div>
-          </div>
-
-          <div class="modal-body">
-            Pronto te enviaremos noticias sobre cómo <p style="color: #11CCCB;    display: inline;">Symplifica</p> te puede ayudar a gestionar tus empleados.
-          </div>
-        </div>
-      </div>
-    </div>
+           <div class="modal-body">
+               No pudimos inscribirte, ingresa tu correo nuevamente.
+           </div>
+         </div>
+       </div>
+     </div>
 
 
+     <!-- Modal Success-->
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/bien.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Gracias!</h4>
+             <div style="clear: both"></div>
+           </div>
 
-            <!-- Google Tag Manager -->
-            <noscript><iframe src="http://www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'http://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-TR6JCJ');</script>
-            <!-- End Google Tag Manager -->
-        <div id = "general">
-
-            <div id = "header">
-
-                    <img src="{{ asset('public/img/logo-landing.png') }}">
-
-                <div id = "header_texto">
-                    <p>Tu gran aliado en la gestión de tus                    empleados con </p>
-                    <p>la tranquilidad que necesitas</p>
-                </div>
-                <div style="clear: both"></div>
-
-            </div>
-
-            <div id = "main">
-              <div id = "franja_oscura1">
-                <img src="{{ asset('public/img/muestra.png') }}" id="foto_muestra">
-                <img src="{{ asset('public/img/muestra_mac.png') }}" id="foto_muestra_mac">
-                <img src="{{ asset('public/img/muestra_ipad.png') }}" id="foto_muestra_ipad">
-
-              </div>
-              <div id = "franja_clara"></div>
-              <div id = "franja_oscura_movil"></div>
-              <div id = "franja_clara_movil"></div>
-              <div id = "franja_oscura2">
-
-                  <div id = "mail_wrapper">
-                    <p>Pronto estaremos al aire para ayudarte, <br>¿quieres recibir más información?</p>
-                      <input type="text" class="form-control" placeholder="Envíenme un email cuando esté listo" id="emailSus" required><br>
-                      <button type="button" class="btn btn-default submit-button loading" onclick="javascript:suscribirme($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>
-                  </div>
-              </div>
-
-            </div>
-
-            <div id = "footer">
-                <div id = "texto_footer">
-                    <p>©2015 symplifica.
-                    Todos los derechos reservados.</p>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
+           <div class="modal-body">
+             Pronto te contaremos cuando estemos al aire.
+           </div>
+         </div>
+       </div>
+     </div>
 
 
-        </div>
 
+             <!-- Google Tag Manager -->
+             <noscript><iframe src="http://www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
+             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+             <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+             'http://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+             })(window,document,'script','dataLayer','GTM-TR6JCJ');</script>
+             <!-- End Google Tag Manager -->
+         <div id = "general">
+
+             <div id = "header">
+
+                     <img src="{{ asset('public/img/logo-landing.png') }}">
+
+                 <div id = "header_texto">
+                     <p>Un gran aliado en la gestión de tus                    empleados con </p>
+                     <p>la tranquilidad que necesitas.</p>
+                 </div>
+                 <div style="clear: both"></div>
+
+             </div>
+
+             <div id = "main">
+               <div id = "franja_oscura1">
+                 <img src="{{ asset('public/img/muestra.png') }}" id="foto_muestra">
+                 <img src="{{ asset('public/img/muestra_mac.png') }}" id="foto_muestra_mac">
+                 <img src="{{ asset('public/img/muestra_ipad.png') }}"  id="foto_muestra_ipad">
+
+               </div>
+               <div id = "franja_clara"></div>
+               <div id = "franja_oscura_movil"></div>
+               <div id = "franja_clara_movil"></div>
+               <div id = "franja_oscura2">
+
+                   <div id = "mail_wrapper">
+                     <p>¡Pronto estaremos al aire para ayudarte!</p>
+                       <input type="text" class="form-control" placeholder="Envíame un email cuando esté listo." id="emailSus" required><br>
+                       <button type="button" class="btn btn-default submit-button loading" onclick="javascript:suscribirme($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>
+                   </div>
+               </div>
+
+             </div>
+
+             <div id = "footer">
+                 <div id = "texto_footer">
+                     <p>©2015 symplifica.
+                     Todos los derechos reservados.</p>
+                 </div>
+                 <div style="clear: both;"></div>
+             </div>
+
+
+         </div>
 
 
 
 
 
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-	<script>
-    function suscribirme(event) {
-        var $btn = event;
-        $btn.button('loading');
+     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-        var email = $("#emailSus").val();
+ 	<script>
+     function suscribirme(event) {
+         var $btn = event;
+         $btn.button('loading');
 
-        $.post( "/api/public/v1/suscribes/users", { email: email })
-        .done(function( data ) {
-            $btn.button("reset");
-            $('#myModal').modal({
-                keyboard: false
-            });
-            var a = {
-                email : email,
-                name : email
-            };
-            $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
-            .done();
-        }).fail(function(data){
-            console.log('He fallado')
-            $btn.button('reset');
-            $('#myModalError').modal({
-                keyboard: false
-            })
-        });
-    }
+         var email = $("#emailSus").val();
 
-	</script>
+         $.post( "/api/public/v1/suscribes/users", { email: email })
+         .done(function( data ) {
+             $btn.button("reset");
+             $('#myModal').modal({
+                 keyboard: false
+             });
+             var a = {
+                 email : email,
+                 name : email
+             };
+             $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
+             .done();
+         }).fail(function(data){
+             console.log('He fallado')
+             $btn.button('reset');
+             $('#myModalError').modal({
+                 keyboard: false
+             })
+         });
+     }
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+ 	</script>
 
-        ga('create', 'UA-70850811-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <!-- End Google Analytics -->
-    </body>
-</html>
+     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+     <script>
+         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+         })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+         ga('create', 'UA-70850811-1', 'auto');
+         ga('send', 'pageview');
+     </script>
+     <!-- End Google Analytics -->
+     </body>
+ </html>
