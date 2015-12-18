@@ -82,7 +82,7 @@ class ExportController extends Controller
 	public function generateCsvAction(){
 		/** @var User $user */
 		$user = $this->getUser();
-		$tmp_file="tempcsv.csv";
+		$tmp_file=$user->getPersonPerson()->getNames()."_fields.cvs";
 		$handle = fopen($tmp_file, 'w+');
 
 		// Add the header of the CSV file
