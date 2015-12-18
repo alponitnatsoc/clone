@@ -433,6 +433,7 @@ class EmployeeController extends Controller
     }
     public function employeeDocumentsAction($id)
     {
+        $keys = array();
         $documentsPerEmployee = array();
         $person = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Person')
@@ -450,19 +451,25 @@ class EmployeeController extends Controller
                 $entityHasDocumentsType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
                 ->findByEntityEntity($entity);
-                foreach ($entityHasDocumentsType as $entityHasDocumentType) {
+                foreach ($entityHasDocumentsType as $entityHasDocumentType) {                    
                     array_push($documentTypeByEmployee,$entityHasDocumentType->getDocumentTypeDocumentType());
                 }            
             }                                  
             foreach ($documentsEmployee as $doc) {
-                if ($doc->getStatus()) {                                    
-                    array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
-                }                
-                
+                if ($doc->getStatus()) {  
+                    $documentsPerEmployee[$doc->getIdDocument()] = $doc->getDocumentTypeDocumentType();                                  
+                    //array_push($documentsPerEmployee,$doc->getDocumentTypeDocumentType());
+                }                 
             }
             $documentTypeByEmployee = $this->simpleRemoveDuplicated($documentTypeByEmployee);                           
-        return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('documentTypeByEmployee'=>$documentTypeByEmployee , 'employee'=>$employee ,'documentsPerEmployee'=>$documentsPerEmployee));
-    } 
+        foreach ($documentTypeByEmployee as $document) {  
+                $aux = array_search($document, $documentsPerEmployee);          
+                if (!is_null($aux)) {
+                    array_push($keys,array_search($document, $documentsPerEmployee));
+                } 
+        }
+        return $this->render('RocketSellerTwoPickBundle:Employee:documents.html.twig',array('documentTypeByEmployee'=>$documentTypeByEmployee , 'employee'=>$employee ,'documentsPerEmployee'=>$documentsPerEmployee,'keys'=>$keys));
+    }  
     public function simpleRemoveDuplicated($array)
     {
         $docs = array();

@@ -1,9 +1,8 @@
 {% extends "::base.html.twig" %}
 {% block content %}
 	
-		<p>hola {{ employee.personPerson.names }}</p>
+		<p>Hola {{ employee.personPerson.names }}</p>
 		<p>Revisa tu celular e ingresa el codigo que te enviamos</p>
-		<p>{{ employee.twoFactorCode }}</p>
 	
 	<form class="form col-md-6" method="POST" action="{{ path('employee_login_two_auth', {id : employee.idEmployee }) }}">	
 		<div class="form-group col-md-12">
