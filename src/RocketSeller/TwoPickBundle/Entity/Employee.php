@@ -36,6 +36,10 @@ class Employee
      */
     private $employeeHasEmployers;
     /**
+     * @ORM\OneToMany(targetEntity="EmployeeHasBeneficiary", mappedBy="employeeEmployee", cascade={"persist"})
+     */
+    private $employeeHasBeneficiary;
+    /**
      * @var boolean $twoFactorAuthentication Enabled yes/no
      * @ORM\Column(type="boolean")
      */
@@ -210,5 +214,39 @@ class Employee
     public function getTwoFactorCode()
     {
         return $this->twoFactorCode;
+    }
+
+    /**
+     * Add employeeHasBeneficiary
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary $employeeHasBeneficiary
+     *
+     * @return Employee
+     */
+    public function addEmployeeHasBeneficiary(\RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary $employeeHasBeneficiary)
+    {
+        $this->employeeHasBeneficiary[] = $employeeHasBeneficiary;
+
+        return $this;
+    }
+
+    /**
+     * Remove employeeHasBeneficiary
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary $employeeHasBeneficiary
+     */
+    public function removeEmployeeHasBeneficiary(\RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary $employeeHasBeneficiary)
+    {
+        $this->employeeHasBeneficiary->removeElement($employeeHasBeneficiary);
+    }
+
+    /**
+     * Get employeeHasBeneficiary
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmployeeHasBeneficiary()
+    {
+        return $this->employeeHasBeneficiary;
     }
 }

@@ -29,8 +29,12 @@ employer_services:
 novelty_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:NoveltyRest"
-    name_prefix: api_plublic_
+    name_prefix: api_public_
 payments_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PaymentsRest"
-    name_prefix: api_plublic_
+    name_prefix: api_public_
+liquidation_services:
+    resource: "RocketSellerTwoPickBundle:LiquidationRest"
+    type:   rest
+    name_prefix:   api_public_

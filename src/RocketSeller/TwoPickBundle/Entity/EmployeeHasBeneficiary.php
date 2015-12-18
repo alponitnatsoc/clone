@@ -32,7 +32,7 @@ class EmployeeHasBeneficiary
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employee
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee", inversedBy="employeeHasBeneficiary")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employee_id_employee", referencedColumnName="id_employee")
      * })
