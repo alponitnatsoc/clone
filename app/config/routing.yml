@@ -68,6 +68,9 @@ documents_upload:
 show_notifications:
     path:   /notifications
     defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
+change_status_notification:
+    path:   /notifications/change/{idNotification}/{status}
+    defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:changeStatus }
 
 show_notificationsEmployer:
     path:   /notificationsEmployer

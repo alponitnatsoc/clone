@@ -15,12 +15,14 @@
                                     {{ notification.sawDate|date("d/m/Y H:m") }}: {{ notification.description }}
                                 </div>
                             </div>
-                            <div id='' class='col-xs-4'>
+                            <div id='' class='col-xs-2'>
                                 {% if notification.relatedLink != null %}
-                                    <a href="{{ notification.relatedLink }}">View</a>
+                                    <a class="nav-link" href="{{ notification.relatedLink }}">Ver</a>
                                 {% endif %}
                             </div>
-
+                            <div id='' class='col-xs-2'>
+                                    <a class="nav-link" href="{{ path('change_status_notification',{'idNotification':notification.id,'status':1}) }}">Descartar</a>
+                            </div>
                         </div>
                     </div>
                 </div>

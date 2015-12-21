@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\NotificationEmployer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 //use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,22 @@ class NotificationEmployerController extends Controller
     {
         $user = $this->getUser();
         $notifications = $this->getNotifications($user->getPersonPerson());
+        return $this->render('RocketSellerTwoPickBundle:Employer:notifications.html.twig', array(
+                    'notifications' => $notifications,
+        ));
+    }
+    public function changeStatusAction($idNotification,$status)
+    {
+        $user = $this->getUser();
+        /** @var NotificationEmployer $notification */
+        $notification = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:NotificationEmployer')
+            ->find($idNotification);
+        $notification->setStatus($status);
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($notification);
+        $em->flush();
+        $notifications=$this->getNotifications($user->getPersonPerson());
         return $this->render('RocketSellerTwoPickBundle:Employer:notifications.html.twig', array(
                     'notifications' => $notifications,
         ));
