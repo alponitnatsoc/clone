@@ -50,3 +50,7 @@ pay_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayRest"
     name_prefix: api_public_
+payments_services_test:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PaymentsRestTest"
+    name_prefix: api_plublic_

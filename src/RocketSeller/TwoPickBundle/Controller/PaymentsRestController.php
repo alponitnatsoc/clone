@@ -19,61 +19,6 @@ use EightPoints\Bundle\GuzzleBundle;
 class PaymentsRestController extends FOSRestController
 {
   /**
-   * Add the novelty<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Finds the cities of a department.",
-   *   statusCodes = {
-   *     200 = "Returned when successful",
-   *     400 = "Bad Request",
-   *     404 = "Returned when the Novelty Type id doesn't exists "
-   *   }
-   * )
-   *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   * @RequestParam(name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
-   * @return View
-   */
-  public function postPaymentsMockAction(ParamFetcher $paramFetcher)
-  {
-    $a = $paramFetcher->get('documentType');
-    $view = View::create();
-    $view->setStatusCode(200);
-    $view->setData((array('name' => 'ok')));
-    return $view;
-  }
-
-  /**
-   * Add the novelty<br/>
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Finds the cities of a department.",
-   *   statusCodes = {
-   *     200 = "Returned when successful",
-   *     400 = "Bad Request",
-   *     404 = "Returned when the Novelty Type id doesn't exists "
-   *   }
-   * )
-   *
-   * @param integer $cedula - Cedula usuario falso
-   * @return View
-   */
-  public function postCustomerAction($cedula)
-  {
-    $view = View::create();
-    $view->setStatusCode(200);
-    $view->setData(json_encode(array('document-type' => 'CC',
-                                     'document-number' => '765432198',
-                                     'name' => 'Alan',
-                                     'last-name' => 'Turing',
-                                     'birth-date' => '12/12/1912',
-                                     'phone-number' => '3456789',
-                                     'email' => 'aaaaa@bbb.cc')));
-    return $view;
-  }
-
-  /**
    * Calls the payments api, it receives the headers and the parameters and
    * makes a call using an absolute path, and returns a view with the Json or
    * XML response.
@@ -88,14 +33,14 @@ class PaymentsRestController extends FOSRestController
                           $timeout=10)
   {
     $client = $this->get('guzzle.client.api_rest');
-    $url_request = $this->container->getParameter('novo_payments_url') ;
+    // $url_request = $this->container->getParameter('novo_payments_url') ;
 
-    // URL used for test porpouses.
-    //$url_request = "http://localhost:8001/api/public/v1" . $path;
+    // URL used for test porpouses, the line above should be used in production.
+    $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
     $response = null;
     $options = array(
                   'headers'     => $headers,
-                  'form_params' => $parameters,
+                  'json'        => $parameters,
                   'timeout'     => $timeout
                 );
     if ($action == "post")
@@ -112,7 +57,9 @@ class PaymentsRestController extends FOSRestController
     }
     $view = View::create();
     $view->setStatusCode($response->getStatusCode());
-    $view->setData(json_decode((String)$response->getBody()));
+    //die(json_decode((String)$response->getBody(), JSON_UNESCAPED_SLASHES));
+    $view->setData(((String)$response->getBody()));
+
     return $view;
   }
 
@@ -172,7 +119,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function postInsertClientAction(ParamFetcher $paramFetcher)
+  public function postClientAction(ParamFetcher $paramFetcher)
   {
     // Create the birth date in the right format.
     $birth = $paramFetcher->get('day') . '/' . $paramFetcher->get('month') .
@@ -224,7 +171,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getGetClientAction(ParamFetcher $paramFetcher)
+  public function getClientAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber');
@@ -266,7 +213,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getLast10MovementsAction(ParamFetcher $paramFetcher)
+  public function getClientLast10MovementsAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') . "/movement";
@@ -318,7 +265,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getGetMovementsRangeAction(ParamFetcher $paramFetcher)
+  public function getClientRangeMovementsAction(ParamFetcher $paramFetcher)
   {
     // Adjust the format of the start date.
     $start = null;
@@ -375,7 +322,7 @@ class PaymentsRestController extends FOSRestController
    * @RequestParam(name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
    * @RequestParam(name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
    * @RequestParam(name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
-   * @RequestParam(name="paymentMode", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="Payment mode.")
+   * @RequestParam(name="paymentMode", nullable=false, requirements="([A-Z|a-z| ])+", strict=true, description="Payment mode.")
    *
    * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
    * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
@@ -385,7 +332,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function postSetPaymentMethodAction(ParamFetcher $paramFetcher)
+  public function postClientPaymentmethodAction(ParamFetcher $paramFetcher)
   {
     // Adjust the format of the expiration date.
     $expiration = null;
@@ -442,7 +389,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getLast5PaymentMethodAction(ParamFetcher $paramFetcher)
+  public function getClientLast5PaymentmethodsAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -486,7 +433,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getPaymentMethodByClientAction(ParamFetcher $paramFetcher)
+  public function getClientPaymentmethodsAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -530,7 +477,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function deleteClientPaymentMethodAction(ParamFetcher $paramFetcher)
+  public function deleteClientPaymentmethodAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -586,11 +533,12 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function postInsertBeneficiaryAction(ParamFetcher $paramFetcher)
+  public function postBeneficiaryAction(ParamFetcher $paramFetcher)
   {
     // Create the birth date in the right format.
-    $birth = $paramFetcher->get('dayBirth') . '/' . $paramFetcher->get('monthBirth') .
-             '/' . $paramFetcher->get('yearBirth');
+    $birth = $paramFetcher->get('dayBirth') . '/' .
+             $paramFetcher->get('monthBirth') . '/' .
+             $paramFetcher->get('yearBirth');
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
             "/beneficiary/";
@@ -609,7 +557,8 @@ class PaymentsRestController extends FOSRestController
     $parameters['company-id'] = $paramFetcher->get('companyId');
     $parameters['company-branch'] = $paramFetcher->get('companyBranch');
     $parameters['payment-mode-id'] = $paramFetcher->get('paymentMethodId');
-    $parameters['payment-mode-account'] = $paramFetcher->get('PaymentAccountNumber');
+    $parameters['payment-mode-account'] =
+        $paramFetcher->get('PaymentAccountNumber');
     $parameters['payment-mode-bank'] = $paramFetcher->get('PaymentBankNumber');
     $parameters['payment-mode-type'] = $paramFetcher->get('PaymentType');
 
@@ -646,7 +595,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getBeneficiaryByClientAction(ParamFetcher $paramFetcher)
+  public function getClientBeneficiaryAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -689,7 +638,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getAllBeneficiariesByClientAction(ParamFetcher $paramFetcher)
+  public function getClientBeneficiariesAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -733,7 +682,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function deleteBeneficiaryByClientAction(ParamFetcher $paramFetcher)
+  public function deleteClientBeneficiaryAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -847,7 +796,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function postPaymentDispersionByClientAction(ParamFetcher $paramFetcher)
+  public function postClientPaymentAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -860,7 +809,8 @@ class PaymentsRestController extends FOSRestController
     $parameters['charge-id'] = $paramFetcher->get('chargeId');
     $parameters['beneficiary-id'] = $paramFetcher->get('beneficiaryId');
     $parameters['beneficiary-amount'] = $paramFetcher->get('beneficiaryAmount');
-    $parameters['beneficiary-phone-number'] = $paramFetcher->get('beneficiaryPhone');
+    $parameters['beneficiary-phone-number'] =
+        $paramFetcher->get('beneficiaryPhone');
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters, $path);
@@ -894,7 +844,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getChargeByClientAction(ParamFetcher $paramFetcher)
+  public function getClientChargesAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -938,7 +888,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getDetailedChargeByClientAction(ParamFetcher $paramFetcher)
+  public function getClientChargeAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -983,7 +933,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getDispersionByClientAction(ParamFetcher $paramFetcher)
+  public function getClientTransferAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .
@@ -1027,7 +977,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getBalanceByClientAction(ParamFetcher $paramFetcher)
+  public function getClientBalanceAction(ParamFetcher $paramFetcher)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $paramFetcher->get('documentNumber') .

@@ -108,7 +108,7 @@ swiftmailer:
 
 accord_mandrill_swift_mailer:
     api_key: "%mandrill_api_key%"
-    
+
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
@@ -148,7 +148,7 @@ sonata_block:
         sonata.block.service.text:
         sonata.block.service.rss:
         sonata.admin.block.search_result:
-            
+
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
@@ -166,10 +166,10 @@ fos_rest:
         default_engine: twig
     routing_loader:
         default_format: json
-        
+
 nelmio_api_doc:
     name: 2Pick API Documentation
-    
+
 guzzle:
     clients:
         api_rest:
@@ -189,7 +189,7 @@ guzzle:
              #   wsse:
               #      username: fabian.padilla
                #     password: $2y$13$iihkvl78gyokgww8w4owse8fKC8uZrhPWSZQAsJmp2vvIicTqv1xS
-                    
+
 hwi_oauth:
     # name of the firewall in which this bundle is active, this setting MUST be set
     firewall_name: main
@@ -235,7 +235,7 @@ hwi_oauth:
             facebook: facebook_id
             google: google_id
             linkedin: linkedin_id
-            
+
 fs_solr:
     endpoints:
         core1:
@@ -243,7 +243,7 @@ fs_solr:
             port: 8983
             path: /solr/2pick
             core: 2pick
-            timeout: 5  
+            timeout: 5
 doctrine:
     orm:
         entity_managers:
