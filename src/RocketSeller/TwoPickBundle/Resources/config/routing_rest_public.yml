@@ -42,3 +42,7 @@ contract_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:ContractRest"
     name_prefix: api_public_
+pay_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PayRest"
+    name_prefix: api_public_
