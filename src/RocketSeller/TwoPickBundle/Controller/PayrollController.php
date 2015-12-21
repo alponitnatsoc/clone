@@ -35,13 +35,13 @@ class PayrollController extends Controller
                     $em->flush();
                 } else {
                     $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] =  array();
-                    foreach($payroll->getPayrollDetails() as $detail){ 
+                    foreach($payroll->getPayrollDetails() as $detail){
                         $repository = $this->getDoctrine()
                             ->getRepository('RocketSellerTwoPickBundle:Novelty');
                         $query = $repository->createQueryBuilder('n');
                         $query->andWhere('n.payrollDetailPayrollDetail = :payroll')
                             ->setParameter('payroll', $detail->getIdPayrollDetail());
-                        $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] = $query->getQuery()->getResult();
+                        $novelties[$employerHasEmployee->getIdEmployerHasEmployee()][] = $query->getQuery()->getResult();
                     }
                 }
 
@@ -49,14 +49,13 @@ class PayrollController extends Controller
                 $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
             }
         }
-        dump($novelties);
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
         	"employees" => $employeesData,
             "salaries" => $salaries,
             "payrolls" => $payrolls,
             "novelties" => $novelties
-        ));    
+        ));
     }
 
     public function calculateAction(Request $request)
@@ -76,7 +75,7 @@ class PayrollController extends Controller
             $salaries = array();
             $total = 0;
             foreach($employeesData as $employerHasEmployee) {
-                
+
                 $contracts = $employerHasEmployee->getContracts();
                 $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
                 foreach($contracts as $contract)
@@ -112,7 +111,7 @@ class PayrollController extends Controller
             $salaries = array();
             $total = 0;
             foreach($employeesData as $employerHasEmployee) {
-                
+
                 $contracts = $employerHasEmployee->getContracts();
                 $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
                 foreach($contracts as $contract)
@@ -128,6 +127,6 @@ class PayrollController extends Controller
             ));
         } else {
             return $this->redirect("/payroll", 301);
-        }  
-    }    
+        }
+    }
 }
