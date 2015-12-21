@@ -144,6 +144,14 @@
          });
      }
 
+     $('#myModalError').on('hidden.bs.modal', function () {
+          $('#emailSus').val('');
+      });
+      $('#myModal').on('hidden.bs.modal', function () {
+          $('#emailSus').val('');
+      });
+
+
  	</script>
 
      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
