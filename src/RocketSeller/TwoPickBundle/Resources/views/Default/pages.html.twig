@@ -30,14 +30,21 @@ function sendAjax (url, form) {
 			}
 		}
 		}).done(function(data) {
-			$('#main').replaceWith(
-			// ... with the returned one from the AJAX response.
-			$(data).find('#main'));
-			addClick();
-			if (!jsLoader(url)) {
-				addSumbit();
+			if(data["url"]!=null){
+				console.log(data["url"]);
+				sendAjax(data["url"]);
+			}else{
+				$('#main').replaceWith(
+						// ... with the returned one from the AJAX response.
+						$(data).find('#main'));
+				addClick();
+				if (!jsLoader(url)) {
+					addSumbit();
+				}
 			}
-		});
+		}).fail(function( jqXHR, textStatus, errorThrown ) {
+			alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+	});
 }
 function addClick () {
 	$("#main .nav-link").on("click",function(e){
