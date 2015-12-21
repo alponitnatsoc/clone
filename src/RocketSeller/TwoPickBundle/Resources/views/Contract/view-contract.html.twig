@@ -1,25 +1,116 @@
 {% extends "::base.html.twig" %}
-{% block fos_user_content %}
+{% block content %}
     <div class="page-header">
-        <h1>{{  contract["employee"]["name"] }} </h1>
-        <small>{{ contract["employee"]["document"]["type"] }} {{ contract["employee"]["document"]["number"] }}</small>
+{#         <h1>{{  contract["employee"]["name"] }} </h1>#}
+{#         <small>{{ contract["employee"]["document"]["type"] }} {{ contract["employee"]["document"]["number"] }}</small>#}
         <a class="btn btn-default" href="#" role="button">Liquidar empleado</a>
     </div>
     <div class="row">
-        {% for key, data in contract.contract %}
-            <div class="col-sm-6 col-md-4">
-                <div class="caption">
-                    <h3>{{ key }}</h3>
-                    {% if data is iterable %}
-                        {# users is probably a string #}
-                        {% for key, d in data %}
-                            {{ key }}: {{ dump(d) }}
-                        {% endfor %}
-                    {% else %}
-                        <p>{{ data }}</p>
-                    {% endif %}
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tipo de empleado</h3>
+                </div>
+                <div class="panel-body">
+                    {{ contract.employeeContractTypeEmployeeContractType.name }}
                 </div>
             </div>
-        {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tipo de contrato</h3>
+                </div>
+                <div class="panel-body">
+                    {{ contract.contractTypeContractType.name }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Dedicación de tiempo</h3>
+                </div>
+                <div class="panel-body">
+                    {{ contract.timeCommitmentTimeCommitment.name }}
+                </div>
+            </div>
+        </div>
     </div>
-{% endblock fos_user_content %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fecha de inicio contrato</h3>
+                </div>
+                <div class="panel-body">
+                    BB
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fecha de fin contrato</h3>
+                </div>
+                <div class="panel-body">
+                    BB
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Días laborales al mes</h3>
+                </div>
+                <div class="panel-body">
+                    BB
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Cargo</h3>
+                </div>
+                <div class="panel-body">
+                    {{ contract.positionPosition.name }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Funciones</h3>
+                </div>
+                <div class="panel-body">
+                    BB
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sueldo</h3>
+                </div>
+                <div class="panel-body">
+                    {{ contract.salary }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Beneficios</h3>
+                </div>
+                <div class="panel-body">
+                    {{ dump(contract.benefits) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
