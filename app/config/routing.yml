@@ -72,8 +72,8 @@ change_status_notification:
     path:   /notifications/change/{idNotification}/{status}
     defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:changeStatus }
 
-show_notificationsEmployer:
-    path:   /notificationsEmployer
+show_notifications_employer:
+    path:   /notifications/employer
     defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:index }
 
 
