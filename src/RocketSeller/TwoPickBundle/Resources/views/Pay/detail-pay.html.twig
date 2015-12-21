@@ -1,6 +1,5 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-{# {{ dump(pay) }}#}
     <div class="page-header">
         <small>Detalle de pago</small>
     </div>
@@ -14,7 +13,7 @@
                     <h3 class="panel-title">Fecha de creacion</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.purchaseOrder.dateCreated.date }}
+                    {{ pay.purchaseOrdersPurchaseOrders.dateCreated.date }}
                 </div>
             </div>
         </div>
@@ -24,7 +23,7 @@
                     <h3 class="panel-title">Fecha modificacion</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.purchaseOrder.dateModified.date }}
+                    {{ pay.purchaseOrdersPurchaseOrders.dateModified.date }}
                 </div>
             </div>
         </div>
@@ -34,7 +33,7 @@
                     <h3 class="panel-title">Valor</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.purchaseOrder.value }}
+                    {{ pay.purchaseOrdersPurchaseOrders.value }}
                 </div>
             </div>
         </div>
@@ -44,8 +43,8 @@
                     <h3 class="panel-title">Numero de factura</h3>
                 </div>
                 <div class="panel-body">
-                    {% if pay.purchaseOrder.invoiceNumber is not null %}
-                        pay.purchaseOrder.invoiceNumber
+                    {% if pay.purchaseOrdersPurchaseOrders.invoiceNumber is not null %}
+                        pay.purchaseOrdersPurchaseOrders.invoiceNumber
                     {% else %}
                         No hay factura asociada
                     {% endif %}
@@ -58,7 +57,7 @@
                     <h3 class="panel-title">Estado</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.purchaseOrder.purchaseOrdersStatusPurchaseOrdersStatus.name }}
+                    {{ pay.purchaseOrdersPurchaseOrders.purchaseOrdersStatusPurchaseOrdersStatus.name }}
                 </div>
             </div>
         </div>
@@ -68,7 +67,7 @@
                     <h3 class="panel-title">Tipo</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.purchaseOrder.purchaseOrdersTypePurchaseOrdersType.name }}
+                    {{ pay.purchaseOrdersPurchaseOrders.purchaseOrdersTypePurchaseOrdersType.name }}
                 </div>
             </div>
         </div>
@@ -84,7 +83,7 @@
                     <h3 class="panel-title">Forma de pago</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.payType.name }}
+                    {{ pay.payTypePayType.name }}
                 </div>
             </div>
         </div>
@@ -100,7 +99,7 @@
                     <h3 class="panel-title">Banco</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.payMethod.bankBank.name }}
+                    {{ pay.payMethodPayMethod.bankBank.name }}
                 </div>
             </div>
         </div>
@@ -110,7 +109,7 @@
                     <h3 class="panel-title">Tipo de cuenta</h3>
                 </div>
                 <div class="panel-body">
-                    {{ pay.payMethod.accountTypeAccountType.name }}
+                    {{ pay.payMethodPayMethod.accountTypeAccountType.name }}
                 </div>
             </div>
         </div>
