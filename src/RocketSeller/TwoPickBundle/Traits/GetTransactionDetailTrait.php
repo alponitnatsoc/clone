@@ -1,9 +1,7 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Traits;
 
-use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
-use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 trait GetTransactionDetailTrait
 {
@@ -14,27 +12,6 @@ trait GetTransactionDetailTrait
         $details = array();
 
         switch ($type) {
-            case "contract":
-
-                $contractRepository = $em->getRepository("RocketSellerTwoPickBundle:Contract");
-                /** @var Contract $contract */
-                $contract = $contractRepository->findOneBy(
-                    array(
-                        "idContract" => $id
-                    )
-                );
-                $details["benefics"] = $contract->getBenefits();
-                $details["contractType"] = $contract->getContractTypeContractType();
-                $details["document"] = $contract->getDocumentDocument();
-                $details["employeeContractType"] = $contract->getEmployeeContractTypeEmployeeContractType();
-                $details["payMethod"] = $contract->getPayMethodPayMethod();
-                $details["payrolls"] = $contract->getPayrolls();
-                $details["position"] = $contract->getPositionPosition();
-                $details["salary"] = $contract->getSalary();
-                $details["state"] = $contract->getState();
-                $details["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment();
-                $details["workplaces"] = $contract->getWorkplaces();
-                break;
             case "pay":
                 $payRepository = $em->getRepository("RocketSellerTwoPickBundle:Pay");
                 /** @var Pay $pay */

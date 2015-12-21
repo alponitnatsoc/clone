@@ -15,11 +15,13 @@ use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\ContractMethodsTrait;
 
 class ContractController extends Controller
 {
 
     use EmployerHasEmployeeMethodsTrait;
+    use ContractMethodsTrait;
 
 	/**
     * @param Id el id de la relación entre empleado y empleador EmployerHasEmployee
@@ -79,64 +81,11 @@ class ContractController extends Controller
      */
     public function viewContractAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $details = array();
-
-        $contractRepository = $em->getRepository("RocketSellerTwoPickBundle:Contract");
-        /** @var Contract $contract */
-        $contract = $contractRepository->findOneBy(
-            array(
-                "idContract" => $id
-            )
-        );
-
-        $employee = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
-
-        $details["employee"]["name"] = $employee->getNames() . " " . $employee->getLastName1() . " " . $employee->getLastName2();
-        $details["employee"]["document"]["type"] = $employee->getDocumentType();
-        $details["employee"]["document"]["number"] = $employee->getDocument();
-
-        $details["contract"]["type"] = $contract->getContractTypeContractType()->getName();
-        $benefits = $contract->getBenefits();
-        if (is_array($benefits)) {
-            foreach($benefits as $benefit) {
-                $details["contract"]["benefits"][] = $benefit;
-            }
-        }
-
-        $documents = $contract->getDocumentDocument();
-        if ($documents) {
-            $details["contract"]["document"] = $documents->getName();
-        }
-
-        $details["contract"]["employeeType"] = $contract->getEmployeeContractTypeEmployeeContractType()->getName();
-        $details["contract"]["salary"] = $contract->getSalary();
-        $details["contract"]["payMethod"] = $contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
-
-        $payrolls = $contract->getPayrolls()->getValues();
-        if (is_array($payrolls)) {
-            /** @var Payroll $payroll */
-            foreach($payrolls as $key => $payroll) {
-                $details["contract"]["payrolls"][$key] = $payroll;
-            }
-        }
-        $details["contract"]["position"] = $contract->getPositionPosition()->getName();
-        $details["contract"]["state"] = $contract->getState();
-        $details["contract"]["timeCommitment"] = $contract->getTimeCommitmentTimeCommitment()->getName();
-
-        $workplaces = $contract->getWorkplaces()->getValues();
-        if (is_array($workplaces)) {
-            /** @var ContractHasWorkplace $workplace */
-            foreach($workplaces as $key => $workplace) {
-                $details["contract"]["workplaces"][$key]["city"] = $workplace->getWorkplaceWorkplace()->getCity();
-                $details["contract"]["workplaces"][$key]["mainAddress"] = $workplace->getWorkplaceWorkplace()->getMainAddress();
-            }
-        }
+        $contract = $this->contractDetail($id);
 
         return $this->render('RocketSellerTwoPickBundle:Contract:view-contract.html.twig',
             array(
-                "contract" => $details,
-                'idContract' => $id
+                "contract" => $contract
             )
         );
     }

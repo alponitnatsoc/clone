@@ -1,19 +1,19 @@
 tokens :
     type: rest
-    resource:     "RocketSellerTwoPickBundle:TokenRest"
-    name_prefix:  api_public_
+    resource: "RocketSellerTwoPickBundle:TokenRest"
+    name_prefix: api_public_
 employer :
     type: rest
-    resource:     "RocketSellerTwoPickBundle:PersonRest"
-    name_prefix:  api_public_
+    resource: "RocketSellerTwoPickBundle:PersonRest"
+    name_prefix: api_public_
 calculator :
     type: rest
-    resource:     "RocketSellerTwoPickBundle:CalculatorRest"
-    name_prefix:  api_public_
+    resource: "RocketSellerTwoPickBundle:CalculatorRest"
+    name_prefix: api_public_
 employee :
     type: rest
-    resource:     "RocketSellerTwoPickBundle:EmployeeRest"
-    name_prefix:  api_public_
+    resource: "RocketSellerTwoPickBundle:EmployeeRest"
+    name_prefix: api_public_
 purchase_orders_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:PurchaseOrdersRest"
@@ -35,6 +35,10 @@ payments_services:
     resource: "RocketSellerTwoPickBundle:PaymentsRest"
     name_prefix: api_public_
 liquidation_services:
+    type: rest
     resource: "RocketSellerTwoPickBundle:LiquidationRest"
-    type:   rest
-    name_prefix:   api_public_
+    name_prefix: api_public_
+contract_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:ContractRest"
+    name_prefix: api_public_
