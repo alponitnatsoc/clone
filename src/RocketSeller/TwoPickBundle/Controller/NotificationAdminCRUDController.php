@@ -5,11 +5,9 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class NotificationEmployerAdminCRUDController extends CRUDController
-{
+class NotificationAdminCRUDController extends CRUDController {
 
-    public function createAction()
-    {
+    public function createAction() {
         // the key used to lookup the template
         $templateKey = 'edit';
 
@@ -44,7 +42,7 @@ class NotificationEmployerAdminCRUDController extends CRUDController
                 }
 
                 try {
-                    if (!empty($object->getEmployerEmployer())) {
+                    if (!empty($object->getPersonPerson())) {
 
                         $object = $this->admin->create($object);
 
@@ -74,7 +72,8 @@ class NotificationEmployerAdminCRUDController extends CRUDController
                         $batchSize = 20;
                         foreach ($employers as $i => $employer) {
                             $notificacion = clone $object;
-                            $notificacion->setEmployerEmployer($employer);
+                            $person = $employer->getPersonPerson();
+                            $notificacion->setPersonPerson($person);
                             $em->persist($notificacion);
                             // flush everything to the database every 20 inserts
 //                            if (($i % $batchSize) == 0) {
@@ -144,6 +143,14 @@ class NotificationEmployerAdminCRUDController extends CRUDController
                     'form' => $view,
                     'object' => $object,
         ));
+    }
+
+    private function logModelManagerException($e) {
+        $context = array('exception' => $e);
+        if ($e->getPrevious()) {
+            $context['previous_exception_message'] = $e->getPrevious()->getMessage();
+        }
+        $this->getLogger()->error($e->getMessage(), $context);
     }
 
 }
