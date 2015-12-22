@@ -297,3 +297,7 @@ show_help:
 help_detail:
     path:     /help/detail/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Home:helpDetail }
+
+subscription_choices:
+    path:     /subscription
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:subscriptionChoices }
