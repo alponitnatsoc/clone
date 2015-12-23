@@ -4,12 +4,11 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-//TODO mirar porque funciona si no extiende de RESTController
-class CalculatorRestController extends Controller
+class CalculatorRestController extends FOSRestController
 {
     /**
      * Create a Person from the submitted data.<br/>

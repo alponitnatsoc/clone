@@ -111,8 +111,8 @@ class NoveltyController extends Controller {
                 /** @var User $user */
                 $user = $this->getUser();
                 $notification = new Notification();
-                $notification->setPersonPerson($user->getPersonPerson()->getEmployer()->getPersonPerson());
-                $notification->setStatus(-1);
+                $notification->setPersonPerson($user->getPersonPerson());
+                $notification->setStatus(1);
                 $notification->setDescription("Faltan llenar algunos datos de la novedad");
                 $em->persist($notification);
                 $em->flush();
@@ -163,9 +163,9 @@ class NoveltyController extends Controller {
                     /** @var User $user */
                     $user = $this->getUser();
                     $notification = new Notification();
-                    $notification->setPersonPerson($user->getPersonPerson()->getEmployer()->getPersonPerson());
+                    $notification->setPersonPerson($user->getPersonPerson());
                     $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty())));
-                    $notification->setStatus(-1);
+                    $notification->setStatus(1);
                     $notification->setDescription("Faltan llenar algunos datos de la novedad");
                     $em->persist($notification);
                     $em->flush();
