@@ -23,11 +23,12 @@ class EmployerRegistration extends AbstractType
             ->add('youAre', 'choice', array(
                 'choices' => array(
                     'persona'   => 'Persona',
-                    'empresa' => 'Empresa',
+                    'empresa' => 'Empresa (muy pronto)',
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'mapped' => false,))
+                'label' => 'Usted Es',
+                'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
             ->add('numberOfWorkplaces', 'choice', array(

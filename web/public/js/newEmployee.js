@@ -82,8 +82,18 @@ function startEmployee(){
             },
             statusCode:{
                 200: function(data){
-                    console.log(data);
-                    sendAjax(data);
+                    if(data["url"]!=null){
+                        console.log(data["url"]);
+                        sendAjax(data["url"]);
+                    }else{
+                        $('#main').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(data).find('#main'));
+                        addClick();
+                        if (!jsLoader(url)) {
+                            addSumbit();
+                        }
+                    }
                 },
                 400 : function(data, textStatus, errorThrown){
                     alert("400 :"+errorThrown+"\n"+data.responseJSON.error.exception[0].message);

@@ -20,7 +20,11 @@ class Employer
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployer;
-    
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $employerType;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
@@ -206,5 +210,29 @@ class Employer
     public function getEmployerHasEmployees()
     {
         return $this->employerHasEmployees;
+    }
+
+    /**
+     * Set employerType
+     *
+     * @param string $employerType
+     *
+     * @return Employer
+     */
+    public function setEmployerType($employerType)
+    {
+        $this->employerType = $employerType;
+
+        return $this;
+    }
+
+    /**
+     * Get employerType
+     *
+     * @return string
+     */
+    public function getEmployerType()
+    {
+        return $this->employerType;
     }
 }

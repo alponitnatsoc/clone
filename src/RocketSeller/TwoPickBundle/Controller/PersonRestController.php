@@ -70,6 +70,7 @@ class PersonRestController extends FOSRestController
             $people->setMainAddress($paramFetcher->get('mainAddress'));
             $people->setNeighborhood($paramFetcher->get('neighborhood'));
             $people->setPhone($paramFetcher->get('phone'));
+            $employer->setEmployerType($paramFetcher->get('youAre'));
             $datetime = new DateTime();
             $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
             // TODO validate Date
