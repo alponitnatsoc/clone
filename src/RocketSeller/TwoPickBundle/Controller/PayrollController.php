@@ -10,52 +10,56 @@ class PayrollController extends Controller
 {
     public function payAction()
     {
-    	$user=$this->getUser();
-        $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        $salaries = array();
-        $payrolls = array();
-        $novelties = array();
-        foreach($employeesData as $employerHasEmployee) {
-            $contracts = $employerHasEmployee->getContracts();
-            $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
-            foreach($contracts as $contract)
-            {
-                $repository = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:Payroll');
-                $query = $repository->createQueryBuilder('p');
-                $query->andWhere('p.contractContract = :contract')
-                    ->setParameter('contract', $contract->getIdContract());
-                $payroll = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if($this->isGranted('PAYROLL', $this->getUser())) {
+        	$user=$this->getUser();
+            $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            $salaries = array();
+            $payrolls = array();
+            $novelties = array();
+            foreach($employeesData as $employerHasEmployee) {
+                $contracts = $employerHasEmployee->getContracts();
+                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
+                foreach($contracts as $contract)
+                {
+                    $repository = $this->getDoctrine()
+                        ->getRepository('RocketSellerTwoPickBundle:Payroll');
+                    $query = $repository->createQueryBuilder('p');
+                    $query->andWhere('p.contractContract = :contract')
+                        ->setParameter('contract', $contract->getIdContract());
+                    $payroll = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
 
-                if(!$payroll) {
-                    $payroll = new Payroll();
-                    $payroll->setContractContract($contract);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($payroll);
-                    $em->flush();
-                } else {
-                    $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] =  array();
-                    foreach($payroll->getPayrollDetails() as $detail){
-                        $repository = $this->getDoctrine()
-                            ->getRepository('RocketSellerTwoPickBundle:Novelty');
-                        $query = $repository->createQueryBuilder('n');
-                        $query->andWhere('n.payrollDetailPayrollDetail = :payroll')
-                            ->setParameter('payroll', $detail->getIdPayrollDetail());
-                        $novelties[$employerHasEmployee->getIdEmployerHasEmployee()][] = $query->getQuery()->getResult();
+                    if(!$payroll) {
+                        $payroll = new Payroll();
+                        $payroll->setContractContract($contract);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($payroll);
+                        $em->flush();
+                    } else {
+                        $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] =  array();
+                        foreach($payroll->getPayrollDetails() as $detail){
+                            $repository = $this->getDoctrine()
+                                ->getRepository('RocketSellerTwoPickBundle:Novelty');
+                            $query = $repository->createQueryBuilder('n');
+                            $query->andWhere('n.payrollDetailPayrollDetail = :payroll')
+                                ->setParameter('payroll', $detail->getIdPayrollDetail());
+                            $novelties[$employerHasEmployee->getIdEmployerHasEmployee()][] = $query->getQuery()->getResult();
+                        }
                     }
+
+                    $payrolls[$employerHasEmployee->getIdEmployerHasEmployee()] = $payroll;
+                    $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
                 }
-
-                $payrolls[$employerHasEmployee->getIdEmployerHasEmployee()] = $payroll;
-                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
             }
-        }
 
-        return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
-        	"employees" => $employeesData,
-            "salaries" => $salaries,
-            "payrolls" => $payrolls,
-            "novelties" => $novelties
-        ));
+            return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
+            	"employees" => $employeesData,
+                "salaries" => $salaries,
+                "payrolls" => $payrolls,
+                "novelties" => $novelties
+            ));
+        } else {
+            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+        }
     }
 
     public function calculateAction(Request $request)

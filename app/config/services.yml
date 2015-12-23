@@ -43,3 +43,9 @@ services:
             - [ setContainer, [ @service_container ] ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    app.symplifica_voter:
+        class: RocketSeller\TwoPickBundle\Security\Voter\SymplificaVoter
+        arguments: [ @doctrine.orm.entity_manager ]
+        tags:
+            - { name: security.voter }
