@@ -70,4 +70,18 @@ class DefaultController extends Controller
     {
         return $this->render("RocketSellerTwoPickBundle:Default:active.html.twig");
     }
+    public function subscriptionChoicesAction()
+    {
+        $user = $this->getUser();
+        $user->addRole('ROLE_NEW');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        if ($this->get('security.context')->isGranted('ROLE_NEW')) {
+            return $this->render('RocketSellerTwoPickBundle:Default:subscriptionChoices.html.twig');    
+        }else{
+            throw $this->createAccessDeniedException('You cannot access this page!');
+        }
+        
+    }
 }
