@@ -137,7 +137,7 @@ class PersonRestController extends FOSRestController
             if (count($errors) == 0) {
                 $em->persist($user);
                 $em->flush();
-                $view->setData($this->generateUrl('show_dashboard') )->setStatusCode(200);
+                $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
                 return $view;
             } else {
                 $view = $this->getErrorsView($errors);

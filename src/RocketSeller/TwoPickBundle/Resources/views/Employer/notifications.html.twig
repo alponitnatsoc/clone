@@ -3,7 +3,7 @@
     {% if notifications %}
         <p>Funcionó</p>	
         {% for notification in notifications %}
-            {% if notification.status != 1 %}
+            {% if notification.status != -1 %}
                 <div id='' class='col-xs-12'>
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -21,7 +21,7 @@
                                 {% endif %}
                             </div>
                             <div id='' class='col-xs-2'>
-                                    <a class="nav-link" href="{{ path('change_status_notification',{'idNotification':notification.id,'status':1}) }}">Descartar</a>
+                                    <a class="nav-link" href="{{ path('change_status_notification',{'idNotification':notification.id,'status':-1}) }}">Descartar</a>
                             </div>
                         </div>
                     </div>

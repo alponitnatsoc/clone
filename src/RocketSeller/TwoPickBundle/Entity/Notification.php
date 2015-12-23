@@ -47,7 +47,7 @@ class Notification {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sawDate", type="datetime")
+     * @ORM\Column(name="sawDate", type="datetime", nullable=TRUE)
      */
     private $sawDate;
 
