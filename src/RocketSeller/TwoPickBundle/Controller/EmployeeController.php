@@ -86,6 +86,7 @@ class EmployeeController extends Controller
                 $employeeBeneficiary = new EmployeeHasBeneficiary();
                 $employeeBeneficiary->setEmployeeEmployee($employee);
                 $employeeBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+                $employeeBeneficiary->setEntityEntity($Entity);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($beneficiary);
                 $em->flush();
