@@ -82,7 +82,7 @@ class ExportController extends Controller
 	public function generateCsvAction(){
 		/** @var User $user */
 		$user = $this->getUser();
-		$tmp_file=$user->getPersonPerson()->getNames()."_fields.cvs";
+		$tmp_file=$user->getPersonPerson()->getNames()."_fields.csv";
 		$handle = fopen($tmp_file, 'w+');
 
 		// Add the header of the CSV file
@@ -158,7 +158,7 @@ class ExportController extends Controller
 		fclose($handle);
 
 		header("Content-disposition: attachment; filename=$tmp_file");
-		header('Content-type: application/zip');
+		header('Content-type: text/csv');
 		header('Expires: 0');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
