@@ -93,8 +93,8 @@
 
                     </div>
                     <div class="panel_btn">
-                        {% if notification.relatedlinkName %}
-                            <a href="{{ notification.relatedlink }}" class="btn btn-default">{{ notification.relatedlinkName }}</a>
+                        {% if notification.accion %}
+                            <a href="{{ notification.relatedlink }}" class="btn btn-default">{{ notification.accion }}</a>
                         {% else %}
                             <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
                         {% endif %}

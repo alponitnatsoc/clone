@@ -70,11 +70,11 @@ show_notifications:
     defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
 change_status_notification:
     path:   /notifications/change/{idNotification}/{status}
-    defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:changeStatus }
+    defaults: {_controller: RocketSellerTwoPickBundle:Notification:changeStatus }
 
 show_notifications_employer:
     path:   /notifications/employer
-    defaults: {_controller: RocketSellerTwoPickBundle:NotificationEmployer:index }
+    defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
 
 
 show_beneficiaries:

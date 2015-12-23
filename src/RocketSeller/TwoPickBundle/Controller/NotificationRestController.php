@@ -46,7 +46,7 @@ class NotificationRestController extends FOSRestController
         }
         /** @var NotificationEmployer $notification */
         $notification = $this->getdoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:NotificationEmployer')
+            ->getRepository('RocketSellerTwoPickBundle:Notification')
             ->find($paramFetcher->get('notificationId'));
         if($notification==null){
             $view->setStatusCode(404);

@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\NotificationRepository")
  */
-class Notification
-{
+class Notification {
+
     /**
      * @var integer
      *
@@ -20,6 +20,20 @@ class Notification
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=100, nullable=TRUE)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100, nullable=TRUE)
+     */
+    private $title;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
@@ -42,41 +56,91 @@ class Notification
      *
      * @ORM\Column(name="status", type="smallint")
      */
-    private $status;
+    private $status = 0;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relatedlink", type="string", length=100, nullable=TRUE)
+     */
+    private $relatedLink;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accion", type="string", length=100, nullable=TRUE)
+     */
+    private $accion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=100, nullable=TRUE)
+     */
+    private $description;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="deadline", type="datetime", nullable=TRUE)
+     */
+    private $deadline;
+
+    public function _construct() {
+        $this->sawDate = new \DateTime();
+    }
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
-     * Set personPerson
+     * Set type
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
+     * @param string $type
      *
      * @return Notification
      */
-    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson)
-    {
-        $this->personPerson = $personPerson;
+    public function setType($type) {
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get personPerson
+     * Get type
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\Person
+     * @return string
      */
-    public function getPersonPerson()
-    {
-        return $this->personPerson;
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Notification
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle() {
+        return $this->title;
     }
 
     /**
@@ -86,8 +150,7 @@ class Notification
      *
      * @return Notification
      */
-    public function setSawDate($sawDate)
-    {
+    public function setSawDate($sawDate) {
         $this->sawDate = $sawDate;
 
         return $this;
@@ -98,8 +161,7 @@ class Notification
      *
      * @return \DateTime
      */
-    public function getSawDate()
-    {
+    public function getSawDate() {
         return $this->sawDate;
     }
 
@@ -110,8 +172,7 @@ class Notification
      *
      * @return Notification
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -122,8 +183,118 @@ class Notification
      *
      * @return integer
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
+
+    /**
+     * Set relatedLink
+     *
+     * @param string $relatedLink
+     *
+     * @return Notification
+     */
+    public function setRelatedLink($relatedLink) {
+        $this->relatedLink = $relatedLink;
+
+        return $this;
+    }
+
+    /**
+     * Get relatedLink
+     *
+     * @return string
+     */
+    public function getRelatedLink() {
+        return $this->relatedLink;
+    }
+
+    /**
+     * Set accion
+     *
+     * @param string $accion
+     *
+     * @return Notification
+     */
+    public function setAccion($accion) {
+        $this->accion = $accion;
+
+        return $this;
+    }
+
+    /**
+     * Get accion
+     *
+     * @return string
+     */
+    public function getAccion() {
+        return $this->accion;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Notification
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * Set deadline
+     *
+     * @param \DateTime $deadline
+     *
+     * @return Notification
+     */
+    public function setDeadline($deadline) {
+        $this->deadline = $deadline;
+
+        return $this;
+    }
+
+    /**
+     * Get deadline
+     *
+     * @return \DateTime
+     */
+    public function getDeadline() {
+        return $this->deadline;
+    }
+
+    /**
+     * Set personPerson
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Person $personPerson
+     *
+     * @return Notification
+     */
+    public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson = null) {
+        $this->personPerson = $personPerson;
+
+        return $this;
+    }
+
+    /**
+     * Get personPerson
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Person
+     */
+    public function getPersonPerson() {
+        return $this->personPerson;
+    }
+
 }

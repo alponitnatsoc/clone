@@ -4,10 +4,9 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use RocketSeller\TwoPickBundle\Controller\NotificationEmployerController;
+use RocketSeller\TwoPickBundle\Controller\NotificationController;
 
-class DashBoardEmployerController extends Controller
-{
+class DashBoardEmployerController extends Controller {
 
     /**
      * Maneja el registro de una nueva persona con los datos básicos, 
@@ -15,8 +14,7 @@ class DashBoardEmployerController extends Controller
      * @param el Request que manjea el form que se imprime
      * @return La vista de el formulario de la nueva persona
      * */
-    public function showDashBoardAction(Request $request)
-    {
+    public function showDashBoardAction(Request $request) {
         $user = $this->getUser();
         if (empty($user)) {
             return $this->redirectToRoute('fos_user_security_login');
@@ -26,11 +24,10 @@ class DashBoardEmployerController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array('notifications' => $notifications));
     }
 
-    public function getNotifications($person)
-    {
+    public function getNotifications($person) {
         $notifications = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:NotificationEmployer')
-                ->findByEmployerEmployer($person);
+                ->getRepository('RocketSellerTwoPickBundle:Notification')
+                ->findByPersonPerson($person);
         return $notifications;
     }
 
