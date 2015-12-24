@@ -9,13 +9,51 @@ function startEmployer(){
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', ($collectionHolder.find(':input').length)/4);
     //el cambio de tabs entre el formulario de registro
-    $('.btnNext').click(function(){
-        $('.nav-tabs > .active').next('li').find('a').trigger('click');
-    });
     $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
     });
-
+    $('#btn-1').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                youAre: 		$(form).find("input[name='register_employer[youAre]']").val(),
+                documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
+                document: 		$(form).find("input[name='register_employer[person][document]']").val(),
+                names:			$(form).find("input[name='register_employer[person][names]']").val(),
+                lastName1: 		$(form).find("input[name='register_employer[person][lastName1]']").val(),
+                lastName2: 		$(form).find("input[name='register_employer[person][lastName2]']").val(),
+                year: 			$(form).find("select[name='register_employer[person][birthDate][year]']").val(),
+                month: 			$(form).find("select[name='register_employer[person][birthDate][month]']").val(),
+                day: 			$(form).find("select[name='register_employer[person][birthDate][day]']").val(),
+            }
+        }).done(function(data) {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+        });
+    });
+    $('#btn-2').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                mainAddress: 	$(form).find("input[name='register_employer[person][mainAddress]']").val(),
+                neighborhood: 	$(form).find("input[name='register_employer[person][neighborhood]']").val(),
+                phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
+                department: 	$(form).find("select[name='register_employer[person][department]']").val(),
+                city: 			$(form).find("select[name='register_employer[person][city]']").val(),
+            }
+        }).done(function(data) {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+        });
+    });
     //funcion que agrega un listener a cada department
     addListeners();
 
@@ -86,20 +124,6 @@ function startEmployer(){
             url : form.attr('action'),
             type: $(form).attr('method'),
             data: {
-                youAre: 		$(form).find("input[name='register_employer[youAre]']").val(),
-                documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
-                document: 		$(form).find("input[name='register_employer[person][document]']").val(),
-                names:			$(form).find("input[name='register_employer[person][names]']").val(),
-                lastName1: 		$(form).find("input[name='register_employer[person][lastName1]']").val(),
-                lastName2: 		$(form).find("input[name='register_employer[person][lastName2]']").val(),
-                year: 			$(form).find("select[name='register_employer[person][birthDate][year]']").val(),
-                month: 			$(form).find("select[name='register_employer[person][birthDate][month]']").val(),
-                day: 			$(form).find("select[name='register_employer[person][birthDate][day]']").val(),
-                mainAddress: 	$(form).find("input[name='register_employer[person][mainAddress]']").val(),
-                neighborhood: 	$(form).find("input[name='register_employer[person][neighborhood]']").val(),
-                phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
-                department: 	$(form).find("select[name='register_employer[person][department]']").val(),
-                city: 			$(form).find("select[name='register_employer[person][city]']").val(),
                 workId:         ids,
                 workMainAddress:addresses,
                 workCity:       citys,

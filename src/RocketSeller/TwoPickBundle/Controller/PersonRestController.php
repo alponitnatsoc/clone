@@ -15,6 +15,7 @@ use DateTime;
 
 class PersonRestController extends FOSRestController
 {	
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -32,24 +33,15 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="youAre", nullable=false, strict=true, description="you Are.")
      * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
      * @RequestParam(name="document", nullable=false, strict=true, description="document.")
-     * @RequestParam(name="names", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="names.")
-     * @RequestParam(name="lastName1", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last Name 1.")
-     * @RequestParam(name="lastName2", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last Name 2.")
+     * @RequestParam(name="names", nullable=false,  strict=true, description="names.")
+     * @RequestParam(name="lastName1", nullable=false,  strict=true, description="last Name 1.")
+     * @RequestParam(name="lastName2", nullable=false,  strict=true, description="last Name 2.")
      * @RequestParam(name="year", nullable=false, strict=true, description="year.")
      * @RequestParam(name="month", nullable=false, strict=true, description="month.")
      * @RequestParam(name="day", nullable=false, strict=true, description="day.")
-     * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
-     * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
-     * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
-     * @RequestParam(name="department", nullable=false, strict=true, description="department.")
-     * @RequestParam(name="city", nullable=false, strict=true, description="city.")
-     * @RequestParam(array=true, name="workId", nullable=false, strict=true, description="id if exist else -1.")
-     * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
-     * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="workplace city.")
-     * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="workplace department.")
      * @return View
      */
-    public function postEditPersonSubmitAction(ParamFetcher $paramFetcher)
+    public function postEditPersonSubmitStep1Action(ParamFetcher $paramFetcher)
     {
         $user=$this->getUser();
         /** @var Person $people */
@@ -67,20 +59,122 @@ class PersonRestController extends FOSRestController
             $people->setLastName2($paramFetcher->get('lastName2'));
             $people->setDocument($paramFetcher->get('document'));
             $people->setDocumentType($paramFetcher->get('documentType'));
-            $people->setMainAddress($paramFetcher->get('mainAddress'));
-            $people->setNeighborhood($paramFetcher->get('neighborhood'));
-            $people->setPhone($paramFetcher->get('phone'));
             $employer->setEmployerType($paramFetcher->get('youAre'));
             $datetime = new DateTime();
             $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
             // TODO validate Date
             $people->setBirthDate($datetime);
-            // TODO Check if null
+            $em = $this->getDoctrine()->getManager();
+
+            $view = View::create();
+            $errors = $this->get('validator')->validate($user, array('Update'));
+
+            if (count($errors) == 0) {
+                $em->persist($user);
+                $em->flush();
+                $view->setStatusCode(200);
+                return $view;
+            } else {
+                $view = $this->getErrorsView($errors);
+                return $view;
+            }
+        }
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
+     * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
+     * @RequestParam(name="department", nullable=false, strict=true, description="department.")
+     * @RequestParam(name="city", nullable=false, strict=true, description="city.")
+     * @return View
+     */
+    public function postEditPersonSubmitStep2Action(ParamFetcher $paramFetcher)
+    {
+        $user=$this->getUser();
+        /** @var Person $people */
+        $people =$user->getPersonPerson();
+        $employer=$people->getEmployer();
+
+        //all the data is valid
+        if (true) {
+            $people->setMainAddress($paramFetcher->get('mainAddress'));
+            $people->setNeighborhood($paramFetcher->get('neighborhood'));
+            $people->setPhone($paramFetcher->get('phone'));
+            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $people->setCity($cityRepo->find($paramFetcher->get('city')));
+
+            $people->setDepartment($depRepo->find($paramFetcher->get('department')));
+
+            $em = $this->getDoctrine()->getManager();
+            $view = View::create();
+            $errors = $this->get('validator')->validate($user, array('Update'));
+            if($people->getCity()==null){
+                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
+                    'error'=>array('department'=>'not valid city')))->setStatusCode(404);
+            }
+            if($people->getDepartment()==null){
+                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
+                    'error'=>array('department'=>'not valid department')) )->setStatusCode(404);
+            }
+            if (count($errors) == 0) {
+                $em->persist($user);
+                $em->flush();
+                $view->setStatusCode(200);
+                return $view;
+            } else {
+                $view = $this->getErrorsView($errors);
+                return $view;
+            }
+        }
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(array=true, name="workId", nullable=false, strict=true, description="id if exist else -1.")
+     * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
+     * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="workplace city.")
+     * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="workplace department.")
+     * @return View
+     */
+    public function postEditPersonSubmitStep3Action(ParamFetcher $paramFetcher)
+    {
+        $user=$this->getUser();
+        /** @var Person $people */
+        $people =$user->getPersonPerson();
+        $employer=$people->getEmployer();
+
+
+        //all the data is valid
+        if (true) {
             $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
             $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
             $workRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
-            $people->setCity($cityRepo->find($paramFetcher->get('city')));
-            $people->setDepartment($depRepo->find($paramFetcher->get('department')));
 
             $em = $this->getDoctrine()->getManager();
             $actualWorkplacesId=$paramFetcher->get('workId');
@@ -94,7 +188,8 @@ class PersonRestController extends FOSRestController
                     /** @var Workplace $tempWorkplace */
                     $tempWorkplace=$workRepo->find($actualWorkplacesId[$i]);
                     if($tempWorkplace->getEmployerEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
-                        $view = View::create()->setStatusCode(400);
+                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
+                            'error'=>array('wokplaces'=>'you dont have those workplaces')))->setStatusCode(400);
                         return $view;
                     }
 

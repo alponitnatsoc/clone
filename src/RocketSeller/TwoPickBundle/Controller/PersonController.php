@@ -41,7 +41,7 @@ class PersonController extends Controller
         $employer->setEmployerType("persona");
 
         $form = $this->createForm(new EmployerRegistration(), $employer, array(
-            'action' => $this->generateUrl('api_public_post_edit_person_submit', array('format'=>'json')),
+            'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
             'method' => 'POST',
         ));
 

@@ -135,21 +135,15 @@ show_form_entity:
 inactive_user:
     path: /activar-suscripcion
     defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
-#edit_profile_submit:
-#    path:      /register/edit/submit
-#    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPersonSubmit }
 edit_profile:
-    path:      /register/edit
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson }
+    path:      /register/edit/{step}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, step: 0 }
 show_dashboard:
     path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }
 show_dashboard_employer:
     path:      /dashboard/employer
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard }
-register_incomplete:
-    path:      /register/complete
-    defaults:  { _controller: RocketSellerTwoPickBundle:Person:newPerson }
 purchase_orders_list:
     path: /ordenes-de-compra
     defaults: { _controller: RocketSellerTwoPickBundle:PurchaseOrders:index}

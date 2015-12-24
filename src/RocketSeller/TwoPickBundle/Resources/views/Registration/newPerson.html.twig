@@ -21,7 +21,7 @@
 	    {{ form_row(form.person.lastName1) }}
 	    {{ form_row(form.person.lastName2) }}
 	    {{ form_row(form.person.birthDate) }}
-	    <a class="btn btn-primary btnNext" >Siguiente</a>
+	    <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 	</div>
 
@@ -32,7 +32,7 @@
 	    {{ form_row(form.person.department) }}
 	    {{ form_row(form.person.city) }}
 	    <a class="btn btn-primary btnPrevious" >Anterior</a>
-	    <a class="btn btn-primary btnNext" >Siguiente</a>
+	    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
     </div>
 
