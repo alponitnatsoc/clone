@@ -9,6 +9,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
@@ -97,7 +98,8 @@ class PersonRestController extends FOSRestController
      *
      * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
      * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
-     * @RequestParam(name="phone", nullable=false, strict=true, description="phone.")
+     * @RequestParam(array=true, name="phonesIds", nullable=false, strict=true, description="id if exist else -1.")
+     * @RequestParam(array=true, name="phones", nullable=false, strict=true, description="main workplace Address.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
      * @RequestParam(name="city", nullable=false, strict=true, description="city.")
      * @return View
@@ -113,14 +115,59 @@ class PersonRestController extends FOSRestController
         if (true) {
             $people->setMainAddress($paramFetcher->get('mainAddress'));
             $people->setNeighborhood($paramFetcher->get('neighborhood'));
-            $people->setPhone($paramFetcher->get('phone'));
+            $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
             $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
             $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $actualPhonesId=$paramFetcher->get('phonesIds');
+            $actualPhonesAdd=$paramFetcher->get('phones');
             $people->setCity($cityRepo->find($paramFetcher->get('city')));
 
             $people->setDepartment($depRepo->find($paramFetcher->get('department')));
-
             $em = $this->getDoctrine()->getManager();
+
+            $actualPhones= new ArrayCollection();
+            for($i=0;$i<count($actualPhonesAdd);$i++){
+                $tempPhone=null;
+                if($actualPhonesId[$i]!=""){
+                    /** @var Phone $tempPhone */
+                    $tempPhone=$phoneRepo->find($actualPhonesId[$i]);
+                    if($tempPhone->getPersonPerson()->getEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
+                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
+                            'error'=>array('wokplaces'=>'you dont have those phones')))->setStatusCode(400);
+                        return $view;
+                    }
+
+                }else{
+                    $tempPhone=new Phone();
+                }
+                $tempPhone->setPhoneNumber($actualPhonesAdd[$i]);
+                $actualPhones->add($tempPhone);
+            }
+            $phones = $people->getPhones();
+            /** @var Phone $phone */
+            foreach($phones as $phone){
+                /** @var Phone $actPhone */
+                $flag=false;
+                foreach($actualPhones as $actPhone){
+                    if($phone->getIdPhone()==$actPhone->getIdPhone()){
+                        $flag=true;
+                        $phone=$actPhone;
+                        $actualPhones->removeElement($actPhone);
+                        continue;
+                    }
+                }
+                if(!$flag){
+                    $phone->setPersonPerson(null);
+                    $em->persist($phone);
+                    $em->remove($phone);
+                    $em->flush();
+                    $phones->removeElement($phone);
+                }
+            }
+            foreach($actualPhones as $phone){
+                $people->addPhone($phone);
+            }
+
             $view = View::create();
             $errors = $this->get('validator')->validate($user, array('Update'));
             if($people->getCity()==null){

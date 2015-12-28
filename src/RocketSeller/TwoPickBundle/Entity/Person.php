@@ -69,9 +69,9 @@ class Person
      */
     private $department;
     /**
-     * @ORM\Column(type="string", length=50, nullable=TRUE)
+     * @ORM\OneToMany(targetEntity="Phone", mappedBy="personPerson", cascade={"persist"})
      */
-    private $phone;
+    private $phones;
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
@@ -141,6 +141,18 @@ class Person
     private $civilStatus;
 
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get idPerson
      *
@@ -150,8 +162,6 @@ class Person
     {
         return $this->idPerson;
     }
-
-
 
     /**
      * Set names
@@ -274,6 +284,30 @@ class Person
     }
 
     /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Person
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
      * Set birthDate
      *
      * @param \DateTime $birthDate
@@ -296,8 +330,6 @@ class Person
     {
         return $this->birthDate;
     }
-
-
 
     /**
      * Set mainAddress
@@ -348,13 +380,37 @@ class Person
     }
 
     /**
-     * Set department
+     * Set civilStatus
      *
-     * @param string $department
+     * @param string $civilStatus
      *
      * @return Person
      */
-    public function setDepartment($department)
+    public function setCivilStatus($civilStatus)
+    {
+        $this->civilStatus = $civilStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get civilStatus
+     *
+     * @return string
+     */
+    public function getCivilStatus()
+    {
+        return $this->civilStatus;
+    }
+
+    /**
+     * Set department
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
+     *
+     * @return Person
+     */
+    public function setDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department = null)
     {
         $this->department = $department;
 
@@ -364,7 +420,7 @@ class Person
     /**
      * Get department
      *
-     * @return string
+     * @return \RocketSeller\TwoPickBundle\Entity\Department
      */
     public function getDepartment()
     {
@@ -372,29 +428,39 @@ class Person
     }
 
     /**
-     * Set phone
+     * Add phone
      *
-     * @param string $phone
+     * @param \RocketSeller\TwoPickBundle\Entity\Phone $phone
      *
      * @return Person
      */
-    public function setPhone($phone)
+    public function addPhone(\RocketSeller\TwoPickBundle\Entity\Phone $phone)
     {
-        $this->phone = $phone;
+        $phone->setPersonPerson($this);
+        $this->phones[] = $phone;
 
         return $this;
     }
 
     /**
-     * Get phone
+     * Remove phone
      *
-     * @return string
+     * @param \RocketSeller\TwoPickBundle\Entity\Phone $phone
      */
-    public function getPhone()
+    public function removePhone(\RocketSeller\TwoPickBundle\Entity\Phone $phone)
     {
-        return $this->phone;
+        $this->phones->removeElement($phone);
     }
 
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
 
     /**
      * Set city
@@ -420,8 +486,6 @@ class Person
         return $this->city;
     }
 
-
-
     /**
      * Set employer
      *
@@ -431,7 +495,6 @@ class Person
      */
     public function setEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer = null)
     {
-        $employer->setPersonPerson($this);
         $this->employer = $employer;
 
         return $this;
@@ -448,34 +511,27 @@ class Person
     }
 
     /**
-     * Set email
+     * Set employee
      *
-     * @param string $email
+     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employee
      *
      * @return Person
      */
-    public function setEmail($email)
+    public function setEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employee = null)
     {
-        $this->email = $email;
+        $this->employee = $employee;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get employee
      *
-     * @return string
+     * @return \RocketSeller\TwoPickBundle\Entity\Employee
      */
-    public function getEmail()
+    public function getEmployee()
     {
-        return $this->email;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->employee;
     }
 
     /**
@@ -487,6 +543,7 @@ class Person
      */
     public function addDoc(\RocketSeller\TwoPickBundle\Entity\Document $doc)
     {
+        $doc->setPersonPerson($this);
         $this->docs[] = $doc;
 
         return $this;
@@ -521,6 +578,7 @@ class Person
      */
     public function addSpecificDatum(\RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum)
     {
+        $specificDatum->setPersonPerson($this);
         $this->specificData[] = $specificDatum;
 
         return $this;
@@ -555,6 +613,7 @@ class Person
      */
     public function addAction(\RocketSeller\TwoPickBundle\Entity\Action $action)
     {
+        $action->setPersonPerson($this);
         $this->action[] = $action;
 
         return $this;
@@ -581,35 +640,6 @@ class Person
     }
 
     /**
-     * Set employee
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Employee $employee
-     *
-     * @return Person
-     */
-    public function setEmployee(\RocketSeller\TwoPickBundle\Entity\Employee $employee = null)
-    {
-        $this->employee = $employee;
-
-        return $this;
-    }
-
-    /**
-     * Get employee
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Employee
-     */
-    public function getEmployee()
-    {
-        return $this->employee;
-    }
-    public function __toString()
-    {
-        return (string) $this->names;
-    }
-
-
-    /**
      * Set gallery
      *
      * @param \Application\Sonata\MediaBundle\Entity\Gallery $gallery
@@ -632,30 +662,29 @@ class Person
     {
         return $this->gallery;
     }
-    
 
     /**
-     * Set civilStatus
+     * Set birthCountry
      *
-     * @param string $civilStatus
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $birthCountry
      *
      * @return Person
      */
-    public function setCivilStatus($civilStatus)
+    public function setBirthCountry(\RocketSeller\TwoPickBundle\Entity\Country $birthCountry = null)
     {
-        $this->civilStatus = $civilStatus;
+        $this->birthCountry = $birthCountry;
 
         return $this;
     }
 
     /**
-     * Get civilStatus
+     * Get birthCountry
      *
-     * @return string
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
      */
-    public function getCivilStatus()
+    public function getBirthCountry()
     {
-        return $this->civilStatus;
+        return $this->birthCountry;
     }
 
     /**
@@ -704,29 +733,5 @@ class Person
     public function getBirthCity()
     {
         return $this->birthCity;
-    }
-
-    /**
-     * Set birthCountry
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Country $birthCountry
-     *
-     * @return Person
-     */
-    public function setBirthCountry(\RocketSeller\TwoPickBundle\Entity\Country $birthCountry = null)
-    {
-        $this->birthCountry = $birthCountry;
-
-        return $this;
-    }
-
-    /**
-     * Get birthCountry
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Country
-     */
-    public function getBirthCountry()
-    {
-        return $this->birthCountry;
     }
 }

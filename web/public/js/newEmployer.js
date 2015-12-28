@@ -3,8 +3,22 @@
  * Created by gabrielsamoma on 11/11/15.
  */
 function startEmployer(){
+    var $collectionHolderPhones;
+    var $addPhoneLink = $('<a href="#" class="add_phone_link">Add Phone</a>');
+    var $newLinkLi = $('<li></li>').append($addPhoneLink);
     var $collectionHolder;
+    $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
+    $collectionHolderPhones.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+    });
+    $collectionHolderPhones.append($newLinkLi);
+    $collectionHolderPhones.data('index', $collectionHolderPhones.find(':input').length);
+    $addPhoneLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        addPhoneForm($collectionHolderPhones, $newLinkLi);
+    });
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', ($collectionHolder.find(':input').length)/4);
@@ -38,13 +52,23 @@ function startEmployer(){
     $('#btn-2').click(function(e){
         e.preventDefault();
         var form =$("form");
+        var idsPhones=[],phones=[];
+        var i =0;
+        $(form).find("ul.phones input[name*='id']").each(function(){
+            idsPhones[i++]=$(this).val();
+        });
+        i =0;
+        $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
+            phones[i++]=$(this).val();
+        });
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
             data: {
                 mainAddress: 	$(form).find("input[name='register_employer[person][mainAddress]']").val(),
                 neighborhood: 	$(form).find("input[name='register_employer[person][neighborhood]']").val(),
-                phone: 			$(form).find("input[name='register_employer[person][phone]']").val(),
+                phonesIds:      idsPhones,
+                phones:         phones,
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),
                 city: 			$(form).find("select[name='register_employer[person][city]']").val(),
             }
@@ -186,5 +210,25 @@ function addListeners() {
             jsonToHTML(data)
         );});
 
+    });
+}
+function addPhoneForm($collectionHolderB, $newLinkLi) {
+    var prototype = $collectionHolderB.data('prototype');
+    var index = $collectionHolderB.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $collectionHolderB.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    addTagFormDeleteLink($newFormLi);
+    $newLinkLi.before($newFormLi);
+}
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a href="#">delete this tag</a>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        // remove the li for the tag form
+        $tagFormLi.remove();
     });
 }

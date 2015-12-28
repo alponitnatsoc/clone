@@ -28,7 +28,14 @@
 	<div id="contactData" class="tab-pane fade in">
 	    {{ form_row(form.person.mainAddress) }}
 	    {{ form_row(form.person.neighborhood) }}
-	    {{ form_row(form.person.phone) }}
+		<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+			{% for phone in form.person.phones %}
+				<li id="phone_{{loop.index}}" class="phoneLi">
+					{{ form_row(phone.id) }}
+					{{ form_row(phone.phoneNumber) }}
+				</li>
+			{% endfor %}
+		</ul>
 	    {{ form_row(form.person.department) }}
 	    {{ form_row(form.person.city) }}
 	    <a class="btn btn-primary btnPrevious" >Anterior</a>

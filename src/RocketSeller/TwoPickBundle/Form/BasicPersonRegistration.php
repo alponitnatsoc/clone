@@ -64,10 +64,12 @@ class BasicPersonRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank(),
                 ),))
-            ->add('phone', 'text', array(
-                'constraints' => array(
-                    new NotBlank(),
-                ),))
+            ->add('phones', 'collection', array(
+                'type' => new PhoneRegistration(),
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'placeholder' => '',

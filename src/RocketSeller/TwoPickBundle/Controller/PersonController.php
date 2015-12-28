@@ -1,5 +1,6 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -27,6 +28,7 @@ class PersonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user=$this->getUser();
+        /** @var Person $people */
         $people = $user->getPersonPerson();
         $employer = $people->getEmployer();
         if ($employer==null) {
@@ -39,6 +41,10 @@ class PersonController extends Controller
             $people->setEmployer($employer);
         }
         $employer->setEmployerType("persona");
+        if(count($people->getPhones())==0){
+            $phone=new Phone();
+            $people->addPhone($phone);
+        }
 
         $form = $this->createForm(new EmployerRegistration(), $employer, array(
             'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
