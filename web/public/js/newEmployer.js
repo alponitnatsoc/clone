@@ -211,6 +211,24 @@ function addListeners() {
         );});
 
     });
+    $("input[name='register_employer[sameWorkHouse]']").change(function(){
+        var selected=$("input[name='register_employer[sameWorkHouse]']:checked").val();
+        if(selected=="1"){
+            var select= $("#register_employer_workplaces_0_id");
+            if(select.val()==""){
+                $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
+                $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
+                $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
+            }
+        }else{
+            if($("#register_employer_workplaces_0_mainAddress").val()==$("#register_employer_person_mainAddress").val()){
+                $("#register_employer_workplaces_0_id").val("");
+                $("#register_employer_workplaces_0_mainAddress").val("");
+                $("#register_employer_workplaces_0_department").val("");
+                $("#register_employer_workplaces_0_city").val("");
+            }
+        }
+    })
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');

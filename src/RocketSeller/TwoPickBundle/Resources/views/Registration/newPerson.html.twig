@@ -44,6 +44,7 @@
     </div>
 
     <div id="workplacesData" class="tab-pane fade h3">
+		{{ form_row(form.sameWorkHouse) }}
 	    <h3>Workplaces</h3>
 	    	{{ form_row(form.numberOfWorkplaces) }}
 	    {# iterate over each existing workplaces and render its fields #}

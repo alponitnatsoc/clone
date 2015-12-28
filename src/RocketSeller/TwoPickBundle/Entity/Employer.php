@@ -49,7 +49,10 @@ class Employer
      */
     private $employerHasEmployees;
 
-
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $sameWorkHouse;
 
 
     /**
@@ -234,5 +237,31 @@ class Employer
     public function getEmployerType()
     {
         return $this->employerType;
+    }
+
+
+
+    /**
+     * Set sameWorkHouse
+     *
+     * @param boolean $sameWorkHouse
+     *
+     * @return Employer
+     */
+    public function setSameWorkHouse($sameWorkHouse)
+    {
+        $this->sameWorkHouse = $sameWorkHouse;
+
+        return $this;
+    }
+
+    /**
+     * Get sameWorkHouse
+     *
+     * @return boolean
+     */
+    public function getSameWorkHouse()
+    {
+        return $this->sameWorkHouse;
     }
 }
