@@ -54,6 +54,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->date_created = new \DateTime("now");
         // your own logic
     }
 
@@ -99,6 +100,13 @@ class User extends BaseUser
      * @ORM\Column(type="smallint")
      */
     private $status = 2;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
+     */
+    private $date_created;
 
     /**
      * Set personPerson
@@ -442,5 +450,29 @@ class User extends BaseUser
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param \DateTime $dateCreated
+     *
+     * @return User
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->date_created = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return \DateTime
+     */
+    public function getDateCreated()
+    {
+        return $this->date_created;
     }
 }
