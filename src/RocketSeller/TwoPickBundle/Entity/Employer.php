@@ -25,6 +25,10 @@ class Employer
      * @ORM\Column(type="string", length=20)
      */
     private $employerType;
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $registerState;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
@@ -263,5 +267,29 @@ class Employer
     public function getSameWorkHouse()
     {
         return $this->sameWorkHouse;
+    }
+
+    /**
+     * Set registerState
+     *
+     * @param integer $registerState
+     *
+     * @return Employer
+     */
+    public function setRegisterState($registerState)
+    {
+        $this->registerState = $registerState;
+
+        return $this;
+    }
+
+    /**
+     * Get registerState
+     *
+     * @return integer
+     */
+    public function getRegisterState()
+    {
+        return $this->registerState;
     }
 }

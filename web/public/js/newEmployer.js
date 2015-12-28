@@ -168,15 +168,11 @@ function startEmployer(){
                             addSumbit();
                         }
                     }
-                },
-                400 : function(data, textStatus, errorThrown){
-                    alert("400 :"+errorThrown+"\n"+data.responseJSON.error.exception[0].message);
-                    console.log(data);
-                    console.log(textStatus);
-                    console.log(errorThrown);
                 }
 
             }
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
         });
     });
 }

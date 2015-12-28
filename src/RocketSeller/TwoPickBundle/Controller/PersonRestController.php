@@ -71,6 +71,7 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
+                $employer->setRegisterState(33);
                 $em->persist($user);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -113,6 +114,11 @@ class PersonRestController extends FOSRestController
 
         //all the data is valid
         if (true) {
+            if($employer->getRegisterState()<33){
+                $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
+                    'error'=>array('form'=>'please fill all the fields')))->setStatusCode(403);
+                return $view;
+            }
             $people->setMainAddress($paramFetcher->get('mainAddress'));
             $people->setNeighborhood($paramFetcher->get('neighborhood'));
             $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
@@ -179,6 +185,7 @@ class PersonRestController extends FOSRestController
                     'error'=>array('department'=>'not valid department')) )->setStatusCode(404);
             }
             if (count($errors) == 0) {
+                $employer->setRegisterState(66);
                 $em->persist($user);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -220,6 +227,11 @@ class PersonRestController extends FOSRestController
 
         //all the data is valid
         if (true) {
+            if($employer->getRegisterState()<66){
+                $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
+                    'error'=>array('form'=>'please fill all the fields')))->setStatusCode(403);
+                return $view;
+            }
             $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
             $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
             $workRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
@@ -280,6 +292,7 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
+                $employer->setRegisterState(100);
                 $em->persist($user);
                 $em->flush();
                 $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);

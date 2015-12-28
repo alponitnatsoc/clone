@@ -1,5 +1,6 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +19,14 @@ class DashBoardController extends Controller
         $user=$this->getUser();
         $stateRegister=0;
         $stateEmployees=0;
+        /** @var Employer $employer */
         $employer=$user->getPersonPerson()->getEmployer();
-        if ($user->getPersonPerson()->getEmployer()==null) {
+        if ($employer==null) {
             $stateRegister+=10;
             
         }else{
             //el registro del empleador está completo
-            $stateRegister+=100;
+            $stateRegister=$employer->getRegisterState();
             //ahora vamos a ver el de los empleados
             $employees=$employer->getEmployerHasEmployees();
             //se calcula cuantos empleados tenemos 0 ó *
