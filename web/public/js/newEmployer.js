@@ -33,7 +33,7 @@ function startEmployer(){
             url : $(this).attr('href'),
             type: 'POST',
             data: {
-                youAre: 		$(form).find("input[name='register_employer[youAre]']").val(),
+                youAre: 		$(form).find("input[name='register_employer[youAre]']:checked").val(),
                 documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
                 document: 		$(form).find("input[name='register_employer[person][document]']").val(),
                 names:			$(form).find("input[name='register_employer[person][names]']").val(),
@@ -148,6 +148,7 @@ function startEmployer(){
             url : form.attr('action'),
             type: $(form).attr('method'),
             data: {
+                sameWorkHouse: 	$(form).find("input[name='register_employer[sameWorkHouse]']:checked").val(),
                 workId:         ids,
                 workMainAddress:addresses,
                 workCity:       citys,
