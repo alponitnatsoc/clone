@@ -56,7 +56,7 @@ class ValidateUserOnloadListener implements ContainerAwareInterface
 //             echo $userId = $securityContext->getToken()->getUser()->getStatus();
 //             $user = $this->em->getRepository('RocketSellerTwoPickBundle:User')->find($userId);
 //             echo $user->getEmail();
-            if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $securityContext->getToken()->getUser()->getStatus() != 1) {
+            if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $securityContext->getToken()->getUser()->getStatus() == 0) {
                 echo "Usuario inactivo";
                 $url = $this->router->generate('inactive_user');
                 $event->setResponse(new RedirectResponse($url));
