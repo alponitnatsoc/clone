@@ -57,8 +57,9 @@ class PaymentsRestController extends FOSRestController
     }
     $view = View::create();
     $view->setStatusCode($response->getStatusCode());
-    //die(json_decode((String)$response->getBody(), JSON_UNESCAPED_SLASHES));
-    $view->setData(((String)$response->getBody()));
+
+    // We decode the json string, meaning we transform it into an array.
+    $view->setData(json_decode($response->getBody(), true));
 
     return $view;
   }
@@ -70,18 +71,19 @@ class PaymentsRestController extends FOSRestController
    * @param ParamFetcher with the options in the request $paramFetcher
    * @return Array with the header options.
    */
-  private function setHeaders($paramFetcher) {
+  private function setHeaders($paramFetcher=null) {
     $header = array();
-    $header['x-channel'] = (!$paramFetcher->get('channel')) ?
+    $header['x-channel'] = (!$paramFetcher || !$paramFetcher->get('channel')) ?
                            'WEB' : $paramFetcher->get('channel');
-    $header['x-country'] = (!$paramFetcher->get('country')) ?
+    $header['x-country'] = (!$paramFetcher || !$paramFetcher->get('country')) ?
                            'CO' : $paramFetcher->get('country');
-    $header['language'] = (!$paramFetcher->get('language')) ?
+    $header['language'] = (!$paramFetcher || !$paramFetcher->get('language')) ?
                           'es' : $paramFetcher->get('language');
-    $header['content-type'] = (!$paramFetcher->get('content_type')) ?
+    $header['content-type'] = (!$paramFetcher ||
+                              !$paramFetcher->get('content_type')) ?
                               'application/json' :
                               $paramFetcher->get('content_type');
-    $header['accept'] = (!$paramFetcher->get('accept')) ?
+    $header['accept'] = (!$paramFetcher || !$paramFetcher->get('accept')) ?
                               'application/json' : $paramFetcher->get('accept');
     return $header;
   }
@@ -159,25 +161,18 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
    *
    * @return View
    */
-  public function getClientAction(ParamFetcher $paramFetcher)
+  public function getClientAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber');
+    $path = "/customer/" . $documentNumber;
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -201,25 +196,18 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
    *
    * @return View
    */
-  public function getClientLast10MovementsAction(ParamFetcher $paramFetcher)
+  public function getClientLast10MovementsAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') . "/movement";
+    $path = "/customer/" . $documentNumber . "/movement";
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -243,52 +231,23 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="yearStart", nullable=true, requirements="([0-9]){4}", strict=true, description="year of begining of range.")
-   * @RequestParam(name="monthStart", nullable=true, requirements="([0-9]){2}", strict=true, description="month of begining of range.")
-   * @RequestParam(name="dayStart", nullable=true, requirements="([0-9]){2}", strict=true, description="day of begining of range.")
-   *
-   * @RequestParam(name="yearEnd", nullable=true, requirements="([0-9]){4}", strict=true, description="year of ending of range.")
-   * @RequestParam(name="monthEnd", nullable=true, requirements="([0-9]){2}", strict=true, description="month of ending of range.")
-   * @RequestParam(name="dayEnd", nullable=true, requirements="([0-9]){2}", strict=true, description="day of ending of range.")
-   *
-   * @RequestParam(name="limit", nullable=true, requirements="([0-9])+", strict=false, description="maximum number of elements returned.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $start The start day of the query. Format: AAAA-MM-DD.
+   * @param Int $end The start day of the query. Format: AAAA-MM-DD.
+   * @param Int limit Maximum number of queries to be displayed.
    *
    * @return View
    */
-  public function getClientRangeMovementsAction(ParamFetcher $paramFetcher)
+  public function getClientRangeMovementsAction($documentNumber, $start, $end,
+                                                $limit)
   {
-    // Adjust the format of the start date.
-    $start = null;
-    if ($paramFetcher->get('yearStart') != null)
-      $start = $paramFetcher->get('yearStart') . '-' .
-               $paramFetcher->get('monthStart') . '-' .
-               $paramFetcher->get('dayStart');
-
-    $end = null;
-    if ($paramFetcher->get('yearEnd') != null)
-      $end = $paramFetcher->get('yearEnd') . '-' .
-               $paramFetcher->get('monthEnd') . '-' .
-               $paramFetcher->get('dayEnd');
-
-    $limit = (!$paramFetcher->get('limit')) ?
-                           20 : $paramFetcher->get('limit');
-
     // This is the asigned path by NovoPayment to this action.
-    $path = "/account/" . $paramFetcher->get('documentNumber') .
-            "/movement?from=" . $start . '&to=' . $end . '&q=' . $limit;
+    $path = "/account/" . $documentNumber . "/movement?from=" . $start .
+            '&to=' . $end . '&q=' . $limit;
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -377,26 +336,18 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
    *
    * @return View
    */
-  public function getClientLast5PaymentmethodsAction(ParamFetcher $paramFetcher)
+  public function getClientLast5PaymentmethodsAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/payment-method/";
+    $path = "/customer/" . $documentNumber ."/payment-method/";
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -420,27 +371,21 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="paymentMethodId", nullable=false, requirements="([0-9])+", strict=true, description="payment method id.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $paymentMethod The id of the payment method to be queried.
    *
    * @return View
    */
-  public function getClientPaymentmethodsAction(ParamFetcher $paramFetcher)
+  public function getClientPaymentmethodsAction($documentNumber,
+                                                $paymentMethodId)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/payment-method/" . $paramFetcher->get('paymentMethodId');
+    $path = "/customer/" . $documentNumber .
+            "/payment-method/" . $paymentMethodId;
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -582,27 +527,19 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $beneficiaryId The id of the beneficiary to be queried.
    *
    * @return View
    */
-  public function getClientBeneficiaryAction(ParamFetcher $paramFetcher)
+  public function getClientBeneficiaryAction($documentNumber, $beneficiaryId)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/beneficiary/" . $paramFetcher->get('beneficiaryId');
+    $path = "/customer/" . $documentNumber . "/beneficiary/" . $beneficiaryId;
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -626,26 +563,18 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
    *
    * @return View
    */
-  public function getClientBeneficiariesAction(ParamFetcher $paramFetcher)
+  public function getClientBeneficiariesAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/beneficiary/";
+    $path = "/customer/" . $documentNumber . "/beneficiary/";
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -832,26 +761,18 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
    *
    * @return View
    */
-  public function getClientChargesAction(ParamFetcher $paramFetcher)
+  public function getClientChargesAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/charge/";
+    $path = "/customer/" . $documentNumber . "/charge/";
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -875,28 +796,20 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="chargeId", nullable=false, requirements="([0-9])+", strict=true, description="charge Id.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $chargeId The id of the charge to be queried.
    *
    * @return View
    */
-  public function getClientChargeAction(ParamFetcher $paramFetcher)
+  public function getClientChargeAction($documentNumber, $chargeId)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/charge/" . $paramFetcher->get('chargeId');
+    $path = "/customer/" . $documentNumber .
+            "/charge/" . $chargeId;
 
-    // Set up the headers to default if none is provided.
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -920,27 +833,20 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="transferId", nullable=false, requirements="([0-9])+", strict=true, description="charge Id.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $transferId The id of the tranfer to be queried.
    *
    * @return View
    */
-  public function getClientTransferAction(ParamFetcher $paramFetcher)
+  public function getClientTransferAction($documentNumber, $transferId)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/beneficiary/transfer/" . $paramFetcher->get('transferId');
+    $path = "/customer/" . $documentNumber .
+            "/beneficiary/transfer/" . $transferId;
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 
@@ -964,27 +870,20 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
-   *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="charge Id.")
-   *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $beneficiaryId The id of the beneficiary of the client.
    *
    * @return View
    */
-  public function getClientBalanceAction(ParamFetcher $paramFetcher)
+  public function getClientBalanceAction($documentNumber, $beneficiaryId)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/beneficiary/" . $paramFetcher->get('beneficiaryId') . "/balance";
+    $path = "/customer/" . $documentNumber .
+            "/beneficiary/" . $beneficiaryId . "/balance";
 
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
 
     $parameters = array();
 

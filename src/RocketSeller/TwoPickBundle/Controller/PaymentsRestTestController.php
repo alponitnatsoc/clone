@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Get;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
@@ -25,7 +26,7 @@ use EightPoints\Bundle\GuzzleBundle;
 class PaymentsRestTestController extends FOSRestController
 {
   /**
-   * It sets the headers for the payments request. 
+   * It sets the headers for the payments request.
    * @return Array with the header options.
    */
   private function setHeaders() {
@@ -68,6 +69,50 @@ class PaymentsRestTestController extends FOSRestController
     if ($document == 123456789)
     {
       $view->setStatusCode(201);
+    }
+    else
+    {
+      $view->setStatusCode(400);
+    }
+    return $view;
+  }
+
+  /**
+   * @Get("mock/customer/{customerid}")
+   * Mocks the insert client request<br/>
+   * If the document is 123456789 it will return success, otherwise it returns
+   * a bad request.
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Mocks the insert client request. If the document is
+   *                  123456789 it will return success, otherwise it returns
+   *                  a bad request",
+   *   statusCodes = {
+   *     201 = "Created",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized"
+   *   }
+   * )
+   *
+   * @param Int customer-id
+   * @return View
+   */
+  public function getMocksCustomerAction($customerid)
+  {
+    $view = View::create();
+    if ($customerid == 123456789)
+    {
+      $view->setStatusCode(201);
+      $response = array();
+      $response["document-type"] = "CC";
+      $response["document-number"] = 10200303;
+      $response["name"] = "Myname";
+      $response["last-name"] = "Mylastname";
+      $response["birth-date"] = "1990-01-10";
+      $response["phone-number"] = "+5056982472";
+      $response["email"] = "myemail@mail.com";
+      $view->setData($response);
     }
     else
     {
