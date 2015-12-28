@@ -91,9 +91,14 @@ class User extends BaseUser
      * Columna utilizada para conocer el estado de la suscripcion del usuario
      * 0 Inactivo
      * 1 Activo
-     * @ORM\Column(type="integer", nullable=true)
+     * 2 Free
+     * 3 Free3
+     * 
+     * @var \SmallIntType
+     * 
+     * @ORM\Column(type="smallint")
      */
-    private $status;
+    private $status = 2;
 
     /**
      * Set personPerson
@@ -374,6 +379,8 @@ class User extends BaseUser
      * Estados del usuario:
      *      0 - Inactivo / Suscripcion desactivada o inactiva
      *      1 - Activo / Suscripcion activa
+     *      2 - Free / Periodo gratis para el usuario primer mes
+     *      3 - Free3 / Periodo gratis para el usuario +2 meses por completar registro 48 horas total 3 meses gratis
      *
      */
     public function setStatus($status)
