@@ -310,7 +310,7 @@ class UserRestController extends FOSRestController
      * Codigos de respuesta:
      *      0 - Suscripcion inactiva
      *      1 - Suscripcion activa
-     *      2 - No hay suscripcion
+     *      404 - El usuario no tiene ordenes de pago del servicio
      */
     public function getUserActiveSuscriptionAction($id)
     {
@@ -363,11 +363,11 @@ class UserRestController extends FOSRestController
     }
 
     /**
-     * Actualizar estado de la suscripcion de un usuario
+     * Verificar y actualizar estado de la suscripcion de un usuario
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Obtener todos los datos de una orden de compra.",
+     *   description = "Verificar y actualizar estado de la suscripcion de un usuario",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors"
@@ -466,6 +466,34 @@ class UserRestController extends FOSRestController
             "response" => $msgCode
         );
 
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Actualizar estado de la suscripcion de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Actualizar estado de la suscripcion de un usuario.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @RequestParam(name="id", nullable=false, strict=true, description="id del usuario")
+     * @RequestParam(name="status", nullable=false, strict=true, description="nuevo estado del usuario")
+     *
+     * @return View
+     */
+    public function postUpdateUserStatusAction(ParamFetcher $paramFetcher)
+    {
+        $id = $paramFetcher->get("id");
+        $status = $paramFetcher->get("status");
+        $response = $this->updateUserStatus($id, $status);
         $view = View::create();
         $view->setData($response)->setStatusCode(200);
         return $view;

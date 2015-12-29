@@ -10,7 +10,18 @@ To 4: <input value="" name="to[3][email]" type="text" />
 </form>
 <a href="javascript:void(0)" onclick="javascript:test2()">TEST</a>
 <a href="javascript:void(0)" onclick="javascript:test()">Service Status User</a>
+<a href="javascript:void(0)" onclick="javascript:test3()">Service update User status</a>
 <script type='text/javascript'>
+function test3() {
+	$.ajax({
+        url: "/api/secured/v1/updates/users/statuses",
+        type: 'POST',
+        data: {id: 1, status: 1},
+        success: function(data) {
+            alert(data);
+        }
+    });
+}
 function test() {
     $.ajax({
         url: "/api/secured/v1/user/status",
