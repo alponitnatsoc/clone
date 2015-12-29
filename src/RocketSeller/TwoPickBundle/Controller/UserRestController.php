@@ -293,11 +293,11 @@ class UserRestController extends FOSRestController
     }
 
     /**
-     * Obtener el estado de la suscripcion de un usuario.
+     * Obtener el estado de la suscripcion de un usuario a partir de la ultima orden de compra pagada.
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Obtener todos los datos de una orden de compra.",
+     *   description = "Obtener el estado de la suscripcion de un usuario a partir de la ultima orden de compra pagada.",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors"
@@ -342,18 +342,18 @@ class UserRestController extends FOSRestController
 
         if (isset($dateDiff) && $dateDiff <= 30) {
             $response = array(
-                "code" => "1",
+                "code" => 1,
                 "response" => "Suscripcion Activa"
             );
         } else if (isset($dateDiff) && $dateDiff > 30) {
             $response = array(
-                "code" => "0",
+                "code" => 0,
                 "response" => "Suscripcion Inactiva"
             );
         } else {
             $response = array(
-                "code" => "2",
-                "response" => "El usuario no tiene suscripcion"
+                "code" => 404,
+                "response" => "El usuario no tiene ordenes de pago del servicio"
             );
         }
 
@@ -386,35 +386,79 @@ class UserRestController extends FOSRestController
     public function putUserStatusAction(ParamFetcher $paramFetcher)
     {
         $id = $paramFetcher->get("id");
-        $status = $this->getUserActiveSuscriptionAction($id);
 
-        $data = $status->getData();
-        $code = $data["code"];
+        $statusActual = $this->userStatus($id);
+        $resCode = $statusActual;
+        $msgCode = "umm";
+        switch ($statusActual) {
+        	case 0: //Suscripcion inactiva
+        	case 1: //Suscripcion activa
+        	    $status = $this->getUserActiveSuscriptionAction($id);
+        	    $data = $status->getData();
+        	    $code = $data["code"];
 
-        $userManager = $this->container->get("fos_user.user_manager");
+        	    if ($code != $statusActual) {
+        	        switch ($code) {
+        	            case 1: //Suscripcion debe ser Activa
+        	                $this->updateUserStatus($id, 1);
+        	                $resCode = 2;
+        	                $msgCode = "La suscripcion del usuario se ha activado";
+        	                break;
+    	                case 0: //Sucripicion debe ser Inactiva
+        	            case 404: //No se encuentra pago de suscripcion alguna al servicio
+        	            default:
+        	                $this->updateUserStatus($id, 0);
+    	                    $resCode = 1;
+    	                    $msgCode = "La suscripcion del usuario se ha desactivado";
+    	                    break;
+        	        }
+        	    } else {
+        	        $resCode = 0;
+        	        $msgCode = "La suscripcion del usuario no ha cambiado de estado";
+        	    }
+        	    break;
+            case 2: //Suscripcion gratis por el primer mes
+                $userManager = $this->container->get("fos_user.user_manager");
+                /** @var User $user */
+                $user = $userManager->findUserBy(array('id'=>$id));
+                $dateCreated = $user->getDateCreated();
+                $nowDate = new \DateTime();
 
-        /** @var User $user */
-        $user = $userManager->findUserBy(array('id'=>$id));
-        $statusActual = $user->getStatus();
+                $dateDif = date_diff($nowDate, $dateCreated);
+                $dias = $dateDif->format('%a');
 
-        if ($code != $statusActual) {
-            switch ($code) {
-                case 1: //Suscripcion Activa
-                    $this->updateUserStatus($id, 1);
-                    $resCode = 2;
-                    $msgCode = "La suscripcion del usuario se ha activado";
-                    break;
-                case 0: //Sucripicion Inactiva
-                case 2: //No tiene suscripcion
-                default:
+                if ($dias > 31) {
                     $this->updateUserStatus($id, 0);
                     $resCode = 1;
-                    $msgCode = "La suscripcion del usuario se ha desactivado";
-                    break;
-            }
-        } else {
-            $resCode = 0;
-            $msgCode = "La suscripcion del usuario no ha cambiado de estado";
+                    $msgCode = "La suscripcion del usuario se ha desactivado " . $dateDif->format("%a dias");
+                } else {
+                    $resCode = 0;
+                    $msgCode = "La suscripcion del usuario no ha cambiado de estado " . $dateDif->format("%a dias");
+                }
+                break;
+            case 3: //Suscripcion gratis 3 primeros meses por completar el registro en 48 horas
+                $userManager = $this->container->get("fos_user.user_manager");
+                /** @var User $user */
+                $user = $userManager->findUserBy(array('id'=>$id));
+                $dateCreated = $user->getDateCreated();
+                $nowDate = new \DateTime();
+                $dateDif = date_diff($nowDate, $dateCreated);
+                $days = $dateDif->format('%a');
+
+                if ($days > 90) {
+                    $this->updateUserStatus($id, 0);
+                    $resCode = 1;
+                    $msgCode = "La suscripcion del usuario se ha desactivado " . $dateDif->format("%a dias");
+                } else {
+                    $resCode = 0;
+                    $msgCode = "La suscripcion del usuario no ha cambiado de estado " . $dateDif->format("%a dias");
+                }
+                break;
+            default:
+                $this->updateUserStatus($id, 0);
+                $resCode = 1;
+                $msgCode = "La suscripcion del usuario se ha desactivado";
+                break;
         }
 
         $response = array(
@@ -427,7 +471,30 @@ class UserRestController extends FOSRestController
         return $view;
     }
 
-    protected function updateUserStatus($id, $status)
+    /**
+     * Estado de la suscripicion del usuario
+     *
+     * @param integer $id - Id del usuario
+     * @return $status - Estado actual del usuario
+     */
+    private function userStatus($id)
+    {
+        $userManager = $this->container->get("fos_user.user_manager");
+        /** @var User $user */
+        $user = $userManager->findUserBy(array('id'=>$id));
+        $status = $user->getStatus();
+
+        return $status;
+    }
+
+    /**
+     * Actualizar el estado del usuario
+     *
+     * @param integer $id - Id del usuario
+     * @param integer $status - Estado del usuario a actualizar
+     * @return View
+     */
+    private function updateUserStatus($id, $status)
     {
         $userManager = $this->container->get("fos_user.user_manager");
         $em = $this->getDoctrine()->getManager();

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Doctrine\ORM\EntityManager;
+use RocketSeller\TwoPickBundle\Entity\User;
 
 class ValidateUserOnloadListener implements ContainerAwareInterface
 {
@@ -56,7 +57,16 @@ class ValidateUserOnloadListener implements ContainerAwareInterface
 //             echo $userId = $securityContext->getToken()->getUser()->getStatus();
 //             $user = $this->em->getRepository('RocketSellerTwoPickBundle:User')->find($userId);
 //             echo $user->getEmail();
-            if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $securityContext->getToken()->getUser()->getStatus() == 0) {
+
+        	/** @var User $user */
+        	$user = $securityContext->getToken()->getUser();
+        	$dc = $user->getDateCreated();
+        	$dt = new \DateTime();
+
+        	$dateDif = date_diff($dt, $dc);
+        	echo "El usuario " . $user->getEmail() . " fue creado hace " . $dateDif->format('%y Year %m Month %d Day %h Hours %i Minute %s Seconds');
+
+            if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $user->getStatus() == 0) {
                 echo "Usuario inactivo";
                 $url = $this->router->generate('inactive_user');
                 $event->setResponse(new RedirectResponse($url));

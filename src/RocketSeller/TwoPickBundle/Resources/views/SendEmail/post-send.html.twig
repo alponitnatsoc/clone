@@ -9,6 +9,7 @@ To 4: <input value="" name="to[3][email]" type="text" />
 <input type="submit" />
 </form>
 <a href="javascript:void(0)" onclick="javascript:test2()">TEST</a>
+<a href="javascript:void(0)" onclick="javascript:test()">Service Status User</a>
 <script type='text/javascript'>
 function test() {
     $.ajax({
@@ -20,34 +21,34 @@ function test() {
         }
     });
 
-    getAuthorizationHeader = function (username, password) {
-        var up = $.base64.encode(username + ":" + password);
-        authType = "Basic " + up;
-        return authType;
-    },
+//     getAuthorizationHeader = function (username, password) {
+//         var up = $.base64.encode(username + ":" + password);
+//         authType = "Basic " + up;
+//         return authType;
+//     },
 
 
-    $.ajax({
-        url: "/api/secured/v1/user/status",
-        data: {id: 1},
-        type: "PUT",
-        beforeSend: function (xhr) {
-//             xhr.setRequestHeader("Authorization", getAuthorizationHeader("cakego@freeletter.me", "cakego@freeletter.me"));
-            xhr.setRequestHeader(
-                    "Authorization",'WSSE profile="UsernameToken"'
-            );
-            xhr.setRequestHeader(
-                    "X-WSSE", generateWsseToken(username, secret)
-            );
-        },
-        headers: config.getApiHeaders(),
-        success: function (data) {
-            alert(data);
-        },
-        error: function (xhr, textError) {
-            alert(xhr.responseText);
-        }
-    });
+//     $.ajax({
+//         url: "/api/secured/v1/user/status",
+//         data: {id: 1},
+//         type: "PUT",
+//         beforeSend: function (xhr) {
+// //             xhr.setRequestHeader("Authorization", getAuthorizationHeader("cakego@freeletter.me", "cakego@freeletter.me"));
+//             xhr.setRequestHeader(
+//                     "Authorization",'WSSE profile="UsernameToken"'
+//             );
+//             xhr.setRequestHeader(
+//                     "X-WSSE", generateWsseToken(username, secret)
+//             );
+//         },
+//         headers: config.getApiHeaders(),
+//         success: function (data) {
+//             alert(data);
+//         },
+//         error: function (xhr, textError) {
+//             alert(xhr.responseText);
+//         }
+//     });
 }
 
 function test2() {
