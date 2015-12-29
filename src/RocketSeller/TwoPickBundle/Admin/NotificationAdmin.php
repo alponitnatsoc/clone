@@ -66,6 +66,8 @@ class NotificationAdmin extends Admin {
                 ->add('type', 'choice', array(
                     'choices' => array(
                         'alert' => 'Alert',
+                        'notification' => 'Notification',
+                        'mensaje' => 'Mensaje',
                         'informative' => 'Informative',
                         'reminder' => 'Reminder'
                     ),

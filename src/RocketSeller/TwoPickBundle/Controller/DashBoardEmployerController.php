@@ -19,16 +19,30 @@ class DashBoardEmployerController extends Controller {
         if (empty($user)) {
             return $this->redirectToRoute('fos_user_security_login');
         }
-
-        $notifications = $this->getNotifications($user->getPersonPerson());
-        return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array('notifications' => $notifications));
+        try {
+            $orderBy = ($request->query->get('orderBy')) ? $request->query->get('orderBy') : 'deadline';
+            $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
+            return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
+                        'notifications' => $notifications,
+                        'user' => $user->getPersonPerson()
+            ));
+        } catch (Exception $ex) {
+            return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
+                        'notifications' => false,
+                        'user' => $user->getPersonPerson()
+            ));
+        }
     }
 
-    public function getNotifications($person) {
-        $notifications = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Notification')
-                ->findByPersonPerson($person);
-        return $notifications;
+    public function getNotifications($person, $orderBy = 'deadline') {
+        try {
+            $notifications = $this->getdoctrine()
+                    ->getRepository('RocketSellerTwoPickBundle:Notification')
+                    ->findByPersonPerson($person, array($orderBy => 'ASC'));
+            return $notifications;
+        } catch (Exception $ex) {
+            return false;
+        }
     }
 
 }
