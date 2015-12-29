@@ -3,6 +3,47 @@
  * Created by gabrielsamoma on 11/11/15.
  */
 function startEmployer(){
+    var validator;
+    $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
+        validator = $("form[name='register_employer']").validate({
+            rules: {
+                "register_employer[person][document]": "required",
+                "register_employer[person][names]": "required",
+                "register_employer[person][lastName1]": "required",
+                "register_employer[person][lastName2]": "required",
+                "register_employer[person][mainAddress]": "required",
+                "register_employer[person][neighborhood]": "required",
+            },
+            messages:{
+                "register_employer[person][document]": "Por favor Ingrese su documento",
+                "register_employer[person][names]": "Por favor Ingrese su nombre",
+                "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
+                "register_employer[person][lastName2]": "Por favor Ingrese su segundo apellido",
+                "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
+                "register_employer[person][neighborhood]": "Por favor Ingrese un barrio",
+            }
+        });
+        $("ul.phones input[name*='phoneNumber']").each(function(){
+            $(this).rules("add", {
+                minlength: 7,
+                required: true,
+                number: true,
+                messages:{
+                    minlength: "Por favor ingrese un número valido",
+                    required:   "Por favor ingrese un número de telefono",
+                    number: "Por favor ingrese solo digitos"
+                }
+            });
+        });
+        $("ul.workplaces input[name*='mainAddress']").each(function(){
+            $(this).rules("add", {
+                required: true,
+                messages:{
+                    required:   "Por favor ingrese una dirección"
+                }
+            });
+        });
+    });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link">Add Phone</a>');
     var $newLinkLi = $('<li></li>').append($addPhoneLink);
@@ -29,16 +70,24 @@ function startEmployer(){
     $('#btn-1').click(function(e){
         e.preventDefault();
         var form =$("form");
+        var document= 		$(form).find("input[name='register_employer[person][document]']");
+        var names=			$(form).find("input[name='register_employer[person][names]']");
+        var lastName1= 		$(form).find("input[name='register_employer[person][lastName1]']");
+        var lastName2= 		$(form).find("input[name='register_employer[person][lastName2]']");
+        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1)&&validator.element(lastName2))){
+            return;
+        }
+
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
             data: {
                 youAre: 		$(form).find("input[name='register_employer[youAre]']:checked").val(),
                 documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
-                document: 		$(form).find("input[name='register_employer[person][document]']").val(),
-                names:			$(form).find("input[name='register_employer[person][names]']").val(),
-                lastName1: 		$(form).find("input[name='register_employer[person][lastName1]']").val(),
-                lastName2: 		$(form).find("input[name='register_employer[person][lastName2]']").val(),
+                document: 		document.val(),
+                names:			names.val(),
+                lastName1: 		lastName1.val(),
+                lastName2: 		lastName2.val(),
                 year: 			$(form).find("select[name='register_employer[person][birthDate][year]']").val(),
                 month: 			$(form).find("select[name='register_employer[person][birthDate][month]']").val(),
                 day: 			$(form).find("select[name='register_employer[person][birthDate][day]']").val(),
@@ -53,20 +102,33 @@ function startEmployer(){
         e.preventDefault();
         var form =$("form");
         var idsPhones=[],phones=[];
+        var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
+        var neighborhood=$(form).find("input[name='register_employer[person][neighborhood]']");
+        if (!(validator.element(mainAddress)&&validator.element(neighborhood))){
+            return;
+        }
         var i =0;
         $(form).find("ul.phones input[name*='id']").each(function(){
             idsPhones[i++]=$(this).val();
         });
         i =0;
+        var flagValid=true;
         $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             phones[i++]=$(this).val();
         });
+        if(!flagValid){
+            return;
+        }
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
             data: {
-                mainAddress: 	$(form).find("input[name='register_employer[person][mainAddress]']").val(),
-                neighborhood: 	$(form).find("input[name='register_employer[person][neighborhood]']").val(),
+                mainAddress: 	mainAddress.val(),
+                neighborhood: 	neighborhood.val(),
                 phonesIds:      idsPhones,
                 phones:         phones,
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),
@@ -133,9 +195,17 @@ function startEmployer(){
             ids[i++]=$(this).val();
         });
         i=0;
+        var flagValid=true;
         $(form).find("ul.workplaces input[name*='mainAddress']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             addresses[i++]=$(this).val();
         });
+        if(!flagValid){
+            return;
+        }
         i=0;
         $(form).find("ul.workplaces select[name*='city']").each(function(){
             citys[i++]=$(this).val();
@@ -175,6 +245,7 @@ function startEmployer(){
             alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
         });
     });
+
 }
 
 

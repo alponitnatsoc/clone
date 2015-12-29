@@ -71,7 +71,8 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                $employer->setRegisterState(33);
+                if($employer->getRegisterState()<33)
+                    $employer->setRegisterState(33);
                 $em->persist($user);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -185,7 +186,8 @@ class PersonRestController extends FOSRestController
                     'error'=>array('department'=>'not valid department')) )->setStatusCode(404);
             }
             if (count($errors) == 0) {
-                $employer->setRegisterState(66);
+                if($employer->getRegisterState()==33)
+                    $employer->setRegisterState(66);
                 $em->persist($user);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -292,7 +294,8 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                $employer->setRegisterState(100);
+                if($employer->getRegisterState()==66)
+                    $employer->setRegisterState(100);
                 $em->persist($user);
                 $em->flush();
                 $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
