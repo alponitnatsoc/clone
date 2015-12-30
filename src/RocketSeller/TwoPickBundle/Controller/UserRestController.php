@@ -498,6 +498,29 @@ class UserRestController extends FOSRestController
         $view->setData($response)->setStatusCode(200);
         return $view;
     }
+    /**
+     * Actualizar estado de la suscripcion de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Actualizar estado de la suscripcion de un usuario.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param int $id
+     * @param int $status
+     * @return View
+     */
+    public function postUpdateUserStatusTestAction($id, $status)
+    {
+        $response = $this->updateUserStatus($id, $status);
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
 
     /**
      * Estado de la suscripicion del usuario

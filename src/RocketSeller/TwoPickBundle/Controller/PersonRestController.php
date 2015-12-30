@@ -10,6 +10,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
@@ -221,6 +222,7 @@ class PersonRestController extends FOSRestController
      */
     public function postEditPersonSubmitStep3Action(ParamFetcher $paramFetcher)
     {
+        /** @var User $user */
         $user=$this->getUser();
         /** @var Person $people */
         $people =$user->getPersonPerson();
@@ -294,8 +296,17 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                if($employer->getRegisterState()==66)
+                if($employer->getRegisterState()==66){
+                    $nowDate=new DateTime();
+                    if(($user->getDateCreated()->diff($nowDate)->h)<48){
+                        $response = $this->forward('RocketSellerTwoPickBundle:UserRest:postUpdateUserStatusTest', array('id'=>$user->getId(),'status'=>3));
+                        if($response->getStatusCode()!=200){
+                            $view->setStatusCode(400);
+                            return $view;
+                        }
+                    }
                     $employer->setRegisterState(100);
+                }
                 $em->persist($user);
                 $em->flush();
                 $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
