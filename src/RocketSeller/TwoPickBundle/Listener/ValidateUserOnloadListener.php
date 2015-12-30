@@ -60,11 +60,11 @@ class ValidateUserOnloadListener implements ContainerAwareInterface
 
         	/** @var User $user */
         	$user = $securityContext->getToken()->getUser();
-        	$dc = $user->getDateCreated();
-        	$dt = new \DateTime();
+//         	$dc = $user->getDateCreated();
+//         	$dt = new \DateTime();
 
-        	$dateDif = date_diff($dt, $dc);
-        	//echo "El usuario " . $user->getEmail() . " fue creado hace " . $dateDif->format('%y Year %m Month %d Day %h Hours %i Minute %s Seconds');
+//         	$dateDif = date_diff($dt, $dc);
+//         	echo "El usuario " . $user->getEmail() . " fue creado hace " . $dateDif->format('%y Year %m Month %d Day %h Hours %i Minute %s Seconds');
 
             if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $user->getStatus() == 0) {
                 echo "Usuario inactivo";
