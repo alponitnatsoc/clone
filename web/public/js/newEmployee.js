@@ -105,6 +105,20 @@ function startEmployee(){
             }
         });
     });
+    var $collectionHolderPhones;
+    var $addPhoneLink = $('<a href="#" class="add_phone_link">Add Phone</a>');
+    var $newLinkLiPhone = $('<li></li>').append($addPhoneLink)
+    $collectionHolderPhones = $('ul.phones');
+    $collectionHolderPhones.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+    });
+    $collectionHolderPhones.append($newLinkLiPhone);
+    $collectionHolderPhones.data('index', $collectionHolderPhones.find(':input').length);
+    $addPhoneLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        addPhoneForm($collectionHolderPhones, $newLinkLiPhone);
+    });
 
     var $collectionHolderB;
     var $collectionHolderW;
@@ -142,6 +156,15 @@ function startEmployee(){
     });
 
 
+}
+function addPhoneForm($collectionHolderB, $newLinkLi) {
+    var prototype = $collectionHolderB.data('prototype');
+    var index = $collectionHolderB.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $collectionHolderB.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    addTagFormDeleteLink($newFormLi);
+    $newLinkLi.before($newFormLi);
 }
 function addBenefitForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
