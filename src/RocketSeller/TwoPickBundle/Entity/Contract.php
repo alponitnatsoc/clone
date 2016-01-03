@@ -57,6 +57,10 @@ class Contract
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $state;
+    /**
+     * @ORM\Column(type="text", length=200, nullable=TRUE)
+     */
+    private $benefitsConditions;
 
     /**
      * @ORM\Column(type="float",  nullable=TRUE)

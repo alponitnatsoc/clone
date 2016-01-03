@@ -330,6 +330,186 @@ class EmployeeRestController extends FOSRestController
         }
     }
     /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="document", nullable=false, strict=true, description="document.")
+     * @RequestParam(name="names", nullable=false,  strict=true, description="names.")
+     * @RequestParam(name="lastName1", nullable=false,  strict=true, description="last Name 1.")
+     * @RequestParam(name="lastName2", nullable=false,  strict=true, description="last Name 2.")
+     * @RequestParam(name="year", nullable=false, strict=true, description="year.")
+     * @RequestParam(name="month", nullable=false, strict=true, description="month.")
+     * @RequestParam(name="day", nullable=false, strict=true, description="day.")
+     * @return View
+     */
+    public function postEditPersonSubmitStep1Action(ParamFetcher $paramFetcher)
+    {
+        $user=$this->getUser();
+        /** @var Person $people */
+        $people =$user->getPersonPerson();
+        $employer=$people->getEmployer();
+        if ($employer==null) {
+            $employer=new Employer();
+            $people->setEmployer($employer);
+        }
+
+        //all the data is valid
+        if (true) {
+            $people->setNames($paramFetcher->get('names'));
+            $people->setLastName1($paramFetcher->get('lastName1'));
+            $people->setLastName2($paramFetcher->get('lastName2'));
+            $people->setDocument($paramFetcher->get('document'));
+            $people->setDocumentType($paramFetcher->get('documentType'));
+            $employer->setEmployerType($paramFetcher->get('youAre'));
+            $datetime = new DateTime();
+            $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
+            // TODO validate Date
+            $people->setBirthDate($datetime);
+            $em = $this->getDoctrine()->getManager();
+
+            $view = View::create();
+            $errors = $this->get('validator')->validate($user, array('Update'));
+
+            if (count($errors) == 0) {
+                if($employer->getRegisterState()<33)
+                    $employer->setRegisterState(33);
+                $em->persist($user);
+                $em->flush();
+                $view->setStatusCode(200);
+                return $view;
+            } else {
+                $view = $this->getErrorsView($errors);
+                return $view;
+            }
+        }
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
+     * @RequestParam(array=true, name="phonesIds", nullable=false, strict=true, description="id if exist else -1.")
+     * @RequestParam(array=true, name="phones", nullable=false, strict=true, description="main workplace Address.")
+     * @RequestParam(name="department", nullable=false, strict=true, description="department.")
+     * @RequestParam(name="city", nullable=false, strict=true, description="city.")
+     * @return View
+     */
+    public function postEditPersonSubmitStep2Action(ParamFetcher $paramFetcher)
+    {
+        $user=$this->getUser();
+        /** @var Person $people */
+        $people =$user->getPersonPerson();
+        $employer=$people->getEmployer();
+
+        //all the data is valid
+        if (true) {
+            if($employer->getRegisterState()<33){
+                $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
+                    'error'=>array('form'=>'please fill all the fields')))->setStatusCode(403);
+                return $view;
+            }
+            $people->setMainAddress($paramFetcher->get('mainAddress'));
+            $people->setNeighborhood($paramFetcher->get('neighborhood'));
+            $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
+            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $actualPhonesId=$paramFetcher->get('phonesIds');
+            $actualPhonesAdd=$paramFetcher->get('phones');
+            $people->setCity($cityRepo->find($paramFetcher->get('city')));
+
+            $people->setDepartment($depRepo->find($paramFetcher->get('department')));
+            $em = $this->getDoctrine()->getManager();
+
+            $actualPhones= new ArrayCollection();
+            for($i=0;$i<count($actualPhonesAdd);$i++){
+                $tempPhone=null;
+                if($actualPhonesId[$i]!=""){
+                    /** @var Phone $tempPhone */
+                    $tempPhone=$phoneRepo->find($actualPhonesId[$i]);
+                    if($tempPhone->getPersonPerson()->getEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
+                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
+                            'error'=>array('wokplaces'=>'you dont have those phones')))->setStatusCode(400);
+                        return $view;
+                    }
+
+                }else{
+                    $tempPhone=new Phone();
+                }
+                $tempPhone->setPhoneNumber($actualPhonesAdd[$i]);
+                $actualPhones->add($tempPhone);
+            }
+            $phones = $people->getPhones();
+            /** @var Phone $phone */
+            foreach($phones as $phone){
+                /** @var Phone $actPhone */
+                $flag=false;
+                foreach($actualPhones as $actPhone){
+                    if($phone->getIdPhone()==$actPhone->getIdPhone()){
+                        $flag=true;
+                        $phone=$actPhone;
+                        $actualPhones->removeElement($actPhone);
+                        continue;
+                    }
+                }
+                if(!$flag){
+                    $phone->setPersonPerson(null);
+                    $em->persist($phone);
+                    $em->remove($phone);
+                    $em->flush();
+                    $phones->removeElement($phone);
+                }
+            }
+            foreach($actualPhones as $phone){
+                $people->addPhone($phone);
+            }
+
+            $view = View::create();
+            $errors = $this->get('validator')->validate($user, array('Update'));
+            if($people->getCity()==null){
+                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
+                    'error'=>array('department'=>'not valid city')))->setStatusCode(404);
+            }
+            if($people->getDepartment()==null){
+                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
+                    'error'=>array('department'=>'not valid department')) )->setStatusCode(404);
+            }
+            if (count($errors) == 0) {
+                if($employer->getRegisterState()==33)
+                    $employer->setRegisterState(66);
+                $em->persist($user);
+                $em->flush();
+                $view->setStatusCode(200);
+                return $view;
+            } else {
+                $view = $this->getErrorsView($errors);
+                return $view;
+            }
+        }
+    }
+    /**
      * Get the validation errors
      *
      * @param ConstraintViolationList $errors Validator error list

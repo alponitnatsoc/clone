@@ -20,10 +20,13 @@
 				{{ form_row(form.person.lastName1) }}
 				{{ form_row(form.person.lastName2) }}
 				{{ form_row(form.person.birthDate) }}
+				{{ form_row(form.personExtra.gender) }}
+				{{ form_row(form.personExtra.documentExpeditionDate) }}
+				{{ form_row(form.personExtra.documentExpeditionPlace) }}
 				{{ form_row(form.personExtra.birthDepartment) }}
 				{{ form_row(form.personExtra.birthCity) }}
 				{{ form_row(form.personExtra.birthCountry) }}
-				<a class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 			</div>
 
@@ -42,7 +45,7 @@
 				{{ form_row(form.person.city) }}
 				{{ form_row(form.personExtra.email) }}
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 			</div>
 
@@ -70,7 +73,7 @@
 					{% endfor %}
 				</ul>
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-3c" href="{{ path('api_public_post_edit_person_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
 			</div>
 			<div id="paymentMethod" class="tab-pane fade h3">
 				{{ form_row(form.employeeHasEmployers.payMethod) }}

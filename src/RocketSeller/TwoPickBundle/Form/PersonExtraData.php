@@ -29,6 +29,23 @@ class PersonExtraData extends AbstractType
                     'expanded' => false,
                     'property_path' => 'civilStatus',)
             )
+            ->add('gender', 'choice', array(
+                    'choices' => array(
+                        'masculino'   => 'Masculino',
+                        'femenino' => 'Femenino',
+                    ),
+                    'multiple' => false,
+                    'expanded' => false,
+                    'property_path' => 'gender',
+                    'label' => 'Género')
+            )
+            ->add('documentExpeditionDate', 'date', array(
+                'years' => range(1900,2015),
+                'label' => 'Lugar de expedición de documento de identidad'
+            ))
+            ->add('documentExpeditionPlace', 'text', array(
+                'label' => 'Fecha de expedición de documento de identidad'
+            ))
             ->add('birthCountry', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Country',
                 'placeholder' => '',

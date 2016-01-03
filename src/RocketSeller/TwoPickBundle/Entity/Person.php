@@ -45,11 +45,19 @@ class Person
      */
     private $document;
     /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $documentExpeditionDate;
+    /**
+     * @ORM\Column(type="date", length=50, nullable=TRUE)
+     */
+    private $documentExpeditionPlace;
+    /**
      * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $email;
     /**
-     * @ORM\Column(type="date", length=20, nullable=TRUE)
+     * @ORM\Column(type="date", nullable=TRUE)
      */
     private $birthDate;
     /**
@@ -139,6 +147,10 @@ class Person
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $civilStatus;
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $gender;
 
 
 
@@ -733,5 +745,77 @@ class Person
     public function getBirthCity()
     {
         return $this->birthCity;
+    }
+
+    /**
+     * Set documentExpeditionDate
+     *
+     * @param \DateTime $documentExpeditionDate
+     *
+     * @return Person
+     */
+    public function setDocumentExpeditionDate($documentExpeditionDate)
+    {
+        $this->documentExpeditionDate = $documentExpeditionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get documentExpeditionDate
+     *
+     * @return \DateTime
+     */
+    public function getDocumentExpeditionDate()
+    {
+        return $this->documentExpeditionDate;
+    }
+
+    /**
+     * Set documentExpeditionPlace
+     *
+     * @param \DateTime $documentExpeditionPlace
+     *
+     * @return Person
+     */
+    public function setDocumentExpeditionPlace($documentExpeditionPlace)
+    {
+        $this->documentExpeditionPlace = $documentExpeditionPlace;
+
+        return $this;
+    }
+
+    /**
+     * Get documentExpeditionPlace
+     *
+     * @return \DateTime
+     */
+    public function getDocumentExpeditionPlace()
+    {
+        return $this->documentExpeditionPlace;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     *
+     * @return Person
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
     }
 }

@@ -39,6 +39,15 @@ class ContractHasBenefits
      */
     private $benefitsBenefits;
 
+    /**
+     * @ORM\Column(type="float",  nullable=TRUE)
+     */
+    private $ammount;
+    /**
+     * @ORM\Column( type="integer")
+     */
+    private $periodicity;
+
 
     function __construct($contract=null, $benefit=null){
         if ($contract) {
