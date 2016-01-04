@@ -19,10 +19,11 @@
 				{{ form_row(form.person.names) }}
 				{{ form_row(form.person.lastName1) }}
 				{{ form_row(form.person.lastName2) }}
-				{{ form_row(form.person.birthDate) }}
 				{{ form_row(form.personExtra.gender) }}
 				{{ form_row(form.personExtra.documentExpeditionDate) }}
 				{{ form_row(form.personExtra.documentExpeditionPlace) }}
+				<h2>Datos de nacimiento</h2>
+				{{ form_row(form.person.birthDate) }}
 				{{ form_row(form.personExtra.birthDepartment) }}
 				{{ form_row(form.personExtra.birthCity) }}
 				{{ form_row(form.personExtra.birthCountry) }}
@@ -49,14 +50,15 @@
 
 			</div>
 
-			<div id="contractData" class="tab-pane fade h3">
+			<div id="contractData" class="tab-pane fade">
 				{{ form_row(form.employeeHasEmployers.employeeType) }}
 				{{ form_row(form.employeeHasEmployers.contractType) }}
 				{{ form_row(form.employeeHasEmployers.timeCommitment) }}
 				{{ form_row(form.employeeHasEmployers.position) }}
 				{{ form_row(form.employeeHasEmployers.salary) }}
+				{{ form_row(form.employeeHasEmployers.workplaces) }}
 
-				<h3>Benefits</h3>
+				<h3>Beneficios extralegales</h3>
 				<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
 					{% for benefit in form.employeeHasEmployers.benefits %}
 						<li id="benefits_{{loop.index}}" class="benefitLi">
@@ -64,24 +66,21 @@
 						</li>
 					{% endfor %}
 				</ul>
-				<h3>Work places</h3>
-				<ul id='' class="workplaces" data-prototype="{{ form_widget(form.employeeHasEmployers.workplaces.vars.prototype)|e }}">
-					{% for workplace in form.employeeHasEmployers.workplaces %}
-						<li id="workplaces_{{loop.index}}" class="benefitLi">
-							{{ form_row(workplace.workplaces) }}
-						</li>
-					{% endfor %}
-				</ul>
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
 				<a id="btn-3c" href="{{ path('api_public_post_edit_person_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
 			</div>
-			<div id="paymentMethod" class="tab-pane fade h3">
+			<div id="paymentMethod" class="tab-pane fade">
 				{{ form_row(form.employeeHasEmployers.payMethod) }}
 
 				<div id="payMethodFields">
 
 				</div>
-
+				<div id="userPayMethod">
+					{{ form_row(form.credit_card) }}
+					{{ form_row(form.expiry_date) }}
+					{{ form_row(form.cvv) }}
+					{{ form_row(form.name_on_card) }}
+				</div>
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
 				{{ form_row(form.save) }}
 				<div id="toHide">

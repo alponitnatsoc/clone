@@ -15,7 +15,6 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 class ContractRegistration extends AbstractType
 {
     private $workplaces;
-    private $benefits;
     function __construct($workplaces){
         $this->workplaces=$workplaces;
     }
@@ -30,6 +29,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'employeeContractTypeEmployeeContractType',
+                'label'=>'Tipo de empleado'
             ))
             ->add('contractType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:ContractType',
@@ -38,6 +38,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
+                'label'=>'Tipo de contrato'
             ))
             ->add('timeCommitment', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
@@ -46,6 +47,8 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'timeCommitmentTimeCommitment',
+                'label'=>'Dedicación de tiempo'
+
             ))
             ->add('position', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Position',
@@ -54,13 +57,15 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
+                'label'=>'Cargo'
             ))
             ->add('salary', 'money', array(
                 'constraints' => array(
                     new NotBlank(),),
                 'currency' => 'COP',
                 'property_path' => 'salary',
-                ))
+                'label'=>'Sueldo diario'
+            ))
 
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),
@@ -69,20 +74,24 @@ class ContractRegistration extends AbstractType
                 'by_reference' => false,
                 ))
 
-            
-            ->add('workplaces', 'collection', array(
-                'type' => new WorkPlacePick($this->workplaces),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                ))
-            ->add('payMethod', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:PayType',
+
+            ->add('workplaces', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'placeholder' => '',
-                'property' => 'name',
+                'choices' => $this->workplaces,
+                'property' => 'mainAddress',
                 'multiple' => false,
                 'expanded' => false,
+                'property_path' => 'workplaceWorkplace',
+                'label'=>'Lugar de trabajo'
+            ))
+            ->add('payMethod', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:PayType',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => true,
                 'property_path' => 'payTypePayType',
+                'label'=>'Destino del pago'
             ));
 
 
