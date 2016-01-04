@@ -18,7 +18,13 @@ body {
     font-size: 14px;
     color: #3d4c5a;
     text-transform: uppercase;
-    text-shadow: none
+    text-shadow: none;
+    border-left: 1px solid #00cdcc;
+    padding: 5px 10px;
+    margin: 10px 0px;
+}
+.navbar ul.navbar-nav li:first-child a {
+    border-left: none;
 }
 .navbar ul.navbar-nav li a.btn-ingresar {
     border: 2px solid #1fcecb;
@@ -139,7 +145,7 @@ footer>.container>div:last-child {
 }
 .left-headline, .right-headline {
     display: block;
-    margin: 15px 0px;
+    margin: 25px 0px;
     overflow: hidden;
     height: 70px;
 }
