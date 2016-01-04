@@ -15,9 +15,9 @@ class RegistrationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
-            ->add('name', 'text', array('label' => 'Name', 'mapped' => false,))
-            ->add('plainPassword','password', array('label' => 'form.password', 'translation_domain' => 'FOSUserBundle'))
+        $builder->add('email', 'email', array('translation_domain' => 'FOSUserBundle', "attr" => array('placeholder' => 'form.email')))
+            ->add('name', 'text', array("attr" => array('placeholder' => 'Name'), 'mapped' => false))
+            ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password'), 'translation_domain' => 'FOSUserBundle'))
         ;
     }
     public function configureOptions(OptionsResolver $resolver)
