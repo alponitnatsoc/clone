@@ -91,8 +91,8 @@
             {% endif %}
         {% endblock %}
         <div>
-            <div class="container body-container">
-                {% block body %}
+            {% block body %}
+                <div class="container body-container">
                     <div class="row">
                         <div id="sidebar" class="col-sm-3">
                             {% block sidebar %}
@@ -106,18 +106,18 @@
                         <div id="main" class="col-sm-9">
                             {% block main %}
                                 <div>
-                                {% block content %}{% endblock %}
-                            </div>
-                            <div class="span12">
-                            {% block fos_user_content %}{% endblock %}
+                                    {% block content %}{% endblock %}
+                                </div>
+                                <div class="span12">
+                                    {% block fos_user_content %}{% endblock %}
+                                </div>
+                            {% endblock %}
                         </div>
-                    {% endblock %}
+                    </div>
                 </div>
-            </div>
-        {% endblock %}
-    </div>
-</div> <!-- /container -->
-{% block footer %}
+            {% endblock %}
+        </div> 
+        {% block footer %}
     <footer>
         <div class="container">
             <div class="col-sm-2 col-xs-6 logo">

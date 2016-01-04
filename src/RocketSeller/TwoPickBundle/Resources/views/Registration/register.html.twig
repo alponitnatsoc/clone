@@ -1,10 +1,18 @@
 {% extends "::base.html.twig" %}
 
-{% block fos_user_content %}
-<div id='' class='col-sm-12 col-md-6'>
-	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
-</div>
-<div id='' class='col-sm-12 col-md-6'>
-    {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
-</div>
-{% endblock fos_user_content %}
+{% block body %}
+    <div class="row-fluid block-Intro-blue">
+        <div class="up-Intro">Estás a un paso de poder gestionar</div>
+        <div class="down-Intro">con un solo clic a tus empleados</div>
+    </div>
+    <div class="container">
+        <div class="col-sm-12 txt-A1-register">Regístrese <m>GRATIS</m> y simplifique el pago de sueldo y aportes a Seguridad Social. </br>Tiene dos opciones para hacerlo:</div>
+        <div id='' class='col-sm-12 col-md-6'>
+        	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+        </div>
+        <div id='' class='col-sm-12 col-md-6'>
+            {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
+        </div>
+        <div class="col-sm-12 txt-A1-terms">Al registrarme acepto todos los <a href="#">Términos y Condiciones</a></div>
+    </div>
+{% endblock body %}
