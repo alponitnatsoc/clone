@@ -41,10 +41,10 @@ class PersonExtraData extends AbstractType
             )
             ->add('documentExpeditionDate', 'date', array(
                 'years' => range(1900,2015),
-                'label' => 'Lugar de expedición de documento de identidad'
+                'label' => 'Fecha de expedición de documento de identidad'
             ))
             ->add('documentExpeditionPlace', 'text', array(
-                'label' => 'Fecha de expedición de documento de identidad'
+                'label' => 'Lugar de expedición de documento de identidad'
             ))
             ->add('birthCountry', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Country',
