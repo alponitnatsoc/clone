@@ -129,4 +129,52 @@ class ContractHasBenefits
     {
         return $this->benefitsBenefits;
     }
+
+    /**
+     * Set ammount
+     *
+     * @param float $ammount
+     *
+     * @return ContractHasBenefits
+     */
+    public function setAmmount($ammount)
+    {
+        $this->ammount = $ammount;
+
+        return $this;
+    }
+
+    /**
+     * Get ammount
+     *
+     * @return float
+     */
+    public function getAmmount()
+    {
+        return $this->ammount;
+    }
+
+    /**
+     * Set periodicity
+     *
+     * @param integer $periodicity
+     *
+     * @return ContractHasBenefits
+     */
+    public function setPeriodicity($periodicity)
+    {
+        $this->periodicity = $periodicity;
+
+        return $this;
+    }
+
+    /**
+     * Get periodicity
+     *
+     * @return integer
+     */
+    public function getPeriodicity()
+    {
+        return $this->periodicity;
+    }
 }

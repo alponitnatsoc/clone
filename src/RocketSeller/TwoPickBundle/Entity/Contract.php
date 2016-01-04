@@ -504,4 +504,28 @@ class Contract
     {
         return $this->liquidations;
     }
+
+    /**
+     * Set benefitsConditions
+     *
+     * @param string $benefitsConditions
+     *
+     * @return Contract
+     */
+    public function setBenefitsConditions($benefitsConditions)
+    {
+        $this->benefitsConditions = $benefitsConditions;
+
+        return $this;
+    }
+
+    /**
+     * Get benefitsConditions
+     *
+     * @return string
+     */
+    public function getBenefitsConditions()
+    {
+        return $this->benefitsConditions;
+    }
 }
