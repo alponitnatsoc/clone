@@ -319,20 +319,26 @@ footer > .container > div:last-child {
   color: #3C4B5A;
   white-space: normal;
 }
+.btn.blockStep .txt-AD1 p {
+  font-size: 14px;
+  font-family: "Lato";
+  font-weight: 100;
+  margin-bottom: 0px;
+}
 .btn.blockStep .txt-AD2 {
   font-family: "Roboto Slab";
   color: #00CDCC;
-  font-size: 40px;
+  font-size: 60px;
   font-weight: bold;
 }
 .btn.blockStep .txt-AD2 min {
   font-size: 14px;
   color: #3C4B5A;
-  font-family: "Lato, sans-serif";
+  font-family: "Lato";
   font-weight: 100;
 }
 .btn.blockStep .txt-AD3 {
-  margin-top: 15px;
+  margin-top: 25px;
 }
 .btn.blockStep .txt-AD3 .btn.stepIni {
   background: #00CDCC;

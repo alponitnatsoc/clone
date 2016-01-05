@@ -20,20 +20,21 @@
 		
 		<div id='' class='col-xs-12'>
 			<a id='' class='btn col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
-				<div id='' class='col-xs-3 txt-AD0'>
+				<div id='' class='col-xs-2 txt-AD0'>
 					<img src="/img/employ.png">
 				</div>
 				<div id='' class='col-xs-4 txt-AD1'>
 					<div id='' class='text-left' >
+						<p>Paso <strong>1</strong> de 3</p>
 						{{step.name}}
 					</div>
 				</div>
-				<div id='' class='col-xs-2 txt-AD2'>
+				<div id='' class='col-xs-3 txt-AD2'>
 					{{step.state}}% <min>Done</min>
 				</div>
 				<div id='' class='col-xs-3 txt-AD3'>
 					<div id='' class='btn stepIni' >
-						{{step.stateMessage}}
+						{{step.stateMessage}} >
 					</div>
 					
 				</div>
