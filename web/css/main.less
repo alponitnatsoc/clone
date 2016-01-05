@@ -3,10 +3,23 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+@blue: #00CDCC;
+@gray: #919191;
+@dark_gray: #3C4B5A;
+@open: "Open Sans";
+@roboto: "Roboto Slab";
+@lato: "Lato, sans-serif";
 
    body {
 	padding-bottom:80px;
 	background:#3c4b5a;
+   }
+   span {
+   	font-family: @open;
+   	font-size: 16px;
+   	display: block;
+   	overflow: hidden;
+   	margin-bottom: 25px;
    }
    .content {
    	padding-top: 30px;
@@ -234,3 +247,106 @@
    .fos_user_registration_register label {
 	display:none;
    }
+#sidebar {
+  border-right: 1px solid #e9e9e9;
+  .well {
+  	font-family:Lato, sans-serif;
+  	font-size: 16px;
+  	text-transform: uppercase;
+  	text-align: right;
+  	background-image: none;
+  	background-color: transparent;
+  	border: none;
+  	box-shadow: none;
+  	padding: 15px 24px;
+  	margin-bottom: 5px;
+  	a {
+  		color: @dark_gray;
+  	}
+  	img {
+  		margin-left: 40%;
+  	}
+  }
+}
+.block-Data {
+	h1 {
+		font-family: @open;
+		font-size: 28px;
+		font-weight: bold;
+		color: @blue;
+		text-transform: uppercase;
+		margin-bottom: 25px;
+	}
+}
+.profile-Data {
+	.person {
+		float: right;
+		h4 {
+			font-size: 18px;
+			font-family: @open;
+			color: @dark_gray;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		span {
+			color: @blue;
+			a {
+				color: @blue;
+				font-family: @open;
+				font-size: 14px;
+				font-weight: bold;
+			}
+		}
+		div {
+			padding-right: 0px;
+		}
+		div + div {
+			padding-left: 0px;
+		}
+	}
+}
+.btn.blockStep {
+		background-image: none;
+		background: transparent;
+		border: 1px solid @gray;
+		border-radius: 0px;
+		box-shadow: none;
+		margin-bottom: 20px;
+		padding: 15px;
+		text-shadow: none;
+		color: @gray;
+		.txt-AD0 img {
+			
+		}
+		.txt-AD1 {
+			font-family: @open;
+			font-size: 24px;
+			font-weight: bold;
+			text-transform: uppercase;
+			color: @dark_gray;
+			white-space: normal;
+		}
+		.txt-AD2 {
+			font-family: @roboto;
+			color: @blue;
+			font-size: 40px;
+			font-weight: bold;
+		}
+		.txt-AD2 min {
+			font-size: 14px;
+			color: @dark_gray;
+			font-family: @lato;
+			font-weight: 100;
+		}
+		.txt-AD3 {
+			margin-top: 15px;
+			.btn.stepIni {
+				background: @blue;
+				color: #fff;
+				font-family: @open;
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+}
+		
