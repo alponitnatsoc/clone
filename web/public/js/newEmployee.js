@@ -14,8 +14,8 @@ function startEmployee(){
     //funcion que agrega un listener a cada department
     addListeners();
 
-    $('#register_employee_employeeHasEmployers_payMethod').on('change', function(){
-        var payMethod = $(this);
+    $("input[name='register_employee[employeeHasEmployers][payMethod]']").on('change', function(){
+        var payMethod = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
         $.ajax({
             url : '/pay/method/fields/'+payMethod.val(),
             type: 'GET'
@@ -125,8 +125,6 @@ function startEmployee(){
     $("#toHide").children().hide();
     var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
-    var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Add workplace</a>');
-    var $newLinkLink = $('<li></li>').append($addWorkplaceLink);
     // Get the ul that holds the collection of benefits
     $collectionHolderB = $('ul.benefits');
     $collectionHolderW = $('ul.workplaces');
@@ -139,7 +137,6 @@ function startEmployee(){
     });
     // add the "add a tag" anchor and li to the tags ul
     $collectionHolderB.append($newLinkLi);
-    $collectionHolderW.append($newLinkLink);
 
     // count the current form inputs we have (e.g. 2), use that as the new
     $collectionHolderB.data('index', $collectionHolderB.find(':input').length);
@@ -148,11 +145,6 @@ function startEmployee(){
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
         addBenefitForm($collectionHolderB, $newLinkLi);
-    });
-    $addWorkplaceLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-        addWorkplaceForm($collectionHolderW, $newLinkLink);
     });
 
 
@@ -174,15 +166,6 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
     var $newFormLi = $('<li></li>').append(newForm);
     addTagFormDeleteLink($newFormLi);
     $newLinkLi.before($newFormLi);
-}
-function addWorkplaceForm($collectionHolderB, $newLinkLink) {
-    var prototype = $collectionHolderB.data('prototype');
-    var index = $collectionHolderB.data('index');
-    var newForm = prototype.replace(/__name__/g, index);
-    $collectionHolderB.data('index', index + 1);
-    var $newFormLi = $('<li></li>').append(newForm);
-    addTagFormDeleteLink($newFormLi);
-    $newLinkLink.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
     var $removeFormA = $('<a href="#">delete this tag</a>');

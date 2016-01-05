@@ -41,6 +41,13 @@
                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="row-fluid up-Help-Phone">
+                    <div class="container">
+                        <div class="txthelp">
+                            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá 411-2233</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -91,8 +98,8 @@
             {% endif %}
         {% endblock %}
         <div>
-            <div class="container body-container">
-                {% block body %}
+            {% block body %}
+                <div class="container body-container">
                     <div class="row">
                         <div id="sidebar" class="col-sm-3">
                             {% block sidebar %}
@@ -106,18 +113,18 @@
                         <div id="main" class="col-sm-9">
                             {% block main %}
                                 <div>
-                                {% block content %}{% endblock %}
-                            </div>
-                            <div class="span12">
-                            {% block fos_user_content %}{% endblock %}
+                                    {% block content %}{% endblock %}
+                                </div>
+                                <div class="span12">
+                                    {% block fos_user_content %}{% endblock %}
+                                </div>
+                            {% endblock %}
                         </div>
-                    {% endblock %}
+                    </div>
                 </div>
-            </div>
-        {% endblock %}
-    </div>
-</div> <!-- /container -->
-{% block footer %}
+            {% endblock %}
+        </div> 
+        {% block footer %}
     <footer>
         <div class="container">
             <div class="col-sm-2 col-xs-6 logo">

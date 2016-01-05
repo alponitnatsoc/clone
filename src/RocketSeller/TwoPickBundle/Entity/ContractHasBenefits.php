@@ -42,7 +42,7 @@ class ContractHasBenefits
     /**
      * @ORM\Column(type="float",  nullable=TRUE)
      */
-    private $ammount;
+    private $amount;
     /**
      * @ORM\Column( type="integer")
      */
@@ -131,30 +131,6 @@ class ContractHasBenefits
     }
 
     /**
-     * Set ammount
-     *
-     * @param float $ammount
-     *
-     * @return ContractHasBenefits
-     */
-    public function setAmmount($ammount)
-    {
-        $this->ammount = $ammount;
-
-        return $this;
-    }
-
-    /**
-     * Get ammount
-     *
-     * @return float
-     */
-    public function getAmmount()
-    {
-        return $this->ammount;
-    }
-
-    /**
      * Set periodicity
      *
      * @param integer $periodicity
@@ -176,5 +152,29 @@ class ContractHasBenefits
     public function getPeriodicity()
     {
         return $this->periodicity;
+    }
+
+    /**
+     * Set amount
+     *
+     * @param float $amount
+     *
+     * @return ContractHasBenefits
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Get amount
+     *
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
     }
 }

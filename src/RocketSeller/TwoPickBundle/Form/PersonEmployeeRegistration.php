@@ -39,6 +39,16 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('employeeHasEmployers', new ContractRegistration($this->workplaces), array(
                 'mapped' => false))
+
+            ->add('credit_card', 'text', array(
+                'mapped' => false))
+            ->add('expiry_date', 'text', array(
+                'mapped' => false))
+            ->add('cvv', 'text', array(
+                'mapped' => false))
+            ->add('name_on_card', 'text', array(
+                'mapped' => false))
+
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

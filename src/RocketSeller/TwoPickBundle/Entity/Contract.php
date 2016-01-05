@@ -39,10 +39,15 @@ class Contract
      */
     private $contractTypeContractType;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="ContractHasWorkplace", mappedBy="contractContract", cascade={"persist"})
+     * @var \RocketSeller\TwoPickBundle\Entity\WorkPlace
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\WorkPlace",  inversedBy="workplaceHasContracts")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="workplace_id_workplace", referencedColumnName="id_workplace")
+     * })
      */
-    private $workplaces;
+    private $workplaceWorkplace;
 
     /**
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
@@ -117,18 +122,15 @@ class Contract
      */
     private $liquidations;
 
-    /**
-     * Set idContract
-     *
-     * @param integer $idContract
-     *
-     * @return Contract
-     */
-    public function setIdContract($idContract)
-    {
-        $this->idContract = $idContract;
 
-        return $this;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -142,13 +144,85 @@ class Contract
     }
 
     /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return Contract
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set benefitsConditions
+     *
+     * @param string $benefitsConditions
+     *
+     * @return Contract
+     */
+    public function setBenefitsConditions($benefitsConditions)
+    {
+        $this->benefitsConditions = $benefitsConditions;
+
+        return $this;
+    }
+
+    /**
+     * Get benefitsConditions
+     *
+     * @return string
+     */
+    public function getBenefitsConditions()
+    {
+        return $this->benefitsConditions;
+    }
+
+    /**
+     * Set salary
+     *
+     * @param float $salary
+     *
+     * @return Contract
+     */
+    public function setSalary($salary)
+    {
+        $this->salary = $salary;
+
+        return $this;
+    }
+
+    /**
+     * Get salary
+     *
+     * @return float
+     */
+    public function getSalary()
+    {
+        return $this->salary;
+    }
+
+    /**
      * Set employerHasEmployeeEmployerHasEmployee
      *
      * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee
      *
      * @return Contract
      */
-    public function setEmployerHasEmployeeEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee)
+    public function setEmployerHasEmployeeEmployerHasEmployee(\RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployeeEmployerHasEmployee = null)
     {
         $this->employerHasEmployeeEmployerHasEmployee = $employerHasEmployeeEmployerHasEmployee;
 
@@ -172,7 +246,7 @@ class Contract
      *
      * @return Contract
      */
-    public function setContractTypeContractType(\RocketSeller\TwoPickBundle\Entity\ContractType $contractTypeContractType)
+    public function setContractTypeContractType(\RocketSeller\TwoPickBundle\Entity\ContractType $contractTypeContractType = null)
     {
         $this->contractTypeContractType = $contractTypeContractType;
 
@@ -188,14 +262,30 @@ class Contract
     {
         return $this->contractTypeContractType;
     }
+
     /**
-     * Constructor
+     * Set workplaceWorkplace
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\WorkPlace $workplaceWorkplace
+     *
+     * @return Contract
      */
-    public function __construct()
+    public function setWorkplaceWorkplace(\RocketSeller\TwoPickBundle\Entity\WorkPlace $workplaceWorkplace = null)
     {
-        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workplaceWorkplace = $workplaceWorkplace;
+
+        return $this;
     }
 
+    /**
+     * Get workplaceWorkplace
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\WorkPlace
+     */
+    public function getWorkplaceWorkplace()
+    {
+        return $this->workplaceWorkplace;
+    }
 
     /**
      * Add payroll
@@ -232,54 +322,6 @@ class Contract
     }
 
     /**
-     * Set state
-     *
-     * @param string $state
-     *
-     * @return Contract
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * Set salary
-     *
-     * @param float $salary
-     *
-     * @return Contract
-     */
-    public function setSalary($salary)
-    {
-        $this->salary = $salary;
-
-        return $this;
-    }
-
-    /**
-     * Get salary
-     *
-     * @return float
-     */
-    public function getSalary()
-    {
-        return $this->salary;
-    }
-
-    /**
      * Add benefit
      *
      * @param \RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit
@@ -288,7 +330,6 @@ class Contract
      */
     public function addBenefit(\RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit)
     {
-        $benefit->setContractContract($this);
         $this->benefits[] = $benefit;
 
         return $this;
@@ -312,43 +353,6 @@ class Contract
     public function getBenefits()
     {
         return $this->benefits;
-    }
-
-
-
-    /**
-     * Add workplace
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplace
-     *
-     * @return Contract
-     */
-    public function addWorkplace(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplace)
-    {
-        $workplace->setContractContract($this);
-        $this->workplaces[] = $workplace;
-
-        return $this;
-    }
-
-    /**
-     * Remove workplace
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplace
-     */
-    public function removeWorkplace(\RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace $workplace)
-    {
-        $this->workplaces->removeElement($workplace);
-    }
-
-    /**
-     * Get workplaces
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getWorkplaces()
-    {
-        return $this->workplaces;
     }
 
     /**
@@ -503,29 +507,5 @@ class Contract
     public function getLiquidations()
     {
         return $this->liquidations;
-    }
-
-    /**
-     * Set benefitsConditions
-     *
-     * @param string $benefitsConditions
-     *
-     * @return Contract
-     */
-    public function setBenefitsConditions($benefitsConditions)
-    {
-        $this->benefitsConditions = $benefitsConditions;
-
-        return $this;
-    }
-
-    /**
-     * Get benefitsConditions
-     *
-     * @return string
-     */
-    public function getBenefitsConditions()
-    {
-        return $this->benefitsConditions;
     }
 }
