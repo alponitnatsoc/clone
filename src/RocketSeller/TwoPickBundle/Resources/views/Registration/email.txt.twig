@@ -1,7 +1,7 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block subject %}
 {% autoescape false %}
-{{ 'registration.email.subject'|trans({'%username%': user.email, '%confirmationUrl%': confirmationUrl}) }}
+{{ 'registration.email.subject'|trans({'%username%': user.email}) }}
 {% endautoescape %}
 {% endblock %}
 {% block body_text %}
@@ -921,7 +921,7 @@ div{color:#202020}.logo div a{color:#202020}.logo div a:hover{color:#202020 !imp
                     <tbody><tr>
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 20px;padding-right: 20px;word-break: break-word;word-wrap: break-word;">
 
-            <h1 style="font-style: normal;font-weight: 400;Margin-bottom: 24px;Margin-top: 0;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;color: #2ecc9e;text-align: center;"><span style="color:#01140f">Ya falta poco!</span></h1>
+            <h1 style="font-style: normal;font-weight: 400;Margin-bottom: 24px;Margin-top: 0;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;color: #2ecc9e;text-align: center;"><span style="color:#01140f">&#161;Ya falta poco&#33;</span></h1>
 
                       </td>
                     </tr>
