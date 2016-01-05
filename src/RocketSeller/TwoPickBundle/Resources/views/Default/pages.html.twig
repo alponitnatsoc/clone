@@ -1,7 +1,20 @@
-
 {% extends "::base.html.twig" %}
 {% block fos_user_content%}
 
+    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+        Welcome {{ app.user.username }}
+        <p>¿Quiere GRATIS DOS MESES M&Aacute;S de servicio de Symplifica ?</p>
+        <p>IMG</p>
+        <p>Tome 20 minutos de su tiempo, prep&aacute;rese un caf&eacute; y complete la</p>
+        <p>configuraci&oacute;n inicial en menos de 48 horas y lo retribuiremos con</p>
+        <p>m&aacute;s tiempo de servicio y un delicioso caf&eacute; de Juan Valdez.</p>
+        <p><a class="nav-link btn btn-default" href="{{ path('show_dashboard') }}" role="button">
+                Comenzar la configuraci&oacute;n incial
+        </a></p>
+    {% else %}
+        Welcome Visitor!!
+    {% endif %}
 
 {% endblock fos_user_content%}
 {% block javascripts %}
@@ -15,7 +28,7 @@ jQuery(document).ready(function() {
 		sendAjax($(this).attr('href'));
 	});
 	{# ajax que maneja los requests #}
-	sendAjax(state);
+// 	sendAjax(state);
 });
 
 function sendAjax (url, form) {

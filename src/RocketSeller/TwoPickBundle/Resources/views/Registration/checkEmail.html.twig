@@ -3,5 +3,11 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block fos_user_content %}
-    <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+    <p>Hemos enviado un correo electrónico</p>
+    <p>a la dirección ingresada</p>
+    <p>para finalizar el proceso de registro requerimos que</p>
+    <p>confirme la dirección ingresada haciendo click en el vínculo</p>
+    <p>que se encuentra en el mensaje enviado.</p>
+    <p>¡Gracias por contar con Symplifica!</p>
+    <p><a href="">Entendido</a></p>
 {% endblock fos_user_content %}
