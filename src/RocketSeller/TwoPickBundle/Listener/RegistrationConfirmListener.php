@@ -23,7 +23,7 @@ class RegistrationConfirmListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-                FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationConfirm'
+            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationConfirm'
         );
     }
 
@@ -35,4 +35,3 @@ class RegistrationConfirmListener implements EventSubscriberInterface
         return $event;
     }
 }
- ?>

@@ -136,7 +136,7 @@ fos_user:
             name:               fos_user_resetting_form
             validation_groups:  [ResetPassword, Default]
     service:
-        mailer:                 fos_user.mailer.twig_swift
+        mailer:                 symplifica.mailer.twig_swift
 
 sonata_block:
     default_contexts: [cms]
