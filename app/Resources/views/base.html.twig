@@ -20,7 +20,7 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         <script src="{{ asset('js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
     </head>
-    <body>
+    <body {% if body_color|default %}style="background-color: {{body_color}}"{% endif %}>
         <!-- Google Tag Manager -->
         <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
                           height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -88,9 +88,6 @@
                 {% endif %}
             {% endif %}
         {% endblock %}
-        {% if not logged_in|default %}
-            {% set clase_body="interna" %}
-        {% endif %}
         <div class="content">
             {% block body %}
                 <div class="container body-container">
