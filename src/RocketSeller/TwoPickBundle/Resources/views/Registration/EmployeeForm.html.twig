@@ -57,7 +57,7 @@
 					</div>
 				</div>
 				<div class="col-sm-12 col-xs-12">
-					<a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
+					<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 				</div>
 			</div>
 
@@ -76,7 +76,7 @@
 				{{ form_row(form.person.city) }}
 				{{ form_row(form.personExtra.email) }}
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 			</div>
 
@@ -87,6 +87,7 @@
 				{{ form_row(form.employeeHasEmployers.position) }}
 				{{ form_row(form.employeeHasEmployers.salary) }}
 				{{ form_row(form.employeeHasEmployers.workplaces) }}
+				{{ form_row(form.employeeHasEmployers.transportAid) }}
 
 				<h3>Beneficios extralegales</h3>
 				<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
@@ -96,8 +97,10 @@
 						</li>
 					{% endfor %}
 				</ul>
+				{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
+
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a id="btn-3c" href="{{ path('api_public_post_edit_person_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
 			</div>
 			<div id="paymentMethod" class="tab-pane fade">
 				{{ form_row(form.employeeHasEmployers.payMethod) }}

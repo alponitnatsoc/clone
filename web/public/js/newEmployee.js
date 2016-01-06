@@ -3,9 +3,51 @@
  * Created by gabrielsamoma on 11/11/15.
  */
 function startEmployee(){
+    var validator;
+    $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
+        validator = $("form[name='register_employee']").validate({
+            rules: {
+                "register_employee[person][document]": "required",
+                "register_employee[person][names]": "required",
+                "register_employee[person][lastName1]": "required",
+                "register_employee[person][lastName2]": "required",
+                "register_employee[person][mainAddress]": "required",
+                "register_employee[person][neighborhood]": "required",
+                "register_employee[employeeHasEmployers][salary]":"required",
+            },
+            messages:{
+                "register_employee[person][document]": "Por favor Ingrese su documento",
+                "register_employee[person][names]": "Por favor Ingrese su nombre",
+                "register_employee[person][lastName1]": "Por favor Ingrese su primer apellido",
+                "register_employee[person][lastName2]": "Por favor Ingrese su segundo apellido",
+                "register_employee[person][mainAddress]": "Por favor Ingrese una dirección",
+                "register_employee[person][neighborhood]": "Por favor Ingrese un barrio",
+                "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario",
 
-    $('.btnNext').click(function(){
-        $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            }
+        });
+        $("ul.phones input[name*='phoneNumber']").each(function(){
+            $(this).rules("add", {
+                minlength: 7,
+                required: true,
+                number: true,
+                messages:{
+                    minlength: "Por favor ingrese un número valido",
+                    required:   "Por favor ingrese un número de telefono",
+                    number: "Por favor ingrese solo digitos"
+                }
+            });
+        });
+        $("ul.benefits input[name*='amount']").each(function(){
+            $(this).rules("add", {
+                required: true,
+                number: true,
+                messages:{
+                    required:   "Por favor ingrese una cantidad",
+                    number: "Por favor ingrese solo digitos"
+                }
+            });
+        });
     });
     $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
@@ -43,66 +85,37 @@ function startEmployee(){
             url : form.attr('action'),
             type: $(form).attr('method'),
             data: {
-                documentType: 	$(form).find("select[name='register_employee[person][documentType]']").val(),
-                document: 		$(form).find("input[name='register_employee[person][document]']").val(),
-                names:			$(form).find("input[name='register_employee[person][names]']").val(),
-                lastName1: 		$(form).find("input[name='register_employee[person][lastName1]']").val(),
-                lastName2: 		$(form).find("input[name='register_employee[person][lastName2]']").val(),
-                civilStatus:    $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(),
-                year: 			$(form).find("select[name='register_employee[person][birthDate][year]']").val(),
-                month: 			$(form).find("select[name='register_employee[person][birthDate][month]']").val(),
-                day: 			$(form).find("select[name='register_employee[person][birthDate][day]']").val(),
-                birthCountry: 	$(form).find("select[name='register_employee[personExtra][birthCountry]']").val(),
-                birthDepartment:$(form).find("select[name='register_employee[personExtra][birthDepartment]']").val(),
-                birthCity: 		$(form).find("select[name='register_employee[personExtra][birthCity]']").val(),
 
-                mainAddress: 	$(form).find("input[name='register_employee[person][mainAddress]']").val(),
-                neighborhood: 	$(form).find("input[name='register_employee[person][neighborhood]']").val(),
-                phone: 			$(form).find("input[name='register_employee[person][phone]']").val(),
-                department: 	$(form).find("select[name='register_employee[person][department]']").val(),
-                city: 			$(form).find("select[name='register_employee[person][city]']").val(),
-                email:          $(form).find("input[name='register_employee[personExtra][email]']").val(),
-                employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
-
-                employeeType:   $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']").val(),
-                contractType:   $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']").val(),
-                timeCommitment: $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']").val(),
-                position:       $(form).find("select[name='register_employee[employeeHasEmployers][position]']").val(),
-                salary:         $(form).find("input[name='register_employee[employeeHasEmployers][salary]']").val(),
-                idsBenefits:    idsBenef,
-                idsWorkplaces:  idsWorkpl,
-
-
-                payTypeId:      $(form).find("select[name='register_employee[employeeHasEmployers][payMethod]']").val(),
+                payTypeId:      $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']:checked").val(),
                 bankId:         $(form).find("select[name='method_type_fields[Bank]']").val(),
                 accountTypeId:  $(form).find("select[name='method_type_fields[AccountType]']").val(),
                 frequency:      $(form).find("input[name='method_type_fields[frecuency]']").val(),
                 accountNumber:  $(form).find("input[name='method_type_fields[account_number]']").val(),
                 cellphone:      $(form).find("input[name='method_type_fields[cellphone]']").val(),
+                creditCard:     $(form).find("input[name='register_employee[credit_card]']").val(),
+                expiryDate:     $(form).find("input[name='register_employee[expiry_date]']").val(),
+                cvv:            $(form).find("input[name='register_employee[cvv]']").val(),
+                nameOnCard:     $(form).find("input[name='register_employee[name_on_card]']").val(),
+                contractId:     $(form).find("input[name='register_employee[idContract]']").val(),
+
             },
             statusCode:{
                 200: function(data){
-                    if(data["url"]!=null){
-                        console.log(data["url"]);
-                        sendAjax(data["url"]);
-                    }else{
-                        $('#main').replaceWith(
-                            // ... with the returned one from the AJAX response.
-                            $(data).find('#main'));
-                        addClick();
-                        if (!jsLoader(url)) {
-                            addSumbit();
-                        }
-                    }
+                    console.log(data["url"]);
+                    sendAjax(data["url"]);
                 },
-                400 : function(data, textStatus, errorThrown){
+                400 : function(){
                     alert("400 :"+errorThrown+"\n"+data.responseJSON.error.exception[0].message);
-                    console.log(data);
-                    console.log(textStatus);
-                    console.log(errorThrown);
+
                 }
 
             }
+        }).done(function(data){
+
+        }).fail(function (data, textStatus, errorThrown) {
+            console.log(data);
+            console.log(textStatus);
+            console.log(errorThrown);
         });
     });
     var $collectionHolderPhones;
@@ -145,6 +158,156 @@ function startEmployee(){
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
         addBenefitForm($collectionHolderB, $newLinkLi);
+    });
+    $('#btn-1').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        var document= 		$(form).find("input[name='register_employee[person][document]']");
+        var names=			$(form).find("input[name='register_employee[person][names]']");
+        var lastName1= 		$(form).find("input[name='register_employee[person][lastName1]']");
+        var lastName2= 		$(form).find("input[name='register_employee[person][lastName2]']");
+        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1)&&validator.element(lastName2))){
+            return;
+        }
+
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                documentType: 	$(form).find("select[name='register_employee[person][documentType]']").val(),
+                document: 		$(form).find("input[name='register_employee[person][document]']").val(),
+                names:			$(form).find("input[name='register_employee[person][names]']").val(),
+                lastName1: 		$(form).find("input[name='register_employee[person][lastName1]']").val(),
+                lastName2: 		$(form).find("input[name='register_employee[person][lastName2]']").val(),
+                civilStatus:    $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(),
+                year: 			$(form).find("select[name='register_employee[person][birthDate][year]']").val(),
+                month: 			$(form).find("select[name='register_employee[person][birthDate][month]']").val(),
+                day: 			$(form).find("select[name='register_employee[person][birthDate][day]']").val(),
+                documentExpeditionDateYear: $(form).find("select[name='register_employee[personExtra][documentExpeditionDate][year]']").val(),
+                documentExpeditionDateMonth:$(form).find("select[name='register_employee[personExtra][documentExpeditionDate][month]']").val(),
+                documentExpeditionDateDay: 	$(form).find("select[name='register_employee[personExtra][documentExpeditionDate][day]']").val(),
+                birthCountry: 	$(form).find("select[name='register_employee[personExtra][birthCountry]']").val(),
+                birthDepartment:$(form).find("select[name='register_employee[personExtra][birthDepartment]']").val(),
+                birthCity: 		$(form).find("select[name='register_employee[personExtra][birthCity]']").val(),
+                gender: 		$(form).find("select[name='register_employee[personExtra][gender]']").val(),
+                employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
+                documentExpeditionPlace:    $(form).find("input[name='register_employee[personExtra][documentExpeditionPlace]']").val(),
+
+            }
+        }).done(function(data) {
+            console.log(data);
+            $(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+            console.log(jqXHR);
+        });
+    });
+    $('#btn-2').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        var idsPhones=[],phones=[];
+        var mainAddress=$(form).find("input[name='register_employee[person][mainAddress]']");
+        var neighborhood=$(form).find("input[name='register_employee[person][neighborhood]']");
+        if (!(validator.element(mainAddress)&&validator.element(neighborhood))){
+            return;
+        }
+        var i =0;
+        $(form).find("ul.phones input[name*='id']").each(function(){
+            idsPhones[i++]=$(this).val();
+        });
+        i =0;
+        var flagValid=true;
+        $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
+            phones[i++]=$(this).val();
+        });
+        if(!flagValid){
+            return;
+        }
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                mainAddress: 	mainAddress.val(),
+                neighborhood: 	neighborhood.val(),
+                phonesIds:      idsPhones,
+                phones:         phones,
+                department: 	$(form).find("select[name='register_employee[person][department]']").val(),
+                city: 			$(form).find("select[name='register_employee[person][city]']").val(),
+                email:          $(form).find("input[name='register_employee[personExtra][email]']").val(),
+                employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
+            }
+        }).done(function(data) {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+        });
+    });
+    $('#btn-3').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        var idsBenef=[],amountBenef=[],periodicityBenef=[];
+        var flagValid=true;
+        var i =0;
+        $(form).find("ul.benefits select[name*='benefitType']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
+            idsBenef[i++]=$(this).val();
+        });
+        var i =0;
+        $(form).find("ul.benefits input[name*='amount']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
+            amountBenef[i++]=$(this).val();
+        });
+        var i =0;
+        $(form).find("ul.benefits select[name*='periodicity']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
+            periodicityBenef[i++]=$(this).val();
+        });
+        var salary=$(form).find("input[name='register_employee[employeeHasEmployers][salary]']");
+        if (!(validator.element(salary))){
+            return;
+        }
+
+        if(!flagValid){
+            return;
+        }
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                employeeType:       $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']").val(),
+                contractType:       $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']").val(),
+                timeCommitment:     $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']").val(),
+                position:           $(form).find("select[name='register_employee[employeeHasEmployers][position]']").val(),
+                salary:             salary.val(),
+                idsBenefits:        idsBenef,
+                amountBenefits:     amountBenef,
+                periodicityBenefits:periodicityBenef,
+                idWorkplace:        $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']").val(),
+                transportAid:       $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']").val(),
+                benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
+                employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
+
+            }
+        }).done(function(data) {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $(form).find("input[name='register_employee[idContract]']").val(data['response']['idContract']);
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+        });
     });
 
 

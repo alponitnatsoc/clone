@@ -33,6 +33,9 @@ class PersonEmployeeRegistration extends AbstractType
                 'data' => $this->idEmployee,
                 'mapped' => false,
             ))
+            ->add('idContract', 'hidden', array(
+                'mapped' => false,
+            ))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
             ->add('personExtra', new PersonExtraData(), array(

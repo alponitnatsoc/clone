@@ -13,14 +13,32 @@ class BenefitPick extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('benefits', 'entity', array(
+            ->add('benefitType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Benefits',
                 'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'benefitsBenefits'
-                ));
+                'property_path' => 'benefitsBenefits',
+                'label'=>'Tipo de Beneficio'
+            ))
+            ->add('amount', 'money', array(
+                'currency' => 'COP',
+                'property_path' => 'amount',
+                'label'=>' '
+            ))
+            ->add('periodicity', 'choice', array(
+                'choices' => array(
+                    ''   => 'Periodicidad',
+                    1 => 'Mensual',
+                    3 => 'Trimestral',
+                    6 => 'Semestral',
+                    12=> 'Anual',
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'label'=>' '
+            ));
 
 
     }

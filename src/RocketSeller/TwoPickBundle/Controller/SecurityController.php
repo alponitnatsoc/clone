@@ -71,7 +71,8 @@ class SecurityController extends BaseController
             if (!$user->isEnabled()) {
                 $url = $this->generateUrl("intro_sin_verificar", array(
                     "dc" => strftime("%d de %B de %Y", $user->getDateCreated()->getTimestamp()),
-                    "q" => $user->getConfirmationToken()
+                    "q" => $user->getConfirmationToken(),
+                    "ui" => $user->getId()
                 ));
 
                 return new RedirectResponse($url);

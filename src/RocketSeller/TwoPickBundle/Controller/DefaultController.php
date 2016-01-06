@@ -89,7 +89,8 @@ class DefaultController extends Controller
     {
         return $this->render("RocketSellerTwoPickBundle:Default:intro-sin-verificar.html.twig", array(
             'dateCreated' => $this->getRequest()->query->get("dc"),
-            'ct' => $this->getRequest()->query->get("q")
+            'ct' => $this->getRequest()->query->get("q"),
+            'id' => $this->getRequest()->query->get("ui")
         ));
     }
 }

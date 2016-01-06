@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Form\PayMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -192,7 +193,14 @@ class EmployeeController extends Controller
             }
         }
         $userWorkplaces= $user->getPersonPerson()->getEmployer()->getWorkplaces();
-        //$employee->getPersonPerson()->addPhone(new Phone());
+        $tempPerson=$employee->getPersonPerson();
+        if($tempPerson==null){
+            $tempPerson=new Person();
+            $employee->setPersonPerson($tempPerson);
+        }
+        if($tempPerson->getPhones()->count()==0){
+            $tempPerson->addPhone(new Phone());
+        }
         $form = $this->createForm(new PersonEmployeeRegistration($id,$userWorkplaces), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',

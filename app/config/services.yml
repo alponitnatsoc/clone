@@ -56,7 +56,6 @@ services:
             - { name: kernel.event_subscriber }
     symplifica.mailer.twig_swift:
         class: RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer
-        public: false
         arguments:
             - '@mailer'
             - '@router'
