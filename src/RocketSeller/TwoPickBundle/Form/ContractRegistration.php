@@ -74,7 +74,21 @@ class ContractRegistration extends AbstractType
                 'by_reference' => false,
                 ))
 
-
+            ->add('benefitsConditions', 'textarea', array(
+                'property_path' => 'benefitsConditions',
+                'label'=>'Condiciones de los beneficios'
+            ))
+            ->add('transportAid', 'choice', array(
+                'choices' => array(
+                    ''=> 'Seleccionar',
+                    'auxilio' => 'Recibe auxilio de transporte',
+                    'empleador' => 'Transporte brindado por el empleador',
+                    'reside' => 'Reside en el lugar de trabajo',
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'label'=>'Desplazamiento al lugar de trabajo'
+            ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'placeholder' => '',

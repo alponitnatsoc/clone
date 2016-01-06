@@ -41,8 +41,8 @@ class Contract
 
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\WorkPlace
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\WorkPlace",  inversedBy="workplaceHasContracts")
+     * @var \RocketSeller\TwoPickBundle\Entity\Workplace
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Workplace",  inversedBy="contracts")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="workplace_id_workplace", referencedColumnName="id_workplace")
      * })
@@ -63,7 +63,11 @@ class Contract
      */
     private $state;
     /**
-     * @ORM\Column(type="text", length=200, nullable=TRUE)
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $transportAid;
+    /**
+     * @ORM\Column(type="text", length=500, nullable=TRUE)
      */
     private $benefitsConditions;
 
@@ -280,7 +284,7 @@ class Contract
     /**
      * Get workplaceWorkplace
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\WorkPlace
+     * @return \RocketSeller\TwoPickBundle\Entity\Workplace
      */
     public function getWorkplaceWorkplace()
     {
@@ -330,6 +334,7 @@ class Contract
      */
     public function addBenefit(\RocketSeller\TwoPickBundle\Entity\ContractHasBenefits $benefit)
     {
+        $benefit->setContractContract($this);
         $this->benefits[] = $benefit;
 
         return $this;
@@ -507,5 +512,29 @@ class Contract
     public function getLiquidations()
     {
         return $this->liquidations;
+    }
+
+    /**
+     * Set transportAid
+     *
+     * @param string $transportAid
+     *
+     * @return Contract
+     */
+    public function setTransportAid($transportAid)
+    {
+        $this->transportAid = $transportAid;
+
+        return $this;
+    }
+
+    /**
+     * Get transportAid
+     *
+     * @return string
+     */
+    public function getTransportAid()
+    {
+        return $this->transportAid;
     }
 }
