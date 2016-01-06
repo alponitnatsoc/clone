@@ -54,7 +54,8 @@ span {
 .navbar + .content {
   padding-top: 120px;
 }
-.btn.btnNext {
+.btn.btnNext,
+.btnPrevious {
   font-family: "Open Sans";
   border: 2px solid #1fcecb;
   background: #1fcecb;
@@ -415,6 +416,26 @@ footer > .container > div:last-child {
   font-size: 22px;
   font-weight: bold;
   color: #3C4B5A;
+}
+#basicData .col-sm-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.blockUpData {
+  border-bottom: 1px solid #E9E9E9;
+  padding-bottom: 30px;
+  margin-bottom: 20px;
+}
+.blockUpData img {
+  border: 2px solid #919191;
+}
+.blockUpData div {
+  text-align: center;
+}
+.blockUpData label {
+  font-weight: bold !important;
+  font-family: "Open Sans" !important;
+  font-size: 18px !important;
 }
 @media (max-width: 480px) {
   .blockStep {
