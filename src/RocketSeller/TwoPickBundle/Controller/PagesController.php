@@ -13,4 +13,3 @@ class PagesController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Default:pages.html.twig');
     }
 }
-?>

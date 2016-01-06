@@ -62,11 +62,11 @@ class TwigSwiftMailer implements MailerInterface
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
         $template = $this->parameters['template']['welcome'];
-        $url = $this->router->generate('show_dashboard');
 
         $context = array(
-            'user' => $user,
-            'confirmationUrl' => $url
+            'fechaFin' => '17 de enero de 2016',
+            'codigoReferidos' => 'CAR2309ZY',
+            'user' => $user
         );
 
         $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());

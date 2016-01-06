@@ -1,18 +1,44 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block subject %}
 {% autoescape false %}
-{{ 'registration.email.subject'|trans({'%username%': user.email, '%confirmationUrl%': confirmationUrl}) }}
+{{ 'registration.email.subject'|trans({'%username%': user.email}) }} a Symplifica
 {% endautoescape %}
 {% endblock %}
 {% block body_text %}
 {% autoescape false %}
-{{ 'registration.email.message'|trans({'%username%': user.email, '%confirmationUrl%': confirmationUrl}) }}
+&#161;Bienvenido&#33;
+
+A partir de ahora cuenta con acceso a todas las herramientas que Symplifica tiene para usted.
+
+Verificaci&#243;n de  seguridad y ex&#225;men m&#233;dico de la persona a contratar
+
+Generaci&#243;n de contrato
+
+Afiliaci&#243;n al empleado y al empleador a Seguridad Social
+
+Gesti&#243;n de la informaci&#243;n relacionada al empleado de acuerdo a lo exigido por la ley
+
+Liquidaci&#243;n y pago de sueldo y aportes a Seguridad Social
+
+Symplifica le obsequia desde hoy UN MES de servicio completo, terminando el d&#237;a 17 de enero de 2016
+
+Podr&#225; recibir OTRO MES ADICIONAL por cada persona a la que usted refiera y adquiera alguno de nuestros paquetes de servicio usando el siguiente c&#243;digo:
+CAR2309ZY
+
+Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor a&#250;n, minizaremos al m&#225;ximo el riesgo de eventualidades a futuro.
+
+Atentamente,
+
+
+
+CAMILO M&#201;NDEZ
+Director Symplifica
 {% endautoescape %}
 {% endblock %}
 {% block body_html %}
 <!DOCTYPE html>
 <html><head>
-    <title>SYMPLIFICA WELCOME</title>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
 .font-sans-serif {
@@ -921,7 +947,7 @@ div{color:#202020}.logo div a{color:#202020}.logo div a:hover{color:#202020 !imp
                     <tbody><tr>
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 20px;padding-right: 20px;word-break: break-word;word-wrap: break-word;">
 
-            <h1 style="font-style: normal;font-weight: 400;Margin-bottom: 24px;Margin-top: 0;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;color: #2ecc9e;text-align: center;"><span style="color:#01140f">WELCOME!</span></h1>
+            <h1 style="font-style: normal;font-weight: 400;Margin-bottom: 24px;Margin-top: 0;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;color: #2ecc9e;text-align: center;"><span style="color:#01140f">&#161;Bienvenido&#33;</span></h1>
 
                       </td>
                     </tr>
@@ -932,8 +958,22 @@ div{color:#202020}.logo div a{color:#202020}.logo div a:hover{color:#202020 !imp
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 20px;padding-right: 20px;word-break: break-word;word-wrap: break-word;">
 
 
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Est&#225; a un paso de hacer uso de la herramienta m&#225;s efectiva para el manejo de sus empleados, pago de sueldo y aportes a seguridad social</em>.&nbsp;</p><p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><span style="color:rgb(51, 51, 51); text-align:center">Para finalizar el proceso de registro debe hacer clic en el siguiente v&#237;nculo, o c&#243;pielo y p&#233;guelo en la casilla&nbsp;</span><em style="text-align:center">Direcci&#243;n</em><span style="color:rgb(51, 51, 51); text-align:center">&nbsp;de su navegador:</span></p>
-<p><a target="_blank" href="{{ confirmationUrl }}">{{ confirmationUrl }}</a></p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">A partir de ahora cuenta con acceso a todas las herramientas que Symplifica tiene para usted.</em>.&nbsp;</p>
+<ul>
+<li>Verificaci&#243;n de  seguridad y ex&#225;men m&#233;dico de la persona a contratar</li>
+<li>Generaci&#243;n de contrato</li>
+
+<li>Afiliaci&#243;n al empleado y al empleador a Seguridad Social</li>
+<li>Gesti&#243;n de la informaci&#243;n relacionada al empleado de acuerdo a lo exigido por la ley</li>
+
+<li>Liquidaci&#243;n y pago de sueldo y aportes a Seguridad Social</li>
+</ul>
+
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Symplifica <b>le obsequia desde hoy UN MES</b> de servicio completo, terminando el d&#237;a {{ fechaFin }}</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Podr&#225; recibir OTRO MES ADICIONAL por cada persona a la que usted refiera y adquiera alguno de nuestros paquetes de servicio usando el siguiente c&#243;digo:</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">{{ codigoReferidos }}</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">&#161;Comp&#225;rtalo con sus amigos y obtenga los beneficios&#33;</em>.&nbsp;</p>
+
 <p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'>&nbsp;</p><p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><span style="color:rgb(51, 51, 51); text-align:center">Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor a&#250;n, minizaremos al m&#225;ximo el riesgo de eventualidades a futuro.</span></p><p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'>&nbsp;</p><p class="size-13" style="font-style: normal;font-weight:
 400;Margin-bottom: 0;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><span>Atentamente,</span></p><p class="size-13" style="font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><strong style="font-weight: bold;">CAMILO M&#201;NDEZ</strong></p><p class="size-13" style="font-style: normal;font-weight: 400;Margin-bottom: 27px;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><span>Director Symplifica</span></p>
 

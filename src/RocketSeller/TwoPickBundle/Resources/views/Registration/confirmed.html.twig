@@ -1,11 +1,39 @@
 {% extends "::base.html.twig" %}
 
 {% trans_default_domain 'FOSUserBundle' %}
-
+{% block sidebar %}{% endblock sidebar %}
 {% block fos_user_content %}
-    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if app.session is not empty %}
-        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
-        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
-    {% endif %}
+<div class="page-header" id="info1">
+    <h1><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&#161;Su registro finaliz&oacute; con &eacute;xito&#33;</h1>
+    <p class="lead">Antes de comenzar, le recomendamos tener presente que el proceso a seguir<br> cuando contrata un empleado es el siguiente:</p>
+    <p>Antes de ingresar a trabajar</p>
+    <p>Una vez ingresa a trabajar</p>
+    <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE</a></p>
+</div>
+<div class="page-header" id="info2" style="display:none">
+    <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
+    <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:...</p>
+    <p>Para facilitar el proceso con los siguientes documentos:</p>
+    <ul>
+        <li>Documento de identidad del empleador</li>
+
+        <li>RUT (Registro &Uacute;nico Tributario) del empleador</li>
+
+        <li>Documento de identidad del(los) empleado(s)</li>
+
+        <li>Datos de contacto del(los) empelado(s)</li>
+
+        <li>Contrato con el(los) empleado(s). <small>Si no tiene, con nuestra herramienta puede generarlo</small></li>
+    </ul>
+    <p><a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO</a></p>
+</div>
 {% endblock fos_user_content %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+function nextInfo() {
+    $("#info1").hide();
+    $("#info2").show();
+}
+</script>
+{% endblock javascripts %}
