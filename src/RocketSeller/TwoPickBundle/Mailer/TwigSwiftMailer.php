@@ -43,7 +43,7 @@ class TwigSwiftMailer implements MailerInterface
             'confirmationUrl' => $url
         );
 
-        $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
     public function sendResettingEmailMessage(UserInterface $user)
@@ -56,7 +56,7 @@ class TwigSwiftMailer implements MailerInterface
             'confirmationUrl' => $url
         );
 
-        $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
     }
 
     public function sendWelcomeEmailMessage(UserInterface $user)
@@ -69,7 +69,7 @@ class TwigSwiftMailer implements MailerInterface
             'user' => $user
         );
 
-        $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
     /**
@@ -98,6 +98,6 @@ class TwigSwiftMailer implements MailerInterface
             $message->setBody($textBody);
         }
 
-        $this->mailer->send($message);
+        return $this->mailer->send($message);
     }
 }

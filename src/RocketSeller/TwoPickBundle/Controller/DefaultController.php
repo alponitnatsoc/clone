@@ -78,10 +78,19 @@ class DefaultController extends Controller
         $em->persist($user);
         $em->flush();
         if ($this->get('security.context')->isGranted('ROLE_NEW')) {
-            return $this->render('RocketSellerTwoPickBundle:Default:subscriptionChoices.html.twig');    
+            return $this->render('RocketSellerTwoPickBundle:Default:subscriptionChoices.html.twig');
         }else{
             throw $this->createAccessDeniedException('You cannot access this page!');
         }
-        
+
+    }
+
+    public function introSinVerificarAction()
+    {
+        return $this->render("RocketSellerTwoPickBundle:Default:intro-sin-verificar.html.twig", array(
+            'dateCreated' => $this->getRequest()->query->get("dc"),
+            'ct' => $this->getRequest()->query->get("q"),
+            'id' => $this->getRequest()->query->get("ui")
+        ));
     }
 }

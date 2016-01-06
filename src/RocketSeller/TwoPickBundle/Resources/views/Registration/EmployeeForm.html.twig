@@ -1,5 +1,8 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+	<div class="col-sm-12 col-xs-12 block-Intro">
+		<span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
+	</div>
 	<div id='registrationFormContainer' class=''>
 		{{ form_errors(form) }}
 		{{ form_start(form) }}
@@ -13,22 +16,49 @@
 
 		<div class="tab-content">
 			<div id="basicData" class="tab-pane fade in active">
-				{{ form_row(form.person.documentType) }}
-				{{ form_row(form.person.document) }}
-				{{ form_row(form.personExtra.civilStatus) }}
-				{{ form_row(form.person.names) }}
-				{{ form_row(form.person.lastName1) }}
-				{{ form_row(form.person.lastName2) }}
-				{{ form_row(form.personExtra.gender) }}
-				{{ form_row(form.personExtra.documentExpeditionDate) }}
-				{{ form_row(form.personExtra.documentExpeditionPlace) }}
+				<div class="col-sm-12 col-xs-12 blockUpData">
+					<div class="col-sm-4 col-xs-12">
+						<img src="/img/documentType.png">
+						{{ form_row(form.person.documentType) }}
+				 	</div>
+				 	<div class="col-sm-4 col-xs-12">
+				 		<img src="/img/documentNumber.png">
+						{{ form_row(form.person.document) }}
+					</div>
+					<div class="col-sm-4 col-xs-12">
+						<img src="/img/lastName.png">
+						{{ form_row(form.person.names) }}
+					</div>
+				</div>
+				<div class="col-sm-12 col-xs-12 block-Intro">
+					<span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
+				</div>
+				<div class="col-sm-12 col-xs-12">
+					<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.personExtra.civilStatus) }}
+					{{ form_row(form.person.lastName1) }}
+					{{ form_row(form.person.lastName2) }}
+					</div>
+					<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.personExtra.gender) }}
+					{{ form_row(form.personExtra.documentExpeditionDate) }}
+					{{ form_row(form.personExtra.documentExpeditionPlace) }}
+					</div>
+				</div>
 				<h2>Datos de nacimiento</h2>
-				{{ form_row(form.person.birthDate) }}
-				{{ form_row(form.personExtra.birthDepartment) }}
-				{{ form_row(form.personExtra.birthCity) }}
-				{{ form_row(form.personExtra.birthCountry) }}
-				<a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
-
+				<div class="col-sm-12 col-xs-12">
+					<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.person.birthDate) }}
+					{{ form_row(form.personExtra.birthDepartment) }}
+					</div>
+					<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.personExtra.birthCity) }}
+					{{ form_row(form.personExtra.birthCountry) }}
+					</div>
+				</div>
+				<div class="col-sm-12 col-xs-12">
+					<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
+				</div>
 			</div>
 
 			<div id="contactData" class="tab-pane fade in">
@@ -46,7 +76,7 @@
 				{{ form_row(form.person.city) }}
 				{{ form_row(form.personExtra.email) }}
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 			</div>
 
@@ -57,6 +87,7 @@
 				{{ form_row(form.employeeHasEmployers.position) }}
 				{{ form_row(form.employeeHasEmployers.salary) }}
 				{{ form_row(form.employeeHasEmployers.workplaces) }}
+				{{ form_row(form.employeeHasEmployers.transportAid) }}
 
 				<h3>Beneficios extralegales</h3>
 				<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
@@ -66,8 +97,10 @@
 						</li>
 					{% endfor %}
 				</ul>
+				{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
+
 				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a id="btn-3c" href="{{ path('api_public_post_edit_person_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
+				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente</a>
 			</div>
 			<div id="paymentMethod" class="tab-pane fade">
 				{{ form_row(form.employeeHasEmployers.payMethod) }}

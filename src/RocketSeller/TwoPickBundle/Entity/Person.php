@@ -49,7 +49,7 @@ class Person
      */
     private $documentExpeditionDate;
     /**
-     * @ORM\Column(type="date", length=50, nullable=TRUE)
+     * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $documentExpeditionPlace;
     /**
@@ -774,7 +774,7 @@ class Person
     /**
      * Set documentExpeditionPlace
      *
-     * @param \DateTime $documentExpeditionPlace
+     * @param string $documentExpeditionPlace
      *
      * @return Person
      */
@@ -788,8 +788,7 @@ class Person
     /**
      * Get documentExpeditionPlace
      *
-     * @return \DateTime
-     */
+    string     */
     public function getDocumentExpeditionPlace()
     {
         return $this->documentExpeditionPlace;

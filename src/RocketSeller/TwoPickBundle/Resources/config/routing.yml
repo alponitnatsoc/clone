@@ -32,3 +32,6 @@ preguntas_frecuentes:
 politica_privacidad:
     path:     /politica-privacidad
     defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad }
+intro_sin_verificar:
+    path: /verificar-cuenta
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:introSinVerificar }

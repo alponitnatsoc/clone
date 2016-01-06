@@ -62,3 +62,7 @@ payroll_services_test:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRestTest"
     name_prefix: api_plublic_
+registration_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:RegistrationRest"
+    name_prefix: api_plublic_
