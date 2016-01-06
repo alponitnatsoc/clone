@@ -54,6 +54,19 @@ span {
 .navbar + .content {
   padding-top: 120px;
 }
+.btn.btnNext {
+  font-family: "Open Sans";
+  border: 2px solid #1fcecb;
+  background: #1fcecb;
+  padding: 6px 20px;
+  color: #ffffff;
+  margin-top: 7px;
+  text-transform: none;
+  font-weight: bold;
+  font-size: 16px;
+  text-shadow: none;
+  box-shadow: none;
+}
 .btn:hover {
   opacity: 0.8;
 }
@@ -230,7 +243,8 @@ footer > .container > div:last-child {
 .btn-social > :first-child {
   line-height: 44px;
 }
-.form-group input {
+.form-group input,
+.form-group select {
   font-family: "Open Sans";
   background: transparent;
   border: 1px solid #919191;
@@ -386,8 +400,21 @@ footer > .container > div:last-child {
   border-color: #00CDCC;
   color: #fff;
 }
-#registrationFormContainer .form-group input {
+#registrationFormContainer .form-group input,
+#registrationFormContainer .form-group select {
   color: #919191;
+}
+#registrationFormContainer label {
+  font-family: "Lato";
+  font-size: 16px;
+  font-weight: 100;
+  color: #4B4B4B;
+}
+#basicData h2 {
+  font-family: "Lato";
+  font-size: 22px;
+  font-weight: bold;
+  color: #3C4B5A;
 }
 @media (max-width: 480px) {
   .blockStep {
