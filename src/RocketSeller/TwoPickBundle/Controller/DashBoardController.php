@@ -70,7 +70,7 @@ class DashBoardController extends Controller
 
         $step4 = array(
             'url' => $this->generateUrl('matrix_choose'),
-            'name' => "Datos de los empleados",
+            'name' => "Finalizar proceso",
             'state' => $stateEmployees,
             'stateMessage' => "Continuar",);
         $steps ['0'] =$step1;
