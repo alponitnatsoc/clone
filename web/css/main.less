@@ -103,6 +103,10 @@
    .btn:hover {
    	opacity:0.8;
    }
+   .btnPrevious:hover {
+      border: 2px solid #1FCECB;
+      background: @blue none repeat scroll 0% 0%;
+   }
    .up-Help-Phone {
    	background:#efefef;
    	padding:5px 0px;
@@ -413,10 +417,9 @@
    border-bottom: 0px;
    margin-bottom: 25px;
 }
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     background: @blue;
     border-width: 2px 1px 2px 2px;
-    border-radius: 4px 0px 0px 4px; 
     border-color: @blue; 
     color: #fff; 
 }
@@ -478,6 +481,24 @@
       font-weight: bold !important;
       font-family: @open !important;
       font-size: 18px !important;
+   }
+}
+ul.phones {
+   padding-left: 0px;
+   li {
+      list-style: none;
+   }
+}
+.addPhone {
+   width: 100%;
+   i {
+      color: @blue;
+      display: inline-block;
+      width: 10%;
+   }
+   input {
+      display: inline-block;
+      width: 90%;
    }
 }
 

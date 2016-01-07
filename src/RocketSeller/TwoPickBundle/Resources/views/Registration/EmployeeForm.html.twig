@@ -60,27 +60,38 @@
 					</div>
 				</div>
 				<div class="col-sm-12 col-xs-12 center">
-					<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
+					<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
 				</div>
 			</div>
 
 			<div id="contactData" class="tab-pane fade in">
-				{{ form_row(form.person.mainAddress) }}
-				{{ form_row(form.person.neighborhood) }}
-				<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-					{% for phone in form.person.phones %}
-						<li id="phone_{{loop.index}}" class="phoneLi">
-							{{ form_row(phone.id) }}
-							{{ form_row(phone.phoneNumber) }}
-						</li>
-					{% endfor %}
-				</ul>
-				{{ form_row(form.person.department) }}
-				{{ form_row(form.person.city) }}
-				{{ form_row(form.personExtra.email) }}
-				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
-
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+    				{{ form_row(form.person.mainAddress) }}
+    				{{ form_row(form.person.neighborhood) }}
+    				<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+    					{% for phone in form.person.phones %}
+    						<li id="phone_{{loop.index}}" class="phoneLi">
+    							{{ form_row(phone.id) }}
+    							{{ form_row(phone.phoneNumber) }}
+    						</li>
+    					{% endfor %}
+                        <li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"></input></li>
+    				</ul>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+    				{{ form_row(form.person.department) }}
+    				{{ form_row(form.person.city) }}
+    				{{ form_row(form.personExtra.email) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+    				<a class="btn btn-primary btnPrevious" >< Anterior</a>
+    				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div>
 			</div>
 
 			<div id="contractData" class="tab-pane fade">
