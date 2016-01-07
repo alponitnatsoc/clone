@@ -63,8 +63,11 @@ class TwigSwiftMailer implements MailerInterface
     {
         $template = $this->parameters['template']['welcome'];
 
+        $interval = new \DateInterval("P30D");
+        $date = $user->getDateCreated()->add($interval);
+
         $context = array(
-            'fechaFin' => '17 de enero de 2016',
+            'fechaFin' => strftime("%d de %B de %Y", $date->getTimestamp()), //mas 30 dias
             'codigoReferidos' => 'CAR2309ZY',
             'user' => $user
         );
