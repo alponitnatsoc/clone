@@ -69,7 +69,7 @@ class DashBoardController extends Controller
                 'stateMessage' => "Continuar",);
 
         $step4 = array(
-            'url' => $this->generateUrl('register_employee'),
+            'url' => $this->generateUrl('matrix_choose'),
             'name' => "Datos de los empleados",
             'state' => $stateEmployees,
             'stateMessage' => "Continuar",);
