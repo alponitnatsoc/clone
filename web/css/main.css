@@ -76,7 +76,8 @@ span {
   padding-top: 120px;
 }
 .btn.btnNext,
-.btnPrevious {
+.btnPrevious,
+.btn-default {
   font-family: "Open Sans";
   border: 2px solid #1fcecb;
   background: #1fcecb;
@@ -91,6 +92,12 @@ span {
 }
 .btn:hover {
   opacity: 0.8;
+}
+.btnPrevious:hover,
+.btn-default:hover {
+  border: 2px solid #1FCECB;
+  background: #00CDCC none repeat scroll 0% 0%;
+  color: #fff;
 }
 .up-Help-Phone {
   background: #efefef;
@@ -177,7 +184,7 @@ footer > .container > div:last-child {
 }
 .block-Intro-blue {
   font-family: "Open Sans";
-  background: #00cdcc;
+  background: #00CDCC;
   text-align: center;
   display: block;
   padding: 30px 0px;
@@ -195,6 +202,41 @@ footer > .container > div:last-child {
   font-weight: bold;
   letter-spacing: -2px;
 }
+.block-Intro-green {
+  background: #3b4b5a;
+  display: block;
+  padding: 30px 0px;
+  margin: 10px 0px 25px 0px;
+  position: relative;
+  height: 160px;
+}
+.block-Intro-green .up-Intro {
+  font-family: "Open Sans";
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.block-Intro-green .boxIntro-Heading {
+  position: absolute;
+  background: #00CDCC;
+  left: 13%;
+  top: 30%;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  padding: 28px 0px;
+}
+.block-Intro-green .boxIntro-Heading img {
+  border: 2px solid #99ebeb;
+}
+.contenMessage p {
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 100;
+  display: block;
+  overflow: hidden;
+}
 .txt-A1-register {
   font-family: "Open Sans";
   color: #ffffff;
@@ -204,9 +246,18 @@ footer > .container > div:last-child {
   font-weight: 100;
 }
 .txt-A1-register m,
-.txt-A1-terms a {
+.txt-A1-terms a,
+.block-Intro a {
   color: #00cdcc;
   font-weight: bold;
+}
+.block-Intro a {
+  font-family: "Open Sans";
+  font-size: 14px;
+}
+a.helpTxt {
+  position: absolute;
+  right: 0px;
 }
 .txt-A1-terms {
   font-family: "Open Sans";
@@ -275,8 +326,9 @@ footer > .container > div:last-child {
   line-height: 44px;
 }
 .form-group input,
-.form-group select {
-  font-family: "Open Sans";
+.form-group select,
+.form-group textarea {
+  font-family: ;
   background: transparent;
   border: 1px solid #919191;
   border-radius: 0px;
@@ -395,6 +447,12 @@ footer > .container > div:last-child {
   font-size: 16px;
   font-weight: bold;
 }
+.btn.blockStep:hover {
+  background: #3b4b5a;
+}
+.btn.blockStep:hover .txt-AD1 {
+  color: #fff;
+}
 .nav.nav-tabs {
   font-family: "Open Sans";
   font-size: 16px;
@@ -403,10 +461,10 @@ footer > .container > div:last-child {
   margin-bottom: 25px;
 }
 .nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover {
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   background: #00CDCC;
   border-width: 2px 1px 2px 2px;
-  border-radius: 4px 0px 0px 4px;
   border-color: #00CDCC;
   color: #fff;
 }
@@ -432,7 +490,8 @@ footer > .container > div:last-child {
   color: #fff;
 }
 #registrationFormContainer .form-group input,
-#registrationFormContainer .form-group select {
+#registrationFormContainer .form-group select,
+#registrationFormContainer .form-group textarea {
   color: #919191;
 }
 #registrationFormContainer label {
@@ -441,13 +500,15 @@ footer > .container > div:last-child {
   font-weight: 100;
   color: #4B4B4B;
 }
-#basicData h2 {
+#basicData h2,
+#contractData h2 {
   font-family: "Lato";
   font-size: 22px;
   font-weight: bold;
   color: #3C4B5A;
 }
-#basicData .col-sm-12 {
+#basicData .col-sm-12,
+#contractData .col-sm-12 {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -467,8 +528,42 @@ footer > .container > div:last-child {
   font-family: "Open Sans" !important;
   font-size: 18px !important;
 }
+ul.phones {
+  padding-left: 0px;
+}
+ul.phones li {
+  list-style: none;
+}
+.addPhone {
+  width: 100%;
+}
+.addPhone i {
+  color: #00CDCC;
+  display: inline-block;
+  width: 10%;
+}
+.addPhone input {
+  display: inline-block;
+  width: 90%;
+}
 @media (max-width: 480px) {
   .blockStep {
     text-align: left;
+  }
+}
+@media (max-width: 768px) {
+  .block-Intro-green {
+    height: 250px;
+  }
+  .block-Intro-green .up-Intro {
+    font-size: 22px;
+  }
+  .block-Intro-green .boxIntro-Heading {
+    left: 5%;
+    top: -10%;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    padding: 12px 0px;
   }
 }

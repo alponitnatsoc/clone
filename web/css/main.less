@@ -4,13 +4,18 @@
    Author's custom styles
    ========================================================================== */
    @blue: #00CDCC;
+   @dark_blue: #3b4b5a;
+   @light_blue: #99ebeb;
    @gray: #919191;
    @dark_gray: #3C4B5A;
    @light_gray: #4B4B4B;
+   @dark_green: #3b4b5a;
    @open: "Open Sans";
    @roboto: "Roboto Slab";
    @lato: "Lato";
 
+   @screen-xs-max: 480px;
+   @screen-sm-max: 768px;
    @screen-sm-min: 768px;
    @screen-md-min: 992px;
    @screen-lg-min: 1200px;
@@ -87,7 +92,7 @@
    		padding-top: 120px;
    	}
    }
-   .btn.btnNext, .btnPrevious {
+   .btn.btnNext, .btnPrevious, .btn-default {
          font-family: @open;
          border:2px solid #1fcecb;
          background:#1fcecb;
@@ -102,6 +107,11 @@
    }
    .btn:hover {
    	opacity:0.8;
+   }
+   .btnPrevious:hover, .btn-default:hover {
+      border: 2px solid #1FCECB;
+      background: @blue none repeat scroll 0% 0%;
+      color: #fff;
    }
    .up-Help-Phone {
    	background:#efefef;
@@ -188,7 +198,7 @@
    }
    .block-Intro-blue {
    	font-family: @open;
-   	background:#00cdcc;
+   	background:@blue;
    	text-align:center;
    	display:block;
    	padding:30px 0px;
@@ -206,6 +216,43 @@
    		letter-spacing:-2px;
    	}
    }
+   .block-Intro-green {
+      background:@dark_green;
+      display:block;
+      padding:30px 0px;
+      margin:10px 0px 25px 0px;
+      position: relative;
+      height: 160px;
+      .up-Intro {
+         font-family: @open;
+         color:#ffffff;
+         font-size:32px;
+         font-weight:bold;
+         text-transform: uppercase;
+      }
+      .boxIntro-Heading {
+         position: absolute;
+         background: @blue;
+         left: 13%;
+         top: 30%;
+         text-align: center;
+         width: 150px;
+         height: 150px;
+         padding: 28px 0px;
+         img {
+            border: 2px solid @light_blue;
+         }
+      }
+   }
+   .contenMessage {
+      p {
+         font-family: @open;
+         font-size: 16px;
+         font-weight: 100;
+         display: block;
+         overflow: hidden;
+      }
+   }
    .txt-A1-register {
    	font-family: @open;
    	color:#ffffff;
@@ -214,9 +261,17 @@
    	font-size:18px;
    	font-weight:100;
    }
-   .txt-A1-register m, .txt-A1-terms a {
+   .txt-A1-register m, .txt-A1-terms a, .block-Intro a {
    	color:#00cdcc;
    	font-weight:bold;
+   }
+   .block-Intro a {
+      font-family: @open;
+      font-size:14px;
+   }
+   a.helpTxt {
+      position: absolute;
+      right: 0px;
    }
    .txt-A1-terms {
    	font-family: @open;
@@ -277,15 +332,17 @@
    .btn-social > :first-child {
    	line-height:44px;
    }
-   .form-group input, .form-group select {
-   	font-family: @open;
-   	background:transparent;
-   	border:1px solid #919191;
-   	border-radius:0px;
-   	padding:10px 12px;
-   	color:#ffffff;
-   	height:auto;
-   	font-size:16px;
+   .form-group {
+     input, select, textarea {
+       font-family:;
+       background:transparent;
+       border:1px solid #919191;
+       border-radius:0px;
+       padding:10px 12px;
+       color:#ffffff;
+       height:auto;
+       font-size:16px;
+     }
    }
    .fos_user_registration_register label {
    	display:none;
@@ -406,6 +463,12 @@
    		}
    	}
    }
+   .btn.blockStep:hover {
+      background: @dark_blue;
+      .txt-AD1 {
+         color:#fff;
+      }
+   }
 .nav.nav-tabs {
    font-family: @open;
    font-size: 16px;
@@ -413,10 +476,9 @@
    border-bottom: 0px;
    margin-bottom: 25px;
 }
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     background: @blue;
     border-width: 2px 1px 2px 2px;
-    border-radius: 4px 0px 0px 4px; 
     border-color: @blue; 
     color: #fff; 
 }
@@ -442,7 +504,7 @@
     color: #fff; 
 }
 #registrationFormContainer {
-   .form-group input, .form-group select {
+   .form-group input, .form-group select, .form-group textarea {
       color: @gray;
    }
    label {
@@ -452,7 +514,7 @@
       color: @light_gray;
    }
 }
-#basicData {
+#basicData, #contractData {
    h2 {
       font-family: @lato;
       font-size: 22px;
@@ -480,10 +542,45 @@
       font-size: 18px !important;
    }
 }
+ul.phones {
+   padding-left: 0px;
+   li {
+      list-style: none;
+   }
+}
+.addPhone {
+   width: 100%;
+   i {
+      color: @blue;
+      display: inline-block;
+      width: 10%;
+   }
+   input {
+      display: inline-block;
+      width: 90%;
+   }
+}
 
 
-@media (max-width: 480px) {
+@media (max-width: @screen-xs-max) {
    .blockStep {
       text-align: left;
+   }
+}
+
+@media (max-width: @screen-sm-max) {
+   .block-Intro-green {
+      height: 250px;
+      .up-Intro {
+         font-size: 22px;
+         }
+      .boxIntro-Heading {
+         left: 5%;
+         top: -10%;
+         position: relative;
+         width: 120px;
+         height: 120px;
+         padding: 12px 0px;
+      }
    }
 }
