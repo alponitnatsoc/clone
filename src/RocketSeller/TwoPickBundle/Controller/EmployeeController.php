@@ -3,21 +3,23 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Beneficiary;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\EntityType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
-use RocketSeller\TwoPickBundle\Form\PayMethod;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use RocketSeller\TwoPickBundle\Entity\Employee;
-use Symfony\Component\HttpFoundation\Request;
-use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\User;
-use RocketSeller\TwoPickBundle\Entity\Beneficiary;
-use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
+use RocketSeller\TwoPickBundle\Form\AffiliationEmployerEmployee;
+use RocketSeller\TwoPickBundle\Form\AfiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
-use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
-use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
+use RocketSeller\TwoPickBundle\Form\PayMethod;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -141,6 +143,48 @@ class EmployeeController extends Controller
                 array('form' => $form->createView())
             );
         }
+    }
+    public function matrixChooseAction(){
+        /** @var User $user */
+        $user=$this->getUser();
+        $employer=$user->getPersonPerson()->getEmployer();
+        $employerHasEmployees=$employer->getEmployerHasEmployees();
+        $employees=new ArrayCollection();
+        /** @var EmployerHasEmployee $ehE */
+        foreach ($employerHasEmployees as $ehE) {
+            $employees->add($ehE->getEmployeeEmployee());
+        }
+        $entityTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
+        $entityTypes=$entityTypeRepo->findAll();
+        $pensions=null;
+        $eps=null;
+        $severances=null;
+        $arls=null;
+        /** @var EntityType $entityType */
+        foreach ($entityTypes as $entityType) {
+            if($entityType->getName()=="EPS"){
+                $eps=$entityType->getEntities();
+            }
+            if($entityType->getName()=="ARL"){
+                $arls=$entityType->getEntities();
+
+            }
+            if($entityType->getName()=="Pension"){
+                $pensions=$entityType->getEntities();
+
+            }
+            if($entityType->getName()=="Cesantias"){
+                $severances=$entityType->getEntities();
+            }
+        }
+        $form = $this->createForm(new AffiliationEmployerEmployee($employer,$employees, $eps, $pensions), array(
+            'action' => $this->generateUrl('api_public_post_new_employee_submit'),
+            'method' => 'POST',
+        ));
+        return $this->render(
+            'RocketSellerTwoPickBundle:Registration:afiliation.html.twig',
+            array('form' => $form->createView(), 'numberOfEmployees'=>$employees->count())
+        );
     }
 
 

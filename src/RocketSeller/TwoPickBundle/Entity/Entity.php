@@ -23,7 +23,7 @@ class Entity
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\EntityType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EntityType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EntityType", inversedBy="entities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="entity_type_id_entity_type", referencedColumnName="id_entity_type")
      * })

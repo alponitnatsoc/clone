@@ -25,6 +25,10 @@ class EntityType
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Entity", mappedBy="entityTypeEntityType")
+     */
+    private $entities;
 
 
     /**
@@ -63,5 +67,46 @@ class EntityType
     public function __toString()
     {
         return (string) $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     *
+     * @return EntityType
+     */
+    public function addEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities[] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Remove entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     */
+    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities->removeElement($entity);
+    }
+
+    /**
+     * Get entities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 }
