@@ -4,13 +4,18 @@
    Author's custom styles
    ========================================================================== */
    @blue: #00CDCC;
+   @dark_blue: #3b4b5a;
+   @light_blue: #99ebeb;
    @gray: #919191;
    @dark_gray: #3C4B5A;
    @light_gray: #4B4B4B;
+   @dark_green: #3b4b5a;
    @open: "Open Sans";
    @roboto: "Roboto Slab";
    @lato: "Lato";
 
+   @screen-xs-max: 480px;
+   @screen-sm-max: 768px;
    @screen-sm-min: 768px;
    @screen-md-min: 992px;
    @screen-lg-min: 1200px;
@@ -193,7 +198,7 @@
    }
    .block-Intro-blue {
    	font-family: @open;
-   	background:#00cdcc;
+   	background:@blue;
    	text-align:center;
    	display:block;
    	padding:30px 0px;
@@ -210,6 +215,43 @@
    		font-weight:bold;
    		letter-spacing:-2px;
    	}
+   }
+   .block-Intro-green {
+      background:@dark_green;
+      display:block;
+      padding:30px 0px;
+      margin:10px 0px 25px 0px;
+      position: relative;
+      height: 160px;
+      .up-Intro {
+         font-family: @open;
+         color:#ffffff;
+         font-size:32px;
+         font-weight:bold;
+         text-transform: uppercase;
+      }
+      .boxIntro-Heading {
+         position: absolute;
+         background: @blue;
+         left: 13%;
+         top: 30%;
+         text-align: center;
+         width: 150px;
+         height: 150px;
+         padding: 28px 0px;
+         img {
+            border: 2px solid @light_blue;
+         }
+      }
+   }
+   .contenMessage {
+      p {
+         font-family: @open;
+         font-size: 16px;
+         font-weight: 100;
+         display: block;
+         overflow: hidden;
+      }
    }
    .txt-A1-register {
    	font-family: @open;
@@ -290,15 +332,17 @@
    .btn-social > :first-child {
    	line-height:44px;
    }
-   .form-group input, .form-group select, .form-group textarea {
-   	font-family: @open;
-   	background:transparent;
-   	border:1px solid #919191;
-   	border-radius:0px;
-   	padding:10px 12px;
-   	color:#ffffff;
-   	height:auto;
-   	font-size:16px;
+   .form-group {
+     input, select, textarea {
+       font-family:;
+       background:transparent;
+       border:1px solid #919191;
+       border-radius:0px;
+       padding:10px 12px;
+       color:#ffffff;
+       height:auto;
+       font-size:16px;
+     }
    }
    .fos_user_registration_register label {
    	display:none;
@@ -419,6 +463,12 @@
    		}
    	}
    }
+   .btn.blockStep:hover {
+      background: @dark_blue;
+      .txt-AD1 {
+         color:#fff;
+      }
+   }
 .nav.nav-tabs {
    font-family: @open;
    font-size: 16px;
@@ -512,8 +562,25 @@ ul.phones {
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: @screen-xs-max) {
    .blockStep {
       text-align: left;
+   }
+}
+
+@media (max-width: @screen-sm-max) {
+   .block-Intro-green {
+      height: 250px;
+      .up-Intro {
+         font-size: 22px;
+         }
+      .boxIntro-Heading {
+         left: 5%;
+         top: -10%;
+         position: relative;
+         width: 120px;
+         height: 120px;
+         padding: 12px 0px;
+      }
    }
 }

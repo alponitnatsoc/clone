@@ -184,7 +184,7 @@ footer > .container > div:last-child {
 }
 .block-Intro-blue {
   font-family: "Open Sans";
-  background: #00cdcc;
+  background: #00CDCC;
   text-align: center;
   display: block;
   padding: 30px 0px;
@@ -201,6 +201,41 @@ footer > .container > div:last-child {
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: -2px;
+}
+.block-Intro-green {
+  background: #3b4b5a;
+  display: block;
+  padding: 30px 0px;
+  margin: 10px 0px 25px 0px;
+  position: relative;
+  height: 160px;
+}
+.block-Intro-green .up-Intro {
+  font-family: "Open Sans";
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.block-Intro-green .boxIntro-Heading {
+  position: absolute;
+  background: #00CDCC;
+  left: 13%;
+  top: 30%;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  padding: 28px 0px;
+}
+.block-Intro-green .boxIntro-Heading img {
+  border: 2px solid #99ebeb;
+}
+.contenMessage p {
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 100;
+  display: block;
+  overflow: hidden;
 }
 .txt-A1-register {
   font-family: "Open Sans";
@@ -293,7 +328,7 @@ a.helpTxt {
 .form-group input,
 .form-group select,
 .form-group textarea {
-  font-family: "Open Sans";
+  font-family: ;
   background: transparent;
   border: 1px solid #919191;
   border-radius: 0px;
@@ -412,6 +447,12 @@ a.helpTxt {
   font-size: 16px;
   font-weight: bold;
 }
+.btn.blockStep:hover {
+  background: #3b4b5a;
+}
+.btn.blockStep:hover .txt-AD1 {
+  color: #fff;
+}
 .nav.nav-tabs {
   font-family: "Open Sans";
   font-size: 16px;
@@ -508,5 +549,21 @@ ul.phones li {
 @media (max-width: 480px) {
   .blockStep {
     text-align: left;
+  }
+}
+@media (max-width: 768px) {
+  .block-Intro-green {
+    height: 250px;
+  }
+  .block-Intro-green .up-Intro {
+    font-size: 22px;
+  }
+  .block-Intro-green .boxIntro-Heading {
+    left: 5%;
+    top: -10%;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    padding: 12px 0px;
   }
 }
