@@ -10,6 +10,11 @@
    @open: "Open Sans";
    @roboto: "Roboto Slab";
    @lato: "Lato";
+
+   @screen-sm-min: 768px;
+   @screen-md-min: 992px;
+   @screen-lg-min: 1200px;
+
    span {
    	font-family: @open;
    	font-size: 16px;
@@ -25,6 +30,22 @@
    	background-image:none;
    	background-color:#ffffff;
    	border:none;
+      .navbar-toggle {
+         float: left;
+         margin-left: 15px;
+         margin-right: 0;
+         border: none;
+         &:hover, &:active, &:focus {
+            background-color: transparent;
+         }
+         .icon-bar {
+            border: 1px solid #00cccc;
+            height: 4px;
+            & + .icon-bar {
+               margin-top: 2px;
+            }
+         }
+      }
    	ul.navbar-nav li a {
    		font-family:Lato, sans-serif;
    		font-weight:300;
@@ -97,26 +118,35 @@
    	color:#3c4b5a;
    }
    footer {
-   	position:fixed;
-   	bottom:0;
+      @media (min-width: @screen-md-min) {
+         position:fixed;
+         bottom:0;
+         height:60px;
+      }
    	width:100%;
-   	height:60px;
    	background-color:#ededed;
    	> .container {
    		margin-top:11px;
    		> div {
-   			height:37px;
-   			border-right:1px solid #919191;
+   			@media (min-width: @screen-md-min) {
+               height:37px;
+   			   border-right:1px solid #919191;
+            }
    		}
    		> div.logo img {
    			margin-top:5px;
    		}
-   		> div.links a {
-   			color:#333333;
-   			font-size:12px;
-   			font-family:'Open Sans', sans-serif;
-   			text-transform:uppercase;
-   		}
+   		> div.links {
+            > div {
+               padding-left: 0;
+               > a {
+                  color:#333333;
+                  font-size:12px;
+                  font-family:'Open Sans', sans-serif;
+                  text-transform:uppercase;
+               }   
+            }
+         }
    		> div.social {
    			padding-top:4px;
    			> div {
