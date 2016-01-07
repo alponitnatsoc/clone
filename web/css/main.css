@@ -76,7 +76,8 @@ span {
   padding-top: 120px;
 }
 .btn.btnNext,
-.btnPrevious {
+.btnPrevious,
+.btn-default {
   font-family: "Open Sans";
   border: 2px solid #1fcecb;
   background: #1fcecb;
@@ -92,9 +93,11 @@ span {
 .btn:hover {
   opacity: 0.8;
 }
-.btnPrevious:hover {
+.btnPrevious:hover,
+.btn-default:hover {
   border: 2px solid #1FCECB;
   background: #00CDCC none repeat scroll 0% 0%;
+  color: #fff;
 }
 .up-Help-Phone {
   background: #efefef;
@@ -208,9 +211,18 @@ footer > .container > div:last-child {
   font-weight: 100;
 }
 .txt-A1-register m,
-.txt-A1-terms a {
+.txt-A1-terms a,
+.block-Intro a {
   color: #00cdcc;
   font-weight: bold;
+}
+.block-Intro a {
+  font-family: "Open Sans";
+  font-size: 14px;
+}
+a.helpTxt {
+  position: absolute;
+  right: 0px;
 }
 .txt-A1-terms {
   font-family: "Open Sans";
@@ -279,7 +291,8 @@ footer > .container > div:last-child {
   line-height: 44px;
 }
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   font-family: "Open Sans";
   background: transparent;
   border: 1px solid #919191;
@@ -436,7 +449,8 @@ footer > .container > div:last-child {
   color: #fff;
 }
 #registrationFormContainer .form-group input,
-#registrationFormContainer .form-group select {
+#registrationFormContainer .form-group select,
+#registrationFormContainer .form-group textarea {
   color: #919191;
 }
 #registrationFormContainer label {

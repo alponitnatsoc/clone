@@ -96,7 +96,7 @@
 
 			<div id="contractData" class="tab-pane fade">
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios</span>
+                    <span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
                 </div>
                 <div class="col-sm-12 col-xs-12 blockUpData">
                     <div class="col-sm-4 col-xs-12">
@@ -142,13 +142,23 @@
 
 				</div>
 				<div id="userPayMethod">
-					{{ form_row(form.credit_card) }}
-					{{ form_row(form.expiry_date) }}
-					{{ form_row(form.cvv) }}
-					{{ form_row(form.name_on_card) }}
-				</div>
-				<a class="btn btn-primary btnPrevious" >Anterior</a>
-				{{ form_row(form.save) }}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 col-xs-12">
+				        {{ form_row(form.credit_card) }}
+					    {{ form_row(form.expiry_date) }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+					    {{ form_row(form.cvv) }}
+					    {{ form_row(form.name_on_card) }}
+                        </div>
+                    </div>
+			    </div>
+                <div class="col-sm-12 col-xs-12 center">
+    				<a class="btn btn-primary btnPrevious" >< Anterior</a>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    {{ form_row(form.save) }}
+                </div>
 				<div id="toHide">
 
 					{{ form_widget(form) }}

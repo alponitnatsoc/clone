@@ -87,7 +87,7 @@
    		padding-top: 120px;
    	}
    }
-   .btn.btnNext, .btnPrevious {
+   .btn.btnNext, .btnPrevious, .btn-default {
          font-family: @open;
          border:2px solid #1fcecb;
          background:#1fcecb;
@@ -103,9 +103,10 @@
    .btn:hover {
    	opacity:0.8;
    }
-   .btnPrevious:hover {
+   .btnPrevious:hover, .btn-default:hover {
       border: 2px solid #1FCECB;
       background: @blue none repeat scroll 0% 0%;
+      color: #fff;
    }
    .up-Help-Phone {
    	background:#efefef;
@@ -218,9 +219,17 @@
    	font-size:18px;
    	font-weight:100;
    }
-   .txt-A1-register m, .txt-A1-terms a {
+   .txt-A1-register m, .txt-A1-terms a, .block-Intro a {
    	color:#00cdcc;
    	font-weight:bold;
+   }
+   .block-Intro a {
+      font-family: @open;
+      font-size:14px;
+   }
+   a.helpTxt {
+      position: absolute;
+      right: 0px;
    }
    .txt-A1-terms {
    	font-family: @open;
@@ -281,7 +290,7 @@
    .btn-social > :first-child {
    	line-height:44px;
    }
-   .form-group input, .form-group select {
+   .form-group input, .form-group select, .form-group textarea {
    	font-family: @open;
    	background:transparent;
    	border:1px solid #919191;
@@ -445,7 +454,7 @@
     color: #fff; 
 }
 #registrationFormContainer {
-   .form-group input, .form-group select {
+   .form-group input, .form-group select, .form-group textarea {
       color: @gray;
    }
    label {
