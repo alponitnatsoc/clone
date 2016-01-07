@@ -445,13 +445,15 @@ footer > .container > div:last-child {
   font-weight: 100;
   color: #4B4B4B;
 }
-#basicData h2 {
+#basicData h2,
+#contractData h2 {
   font-family: "Lato";
   font-size: 22px;
   font-weight: bold;
   color: #3C4B5A;
 }
-#basicData .col-sm-12 {
+#basicData .col-sm-12,
+#contractData .col-sm-12 {
   padding-left: 0px;
   padding-right: 0px;
 }
