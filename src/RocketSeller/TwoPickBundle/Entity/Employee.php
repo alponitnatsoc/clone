@@ -89,6 +89,7 @@ class Employee
      */
     public function setPersonPerson(\RocketSeller\TwoPickBundle\Entity\Person $personPerson)
     {
+        $personPerson->setEmployee($this);
         $this->personPerson = $personPerson;
 
         return $this;

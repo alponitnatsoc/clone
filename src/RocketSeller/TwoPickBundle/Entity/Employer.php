@@ -54,7 +54,7 @@ class Employer
     private $employerHasEmployees;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=TRUE)
      */
     private $sameWorkHouse;
 

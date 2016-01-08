@@ -507,6 +507,7 @@ class Person
      */
     public function setEmployer(\RocketSeller\TwoPickBundle\Entity\Employer $employer = null)
     {
+        $employer->setPersonPerson($this);
         $this->employer = $employer;
 
         return $this;
