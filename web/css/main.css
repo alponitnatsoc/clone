@@ -546,6 +546,60 @@ ul.phones li {
   display: inline-block;
   width: 90%;
 }
+.blockLeftBefore,
+.blockRightAfter {
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 100;
+  margin-top: 20px;
+}
+.blockLeftBefore span,
+.blockRightAfter span {
+  font-weight: bold;
+}
+.blockLeftBefore img,
+.blockRightAfter img {
+  border: 2px solid #919191;
+  margin-bottom: 15px;
+}
+.blockLeftBefore span.numberAT,
+.blockRightAfter span.numberAT {
+  font-size: 28px;
+  color: #fff;
+  font-weight: bold;
+  background: #00CDCC;
+  width: 40px;
+  margin: 0 auto;
+  position: relative;
+  top: 10px;
+}
+.blockLeftBefore span.txtAT,
+.blockRightAfter span.txtAT {
+  font-style: italic;
+  font-weight: 100;
+}
+.blockLeftBefore span.txtAT bl,
+.blockRightAfter span.txtAT bl {
+  color: #00CDCC;
+  font-weight: bold;
+}
+.blockLeftBefore .lineDivider,
+.blockRightAfter .lineDivider {
+  height: 40px;
+  width: 1px;
+  border-right: 1px solid #3C4B5A;
+  margin: 10px 50%;
+}
+.blockLeftBefore .lineDividerH,
+.blockRightAfter .lineDividerH {
+  height: 1px;
+  width: 60%;
+  border-top: 1px solid #3C4B5A;
+  margin: -10px auto 0px auto;
+}
+.blockLeftBefore.lineDivider {
+  border-right: 1px solid #e8e5e5;
+}
 @media (max-width: 480px) {
   .blockStep {
     text-align: left;

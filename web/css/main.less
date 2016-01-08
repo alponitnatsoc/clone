@@ -560,7 +560,52 @@ ul.phones {
       width: 90%;
    }
 }
-
+.blockLeftBefore, .blockRightAfter {
+   font-family: @open;
+   font-size: 16px;
+   font-weight: 100;
+   margin-top: 20px;
+   span {
+      font-weight: bold;
+   }
+   img {
+      border: 2px solid @gray;
+      margin-bottom: 15px;
+   }
+   span.numberAT {
+      font-size: 28px;
+      color: #fff;
+      font-weight: bold;
+      background: @blue;
+      width: 40px;
+      margin: 0 auto;
+      position: relative;
+      top: 10px;
+   }
+   span.txtAT {
+      font-style: italic;
+      font-weight: 100;
+   }
+   span.txtAT bl {
+      color: @blue;
+      font-weight: bold;
+   }
+   .lineDivider {
+      height: 40px;
+      width: 1px;
+      border-right: 1px solid @dark_gray;
+      margin: 10px 50%;
+   }
+   .lineDividerH {
+      height: 1px;
+      width: 60%;
+      border-top: 1px solid @dark_gray;
+      margin: -10px auto 0px auto;
+   }
+}
+.blockLeftBefore.lineDivider {
+   border-right: 1px solid #e8e5e5;
+}
 
 @media (max-width: @screen-xs-max) {
    .blockStep {
