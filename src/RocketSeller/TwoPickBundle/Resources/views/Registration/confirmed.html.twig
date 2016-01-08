@@ -3,13 +3,95 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block sidebar %}{% endblock sidebar %}
 {% block fos_user_content %}
-<div class="page-header" id="info1">
-    <h1><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>&#161;Su registro finaliz&oacute; con &eacute;xito&#33;</h1>
-    <p class="lead">Antes de comenzar, le recomendamos tener presente que el proceso a seguir<br> cuando contrata un empleado es el siguiente:</p>
-    <p>Antes de ingresar a trabajar</p>
-    <p>Una vez ingresa a trabajar</p>
-    <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE</a></p>
-</div>
+{% block body %}
+    <div class="row-fluid block-Intro-green">
+        <div class="col-sm-2 col-xs-12 boxIntro-Heading"><img src="/img/cross.png"></div>
+        <div class="col-sm-3 hidden-xs"></div>
+        <div class="col-sm-9 col-xs-12 up-Intro">Su registro finaliz&oacute; con &eacute;xito&#33;</div>
+    </div>
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-3 contenMessage">
+            <div class="" id="info1">
+                <p class="lead">Antes de comenzar, le recomendamos tener presente que el proceso a seguir<br> cuando contrata un empleado es el siguiente:</p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12">
+            <div class="col-sm-7 col-xs-12 blockLeftBefore center lineDivider">
+                <p>Antes de ingresar a trabajar</p>
+                <div class="lineDivider"></div>
+                <div class="lineDividerH"></div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="col-sm-6 col-xs-6">
+                        <span class="numberAT">1</span>
+                        <img src="/img/1-iconExit-Step.png">
+                        <span>Verificación de seguridad de la persona a contratar</span>
+                        <div class="lineDivider"></div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6">
+                        <span class="numberAT">2</span>
+                        <img src="/img/2-iconExit-Step.png">
+                        <span>Exámen médico de ingreso</span>
+                        <div class="lineDivider"></div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <span class="txtAT"><bl>Symplifica</bl> le ofrece la manera de hacerlo</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <span class="numberAT">3</span>
+                    <img src="/img/3-iconExit-Step.png">
+                    <span>Establecer condiciones de contrato y firmarlo</span>
+                    <div class="lineDivider"></div>
+                    <div class="">
+                        <span class="txtAT"><bl>Symplifica</bl> cuenta con herramientas para generarlo</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <span class="numberAT">4</span>
+                    <img src="/img/4-iconExit-Step.png">
+                    <span>Afiliación al empleado y al empleador a Seguridad Social</span>
+                    <div class="lineDivider"></div>
+                    <div class="">
+                        <span class="txtAT">¡<bl>Symplifica</bl> hace las diligencias por usted!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-xs-12 blockRightAfter center">
+                <p>Una vez ingresa a trabajar</p>
+                <div class="lineDivider"></div>
+                <div class="lineDividerH"></div>
+                <div class="col-sm-4 col-xs-6">
+                    <span class="numberAT">5</span>
+                    <img src="/img/5-iconExit-Step.png">
+                    <span>Entrega formal de puesto de trabajo según lo establece la ley</span>
+                    <div class="lineDivider"></div>
+                    <div class="">
+                        <span class="txtAT"><bl>Symplifica</bl> le brinda recursos para hacerlo</span>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-6">
+                    <span class="numberAT">6</span>
+                    <img src="/img/6-iconExit-Step.png">
+                    <span>Liquidación y pago de sueldo y aportes a Seguridad Social</span>
+                    <div class="lineDivider"></div>
+                    <div class="">
+                        <span class="txtAT">En <bl>Symplifica</bl> puede pagar con un solo clic</span>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-12">
+                    <span class="numberAT">7</span>
+                    <img src="/img/7-iconExit-Step.png">
+                    <span>Gestión de la información relacionada al empleado de acuerdo a lo exigido por la ley</span>
+                    <div class="lineDivider"></div>
+                    <div class="">
+                        <span class="txtAT"><bl>Symplifica</bl> compila y almacena la información que lo mantendrá seguro</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center">
+            <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE ></a></p>
+        </div>
 <div class="page-header" id="info2" style="display:none">
     <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
     <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:...</p>
@@ -27,6 +109,7 @@
     </ul>
     <p><a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO</a></p>
 </div>
+{% endblock body %}
 {% endblock fos_user_content %}
 {% block javascripts %}
 {{ parent() }}
