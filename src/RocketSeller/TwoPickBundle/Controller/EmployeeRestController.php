@@ -161,13 +161,13 @@ class EmployeeRestController extends FOSRestController
         $options = array(
             'json'        => $parameters,
         );
-        /** @var Response $response */
-        $response = $this->get('guzzle.client.api_rest')->post($url_request, $options);
-        if($response->getStatusCode()!=201){
-            $view->setData(array('error'=>array('credit card'=>'something is wrong with the information')))->setStatusCode($response->getStatusCode());
-            return $view;
-        }
-        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
+//        /** @var Response $response */
+//        $response = $this->get('guzzle.client.api_rest')->post($url_request, $options);
+//        if($response->getStatusCode()!=201){
+//            $view->setData(array('error'=>array('credit card'=>'something is wrong with the information')))->setStatusCode($response->getStatusCode());
+//            return $view;
+//        }
+//        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
         $contract->setPayMethodPayMethod($payMethod);
 

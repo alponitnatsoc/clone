@@ -32,6 +32,11 @@ class Employee
     private $personPerson;
 
     /**
+     * @ORM\OneToMany(targetEntity="EmployeeHasEntity", mappedBy="employeeEmployee", cascade={"persist"})
+     */
+    private $entities;
+
+    /**
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
      */
     private $employeeHasEmployers;
@@ -248,5 +253,39 @@ class Employee
     public function getEmployeeHasBeneficiary()
     {
         return $this->employeeHasBeneficiary;
+    }
+
+    /**
+     * Add entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     *
+     * @return Employee
+     */
+    public function addEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities[] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Remove entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     */
+    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities->removeElement($entity);
+    }
+
+    /**
+     * Get entities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 }

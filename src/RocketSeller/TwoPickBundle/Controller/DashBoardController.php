@@ -1,6 +1,7 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ class DashBoardController extends Controller
         $user=$this->getUser();
         $stateRegister=0;
         $stateEmployees=0;
+        $idCurrentEmployee=-1;
         /** @var Employer $employer */
         $employer=$user->getPersonPerson()->getEmployer();
         if ($employer==null) {
@@ -38,11 +40,13 @@ class DashBoardController extends Controller
             //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees>0) {
                 $minUnit=100/($numEmployees*2);
+                /** @var EmployerHasEmployee $value */
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
                     if (count($value->getContracts())>0) {
                         $stateEmployees+=$minUnit*2;
                     } else {
+                        $idCurrentEmployee=$value->getEmployeeEmployee()->getIdEmployee();
                         //si nó el contrato todavía no se ha diligenciado y solo se
                         //puede sumar 1 unidad minima al porcentaje
                         $stateEmployees+=$minUnit;
@@ -59,13 +63,29 @@ class DashBoardController extends Controller
                 'state' => $stateRegister,
                 'stateMessage' => "Continuar",);
         $step2 = array(
-                'url' => $this->generateUrl('manage_employees'), 
+                'url' => $this->generateUrl('register_employee', array('id'=>$idCurrentEmployee)),
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
                 'stateMessage' => "Continuar",);
-        $steps [] =$step1;
-        $steps [] =$step2;
-        return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', 
+
+        $step4 = array(
+            'url' => $this->generateUrl('matrix_choose'),
+            'name' => "Finalizar proceso",
+            'state' => $stateEmployees,
+            'stateMessage' => "Continuar",);
+        $steps ['0'] =$step1;
+        $steps ['1'] =$step2;
+        if($stateEmployees==100){
+            $step3 = array(
+                'url' => $this->generateUrl('register_employee', array('id'=>$idCurrentEmployee)),
+                'name' => "Agregar un nuevo Empleado?",
+                'state' => 0,
+                'stateMessage' => "Iniciar",);
+            $steps ['2'] =$step3;
+
+        }
+        $steps ['3'] =$step4;
+        return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig',
             array('steps' => $steps ) );
     }
 }

@@ -2,6 +2,9 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+matrix_choose:
+    path:      /matrix/choose
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose}
 testzip:
     path:      /export/user/documents
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:exportDocuments}
