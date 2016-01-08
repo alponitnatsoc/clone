@@ -32,9 +32,9 @@ class PersonRegistration extends AbstractType
 			    'mapped' => false,))
             ->add('documentType', 'choice', array(
 			    'choices' => array(
-			        'cedulaCiudadania'   => 'Cedula Ciudadania',
-			        'cedulaExtrangeria' => 'Cedula Extrangeria',
-                    'pasaporte' => 'Pasaporte',
+			        'CC'   => 'Cedula Ciudadania',
+			        'CE' => 'Cedula Extrangeria',
+                    'PP' => 'Pasaporte',
 			    ),
 			    'multiple' => false,
 			    'expanded' => false,

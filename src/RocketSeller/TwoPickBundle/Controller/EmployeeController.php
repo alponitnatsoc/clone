@@ -172,7 +172,7 @@ class EmployeeController extends Controller
                 $severances=$entityType->getEntities();
             }
         }
-        $form = $this->createForm(new AffiliationEmployerEmployee($employerHasEmployees, $eps, $pensions), $employer, array(
+        $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions,$severances,$arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
@@ -187,10 +187,17 @@ class EmployeeController extends Controller
             }
 
         }
+        $personEmployer=$employer->getPersonPerson();
+        $employerFullName=$personEmployer->getNames()." ".$personEmployer->getLastName1()." ".$personEmployer->getLastName2();
 
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:afiliation.html.twig',
-            array('form' => $form->createView(), 'numberOfEmployees'=>$employerHasEmployees->count())
+            array(
+                'form' => $form->createView(),
+                'numberOfEmployees'=>$employerHasEmployees->count(),
+                'employerName'=>$employerFullName,
+                'employerDocument'=>$personEmployer->getDocument(),
+                'employerDocumentType'=>$personEmployer->getDocumentType())
         );
     }
 

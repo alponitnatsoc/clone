@@ -25,13 +25,16 @@
 				</li>
 			{% endfor %}
 		</ul>
-		{{ form_widget(form) }}
 	    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 	</div>
 
 	<div id="contactData" class="tab-pane fade in">
-
+		{{ employerName }}
+		{{ employerDocumentType }} {{ employerDocument }}
+		{{ form_row(form.severances) }}
+		{{ form_row(form.arl) }}
+		{{ form_row(form.economicalActivity) }}
 	    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 		{{ form_row(form.save) }}
 

@@ -14,13 +14,15 @@ use Symfony\Component\Form\FormEvents;
 
 class AffiliationEmployerEmployee extends AbstractType
 {
-    private $employerHasEmployees;
     private $wealthEntities;
     private $pensionEntities;
-    function __construct($employerHasEmployees,$wealthEntities,$pensionEntities){
-        $this->employerHasEmployees=$employerHasEmployees;
+    private $severancesEntities;
+    private $arlEntities;
+    function __construct($wealthEntities,$pensionEntities,$severancesEntities,$arlEntities){
         $this->wealthEntities=$wealthEntities;
         $this->pensionEntities=$pensionEntities;
+        $this->severancesEntities=$severancesEntities;
+        $this->arlEntities=$arlEntities;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -35,6 +37,21 @@ class AffiliationEmployerEmployee extends AbstractType
                 'allow_delete' => false,
                 'by_reference' => false,
             ))
+            ->add('severances', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->severancesEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Caja de Compensación Familiar'
+            ))
+            ->add('arl', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->arlEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Administradora de Riesgos Labolares'
+            ))
+            ->add('economicalActivity', 'text')
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));
