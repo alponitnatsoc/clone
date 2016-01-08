@@ -23,8 +23,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -636,6 +638,82 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
         }
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(array=true, name="idEmployerHasEmployee", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="pension", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
+     * @return View
+     */
+    public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher){
+        /** @var User $user */
+        $user=$this->getUser();
+        if($user==null){
+            return;
+        }
+        $idEmployer=$paramFetcher->get('idEmployer');
+        $idsEmployerHasEmployee=$paramFetcher->get('idEmployerHasEmployee');
+        $beneficiaries=$paramFetcher->get('beneficiaries');
+        $pension=$paramFetcher->get('pension');
+        $wealth=$paramFetcher->get('wealth');
+        $employerRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $employerHasEmployeeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $entityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
+        /** @var Employer $realEmployer */
+        $realEmployer=$employerRepo->find($idEmployer);
+        if($user->getPersonPerson()->getEmployer()!=$realEmployer){
+            return;
+        }
+        $realEmployerHasEmployees=$realEmployer->getEmployerHasEmployees();
+        for($i=0;$i<count($idsEmployerHasEmployee);$i++){
+            /** @var EmployerHasEmployee $realEmployerHasEmployee */
+            $realEmployerHasEmployee=$employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
+            if($realEmployerHasEmployees->contains($realEmployerHasEmployee)){
+                /** @var Entity $tempPens */
+                $tempPens=$entityRepo->find($pension[$i]);
+                /** @var Entity $tempWealth */
+                $tempWealth=$entityRepo->find($wealth[$i]);
+                if($tempPens==null||$tempWealth==null){
+                    return;
+                }
+                $realEmployee=$realEmployerHasEmployee->getEmployeeEmployee();
+                $employeeHasEntityPens=new EmployeeHasEntity();
+                $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
+                $employeeHasEntityPens->setEntityEntity($tempPens);
+                $realEmployee->addEntity($employeeHasEntityPens);
+                $employeeHasEntityWealth=new EmployeeHasEntity();
+                $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
+                $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                $realEmployee->addEntity($employeeHasEntityPens);
+                $realEmployee->setAskBeneficiary(($beneficiaries[$i])? true : false);
+
+                $em = $this->getDoctrine()->getManager();
+
+                $em->persist($realEmployee);
+                $em->flush();
+            }else{
+              return;
+            }
+        }
+        $view = View::create();
+        $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
+        return $view;
     }
     /**
      * Get the validation errors

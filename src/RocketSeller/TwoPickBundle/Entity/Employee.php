@@ -49,6 +49,11 @@ class Employee
      * @ORM\Column(type="boolean")
      */
     private $twoFactorAuthentication = false;
+    /**
+     * @var boolean $askBeneficiary 
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $askBeneficiary ;
      
     /**
      * @var integer $twoFactorCode Current authentication code
@@ -259,11 +264,11 @@ class Employee
     /**
      * Add entity
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity
      *
      * @return Employee
      */
-    public function addEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    public function addEntity(\RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity)
     {
         $this->entities[] = $entity;
 
@@ -273,9 +278,9 @@ class Employee
     /**
      * Remove entity
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity
      */
-    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity)
     {
         $this->entities->removeElement($entity);
     }
@@ -288,5 +293,29 @@ class Employee
     public function getEntities()
     {
         return $this->entities;
+    }
+
+    /**
+     * Set askBeneficiary
+     *
+     * @param boolean $askBeneficiary
+     *
+     * @return Employee
+     */
+    public function setAskBeneficiary($askBeneficiary)
+    {
+        $this->askBeneficiary = $askBeneficiary;
+
+        return $this;
+    }
+
+    /**
+     * Get askBeneficiary
+     *
+     * @return boolean
+     */
+    public function getAskBeneficiary()
+    {
+        return $this->askBeneficiary;
     }
 }
