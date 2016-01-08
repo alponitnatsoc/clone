@@ -74,7 +74,8 @@ class PersonRestController extends FOSRestController
             if (count($errors) == 0) {
                 if($employer->getRegisterState()<33)
                     $employer->setRegisterState(33);
-                $em->persist($user);
+                $em->persist($employer);
+                $em->persist($people);
                 $em->flush();
                 $view->setStatusCode(200);
                 return $view;
@@ -189,7 +190,8 @@ class PersonRestController extends FOSRestController
             if (count($errors) == 0) {
                 if($employer->getRegisterState()==33)
                     $employer->setRegisterState(66);
-                $em->persist($user);
+                $em->persist($employer);
+                $em->persist($people);
                 $em->flush();
                 $view->setStatusCode(200);
                 return $view;

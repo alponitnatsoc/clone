@@ -33,6 +33,7 @@ class PersonController extends Controller
         $employer = $people->getEmployer();
         if ($employer==null) {
             $employer=new Employer();
+            $people->setEmployer($employer);
         }
         
         if (count($employer->getWorkplaces())==0) {
@@ -41,7 +42,7 @@ class PersonController extends Controller
             $people->setEmployer($employer);
         }
         $employer->setEmployerType("persona");
-        if($people->getPhones()->count()==0){
+        if($people->getPhones()->count()==0||$people->getPhones()==null){
             $phone=new Phone();
             $people->addPhone($phone);
         }
