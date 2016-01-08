@@ -66,7 +66,7 @@
 
 			<div id="contactData" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
+                    <span>Los campos marcados en * son obligatorios</span>
                 </div>
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
@@ -154,10 +154,7 @@
                     </div>
 			    </div>
                 <div class="col-sm-12 col-xs-12 center">
-    				<a class="btn btn-primary btnPrevious" >< Anterior</a>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    {{ form_row(form.save) }}
+    				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
                 </div>
 				<div id="toHide">
 

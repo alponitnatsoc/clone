@@ -1,7 +1,8 @@
 {% extends "::base.html.twig" %}
-
 {% block fos_user_content %}
-
+	<div class="col-sm-12 col-xs-12 block-Intro">
+		<span>Por favor ingrese la información solicitada para efectuar el registro:</span>
+	</div>
 <div id='registrationFormContainer' class=''>
 {{ form_start(form) }}
 
@@ -14,52 +15,111 @@
 <div class="tab-content">
 	<div id="basicData" class="tab-pane fade in active">
 	    {# render the task's only field: description #}
-	    {{ form_row(form.youAre) }}
-	    {{ form_row(form.person.documentType) }}
-	    {{ form_row(form.person.document) }}
-	    {{ form_row(form.person.names) }}
-	    {{ form_row(form.person.lastName1) }}
-	    {{ form_row(form.person.lastName2) }}
-	    {{ form_row(form.person.birthDate) }}
-	    <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
+	    	<div class="col-sm-12 col-xs-12 block-Intro">
+    			<span>Los campos marcados con * son obligatorios</span>
+    		</div>
+	    	<div class="col-sm-12 col-xs-12 blockUpData">
+				<div class="col-sm-3 col-xs-12">
+					<img src="/img/typePerson.png">
+    				{{ form_row(form.youAre) }}
+				</div>
+				<div class="col-sm-3 col-xs-12">
+			 		<img src="/img/documentType.png">
+    				{{ form_row(form.person.documentType) }}
+				</div>
+				<div class="col-sm-3 col-xs-12">
+					<img src="/img/documentNumber.png">
+    				{{ form_row(form.person.document) }}
+				</div>
+				<div class="col-sm-3 col-xs-12">
+					<img src="/img/lastName.png">
+    				{{ form_row(form.person.names) }}
+				</div>
+				<div class="col-sm-12 col-xs-12">
+                    <a id="btn-4" href="" class="btn btn-primary btnNext" >Consultar ></a>
+                </div>
+			</div>
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-6 col-xs-12">
+    			{{ form_row(form.person.lastName1) }}
+    			{{ form_row(form.person.lastName2) }}
+    			</div>
+    			<div class="col-sm-6 col-xs-12">
+    			{{ form_row(form.person.birthDate) }}
+    			</div>
+			</div>
+			<div class="col-sm-12 col-xs-12 center">
+			    <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+			</div>
 
 	</div>
 
 	<div id="contactData" class="tab-pane fade in">
-	    {{ form_row(form.person.mainAddress) }}
-	    {{ form_row(form.person.neighborhood) }}
-		<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-			{% for phone in form.person.phones %}
-				<li id="phone_{{loop.index}}" class="phoneLi">
-					{{ form_row(phone.id) }}
-					{{ form_row(phone.phoneNumber) }}
-				</li>
-			{% endfor %}
-		</ul>
-	    {{ form_row(form.person.department) }}
-	    {{ form_row(form.person.city) }}
-	    <a class="btn btn-primary btnPrevious" >Anterior</a>
-	    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
+		<div class="col-sm-12 col-xs-12 block-Intro">
+            <span>Los campos marcados en * son obligatorios</span>
+        </div>
+        <div class="col-sm-12 col-xs-12">
+            <div class="col-sm-6 col-xs-12">
+		    {{ form_row(form.person.mainAddress) }}
+		    {{ form_row(form.person.neighborhood) }}
+			<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+				{% for phone in form.person.phones %}
+					<li id="phone_{{loop.index}}" class="phoneLi">
+						{{ form_row(phone.id) }}
+						{{ form_row(phone.phoneNumber) }}
+					</li>
+				{% endfor %}
+			</ul>
+			</div>
+			<div class="col-sm-6 col-xs-12">
+		    {{ form_row(form.person.department) }}
+		    {{ form_row(form.person.city) }}
+			</div>
+		</div>
+		<div class="col-sm-12 col-xs-12 center">
+		    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+		    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+		</div>
 
     </div>
 
     <div id="workplacesData" class="tab-pane fade h3">
-		{{ form_row(form.sameWorkHouse) }}
-	    <h3>Workplaces</h3>
-	    	{{ form_row(form.numberOfWorkplaces) }}
+    	<div class="col-sm-12 col-xs-12 block-Intro">
+			<span>Corresponden a los puntos donde laborará o dependerá cada empleado.Los campos marcados con * son obligatorios.</span>
+		</div>
+    	<div class="col-sm-12 col-xs-12 blockUpData">
+			<div class="col-sm-6 col-xs-12">
+				<img src="/img/placeLocate.png">
+				{{ form_row(form.sameWorkHouse) }}
+			</div>
+			<div class="col-sm-6 col-xs-12">
+				<img src="/img/placeNumber.png">
+				{{ form_row(form.numberOfWorkplaces) }}
+			</div>
+		</div>
+	    
 	    {# iterate over each existing workplaces and render its fields #}
-		<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
+		<div class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
 	   	{% for workplace in form.workplaces %}
-	        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
-				{{ form_row(workplace.id) }}
-	        	{{ form_row(workplace.mainAddress) }}
-	        	{{ form_row(workplace.department) }}
-	        	{{ form_row(workplace.city) }}
-	        </li>
+	        <div id="workSpace_{{loop.index}}" class="workSpaceLi">
+	        	<div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-12 col-xs-12">
+					{{ form_row(workplace.id) }}
+					{{ form_row(workplace.mainAddress) }}
+					</div>
+	        		<div class="col-sm-6 col-xs-12">
+	        		{{ form_row(workplace.department) }}
+	        		</div>
+	        		<div class="col-sm-6 col-xs-12">
+	        		{{ form_row(workplace.city) }}
+	        		</div>
+	        	</div>
+	        </div>
 	    {% endfor %}
-	    </ul>
-	    <a class="btn btn-primary btnPrevious" >Anterior</a>
-	    {{ form_row(form.save) }}
+	    </div>
+	    <div class="col-sm-12 col-xs-12 center">
+		    <a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+		</div>
     </div>
 
 
