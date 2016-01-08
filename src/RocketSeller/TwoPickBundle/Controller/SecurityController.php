@@ -62,23 +62,25 @@ class SecurityController extends BaseController
         }
 
         if ($error) {
-            $id = $error->getUser()->getId();
+            if (method_exists($error, "getUser")) {
+                $id = $error->getUser()->getId();
 
-            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-            $userManager = $this->get('fos_user.user_manager');
-            /** @var $user \RocketSeller\TwoPickBundle\Entity\User */
-            $user = $userManager->findUserBy(array('id' => $id));
-            if (!$user->isEnabled()) {
-                $url = $this->generateUrl("intro_sin_verificar", array(
-                    "dc" => strftime("%d de %B de %Y", $user->getDateCreated()->getTimestamp()),
-                    "q" => $user->getConfirmationToken(),
-                    "ui" => $user->getId()
-                ));
+                /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+                $userManager = $this->get('fos_user.user_manager');
+                /** @var $user \RocketSeller\TwoPickBundle\Entity\User */
+                $user = $userManager->findUserBy(array('id' => $id));
+                if (!$user->isEnabled()) {
+                    $url = $this->generateUrl("intro_sin_verificar", array(
+                        "dc" => strftime("%d de %B de %Y", $user->getDateCreated()->getTimestamp()),
+                        "q" => $user->getConfirmationToken(),
+                        "ui" => $user->getId()
+                    ));
 
-                return new RedirectResponse($url);
+                    return new RedirectResponse($url);
+                }
             }
-
         }
+
         return $this->renderLogin(array(
             'last_username' => $lastUsername,
             'error' => $error,
