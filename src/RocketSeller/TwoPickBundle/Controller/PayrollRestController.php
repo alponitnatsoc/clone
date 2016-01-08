@@ -25,7 +25,7 @@ class PayrollRestController extends FOSRestController
 
   public function getContentRecursive($array, &$result, &$errorCode)
   {
-    //die(print_r($array,true));
+    $cuenta = array();
     if (!is_array($array))
       return;
     foreach($array as $key => $val)
@@ -37,42 +37,43 @@ class PayrollRestController extends FOSRestController
         if($key == 'UNICO')
         {
           $temp = array();
-          //die(print_r($val,true));
+          $count = 0;
+
           foreach($val as $i => $j)
           {
             $content = '';
+            if($i == 'END_REG')continue;
             if(!is_array($j))
-              $content = (String)$j;
-            $temp[$i] = $content;
+            {
+              $temp[$i] =(String)$j;
+            } else
+            {
+              // In case is an empty array which means that is an empty text,
+              // We just add it as normal but empty.
+              if(empty($j))
+              {
+                $temp[$i] = '';
+                continue;
+              }
+              foreach($j as $index => $text)
+              {
+                if(!(count($temp) > $index))
+                {
+                  $temp[] = array();
+                }
+                if(is_array($text))
+                  $temp[$index][$i] = '';
+                else
+                  $temp[$index][$i] = $text;
+              }
+            }
           }
           $result[] = $temp;
         }else
         {
-            $this->getContentRecursive($val, $result,$errorCode);
+            $this->getContentRecursive($val, $result, $errorCode);
         }
     }
-  }
-
-  public function formatResponse($array)
-  {
-      $group = array();
-      $bigGroup = array();
-      if(count($array) == 0)return;
-      foreach($array[0] as $key => $value)
-      {
-         if($key == 'END_REG')
-         {
-           $bigGroup[] = $group;
-           $group = array();
-         }else
-         {
-           $group[$key] = $value;
-
-         }
-      }
-      if(count($bigGroup) > 0)
-        return $bigGroup;
-      return $group;
   }
 
   /**
@@ -95,7 +96,7 @@ class PayrollRestController extends FOSRestController
      $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
     //TODO(daniel.serrano): Remove the mock URL.
     // This URL is only for testing porpouses and should be removed.
-    //$url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
+
     $response = null;
     $options = array(
                   'form_params' => $parameters,
@@ -106,17 +107,14 @@ class PayrollRestController extends FOSRestController
     str_replace( "%20", "", $test );
     $test = trim(preg_replace('/\s\s+/', '', $test));
     $response = $client->request('GET', $url_request . '?' . str_replace( "%20", "",urldecode($test)));//, ['query' => urldecode($test)]);
-    //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+
     // We parse the xml recieved into an xml object, that we will transform.
     $plain_text = (String)$response->getBody();
+
     // This two lines is to remove extra text from the respose that breaks the
     // php parser.
-
     $plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
     $plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
-
-    //$parsed = new \SimpleXMLElement(((String)$response->getBody()) );
-    //die($plain_text);
 
     // TODO(daniel.serrano): Remove this debug lines.
     libxml_use_internal_errors(true);
@@ -130,28 +128,21 @@ class PayrollRestController extends FOSRestController
 
     $json = json_encode($xml);
     $array = json_decode($json, TRUE);
-    //die('aaaaa' . print_r($array));
 
     $result = array();
     $errorCode = 201;
     $this->getContentRecursive($array, $result,$errorCode);
-    //die('4444' . print_r($result, true));
+    if(count($result)>0)
+      $result = $result[0];
 
-    //die('asdfasdfasdfasdf' . print_r($array, true));
-    //die(print_r(((String)$response->getBody()),true));
-    //die(print_r($parsed,true));
     $view = View::create();
-    // We set the error code according to a certain place on the XML returned.
-    //die($this->getErrorCode($array));
 
     if($errorCode == 505 || $errorCode == 605)$errorCode = 404;
     $view->setStatusCode($errorCode);
-    // We transform the xml into json.
-    $result = $this->formatResponse($result);
+
     $view->setData($result);
     return $view;
   }
-
 
   /**
    * It creates the XML request based on an asociative array. The xml generated
@@ -184,7 +175,6 @@ class PayrollRestController extends FOSRestController
     $answer .= "</Interfaz" . $idInterfaz . "Solic>";
     return $answer;
   }
-
 
   /**
    * Insert employee personal information. The id should be created in our side
@@ -303,7 +293,7 @@ class PayrollRestController extends FOSRestController
     $content = array();
     $unico = array();
     $info = $this->getEmployeeAction($paramFetcher->get('employee_id'))->getData();
-    //die(print_r($info,true));
+
     $unico['TIPOCON'] = 1;
     $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
     $unico['EMP_APELLIDO1'] = $paramFetcher->get('last_name') ? $paramFetcher->get('last_name') : $info['EMP_APELLIDO1'];
@@ -333,7 +323,6 @@ class PayrollRestController extends FOSRestController
 
     return $responseView;
   }
-
 
   /**
    * Gets all the information of the employee.<br/>
@@ -371,7 +360,6 @@ class PayrollRestController extends FOSRestController
 
     return $responseView;
   }
-
 
   /**
    * Inserts a fixed concept for a given employee.<br/>
@@ -442,11 +430,12 @@ class PayrollRestController extends FOSRestController
   {
     $content = array();
     $unico = array();
+    $info = $this->getFixedConceptsAction($paramFetcher->get('employee_id'))->getData();
 
     $unico['TIPOCON'] = 1;
-    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info[EMP_CODIGO];
-    $unico['CON_CODIGO'] = $paramFetcher->get('concept_id') ? $paramFetcher->get('concept_id') : $info[CON_CODIGO];
-    $unico['COF_VALOR'] = $paramFetcher->get('value') ? $paramFetcher->get('value') : $info[COF_VALOR];
+    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+    $unico['CON_CODIGO'] = $paramFetcher->get('concept_id') ? $paramFetcher->get('concept_id') : $info['CON_CODIGO'];
+    $unico['COF_VALOR'] = $paramFetcher->get('value') ? $paramFetcher->get('value') : $info['COF_VALOR'];
 
     $content[] = $unico;
     $parameters = array();
@@ -496,5 +485,178 @@ class PayrollRestController extends FOSRestController
     return $responseView;
   }
 
+  /**
+   * Gets all the information of the employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Gets all the information of a given employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Int $employeeId The id of the employee to be queried.
+   *
+   * @return View
+   */
+  public function getHistoryFixedConceptsAction($employeeId)
+  {
+    $content = array();
+    $unico = array();
+
+    $unico['EMPCODIGO'] = $employeeId;
+
+    $content[] = $unico;
+    $parameters = array();
+
+    $parameters['inInexCod'] = '607';
+    $parameters['clXMLSolic'] = $this->createXml($content, 607, 2);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+
+
+  /**
+   * Insert a new entity for an employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = " Insert a new entity for an employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param ParamFetcher $paramFetcher Paramfetcher
+   *
+   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   * @RequestParam(name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software")
+   * @RequestParam(name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software.")
+   * @RequestParam(name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software")
+   * @RequestParam(name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *
+   * @return View
+   */
+  public function postAddEmployeeEntityAction(ParamFetcher $paramFetcher)
+  {
+    $content = array();
+    $unico = array();
+
+    $unico['TIPOCON'] = 0;
+    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
+    $unico['TENT_CODIGO'] = $paramFetcher->get('entity_type_code');
+    $unico['COB_CODIGO'] = $paramFetcher->get('coverage_code');
+    $unico['ENT_CODIGO'] = $paramFetcher->get('entity_code');
+    $unico['FECHA_INICIO'] = $paramFetcher->get('start_date');
+
+    $content[] = $unico;
+    $parameters = array();
+    $parameters['inInexCod'] = '608';
+    $parameters['clXMLSolic'] = $this->createXml($content, 608);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+  /**
+   * Modifies a  entity of an employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = " Insert a new entity for an employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param ParamFetcher $paramFetcher Paramfetcher
+   *
+   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id")
+   * @RequestParam(name="entity_type_code", nullable=true, requirements="([A-Za-z])+", description="Code of the entity type as described by sql software")
+   * @RequestParam(name="coverage_code", nullable=true, requirements="([0-9])+", description="Code of the coverage as described by sql software.")
+   * @RequestParam(name="entity_code", nullable=true, requirements="([0-9])+", description="Code of the entity as described by sql software")
+   * @RequestParam(name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *
+   * @return View
+   */
+  public function postModifyEmployeeEntityAction(ParamFetcher $paramFetcher)
+  {
+    $content = array();
+    $unico = array();
+    $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+
+
+    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+
+    $unico['TIPOCON'] = 1;
+    $unico['EMP_CODIGO'] =   $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+    $unico['TENT_CODIGO'] = $paramFetcher->get('entity_type_code') ? $paramFetcher->get('entity_type_code') : $info['TENT_CODIGO'];
+    $unico['COB_CODIGO'] = $paramFetcher->get('coverage_code') ? $paramFetcher->get('coverage_code') : $info['COB_CODIGO'];
+    $unico['ENT_CODIGO'] = $paramFetcher->get('entity_code') ? $paramFetcher->get('entity_code') : $info['ENT_CODIGO'];
+    $unico['FECHA_INICIO'] = $paramFetcher->get('start_date') ? $paramFetcher->get('start_date') : $info['FECHA_INICIO'];
+
+    $content[] = $unico;
+    $parameters = array();
+    $parameters['inInexCod'] = '608';
+    $parameters['clXMLSolic'] = $this->createXml($content, 608);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+  /**
+   * Gets all the information related to the entities of the employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Gets all the information related to the entities of the employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Int $employeeId The id of the employee to be queried.
+   *
+   * @return View
+   */
+  public function getEmployeeEntityAction($employeeId)
+  {
+    $content = array();
+    $unico = array();
+
+    $unico['EMPCODIGO'] = $employeeId;
+
+    $content[] = $unico;
+    $parameters = array();
+
+    $parameters['inInexCod'] = '609';
+    $parameters['clXMLSolic'] = $this->createXml($content, 609, 2);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
 }
 ?>
