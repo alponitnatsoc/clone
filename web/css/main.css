@@ -500,6 +500,9 @@ a.helpTxt {
   font-weight: 100;
   color: #4B4B4B;
 }
+#registrationFormContainer .form-inline select {
+  margin-right: 10px;
+}
 #basicData h2,
 #contractData h2 {
   font-family: "Lato";
