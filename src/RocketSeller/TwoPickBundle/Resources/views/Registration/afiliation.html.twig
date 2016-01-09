@@ -8,38 +8,89 @@
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
   <li><a data-toggle="tab" href="#contactData">Datos de contacto</a></li>
-  <li><a data-toggle="tab" href="#workplacesData">Lugares de trabajo</a></li>
 </ul>
 
 <div class="tab-content">
 	<div id="basicData" class="tab-pane fade in active">
 	    {# render the task's only field: description #}
 	    {{ form_row(form.idEmployer) }}
-		{{ form_widget(form) }}
-		{{ form_row(form.save) }}
-	    <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
+		<ul class="employees"  >
+			{% for employee in form.employerHasEmployees %}
+				<li id="employee_{{loop.index}}" class="employeeLi">
+					{{ form_row(employee.nameEmployee) }}
+					{{ form_row(employee.wealth) }}
+					{{ form_row(employee.pension) }}
+					{{ form_row(employee.beneficiaries) }}
+					{{ form_row(employee.idEmployerHasEmployee) }}
+				</li>
+			{% endfor %}
+		</ul>
+	    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 	</div>
 
 	<div id="contactData" class="tab-pane fade in">
-
-	    <a class="btn btn-primary btnPrevious" >Anterior</a>
+		{{ employerName }}
+		{{ employerDocumentType }} {{ employerDocument }}
+		{{ form_row(form.severances) }}
+		{{ form_row(form.arl) }}
+		{{ form_row(form.economicalActivity) }}
 	    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
+		{{ form_row(form.save) }}
 
-    </div>
 
-    <div id="workplacesData" class="tab-pane fade h3">
-	    <a class="btn btn-primary btnPrevious" >Anterior</a>
 
-    </div>
+	</div>
 
 
 
 
 </div>
-
-
-
 {{ form_end(form) }}
 </div>
 {% endblock fos_user_content%}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$('#btn-1').click(function(e){
+			e.preventDefault();
+			var form =$("form");
+			var idEmployees=[],beneficiaries=[],pension=[],wealth=[];
+			var i =0;
+			$(form).find("ul.employees input[name*='idEmployerHasEmployee']").each(function(){
+				idEmployees[i++]=$(this).val();
+			});
+			i =0;
+			$(form).find("ul.employees select[name*='wealth']").each(function(){
+				wealth[i++]=$(this).val();
+			});
+			i =0;
+			$(form).find("ul.employees select[name*='pension']").each(function(){
+				pension[i++]=$(this).val();
+			});
+			i =0;
+			$(form).find("ul.employees input[name*='beneficiaries']").each(function(){
+				beneficiaries[i++]=$(this).val();
+			});
+
+			$.ajax({
+				url : $(this).attr('href'),
+				type: 'POST',
+				data: {
+					idEmployerHasEmployee:	idEmployees,
+					beneficiaries: 			beneficiaries,
+					pension:				pension,
+					wealth: 				wealth,
+					idEmployer: 			$(form).find("input[name='register_social_security[idEmployer]']").val(),
+				}
+			}).done(function(data) {
+				console.log(data);
+				$(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
+				$('.nav-tabs > .active').next('li').find('a').trigger('click');
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+				console.log(jqXHR);
+			});
+		});
+	</script>
+{% endblock javascripts %}

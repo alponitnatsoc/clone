@@ -14,16 +14,15 @@ use Symfony\Component\Form\FormEvents;
 
 class AffiliationEmployerEmployee extends AbstractType
 {
-
-    private $employer;
-    private $employees;
     private $wealthEntities;
     private $pensionEntities;
-    function __construct($employer,$employees,$wealthEntities,$pensionEntities){
-        $this->employer=$employer;
-        $this->employees=$employees;
+    private $severancesEntities;
+    private $arlEntities;
+    function __construct($wealthEntities,$pensionEntities,$severancesEntities,$arlEntities){
         $this->wealthEntities=$wealthEntities;
         $this->pensionEntities=$pensionEntities;
+        $this->severancesEntities=$severancesEntities;
+        $this->arlEntities=$arlEntities;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,53 +30,32 @@ class AffiliationEmployerEmployee extends AbstractType
         $builder
             ->setAction($options['action'])
             ->setMethod($options['method'])
-            ->add('idEmployer', 'hidden', array(
-                'data' => $this->employer->getIdEmployer(),
+            ->add('idEmployer', 'hidden')
+            ->add('employerHasEmployees', 'collection', array(
+                'type' => new EntitiesPick($this->wealthEntities,$this->pensionEntities),
+                'allow_add'    => false,
+                'allow_delete' => false,
+                'by_reference' => false,
+            ))
+            ->add('severances', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->severancesEntities,
+                'choice_label' =>'name',
                 'mapped' => false,
-            ));
-        $i=0;
-        /** @var Employee $employee */
-        foreach ($this->employees as $employee) {
-            $builder
-                ->add('nameEmployee'.$i, 'text', array(
-                    'data' => $employee->getPersonPerson()->getNames(),
-                    'mapped' => false,
-                    'read_only'=>true,
-                    'disabled'=>true,
-                    'label'=>' '
-                ))
-                ->add('wealth'.$i, 'entity', array(
-                        'class' => 'RocketSellerTwoPickBundle:Entity',
-                        'choices' => $this->wealthEntities,
-                        'choice_label' =>'name',
-                        'label'=>' '
-                    ))
-                ->add('pension'.$i, 'entity', array(
-                        'class' => 'RocketSellerTwoPickBundle:Entity',
-                        'choices' => $this->pensionEntities,
-                        'choice_label' =>'name',
-                        'label'=>' '
-                    ))
-                ->add('beneficiaries'.$i, 'choice', array(
-                        'choices' => array(
-                            1 => 'Si',
-                            0 => 'No',
-                        ),
-                        'multiple' => false,
-                        'expanded' => true,
-                        'label'=>' '
-                ))
-                ->add('idEmployee'.$i, 'hidden', array(
-                    'data' => $employee->getIdEmployee(),
-                    'mapped' => false,
-                ));
-            $i++;
-        }
-        $builder
-
+                'label'=>'Caja de Compensación Familiar'
+            ))
+            ->add('arl', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->arlEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Administradora de Riesgos Labolares'
+            ))
+            ->add('economicalActivity', 'text')
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));
+
 
     }
 
@@ -85,6 +63,7 @@ class AffiliationEmployerEmployee extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employer',
         ));
     }
     

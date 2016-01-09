@@ -26,6 +26,10 @@ class Employer
      */
     private $employerType;
     /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $economicalActivity;
+    /**
      * @ORM\Column(type="smallint")
      */
     private $registerState;
@@ -57,6 +61,11 @@ class Employer
      * @ORM\Column(type="boolean", nullable=TRUE)
      */
     private $sameWorkHouse;
+
+    /**
+     * @ORM\OneToMany(targetEntity="EmployerHasEntity", mappedBy="employerEmployer", cascade={"persist"})
+     */
+    private $entities;
 
 
     /**
@@ -291,5 +300,63 @@ class Employer
     public function getRegisterState()
     {
         return $this->registerState;
+    }
+
+    /**
+     * Add entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $entity
+     *
+     * @return Employer
+     */
+    public function addEntity(\RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $entity)
+    {
+        $this->entities[] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Remove entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $entity
+     */
+    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $entity)
+    {
+        $this->entities->removeElement($entity);
+    }
+
+    /**
+     * Get entities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntities()
+    {
+        return $this->entities;
+    }
+
+    /**
+     * Set economicalActivity
+     *
+     * @param string $economicalActivity
+     *
+     * @return Employer
+     */
+    public function setEconomicalActivity($economicalActivity)
+    {
+        $this->economicalActivity = $economicalActivity;
+
+        return $this;
+    }
+
+    /**
+     * Get economicalActivity
+     *
+     * @return string
+     */
+    public function getEconomicalActivity()
+    {
+        return $this->economicalActivity;
     }
 }

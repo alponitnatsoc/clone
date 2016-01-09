@@ -149,11 +149,6 @@ class EmployeeController extends Controller
         $user=$this->getUser();
         $employer=$user->getPersonPerson()->getEmployer();
         $employerHasEmployees=$employer->getEmployerHasEmployees();
-        $employees=new ArrayCollection();
-        /** @var EmployerHasEmployee $ehE */
-        foreach ($employerHasEmployees as $ehE) {
-            $employees->add($ehE->getEmployeeEmployee());
-        }
         $entityTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
         $entityTypes=$entityTypeRepo->findAll();
         $pensions=null;
@@ -177,13 +172,32 @@ class EmployeeController extends Controller
                 $severances=$entityType->getEntities();
             }
         }
-        $form = $this->createForm(new AffiliationEmployerEmployee($employer,$employees, $eps, $pensions), array(
+        $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions,$severances,$arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $employees=$form->get('employerHasEmployees');
+        foreach ($employees as $employee) {
+            /** @var EmployerHasEmployee $eHE */
+            foreach ($employerHasEmployees as $eHE) {
+                if($eHE->getIdEmployerHasEmployee()==$employee->get('idEmployerHasEmployee')->getData()){
+                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
+                    break;
+                }
+            }
+
+        }
+        $personEmployer=$employer->getPersonPerson();
+        $employerFullName=$personEmployer->getNames()." ".$personEmployer->getLastName1()." ".$personEmployer->getLastName2();
+
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:afiliation.html.twig',
-            array('form' => $form->createView(), 'numberOfEmployees'=>$employees->count())
+            array(
+                'form' => $form->createView(),
+                'numberOfEmployees'=>$employerHasEmployees->count(),
+                'employerName'=>$employerFullName,
+                'employerDocument'=>$personEmployer->getDocument(),
+                'employerDocumentType'=>$personEmployer->getDocumentType())
         );
     }
 

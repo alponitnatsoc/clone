@@ -32,7 +32,7 @@ class EmployerHasEntity
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer")
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="entities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="employer_id_employer", referencedColumnName="id_employer")
      * })
