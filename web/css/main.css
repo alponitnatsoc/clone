@@ -77,7 +77,8 @@ span {
 }
 .btn.btnNext,
 .btnPrevious,
-.btn-default {
+.btn-default,
+.btn.pull-right {
   font-family: "Open Sans";
   border: 2px solid #1fcecb;
   background: #1fcecb;
@@ -115,6 +116,9 @@ span {
   font-family: "Open Sans";
   font-size: 12px;
   color: #3c4b5a;
+}
+.panel.panel-info {
+  border: none;
 }
 footer {
   width: 100%;
@@ -326,8 +330,11 @@ a.helpTxt {
   line-height: 44px;
 }
 .form-group input,
+.form-horizontal input,
 .form-group select,
-.form-group textarea {
+.form-horizontal select,
+.form-group textarea,
+.form-horizontal textarea {
   font-family: ;
   background: transparent;
   border: 1px solid #919191;
@@ -371,6 +378,31 @@ a.helpTxt {
 }
 .block-Data span {
   margin-bottom: 25px;
+}
+.page-header {
+  border: none;
+}
+.page-header h1 small {
+  font-family: "Open Sans";
+  font-size: 28px;
+  font-weight: bold;
+  color: #00CDCC;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+}
+.panel.panel-info {
+  box-shadow: none;
+}
+.panel.panel-info .panel-heading {
+  background-image: none;
+  background: none;
+  border: none;
+}
+.panel.panel-info .panel-heading h3 {
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: bold;
+  color: #3C4B5A;
 }
 .block-Intro span {
   margin-bottom: 25px;
@@ -488,6 +520,9 @@ a.helpTxt {
   background: #00CDCC;
   border-color: #00CDCC;
   color: #fff;
+}
+.form-horizontal input {
+  color: #919191;
 }
 #registrationFormContainer .form-group input,
 #registrationFormContainer .form-group select,

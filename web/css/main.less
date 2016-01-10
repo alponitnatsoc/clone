@@ -92,7 +92,7 @@
    		padding-top: 120px;
    	}
    }
-   .btn.btnNext, .btnPrevious, .btn-default {
+   .btn.btnNext, .btnPrevious, .btn-default, .btn.pull-right {
          font-family: @open;
          border:2px solid #1fcecb;
          background:#1fcecb;
@@ -129,6 +129,9 @@
    	font-family: @open;
    	font-size:12px;
    	color:#3c4b5a;
+   }
+   .panel.panel-info {
+      border: none;
    }
    footer {
       @media (min-width: @screen-md-min) {
@@ -332,7 +335,7 @@
    .btn-social > :first-child {
    	line-height:44px;
    }
-   .form-group {
+   .form-group, .form-horizontal {
      input, select, textarea {
        font-family:;
        background:transparent;
@@ -379,6 +382,31 @@
    	}
       span {
          margin-bottom: 25px;
+      }
+   }
+   .page-header {
+      border: none;
+      h1 small {
+      font-family: @open;
+         font-size: 28px;
+         font-weight: bold;
+         color: @blue;
+         text-transform: uppercase;
+         margin-bottom: 25px;
+      }
+   }
+   .panel.panel-info {
+      box-shadow: none;
+      .panel-heading{
+         background-image: none;
+         background: none;
+         border: none;
+         h3 {
+            font-family: @open;
+            font-size: 16px;
+            font-weight: bold;
+            color: @dark_gray;
+         }
       }
    }
    .block-Intro {
@@ -502,6 +530,9 @@
     background: @blue; 
     border-color: @blue; 
     color: #fff; 
+}
+.form-horizontal input {
+   color: @gray;
 }
 #registrationFormContainer {
    .form-group input, .form-group select, .form-group textarea {
