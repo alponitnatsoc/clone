@@ -521,6 +521,13 @@ a.helpTxt {
   border-color: #00CDCC;
   color: #fff;
 }
+.form-horizontal .spacing {
+  font-family: "Lato";
+  font-size: 16px;
+}
+.form-horizontal .spacing a {
+  color: #00CDCC;
+}
 .form-horizontal input {
   color: #919191;
 }
