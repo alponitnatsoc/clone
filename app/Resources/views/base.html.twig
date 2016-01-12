@@ -89,11 +89,22 @@
         {% endblock %}
         <div class="content">
             {% block body %}
-                <div class="container body-container">
+                <div class="container body-container navbar">
                     <div class="row">
                         <div id="sidebar" class="col-sm-3">
                             {% block sidebar %}
-                                <div class="section about">
+                                <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">    
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">
+                                <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
+                            </a>
+                        </div>
+                                <div id="navbarSidebar" class="section about navbar-collapse collapse">
                                     <div class="well well-lg">
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
