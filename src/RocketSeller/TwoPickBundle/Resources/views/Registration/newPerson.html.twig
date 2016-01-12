@@ -101,9 +101,9 @@
 			</div>
 
 			{# iterate over each existing workplaces and render its fields #}
-			<div class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
+			<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" >
 				{% for workplace in form.workplaces %}
-				<div id="workSpace_{{loop.index}}" class="workSpaceLi">
+				<li id="workSpace_{{loop.index}}" class="workSpaceLi">
 					<div class="col-sm-12 col-xs-12">
 						<div class="col-sm-12 col-xs-12">
 							{{ form_row(workplace.id) }}
@@ -116,14 +116,37 @@
 							{{ form_row(workplace.city) }}
 						</div>
 					</div>
-				</div>
+				</li>
 				{% endfor %}
-			</div>
+			</ul>
 			<div class="col-sm-12 col-xs-12 center">
 				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
 			</div>
 		</div>
 	</div>
 	{{ form_end(form) }}
+
+	<!-- Modal success -->
+	<div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">¡Muy bien! Realizó satisfactoriamente el registro del empleador!</h4>
+				</div>
+				<div class="modal-body">
+					<p>Ahora tenga a la mano los siguientes documentos para continuar con el registro de la información de los empleados:</p>
+					<ul>
+						<li>Copia del documento de identificación</li>
+						<li>Datos de contacto (Teléfono y dirección - email opcional)</li>
+						<li>Contrato vigente (si cuenta con uno)</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock fos_user_content%}

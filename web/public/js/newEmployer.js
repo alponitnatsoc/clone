@@ -12,7 +12,6 @@ function startEmployer(){
                 "register_employer[person][lastName1]": "required",
                 "register_employer[person][lastName2]": "required",
                 "register_employer[person][mainAddress]": "required",
-                "register_employer[person][neighborhood]": "required",
             },
             messages:{
                 "register_employer[person][document]": "Por favor Ingrese su documento",
@@ -20,7 +19,6 @@ function startEmployer(){
                 "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
                 "register_employer[person][lastName2]": "Por favor Ingrese su segundo apellido",
                 "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
-                "register_employer[person][neighborhood]": "Por favor Ingrese un barrio",
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function(){
@@ -103,8 +101,7 @@ function startEmployer(){
         var form =$("form");
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
-        var neighborhood=$(form).find("input[name='register_employer[person][neighborhood]']");
-        if (!(validator.element(mainAddress)&&validator.element(neighborhood))){
+        if (!(validator.element(mainAddress))){
             return;
         }
         var i =0;
@@ -128,7 +125,6 @@ function startEmployer(){
             type: 'POST',
             data: {
                 mainAddress: 	mainAddress.val(),
-                neighborhood: 	neighborhood.val(),
                 phonesIds:      idsPhones,
                 phones:         phones,
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),
@@ -188,6 +184,7 @@ function startEmployer(){
     });
     $("form").on("submit",function(e){
         e.preventDefault();
+        $('#createdModal').modal('toggle');
         var form =$("form");
         var addresses =[],citys=[],departments=[],ids=[];
         var i =0;

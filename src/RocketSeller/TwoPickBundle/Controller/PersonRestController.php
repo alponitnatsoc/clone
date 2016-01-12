@@ -101,7 +101,6 @@ class PersonRestController extends FOSRestController
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
-     * @RequestParam(name="neighborhood", nullable=false, strict=true, description="neighborhood.")
      * @RequestParam(array=true, name="phonesIds", nullable=false, strict=true, description="id if exist else -1.")
      * @RequestParam(array=true, name="phones", nullable=false, strict=true, description="main workplace Address.")
      * @RequestParam(name="department", nullable=false, strict=true, description="department.")
@@ -123,7 +122,6 @@ class PersonRestController extends FOSRestController
                 return $view;
             }
             $people->setMainAddress($paramFetcher->get('mainAddress'));
-            $people->setNeighborhood($paramFetcher->get('neighborhood'));
             $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
             $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
             $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
