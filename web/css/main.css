@@ -95,7 +95,8 @@ span {
   opacity: 0.8;
 }
 .btnPrevious:hover,
-.btn-default:hover {
+.btn-default:hover,
+.btn-default:focus {
   border: 2px solid #1FCECB;
   background: #00CDCC none repeat scroll 0% 0%;
   color: #fff;
@@ -352,6 +353,23 @@ a.helpTxt {
   border-radius: 0;
   min-width: 100px;
 }
+.block-Intro .lead {
+  font-family: "Open Sans";
+  font-size: 26px;
+}
+.block-Intro p,
+.block-Intro ul li {
+  font-family: "Open Sans";
+  font-size: 16px;
+}
+.block-Intro ul li {
+  list-style: square;
+  color: #00CDCC;
+}
+.block-Intro ul li span {
+  color: #3C4B5A;
+  margin-bottom: 7px;
+}
 .fos_user_registration_register label {
   display: none;
 }
@@ -495,30 +513,30 @@ a.helpTxt {
 .btn.blockStep:hover .txt-AD1 {
   color: #fff;
 }
-.nav.nav-tabs {
+.nav.nav-tabs.nav-justified {
   font-family: "Open Sans";
   font-size: 16px;
   font-weight: bold;
   border-bottom: 0px;
   margin-bottom: 25px;
 }
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
+.nav-tabs.nav-justified > li.active > a,
+.nav-tabs.nav-justified > li.active > a:hover,
+.nav-tabs.nav-justified > li.active > a:focus {
   background: #00CDCC;
   border-width: 2px 1px 2px 2px;
   border-color: #00CDCC;
   color: #fff;
 }
-.nav-tabs > li:first-child a {
+.nav-tabs.nav-justified > li:first-child a {
   border-width: 2px 1px 2px 2px;
   border-radius: 4px 0px 0px 4px;
 }
-.nav-tabs > li:last-child a {
+.nav-tabs.nav-justified > li:last-child a {
   border-width: 2px 2px 2px 1px;
   border-radius: 0px 4px 4px 0px;
 }
-.nav-tabs > li > a {
+.nav-tabs.nav-justified > li > a {
   margin-right: 0px;
   color: #00CDCC;
   border-radius: 0px;
@@ -526,7 +544,7 @@ a.helpTxt {
   border-width: 2px 2px 2px 1px;
   border-color: #00CDCC;
 }
-.nav-tabs > li > a:hover {
+.nav-tabs.nav-justified > li > a:hover {
   background: #00CDCC;
   border-color: #00CDCC;
   color: #fff;

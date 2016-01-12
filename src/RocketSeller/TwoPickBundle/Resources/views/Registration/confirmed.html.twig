@@ -93,21 +93,21 @@
             <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE ></a></p>
         </div>
 <div class="page-header" id="info2" style="display:none">
-    <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
-    <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:...</p>
-    <p>Para facilitar el proceso con los siguientes documentos:</p>
-    <ul>
-        <li>Documento de identidad del empleador</li>
-
-        <li>RUT (Registro &Uacute;nico Tributario) del empleador</li>
-
-        <li>Documento de identidad del(los) empleado(s)</li>
-
-        <li>Datos de contacto del(los) empelado(s)</li>
-
-        <li>Contrato con el(los) empleado(s). <small>Si no tiene, con nuestra herramienta puede generarlo</small></li>
-    </ul>
-    <p><a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO</a></p>
+    <div class="col-sm-12 col-xs-12 block-Intro">
+        <h3 class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</h3>
+        <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:...</p>
+        <p>Para facilitar el proceso con los siguientes documentos:</p>
+        <ul>
+            <li><span>Documento de identidad del empleador</span></li>
+            <li><span>RUT (Registro &Uacute;nico Tributario) del empleador</span></li>
+            <li><span>Documento de identidad del(los) empleado(s)</span></li>
+            <li><span>Datos de contacto del(los) empelado(s)</span></li>
+            <li><span>Contrato con el(los) empleado(s). <small>Si no tiene, con nuestra herramienta puede generarlo</small></span></li>
+        </ul>
+    </div>
+    <div class="col-sm-12 col-xs-12 center">
+        <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO</a>
+    </div>
 </div>
 {% endblock body %}
 {% endblock fos_user_content %}
