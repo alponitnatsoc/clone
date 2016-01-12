@@ -29,7 +29,7 @@
 					</div>
 				</div>
 				<div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-					{{step.state}}% <min>Done</min>
+					{{step.state}}% {% if step.state==100 %}<min>Hecho</min>{% endif %}
 				</div>
 				<div id='' class='col-sm-3 col-xs-12 txt-AD3'>
 					<div id='' class='btn stepIni' >
