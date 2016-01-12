@@ -108,7 +108,7 @@
    .btn:hover {
     opacity:0.8;
    }
-   .btnPrevious:hover, .btn-default:hover {
+   .btnPrevious:hover, .btn-default:hover, .btn-default:focus {
     border: 2px solid #1FCECB;
     background: @blue none repeat scroll 0% 0%;
     color: #fff;
@@ -354,6 +354,24 @@
         -webkit-appearance: none;
         border-radius: 0;
         min-width: 100px;
+    }
+   }
+   .block-Intro {
+    .lead {
+        font-family: @open;
+        font-size: 26px;
+    }
+    p, ul li {
+        font-family: "Open Sans";
+        font-size: 16px;
+    }
+    ul li {
+        list-style: square;
+        color: @blue;
+        span {
+            color: @dark_gray;
+            margin-bottom: 7px;
+        }
     }
    }
    .fos_user_registration_register label {
