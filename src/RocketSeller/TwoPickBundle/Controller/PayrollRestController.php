@@ -658,5 +658,290 @@ class PayrollRestController extends FOSRestController
 
     return $responseView;
   }
+
+  /**
+   * Insert a new occasional novelty for an employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Insert a new occasional novelty for an employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param ParamFetcher $paramFetcher Paramfetcher
+   *
+   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   * @RequestParam(name="novelty_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
+   * @RequestParam(name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+   * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
+   * @RequestParam(name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   * @RequestParam(name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
+   * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+   * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+   *
+   * @return View
+   */
+  public function postAddNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+  {
+    $content = array();
+    $unico = array();
+
+    $unico['TIPOCON'] = 0;
+    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
+    $unico['NOV_CONSEC'] = $paramFetcher->get('novelty_id');
+    $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id');
+    $unico['NOV_VALOR_LOCAL'] = $paramFetcher->get('novelty_value');
+    $unico['FLIQ_CODIGO'] = $paramFetcher->get('liquidation_type_id');
+    $unico['NOV_UNIDADES'] = $paramFetcher->get('unity_numbers');
+    $unico['NOV_FECHA_DESDE_CAUSA'] = $paramFetcher->get('novelty_start_date');
+    $unico['NOV_FECHA_HASTA_CAUSA'] = $paramFetcher->get('novelty_end_date');
+
+    $content[] = $unico;
+    $parameters = array();
+    $parameters['inInexCod'] = '608';
+    $parameters['clXMLSolic'] = $this->createXml($content, 608);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+  /**
+   * Modifies a new occasional novelty for an employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Modifies a new occasional novelty for an employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param ParamFetcher $paramFetcher Paramfetcher
+   *
+   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   * @RequestParam(name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
+   * @RequestParam(name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+   * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
+   * @RequestParam(name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   * @RequestParam(name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
+   * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+   * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+   *
+   * @return View
+   */
+  public function postModifyNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+  {
+    $content = array();
+    $unico = array();
+    $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+
+
+    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+
+    $unico['TIPOCON'] = 1;
+    $unico['EMP_CODIGO'] =   $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+    $unico['NOV_CONSEC'] = $paramFetcher->get('novelty_id') ? $paramFetcher->get('novelty_id') : $info['NOV_CONSEC'];
+    $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id') ? $paramFetcher->get('novelty_concept_id') : $info['CON_CODIGO'];
+    $unico['NOV_VALOR_LOCAL'] = $paramFetcher->get('novelty_value') ? $paramFetcher->get('novelty_value') : $info['NOV_VALOR_LOCAL'];
+    $unico['FLIQ_CODIGO'] = $paramFetcher->get('liquidation_type_id') ? $paramFetcher->get('liquidation_type_id') : $info['FLIQ_CODIGO'];
+    $unico['NOV_UNIDADES'] = $paramFetcher->get('unity_numbers') ? $paramFetcher->get('unity_numbers') : $info['NOV_UNIDADES'];
+    $unico['NOV_FECHA_DESDE_CAUSA'] = $paramFetcher->get('novelty_start_date') ? $paramFetcher->get('novelty_start_date') : $info['NOV_FECHA_DESDE_CAUSA'];
+    $unico['NOV_FECHA_HASTA_CAUSA'] = $paramFetcher->get('novelty_end_date') ? $paramFetcher->get('novelty_end_date') : $info['NOV_FECHA_HASTA_CAUSA'];
+
+    $content[] = $unico;
+    $parameters = array();
+    $parameters['inInexCod'] = '608';
+    $parameters['clXMLSolic'] = $this->createXml($content, 608);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+  /**
+   * Gets the novelties of an employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Gets the novelties of an employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Int $employeeId The id of the employee to be queried.
+   *
+   * @return View
+   */
+  public function getEmployeeNoveltyAction($employeeId)
+  {
+    $content = array();
+    $unico = array();
+
+    $unico['EMPCODIGO'] = $employeeId;
+
+    $content[] = $unico;
+    $parameters = array();
+
+    $parameters['inInexCod'] = '613';
+    $parameters['clXMLSolic'] = $this->createXml($content, 613, 2);
+
+    /** @var View $res */
+    $responseView = $this->callApi($parameters);
+
+    return $responseView;
+  }
+
+
+
+    /**
+     * Insert a new fixed novelty for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Insert a new fixed novelty for an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     * @RequestParam(name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+     * @RequestParam(name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
+     * @RequestParam(name="novelty_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+     * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
+     *
+     * @return View
+     */
+    public function postAddFixedNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+    {
+      $content = array();
+      $unico = array();
+
+      $unico['TIPOCON'] = 0;
+      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
+      $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id');
+      $unico['NOVF_VALOR'] = $paramFetcher->get('novelty_value');
+      $unico['NOVF_FECHA_INICIAL'] = $paramFetcher->get('novelty_start_date');
+      $unico['NOVF_FECHA_FINAL'] = $paramFetcher->get('novelty_end_date');
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '614';
+      $parameters['clXMLSolic'] = $this->createXml($content, 614);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Modifies a fixed novelty for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modifies a fixed novelty for an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     * @RequestParam(name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Novelty id")
+     * @RequestParam(name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+     * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
+     * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+     * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
+     *
+     * @return View
+     */
+    public function postModifyFixedNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+    {
+      $content = array();
+
+      $unico = array();
+      $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+
+      $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id');
+
+      $unico['TIPOCON'] = 1;
+      $unico['NOVF_CONSEC'] = $paramFetcher->get('novelty_id') ? $paramFetcher->get('novelty_id') : $info['NOVF_CONSEC'];
+      $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id') ? $paramFetcher->get('novelty_concept_id') : $info['CON_CODIGO'];
+      $unico['NOVF_VALOR'] = $paramFetcher->get('novelty_value') ? $paramFetcher->get('novelty_value') : $info['NOVF_VALOR'];
+      $unico['NOVF_FECHA_INICIAL'] = $paramFetcher->get('novelty_start_date') ? $paramFetcher->get('novelty_start_date') : $info['NOVF_FECHA_INICIAL'];
+      $unico['NOVF_FECHA_FINAL'] = $paramFetcher->get('novelty_end_date') ? $paramFetcher->get('novelty_end_date') : $info['NOVF_FECHA_FINAL'];
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '614';
+      $parameters['clXMLSolic'] = $this->createXml($content, 614);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Gets the fixed novelties of an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the fixed novelties of an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     *
+     * @return View
+     */
+    public function getEmployeeFixedNoveltyAction($employeeId)
+    {
+      $content = array();
+      $unico = array();
+
+      $unico['EMPCODIGO'] = $employeeId;
+
+      $content[] = $unico;
+      $parameters = array();
+
+      $parameters['inInexCod'] = '615';
+      $parameters['clXMLSolic'] = $this->createXml($content, 615, 2);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
 }
 ?>
