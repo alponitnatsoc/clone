@@ -74,7 +74,6 @@
 			<div class="col-sm-12 col-xs-12">
 				<div class="col-sm-6 col-xs-12">
 					{{ form_row(form.person.mainAddress) }}
-					{{ form_row(form.person.neighborhood) }}
 					<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
 						{% for phone in form.person.phones %}
 						<li id="phone_{{loop.index}}" class="phoneLi">
@@ -82,7 +81,7 @@
 							{{ form_row(phone.phoneNumber) }}
 						</li>
 						{% endfor %}
-						<li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"></input></li>
+						<li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li>
 					</ul>
 				</div>
 				<div class="col-sm-6 col-xs-12">
@@ -133,10 +132,84 @@
 				{% endfor %}
 			</ul>
 			{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
+			<!-- Button trigger modal -->
+			2. ¿Ya cuenta con contrato firmado? *
+			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#siTarget" aria-expanded="false" aria-controls="collapseExample">
+				Si
+			</button>
+			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#noTarget" aria-expanded="false" aria-controls="collapseExample">
+				No
+			</button>
+			<div class="collapse" id="siTarget">
+				<div class="well">
+					<p>Proteger al empleador es nuestra prioridad</p>
+					<p>Por eso nuestro sistema busca almacenar toda la información relacionada con el empleado. Por favor escanee o tome uno fotografía de cada una de las páginas del contrato y suba los archivos.</p>
+					<p>Su contrato además debe incluir Reglamento de trabajo, Manual de funciones y manual de manejo de herramientas. › Más información</p>
+					<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#subirModal">
+						Subir Archivos
+					</button>
+				</div>
+			</div>
+			<div class="collapse" id="noTarget">
+				<div class="well">
+					<p>¡Nosotros le ayudamos!</p>
+					<p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema.</p>
+					<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#generarModal">
+						Generar Contrato
+					</button>
+				</div>
+			</div>
+
+
+			<!-- Modal si -->
+			<div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">Subir documento nuevo</h4>
+						</div>
+						<div class="modal-body">
+							Almacene las fotos o digitalizaciones de los documentos que firme con su empleado.
+							Los campos marcados con * son obligatorios.
+							<p>¿Cómo tomar foto o escanear un documento?</p>
+							<p>Hay varias formas de hacerlo, pero la mejor de ellas es nuestra aplicación iOS (iPhone) o Android</p>
+							<p>Selección de archivo*:</p>
+							{{ form_row(form.employeeHasEmployers.document) }}
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+							<button type="button" class="btn btn-default">Guardar Cambios</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal no -->
+			<div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
+						</div>
+						<div class="modal-body">
+							<p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
+							<p>Este documento es necesario para que Symplifica se pueda hacer cargo de los trámites de afiliación suyos y de sus empleados.</p>
+							<p>Recuerde que una vez impreso  ES MUY IMPORTANTE que lo firmen el empleador y los empleados; luedo tomarle foto al documento o escanearlo y posteriormente subirlo a Symplifica.</p>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Descargar Contrato</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-sm-12 col-xs-12 center">
 				<a class="btn btn-primary btnPrevious" >< Anterior</a>
 				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
 			</div>
+
 		</div>
 		<div id="paymentMethod" class="tab-pane fade">
 			{{ form_row(form.employeeHasEmployers.payMethod) }}

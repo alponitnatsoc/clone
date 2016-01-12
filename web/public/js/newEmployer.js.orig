@@ -117,7 +117,10 @@ function startEmployer(){
             type: 'POST',
             data: {
                 mainAddress: 	mainAddress.val(),
+<<<<<<< HEAD
                 neighborhood: 	"",
+=======
+>>>>>>> 495c3b48dc8f31b65c7aaa4503e7ec2e62e2733f
                 phonesIds:      idsPhones,
                 phones:         phones,
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),

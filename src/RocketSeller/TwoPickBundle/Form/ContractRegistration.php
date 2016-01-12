@@ -78,6 +78,7 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'benefitsConditions',
                 'label'=>'Condiciones de los beneficios'
             ))
+            ->add('document', new DocumentPick())
             ->add('transportAid', 'choice', array(
                 'choices' => array(
                     ''=> 'Seleccionar',
