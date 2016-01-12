@@ -21,7 +21,7 @@ class PhoneRegistration extends AbstractType
             ->add('phoneNumber', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),'label' => 'Teléfono'))
             ->add('id', 'hidden', array(
                 'property_path' => 'idPhone',
             ));
