@@ -743,7 +743,7 @@ class PayrollRestController extends FOSRestController
   {
     $content = array();
     $unico = array();
-    $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+    $info = $this->getEmployeeNoveltyAction($paramFetcher->get('employee_id'))->getData();
 
 
     $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
@@ -885,7 +885,7 @@ class PayrollRestController extends FOSRestController
       $content = array();
 
       $unico = array();
-      $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+      $info = $this->getEmployeeFixedNoveltyAction($paramFetcher->get('employee_id'))->getData();
 
       $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id');
 
@@ -943,5 +943,148 @@ class PayrollRestController extends FOSRestController
 
       return $responseView;
     }
+
+    /**
+     * Insert a new absenteeism for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Insert a new absenteeism for an employee.y",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     * @RequestParam(name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     * @RequestParam(name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_units", nullable=false, requirements="([0-9])+", description="Number of units, can be hours or days")
+     * @RequestParam(name="liquidation_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_state", nullable=false, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *
+     * @return View
+     */
+    public function postAddAbsenteeismEmployeeAction(ParamFetcher $paramFetcher)
+    {
+      $content = array();
+      $unico = array();
+
+      $unico['TIPOCON'] = 0;
+      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
+      $unico['TAUS_CODIGO'] = $paramFetcher->get('absenteeism_type_id');
+      $unico['AUS_FECHA_INICIAL'] = $paramFetcher->get('absenteeism_start_date');
+      $unico['AUS_FECHA_FINAL'] = $paramFetcher->get('absenteeism_end_date');
+      $unico['AUS_UNIDADES'] = $paramFetcher->get('absenteeism_units');
+      $unico['AUS_FECHA_LIQ'] = $paramFetcher->get('liquidation_date');
+      $unico['AUS_ESTADO'] = $paramFetcher->get('absenteeism_state');
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '623';
+      $parameters['clXMLSolic'] = $this->createXml($content, 623);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Modifies an absenteeism for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modifies an absenteeism for an employee.y",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     * @RequestParam(name="absenteeism_id", nullable=true, requirements="([0-9])+", description="Consecutive number of the absenteeism")
+     * @RequestParam(name="absenteeism_type_id", nullable=true, requirements="([0-9])+", description="Code of the type of absenteeism as provided by SQL")
+     * @RequestParam(name="absenteeism_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_units", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
+     * @RequestParam(name="liquidation_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
+     * @RequestParam(name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", description="State of the absenteeism ACT active or CAN cancelled")
+     *
+     * @return View
+     */
+    public function postModifyAbsenteeismEmployeeAction(ParamFetcher $paramFetcher)
+    {
+      $content = array();
+      $unico = array();
+
+      $info = $this->getAbsenteeismEmployeeAction($paramFetcher->get('employee_id'))->getData();
+
+      $unico['TIPOCON'] = 0;
+      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+      $unico['TAUS_CODIGO'] = $paramFetcher->get('absenteeism_type_id') ? $paramFetcher->get('absenteeism_type_id') : $info['TAUS_CODIGO'];
+      $unico['AUS_FECHA_INICIAL'] = $paramFetcher->get('absenteeism_start_date') ? $paramFetcher->get('absenteeism_start_date') : $info['AUS_FECHA_INICIAL'];
+      $unico['AUS_FECHA_FINAL'] = $paramFetcher->get('absenteeism_end_date') ? $paramFetcher->get('absenteeism_end_date') : $info['AUS_FECHA_FINAL'];
+      $unico['AUS_UNIDADES'] = $paramFetcher->get('absenteeism_units') ? $paramFetcher->get('absenteeism_units') : $info['AUS_UNIDADES'];
+      $unico['AUS_FECHA_LIQ'] = $paramFetcher->get('liquidation_date') ? $paramFetcher->get('liquidation_date') : $info['AUS_FECHA_LIQ'];
+      $unico['AUS_ESTADO'] = $paramFetcher->get('absenteeism_state') ? $paramFetcher->get('absenteeism_state') : $info['AUS_ESTADO'];
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '623';
+      $parameters['clXMLSolic'] = $this->createXml($content, 623);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Gets the abstenteeisms information of an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the abstenteeisms information of an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     *
+     * @return View
+     */
+    public function getAbsenteeismEmployeeAction($employeeId)
+    {
+      $content = array();
+      $unico = array();
+
+      $unico['EMPCODIGO'] = $employeeId;
+
+      $content[] = $unico;
+      $parameters = array();
+
+      $parameters['inInexCod'] = '624';
+      $parameters['clXMLSolic'] = $this->createXml($content, 624, 2);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
 }
 ?>
