@@ -9,7 +9,11 @@
 		<div id='' class='col-sm-12 col-xs-12 align-Resp'>
 			<a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
 				<div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+					{% if step.paso != 3 %}
 					<img src="/img/employ.png">
+					{% else %}
+					<img src="/img/complete.png">
+					{% endif %}
 				</div>
 				<div id='' class='col-sm-4 col-xs-12 txt-AD1'>
 					<div id='' class='text-left' >
