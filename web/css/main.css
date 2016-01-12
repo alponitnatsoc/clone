@@ -77,7 +77,8 @@ span {
 }
 .btn.btnNext,
 .btnPrevious,
-.btn-default {
+.btn-default,
+.btn.pull-right {
   font-family: "Open Sans";
   border: 2px solid #1fcecb;
   background: #1fcecb;
@@ -115,6 +116,9 @@ span {
   font-family: "Open Sans";
   font-size: 12px;
   color: #3c4b5a;
+}
+.panel.panel-info {
+  border: none;
 }
 footer {
   width: 100%;
@@ -326,9 +330,9 @@ a.helpTxt {
   line-height: 44px;
 }
 .form-group input,
-.form-group select,
-.form-group textarea {
-  font-family: ;
+.form-horizontal input,
+.form-group textarea,
+.form-horizontal textarea {
   background: transparent;
   border: 1px solid #919191;
   border-radius: 0px;
@@ -336,6 +340,17 @@ a.helpTxt {
   color: #ffffff;
   height: auto;
   font-size: 16px;
+}
+.form-group select,
+.form-horizontal select {
+  background-image: url(../img/select-arrow.png);
+  background-position: right;
+  background-repeat: no-repeat;
+  height: 46px;
+  border: 1px solid #919191;
+  -webkit-appearance: none;
+  border-radius: 0;
+  min-width: 100px;
 }
 .fos_user_registration_register label {
   display: none;
@@ -371,6 +386,31 @@ a.helpTxt {
 }
 .block-Data span {
   margin-bottom: 25px;
+}
+.page-header {
+  border: none;
+}
+.page-header h1 small {
+  font-family: "Open Sans";
+  font-size: 28px;
+  font-weight: bold;
+  color: #00CDCC;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+}
+.panel.panel-info {
+  box-shadow: none;
+}
+.panel.panel-info .panel-heading {
+  background-image: none;
+  background: none;
+  border: none;
+}
+.panel.panel-info .panel-heading h3 {
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: bold;
+  color: #3C4B5A;
 }
 .block-Intro span {
   margin-bottom: 25px;
@@ -436,6 +476,8 @@ a.helpTxt {
   color: #3C4B5A;
   font-family: "Lato";
   font-weight: 100;
+  display: block;
+  float: right;
 }
 .btn.blockStep .txt-AD3 {
   margin-top: 25px;
@@ -489,6 +531,16 @@ a.helpTxt {
   border-color: #00CDCC;
   color: #fff;
 }
+.form-horizontal .spacing {
+  font-family: "Lato";
+  font-size: 16px;
+}
+.form-horizontal .spacing a {
+  color: #00CDCC;
+}
+.form-horizontal input {
+  color: #919191;
+}
 #registrationFormContainer .form-group input,
 #registrationFormContainer .form-group select,
 #registrationFormContainer .form-group textarea {
@@ -499,6 +551,9 @@ a.helpTxt {
   font-size: 16px;
   font-weight: 100;
   color: #4B4B4B;
+}
+#registrationFormContainer .form-inline select {
+  margin-right: 10px;
 }
 #basicData h2,
 #contractData h2 {
@@ -514,8 +569,6 @@ a.helpTxt {
 }
 .blockUpData {
   border-bottom: 1px solid #E9E9E9;
-  padding-bottom: 30px;
-  margin-bottom: 20px;
 }
 .blockUpData img {
   border: 2px solid #919191;
@@ -527,6 +580,14 @@ a.helpTxt {
   font-weight: bold !important;
   font-family: "Open Sans" !important;
   font-size: 18px !important;
+  min-height: 60px;
+}
+.blockUpData .radio {
+  padding-top: 0;
+  margin-top: 0;
+}
+.blockUpData .radio label {
+  min-height: 0;
 }
 ul.phones {
   padding-left: 0px;
@@ -618,6 +679,37 @@ ul.phones li {
 #paymentMethod .saveControl {
   display: inline-block;
   margin-left: 20px;
+}
+#navbarSidebar.collapse.in .well.well-lg {
+  text-align: left;
+  font-size: 12px;
+  font-family: "Lato";
+  font-weight: 300;
+  padding: 5px 0px 5px 0px;
+}
+#navbarSidebar.collapse.in .well.well-lg img {
+  display: none;
+}
+@media (max-width: 768px) {
+  .block-Intro-green {
+    height: 250px;
+  }
+  .block-Intro-green .up-Intro {
+    font-size: 22px;
+  }
+  .block-Intro-green .boxIntro-Heading {
+    left: 5%;
+    top: -10%;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    padding: 12px 0px;
+  }
+}
+@media (min-width: 768px) {
+  .navbar-brand img {
+    display: none;
+  }
 }
 @media (max-width: 480px) {
   .blockStep {

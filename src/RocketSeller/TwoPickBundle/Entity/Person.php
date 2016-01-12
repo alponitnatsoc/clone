@@ -247,6 +247,11 @@ class Person
         return $this->lastName2;
     }
 
+    public function getFullName() {
+        return $this->getNames()." ".$this->getLastName1()." ".$this->getLastName2();
+        
+    }
+
     /**
      * Set documentType
      *

@@ -23,11 +23,16 @@ class EmployerRegistration extends AbstractType
             ->add('youAre', 'choice', array(
                 'choices' => array(
                     'persona'   => 'Persona',
-                    'empresa' => 'Empresa (muy pronto)',
+                    'empresa' => 'Empresa (muy pronto)'
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Usted Es',
+                'choice_attr' => function($key, $val, $index) {
+                    $disabled = $key=="empresa";
+
+                    return $disabled ? ['disabled' => 'disabled'] : [];
+                },
+                'label' => 'Usted Es*',
                 'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))

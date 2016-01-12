@@ -1,36 +1,28 @@
 {% extends "::base.html.twig" %}
 {% block header %}{% endblock header %}
 {% block fos_user_content %}
-	<div class="col-sm-12 col-xs-12 profile-Data">
-		<div class="col-sm-4 col-xs-11 person">
-			<div class="col-sm-9 col-xs-9">
-				<h4>Claudia Benítez</h4>
-				<span><a href="">Mi cuenta ›</a>   |  <a href="">Salir ›</a></span>
-			</div>
-			<div class="col-sm-3 col-xs-3">
-				<img src="/img/person-1.png" title="Symplifica">
-			</div>
-		</div>
-	</div>
 	<div class="col-sm-12 col-xs-12 block-Data">
 		<h1>Configuración inicial</h1>
 		<span>Para obtener el mayor beneficio posible de nuestra herramienta, requerimos contar con su información como empleador, de sus empleados y lo referente a la afiliación a las administradoras de salud, pensión, riesgos laborales y Caja de Compensación Familiar.</span>
 	</div>
 {% for step in steps %}
-		
 		<div id='' class='col-sm-12 col-xs-12 align-Resp'>
 			<a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
 				<div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+					{% if step.paso != 3 %}
 					<img src="/img/employ.png">
+					{% else %}
+					<img src="/img/complete.png">
+					{% endif %}
 				</div>
 				<div id='' class='col-sm-4 col-xs-12 txt-AD1'>
 					<div id='' class='text-left' >
-						<p>Paso <strong>1</strong> de 3</p>
+						<p>Paso <strong>{{step.paso}}</strong> de 3</p>
 						{{step.name}}
 					</div>
 				</div>
 				<div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-					{{step.state}}% <min>Done</min>
+					{{step.state}}% {% if step.state==100 %}<min>Hecho</min>{% endif %}
 				</div>
 				<div id='' class='col-sm-3 col-xs-12 txt-AD3'>
 					<div id='' class='btn stepIni' >
