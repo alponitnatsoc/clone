@@ -89,6 +89,12 @@ require(["jquery"], function(jQuery) {
 			})
 
 			return true;
+		}else if(url.indexOf("{{ path('matrix_choose') }}")!==-1){
+			$.getScript( "{{ asset('public/js/afiliation.js') }}").done(function(){
+				startAfiliation();
+			})
+
+			return true;
 		}
 		return false;
 	}

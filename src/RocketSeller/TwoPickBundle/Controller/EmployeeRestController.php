@@ -26,6 +26,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
@@ -665,7 +666,9 @@ class EmployeeRestController extends FOSRestController
         /** @var User $user */
         $user=$this->getUser();
         if($user==null){
-            return;
+            $view = View::create();
+            $view->setData(array('error'=>array('employee'=>'user not logged')))->setStatusCode(403);
+            return $view;
         }
         $idEmployer=$paramFetcher->get('idEmployer');
         $idsEmployerHasEmployee=$paramFetcher->get('idEmployerHasEmployee');
@@ -678,9 +681,12 @@ class EmployeeRestController extends FOSRestController
         /** @var Employer $realEmployer */
         $realEmployer=$employerRepo->find($idEmployer);
         if($user->getPersonPerson()->getEmployer()!=$realEmployer){
-            return;
+            $view = View::create();
+            $view->setData(array('error'=>array('user'=>'not the logged user')))->setStatusCode(403);
+            return $view;
         }
         $realEmployerHasEmployees=$realEmployer->getEmployerHasEmployees();
+        $flag=false;
         for($i=0;$i<count($idsEmployerHasEmployee);$i++){
             /** @var EmployerHasEmployee $realEmployerHasEmployee */
             $realEmployerHasEmployee=$employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
@@ -690,7 +696,9 @@ class EmployeeRestController extends FOSRestController
                 /** @var Entity $tempWealth */
                 $tempWealth=$entityRepo->find($wealth[$i]);
                 if($tempPens==null||$tempWealth==null){
-                    return;
+                    $view = View::create();
+                    $view->setData(array('error'=>array('entity'=>'do not exist')))->setStatusCode(404);
+                    return $view;
                 }
                 $realEmployee=$realEmployerHasEmployee->getEmployeeEmployee();
                 $employeeHasEntityPens=new EmployeeHasEntity();
@@ -705,15 +713,85 @@ class EmployeeRestController extends FOSRestController
 
                 $em = $this->getDoctrine()->getManager();
 
+                $em->persist($employeeHasEntityPens);
+                $em->persist($employeeHasEntityWealth);
                 $em->persist($realEmployee);
                 $em->flush();
+                $flag=true;
             }else{
-              return;
+                $view = View::create();
+                $view->setData(array('error'=>array('employee'=>'do not contain')))->setStatusCode(401);
+                return $view;
             }
         }
+        if($flag){
+            $view = View::create();
+            $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
+            return $view;
+        }else{
+            $view = View::create();
+            $view->setData(array('response'=>array('message'=>'something went wrong')))->setStatusCode(400);
+            return $view;
+        }
+
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
+     * @return View
+     */
+    public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher){
+        /** @var User $user */
+        $user=$this->getUser();
+        if($user==null){
+            return;
+        }
+        $idEmployer=$paramFetcher->get('idEmployer');
+        $employerRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $entityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
+        /** @var Employer $realEmployer */
+        $realEmployer=$employerRepo->find($idEmployer);
+        if($user->getPersonPerson()->getEmployer()!=$realEmployer){
+            return;
+        }
+        $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity'));
+        $realArl=$entityRepo->find($paramFetcher->get('arl'));
+        $realSeverances=$entityRepo->find($paramFetcher->get('severances'));
+        if($realSeverances==null||$realArl==null){
+            return;
+        }
+        $realArlHasEmployer=new EmployerHasEntity();
+        $realArlHasEmployer->setEntityEntity($realArl);
+        $realArlHasEmployer->setEmployerEmployer($realEmployer);
+        $realEmployer->addEntity($realArlHasEmployer);
+        $realSevereancesHasEmployer=new EmployerHasEntity();
+        $realSevereancesHasEmployer->setEntityEntity($realSeverances);
+        $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
+        $realEmployer->addEntity($realSevereancesHasEmployer);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($realEmployer);
+        $em->flush();
         $view = View::create();
         $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
         return $view;
+
+
     }
     /**
      * Get the validation errors
