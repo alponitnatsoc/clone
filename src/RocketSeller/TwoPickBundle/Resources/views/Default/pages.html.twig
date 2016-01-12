@@ -2,8 +2,6 @@
 {% block fos_user_content%}
 
     {% if is_granted("IS_AUTHENTICATED_FULLY") %}
-        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-        Welcome {{ app.user.username }}
         <p>&#191;Quiere GRATIS DOS MESES M&Aacute;S de servicio de Symplifica&#63;</p>
         <p>IMG</p>
         <p>Tome 20 minutos de su tiempo, prep&aacute;rese un caf&eacute; y complete la</p>
@@ -20,78 +18,86 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-var state="/old";
+require(["jquery"], function(jQuery) {
+	var state="/old";
 
-jQuery(document).ready(function() {
-	$("a").on("click",function(e){
-		e.preventDefault();
-		sendAjax($(this).attr('href'));
+	jQuery(document).ready(function() {
+		$("a").on("click",function(e){
+			e.preventDefault();
+			sendAjax($(this).attr('href'));
+		});
+		{# ajax que maneja los requests #}
+	// 	sendAjax(state);
 	});
-	{# ajax que maneja los requests #}
-// 	sendAjax(state);
-});
 
-function sendAjax (url, form) {
+	function sendAjax (url, form) {
 
-	$.ajax({
-		url : url,
-		type: $(form).attr('method'),
-		data: $(form).serializeArray(),
-		statusCode: {
-			500: function() {
-				alert(" 500 Server might not handle That yet");
-			}
-		}
-		}).done(function(data) {
-			if(data["url"]!=null){
-				console.log(data["url"]);
-				sendAjax(data["url"]);
-			}else{
-				$('#main').replaceWith(
-						// ... with the returned one from the AJAX response.
-						$(data).find('#main'));
-				addClick();
-				if (!jsLoader(url)) {
-					addSumbit();
+		$.ajax({
+			url : url,
+			type: $(form).attr('method'),
+			data: $(form).serializeArray(),
+			statusCode: {
+				500: function() {
+					alert(" 500 Server might not handle That yet");
 				}
 			}
-		}).fail(function( jqXHR, textStatus, errorThrown ) {
-			alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
-	});
-}
-function addClick () {
-	$("#main .nav-link").on("click",function(e){
-		e.preventDefault();
-		sendAjax($(this).attr('href'));
-	});
-}
-function addSumbit () {
-	$("form").on("submit",function(e){
-		e.preventDefault();
-		sendAjax($(this).attr('action'), $(this));
-	});
-}
-function jsLoader(url){
-	if(url.indexOf("{{ path('edit_profile') }}")!==-1){
-		$.getScript( "{{ asset('public/js/newEmployer.js') }}").done(function(){
-			startEmployer();
-		})
-
-		return true;
-	}else if(url.indexOf("{{ path('register_employee') }}")!==-1){
-		$.getScript( "{{ asset('public/js/newEmployee.js') }}").done(function(){
-			startEmployee();
-		})
-
-		return true;
-	}else if(url.indexOf("{{ path('show_calculator_form') }}")!==-1){
-		$.getScript( "{{ asset('public/js/calculator.js') }}").done(function(){
-			calculatorCalculate();
-		})
-
-		return true;
+			}).done(function(data) {
+				if(data["url"]!=null){
+					console.log(data["url"]);
+					sendAjax(data["url"]);
+				}else{
+					$('#main').replaceWith(
+							// ... with the returned one from the AJAX response.
+							$(data).find('#main'));
+					addClick();
+					if (!jsLoader(url)) {
+						addSumbit();
+					}
+				}
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+		});
 	}
-	return false;
-}
+	function addClick () {
+		$("#main .nav-link").on("click",function(e){
+			e.preventDefault();
+			sendAjax($(this).attr('href'));
+		});
+	}
+	function addSumbit () {
+		$("form").on("submit",function(e){
+			e.preventDefault();
+			sendAjax($(this).attr('action'), $(this));
+		});
+	}
+	function jsLoader(url){
+		if(url.indexOf("{{ path('edit_profile') }}")!==-1){
+			$.getScript( "{{ asset('public/js/newEmployer.js') }}").done(function(){
+				startEmployer();
+			})
+
+			return true;
+		}else if(url.indexOf("{{ path('register_employee') }}")!==-1){
+			$.getScript( "{{ asset('public/js/newEmployee.js') }}").done(function(){
+				startEmployee();
+			})
+
+			return true;
+		}else if(url.indexOf("{{ path('show_calculator_form') }}")!==-1){
+			$.getScript( "{{ asset('public/js/calculator.js') }}").done(function(){
+				calculatorCalculate();
+			})
+
+			return true;
+		}else if(url.indexOf("{{ path('matrix_choose') }}")!==-1){
+			$.getScript( "{{ asset('public/js/afiliation.js') }}").done(function(){
+				startAfiliation();
+			})
+
+			return true;
+		}
+		return false;
+	}
+});
 </script>
 {% endblock javascripts %}

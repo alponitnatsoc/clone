@@ -24,46 +24,44 @@ class BasicPersonRegistration extends AbstractType
             ->add('documentType', 'choice', array(
 			    'choices' => array(
 			        'cedulaCiudadania'   => 'Cedula Ciudadania',
-			        'cedulaExtrangeria' => 'Cedula Extrangeria',
+			        'cedulaExtrangeria' => 'Cedula Extranjeria',
                     'pasaporte' => 'Pasaporte',
 			    ),
 			    'multiple' => false,
 			    'expanded' => false,
-			    'property_path' => 'documentType',)
+			    'property_path' => 'documentType',
+                'label' => 'Tipo de documento*',)
             )
             ->add('document', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
                 ),
-                'property_path' => 'document'
+                'property_path' => 'document',
+                'label' => 'Número de documento*',
             ))
             ->add('names', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),'label' => 'Nombre Completo*',))
             ->add('lastName1', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),'label' => 'Primer Apellido*'))
             ->add('lastName2', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),'label' => 'Segundo Apellido'))
             ->add('birthDate', 'date', array(
                 'years' => range(1900,2015),
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),'label' => 'Fecha de Nacimiento*'))
             //Tab 2
         	
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
-            ->add('neighborhood', 'text', array(
-                'constraints' => array(
-                    new NotBlank(),
-                ),))
+                ),'label' => 'Dirección Principal*'))
             ->add('phones', 'collection', array(
                 'type' => new PhoneRegistration(),
                 'allow_add'    => true,
@@ -76,7 +74,7 @@ class BasicPersonRegistration extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'department',
+                'property_path' => 'department','label' => 'Departamento*'
                 ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
@@ -84,7 +82,7 @@ class BasicPersonRegistration extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'city',
+                'property_path' => 'city','label' => 'Ciudad*'
                 ));
             $formModifier = function (FormInterface $form, Department $department = null) {
                 $citys = null === $department ? array() : $department->getCitys();

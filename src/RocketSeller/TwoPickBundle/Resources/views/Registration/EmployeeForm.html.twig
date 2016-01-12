@@ -1,175 +1,178 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+<div class="row-fluid">
 	<div class="col-sm-12 col-xs-12 block-Intro">
 		<span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
 	</div>
-	<div id='registrationFormContainer' class=''>
-		{{ form_errors(form) }}
-		{{ form_start(form) }}
+</div>
+<div class="row"></div>
+<div id='registrationFormContainer' class=''>
+	{{ form_errors(form) }}
+	{{ form_start(form) }}
 
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-			<li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
-			<li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
-			<li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
-		</ul>
+	<ul class="nav nav-tabs nav-justified">
+		<li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
+		<li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
+		<li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
+		<li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
+	</ul>
 
-		<div class="tab-content">
-			<div id="basicData" class="tab-pane fade in active">
-				<div class="col-sm-12 col-xs-12 blockUpData">
-					<div class="col-sm-4 col-xs-12">
-						<img src="/img/documentType.png">
-						{{ form_row(form.person.documentType) }}
-				 	</div>
-				 	<div class="col-sm-4 col-xs-12">
-				 		<img src="/img/documentNumber.png">
-						{{ form_row(form.person.document) }}
-					</div>
-					<div class="col-sm-4 col-xs-12">
-						<img src="/img/lastName.png">
-						{{ form_row(form.person.names) }}
-					</div>
-                    <div class="col-sm-12 col-xs-12">
-                        <a id="btn-4" href="" class="btn btn-primary btnNext" >Consultar ></a>
-                    </div>
+	<div class="tab-content">
+		<div id="basicData" class="tab-pane fade in active">
+			<div class="col-sm-12 col-xs-12 blockUpData">
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/documentType.png">
+					{{ form_row(form.person.documentType) }}
 				</div>
-				<div class="col-sm-12 col-xs-12 block-Intro">
-					<span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/documentNumber.png">
+					{{ form_row(form.person.document) }}
+				</div>
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/lastName.png">
+					{{ form_row(form.person.names) }}
 				</div>
 				<div class="col-sm-12 col-xs-12">
-					<div class="col-sm-6 col-xs-12">
+					<a id="btn-4" href="" class="btn btn-primary btnNext" >Consultar ></a>
+				</div>
+			</div>
+			<div class="col-sm-12 col-xs-12 block-Intro">
+				<span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
+			</div>
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-6 col-xs-12">
 					{{ form_row(form.personExtra.civilStatus) }}
 					{{ form_row(form.person.lastName1) }}
 					{{ form_row(form.person.lastName2) }}
-					</div>
-					<div class="col-sm-6 col-xs-12">
+				</div>
+				<div class="col-sm-6 col-xs-12">
 					{{ form_row(form.personExtra.gender) }}
 					{{ form_row(form.personExtra.documentExpeditionDate) }}
 					{{ form_row(form.personExtra.documentExpeditionPlace) }}
-					</div>
 				</div>
-				<h2>Datos de nacimiento</h2>
-				<div class="col-sm-12 col-xs-12">
-					<div class="col-sm-6 col-xs-12">
+			</div>
+			<h2>Datos de nacimiento</h2>
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-6 col-xs-12">
 					{{ form_row(form.person.birthDate) }}
 					{{ form_row(form.personExtra.birthDepartment) }}
-					</div>
-					<div class="col-sm-6 col-xs-12">
+				</div>
+				<div class="col-sm-6 col-xs-12">
 					{{ form_row(form.personExtra.birthCity) }}
 					{{ form_row(form.personExtra.birthCountry) }}
+				</div>
+			</div>
+			<div class="col-sm-12 col-xs-12 center">
+				<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+			</div>
+		</div>
+
+		<div id="contactData" class="tab-pane fade in">
+			<div class="col-sm-12 col-xs-12 block-Intro">
+				<span>Los campos marcados en * son obligatorios</span>
+			</div>
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.person.mainAddress) }}
+					{{ form_row(form.person.neighborhood) }}
+					<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+						{% for phone in form.person.phones %}
+						<li id="phone_{{loop.index}}" class="phoneLi">
+							{{ form_row(phone.id) }}
+							{{ form_row(phone.phoneNumber) }}
+						</li>
+						{% endfor %}
+						<li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"></input></li>
+					</ul>
+				</div>
+				<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.person.department) }}
+					{{ form_row(form.person.city) }}
+					{{ form_row(form.personExtra.email) }}
+				</div>
+			</div>
+			<div class="col-sm-12 col-xs-12 center">
+				<a class="btn btn-primary btnPrevious" >< Anterior</a>
+				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+			</div>
+		</div>
+
+		<div id="contractData" class="tab-pane fade">
+			<div class="col-sm-12 col-xs-12 block-Intro">
+				<span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
+			</div>
+			<div class="col-sm-12 col-xs-12 blockUpData">
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/documentType.png">
+					{{ form_row(form.employeeHasEmployers.employeeType) }}
+				</div>
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/documentNumber.png">
+					{{ form_row(form.employeeHasEmployers.contractType) }}
+				</div>
+				<div class="col-sm-4 col-xs-12">
+					<img src="/img/lastName.png">
+					{{ form_row(form.employeeHasEmployers.timeCommitment) }}
+				</div>
+			</div>
+			<h2>1. Datos básicos del contrato</h2>
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-8 col-xs-12">
+					{{ form_row(form.employeeHasEmployers.position) }}
+					{{ form_row(form.employeeHasEmployers.salary) }}
+					{{ form_row(form.employeeHasEmployers.workplaces) }}
+					{{ form_row(form.employeeHasEmployers.transportAid) }}
+				</div>
+			</div>
+			<h2>Beneficios extralegales</h2>
+			<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
+				{% for benefit in form.employeeHasEmployers.benefits %}
+				<li id="benefits_{{loop.index}}" class="benefitLi">
+					{{ form_row(benefit.benefits) }}
+				</li>
+				{% endfor %}
+			</ul>
+			{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
+			<div class="col-sm-12 col-xs-12 center">
+				<a class="btn btn-primary btnPrevious" >< Anterior</a>
+				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+			</div>
+		</div>
+		<div id="paymentMethod" class="tab-pane fade">
+			{{ form_row(form.employeeHasEmployers.payMethod) }}
+
+			<div id="payMethodFields">
+
+			</div>
+			<div id="userPayMethod">
+				<div class="col-sm-12 col-xs-12">
+					<div class="col-sm-6 col-xs-12">
+						{{ form_row(form.credit_card) }}
+						{{ form_row(form.expiry_date) }}
+					</div>
+					<div class="col-sm-6 col-xs-12">
+						{{ form_row(form.cvv) }}
+						{{ form_row(form.name_on_card) }}
 					</div>
 				</div>
-				<div class="col-sm-12 col-xs-12 center">
-					<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-				</div>
 			</div>
-
-			<div id="contactData" class="tab-pane fade in">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios</span>
-                </div>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-    				{{ form_row(form.person.mainAddress) }}
-    				{{ form_row(form.person.neighborhood) }}
-    				<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-    					{% for phone in form.person.phones %}
-    						<li id="phone_{{loop.index}}" class="phoneLi">
-    							{{ form_row(phone.id) }}
-    							{{ form_row(phone.phoneNumber) }}
-    						</li>
-    					{% endfor %}
-                        <li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"></input></li>
-    				</ul>
-                    </div>
-                    <div class="col-sm-6 col-xs-12">
-    				{{ form_row(form.person.department) }}
-    				{{ form_row(form.person.city) }}
-    				{{ form_row(form.personExtra.email) }}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-    				<a class="btn btn-primary btnPrevious" >< Anterior</a>
-    				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-                </div>
+			<div class="col-sm-12 col-xs-12 center">
+				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
 			</div>
+			<div id="toHide">
 
-			<div id="contractData" class="tab-pane fade">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
-                </div>
-                <div class="col-sm-12 col-xs-12 blockUpData">
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentType.png">
-				        {{ form_row(form.employeeHasEmployers.employeeType) }}
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentNumber.png">
-				        {{ form_row(form.employeeHasEmployers.contractType) }}
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/lastName.png">
-				        {{ form_row(form.employeeHasEmployers.timeCommitment) }}
-                    </div>
-                </div>
-                <h2>1. Datos básicos del contrato</h2>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-8 col-xs-12">
-    				{{ form_row(form.employeeHasEmployers.position) }}
-    				{{ form_row(form.employeeHasEmployers.salary) }}
-    				{{ form_row(form.employeeHasEmployers.workplaces) }}
-    				{{ form_row(form.employeeHasEmployers.transportAid) }}
-                    </div>
-                </div>
-				<h2>Beneficios extralegales</h2>
-				<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
-					{% for benefit in form.employeeHasEmployers.benefits %}
-						<li id="benefits_{{loop.index}}" class="benefitLi">
-							{{ form_row(benefit.benefits) }}
-						</li>
-					{% endfor %}
-				</ul>
-				{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
-                <div class="col-sm-12 col-xs-12 center">
-    				<a class="btn btn-primary btnPrevious" >< Anterior</a>
-    				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-                </div>
+				{{ form_widget(form) }}
+
 			</div>
-			<div id="paymentMethod" class="tab-pane fade">
-				{{ form_row(form.employeeHasEmployers.payMethod) }}
-
-				<div id="payMethodFields">
-
-				</div>
-				<div id="userPayMethod">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 col-xs-12">
-				        {{ form_row(form.credit_card) }}
-					    {{ form_row(form.expiry_date) }}
-                        </div>
-                        <div class="col-sm-6 col-xs-12">
-					    {{ form_row(form.cvv) }}
-					    {{ form_row(form.name_on_card) }}
-                        </div>
-                    </div>
-			    </div>
-                <div class="col-sm-12 col-xs-12 center">
-    				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
-                </div>
-				<div id="toHide">
-
-					{{ form_widget(form) }}
-
-				</div>
-			</div>
-
-
-
-
 		</div>
 
 
 
-		{{ form_end(form) }}
+
 	</div>
+
+
+
+	{{ form_end(form) }}
+</div>
 {% endblock fos_user_content %}

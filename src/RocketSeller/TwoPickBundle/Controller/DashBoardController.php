@@ -61,16 +61,19 @@ class DashBoardController extends Controller
                 'url' => $this->generateUrl('edit_profile'), 
                 'name' => "Datos del empleador",
                 'state' => $stateRegister,
+                'paso' => 1,
                 'stateMessage' => "Continuar",);
         $step2 = array(
                 'url' => $this->generateUrl('register_employee', array('id'=>$idCurrentEmployee)),
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
+                'paso' => 2,
                 'stateMessage' => "Continuar",);
 
         $step4 = array(
             'url' => $this->generateUrl('matrix_choose'),
             'name' => "Finalizar proceso",
+            'paso' => 3,
             'state' => $stateEmployees,
             'stateMessage' => "Continuar",);
         $steps ['0'] =$step1;
@@ -80,6 +83,7 @@ class DashBoardController extends Controller
                 'url' => $this->generateUrl('register_employee', array('id'=>$idCurrentEmployee)),
                 'name' => "Agregar un nuevo Empleado?",
                 'state' => 0,
+                'paso' => 2,
                 'stateMessage' => "Iniciar",);
             $steps ['2'] =$step3;
 
