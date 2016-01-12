@@ -145,7 +145,21 @@
                                     {% block content %}{% endblock %}
                                 </div>
                                 <div class="span12">
-                                    {% block fos_user_content %}{% endblock %}
+                                    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                                        <div class="col-sm-12 col-xs-12 profile-Data">
+                                            <div class="col-sm-4 col-xs-11 person">
+                                                <div class="col-sm-9 col-xs-9">
+                                                    <h4>{{app.user.getPersonPerson().getFullName()}}</h4>
+                                                    <span><a href="/logout">Salir ›</a></span>
+                                                </div>
+                                                <div class="col-sm-3 col-xs-3">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% block fos_user_content %}
+                                    {% endblock %}
                                 </div>
                             {% endblock %}
                         </div>
