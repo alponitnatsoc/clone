@@ -185,11 +185,13 @@
     <script>
         require.config({
             shim : {
-                "bootstrap" : { "deps" :['jquery'] }
+                "bootstrap" : { "deps" :['jquery'] },
+                "jquery.validate": {"deps": ["jquery"]}
             },
             paths: {
                 "jquery" : "//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min",
-                "bootstrap" :  "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min"  
+                "bootstrap" :  "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min",
+                "jquery.validate" : "//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min"
             },
             deps: ["bootstrap"]
         });
