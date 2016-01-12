@@ -4,7 +4,7 @@
  */
 function startEmployer(){
     var validator;
-    require(["jquery", "jquery.validate"], function(jQuery) {
+    $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
         validator = $("form[name='register_employer']").validate({
             rules: {
                 "register_employer[person][document]": "required",
@@ -45,7 +45,7 @@ function startEmployer(){
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link">Add Phone</a>');
+    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar Teléfono</a>');
     var $newLinkLi = $('<li></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
@@ -103,8 +103,7 @@ function startEmployer(){
         var form =$("form");
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
-        var neighborhood=$(form).find("input[name='register_employer[person][neighborhood]']");
-        if (!(validator.element(mainAddress)&&validator.element(neighborhood))){
+        if (!(validator.element(mainAddress))){
             return;
         }
         var i =0;
@@ -112,23 +111,15 @@ function startEmployer(){
             idsPhones[i++]=$(this).val();
         });
         i =0;
-        var flagValid=true;
         $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
-            if(!validator.element($(this))){
-                flagValid=false;
-                return;
-            }
             phones[i++]=$(this).val();
         });
-        if(!flagValid){
-            return;
-        }
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
             data: {
                 mainAddress: 	mainAddress.val(),
-                neighborhood: 	neighborhood.val(),
+                neighborhood: 	"",
                 phonesIds:      idsPhones,
                 phones:         phones,
                 department: 	$(form).find("select[name='register_employer[person][department]']").val(),
@@ -148,8 +139,8 @@ function startEmployer(){
     $('#register_employer_numberOfWorkplaces').val($dropDownWork);
     //listener para el que agrega workplaces
     $('#register_employer_numberOfWorkplaces').change(function() {
-
         // get the numberof Workplaces that the user wants
+        console.log($collectionHolder.data('index'));
         var workplacesCount= $(this).val();
         // get the new index the numer of workplaces that the user has on screen
         var index = parseInt($collectionHolder.data('index'));

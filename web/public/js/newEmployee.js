@@ -4,7 +4,7 @@
  */
 function startEmployee(){
     var validator;
-    require(["jquery", "jquery.validate"], function(jQuery) {
+    $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
         validator = $("form[name='register_employee']").validate({
             rules: {
                 "register_employee[person][document]": "required",

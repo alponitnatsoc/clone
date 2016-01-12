@@ -18,7 +18,6 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-require(["jquery"], function(jQuery) {
 	var state="/old";
 
 	jQuery(document).ready(function() {
@@ -98,6 +97,5 @@ require(["jquery"], function(jQuery) {
 		}
 		return false;
 	}
-});
 </script>
 {% endblock javascripts %}
