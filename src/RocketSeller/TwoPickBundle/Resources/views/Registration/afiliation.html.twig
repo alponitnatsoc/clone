@@ -6,91 +6,82 @@
 {{ form_start(form) }}
 
 <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-  <li><a data-toggle="tab" href="#contactData">Datos de contacto</a></li>
+  <li class="active"><a data-toggle="tab" href="#employeeEntities">employee Entities</a></li>
+  <li><a data-toggle="tab" href="#employerEntities">employer Entities</a></li>
+  <li><a data-toggle="tab" href="#docsMatrix">Matriz de Docs</a></li>
 </ul>
 
 <div class="tab-content">
-	<div id="basicData" class="tab-pane fade in active">
+	<div id="employeeEntities" class="tab-pane fade in active">
 	    {# render the task's only field: description #}
 	    {{ form_row(form.idEmployer) }}
-		<ul class="employees"  >
+		Para finalizar el proceso es necesario confirmar la información de afiliación a Seguridad Social de sus empleados. Los campos marcados con * son obligatorios.
+
+		Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
+		<table>
+			<tr>
+				<th>
+					Nombre
+				</th>
+				<th>
+					Salud
+				</th>
+				<th>
+					Pensión
+				</th>
+				<th>
+					¿Registrará beneficiarios?
+				</th>
+			</tr>
 			{% for employee in form.employerHasEmployees %}
-				<li id="employee_{{loop.index}}" class="employeeLi">
-					{{ form_row(employee.nameEmployee) }}
-					{{ form_row(employee.wealth) }}
-					{{ form_row(employee.pension) }}
-					{{ form_row(employee.beneficiaries) }}
-					{{ form_row(employee.idEmployerHasEmployee) }}
-				</li>
+				<tr>
+					<td>
+						{{ form_row(employee.nameEmployee) }}
+					</td>
+					<td>
+						{{ form_row(employee.wealth) }}
+					</td>
+					<td>
+						{{ form_row(employee.pension) }}
+					</td>
+					<td>
+						{{ form_row(employee.beneficiaries) }}
+						{{ form_row(employee.idEmployerHasEmployee) }}
+					</td>
+				</tr>
 			{% endfor %}
-		</ul>
+
+		</table>
 	    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 	</div>
 
-	<div id="contactData" class="tab-pane fade in">
+	<div id="employerEntities" class="tab-pane fade in">
+		Ahora es necesario que escoja la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales se afiliará como empleador de acuerdo a la ley.
+		Si ya se encuentra afiliado y desea continuar afiliado a ellas, selecciónelas a continuación. Los campos marcados con * son obligatorios:
+
 		{{ employerName }}
 		{{ employerDocumentType }} {{ employerDocument }}
 		{{ form_row(form.severances) }}
 		{{ form_row(form.arl) }}
+		Indique la Actividad económica establecida en su Registro Único Tributario (RUT) o en su defecto mantenga el código asignado por Symplifica el cual corresponde a Empleador de Servicio Doméstico.
 		{{ form_row(form.economicalActivity) }}
-	    <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
-		{{ form_row(form.save) }}
+		<a class="btn btn-primary btnPrevious" >< Anterior</a>
+
+		<a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
+
 
 
 
 	</div>
+	<div id="docsMatrix" class="tab-pane fade in">
+		<a class="btn btn-primary btnPrevious" >< Anterior</a>
 
-
+		{{ form_row(form.save) }}
+	</div>
 
 
 </div>
 {{ form_end(form) }}
 </div>
 {% endblock fos_user_content%}
-{% block javascripts %}
-	{{ parent() }}
-	<script>
-		$('#btn-1').click(function(e){
-			e.preventDefault();
-			var form =$("form");
-			var idEmployees=[],beneficiaries=[],pension=[],wealth=[];
-			var i =0;
-			$(form).find("ul.employees input[name*='idEmployerHasEmployee']").each(function(){
-				idEmployees[i++]=$(this).val();
-			});
-			i =0;
-			$(form).find("ul.employees select[name*='wealth']").each(function(){
-				wealth[i++]=$(this).val();
-			});
-			i =0;
-			$(form).find("ul.employees select[name*='pension']").each(function(){
-				pension[i++]=$(this).val();
-			});
-			i =0;
-			$(form).find("ul.employees input[name*='beneficiaries']").each(function(){
-				beneficiaries[i++]=$(this).val();
-			});
-
-			$.ajax({
-				url : $(this).attr('href'),
-				type: 'POST',
-				data: {
-					idEmployerHasEmployee:	idEmployees,
-					beneficiaries: 			beneficiaries,
-					pension:				pension,
-					wealth: 				wealth,
-					idEmployer: 			$(form).find("input[name='register_social_security[idEmployer]']").val(),
-				}
-			}).done(function(data) {
-				console.log(data);
-				$(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
-				$('.nav-tabs > .active').next('li').find('a').trigger('click');
-			}).fail(function( jqXHR, textStatus, errorThrown ) {
-				alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
-				console.log(jqXHR);
-			});
-		});
-	</script>
-{% endblock javascripts %}
