@@ -34,6 +34,8 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                always_use_default_target_path: false
+                default_target_path: /pages
             oauth:
                 failure_path: hwi_oauth_connect
                 login_path: fos_user_security_login
@@ -52,7 +54,7 @@ security:
             anonymous:    true
             logout:
                 path:           fos_user_security_logout
-                target:         / #where to go after logout
+                target:         /pages #where to go after logout
             #d# anonymous: ~
             # activate different ways to authenticate
 
