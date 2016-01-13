@@ -12,7 +12,6 @@ function startEmployee(){
                 "register_employee[person][lastName1]": "required",
                 "register_employee[person][lastName2]": "required",
                 "register_employee[person][mainAddress]": "required",
-                "register_employee[person][neighborhood]": "required",
                 "register_employee[employeeHasEmployers][salary]":"required",
             },
             messages:{
@@ -21,7 +20,6 @@ function startEmployee(){
                 "register_employee[person][lastName1]": "Por favor Ingrese su primer apellido",
                 "register_employee[person][lastName2]": "Por favor Ingrese su segundo apellido",
                 "register_employee[person][mainAddress]": "Por favor Ingrese una dirección",
-                "register_employee[person][neighborhood]": "Por favor Ingrese un barrio",
                 "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario",
 
             }
@@ -208,8 +206,7 @@ function startEmployee(){
         var form =$("form");
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employee[person][mainAddress]']");
-        var neighborhood=$(form).find("input[name='register_employee[person][neighborhood]']");
-        if (!(validator.element(mainAddress)&&validator.element(neighborhood))){
+        if (!(validator.element(mainAddress))){
             return;
         }
         var i =0;
@@ -233,7 +230,6 @@ function startEmployee(){
             type: 'POST',
             data: {
                 mainAddress: 	mainAddress.val(),
-                neighborhood: 	neighborhood.val(),
                 phonesIds:      idsPhones,
                 phones:         phones,
                 department: 	$(form).find("select[name='register_employee[person][department]']").val(),

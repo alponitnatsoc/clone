@@ -175,6 +175,7 @@ function startEmployer(){
             addListeners();
         }
     });
+    var redirUri="";
     $("form").on("submit",function(e){
         e.preventDefault();
         $('#createdModal').modal('toggle');
@@ -218,7 +219,7 @@ function startEmployer(){
                 200: function(data){
                     if(data["url"]!=null){
                         console.log(data["url"]);
-                        sendAjax(data["url"]);
+                        redirUri=data["url"];
                     }else{
                         $('#main').replaceWith(
                             // ... with the returned one from the AJAX response.
@@ -234,6 +235,9 @@ function startEmployer(){
         }).fail(function( jqXHR, textStatus, errorThrown ) {
             alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
         });
+    });
+    $("#employerDismiss").on('click', function(){
+        sendAjax(redirUri);
     });
 
 }
