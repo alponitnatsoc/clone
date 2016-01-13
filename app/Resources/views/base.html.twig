@@ -46,7 +46,7 @@
                     <div class="row-fluid up-Help-Phone">
                         <div class="container">
                             <div class="txthelp">
-                                <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá 411-2233</span>
+                                <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá¡ 411-2233</span>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                 <li><a href="#">Precios</a></li>
                                 <li><a href="{{ path('fos_user_registration_register') }}">Registro</a></li>
                                 <li><a href="#">Empresa</a></li>
-                                <li><a href="#">Ayuda</a></li>
+                                <li><a href="{{ path('show_help') }}">Ayuda</a></li>
                                 <li><a href="{{ path('show_calculator_form') }}">Calculadora</a></li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -79,14 +79,16 @@
                     </div>
                 </nav>
             {% endif %}
+            <!--
             {% if app.user %}
                 {% if not app.user.status %}
                     <div class="alert alert-danger" role="alert">
-                        Tu cuenta se encuentra inactiva
-                        <a href="#" class="alert-link"> Adquirir suscripción</a>
+                        Tu cuenta se encuentra inactiva 2
+                        <a href="{{ path('subscription_choices') }}" class="alert-link"> Adquirir suscripción</a>
                     </div>
                 {% endif %}
-            {% endif %}
+            {% endif %}            
+            -->
         {% endblock %}
         <div class="content">
             {% block body %}
@@ -110,31 +112,31 @@
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">configuración inicial</a>
+                                        <a href="{{ path('show_dashboard') }}">configuración inicial</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">Empleador</a>
+                                        <a href="{{ path('show_dashboard_employer') }}">Empleador</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">Empleados</a>
+                                        <a href="{{ path('manage_employees') }}">Empleados</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="">pago a empleados</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">Certificados</a>
+                                        <a href="{{ path('show_certificates') }}">Certificados</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="">Reportes</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">calculadora salarial</a>
+                                        <a href="{{ path('show_calculator_form') }}">calculadora salarial</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="">Configuración</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">Ayuda</a>
+                                        <a href="{{ path('show_help') }}">Ayuda</a>
                                     </div>
 
                                 </div>
@@ -142,65 +144,66 @@
                         </div>
                         <div id="main" class="col-sm-9">
                             {% block main %}
-                                <div>
-                                {% block content %}{% endblock %}
-                            </div>
-                            <div class="span12">
-                                {% if is_granted("IS_AUTHENTICATED_FULLY") %}
-                                    <div class="col-sm-12 col-xs-12 profile-Data">
-                                        <div class="col-sm-4 col-xs-11 person">
-                                            <div class="col-sm-9 col-xs-9">
-                                                <h4>{{app.user.getPersonPerson().getFullName()}}</h4>
-                                                <span><a href="/logout">Salir ›</a></span>
-                                            </div>
-                                            <div class="col-sm-3 col-xs-3">
+                                <div class="span12">
+                                    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                                        <div class="col-sm-12 col-xs-12 profile-Data">
+                                            <div class="col-sm-4 col-xs-11 person">
+                                                <div class="col-sm-9 col-xs-9">
+                                                    <h4>{{app.user.getPersonPerson().getFullName()}}</h4>
+                                                    <span><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                </div>
+                                                <div class="col-sm-3 col-xs-3">
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                                {% block fos_user_content %}
-                                {% endblock %}
-                            </div>
-                        {% endblock %}
+                                    {% endif %}
+
+                                    {% block content %}
+                                    {% endblock %}
+
+                                    {% block fos_user_content %}
+                                    {% endblock %}
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        </div> 
+        {% block footer %}
+            <footer>
+                <div class="container">
+                    <div class="col-sm-2 logo">
+                        <img src="{{ asset('img/logo-oscuro.png') }}" alt="Sympifica" class="hidden-sm img-responsive"/>
+                        <img src="{{ asset('img/logo-oscuro-responsive.png') }}" alt="Sympifica" class="visible-sm img-responsive"/>
+                    </div>
+                    <div class="col-sm-5 links">
+                        <div class="col-sm-4"><a href="#">Beneficios</a></div>
+                        <div class="col-sm-4"><a href="#">Precios</a></div>
+                        <div class="col-sm-4"><a href="#">Empresa</a></div>
+                        <div class="col-sm-4"><a href="#">Funcionalidades</a></div>
+                        <div class="col-sm-4"><a href="{{ path('fos_user_registration_register') }}">Registro</a></div>
+                        <div class="col-sm-4"><a href="{{ path('show_help') }}">Ayuda</a></div>
+                    </div>
+                    <div class="col-sm-5 social">
+                        <div class="red facebook"><a href="#" target="_blank"></a></div>
+                        <div class="red linkedin"><a href="#" target="_blank"></a></div>
+                        <div class="red twitter"><a href="#" target="_blank"></a></div>
+                        <div class="terminos">
+                            Términos y Condiciones<br />
+                            Copyright© Todos los derechos reservados Symplifica
+                        </div>
                     </div>
                 </div>
             </div>
-        {% endblock %}
-    </div> 
-    {% block footer %}
-        <footer>
-            <div class="container">
-                <div class="col-sm-2 logo">
-                    <img src="{{ asset('img/logo-oscuro.png') }}" alt="Sympifica" class="hidden-sm img-responsive"/>
-                    <img src="{{ asset('img/logo-oscuro-responsive.png') }}" alt="Sympifica" class="visible-sm img-responsive"/>
-                </div>
-                <div class="col-sm-5 links">
-                    <div class="col-sm-4"><a href="#">Beneficios</a></div>
-                    <div class="col-sm-4"><a href="#">Precios</a></div>
-                    <div class="col-sm-4"><a href="#">Empresa</a></div>
-                    <div class="col-sm-4"><a href="#">Funcionalidades</a></div>
-                    <div class="col-sm-4"><a href="#">Registro</a></div>
-                    <div class="col-sm-4"><a href="#">Ayuda</a></div>
-                </div>
-                <div class="col-sm-5 social">
-                    <div class="red facebook"><a href="#" target="_blank"></a></div>
-                    <div class="red linkedin"><a href="#" target="_blank"></a></div>
-                    <div class="red twitter"><a href="#" target="_blank"></a></div>
-                    <div class="terminos">
-                        Términos y Condiciones<br />
-                        Copyright © Todos los derechos reservados Symplifica
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-{% endblock %}
-{% block javascripts %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{{ asset('js/vendor/jquery-1.11.2.min.js') }}"><\/script>')</script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-    <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script> 
+        </footer>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{{ asset('js/vendor/jquery-1.11.2.min.js') }}"><\/script>')</script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+        <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script> 
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
