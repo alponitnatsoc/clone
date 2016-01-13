@@ -31,8 +31,8 @@ class PersonExtraData extends AbstractType
             )
             ->add('gender', 'choice', array(
                     'choices' => array(
-                        'masculino'   => 'Masculino',
-                        'femenino' => 'Femenino',
+                        'MAS'   => 'Masculino',
+                        'FEM' => 'Femenino',
                     ),
                     'multiple' => false,
                     'expanded' => false,
