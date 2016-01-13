@@ -16,7 +16,7 @@ class EmployerHasEntityAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('employerEmployer.personPerson.names',null,array('label'=>'Employer'))
+            ->add('employerEmployer.personPerson',null,array('label'=>'Employer'))
             ->add('employerEmployer.personPerson.lastName1',null,array('label'=>'Last name'))
             ->add('employerEmployer.personPerson.lastName2',null,array('label'=>'Second last name'))
             ->add('employerEmployer.personPerson.document',null,array('label'=>'Document'))

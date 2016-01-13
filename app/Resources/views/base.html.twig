@@ -112,7 +112,7 @@
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="{{ path('show_dashboard') }}">configuración inicial</a>
+                                        <a href="{{ path('show_dashboard') }}">Inicio</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_dashboard_employer') }}">Empleador</a>
@@ -121,7 +121,7 @@
                                         <a href="{{ path('manage_employees') }}">Empleados</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="">pago a empleados</a>
+                                        <a href="{{ path('payroll') }}">pago a empleados</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_certificates') }}">Certificados</a>
@@ -181,7 +181,7 @@
                     <div class="col-sm-5 links">
                         <div class="col-sm-4"><a href="#">Beneficios</a></div>
                         <div class="col-sm-4"><a href="#">Precios</a></div>
-                        <div class="col-sm-4"><a href="#">Empresa</a></div>
+                        <div class="col-sm-4"><a href="{{ path('_nosotros') }}">Empresa</a></div>
                         <div class="col-sm-4"><a href="#">Funcionalidades</a></div>
                         <div class="col-sm-4"><a href="{{ path('fos_user_registration_register') }}">Registro</a></div>
                         <div class="col-sm-4"><a href="{{ path('show_help') }}">Ayuda</a></div>
@@ -191,7 +191,7 @@
                         <div class="red linkedin"><a href="#" target="_blank"></a></div>
                         <div class="red twitter"><a href="#" target="_blank"></a></div>
                         <div class="terminos">
-                            Términos y Condiciones<br />
+                            <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a><br />
                             Copyright© Todos los derechos reservados Symplifica
                         </div>
                     </div>

@@ -823,4 +823,8 @@ class Person
     {
         return $this->gender;
     }
+    public function __toString()
+    {
+        return (string) $this->names;
+    }
 }
