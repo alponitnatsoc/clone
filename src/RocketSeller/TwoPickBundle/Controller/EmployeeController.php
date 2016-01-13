@@ -172,6 +172,9 @@ class EmployeeController extends Controller
                 $severances=$entityType->getEntities();
             }
         }
+        if($employer->getEconomicalActivity()==null){
+            $employer->setEconomicalActivity("2435");
+        }
         $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions,$severances,$arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
