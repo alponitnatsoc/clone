@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+
 {% block content %}
 	<div class="container col-md-12">
 		<div class="col-md-4">
@@ -27,7 +27,7 @@
 			      </tr>		      
 			    </thead>	    	
 				    <tbody>
-				    	<tbody>		  			
+				    	<tbody>
 			  				{% for document  in documentsPerEmployee[i] %}
 			  					{% if document in documentsByEmployee[i] %}
 			  						<tr><td>Ya lo tienes</td></tr>

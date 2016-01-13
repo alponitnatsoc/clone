@@ -75,6 +75,13 @@
 
 	</div>
 	<div id="docsMatrix" class="tab-pane fade in">
+		<div id='' class='col-xs-12'>
+			<div class="panel panel-default">
+  				<div class="panel-body">
+		    {{ render(controller(
+		        'RocketSeller\TwoPickBundle:Employer:viewDocuments'
+    		)) }}
+    	</div></div></div>
 		<a class="btn btn-primary btnPrevious" >< Anterior</a>
 
 		{{ form_row(form.save) }}
