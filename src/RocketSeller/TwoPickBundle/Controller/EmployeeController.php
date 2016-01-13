@@ -206,14 +206,17 @@ class EmployeeController extends Controller
     public function manageEmployeesAction()
     {
         $user = $this->getUser();
-        $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
+        $employeesData = $registerState = null;
+        if ($user) {
+            $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
+        }
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
                     'employees' => $employeesData,
                     'user' => $user,
                     'registerState' => $registerState
-                ));
+        ));
     }
 
     /**
