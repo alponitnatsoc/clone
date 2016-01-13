@@ -1,4 +1,5 @@
 <?php
+
 namespace RocketSeller\TwoPickBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -15,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\User;
 
 class ValidateUserOnloadListener implements ContainerAwareInterface
 {
+
     /**
      * @var ContainerInterface
      */
@@ -58,16 +60,15 @@ class ValidateUserOnloadListener implements ContainerAwareInterface
 //             $user = $this->em->getRepository('RocketSellerTwoPickBundle:User')->find($userId);
 //             echo $user->getEmail();
 
-        	/** @var User $user */
-        	$user = $securityContext->getToken()->getUser();
+            /** @var User $user */
+            $user = $securityContext->getToken()->getUser();
 //         	$dc = $user->getDateCreated();
 //         	$dt = new \DateTime();
-
 //         	$dateDif = date_diff($dt, $dc);
 //         	echo "El usuario " . $user->getEmail() . " fue creado hace " . $dateDif->format('%y Year %m Month %d Day %h Hours %i Minute %s Seconds');
 
-            if ($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $user->getStatus() == 0) {
-                echo "Usuario inactivo";
+            if (($this->router->getContext()->getPathInfo() != "/activar-suscripcion" && $this->router->getContext()->getPathInfo() != "/subscription") && $user->getStatus() == 0) {
+                //echo "Usuario inactivo";
                 $url = $this->router->generate('inactive_user');
                 $event->setResponse(new RedirectResponse($url));
                 $event->stopPropagation();
@@ -79,8 +80,10 @@ class ValidateUserOnloadListener implements ContainerAwareInterface
     /*
      * This method prevent to cache Response when occurs Exceptions
      */
+
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $event->stopPropagation();
     }
+
 }
