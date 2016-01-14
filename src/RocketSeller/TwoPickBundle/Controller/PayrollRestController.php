@@ -12,6 +12,9 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use DateTime;
 
 //use GuzzleHttp\Psr7\Request;
@@ -19,9 +22,40 @@ use DateTime;
 use GuzzleHttp\Client;
 
 use EightPoints\Bundle\GuzzleBundle;
-
+/**
+* Contains all the web services to call the payroll system.
+* Get methods can be call as any function.
+* If a post method is going to be call from within the application here is an
+* example:
+*   $request =  new Request();
+*   $request->request->set("employee_id", "123456");
+*   $request->request->set("concept_id", "1");
+*   $this->postFunctionAction($request);
+*
+*/
 class PayrollRestController extends FOSRestController
 {
+
+  public function validateParamters($parameters, $regex, $mandatory) {
+
+     foreach($mandatory as $key => $value)
+     {
+       if(array_key_exists($key, $mandatory) &&
+          $mandatory[$key] &&
+          (!array_key_exists($key, $parameters)))
+            throw new HttpException(400, "The parameter " . $key . " is empty");
+
+       if(array_key_exists($key, $regex) &&
+          array_key_exists($key, $parameters) &&
+          !preg_match('/^' . $regex[$key] . '$/', $parameters[$key]))
+         throw new HttpException(400, "The format of the parameter " .
+                                      $key . " is invalid, it doesn't match" .
+                                      $regex[$key]);
+
+       if(!$mandatory[$key] && (!array_key_exists($key, $parameters)))
+          $parameters[$key] = '';
+     }
+  }
 
   public function getContentRecursive($array, &$result, &$errorCode)
   {
@@ -193,51 +227,77 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   * @RequestParam(name="last_name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="Employee Last name(only one).")
-   * @RequestParam(name="first_name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="Employee first name.")
-   * @RequestParam(name="document_type", nullable=true, requirements="([a-z|A-Z| ])+", description="Document type on two char format, if null CC will be used.")
-   * @RequestParam(name="document", nullable=false, requirements="([0-9])+", strict=true, description="Employee document number")
-   * @RequestParam(name="gender", nullable=false, requirements="(MAS|FEM)", strict=true, description="Employee gender(MAS or FEM).")
-   * @RequestParam(name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
-   * @RequestParam(name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
-   * @RequestParam(name="days_company_seniority", nullable=false, requirements="([0-9])+", strict=true, description="Previous seniority on days.")
-   * @RequestParam(name="last_contract_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Start day of the last work contract(format: DD-MM-YYYY).")
-   * @RequestParam(name="contract_number", nullable=false, requirements="([0-9])+", strict=true, description="Employee contract number.")
-   * @RequestParam(name="last_contract_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
-   * @RequestParam(name="shift", nullable=false, requirements="([0-9])+", strict=true, description="day(1) or night(2) shift")
-   * @RequestParam(name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
-   * @RequestParam(name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE).")
-   * @RequestParam(name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks).")
-   * @RequestParam(name="salary_type", nullable=false, requirements="([0-9])", strict=true, description="How the employees salary is recorded(monthly 1, daily 2, every two weeks 3, hourly 4).")
+   *   (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
+   *   (name="last_name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="Employee Last name(only one).")
+   *   (name="first_name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="Employee first name.")
+   *   (name="document_type", nullable=true, requirements="([a-z|A-Z| ])+", description="Document type on two char format, if null CC will be used.")
+   *   (name="document", nullable=false, requirements="([0-9])+", strict=true, description="Employee document number")
+   *   (name="gender", nullable=false, requirements="(MAS|FEM)", strict=true, description="Employee gender(MAS or FEM).")
+   *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
+   *   (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *   (name="days_company_seniority", nullable=false, requirements="([0-9])+", strict=true, description="Previous seniority on days.")
+   *   (name="last_contract_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Start day of the last work contract(format: DD-MM-YYYY).")
+   *   (name="contract_number", nullable=false, requirements="([0-9])+", strict=true, description="Employee contract number.")
+   *   (name="last_contract_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
+   *   (name="shift", nullable=false, requirements="([0-9])+", strict=true, description="day(1) or night(2) shift")
+   *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
+   *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE).")
+   *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks).")
+   *   (name="salary_type", nullable=false, requirements="([0-9])", strict=true, description="How the employees salary is recorded(monthly 1, daily 2, every two weeks 3, hourly 4).")
    *
    * @return View
    */
-  public function postAddEmployeeAction(ParamFetcher $paramFetcher)
+  public function postAddEmployeeAction(Request $request)
   {
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['last_name'] = '([a-z|A-Z| ])+';$mandatory['last_name'] = true;
+    $regex['first_name'] = '([a-z|A-Z| ])+';$mandatory['first_name'] = true;
+    $regex['document_type'] = '([a-z|A-Z| ])+';$mandatory['document_type'] = true;
+    $regex['document'] = '([0-9])+';$mandatory['document'] = true;
+    $regex['gender'] = '(MAS|FEM)';$mandatory['gender'] = true;
+    $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['birth_date'] = true;
+    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = true;
+    $regex['days_company_seniority'] = '([0-9])+';$mandatory['days_company_seniority'] = true;
+    $regex['last_contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_start_date'] = true;
+    $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = true;
+    $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = true;
+    $regex['shift'] = '([0-9])+';$mandatory['shift'] = true;
+    $regex['worked_hours_days'] = '([0-9])+';$mandatory['worked_hours_days'] = true;
+    $regex['payment_method'] = '(CHE|CON|EFE)';$mandatory['payment_method'] = true;
+    $regex['liquidation_type'] = '(J|M|Q)';$mandatory['liquidation_type'] = true;
+    $regex['salary_type'] = '([0-9])';$mandatory['salary_type'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
 
     $unico['TIPOCON'] = 0;
-    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-    $unico['EMP_APELLIDO1'] = $paramFetcher->get('last_name');
-    $unico['EMP_NOMBRE'] = $paramFetcher->get('first_name');
-    $unico['EMP_TIPO_IDENTIF'] = $paramFetcher->get('document_type');
-    $unico['EMP_CEDULA'] = $paramFetcher->get('document');
-    $unico['EMP_SEXO'] = $paramFetcher->get('gender');
-    $unico['EMP_FECHA_NACI'] = $paramFetcher->get('birth_date');
-    $unico['EMP_FECHA_INGRESO'] = $paramFetcher->get('start_date');
-    $unico['EMP_ANTIGUEDAD_ANT'] = $paramFetcher->get('days_company_seniority');
-    $unico['EMP_FECHA_INI_CONTRATO'] = $paramFetcher->get('last_contract_start_date');
-    $unico['EMP_NRO_CONTRATO'] = $paramFetcher->get('contract_number');
-    $unico['EMP_FECHA_FIN_CONTRATO'] = $paramFetcher->get('last_contract_end_date');
-    $unico['EMP_JORNADA'] = $paramFetcher->get('shift');
-    $unico['EMP_HORAS_TRAB'] = $paramFetcher->get('worked_hours_days');
-    $unico['EMP_FORMA_PAGO'] = $paramFetcher->get('payment_method');
-    $unico['EMP_TIPOLIQ'] = $paramFetcher->get('liquidation_type');
-    $unico['EMP_TIPO_SALARIO'] = $paramFetcher->get('salary_type');
+    $unico['EMP_CODIGO'] = $parameters['employee_id'];
+    $unico['EMP_APELLIDO1'] = $parameters['last_name'];
+    $unico['EMP_NOMBRE'] = $parameters['first_name'];
+    $unico['EMP_TIPO_IDENTIF'] = $parameters['document_type'];
+    $unico['EMP_CEDULA'] = $parameters['document'];
+    $unico['EMP_SEXO'] = $parameters['gender'];
+    $unico['EMP_FECHA_NACI'] = $parameters['birth_date'];
+    $unico['EMP_FECHA_INGRESO'] = $parameters['start_date'];
+    $unico['EMP_ANTIGUEDAD_ANT'] = $parameters['days_company_seniority'];
+    $unico['EMP_FECHA_INI_CONTRATO'] = $parameters['last_contract_start_date'];
+    $unico['EMP_NRO_CONTRATO'] = $parameters['contract_number'];
+    $unico['EMP_FECHA_FIN_CONTRATO'] = $parameters['last_contract_end_date'];
+    $unico['EMP_JORNADA'] = $parameters['shift'];
+    $unico['EMP_HORAS_TRAB'] = $parameters['worked_hours_days'];
+    $unico['EMP_FORMA_PAGO'] = $parameters['payment_method'];
+    $unico['EMP_TIPOLIQ'] = $parameters['liquidation_type'];
+    $unico['EMP_TIPO_SALARIO'] = $parameters['salary_type'];
 
     $content[] = $unico;
     $parameters = array();
@@ -266,52 +326,77 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   * @RequestParam(name="last_name", nullable=true, requirements="([a-z|A-Z| ])+", description="Employee Last name(only one).")
-   * @RequestParam(name="first_name", nullable=true, requirements="([a-z|A-Z| ])+", description="Employee first name.")
-   * @RequestParam(name="document_type", nullable=true, requirements="([a-z|A-Z| ])+", description="Document type on two char format, if null CC will be used.")
-   * @RequestParam(name="document", nullable=true, requirements="([0-9])+", description="Employee document number")
-   * @RequestParam(name="gender", nullable=true, requirements="(MAS|FEM)", description="Employee gender(MAS or FEM).")
-   * @RequestParam(name="birth_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Employee birth day on the format DD-MM-YYYY.")
-   * @RequestParam(name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
-   * @RequestParam(name="days_company_seniority", nullable=true, requirements="([0-9])+", description="Previous seniority on days.")
-   * @RequestParam(name="last_contract_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Start day of the last work contract(format: DD-MM-YYYY).")
-   * @RequestParam(name="contract_number", nullable=true, requirements="([0-9])+", description="Employee contract number.")
-   * @RequestParam(name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Last work contract termination day(format: DD-MM-YYYY).")
-   * @RequestParam(name="shift", nullable=true, requirements="([0-9])+", description="day(1) or night(2) shift")
-   * @RequestParam(name="worked_hours_days", nullable=true, requirements="([0-9])+", description="Number of hours worked on a day.")
-   * @RequestParam(name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", description="Code of payment method(CHE, CON, EFE).")
-   * @RequestParam(name="liquidation_type", nullable=true, requirements="(J|M|Q)", description="Liquidation type, (J daily, M monthly, Q every two weeks).")
-   * @RequestParam(name="salary_type", nullable=true, requirements="([0-9])", description="How the employees salary is recorded(monthly 1, daily 2, every two weeks 3, hourly 4).")
+   *   (name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
+   *   (name="last_name", nullable=true, requirements="([a-z|A-Z| ])+", description="Employee Last name(only one).")
+   *   (name="first_name", nullable=true, requirements="([a-z|A-Z| ])+", description="Employee first name.")
+   *   (name="document_type", nullable=true, requirements="([a-z|A-Z| ])+", description="Document type on two char format, if null CC will be used.")
+   *   (name="document", nullable=true, requirements="([0-9])+", description="Employee document number")
+   *   (name="gender", nullable=true, requirements="(MAS|FEM)", description="Employee gender(MAS or FEM).")
+   *   (name="birth_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Employee birth day on the format DD-MM-YYYY.")
+   *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *   (name="days_company_seniority", nullable=true, requirements="([0-9])+", description="Previous seniority on days.")
+   *   (name="last_contract_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Start day of the last work contract(format: DD-MM-YYYY).")
+   *   (name="contract_number", nullable=true, requirements="([0-9])+", description="Employee contract number.")
+   *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Last work contract termination day(format: DD-MM-YYYY).")
+   *   (name="shift", nullable=true, requirements="([0-9])+", description="day(1) or night(2) shift")
+   *   (name="worked_hours_days", nullable=true, requirements="([0-9])+", description="Number of hours worked on a day.")
+   *   (name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", description="Code of payment method(CHE, CON, EFE).")
+   *   (name="liquidation_type", nullable=true, requirements="(J|M|Q)", description="Liquidation type, (J daily, M monthly, Q every two weeks).")
+   *   (name="salary_type", nullable=true, requirements="([0-9])", description="How the employees salary is recorded(monthly 1, daily 2, every two weeks 3, hourly 4).")
    *
    * @return View
    */
-  public function postModifyEmployeeAction(ParamFetcher $paramFetcher)
+  public function postModifyEmployeeAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['last_name'] = '([a-z|A-Z| ])+';$mandatory['last_name'] = false;
+    $regex['first_name'] = '([a-z|A-Z| ])+';$mandatory['first_name'] = false;
+    $regex['document_type'] = '([a-z|A-Z| ])+';$mandatory['document_type'] = false;
+    $regex['document'] = '([0-9])+';$mandatory['document'] = false;
+    $regex['gender'] = '(MAS|FEM)';$mandatory['gender'] = false;
+    $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['birth_date'] = false;
+    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = false;
+    $regex['days_company_seniority'] = '([0-9])+';$mandatory['days_company_seniority'] = false;
+    $regex['last_contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_start_date'] = false;
+    $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = false;
+    $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = false;
+    $regex['shift'] = '([0-9])+';$mandatory['shift'] = false;
+    $regex['worked_hours_days'] = '([0-9])+';$mandatory['worked_hours_days'] = false;
+    $regex['payment_method'] = '(CHE|CON|EFE)';$mandatory['payment_method'] = false;
+    $regex['liquidation_type'] = '(J|M|Q)';$mandatory['liquidation_type'] = false;
+    $regex['salary_type'] = '([0-9])';$mandatory['salary_type'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
-    $info = $this->getEmployeeAction($paramFetcher->get('employee_id'))->getData();
+    $info = $this->getEmployeeAction($parameters['employee_id'])->getData();
 
     $unico['TIPOCON'] = 1;
-    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-    $unico['EMP_APELLIDO1'] = $paramFetcher->get('last_name') ? $paramFetcher->get('last_name') : $info['EMP_APELLIDO1'];
-    $unico['EMP_NOMBRE'] = $paramFetcher->get('first_name') ? $paramFetcher->get('first_name') : $info['EMP_NOMBRE'];
-    $unico['EMP_TIPO_IDENTIF'] = $paramFetcher->get('document_type') ? $paramFetcher->get('document_type') : $info['EMP_TIPO_IDENTIF'];
-    $unico['EMP_CEDULA'] = $paramFetcher->get('document') ? $paramFetcher->get('document') : $info['EMP_CEDULA'];
-    $unico['EMP_SEXO'] = $paramFetcher->get('gender') ? $paramFetcher->get('gender') : $info['EMP_SEXO'];
-    $unico['EMP_FECHA_NACI'] = $paramFetcher->get('birth_date') ? $paramFetcher->get('birth_date') : $info['EMP_FECHA_NACI'];
-    $unico['EMP_FECHA_INGRESO'] = $paramFetcher->get('start_date') ? $paramFetcher->get('start_date') : $info['EMP_FECHA_INGRESO'];
-    $unico['EMP_ANTIGUEDAD_ANT'] = $paramFetcher->get('days_company_seniority') ? $paramFetcher->get('days_company_seniority') : $info['EMP_ANTIGUEDAD_ANT'];
-    $unico['EMP_FECHA_INI_CONTRATO'] = $paramFetcher->get('last_contract_start_date') ? $paramFetcher->get('last_contract_start_date') : $info['EMP_FECHA_INI_CONTRATO'];
-    $unico['EMP_NRO_CONTRATO'] = $paramFetcher->get('contract_number') ? $paramFetcher->get('contract_number') : $info['EMP_NRO_CONTRATO'];
-    $unico['EMP_FECHA_FIN_CONTRATO'] = $paramFetcher->get('last_contract_end_date') ? $paramFetcher->get('last_contract_end_date') : $info['EMP_FECHA_FIN_CONTRATO'];
-    $unico['EMP_JORNADA'] = $paramFetcher->get('shift') ? $paramFetcher->get('shift') : $info['EMP_JORNADA'];
-    $unico['EMP_HORAS_TRAB'] = $paramFetcher->get('worked_hours_days') ? $paramFetcher->get('worked_hours_days') : $info['EMP_HORAS_TRAB'];
-    $unico['EMP_FORMA_PAGO'] = $paramFetcher->get('payment_method') ? $paramFetcher->get('payment_method') : $info['EMP_FORMA_PAGO'];
-    $unico['EMP_TIPOLIQ'] = $paramFetcher->get('liquidation_type') ? $paramFetcher->get('liquidation_type') : $info['EMP_TIPOLIQ'];
-    $unico['EMP_TIPO_SALARIO'] = $paramFetcher->get('salary_type') ? $paramFetcher->get('salary_type') : $info['EMP_TIPO_SALARIO'];
+    $unico['EMP_CODIGO'] = $parameters['employee_id'];
+    $unico['EMP_APELLIDO1'] = isset($parameters['last_name']) ? $parameters['last_name'] : $info['EMP_APELLIDO1'];
+    $unico['EMP_NOMBRE'] =  isset($parameters['first_name']) ? $parameters['first_name'] : $info['EMP_NOMBRE'];
+    $unico['EMP_TIPO_IDENTIF'] =  isset($parameters['document_type']) ? $parameters['document_type'] : $info['EMP_TIPO_IDENTIF'];
+    $unico['EMP_CEDULA'] =  isset($parameters['document']) ? $parameters['document'] : $info['EMP_CEDULA'];
+    $unico['EMP_SEXO'] =  isset($parameters['gender']) ? $parameters['gender'] : $info['EMP_SEXO'];
+    $unico['EMP_FECHA_NACI'] =  isset($parameters['birth_date']) ? $parameters['birth_date'] : $info['EMP_FECHA_NACI'];
+    $unico['EMP_FECHA_INGRESO'] =  isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
+    $unico['EMP_ANTIGUEDAD_ANT'] =  isset($parameters['days_company_seniority']) ? $parameters['days_company_seniority'] : $info['EMP_ANTIGUEDAD_ANT'];
+    $unico['EMP_FECHA_INI_CONTRATO'] =  isset($parameters['last_contract_start_date']) ? $parameters['last_contract_start_date'] : $info['EMP_FECHA_INI_CONTRATO'];
+    $unico['EMP_NRO_CONTRATO'] =  isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
+    $unico['EMP_FECHA_FIN_CONTRATO'] =  isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : $info['EMP_FECHA_FIN_CONTRATO'];
+    $unico['EMP_JORNADA'] =  isset($parameters['shift']) ? $parameters['shift'] : $info['EMP_JORNADA'];
+    $unico['EMP_HORAS_TRAB'] =  isset($parameters['worked_hours_days']) ? $parameters['worked_hours_days'] : $info['EMP_HORAS_TRAB'];
+    $unico['EMP_FORMA_PAGO'] =  isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
+    $unico['EMP_TIPOLIQ'] =  isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
+    $unico['EMP_TIPO_SALARIO'] =  isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
 
     $content[] = $unico;
     $parameters = array();
@@ -375,23 +460,64 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @var Request $request
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   * @RequestParam(name="concept_id", nullable=false, requirements="([0-9])+", strict=true, description="ID of the concept as described by SQL Software.")
-   * @RequestParam(name="value", nullable=false, requirements="([0-9])+(.[0-9]+)?", strict=true, description="Value of the concept.")
+   * @param ParamFetcher $paramFetcher Paramfetcher
    *
    * @return View
    */
-  public function postAddFixedConceptsAction(ParamFetcher $paramFetcher)
+  public function postPruebaAction(Request $request) {
+     //die('entre');
+     $request1 =  new Request();
+    // for example, possibly set its _controller manually
+    $request1->request->set("employee_id", "123456");
+    $request1->request->set("concept_id", "1");
+    $request1->request->set("value", "1000");
+     $this->postAddFixedConceptsAction($request1);
+  }
+
+  /**
+   * Inserts a fixed concept for a given employee.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = " Inserts a fixed concept for a given employee.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @var Request $request
+   *
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
+   *    (name="concept_id", nullable=false, requirements="([0-9])+", description="ID of the concept as described by SQL Software.")
+   *    (name="value", nullable=false, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+   *
+   *
+   * @return View
+   */
+  public function postAddFixedConceptsAction(Request $request)
   {
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['concept_id'] = '([0-9])+';$mandatory['concept_id'] = true;
+    $regex['value'] = '([0-9])+(.[0-9]+)?';$mandatory['value'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
-
     $unico['TIPOCON'] = 0;
-    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-    $unico['CON_CODIGO'] = $paramFetcher->get('concept_id');
-    $unico['COF_VALOR'] = $paramFetcher->get('value');
+    $unico['EMP_CODIGO'] = $parameters['employee_id'];
+    $unico['CON_CODIGO'] = $parameters['concept_id'];
+    $unico['COF_VALOR'] = $parameters['value'];
 
     $content[] = $unico;
     $parameters = array();
@@ -418,24 +544,35 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   * @RequestParam(name="concept_id", nullable=true, requirements="([0-9])+", description="ID of the concept as described by SQL Software.")
-   * @RequestParam(name="value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
+   *    (name="concept_id", nullable=true, requirements="([0-9])+", description="ID of the concept as described by SQL Software.")
+   *    (name="value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
    *
    * @return View
    */
-  public function postModifyFixedConceptsAction(ParamFetcher $paramFetcher)
+  public function postModifyFixedConceptsAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['concept_id'] = '([0-9])+';$mandatory['concept_id'] = false;
+    $regex['value'] = '([0-9])+(.[0-9]+)?';$mandatory['value'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
-    $info = $this->getFixedConceptsAction($paramFetcher->get('employee_id'))->getData();
+    $info = $this->getFixedConceptsAction($parameters['employee_id'])->getData();
 
     $unico['TIPOCON'] = 1;
-    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
-    $unico['CON_CODIGO'] = $paramFetcher->get('concept_id') ? $paramFetcher->get('concept_id') : $info['CON_CODIGO'];
-    $unico['COF_VALOR'] = $paramFetcher->get('value') ? $paramFetcher->get('value') : $info['COF_VALOR'];
+    $unico['EMP_CODIGO'] =  isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
+    $unico['CON_CODIGO'] = isset($parameters['concept_id']) ? $parameters['concept_id'] : $info['CON_CODIGO'];
+    $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
 
     $content[] = $unico;
     $parameters = array();
@@ -538,27 +675,41 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-   * @RequestParam(name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software")
-   * @RequestParam(name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software.")
-   * @RequestParam(name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software")
-   * @RequestParam(name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   *    (name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software")
+   *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software.")
+   *    (name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software")
+   *    (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
    *
    * @return View
    */
-  public function postAddEmployeeEntityAction(ParamFetcher $paramFetcher)
+  public function postAddEmployeeEntityAction(Request $request)
   {
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['entity_type_code'] = '([A-Za-z])+';$mandatory['entity_type_code'] = true;
+    $regex['coverage_code'] = '([0-9])+';$mandatory['coverage_code'] = true;
+    $regex['entity_code'] = '([0-9])+';$mandatory['entity_code'] = true;
+    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
 
     $unico['TIPOCON'] = 0;
-    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-    $unico['TENT_CODIGO'] = $paramFetcher->get('entity_type_code');
-    $unico['COB_CODIGO'] = $paramFetcher->get('coverage_code');
-    $unico['ENT_CODIGO'] = $paramFetcher->get('entity_code');
-    $unico['FECHA_INICIO'] = $paramFetcher->get('start_date');
+    $unico['EMP_CODIGO'] = $parameters['employee_id'];
+    $unico['TENT_CODIGO'] = $parameters['entity_type_code'];
+    $unico['COB_CODIGO'] = $parameters['coverage_code'];
+    $unico['ENT_CODIGO'] = $parameters['entity_code'];
+    $unico['FECHA_INICIO'] = $parameters['start_date'];
 
     $content[] = $unico;
     $parameters = array();
@@ -585,31 +736,44 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id")
-   * @RequestParam(name="entity_type_code", nullable=true, requirements="([A-Za-z])+", description="Code of the entity type as described by sql software")
-   * @RequestParam(name="coverage_code", nullable=true, requirements="([0-9])+", description="Code of the coverage as described by sql software.")
-   * @RequestParam(name="entity_code", nullable=true, requirements="([0-9])+", description="Code of the entity as described by sql software")
-   * @RequestParam(name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", description="Employee id")
+   *    (name="entity_type_code", nullable=true, requirements="([A-Za-z])+", description="Code of the entity type as described by sql software")
+   *    (name="coverage_code", nullable=true, requirements="([0-9])+", description="Code of the coverage as described by sql software.")
+   *    (name="entity_code", nullable=true, requirements="([0-9])+", description="Code of the entity as described by sql software")
+   *    (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
    *
    * @return View
    */
-  public function postModifyEmployeeEntityAction(ParamFetcher $paramFetcher)
+  public function postModifyEmployeeEntityAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['entity_type_code'] = '([A-Za-z])+';$mandatory['entity_type_code'] = false;
+    $regex['coverage_code'] = '([0-9])+';$mandatory['coverage_code'] = false;
+    $regex['entity_code'] = '([0-9])+';$mandatory['entity_code'] = false;
+    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
-    $info = $this->getEmployeeEntityAction($paramFetcher->get('employee_id'))->getData();
+    $info = $this->getEmployeeEntityAction($parameters['employee_id'])->getData();
 
 
-    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+    $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
 
     $unico['TIPOCON'] = 1;
-    $unico['EMP_CODIGO'] =   $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
-    $unico['TENT_CODIGO'] = $paramFetcher->get('entity_type_code') ? $paramFetcher->get('entity_type_code') : $info['TENT_CODIGO'];
-    $unico['COB_CODIGO'] = $paramFetcher->get('coverage_code') ? $paramFetcher->get('coverage_code') : $info['COB_CODIGO'];
-    $unico['ENT_CODIGO'] = $paramFetcher->get('entity_code') ? $paramFetcher->get('entity_code') : $info['ENT_CODIGO'];
-    $unico['FECHA_INICIO'] = $paramFetcher->get('start_date') ? $paramFetcher->get('start_date') : $info['FECHA_INICIO'];
+    $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
+    $unico['TENT_CODIGO'] = isset($parameters['entity_type_code']) ? $parameters['entity_type_code'] : $info['TENT_CODIGO'];
+    $unico['COB_CODIGO'] = isset($parameters['coverage_code']) ? $parameters['coverage_code'] : $info['COB_CODIGO'];
+    $unico['ENT_CODIGO'] = isset($parameters['entity_code']) ? $parameters['entity_code'] : $info['ENT_CODIGO'];
+    $unico['FECHA_INICIO'] = isset($parameters['start_date']) ? $parameters['start_date'] : $info['FECHA_INICIO'];
 
     $content[] = $unico;
     $parameters = array();
@@ -673,33 +837,49 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-   * @RequestParam(name="novelty_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
-   * @RequestParam(name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
-   * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-   * @RequestParam(name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
-   * @RequestParam(name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
-   * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-   * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   *    (name="novelty_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
+   *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+   *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
+   *    (name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
+   *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+   *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
    *
    * @return View
    */
-  public function postAddNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+  public function postAddNoveltyEmployeeAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['novelty_id'] = '([0-9])+';$mandatory['novelty_id'] = true;
+    $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = true;
+    $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';$mandatory['novelty_value'] = false;
+    $regex['liquidation_type_id'] = '([0-9])+';$mandatory['liquidation_type_id'] = true;
+    $regex['unity_numbers'] = '([0-9])+';$mandatory['unity_numbers'] = false;
+    $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = false;
+    $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
 
     $unico['TIPOCON'] = 0;
-    $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-    $unico['NOV_CONSEC'] = $paramFetcher->get('novelty_id');
-    $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id');
-    $unico['NOV_VALOR_LOCAL'] = $paramFetcher->get('novelty_value');
-    $unico['FLIQ_CODIGO'] = $paramFetcher->get('liquidation_type_id');
-    $unico['NOV_UNIDADES'] = $paramFetcher->get('unity_numbers');
-    $unico['NOV_FECHA_DESDE_CAUSA'] = $paramFetcher->get('novelty_start_date');
-    $unico['NOV_FECHA_HASTA_CAUSA'] = $paramFetcher->get('novelty_end_date');
+    $unico['EMP_CODIGO'] = $parameters['employee_id'];
+    $unico['NOV_CONSEC'] = $parameters['novelty_id'];
+    $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
+    $unico['NOV_VALOR_LOCAL'] = $parameters['novelty_value'];
+    $unico['FLIQ_CODIGO'] = $parameters['liquidation_type_id'];
+    $unico['NOV_UNIDADES'] = $parameters['unity_numbers'];
+    $unico['NOV_FECHA_DESDE_CAUSA'] = $parameters['novelty_start_date'];
+    $unico['NOV_FECHA_HASTA_CAUSA'] = $parameters['novelty_end_date'];
 
     $content[] = $unico;
     $parameters = array();
@@ -726,37 +906,53 @@ class PayrollRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-   * @RequestParam(name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
-   * @RequestParam(name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
-   * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-   * @RequestParam(name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
-   * @RequestParam(name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
-   * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-   * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+   *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+   *    (name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the novelty, created by us")
+   *    (name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+   *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
+   *    (name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
+   *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+   *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
    *
    * @return View
    */
-  public function postModifyNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+  public function postModifyNoveltyEmployeeAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+    $regex['novelty_id'] = '([0-9])+';$mandatory['novelty_id'] = false;
+    $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = false;
+    $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';$mandatory['novelty_value'] = false;
+    $regex['liquidation_type_id'] = '([0-9])+';$mandatory['liquidation_type_id'] = false;
+    $regex['unity_numbers'] = '([0-9])+';$mandatory['unity_numbers'] = false;
+    $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = false;
+    $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     $content = array();
     $unico = array();
-    $info = $this->getEmployeeNoveltyAction($paramFetcher->get('employee_id'))->getData();
+    $info = $this->getEmployeeNoveltyAction($parameters['employee_id'])->getData();
 
 
-    $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
+    $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
 
     $unico['TIPOCON'] = 1;
-    $unico['EMP_CODIGO'] =   $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
-    $unico['NOV_CONSEC'] = $paramFetcher->get('novelty_id') ? $paramFetcher->get('novelty_id') : $info['NOV_CONSEC'];
-    $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id') ? $paramFetcher->get('novelty_concept_id') : $info['CON_CODIGO'];
-    $unico['NOV_VALOR_LOCAL'] = $paramFetcher->get('novelty_value') ? $paramFetcher->get('novelty_value') : $info['NOV_VALOR_LOCAL'];
-    $unico['FLIQ_CODIGO'] = $paramFetcher->get('liquidation_type_id') ? $paramFetcher->get('liquidation_type_id') : $info['FLIQ_CODIGO'];
-    $unico['NOV_UNIDADES'] = $paramFetcher->get('unity_numbers') ? $paramFetcher->get('unity_numbers') : $info['NOV_UNIDADES'];
-    $unico['NOV_FECHA_DESDE_CAUSA'] = $paramFetcher->get('novelty_start_date') ? $paramFetcher->get('novelty_start_date') : $info['NOV_FECHA_DESDE_CAUSA'];
-    $unico['NOV_FECHA_HASTA_CAUSA'] = $paramFetcher->get('novelty_end_date') ? $paramFetcher->get('novelty_end_date') : $info['NOV_FECHA_HASTA_CAUSA'];
+    $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
+    $unico['NOV_CONSEC'] = isset($parameters['novelty_id']) ? $parameters['novelty_id'] : $info['NOV_CONSEC'];
+    $unico['CON_CODIGO'] = isset($parameters['novelty_concept_id']) ? $parameters['novelty_concept_id'] : $info['CON_CODIGO'];
+    $unico['NOV_VALOR_LOCAL'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : $info['NOV_VALOR_LOCAL'];
+    $unico['FLIQ_CODIGO'] = isset($parameters['liquidation_type_id']) ? $parameters['liquidation_type_id'] : $info['FLIQ_CODIGO'];
+    $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : $info['NOV_UNIDADES'];
+    $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : $info['NOV_FECHA_DESDE_CAUSA'];
+    $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : $info['NOV_FECHA_HASTA_CAUSA'];
 
     $content[] = $unico;
     $parameters = array();
@@ -822,27 +1018,40 @@ class PayrollRestController extends FOSRestController
      *   }
      * )
      *
-     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @param Request $request.
+     * Rest Parameters:
      *
-     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     * @RequestParam(name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
-     * @RequestParam(name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
-     * @RequestParam(name="novelty_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-     * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+     *    (name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
+     *    (name="novelty_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+     *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
      *
      * @return View
      */
-    public function postAddFixedNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+    public function postAddFixedNoveltyEmployeeAction(Request $request)
     {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = true;
+      $regex['novelty_value'] = '([0-9])+';$mandatory['novelty_value'] = true;
+      $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = true;
+      $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
       $content = array();
       $unico = array();
 
       $unico['TIPOCON'] = 0;
-      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-      $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id');
-      $unico['NOVF_VALOR'] = $paramFetcher->get('novelty_value');
-      $unico['NOVF_FECHA_INICIAL'] = $paramFetcher->get('novelty_start_date');
-      $unico['NOVF_FECHA_FINAL'] = $paramFetcher->get('novelty_end_date');
+      $unico['EMP_CODIGO'] = $parameters['employee_id'];
+      $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
+      $unico['NOVF_VALOR'] = $parameters['novelty_value'];
+      $unico['NOVF_FECHA_INICIAL'] = $parameters['novelty_start_date'];
+      $unico['NOVF_FECHA_FINAL'] = $parameters['novelty_end_date'];
 
       $content[] = $unico;
       $parameters = array();
@@ -869,32 +1078,45 @@ class PayrollRestController extends FOSRestController
      *   }
      * )
      *
-     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @param Request $request.
+     * Rest Parameters:
      *
-     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     * @RequestParam(name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Novelty id")
-     * @RequestParam(name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
-     * @RequestParam(name="novelty_value", nullable=true, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
-     * @RequestParam(name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-     * @RequestParam(name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="novelty_id", nullable=true, requirements="([0-9])+", strict=true, description="Novelty id")
+     *    (name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
+     *    (name="novelty_value", nullable=true, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
+     *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
+     *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
      *
      * @return View
      */
-    public function postModifyFixedNoveltyEmployeeAction(ParamFetcher $paramFetcher)
+    public function postModifyFixedNoveltyEmployeeAction(Request $request)
     {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = false;
+      $regex['novelty_value'] = '([0-9])+';$mandatory['novelty_value'] = false;
+      $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = false;
+      $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
       $content = array();
 
       $unico = array();
-      $info = $this->getEmployeeFixedNoveltyAction($paramFetcher->get('employee_id'))->getData();
+      $info = $this->getEmployeeFixedNoveltyAction($parameters['employee_id'])->getData();
 
-      $unico['EMP_CODIGO'] =  $paramFetcher->get('employee_id');
+      $unico['EMP_CODIGO'] = $parameters['employee_id'];
 
       $unico['TIPOCON'] = 1;
-      $unico['NOVF_CONSEC'] = $paramFetcher->get('novelty_id') ? $paramFetcher->get('novelty_id') : $info['NOVF_CONSEC'];
-      $unico['CON_CODIGO'] = $paramFetcher->get('novelty_concept_id') ? $paramFetcher->get('novelty_concept_id') : $info['CON_CODIGO'];
-      $unico['NOVF_VALOR'] = $paramFetcher->get('novelty_value') ? $paramFetcher->get('novelty_value') : $info['NOVF_VALOR'];
-      $unico['NOVF_FECHA_INICIAL'] = $paramFetcher->get('novelty_start_date') ? $paramFetcher->get('novelty_start_date') : $info['NOVF_FECHA_INICIAL'];
-      $unico['NOVF_FECHA_FINAL'] = $paramFetcher->get('novelty_end_date') ? $paramFetcher->get('novelty_end_date') : $info['NOVF_FECHA_FINAL'];
+      $unico['NOVF_CONSEC'] = isset($parameters['novelty_id']) ? $parameters['novelty_id'] : $info['NOVF_CONSEC'];
+      $unico['CON_CODIGO'] = isset($parameters['novelty_concept_id']) ? $parameters['novelty_concept_id'] : $info['CON_CODIGO'];
+      $unico['NOVF_VALOR'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : $info['NOVF_VALOR'];
+      $unico['NOVF_FECHA_INICIAL'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : $info['NOVF_FECHA_INICIAL'];
+      $unico['NOVF_FECHA_FINAL'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : $info['NOVF_FECHA_FINAL'];
 
       $content[] = $unico;
       $parameters = array();
@@ -958,31 +1180,46 @@ class PayrollRestController extends FOSRestController
      *   }
      * )
      *
-     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @param Request $request.
+     * Rest Parameters:
      *
-     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     * @RequestParam(name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
-     * @RequestParam(name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_units", nullable=false, requirements="([0-9])+", description="Number of units, can be hours or days")
-     * @RequestParam(name="liquidation_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_state", nullable=false, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     *    (name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     *    (name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     *    (name="absenteeism_units", nullable=false, requirements="([0-9])+", description="Number of units, can be hours or days")
+     *    (name="liquidation_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
+     *    (name="absenteeism_state", nullable=false, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
      *
      * @return View
      */
-    public function postAddAbsenteeismEmployeeAction(ParamFetcher $paramFetcher)
+    public function postAddAbsenteeismEmployeeAction(Request $request)
     {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['absenteeism_type_id'] = '([0-9])+';$mandatory['absenteeism_type_id'] = true;
+      $regex['absenteeism_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_start_date'] = true;
+      $regex['absenteeism_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_end_date'] = true;
+      $regex['absenteeism_units'] = '([0-9])+';$mandatory['absenteeism_units'] = true;
+      $regex['liquidation_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_state'] = true;
+      $regex['absenteeism_state'] = '(ACT|CAN)';$mandatory[''] = true;
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
       $content = array();
       $unico = array();
 
       $unico['TIPOCON'] = 0;
-      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id');
-      $unico['TAUS_CODIGO'] = $paramFetcher->get('absenteeism_type_id');
-      $unico['AUS_FECHA_INICIAL'] = $paramFetcher->get('absenteeism_start_date');
-      $unico['AUS_FECHA_FINAL'] = $paramFetcher->get('absenteeism_end_date');
-      $unico['AUS_UNIDADES'] = $paramFetcher->get('absenteeism_units');
-      $unico['AUS_FECHA_LIQ'] = $paramFetcher->get('liquidation_date');
-      $unico['AUS_ESTADO'] = $paramFetcher->get('absenteeism_state');
+      $unico['EMP_CODIGO'] = $parameters['employee_id'];
+      $unico['TAUS_CODIGO'] = $parameters['absenteeism_type_id'];
+      $unico['AUS_FECHA_INICIAL'] = $parameters['absenteeism_start_date'];
+      $unico['AUS_FECHA_FINAL'] = $parameters['absenteeism_end_date'];
+      $unico['AUS_UNIDADES'] = $parameters['absenteeism_units'];
+      $unico['AUS_FECHA_LIQ'] = $parameters['liquidation_date'];
+      $unico['AUS_ESTADO'] = $parameters['absenteeism_state'];
 
       $content[] = $unico;
       $parameters = array();
@@ -1009,34 +1246,49 @@ class PayrollRestController extends FOSRestController
      *   }
      * )
      *
-     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @param Request $request.
+     * Rest Parameters:
      *
-     * @RequestParam(name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     * @RequestParam(name="absenteeism_id", nullable=true, requirements="([0-9])+", description="Consecutive number of the absenteeism")
-     * @RequestParam(name="absenteeism_type_id", nullable=true, requirements="([0-9])+", description="Code of the type of absenteeism as provided by SQL")
-     * @RequestParam(name="absenteeism_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism starts(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism ends(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_units", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
-     * @RequestParam(name="liquidation_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
-     * @RequestParam(name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", description="State of the absenteeism ACT active or CAN cancelled")
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="absenteeism_id", nullable=true, requirements="([0-9])+", description="Consecutive number of the absenteeism")
+     *    (name="absenteeism_type_id", nullable=true, requirements="([0-9])+", description="Code of the type of absenteeism as provided by SQL")
+     *    (name="absenteeism_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     *    (name="absenteeism_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     *    (name="absenteeism_units", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
+     *    (name="liquidation_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day when the absenteeism is effective(format: DD-MM-YYYY)")
+     *    (name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", description="State of the absenteeism ACT active or CAN cancelled")
      *
      * @return View
      */
-    public function postModifyAbsenteeismEmployeeAction(ParamFetcher $paramFetcher)
+    public function postModifyAbsenteeismEmployeeAction(Request $request)
     {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['absenteeism_type_id'] = '([0-9])+';$mandatory['absenteeism_type_id'] = false;
+      $regex['absenteeism_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_start_date'] = false;
+      $regex['absenteeism_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_end_date'] = false;
+      $regex['absenteeism_units'] = '([0-9])+';$mandatory['absenteeism_units'] = false;
+      $regex['liquidation_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['absenteeism_state'] = false;
+      $regex['absenteeism_state'] = '(ACT|CAN)';$mandatory[''] = false;
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
       $content = array();
       $unico = array();
 
-      $info = $this->getAbsenteeismEmployeeAction($paramFetcher->get('employee_id'))->getData();
+      $info = $this->getAbsenteeismEmployeeAction($parameters['employee_id'])->getData();
 
       $unico['TIPOCON'] = 0;
-      $unico['EMP_CODIGO'] = $paramFetcher->get('employee_id') ? $paramFetcher->get('employee_id') : $info['EMP_CODIGO'];
-      $unico['TAUS_CODIGO'] = $paramFetcher->get('absenteeism_type_id') ? $paramFetcher->get('absenteeism_type_id') : $info['TAUS_CODIGO'];
-      $unico['AUS_FECHA_INICIAL'] = $paramFetcher->get('absenteeism_start_date') ? $paramFetcher->get('absenteeism_start_date') : $info['AUS_FECHA_INICIAL'];
-      $unico['AUS_FECHA_FINAL'] = $paramFetcher->get('absenteeism_end_date') ? $paramFetcher->get('absenteeism_end_date') : $info['AUS_FECHA_FINAL'];
-      $unico['AUS_UNIDADES'] = $paramFetcher->get('absenteeism_units') ? $paramFetcher->get('absenteeism_units') : $info['AUS_UNIDADES'];
-      $unico['AUS_FECHA_LIQ'] = $paramFetcher->get('liquidation_date') ? $paramFetcher->get('liquidation_date') : $info['AUS_FECHA_LIQ'];
-      $unico['AUS_ESTADO'] = $paramFetcher->get('absenteeism_state') ? $paramFetcher->get('absenteeism_state') : $info['AUS_ESTADO'];
+      $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
+      $unico['TAUS_CODIGO'] = isset($parameters['absenteeism_type_id']) ? $parameters['absenteeism_type_id'] : $info['TAUS_CODIGO'];
+      $unico['AUS_FECHA_INICIAL'] = isset($parameters['absenteeism_start_date']) ? $parameters['absenteeism_start_date'] : $info['AUS_FECHA_INICIAL'];
+      $unico['AUS_FECHA_FINAL'] = isset($parameters['absenteeism_end_date']) ? $parameters['absenteeism_end_date'] : $info['AUS_FECHA_FINAL'];
+      $unico['AUS_UNIDADES'] = isset($parameters['absenteeism_units']) ? $parameters['absenteeism_units'] : $info['AUS_UNIDADES'];
+      $unico['AUS_FECHA_LIQ'] = isset($parameters['liquidation_date']) ? $parameters['liquidation_date'] : $info['AUS_FECHA_LIQ'];
+      $unico['AUS_ESTADO'] = isset($parameters['absenteeism_state']) ? $parameters['absenteeism_state'] : $info['AUS_ESTADO'];
 
       $content[] = $unico;
       $parameters = array();

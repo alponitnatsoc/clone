@@ -32,7 +32,7 @@ class EmployerRegistration extends AbstractType
 
                     return $disabled ? ['disabled' => 'disabled'] : [];
                 },
-                'label' => 'Usted Es*',
+                'label' => 'Usted es*',
                 'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))

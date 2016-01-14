@@ -8,6 +8,7 @@ class AppKernel extends Kernel
     public function __construct($environment, $debug)
     {
         date_default_timezone_set('America/Bogota');
+        setlocale(LC_ALL, "ES_ES");
         parent::__construct($environment, $debug);
     }
     public function registerBundles()
