@@ -17,14 +17,14 @@
 				<div>
 					<input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
 				</div>
-		  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="{{ 'security.login.username'|trans }}" class="form-control input-md" value="{{ last_username }}" />
+		  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="{{ 'security.login.username'|trans }}" class="form-control input-md" value="{{ last_username }}" style="margin-bottom: 5px;"/>
+		  		<input id="password" name="_password" type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control input-md" required="required" />
 		  		<div class="spacing">
                     <input type="checkbox" name="_remember_me" id="remember_me" value="on" />
-                    <small>{{ 'security.login.remember_me'|trans }}</small>
+                    <small>Recordar mi usuario Symplifica.com</small>
                 </div>
-		  		<input id="password" name="_password" type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control input-md" required="required" />
-		  		<div class="spacing"><a href="#forgotModal" data-toggle="modal"><small> Olvidó su contraseña?</small></a><br/></div>
-		  		<button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right">{{ 'security.login.submit'|trans }}</button>
+		  		<button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right" style="width: 100%">{{ 'security.login.submit'|trans }}</button>
+		  		<div class="spacing"><a href="#forgotModal" data-toggle="modal" sty><small> Olvidó su contraseña?</small></a><br/></div>
 			</fieldset>
 		</form>
 	</div>

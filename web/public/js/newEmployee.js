@@ -50,7 +50,41 @@ function startEmployee(){
     $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
     });
+    //dinamic loading contract type and commitment
+    //first hide all
+    $(".days").each(function(){
+        $(this).hide();
+    });
+    $(".definite").each(function(){
+        $(this).hide();
+    });
 
+    $("#register_employee_employeeHasEmployers_timeCommitment").change(function(){
+        var selectedVal=$(this).find("option:selected").text();
+        if(selectedVal=="Trabajo por días"){
+            $(".days").each(function(){
+                $(this).show();
+            });
+        }else{
+            $(".days").each(function(){
+                $(this).hide();
+            });
+        }
+
+    });
+    $("#register_employee_employeeHasEmployers_contractType").change(function(){
+        var selectedVal=$(this).find("option:selected").text();
+        if(selectedVal=="Término fijo"){
+            $(".definite").each(function(){
+                $(this).show();
+            });
+        }else{
+            $(".definite").each(function(){
+                $(this).hide();
+            });
+        }
+
+    });
     //funcion que agrega un listener a cada department
     addListeners();
 

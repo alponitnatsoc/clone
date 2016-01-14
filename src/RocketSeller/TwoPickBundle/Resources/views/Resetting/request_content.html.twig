@@ -5,10 +5,9 @@
         {% if invalid_username is defined %}
             <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
         {% endif %}
-        <label for="username">{{ 'resetting.request.username'|trans }} o email</label>
-        <input type="text" id="username" name="username" required="required" />
+        <input type="text" id="username" name="username" required="required" placeholder="Email" style="width: 100%;"/>
     </div>
     <div>
-        <input type="submit" value="{{ 'resetting.request.submit'|trans }}" />
+        <button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right" style="width: 100%">Recuperar contraseña</button>
     </div>
 </form>

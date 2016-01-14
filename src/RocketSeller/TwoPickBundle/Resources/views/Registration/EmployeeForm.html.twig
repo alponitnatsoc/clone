@@ -110,11 +110,17 @@
 			</div>
 			<h2>1. Datos básicos del contrato</h2>
 			{{ form_row(form.employeeHasEmployers.startDate) }}
-			{{ form_row(form.employeeHasEmployers.endDate) }}
-			{{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
-			{{ form_row(form.employeeHasEmployers.workTimeStart) }}
+			<div class="definite">
+				{{ form_row(form.employeeHasEmployers.endDate) }}
+			</div>
+			<div class="days">
+				{{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
+			</div>
+			{{ form_row(form.employeeHasEmployers.workTimeStart) }} A
 			{{ form_row(form.employeeHasEmployers.workTimeEnd) }}
-			{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}
+			<div class="days">
+				{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}
+			</div>
 			<div class="col-sm-12 col-xs-12">
 				<div class="col-sm-8 col-xs-12">
 					{{ form_row(form.employeeHasEmployers.position) }}
