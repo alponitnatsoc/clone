@@ -5,10 +5,10 @@
     <div id='registrationFormContainer' class=''>
         {{ form_start(form) }}
 
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#employeeEntities">employee Entities</a></li>
-            <li><a data-toggle="tab" href="#employerEntities">employer Entities</a></li>
-            <li><a data-toggle="tab" href="#docsMatrix">Matriz de Docs</a></li>
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a data-toggle="tab" href="#employeeEntities">Entidades de tus empleados</a></li>
+            <li><a data-toggle="tab" href="#employerEntities">Tus Entidades</a></li>
+            <li><a data-toggle="tab" href="#docsMatrix">Documentos requeridos</a></li>
         </ul>
 
         <div class="tab-content">
@@ -18,40 +18,45 @@
                 Para finalizar el proceso es necesario confirmar la información de afiliación a Seguridad Social de sus empleados. Los campos marcados con * son obligatorios.
 
                 Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
-                <table>
-                    <tr>
-                        <th>
-                            Nombre
-                        </th>
-                        <th>
-                            Salud
-                        </th>
-                        <th>
-                            Pensión
-                        </th>
-                        <th>
-                            ¿Registrará beneficiarios?
-                        </th>
-                    </tr>
-                    {% for employee in form.employerHasEmployees %}
-                        <tr>
-                            <td>
-                                {{ form_row(employee.nameEmployee) }}
-                            </td>
-                            <td>
-                                {{ form_row(employee.wealth) }}
-                            </td>
-                            <td>
-                                {{ form_row(employee.pension) }}
-                            </td>
-                            <td>
-                                {{ form_row(employee.beneficiaries) }}
-                                {{ form_row(employee.idEmployerHasEmployee) }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-
-                </table>
+                <div>        
+                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-3 col-xs-12">
+                        <img src="/img/1-iconStep.png">
+                        <span>Nombre</span>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <img src="/img/2-iconStep.png">
+                        <span>Salud</span>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <img src="/img/3-iconStep.png">
+                        <span>Pensión</span>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <img src="/img/4-iconStep.png">
+                        <span>¿Registrará beneficiarios?</span>
+                    </div>
+                </div>
+                {% for employee in form.employerHasEmployees %}
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(employee.nameEmployee) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(employee.wealth) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(employee.pension) }}
+                        </div>
+                        <div class="col-sm-3 col-xs-12">
+                            {{ form_row(employee.beneficiaries) }}
+                            {{ form_row(employee.idEmployerHasEmployee) }}
+                        </div>
+                    </div>
+                {% endfor %}  
+            </div>
+            
+            
                 <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
             </div>
