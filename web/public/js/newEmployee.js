@@ -280,7 +280,7 @@ function startEmployee(){
     $('#btn-3').click(function(e){
         e.preventDefault();
         var form =$("form");
-        var idsBenef=[],amountBenef=[],periodicityBenef=[];
+        var idsBenef=[],amountBenef=[],periodicityBenef=[], weekWorkableDaysIds=[];
         var flagValid=true;
         var i =0;
         $(form).find("ul.benefits select[name*='benefitType']").each(function(){
@@ -289,6 +289,10 @@ function startEmployee(){
                 return;
             }
             idsBenef[i++]=$(this).val();
+        });
+        var i =0;
+        $(form).find("[name='register_employee[employeeHasEmployers][weekWorkableDays][]']:checked").each(function(){
+            weekWorkableDaysIds[i++]=$(this).val();
         });
         var i =0;
         $(form).find("ul.benefits input[name*='amount']").each(function(){
@@ -327,9 +331,21 @@ function startEmployee(){
                 amountBenefits:     amountBenef,
                 periodicityBenefits:periodicityBenef,
                 idWorkplace:        $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']").val(),
-                transportAid:       $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']").val(),
+                transportAid:       $(form).find("select[name='register_employee[employeeHasEmployers][transportAid]']").val(),
                 benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
-                employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
+                employeeId:         $(form).find("input[name='register_employee[idEmployee]']").val(),
+                startDate:          {   'year':$(form).find("select[name='register_employee[employeeHasEmployers][startDate][year]']").val(),
+                                        'month':$(form).find("select[name='register_employee[employeeHasEmployers][startDate][month]']").val(),
+                                        'day':$(form).find("select[name='register_employee[employeeHasEmployers][startDate][day]']").val() },
+                endDate:            {   'year':$(form).find("select[name='register_employee[employeeHasEmployers][endDate][year]']").val(),
+                                        'month':$(form).find("select[name='register_employee[employeeHasEmployers][endDate][month]']").val(),
+                                        'day':$(form).find("select[name='register_employee[employeeHasEmployers][endDate][day]']").val() },
+                workableDaysMonth:  $(form).find("select[name='register_employee[employeeHasEmployers][workableDaysMonth]']").val(),
+                workTimeStart:      {   'hour':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][hour]']").val(),
+                                        'minute':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][minute]']").val()},
+                workTimeEnd:        {   'hour':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][hour]']").val(),
+                                        'minute':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
+                weekWorkableDays:   weekWorkableDaysIds,
 
             }
         }).done(function(data) {
