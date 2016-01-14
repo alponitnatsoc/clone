@@ -1,11 +1,11 @@
 {% extends "::base.html.twig" %}
 {% block body %}
-    <div class="row-fluid block-Intro-green" id="msgSinVerificar">
+    <div class="row-fluid block-Intro-green" id="msgSinVerificar1">
         <div class="col-sm-2 col-xs-12 boxIntro-Heading"><img src="/img/cross.png"></div>
         <div class="col-sm-3 hidden-xs"></div>
         <div class="col-sm-9 col-xs-12 up-Intro">No hemos recibido confirmaci&oacute;n de su correo electr&oacute;nico</div>
     </div>
-    <div class="container">
+    <div class="container" id="msgSinVerificar2">
         <div class="col-sm-8 col-sm-offset-3 contenMessage">
             <p>Por favor chequee a su casilla de correo electr&oacute;nico, ingrese almensaje que le </p>
             <p>enviamos el d&iacute;a {{ dateCreated }} y haga clic en el v&iacute;nculo que se encuentra all&iacute;. </p>
@@ -14,7 +14,7 @@
             <p>Si no recibi&oacute; el correo haga clic en el siguiente bot&oacute;n:</p>
             <a class="btn btn-default loading" data-loading-text="Cargando..." data-complete-text="El correo fue enviado" onclick="javascript:sendConfirmationEmail($(this))">Reenviar correo de confirmaci&oacute;n ></a>
         </div>
-    </div>  
+    </div>
     <div class="row" id="msgEnviado" style="display:none">
         <div class="row-fluid block-Intro-green">
             <div class="col-sm-2 col-xs-12 boxIntro-Heading"><img src="/img/cross.png"></div>
@@ -45,7 +45,8 @@ function sendConfirmationEmail(event) {
         data: {id: {{ id }}},
         success: function(data) {
             $btn.button('complete');
-            $("#msgSinVerificar").hide();
+            $("#msgSinVerificar1").hide();
+            $("#msgSinVerificar2").hide();
             $("#msgEnviado").show();
         }
     });
