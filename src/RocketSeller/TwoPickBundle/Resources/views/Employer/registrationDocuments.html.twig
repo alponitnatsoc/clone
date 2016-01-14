@@ -1,0 +1,60 @@
+{% block content %}
+<table class="col-md-8">
+ <thead>
+  <tr>
+	<th>Nombre</th>
+	<th>Cedula</th>
+   	<th>Rut</th>
+	<th>Contrato</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+     <td>{{ employer.names }} {{ employer.lastName1}}</td>
+     <td>
+     	{% if documents[0] in documentsTypeByEmployer %}
+				Ya lo tienes
+		{% else %}
+				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+		{% endif %}
+     </td>
+     <td>
+     	{% if documents[1] in documentsTypeByEmployer %}
+				Ya lo tienes
+		{% else %}
+				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
+		{% endif %}
+     </td>
+     <td>No necesitas</td>     
+  </tr>
+{% for i in 0..employees|length  %}
+	<tr>
+		<td>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</td>
+		<td>
+			{% if documents[0] in documentsTypeByEmployee[i] %}
+				Ya lo tienes
+			{% else %}
+				<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+			{% endif %}			
+		</td>
+		<td>No lo necesitas</td>
+		<td>
+			{% if documents[2] in documentsTypeByEmployee[i] %}
+				Ya lo tienes
+			{% else %}
+				<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+			{% endif %}			
+		</td>
+	</tr>
+{% endfor %}
+ </tbody>
+</table>
+<table>
+	<thead>
+		<tr><th>Carta</th></tr>
+	</thead>
+	<tbody>
+		<tr><td>algo</td></tr>
+	</tbody>
+</table>
+{% endblock %}

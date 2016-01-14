@@ -19,6 +19,41 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+    public function registrationDocumentsAction(){
+        $user = $this->getUser();
+        $documents = array();
+        $employees = array();
+        $em = $this->getDoctrine()->getManager();
+        $person = $this->getUser()->getPersonPerson();
+        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')
+              ->findByPersonPerson($person);
+        $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                ->findByEmployerEmployer($employer);                       
+        foreach ($employerHasEmployees as $employerHasEmployee) {
+            array_push($employees,$employerHasEmployee->getEmployeeEmployee());
+        }
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->find(1)); 
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->find(2));
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->find(3));
+        $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
+        $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);               
+        return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig',array('employer'=>$person , 'documents'=>$documents , 'employees'=>$employees ,'documentsTypeByEmployee'=>$documentsTypeByEmployee , 'documentsTypeByEmployer'=> $documentsTypeByEmployer));
+    }
+    public function documentsTypeByEmployer($person)
+    {
+        $documentsTypeByEmployer = array();
+        $docs = array();
+        $em = $this->getDoctrine()->getManager();
+        $docs = $em->getRepository('RocketSellerTwoPickBundle:Document')
+              ->findByPersonPerson($person);
+        foreach ($docs as $doc) {
+            array_push($documentsTypeByEmployer,$doc->getDocumentTypeDocumentType());
+        }
+        return $documentsTypeByEmployer;
+    }
     public function certificateAction(Request $request)
     {
     	if ($request->getMethod() == 'POST') {    		

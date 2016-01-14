@@ -34,9 +34,9 @@
 jQuery(document).ready(function() {
     var $collectionHolderB;
     var $collectionHolderW;
-    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
+    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Agregar beneficiario</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
-    var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Add workplace</a>');
+    var $addWorkplaceLink = $('<a href="#" class="add_workplace_link">Agregar lugar de trabajo</a>');
     var $newLinkLink = $('<li></li>').append($addWorkplaceLink);
     // Get the ul that holds the collection of benefits
 	$collectionHolderB = $('ul.benefits');
@@ -85,7 +85,7 @@ function addWorkplaceForm($collectionHolderB, $newLinkLink) {
     $newLinkLink.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">delete this tag</a>');
+    var $removeFormA = $('<a href="#">Borrar este campo</a>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
