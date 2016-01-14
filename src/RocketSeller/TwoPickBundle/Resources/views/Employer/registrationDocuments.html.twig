@@ -27,32 +27,29 @@
      </td>
      <td>No necesitas</td>     
   </tr>
-  {% if not employees|length > 1 %}
-  	{% for i in 0..employees|length  %}	
+  
+  {% if employees|length < 2 %}
 		<tr>
-			{{ i }}
-			<td>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</td>
+			<td>{{ employees[0].personPerson.names }} {{ employees[0].personPerson.lastName1 }}</td>
 			<td>
-				{% if documents[0] in documentsTypeByEmployee[i] %}
+				{% if documents[0] in documentsTypeByEmployee[0] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+					<a href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 			<td>No lo necesitas</td>
 			<td>
-				{% if documents[2] in documentsTypeByEmployee[i] %}
+				{% if documents[2] in documentsTypeByEmployee[0] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+					<a href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 		</tr>
-		{% endfor %}
   {% else %}
   	{% for i in 0..employees|length-1  %}	
 		<tr>
-			{{ i }}
 			<td>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</td>
 			<td>
 				{% if documents[0] in documentsTypeByEmployee[i] %}
