@@ -47,6 +47,8 @@ class PersonExtraData extends AbstractType
                 'label' => 'Lugar de expedición de documento de identidad'
             ))
             ->add('birthCountry', 'entity', array(
+                'label' => 'País de Nacimiento',
+                'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Country',
                 'placeholder' => '',
                 'property' => 'name',
