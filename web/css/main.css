@@ -924,6 +924,41 @@ ul.phones li {
   .blockStep {
     text-align: left;
   }
+  .bodyMessage {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .bodyMessage .graficBlock {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .bodyMessage .graficBlock .AR1,
+  .bodyMessage .graficBlock .AR2,
+  .bodyMessage .graficBlock .AR3 {
+    width: 85%;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .bodyMessage .graficBlock .AR4 {
+    width: 100%;
+  }
+  .bodyMessage .graficBlock span {
+    font-size: 14px;
+  }
+  .bodyMessage .graficBlock b {
+    margin-right: 5px;
+  }
+  .blockLeftBefore span.txtAU,
+  .blockRightAfter span.txtAU {
+    height: auto;
+  }
+  .bodyMessage ul {
+    text-align: center;
+  }
+  .bodyMessage ul li {
+    width: 48%;
+    margin-bottom: 15px;
+  }
 }
 @media (max-width: 768px) {
   .block-Intro-green {
