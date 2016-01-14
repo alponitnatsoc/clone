@@ -749,23 +749,43 @@ class EmployeeRestController extends FOSRestController
                     return $view;
                 }
                 $realEmployee=$realEmployerHasEmployee->getEmployeeEmployee();
-                $employeeHasEntityPens=new EmployeeHasEntity();
-                $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
-                $employeeHasEntityPens->setEntityEntity($tempPens);
-                $realEmployee->addEntity($employeeHasEntityPens);
-                $employeeHasEntityWealth=new EmployeeHasEntity();
-                $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
-                $employeeHasEntityWealth->setEntityEntity($tempWealth);
-                $realEmployee->addEntity($employeeHasEntityPens);
-                $realEmployee->setAskBeneficiary(($beneficiaries[$i])? true : false);
-
+                $realEmployeeEnt=$realEmployee->getEntities();
                 $em = $this->getDoctrine()->getManager();
+                if($realEmployeeEnt->count()==0){
+                    $employeeHasEntityPens=new EmployeeHasEntity();
+                    $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
+                    $employeeHasEntityPens->setEntityEntity($tempPens);
+                    $realEmployee->addEntity($employeeHasEntityPens);
+                    $employeeHasEntityWealth=new EmployeeHasEntity();
+                    $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
+                    $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                    $realEmployee->addEntity($employeeHasEntityPens);
+                    $realEmployee->setAskBeneficiary(($beneficiaries[$i])? true : false);
 
-                $em->persist($employeeHasEntityPens);
-                $em->persist($employeeHasEntityWealth);
-                $em->persist($realEmployee);
-                $em->flush();
+
+
+                    $em->persist($employeeHasEntityPens);
+                    $em->persist($employeeHasEntityWealth);
+                    $em->persist($realEmployee);
+                    $em->flush();
+                }else{
+                    /** @var EmployeeHasEntity $rEE */
+                    foreach ($realEmployeeEnt as $rEE) {
+                        if($rEE->getEntityEntity()->getEntityTypeEntityType()=="EPS"){
+                            $rEE->setEntityEntity($tempWealth);
+                            $em->persist($rEE);
+                        }
+                        if($rEE->getEntityEntity()->getEntityTypeEntityType()=="Pension"){
+                            $rEE->setEntityEntity($tempPens);
+                            $em->persist($rEE);
+                        }
+                    }
+                    $em->persist($realEmployee);
+                    $em->flush();
+                }
                 $flag=true;
+
+
             }else{
                 $view = View::create();
                 $view->setData(array('error'=>array('employee'=>'do not contain')))->setStatusCode(401);
@@ -824,17 +844,34 @@ class EmployeeRestController extends FOSRestController
         if($realSeverances==null||$realArl==null){
             return;
         }
-        $realArlHasEmployer=new EmployerHasEntity();
-        $realArlHasEmployer->setEntityEntity($realArl);
-        $realArlHasEmployer->setEmployerEmployer($realEmployer);
-        $realEmployer->addEntity($realArlHasEmployer);
-        $realSevereancesHasEmployer=new EmployerHasEntity();
-        $realSevereancesHasEmployer->setEntityEntity($realSeverances);
-        $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
-        $realEmployer->addEntity($realSevereancesHasEmployer);
+        $realEmployerEnt=$realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
-        $em->persist($realEmployer);
-        $em->flush();
+
+        if($realEmployerEnt->count()==0){
+            $realArlHasEmployer=new EmployerHasEntity();
+            $realArlHasEmployer->setEntityEntity($realArl);
+            $realArlHasEmployer->setEmployerEmployer($realEmployer);
+            $realEmployer->addEntity($realArlHasEmployer);
+            $realSevereancesHasEmployer=new EmployerHasEntity();
+            $realSevereancesHasEmployer->setEntityEntity($realSeverances);
+            $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
+            $realEmployer->addEntity($realSevereancesHasEmployer);
+            $em->persist($realEmployer);
+            $em->flush();
+        }else{
+            /** @var EmployerHasEntity $rEE */
+            foreach ($realEmployerEnt as $rEE) {
+                if($rEE->getEntityEntity()->getEntityTypeEntityType()=="ARL"){
+                    $rEE->setEntityEntity($realArl);
+                }
+                if($rEE->getEntityEntity()->getEntityTypeEntityType()=="Cesantias"){
+                    $rEE->setEntityEntity($realSeverances);
+                }
+            }
+            $em->persist($realEmployer);
+            $em->flush();
+        }
+
         $view = View::create();
         $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
         return $view;

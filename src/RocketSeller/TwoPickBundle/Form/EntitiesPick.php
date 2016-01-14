@@ -42,7 +42,7 @@ class EntitiesPick extends AbstractType
             ->add('beneficiaries', 'choice', array(
                 'choices' => array(
                     1 => 'Si',
-                    0 => 'No',
+                    -1 => 'No',
                 ),
                 'multiple' => false,
                 'expanded' => true,
