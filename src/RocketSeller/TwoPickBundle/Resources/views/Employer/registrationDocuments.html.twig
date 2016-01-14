@@ -11,16 +11,40 @@
  <tbody>
   <tr>
      <td>{{ employer.names }} {{ employer.lastName1}}</td>
-     <td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
-     <td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+     <td>
+     	{% if documents[0] in documentsTypeByEmployer %}
+				Ya lo tienes
+		{% else %}
+				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+		{% endif %}
+     </td>
+     <td>
+     	{% if documents[1] in documentsTypeByEmployer %}
+				Ya lo tienes
+		{% else %}
+				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
+		{% endif %}
+     </td>
      <td>No necesitas</td>     
   </tr>
-{% for employerHasEmployee in employerHasEmployees %}
+{% for i in 0..employees|length-1  %}
 	<tr>
-		<td>{{ employerHasEmployee.employeeEmployee.personPerson.names }} {{ employerHasEmployee.employeeEmployee.personPerson.lastName1 }}</td>
-		<td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+		<td>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</td>
+		<td>
+			{% if documents[0] in documentsTypeByEmployee[i] %}
+				Ya lo tienes
+			{% else %}
+				<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+			{% endif %}			
+		</td>
 		<td>No lo necesitas</td>
-		<td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+		<td>
+			{% if documents[2] in documentsTypeByEmployee[i] %}
+				Ya lo tienes
+			{% else %}
+				<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+			{% endif %}			
+		</td>
 	</tr>
 {% endfor %}
  </tbody>
