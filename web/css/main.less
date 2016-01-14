@@ -911,6 +911,20 @@
          }
       }
 }
+
+.lista_listo {
+    list-style-type: none;
+    padding: 0;
+    li {
+        &:before {
+            content: '\25a0';
+            font-size: 20px;
+            color: #00cccc;
+            margin-right: 10px;
+            line-height: 21px;
+        }
+    }
+}
 @media (max-width: @screen-sm-max) {
    .block-Intro-green {
       height: 250px;
