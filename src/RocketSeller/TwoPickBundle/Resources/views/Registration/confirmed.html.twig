@@ -93,20 +93,40 @@
             <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE ></a></p>
         </div>
 <div class="page-header" id="info2" style="display:none">
-    <div class="col-sm-12 col-xs-12 block-Intro">
-        <h3 class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</h3>
-        <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:...</p>
-        <p>Para facilitar el proceso con los siguientes documentos:</p>
-        <ul>
-            <li><span>Documento de identidad del empleador</span></li>
-            <li><span>RUT (Registro &Uacute;nico Tributario) del empleador</span></li>
-            <li><span>Documento de identidad del(los) empleado(s)</span></li>
-            <li><span>Datos de contacto del(los) empelado(s)</span></li>
-            <li><span>Contrato con el(los) empleado(s). <small>Si no tiene, con nuestra herramienta puede generarlo</small></span></li>
-        </ul>
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-3 contenMessage">
+            <div class="" id="info1">
+                <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 bodyMessage">
+            <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:</p>
+            <div class="col-sm-12 col-xs-12 graficBlock">
+                <div class="col-sm-4 col-xs-12 AR1">
+                    <span><b>1</b>Ingresar su información como empleador</span>
+                </div>
+                <div class="col-sm-4 col-xs-12 AR2">
+                    <span><b>2</b>Ingresar la información de sus empleados</span>
+                </div>
+                <div class="col-sm-4 col-xs-12 AR3">
+                    <span><b>3</b>Ingresar la información de afiliación a Seguridad Social</span>
+                </div>
+                <div class="col-sm-12 col-xs-12 AR4 center">
+                    <strong>¿No está afiliado?</strong> <em>¡Tranquilo! Nosotros le ayudamos</em>
+                </div>
+            </div>
+            <p>Para facilitar el proceso con los siguientes documentos:</p>
+            <ul>
+                <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del empleador</span></li>
+                <li><img src="/img/8-iconExit-Step.png"><span>RUT (Registro &Uacute;nico Tributario) del empleador</span></li>
+                <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del(los) empleado(s)</span></li>
+                <li><img src="/img/9-iconExit-Step.png"><span>Datos de contacto del(los) empelado(s)</span></li>
+                <li><img src="/img/10-iconExit-Step.png"><span>Contrato con el(los) empleado(s). </br><small>Si no tiene, con nuestra herramienta puede generarlo</small></span></li>
+            </ul>
+        </div>
     </div>
     <div class="col-sm-12 col-xs-12 center">
-        <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO</a>
+        <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO ></a>
     </div>
 </div>
 {% endblock body %}

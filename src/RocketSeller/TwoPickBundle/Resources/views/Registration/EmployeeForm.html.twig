@@ -108,18 +108,27 @@
 					{{ form_row(form.employeeHasEmployers.timeCommitment) }}
 				</div>
 			</div>
-			<h2>1. Datos básicos del contrato</h2>
-			{{ form_row(form.employeeHasEmployers.startDate) }}
-			<div class="definite">
-				{{ form_row(form.employeeHasEmployers.endDate) }}
-			</div>
-			<div class="days">
-				{{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
-			</div>
-			{{ form_row(form.employeeHasEmployers.workTimeStart) }} A
-			{{ form_row(form.employeeHasEmployers.workTimeEnd) }}
-			<div class="days">
-				{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}
+			<div class="col-xs-12">
+				<h2>1. Datos básicos del contrato</h2>
+				<div class="row">
+					<div class="col-xs-6">
+						{{ form_row(form.employeeHasEmployers.startDate) }}
+					</div>
+					<div class="col-xs-6 definite">
+						{{ form_row(form.employeeHasEmployers.endDate) }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3 days">
+						{{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
+					</div>
+					<div class="col-sm-9 worktime">
+						{{ form_row(form.employeeHasEmployers.workTimeStart) }} 
+						<div style="line-height: 100px;">A</div>
+						<div class="worktimeEnd">{{ form_row(form.employeeHasEmployers.workTimeEnd) }}</div>
+					</div>
+					<div class="col-xs-12 days">{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}</div>
+				</div>
 			</div>
 			<div class="col-sm-12 col-xs-12">
 				<div class="col-sm-8 col-xs-12">
