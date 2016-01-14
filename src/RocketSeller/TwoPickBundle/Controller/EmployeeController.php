@@ -208,17 +208,23 @@ class EmployeeController extends Controller
         $user = $this->getUser();
         $employeesData = $registerState = null;
         
-        if ($user && $user->getPersonPerson()->getEmployer()) {
-            $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-            $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
-             return $this->render(
-                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                    'employees' => $employeesData,
-                    'user' => $user,
-                    'registerState' => $registerState
-            ));
+        if ($user) {
+            if ($user->getPersonPerson()->getEmployer()) {
+                $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
+                return $this->render(
+                            'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                        'employees' => $employeesData,
+                        'user' => $user,
+                        'registerState' => $registerState
+                ));
+            }else{
+                return $this->redirectToRoute('ajax');
+            }            
+        }else{
+            throw $this->createAccessDeniedException();
         }
-        throw $this->createAccessDeniedException();
+       
         
        
     }
