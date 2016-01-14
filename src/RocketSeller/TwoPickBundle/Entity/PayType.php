@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PayType
 {
+
     /**
      * @var integer
      *
@@ -25,6 +26,16 @@ class PayType
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $descripcion;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $image;
 
     /**
      * @ORM\OneToMany(targetEntity="PayMethodFields", mappedBy="payTypePayType", cascade={"persist"})
@@ -64,6 +75,7 @@ class PayType
     {
         return $this->name;
     }
+
     /**
      * Constructor
      */
@@ -105,4 +117,53 @@ class PayType
     {
         return $this->payMethodFields;
     }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return PayType
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return PayType
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
 }

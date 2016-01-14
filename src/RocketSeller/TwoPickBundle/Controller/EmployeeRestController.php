@@ -28,12 +28,14 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\Frequency;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
@@ -59,7 +61,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
-     * @RequestParam(name="frequency", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="frequencyId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
@@ -100,6 +102,7 @@ class EmployeeRestController extends FOSRestController
         $bankRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
         $accountTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
         $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        $frequencyRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
 
 
         //Now for the payType and Pay Method
@@ -108,8 +111,6 @@ class EmployeeRestController extends FOSRestController
         $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
         //TODO check if vaild??
         $payMethod->setCellPhone($paramFetcher->get('cellphone'));
-        // frecuency in days
-        $payMethod->setFrequency($paramFetcher->get('frequency'));
         $payMethod->setUserUser($user);
 
         //check if the Pay Method Ids are valid: Bank payType and AccountType
@@ -144,6 +145,16 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $payMethod->setAccountTypeAccountType($tempAccountType);
+        }
+
+        if($paramFetcher->get('frequencyId')){
+            /** @var Frequency $tempFrequency */
+            $tempFrequency=$frequencyRepo->find($paramFetcher->get('frequencyId'));
+            if($tempFrequency==null){
+                $view->setStatusCode(404)->setHeader("error","The frequencyId ID ".$paramFetcher->get('frequencyId')." is invalid");
+                return $view;
+            }
+            $payMethod->setFrequencyFrequency($tempFrequency);
         }
 
         // add the user to pay
@@ -500,6 +511,12 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="idWorkplace", nullable=false, strict=true, description="place of work.")
      * @RequestParam(name="transportAid", nullable=false, strict=true, description="aid for the employee to transport.")
      * @RequestParam(name="benefitsConditions", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(array=true, name="startDate", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(array=true, name="endDate", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(name="workableDaysMonth", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(array=true, name="workTimeStart", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(array=true, name="workTimeEnd", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(array=true, name="weekWorkableDays", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(name="employeeId", nullable=false, strict=true, description="id if exist else -1.")
      * @return View
      */
@@ -589,6 +606,39 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
+
+            $startDate=$paramFetcher->get('startDate');
+            $datetime = new DateTime();
+            $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
+            $contract->setStartDate($datetime);
+
+            $workTimeStart=$paramFetcher->get('workTimeStart');
+            $datetime = new DateTime();
+            $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);
+            $contract->setWorkTimeStart($datetime);
+
+            $workTimeEnd=$paramFetcher->get('workTimeEnd');
+            $datetime = new DateTime();
+            $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
+            $contract->setWorkTimeEnd($datetime);
+
+            if($contract->getContractTypeContractType()->getName()=="Término fijo"){
+                $endDate=$paramFetcher->get('endDate');
+                $datetime = new DateTime();
+                $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
+                $contract->setEndDate($datetime);
+            }
+            if($contract->getTimeCommitmentTimeCommitment()->getName()=="Trabajo por días"){
+                $weekWorkableDays=$paramFetcher->get('weekWorkableDays');
+                foreach ($weekWorkableDays as $key => $value) {
+                    $weekWorkableDay= new WeekWorkableDays();
+                    $weekWorkableDay->setContractContract($contract);
+                    $weekWorkableDay->setDayName($value);
+                    $contract->addWeekWorkableDay($weekWorkableDay);
+                }
+                $workableDaysMonth=$paramFetcher->get('workableDaysMonth');
+                $contract->setWorkableDaysMonth($workableDaysMonth);
+            }
 
             //Workplaces and Benefits
             $benefits=$paramFetcher->get("idsBenefits");

@@ -19,6 +19,23 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+    public function registrationDocumentsAction(){
+        $user = $this->getUser();
+        $documents = array();
+        $em = $this->getDoctrine()->getManager();
+        $person = $this->getUser()->getPersonPerson();
+        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')
+              ->findByPersonPerson($person);
+        $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                ->findByEmployerEmployer($employer);
+        array_push($documents,$em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->findByName("cedula"));
+        array_push($documents,$em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->findByName("rut"));
+        array_push($documents,$em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->findByName("contrato"));
+        return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig',array('employer'=>$person , 'employerHasEmployees' => $employerHasEmployees , 'documents'=>$documents));
+    }
     public function certificateAction(Request $request)
     {
     	if ($request->getMethod() == 'POST') {    		

@@ -21,7 +21,7 @@ class WorkPlaceRegistration extends AbstractType
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),))
+                ),"label"=>"Dirección"))
             ->add('id', 'hidden', array(
                 'property_path' => 'idWorkplace',
             ))
@@ -32,6 +32,7 @@ class WorkPlaceRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
+                "label" => "Departamento"
                 ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
@@ -40,6 +41,7 @@ class WorkPlaceRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'city',
+                "label" => "Ciudad"
                 ));
 
 
