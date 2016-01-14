@@ -57,6 +57,8 @@ class PersonExtraData extends AbstractType
                 'property_path' => 'birthCountry',
             ))
             ->add('birthDepartment', 'entity', array(
+                'label' => 'Departamento de Nacimiento',
+                'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'placeholder' => '',
                 'property' => 'name',
@@ -65,6 +67,8 @@ class PersonExtraData extends AbstractType
                 'property_path' => 'birthDepartment',
             ))
             ->add('birthCity', 'entity', array(
+                'label' => 'Ciudad de Nacimiento',
+                'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:City',
                 'placeholder' => '',
                 'property' => 'name',
