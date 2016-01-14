@@ -168,7 +168,7 @@ function startEmployer(){
                 index=parseInt(index)+1;
                 console.log("Index New:" + index );
                 // Display the form in the page in an li, before the "Add a tag" link li
-                var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append(newForm);
+                var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append('<div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;"><div class="col-sm-12 col-xs-12">'+newForm+'</div></div>');
                 $collectionHolder.append($newFormLi);
             }
             //add the corresponding listeners

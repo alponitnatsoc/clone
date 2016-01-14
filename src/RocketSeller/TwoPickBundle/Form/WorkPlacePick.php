@@ -25,7 +25,8 @@ class WorkPlacePick extends AbstractType
                 'property' => 'mainAddress',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'workplaceWorkplace'
+                'property_path' => 'workplaceWorkplace',
+                "label" => "Dirección"
                 ));
 
 

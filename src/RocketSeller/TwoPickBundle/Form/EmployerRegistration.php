@@ -47,7 +47,9 @@ class EmployerRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => false,
-                'mapped' => false,))
+                'mapped' => false, 
+                "label" => "¿En cuántos lugares trabajará(n) su(s) empleado(s)?")
+            )
             ->add('sameWorkHouse', 'choice', array(
                 'choices' => array(
                     true   => 'Si',
