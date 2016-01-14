@@ -1,154 +1,199 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-<div class="row-fluid">
-	<div class="col-sm-12 col-xs-12 block-Intro">
-		<span>Por favor ingrese la información solicitada para efectuar el registro:</span>
-	</div>
-</div>
-<div class="row"></div>
-<div class="row-fluid" id='registrationFormContainer'>
-	{{ form_start(form) }}
-
-	<ul class="nav nav-tabs nav-justified">
-		<li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-		<li><a data-toggle="tab" href="#contactData">Datos de contacto</a></li>
-		<li><a data-toggle="tab" href="#workplacesData">Lugares de trabajo</a></li>
-	</ul>
-
-	<div class="tab-content">
-		<div id="basicData" class="tab-pane fade in active">
-			{# render the task's only field: description #}
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Los campos marcados con * son obligatorios</span>
-			</div>
-			<div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/typePerson.png">
-					{{ form_row(form.youAre) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentType.png">
-					{{ form_row(form.person.documentType) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentNumber.png">
-					{{ form_row(form.person.document) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.names) }}
-					{{ form_row(form.person.lastName1) }}
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.lastName2) }}
-					{{ form_row(form.person.birthDate) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<div class="col-sm-6 col-sm-push-6">
-					<a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
-				</div>
-			</div>
-
-		</div>
-
-		<div id="contactData" class="tab-pane fade in">
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Los campos marcados en * son obligatorios</span>
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.mainAddress) }}
-					<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-						{% for phone in form.person.phones %}
-						<li id="phone_{{loop.index}}" class="phoneLi">
-							{{ form_row(phone.id) }}
-							{{ form_row(phone.phoneNumber) }}
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.department) }}
-					{{ form_row(form.person.city) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<div class="col-xs-6">
-					<a class="btn btn-primary btnPrevious" style="width: 100%" >< Anterior</a>
-				</div>
-				<div class="col-xs-6">
-					<a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
-				</div>
-			</div>
-
-		</div>
-
-		<div id="workplacesData" class="tab-pane fade h3">
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Corresponden a los puntos donde laborará o dependerá cada empleado.Los campos marcados con * son obligatorios.</span>
-			</div>
-			<div class="col-sm-12 col-xs-12 blockUpData">
-				<div class="col-sm-6 col-xs-12">
-					<img src="/img/placeLocate.png">
-					{{ form_row(form.sameWorkHouse) }}
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					<img src="/img/placeNumber.png">
-					{{ form_row(form.numberOfWorkplaces) }}
-				</div>
-			</div>
-
-			{# iterate over each existing workplaces and render its fields #}
-			<ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" style="list-style: none">
-				{% for workplace in form.workplaces %}
-				<li id="workSpace_{{loop.index}}" class="workSpaceLi">
-					<div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;">
-						<div class="col-sm-12 col-xs-12">
-							{{ form_row(workplace.id) }}
-							{{ form_row(workplace.mainAddress) }}
-						</div>
-						<div class="col-xs-12 col-xs-12">
-							{{ form_row(workplace.department) }}
-						</div>
-						<div class="col-xs-12 col-xs-12">
-							{{ form_row(workplace.city) }}
-						</div>
-					</div>
-				</li>
-				{% endfor %}
-			</ul>
-			<div class="col-sm-12 col-xs-12 center">
-				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
-			</div>
-		</div>
-	</div>
-	{{ form_end(form) }}
-
-	<!-- Modal success -->
-	<div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" 
-   data-keyboard="false" >
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-			 	<div class="row-fluid block-Intro-green" id="msgSinVerificar1" style="margin-top: 0;">
-                    <div class="col-sm-2 col-xs-12 boxIntro-Heading" style="left: 0;"><img src="/img/check-in.png"></div>
-                    <div class="col-sm-3 hidden-xs"></div>
-                    <div class="col-sm-9 col-xs-12 up-Intro" style="font-size: 22px; top: 30%;">¡Muy bien! <br />Realizó satisfactoriamente el registro del empleador!</div>
+    {% block stylesheets %}
+        <style>
+            .blockStep2 {
+                margin-top: 10px;
+                background: #3b4b5a !important;
+                background-image: none;
+                background: 0 0;
+                border: 1px solid #919191;
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 20px;
+                padding: 15px;
+                text-shadow: none;
+                color: #fff;
+                opacity: 0.8;
+            }
+            .blockStep2 .txt-AD1 {
+                font-family: "Open Sans";
+                font-size: 24px;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: #fff;
+                white-space: normal;
+            }
+        </style>
+    {% endblock %} 
+    <div id='' class='col-sm-12 col-xs-12 align-Resp'>
+        <div id='' class='col-sm-12 col-xs-12 blockStep2'>
+            <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+                <img src="/img/employ.png">                 
+            </div>
+            <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
+                <div id='' class='text-left' >
+                    DATOS DEL EMPLEADOR
                 </div>
-                <div class="row-fluid clearfix" style="padding-bottom: 30px;">
-                    <div class="col-md-9 col-md-push-3">
-						<p>Ahora tenga a la mano los siguientes documentos para continuar con el registro de la información de los empleados:</p>
-						<ul class="lista_listo">
-							<li>Copia del documento de identificación</li>
-							<li>Datos de contacto (Teléfono y dirección - email opcional)</li>
-							<li>Contrato vigente (si cuenta con uno)</li>
-						</ul>
-						<button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Entendido &gt;</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+            </div>
+            <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
+            </div>
+            <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
+                <div id='' class=' stepIni' >
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="col-sm-12 col-xs-12 block-Intro">
+            <span>Por favor ingrese la información solicitada para efectuar el registro:</span>
+        </div>
+    </div>
+    <div class="row"></div>
+    <div class="row-fluid" id='registrationFormContainer'>
+        {{ form_start(form) }}
+
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" href="#contactData">Datos de contacto</a></li>
+            <li><a data-toggle="tab" href="#workplacesData">Lugares de trabajo</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="basicData" class="tab-pane fade in active">
+                {# render the task's only field: description #}
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Los campos marcados con * son obligatorios</span>
+                </div>
+                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/typePerson.png">
+                        {{ form_row(form.youAre) }}
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentType.png">
+                        {{ form_row(form.person.documentType) }}
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentNumber.png">
+                        {{ form_row(form.person.document) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.names) }}
+                        {{ form_row(form.person.lastName1) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.lastName2) }}
+                        {{ form_row(form.person.birthDate) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <div class="col-sm-6 col-sm-push-6">
+                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="contactData" class="tab-pane fade in">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Los campos marcados en * son obligatorios</span>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.mainAddress) }}
+                        <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+                            {% for phone in form.person.phones %}
+                                <li id="phone_{{loop.index}}" class="phoneLi">
+                                    {{ form_row(phone.id) }}
+                                    {{ form_row(phone.phoneNumber) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.department) }}
+                        {{ form_row(form.person.city) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <div class="col-xs-6">
+                        <a class="btn btn-primary btnPrevious" style="width: 100%" >< Anterior</a>
+                    </div>
+                    <div class="col-xs-6">
+                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="workplacesData" class="tab-pane fade h3">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Corresponden a los puntos donde laborará o dependerá cada empleado.Los campos marcados con * son obligatorios.</span>
+                </div>
+                <div class="col-sm-12 col-xs-12 blockUpData">
+                    <div class="col-sm-6 col-xs-12">
+                        <img src="/img/placeLocate.png">
+                        {{ form_row(form.sameWorkHouse) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <img src="/img/placeNumber.png">
+                        {{ form_row(form.numberOfWorkplaces) }}
+                    </div>
+                </div>
+
+                {# iterate over each existing workplaces and render its fields #}
+                <ul class="workplaces" data-prototype="{{ form_widget(form.workplaces.vars.prototype)|e }}" style="list-style: none">
+                    {% for workplace in form.workplaces %}
+                        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
+                            <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;">
+                                <div class="col-sm-12 col-xs-12">
+                                    {{ form_row(workplace.id) }}
+                                    {{ form_row(workplace.mainAddress) }}
+                                </div>
+                                <div class="col-xs-12 col-xs-12">
+                                    {{ form_row(workplace.department) }}
+                                </div>
+                                <div class="col-xs-12 col-xs-12">
+                                    {{ form_row(workplace.city) }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+
+        <!-- Modal success -->
+        <div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" 
+             data-keyboard="false" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="row-fluid block-Intro-green" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-2 col-xs-12 boxIntro-Heading" style="left: 0;"><img src="/img/check-in.png"></div>
+                        <div class="col-sm-3 hidden-xs"></div>
+                        <div class="col-sm-9 col-xs-12 up-Intro" style="font-size: 22px; top: 30%;">¡Muy bien! <br />Realizó satisfactoriamente el registro del empleador!</div>
+                    </div>
+                    <div class="row-fluid clearfix" style="padding-bottom: 30px;">
+                        <div class="col-md-9 col-md-push-3">
+                            <p>Ahora tenga a la mano los siguientes documentos para continuar con el registro de la información de los empleados:</p>
+                            <ul class="lista_listo">
+                                <li>Copia del documento de identificación</li>
+                                <li>Datos de contacto (Teléfono y dirección - email opcional)</li>
+                                <li>Contrato vigente (si cuenta con uno)</li>
+                            </ul>
+                            <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Entendido &gt;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock fos_user_content%}
