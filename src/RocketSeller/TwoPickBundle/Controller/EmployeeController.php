@@ -6,7 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\EntityType;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -180,9 +182,36 @@ class EmployeeController extends Controller
             foreach ($employerHasEmployees as $eHE) {
                 if ($eHE->getIdEmployerHasEmployee() == $employee->get('idEmployerHasEmployee')->getData()) {
                     $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
+                    $eHEEntities=$eHE->getEmployeeEmployee()->getEntities();
+                    $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
+                    if($eHEEntities->count()!=0){
+                        /** @var EmployeeHasEntity $enti */
+                        foreach ($eHEEntities as $enti) {
+                            if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="EPS"){
+                                $employee->get('wealth')->setData($enti->getEntityEntity());
+                            }
+                            if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="Pension"){
+                                $employee->get('pension')->setData($enti->getEntityEntity());
+                            }
+                        }
+
+                    }
                     break;
                 }
             }
+        }
+        $empEntities=$employer->getEntities();
+        if($empEntities->count()!=0){
+            /** @var EmployerHasEntity $enti */
+            foreach ($empEntities as $enti) {
+                if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="ARL"){
+                    $form->get('arl')->setData($enti->getEntityEntity());
+                }
+                if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="Cesantias"){
+                    $form->get('severances')->setData($enti->getEntityEntity());
+                }
+            }
+
         }
         $personEmployer = $employer->getPersonPerson();
         $employerFullName = $personEmployer->getNames() . " " . $personEmployer->getLastName1() . " " . $personEmployer->getLastName2();

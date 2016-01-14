@@ -51,7 +51,7 @@ class Employee
     private $twoFactorAuthentication = false;
     /**
      * @var boolean $askBeneficiary 
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $askBeneficiary ;
      
@@ -295,10 +295,12 @@ class Employee
         return $this->entities;
     }
 
+
+
     /**
      * Set askBeneficiary
      *
-     * @param boolean $askBeneficiary
+     * @param integer $askBeneficiary
      *
      * @return Employee
      */
@@ -312,7 +314,7 @@ class Employee
     /**
      * Get askBeneficiary
      *
-     * @return boolean
+     * @return integer
      */
     public function getAskBeneficiary()
     {
