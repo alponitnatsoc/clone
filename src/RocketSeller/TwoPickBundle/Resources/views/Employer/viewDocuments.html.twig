@@ -1,7 +1,7 @@
-{% extends "::base.html.twig" %}
+
 {% block content %}
 	<div class="container col-md-12">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<table class="table">
 				<thead>
 					<tr><th>Documentos</th></tr>
@@ -17,17 +17,37 @@
 				</tbody>
 			</table>
 		</div>
-
-	{% for i in 0..employees|length-1  %}
-  		<div class="col-md-4">
+	<div class="col-md-3">
 	  		<table class="table">
 			    <thead>
-			      <tr>	           
+			      <tr>			      	          
+			        <th>{{employer.personPerson.names}}</th>          	       
+			      </tr>		      
+			    </thead>	    	
+				    <tbody>
+				    	<tbody>
+				    		{% for doc in employer.personPerson.Docs %}
+				    			{% if doc in result %}
+				    				<tr><td> {{ doc.documentTypeDocumentType.name }}</td></tr>
+				    			{% else %}
+				    				</tr><td>no</td></tr>
+				    			{% endif %}				    			
+				    		{% endfor %}			  				
+			  			</tbody>	          	  	     
+				    </tbody>
+	  		</table>
+  		</div>
+
+	{% for i in 0..employees|length-1  %}
+  		<div class="col-md-3">
+	  		<table class="table">
+			    <thead>
+			      <tr>			      	          
 			        <th>{{employees[i].personPerson.names}} {{employees[i].personPerson.lastName1}}</th>          	       
 			      </tr>		      
 			    </thead>	    	
 				    <tbody>
-				    	<tbody>		  			
+				    	<tbody>
 			  				{% for document  in documentsPerEmployee[i] %}
 			  					{% if document in documentsByEmployee[i] %}
 			  						<tr><td>Ya lo tienes</td></tr>

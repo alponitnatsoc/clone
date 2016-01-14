@@ -104,6 +104,7 @@ novelty_fields:
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:noveltyTypeFields}
     requirements:
         noveltyId:     \d+
+    
 register_employee:
     path:      /register/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}

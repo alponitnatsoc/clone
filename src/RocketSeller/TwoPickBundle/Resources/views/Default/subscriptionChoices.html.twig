@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% block title %}Activar Suscripción{% endblock %}
+{% block title %}Symplifica - Activar Suscripción{% endblock %}
 
 {% block stylesheet %}
     {{ parent() }}
@@ -42,18 +42,36 @@
             width: 60%;
             float: right;
         }
+        .modal {
+            text-align: center;
+        }
 
+        @media screen and (min-width: 768px) { 
+            .modal:before {
+                display: inline-block;
+                vertical-align: middle;
+                content: " ";
+                height: 100%;
+            }
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
     </style>
 {% endblock %}
 
 {% block fos_user_content %}
-    <div style="margin: 10px;padding: 10px; text-align: center;">
-        {% set day = user.getDateCreated|date_modify("+30 day")|date("d") %}
-        {% set month = user.getDateCreated|date_modify("+30 day")|date("M") %}
-        {% set year = user.getDateCreated|date_modify("+30 day")|date("Y") %}
-        {% set day_pay = user.getDateCreated|date_modify("+31 day")|date("d") %}
-        {% set month_pay = user.getDateCreated|date_modify("+31 day")|date("M") %}
-        {% set year_pay = user.getDateCreated|date_modify("+31 day")|date("Y") %}
+    <div style="margin: 10px;padding: 10px; text-align: center; display: inline-block;">
+        {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
+        {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
+        {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("M") %}
+        {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
+        {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
+        {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("M") %}
+        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}
         <p>
             En este momento cuenta con SERVICIO GRATUITO hasta el {{ day }} de {{ month }} de {{ year }}. Sin embargo ya puede llevar a cabo la activación de la suscripción al servicio de Symplifica.
         </p>
@@ -101,7 +119,7 @@
     </div>
 
     <!-- Modal Confirm-->
-    <div class="modal" tabindex="-1" role="dialog" id="modal_confirm">
+    <div class="modal fade"  role="dialog" id="modal_confirm">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +143,7 @@
     </div><!-- /.modal -->
 
     <!-- Modal Pricing Calculator-->
-    <div class="modal" tabindex="-1" role="dialog" id="modal_price_calculator">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_price_calculator">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,7 +183,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-                    <button type="button" class="btn btn-default btn-add-employee">Agregar un empleado</button>
+                    <a type="button" class="btn btn-default btn-add-employee" href="{{ path('register_employee') }}">Agregar un empleado</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -260,9 +278,9 @@
                 $(".btn-change-state-contract-confirm").hide();
             }
         });
-        $(".btn-change-state-contract").on('click', function (e) {
-            $('#modal_confirm').modal('show');
-        });
+        //$(".btn-change-state-contract").on('click', function (e) {
+        //    $('#modal_confirm').modal('show');
+        //});
         $(".btn-change-state-contract-confirm").on('click', function (e) {
             if ($(".activo").length > 1 || $(button).html() == "Activar") {
                 sendAjax(button, contratoid);
@@ -270,9 +288,9 @@
                 $('#modal_confirm').modal('hide');
             }
         });
-        $("#open_pricing_calc").on('click', function (e) {
-            $('#modal_price_calculator').modal('show');
-        });
+        //$("#open_pricing_calc").on('click', function (e) {
+        //    $('#modal_price_calculator').modal('show');
+        //});
         function sendAjax(obj, url) {
             $.ajax({
                 url: url,

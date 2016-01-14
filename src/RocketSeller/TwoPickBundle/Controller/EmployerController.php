@@ -60,6 +60,7 @@ class EmployerController extends Controller
     {        
         $documentTypeByEntity = array();
         $entityByEmployee = array();
+        $documentTypeByEntityEmployer = array();
         $documentTypeAll = array();
         $employees = array();
         $result = array();
@@ -81,10 +82,23 @@ class EmployerController extends Controller
                 }                                   
             }
             array_push($employees, $employerHasEmployee->getEmployeeEmployee());         
-        }
-        
+        }       
         foreach ($documentTypeAll as $document) {            
             if(!in_array($document->getDocumentTypeDocumentType(), $result)){                
+                array_push($result, $document->getDocumentTypeDocumentType());
+            }
+        }
+        $employerHasEntity = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEntity')
+                ->findByEmployerEmployer($employer);
+        foreach ($employerHasEntity as $entity) {
+            $entitiesDocumentsEmployer = $em->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
+                ->findByEntityEntity($entity->getEntityEntity());
+                foreach ($entitiesDocumentsEmployer as $document) {
+                    array_push($documentTypeByEntityEmployer, $document);                                                  
+                }
+        }
+        foreach ($documentTypeByEntityEmployer as $document) {
+            if (!in_array($document->getDocumentTypeDocumentType(), $result)) {
                 array_push($result, $document->getDocumentTypeDocumentType());
             }
         }
@@ -92,8 +106,9 @@ class EmployerController extends Controller
         $documentsPerEmployee = $this->fillArray($result,$entityByEmployee);
         //documentos que tiene por empleado
         $documentsByEmployee = $this->documentsTypeByEmployee($employees);                       
-        return $this->render('RocketSellerTwoPickBundle:Employer:viewDocuments.html.twig',array('employees'=>$employees,'documentsByEmployee'=>$documentsByEmployee , 'result'=>$result , 'documentsPerEmployee'=>$documentsPerEmployee));
+        return $this->render('RocketSellerTwoPickBundle:Employer:viewDocuments.html.twig',array('employer'=>$employer,'employees'=>$employees,'documentsByEmployee'=>$documentsByEmployee , 'result'=>$result , 'documentsPerEmployee'=>$documentsPerEmployee));
     }
+
     //se traen los documento por empleado
     public function documentsTypeByEmployee($employees)
     {        

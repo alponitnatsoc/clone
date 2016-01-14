@@ -19,33 +19,27 @@
 
 	<div class="tab-content">
 		<div id="basicData" class="tab-pane fade in active">
-			<div class="col-sm-12 col-xs-12 blockUpData">
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentType.png">
-					{{ form_row(form.person.documentType) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentNumber.png">
-					{{ form_row(form.person.document) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/lastName.png">
-					{{ form_row(form.person.names) }}
-				</div>
-				<div class="col-sm-12 col-xs-12">
-					<a id="btn-4" href="" class="btn btn-primary btnNext" >Consultar ></a>
-				</div>
-			</div>
 			<div class="col-sm-12 col-xs-12 block-Intro">
 				<span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
 			</div>
+			<div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
+				<div class="col-sm-6 col-xs-12">
+					<img src="/img/documentType.png">
+					{{ form_row(form.person.documentType) }}
+				</div>
+				<div class="col-sm-6 col-xs-12">
+					<img src="/img/documentNumber.png">
+					{{ form_row(form.person.document) }}
+				</div>
+			</div>
 			<div class="col-sm-12 col-xs-12">
 				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.personExtra.civilStatus) }}
+					{{ form_row(form.person.names) }}
 					{{ form_row(form.person.lastName1) }}
 					{{ form_row(form.person.lastName2) }}
 				</div>
 				<div class="col-sm-6 col-xs-12">
+					{{ form_row(form.personExtra.civilStatus) }}
 					{{ form_row(form.personExtra.gender) }}
 					{{ form_row(form.personExtra.documentExpeditionDate) }}
 					{{ form_row(form.personExtra.documentExpeditionPlace) }}

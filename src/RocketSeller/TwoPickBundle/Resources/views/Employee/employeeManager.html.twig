@@ -1,98 +1,104 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
 
-{% for employee in employees %}
+    {% if employees %}
 
+        {% for employee in employees %}
 
-		<div id='' class='col-xs-12'>
-			<div class="panel panel-default">
-  				<div class="panel-body">
-					<div id='' class='col-xs-2'>
-						{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
-					</div>
-					<div id='' class='col-xs-2'>
-						<div id='' class='text-left' >
-							{{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
-						</div>
-					</div>
-					<div id='' class='col-xs-1'>
-						<a id='' class='nav-link' href="{{ path('manage_contracts' ,
-												{'id': employee.idEmployerHasEmployee}) }}">
-							<div id='' class='text-right' >
-								Contracts
-							</div>
-						</a>
-					</div>
-					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('show_documents' ,
-												{'id': employee.employeeEmployee.personPerson.idPerson}) }}">
-							<div id='' class='text-right' >
-								Documents
-							</div>
-						</a>
-					</div>
-					<div id='' class='col-xs-1'>
-						<a id='' class='nav-link' href="{{ path('show_beneficiaries' ,
-												{'employee': employee.employeeEmployee.idEmployee }) }}">
-							<div id='' class='text-right' >
-								Beneficiaries
-							</div>
-						</a>
-					</div>
-                    <div id='' class='col-xs-2'>
-                        <a id='' class='nav-link' href="{{ path('show_payments' ,
-                                                {'id': employee.idEmployerHasEmployee}) }}">
-                            <div id='' class='text-right' >
-                                Payments
+            <div id='' class='col-xs-12'>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div id='' class='col-xs-2'>
+                            {{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
+                        </div>
+                        <div id='' class='col-xs-2'>
+                            <div id='' class='text-left' >
+                                {{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
+                            </div>
+                        </div>
+
+                        {% if user.status != 1 %}
+                            <div id='' class='col-xs-1'>
+                                <a id='' class='nav-link' href="{{ path('manage_contracts' , {'id': employee.idEmployerHasEmployee}) }}">
+                                    <div id='' class='text-right' >
+                                        Contracts
+                                    </div>
+                                </a>
+                            </div>
+                            <div id='' class='col-xs-2'>
+                                <a id='' class='nav-link' href="{{ path('show_documents' , {'id': employee.employeeEmployee.personPerson.idPerson}) }}">
+                                    <div id='' class='text-right' >
+                                        Documents
+                                    </div>
+                                </a>
+                            </div>
+                            <div id='' class='col-xs-1'>
+                                <a id='' class='nav-link' href="{{ path('show_beneficiaries' , {'employee': employee.employeeEmployee.idEmployee }) }}">
+                                    <div id='' class='text-right' >
+                                        Beneficiaries
+                                    </div>
+                                </a>
+                            </div>
+                            <div id='' class='col-xs-2'>
+                                <a id='' class='nav-link' href="{{ path('show_payments' , {'id': employee.idEmployerHasEmployee}) }}">
+                                    <div id='' class='text-right' >
+                                        Payments
+                                    </div>
+                                </a>
+                            </div>
+                            <div id='' class='col-xs-1'>
+                                <a id='' class='nav-link' href="{{ path('liquidations_by_ehe' , {'id': employee.idEmployerHasEmployee}) }}">
+                                    <div id='' class='text-right' >
+                                        Liquidations
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div id='' class='col-xs-2'>
+                            <a id='' class='nav-link' href="{{ path('register_employee' , {'id': employee.employeeEmployee.idEmployee}) }}">
+                                <div id='' class='text-right' >
+                                    Edit
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+        
+    {% endif %}
+    
+    <div id='' class='col-xs-12'>
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                {% if user and user.status != 1 %}
+                    <div class="col-xs-4">
+                        <a id='' class='nav-link' href="{{ path('show_certificates') }}">
+                            <div>
+                                Generate certificates
                             </div>
                         </a>
                     </div>
-                    <div id='' class='col-xs-1'>
-                        <a id='' class='nav-link' href="{{ path('liquidations_by_ehe' ,
-                                                {'id': employee.idEmployerHasEmployee}) }}">
-                            <div id='' class='text-right' >
-                                Liquidations
+                    <div class="col-xs-4">
+                        <a id='' class='nav-link' href="{{ path('employees_documents') }}">
+                            <div>
+                                Missing documents
                             </div>
                         </a>
                     </div>
-					<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('register_employee' ,
-												{'id': employee.employeeEmployee.idEmployee}) }}">
-							<div id='' class='text-right' >
-								Edit
-							</div>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
+                {% endif %}
+                <div id='' class='col-xs-4'>
+                    <a id='' class='nav-link' href="{{ path('register_employee') }}">
+                        <div id='' class='text-right' >
+                            Add new employee
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{% endfor %}
-		<div id='' class='col-xs-12'>
-			<div class="panel panel-default">
-  				<div class="panel-body">
-  					<div class="col-xs-4">
-						<a id='' class='nav-link' href="{{ path('show_certificates') }}">
-							<div>
-								Generate certificates
-							</div>
-						</a>
-  					</div>
- 					<div class="col-xs-4">
-						<a id='' class='nav-link' href="{{ path('employees_documents') }}">
-							<div>
-								Missing documents
-							</div>
-						</a>
-  					</div>
-					<div id='' class='col-xs-4'>
-						<a id='' class='nav-link' href="{{ path('register_employee') }}">
-						<div id='' class='text-right' >
-							Add new employee
-						</div>
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
 {% endblock fos_user_content %}

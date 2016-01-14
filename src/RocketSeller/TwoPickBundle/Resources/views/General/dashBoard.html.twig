@@ -1,38 +1,119 @@
 {% extends "::base.html.twig" %}
+{% block title %}Symplifica - Configuración inicial{% endblock %}
 {% block header %}{% endblock header %}
 {% block fos_user_content %}
-	<div class="col-sm-12 col-xs-12 block-Data">
-		<h1>Configuración inicial</h1>
-		<span>Para obtener el mayor beneficio posible de nuestra herramienta, requerimos contar con su información como empleador, de sus empleados y lo referente a la afiliación a las administradoras de salud, pensión, riesgos laborales y Caja de Compensación Familiar.</span>
-	</div>
-{% for step in steps %}
-		<div id='' class='col-sm-12 col-xs-12 align-Resp'>
-			<a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
-				<div id='' class='col-sm-2 col-xs-12 txt-AD0'>
-					{% if step.paso != 3 %}
-					<img src="/img/employ.png">
-					{% else %}
-					<img src="/img/complete.png">
-					{% endif %}
-				</div>
-				<div id='' class='col-sm-4 col-xs-12 txt-AD1'>
-					<div id='' class='text-left' >
-						<p>Paso <strong>{{step.paso}}</strong> de 3</p>
-						{{step.name}}
-					</div>
-				</div>
-				<div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-					{{step.state}}% {% if step.state==100 %}<min>Hecho</min>{% endif %}
-				</div>
-				<div id='' class='col-sm-3 col-xs-12 txt-AD3'>
-					<div id='' class='btn stepIni' >
-						{{step.stateMessage}} >
-					</div>
-					
-				</div>
-			</a>
-		</div>
+    <div class="col-sm-12 col-xs-12 block-Data">
+        <h1>Configuración inicial</h1>
+        <span>Para obtener el mayor beneficio posible de nuestra herramienta, requerimos contar con su información como empleador, de sus empleados y lo referente a la afiliación a las administradoras de salud, pensión, riesgos laborales y Caja de Compensación Familiar.</span>
+    </div>
+    {% for step in steps %}
+        <div id='' class='col-sm-12 col-xs-12 align-Resp'>
+            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
+                <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+                    {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}                    
+                </div>
+                <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
+                    <div id='' class='text-left' >
+                        <p>Paso {{step.paso}} de 3</p>
+                        {{step.name}}
+                    </div>
+                </div>
+                <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
+                    {{step.state}}% {% if step.state==100 %}{% endif %}
+                </div>
+                <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
+                    <div id='' class='btn stepIni' >
+                        {{step.stateMessage}} >
+                    </div>
 
-{% endfor %}
+                </div>
+            </a>
+        </div>
+
+    {% endfor %}
 
 {% endblock fos_user_content %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+    var state="/old";
+
+    jQuery(document).ready(function() {
+        $("a").on("click",function(e){
+            e.preventDefault();
+            sendAjax($(this).attr('href'));
+        });
+        {# ajax que maneja los requests #}
+    //  sendAjax(state);
+    });
+
+    function sendAjax (url, form) {
+
+        $.ajax({
+            url : url,
+            type: $(form).attr('method'),
+            data: $(form).serializeArray(),
+            statusCode: {
+                500: function() {
+                    alert(" 500 Server might not handle That yet");
+                }
+            }
+            }).done(function(data) {
+                if(data["url"]!=null){
+                    console.log(data["url"]);
+                    sendAjax(data["url"]);
+                }else{
+                    $('#main').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(data).find('#main'));
+                    addClick();
+                    if (!jsLoader(url)) {
+                        addSumbit();
+                    }
+                }
+            }).fail(function( jqXHR, textStatus, errorThrown ) {
+                alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+        });
+    }
+    function addClick () {
+        $("#main .nav-link").on("click",function(e){
+            e.preventDefault();
+            sendAjax($(this).attr('href'));
+        });
+    }
+    function addSumbit () {
+        $("form").on("submit",function(e){
+            e.preventDefault();
+            sendAjax($(this).attr('action'), $(this));
+        });
+    }
+    function jsLoader(url){
+        if(url.indexOf("{{ path('edit_profile') }}")!==-1){
+            $.getScript( "{{ asset('public/js/newEmployer.js') }}").done(function(){
+                startEmployer();
+            })
+
+            return true;
+        }else if(url.indexOf("{{ path('register_employee') }}")!==-1){
+            $.getScript( "{{ asset('public/js/newEmployee.js') }}").done(function(){
+                startEmployee();
+            })
+
+            return true;
+        }else if(url.indexOf("{{ path('show_calculator_form') }}")!==-1){
+            $.getScript( "{{ asset('public/js/calculator.js') }}").done(function(){
+                calculatorCalculate();
+            })
+
+            return true;
+        }else if(url.indexOf("{{ path('matrix_choose') }}")!==-1){
+            $.getScript( "{{ asset('public/js/afiliation.js') }}").done(function(){
+                startAfiliation();
+            })
+
+            return true;
+        }
+        return false;
+    }
+</script>
+{% endblock javascripts %}

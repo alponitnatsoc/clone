@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\UserType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * User controller.
@@ -282,5 +283,11 @@ class UserController extends Controller
             "status" => $response
         );
         return new JsonResponse($res);
+    }
+
+    public function getTokenAction()
+    {
+        return new Response($this->container->get('form.csrf_provider')
+                                ->generateCsrfToken('authenticate'));
     }
 }
