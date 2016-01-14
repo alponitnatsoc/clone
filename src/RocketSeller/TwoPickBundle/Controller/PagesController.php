@@ -9,7 +9,11 @@ class PagesController extends Controller
 {
     public function indexAction()
     {
-    	$response = $this->forward('RocketSellerTwoPickBundle:DashBoard:showDashBoard');    
-    	return $response;        
+    	if ($this->getUser()) {
+    		$response = $this->forward('RocketSellerTwoPickBundle:DashBoard:showDashBoard');        		       	
+    	}else{
+    		return $this->render('RocketSellerTwoPickBundle:General:landing_new.html.twig');    		
+    	} 
+    	return $response;    	
     }
 }

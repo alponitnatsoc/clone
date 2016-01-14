@@ -63,10 +63,7 @@ class DocumentController extends Controller
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
 				array('form' => $form->createView()));
 	}
-	public function editDocAction($id,$idDocument, Request $request)
-	{
-		return true;
-	}
+
 	public function addDocAction($id,$idDocumentType,Request $request){
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()
@@ -99,8 +96,8 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			//return $this->redirectToRoute('employees_documents');
-			$this->redirect($request->server->get('HTTP_REFERER'));
+			return $this->redirectToRoute('ajax');
+			//$this->redirect($request->server->get('HTTP_REFERER'));
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
