@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: gabrielsamoma
@@ -42,6 +43,7 @@ use DateTime;
 
 class EmployeeRestController extends FOSRestController
 {
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -75,38 +77,37 @@ class EmployeeRestController extends FOSRestController
     public function postNewEmployeeSubmitAction(ParamFetcher $paramFetcher)
     {
         /** @var User $user */
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Employee $employee */
-        $employee=null;
-        $idContract=$paramFetcher->get("contractId");
+        $employee = null;
+        $idContract = $paramFetcher->get("contractId");
         $view = View::create();
 
         //search the contract
-        $contractRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
+        $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
         /** @var Contract $contract */
-        $contract=$contractRepo->find($idContract);
-        if($contract==null){
+        $contract = $contractRepo->find($idContract);
+        if ($contract == null) {
             //TODO return him to steps 2,3
-            $view->setStatusCode(403)->setData(array("error"=> array('contract'=>"You don't have that contract")));
+            $view->setStatusCode(403)->setData(array("error" => array('contract' => "You don't have that contract")));
             return $view;
         }
-        if($user->getPersonPerson()->getEmployer()->getIdEmployer()!=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer()){
+        if ($user->getPersonPerson()->getEmployer()->getIdEmployer() != $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer()) {
             //TODO return him to step 2
             $view->setStatusCode(403)->setData(array(
-                "error"=> array('contract'=>"You don't have that contract"),
-                "ulr"=>""));
+                "error" => array('contract' => "You don't have that contract"),
+                "ulr" => ""));
             return $view;
-
         }
         //payMethod repos
-        $bankRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
-        $accountTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
-        $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
-        $frequencyRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
+        $bankRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
+        $accountTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
+        $payTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        $frequencyRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
 
 
         //Now for the payType and Pay Method
-        $payMethod=new PayMethod();
+        $payMethod = new PayMethod();
         //TODO check if valid??
         $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
         //TODO check if vaild??
@@ -116,42 +117,42 @@ class EmployeeRestController extends FOSRestController
         //check if the Pay Method Ids are valid: Bank payType and AccountType
 
 
-        if($paramFetcher->get('bankId')){
+        if ($paramFetcher->get('bankId')) {
             /** @var Bank $tempBank */
-            $tempBank=$bankRepo->find($paramFetcher->get('bankId'));
-            if($tempBank==null){
-                $view->setStatusCode(404)->setHeader("error","The bankId ID ".$paramFetcher->get('bankId')." is invalid");
+            $tempBank = $bankRepo->find($paramFetcher->get('bankId'));
+            if ($tempBank == null) {
+                $view->setStatusCode(404)->setHeader("error", "The bankId ID " . $paramFetcher->get('bankId') . " is invalid");
                 return $view;
             }
             $payMethod->setBankBank($tempBank);
         }
 
 
-        if($paramFetcher->get('payTypeId')){
+        if ($paramFetcher->get('payTypeId')) {
             /** @var PayType $tempPayType */
-            $tempPayType=$payTypeRepo->find($paramFetcher->get('payTypeId'));
-            if($tempPayType==null){
-                $view->setStatusCode(404)->setHeader("error","The payTypeId ID ".$paramFetcher->get('payTypeId')." is invalid");
+            $tempPayType = $payTypeRepo->find($paramFetcher->get('payTypeId'));
+            if ($tempPayType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The payTypeId ID " . $paramFetcher->get('payTypeId') . " is invalid");
                 return $view;
             }
             $payMethod->setPayTypePayType($tempPayType);
         }
 
-        if($paramFetcher->get('accountTypeId')){
+        if ($paramFetcher->get('accountTypeId')) {
             /** @var AccountType $tempAccountType */
-            $tempAccountType=$accountTypeRepo->find($paramFetcher->get('accountTypeId'));
-            if($tempAccountType==null){
-                $view->setStatusCode(404)->setHeader("error","The accountTypeId ID ".$paramFetcher->get('accountTypeId')." is invalid");
+            $tempAccountType = $accountTypeRepo->find($paramFetcher->get('accountTypeId'));
+            if ($tempAccountType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The accountTypeId ID " . $paramFetcher->get('accountTypeId') . " is invalid");
                 return $view;
             }
             $payMethod->setAccountTypeAccountType($tempAccountType);
         }
 
-        if($paramFetcher->get('frequencyId')){
+        if ($paramFetcher->get('frequencyId')) {
             /** @var Frequency $tempFrequency */
-            $tempFrequency=$frequencyRepo->find($paramFetcher->get('frequencyId'));
-            if($tempFrequency==null){
-                $view->setStatusCode(404)->setHeader("error","The frequencyId ID ".$paramFetcher->get('frequencyId')." is invalid");
+            $tempFrequency = $frequencyRepo->find($paramFetcher->get('frequencyId'));
+            if ($tempFrequency == null) {
+                $view->setStatusCode(404)->setHeader("error", "The frequencyId ID " . $paramFetcher->get('frequencyId') . " is invalid");
                 return $view;
             }
             $payMethod->setFrequencyFrequency($tempFrequency);
@@ -159,21 +160,21 @@ class EmployeeRestController extends FOSRestController
 
         // add the user to pay
         // URL used for test porpouses, the line above should be used in production.
-        $url_request ="http://localhost:8002/api/public/v1/clients";
-        $userPerson=$user->getPersonPerson();
-        $parameters=array(
-            'documentType'=>    $userPerson->getDocumentType(),
-            'documentNumber'=>  $userPerson->getDocument(),
-            'name'=>            $userPerson->getNames(),
-            'lastName'=>        $userPerson->getLastName1()." ".$userPerson->getLastName2(),
-            'year'=>            $userPerson->getBirthDate()->format("Y"),
-            'month'=>           $userPerson->getBirthDate()->format("m"),
-            'day'=>             $userPerson->getBirthDate()->format("d"),
-            'phone'=>           $userPerson->getPhones()->get(0)->getPhoneNumber(),
-            'email'=>           $user->getEmail(),
+        $url_request = "http://localhost:8002/api/public/v1/clients";
+        $userPerson = $user->getPersonPerson();
+        $parameters = array(
+            'documentType' => $userPerson->getDocumentType(),
+            'documentNumber' => $userPerson->getDocument(),
+            'name' => $userPerson->getNames(),
+            'lastName' => $userPerson->getLastName1() . " " . $userPerson->getLastName2(),
+            'year' => $userPerson->getBirthDate()->format("Y"),
+            'month' => $userPerson->getBirthDate()->format("m"),
+            'day' => $userPerson->getBirthDate()->format("d"),
+            'phone' => $userPerson->getPhones()->get(0)->getPhoneNumber(),
+            'email' => $user->getEmail(),
         );
         $options = array(
-            'json'        => $parameters,
+            'json' => $parameters,
         );
 //        /** @var Response $response */
 //        $response = $this->get('guzzle.client.api_rest')->post($url_request, $options);
@@ -195,13 +196,14 @@ class EmployeeRestController extends FOSRestController
         if (count($errors) == 0) {
             $em->persist($contract);
             $em->flush();
-            $view->setData(array('url'=>$this->generateUrl('show_dashboard')))->setStatusCode(200);
+            $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
             return $view;
         } else {
             $view = $this->getErrorsView($errors);
             return $view;
         }
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -239,53 +241,53 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep1Action(ParamFetcher $paramFetcher)
     {
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $people */
-        $people =$user->getPersonPerson();
-        $employer=$people->getEmployer();
-        if ($employer==null) {
+        $people = $user->getPersonPerson();
+        $employer = $people->getEmployer();
+        if ($employer == null) {
             //TODO return user to step 1
         }
 
         //all the data is valid
         if (true) {
             /** @var Employee $employee */
-            $employee=null;
-            $id=$paramFetcher->get("employeeId");
+            $employee = null;
+            $id = $paramFetcher->get("employeeId");
             /** @var EmployerHasEmployee $employerEmployee */
-            $employerEmployee=null;
+            $employerEmployee = null;
             $view = View::create();
-            if ($id==-1) {
-                $employee= new Employee();
-                $person= new Person();
+            if ($id == -1) {
+                $employee = new Employee();
+                $person = new Person();
                 $employee->setPersonPerson($person);
-                $employerEmployee= new EmployerHasEmployee();
+                $employerEmployee = new EmployerHasEmployee();
                 $employerEmployee->setEmployeeEmployee($employee);
                 $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
                 $employee->addEmployeeHasEmployer($employerEmployee);
-            }else{
+            } else {
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
-                $employee= $repository->find($id);
+                $employee = $repository->find($id);
                 //verify if the Id exists or it belongs to the logged user
-                $idEmployer=$user->getPersonPerson()->getEmployer()->getIdEmployer();
-                $flag=false;
+                $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+                $flag = false;
                 /** @var EmployerHasEmployee $ee */
-                foreach($employee->getEmployeeHasEmployers() as $ee){
-                    if($ee->getEmployerEmployer()->getIdEmployer()==$idEmployer){
-                        $employerEmployee=$ee;
-                        $flag=true;
+                foreach ($employee->getEmployeeHasEmployers() as $ee) {
+                    if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                        $employerEmployee = $ee;
+                        $flag = true;
                         break;
                     }
                 }
-                if($employee==null||!$flag){
-                    $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                if ($employee == null || !$flag) {
+                    $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     return $this->render(
-                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
-                        'employees'=>$employeesData));
+                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                                'employees' => $employeesData));
                 }
             }
             /** @var Person $person */
-            $person=$employee->getPersonPerson();
+            $person = $employee->getPersonPerson();
             $person->setNames($paramFetcher->get('names'));
             $person->setLastName1($paramFetcher->get('lastName1'));
             $person->setLastName2($paramFetcher->get('lastName2'));
@@ -303,25 +305,25 @@ class EmployeeRestController extends FOSRestController
             $person->setDocumentExpeditionPlace($paramFetcher->get('documentExpeditionPlace'));
 
             //birth repos
-            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
-            $conRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
+            $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $conRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
 
-            $tempBCity=$cityRepo->find($paramFetcher->get('birthCity'));
-            if($tempBCity==null){
-                $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('birthCity')." is invalid");
+            $tempBCity = $cityRepo->find($paramFetcher->get('birthCity'));
+            if ($tempBCity == null) {
+                $view->setStatusCode(404)->setHeader("error", "The city ID " . $paramFetcher->get('birthCity') . " is invalid");
                 return $view;
             }
             $person->setBirthCity($tempBCity);
-            $tempBDep=$depRepo->find($paramFetcher->get('birthDepartment'));
-            if($tempBDep==null){
-                $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('birthDepartment')." is invalid");
+            $tempBDep = $depRepo->find($paramFetcher->get('birthDepartment'));
+            if ($tempBDep == null) {
+                $view->setStatusCode(404)->setHeader("error", "The department ID " . $paramFetcher->get('birthDepartment') . " is invalid");
                 return $view;
             }
             $person->setBirthDepartment($tempBDep);
-            $tempBCou=$conRepo->find($paramFetcher->get('birthCountry'));
-            if($tempBCou==null){
-                $view->setStatusCode(404)->setHeader("error","The country ID ".$paramFetcher->get('birthCountry')." is invalid");
+            $tempBCou = $conRepo->find($paramFetcher->get('birthCountry'));
+            if ($tempBCou == null) {
+                $view->setStatusCode(404)->setHeader("error", "The country ID " . $paramFetcher->get('birthCountry') . " is invalid");
                 return $view;
             }
             $person->setBirthCountry($tempBCou);
@@ -330,17 +332,15 @@ class EmployeeRestController extends FOSRestController
             if (count($errors) == 0) {
                 $em->persist($employee);
                 $em->flush();
-                $view->setData(array('response'=>array('idEmployee'=>$employee->getIdEmployee())))->setStatusCode(200);
+                $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
                 return $view;
             } else {
                 $view = $this->getErrorsView($errors);
                 return $view;
             }
-
-
-
         }
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -367,99 +367,98 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep2Action(ParamFetcher $paramFetcher)
     {
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $person */
-        $person =$user->getPersonPerson();
-        $employer=$person->getEmployer();
-        if ($employer==null) {
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();
+        if ($employer == null) {
             //TODO Return user to step 1
         }
 
         //all the data is valid
         if (true) {
             /** @var Employee $employee */
-            $employee=null;
-            $id=$paramFetcher->get("employeeId");
+            $employee = null;
+            $id = $paramFetcher->get("employeeId");
             /** @var EmployerHasEmployee $employerEmployee */
-            $employerEmployee=null;
+            $employerEmployee = null;
             $view = View::create();
-            if ($id==-1) {
+            if ($id == -1) {
                 //TODO Return user to step 2,1
-            }else{
+            } else {
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
-                $employee= $repository->find($id);
+                $employee = $repository->find($id);
                 //verify if the Id exists or it belongs to the logged user
-                $idEmployer=$user->getPersonPerson()->getEmployer()->getIdEmployer();
-                $flag=false;
+                $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+                $flag = false;
                 /** @var EmployerHasEmployee $ee */
-                foreach($employee->getEmployeeHasEmployers() as $ee){
-                    if($ee->getEmployerEmployer()->getIdEmployer()==$idEmployer){
-                        $employerEmployee=$ee;
-                        $flag=true;
+                foreach ($employee->getEmployeeHasEmployers() as $ee) {
+                    if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                        $employerEmployee = $ee;
+                        $flag = true;
                         break;
                     }
                 }
-                if($employee==null||!$flag){
-                    $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                if ($employee == null || !$flag) {
+                    $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     return $this->render(
-                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
-                        'employees'=>$employeesData));
+                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                                'employees' => $employeesData));
                 }
             }
-            $people=$employerEmployee->getEmployeeEmployee()->getPersonPerson();
+            $people = $employerEmployee->getEmployeeEmployee()->getPersonPerson();
             $people->setMainAddress($paramFetcher->get('mainAddress'));
             $people->setEmail($paramFetcher->get('email'));
-            $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
-            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
-            $actualPhonesId=$paramFetcher->get('phonesIds');
-            $actualPhonesAdd=$paramFetcher->get('phones');
-            $tempCity=$cityRepo->find($paramFetcher->get('city'));
-            if($tempCity==null){
-                $view->setStatusCode(404)->setHeader("error","The city ID ".$paramFetcher->get('city')." is invalid");
+            $phoneRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
+            $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $actualPhonesId = $paramFetcher->get('phonesIds');
+            $actualPhonesAdd = $paramFetcher->get('phones');
+            $tempCity = $cityRepo->find($paramFetcher->get('city'));
+            if ($tempCity == null) {
+                $view->setStatusCode(404)->setHeader("error", "The city ID " . $paramFetcher->get('city') . " is invalid");
                 return $view;
             }
             $people->setCity($tempCity);
-            $tempDep=$depRepo->find($paramFetcher->get('department'));
-            if($tempDep==null){
-                $view->setStatusCode(404)->setHeader("error","The department ID ".$paramFetcher->get('department')." is invalid");
+            $tempDep = $depRepo->find($paramFetcher->get('department'));
+            if ($tempDep == null) {
+                $view->setStatusCode(404)->setHeader("error", "The department ID " . $paramFetcher->get('department') . " is invalid");
                 return $view;
             }
             $people->setDepartment($tempDep);
             $em = $this->getDoctrine()->getManager();
 
-            $actualPhones= new ArrayCollection();
-            for($i=0;$i<count($actualPhonesAdd);$i++){
-                $tempPhone=null;
-                if($actualPhonesId[$i]!=""){
+            $actualPhones = new ArrayCollection();
+            for ($i = 0; $i < count($actualPhonesAdd); $i++) {
+                $tempPhone = null;
+                if ($actualPhonesId[$i] != "") {
                     /** @var Phone $tempPhone */
-                    $tempPhone=$phoneRepo->find($actualPhonesId[$i]);
-                    if($tempPhone->getPersonPerson()->getEmployee()->getIdEmployee()!=$employee->getIdEmployee()){
-                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
-                            'error'=>array('wokplaces'=>'you dont have those phones')))->setStatusCode(400);
+                    $tempPhone = $phoneRepo->find($actualPhonesId[$i]);
+                    if ($tempPhone->getPersonPerson()->getEmployee()->getIdEmployee() != $employee->getIdEmployee()) {
+                        $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '1')),
+                                    'error' => array('wokplaces' => 'you dont have those phones')))->setStatusCode(400);
                         return $view;
                     }
-
-                }else{
-                    $tempPhone=new Phone();
+                } else {
+                    $tempPhone = new Phone();
                 }
                 $tempPhone->setPhoneNumber($actualPhonesAdd[$i]);
                 $actualPhones->add($tempPhone);
             }
             $phones = $people->getPhones();
             /** @var Phone $phone */
-            foreach($phones as $phone){
+            foreach ($phones as $phone) {
                 /** @var Phone $actPhone */
-                $flag=false;
-                foreach($actualPhones as $actPhone){
-                    if($phone->getIdPhone()==$actPhone->getIdPhone()){
-                        $flag=true;
-                        $phone=$actPhone;
+                $flag = false;
+                foreach ($actualPhones as $actPhone) {
+                    if ($phone->getIdPhone() == $actPhone->getIdPhone()) {
+                        $flag = true;
+                        $phone = $actPhone;
                         $actualPhones->removeElement($actPhone);
                         continue;
                     }
                 }
-                if(!$flag){
+                if (!$flag) {
                     $phone->setPersonPerson(null);
                     $em->persist($phone);
                     $em->remove($phone);
@@ -467,7 +466,7 @@ class EmployeeRestController extends FOSRestController
                     $phones->removeElement($phone);
                 }
             }
-            foreach($actualPhones as $phone){
+            foreach ($actualPhones as $phone) {
                 $people->addPhone($phone);
             }
 
@@ -485,6 +484,7 @@ class EmployeeRestController extends FOSRestController
             }
         }
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -522,144 +522,144 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep3Action(ParamFetcher $paramFetcher)
     {
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $person */
-        $person =$user->getPersonPerson();
-        $employer=$person->getEmployer();
-        if ($employer==null) {
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();
+        if ($employer == null) {
             //TODO Return user to step 1
         }
 
         //all the data is valid
         if (true) {
             /** @var Employee $employee */
-            $employee=null;
-            $id=$paramFetcher->get("employeeId");
+            $employee = null;
+            $id = $paramFetcher->get("employeeId");
             /** @var EmployerHasEmployee $employerEmployee */
-            $employerEmployee=null;
+            $employerEmployee = null;
             $view = View::create();
-            if ($id==-1) {
+            if ($id == -1) {
                 //TODO Return user to step 2,1
-            }else{
+            } else {
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
-                $employee= $repository->find($id);
+                $employee = $repository->find($id);
                 //verify if the Id exists or it belongs to the logged user
-                $idEmployer=$user->getPersonPerson()->getEmployer()->getIdEmployer();
-                $flag=false;
+                $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+                $flag = false;
                 /** @var EmployerHasEmployee $ee */
-                foreach($employee->getEmployeeHasEmployers() as $ee){
-                    if($ee->getEmployerEmployer()->getIdEmployer()==$idEmployer){
-                        $employerEmployee=$ee;
-                        $flag=true;
+                foreach ($employee->getEmployeeHasEmployers() as $ee) {
+                    if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                        $employerEmployee = $ee;
+                        $flag = true;
                         break;
                     }
                 }
-                if($employee==null||!$flag){
-                    $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                if ($employee == null || !$flag) {
+                    $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     return $this->render(
-                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig',array(
-                        'employees'=>$employeesData));
+                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                                'employees' => $employeesData));
                 }
             }
 
             //Create the contract
 
-            $contract=new Contract();
+            $contract = new Contract();
             $contract->setSalary($paramFetcher->get('salary'));
             $contract->setState("Active");
 
             //contract repos
-            $contractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ContractType');
-            $employeeContractTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeContractType');
-            $timeCommitmentRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TimeCommitment');
-            $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
-            $workplaceRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
-            $benefitRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Benefits');
+            $contractTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:ContractType');
+            $employeeContractTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeContractType');
+            $timeCommitmentRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:TimeCommitment');
+            $positionRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
+            $workplaceRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
+            $benefitRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Benefits');
 
             $em = $this->getDoctrine()->getManager();
 
             /** @var ContractType $tempContractType */
-            $tempContractType=$contractTypeRepo->find($paramFetcher->get('contractType'));
-            if($tempContractType==null){
-                $view->setStatusCode(404)->setHeader("error","The contractType ID ".$paramFetcher->get('contractType')." is invalid");
+            $tempContractType = $contractTypeRepo->find($paramFetcher->get('contractType'));
+            if ($tempContractType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The contractType ID " . $paramFetcher->get('contractType') . " is invalid");
                 return $view;
             }
             $contract->setContractTypeContractType($tempContractType);
 
-            $tempEmployeeContractType=$employeeContractTypeRepo->find($paramFetcher->get('employeeType'));
-            if($tempEmployeeContractType==null){
-                $view->setStatusCode(404)->setHeader("error","The employeeType ID ".$paramFetcher->get('employeeType')." is invalid");
+            $tempEmployeeContractType = $employeeContractTypeRepo->find($paramFetcher->get('employeeType'));
+            if ($tempEmployeeContractType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The employeeType ID " . $paramFetcher->get('employeeType') . " is invalid");
                 return $view;
             }
             $contract->setEmployeeContractTypeEmployeeContractType($tempEmployeeContractType);
 
-            $tempPosition=$positionRepo->find($paramFetcher->get('position'));
-            if($tempPosition==null){
-                $view->setStatusCode(404)->setHeader("error","The position ID ".$paramFetcher->get('position')." is invalid");
+            $tempPosition = $positionRepo->find($paramFetcher->get('position'));
+            if ($tempPosition == null) {
+                $view->setStatusCode(404)->setHeader("error", "The position ID " . $paramFetcher->get('position') . " is invalid");
                 return $view;
             }
             $contract->setPositionPosition($tempPosition);
 
-            $tempTimeCommitment=$timeCommitmentRepo->find($paramFetcher->get('timeCommitment'));
-            if($tempTimeCommitment==null){
-                $view->setStatusCode(404)->setHeader("error","The timeCommitment ID ".$paramFetcher->get('timeCommitment')." is invalid");
+            $tempTimeCommitment = $timeCommitmentRepo->find($paramFetcher->get('timeCommitment'));
+            if ($tempTimeCommitment == null) {
+                $view->setStatusCode(404)->setHeader("error", "The timeCommitment ID " . $paramFetcher->get('timeCommitment') . " is invalid");
                 return $view;
             }
             $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
 
-            $startDate=$paramFetcher->get('startDate');
+            $startDate = $paramFetcher->get('startDate');
             $datetime = new DateTime();
             $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
             $contract->setStartDate($datetime);
 
-            $workTimeStart=$paramFetcher->get('workTimeStart');
+            $workTimeStart = $paramFetcher->get('workTimeStart');
             $datetime = new DateTime();
             $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);
             $contract->setWorkTimeStart($datetime);
 
-            $workTimeEnd=$paramFetcher->get('workTimeEnd');
+            $workTimeEnd = $paramFetcher->get('workTimeEnd');
             $datetime = new DateTime();
             $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
             $contract->setWorkTimeEnd($datetime);
 
-            if($contract->getContractTypeContractType()->getName()=="Término fijo"){
-                $endDate=$paramFetcher->get('endDate');
+            if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
+                $endDate = $paramFetcher->get('endDate');
                 $datetime = new DateTime();
                 $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
                 $contract->setEndDate($datetime);
             }
-            if($contract->getTimeCommitmentTimeCommitment()->getName()=="Trabajo por días"){
-                $weekWorkableDays=$paramFetcher->get('weekWorkableDays');
+            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
+                $weekWorkableDays = $paramFetcher->get('weekWorkableDays');
                 foreach ($weekWorkableDays as $key => $value) {
-                    $weekWorkableDay= new WeekWorkableDays();
+                    $weekWorkableDay = new WeekWorkableDays();
                     $weekWorkableDay->setContractContract($contract);
                     $weekWorkableDay->setDayName($value);
                     $contract->addWeekWorkableDay($weekWorkableDay);
                 }
-                $workableDaysMonth=$paramFetcher->get('workableDaysMonth');
+                $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
                 $contract->setWorkableDaysMonth($workableDaysMonth);
             }
 
             //Workplaces and Benefits
-            $benefits=$paramFetcher->get("idsBenefits");
-            $benefitsAmount=$paramFetcher->get("amountBenefits");
-            $benefitsPeriod=$paramFetcher->get("periodicityBenefits");
-            $workplace=$paramFetcher->get("idWorkplace");
+            $benefits = $paramFetcher->get("idsBenefits");
+            $benefitsAmount = $paramFetcher->get("amountBenefits");
+            $benefitsPeriod = $paramFetcher->get("periodicityBenefits");
+            $workplace = $paramFetcher->get("idWorkplace");
             /** @var Workplace $realWorkplace */
-            $realWorkplace=$workplaceRepo->find($workplace);
-            if($realWorkplace==null){
-                $view->setStatusCode(404)->setHeader("error","The workplace ID ".$workplace." is invalid");
+            $realWorkplace = $workplaceRepo->find($workplace);
+            if ($realWorkplace == null) {
+                $view->setStatusCode(404)->setHeader("error", "The workplace ID " . $workplace . " is invalid");
                 return $view;
             }
             $contract->setWorkplaceWorkplace($realWorkplace);
-            for($i=0;$i<count($benefits);$i++){
+            for ($i = 0; $i < count($benefits); $i++) {
                 /** @var Benefits $realBenefit */
-                $realBenefit=$benefitRepo->find($benefits[$i]);
-                if($realBenefit==null){
-                    $view->setStatusCode(404)->setHeader("error","The Benefit ID ".$benefits[$i]." is invalid");
+                $realBenefit = $benefitRepo->find($benefits[$i]);
+                if ($realBenefit == null) {
+                    $view->setStatusCode(404)->setHeader("error", "The Benefit ID " . $benefits[$i] . " is invalid");
                     return $view;
                 }
-                $tempContractHasBenefit=new ContractHasBenefits();
+                $tempContractHasBenefit = new ContractHasBenefits();
                 $tempContractHasBenefit->setAmount($benefitsAmount[$i]);
                 $tempContractHasBenefit->setBenefitsBenefits($realBenefit);
                 $tempContractHasBenefit->setPeriodicity($benefitsPeriod[$i]);
@@ -667,9 +667,9 @@ class EmployeeRestController extends FOSRestController
             }
             $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions'));
             $contract->setTransportAid($paramFetcher->get('transportAid'));
-            $contracts= $employerEmployee->getContracts();
+            $contracts = $employerEmployee->getContracts();
             /** @var Contract $cont */
-            foreach($contracts as $cont){
+            foreach ($contracts as $cont) {
                 $cont->setState("UnActive");
             }
             //turn on current contract
@@ -680,7 +680,7 @@ class EmployeeRestController extends FOSRestController
             if (count($errors) == 0) {
                 $em->persist($employee);
                 $em->flush();
-                $view->setData(array('response'=>array('idContract'=>$contract->getIdContract())))->setStatusCode(200);
+                $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
                 return $view;
             } else {
                 $view = $this->getErrorsView($errors);
@@ -688,6 +688,7 @@ class EmployeeRestController extends FOSRestController
             }
         }
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -710,57 +711,58 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
      * @return View
      */
-    public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher){
+    public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
+    {
         /** @var User $user */
-        $user=$this->getUser();
-        if($user==null){
+        $user = $this->getUser();
+        if ($user == null) {
             $view = View::create();
-            $view->setData(array('error'=>array('employee'=>'user not logged')))->setStatusCode(403);
+            $view->setData(array('error' => array('employee' => 'user not logged')))->setStatusCode(403);
             return $view;
         }
-        $idEmployer=$paramFetcher->get('idEmployer');
-        $idsEmployerHasEmployee=$paramFetcher->get('idEmployerHasEmployee');
-        $beneficiaries=$paramFetcher->get('beneficiaries');
-        $pension=$paramFetcher->get('pension');
-        $wealth=$paramFetcher->get('wealth');
-        $employerRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
-        $employerHasEmployeeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-        $entityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
+        $idEmployer = $paramFetcher->get('idEmployer');
+        $idsEmployerHasEmployee = $paramFetcher->get('idEmployerHasEmployee');
+        $beneficiaries = $paramFetcher->get('beneficiaries');
+        $pension = $paramFetcher->get('pension');
+        $wealth = $paramFetcher->get('wealth');
+        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $employerHasEmployeeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
         /** @var Employer $realEmployer */
-        $realEmployer=$employerRepo->find($idEmployer);
-        if($user->getPersonPerson()->getEmployer()!=$realEmployer){
+        $realEmployer = $employerRepo->find($idEmployer);
+        if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
             $view = View::create();
-            $view->setData(array('error'=>array('user'=>'not the logged user')))->setStatusCode(403);
+            $view->setData(array('error' => array('user' => 'not the logged user')))->setStatusCode(403);
             return $view;
         }
-        $realEmployerHasEmployees=$realEmployer->getEmployerHasEmployees();
-        $flag=false;
-        for($i=0;$i<count($idsEmployerHasEmployee);$i++){
+        $realEmployerHasEmployees = $realEmployer->getEmployerHasEmployees();
+        $flag = false;
+        for ($i = 0; $i < count($idsEmployerHasEmployee); $i++) {
             /** @var EmployerHasEmployee $realEmployerHasEmployee */
-            $realEmployerHasEmployee=$employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
-            if($realEmployerHasEmployees->contains($realEmployerHasEmployee)){
+            $realEmployerHasEmployee = $employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
+            if ($realEmployerHasEmployees->contains($realEmployerHasEmployee)) {
                 /** @var Entity $tempPens */
-                $tempPens=$entityRepo->find($pension[$i]);
+                $tempPens = $entityRepo->find($pension[$i]);
                 /** @var Entity $tempWealth */
-                $tempWealth=$entityRepo->find($wealth[$i]);
-                if($tempPens==null||$tempWealth==null){
+                $tempWealth = $entityRepo->find($wealth[$i]);
+                if ($tempPens == null || $tempWealth == null) {
                     $view = View::create();
-                    $view->setData(array('error'=>array('entity'=>'do not exist')))->setStatusCode(404);
+                    $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
                     return $view;
                 }
-                $realEmployee=$realEmployerHasEmployee->getEmployeeEmployee();
-                $realEmployeeEnt=$realEmployee->getEntities();
+                $realEmployee = $realEmployerHasEmployee->getEmployeeEmployee();
+                $realEmployeeEnt = $realEmployee->getEntities();
                 $em = $this->getDoctrine()->getManager();
-                if($realEmployeeEnt->count()==0){
-                    $employeeHasEntityPens=new EmployeeHasEntity();
+                if ($realEmployeeEnt->count() == 0) {
+                    $employeeHasEntityPens = new EmployeeHasEntity();
                     $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
                     $employeeHasEntityPens->setEntityEntity($tempPens);
                     $realEmployee->addEntity($employeeHasEntityPens);
-                    $employeeHasEntityWealth=new EmployeeHasEntity();
+                    $employeeHasEntityWealth = new EmployeeHasEntity();
                     $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                     $employeeHasEntityWealth->setEntityEntity($tempWealth);
                     $realEmployee->addEntity($employeeHasEntityPens);
-                    $realEmployee->setAskBeneficiary(($beneficiaries[$i])? true : false);
+                    $realEmployee->setAskBeneficiary((isset($beneficiaries[$i])) ? true : false);
 
 
 
@@ -768,14 +770,14 @@ class EmployeeRestController extends FOSRestController
                     $em->persist($employeeHasEntityWealth);
                     $em->persist($realEmployee);
                     $em->flush();
-                }else{
+                } else {
                     /** @var EmployeeHasEntity $rEE */
                     foreach ($realEmployeeEnt as $rEE) {
-                        if($rEE->getEntityEntity()->getEntityTypeEntityType()=="EPS"){
+                        if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "EPS") {
                             $rEE->setEntityEntity($tempWealth);
                             $em->persist($rEE);
                         }
-                        if($rEE->getEntityEntity()->getEntityTypeEntityType()=="Pension"){
+                        if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Pension") {
                             $rEE->setEntityEntity($tempPens);
                             $em->persist($rEE);
                         }
@@ -783,26 +785,24 @@ class EmployeeRestController extends FOSRestController
                     $em->persist($realEmployee);
                     $em->flush();
                 }
-                $flag=true;
-
-
-            }else{
+                $flag = true;
+            } else {
                 $view = View::create();
-                $view->setData(array('error'=>array('employee'=>'do not contain')))->setStatusCode(401);
+                $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
                 return $view;
             }
         }
-        if($flag){
+        if ($flag) {
             $view = View::create();
-            $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
+            $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
             return $view;
-        }else{
+        } else {
             $view = View::create();
-            $view->setData(array('response'=>array('message'=>'something went wrong')))->setStatusCode(400);
+            $view->setData(array('response' => array('message' => 'something went wrong')))->setStatusCode(400);
             return $view;
         }
-
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -824,47 +824,48 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
      * @return View
      */
-    public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher){
+    public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher)
+    {
         /** @var User $user */
-        $user=$this->getUser();
-        if($user==null){
+        $user = $this->getUser();
+        if ($user == null) {
             return;
         }
-        $idEmployer=$paramFetcher->get('idEmployer');
-        $employerRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
-        $entityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
+        $idEmployer = $paramFetcher->get('idEmployer');
+        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
         /** @var Employer $realEmployer */
-        $realEmployer=$employerRepo->find($idEmployer);
-        if($user->getPersonPerson()->getEmployer()!=$realEmployer){
+        $realEmployer = $employerRepo->find($idEmployer);
+        if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
             return;
         }
         $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity'));
-        $realArl=$entityRepo->find($paramFetcher->get('arl'));
-        $realSeverances=$entityRepo->find($paramFetcher->get('severances'));
-        if($realSeverances==null||$realArl==null){
+        $realArl = $entityRepo->find($paramFetcher->get('arl'));
+        $realSeverances = $entityRepo->find($paramFetcher->get('severances'));
+        if ($realSeverances == null || $realArl == null) {
             return;
         }
-        $realEmployerEnt=$realEmployer->getEntities();
+        $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
 
-        if($realEmployerEnt->count()==0){
-            $realArlHasEmployer=new EmployerHasEntity();
+        if ($realEmployerEnt->count() == 0) {
+            $realArlHasEmployer = new EmployerHasEntity();
             $realArlHasEmployer->setEntityEntity($realArl);
             $realArlHasEmployer->setEmployerEmployer($realEmployer);
             $realEmployer->addEntity($realArlHasEmployer);
-            $realSevereancesHasEmployer=new EmployerHasEntity();
+            $realSevereancesHasEmployer = new EmployerHasEntity();
             $realSevereancesHasEmployer->setEntityEntity($realSeverances);
             $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
             $realEmployer->addEntity($realSevereancesHasEmployer);
             $em->persist($realEmployer);
             $em->flush();
-        }else{
+        } else {
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if($rEE->getEntityEntity()->getEntityTypeEntityType()=="ARL"){
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "ARL") {
                     $rEE->setEntityEntity($realArl);
                 }
-                if($rEE->getEntityEntity()->getEntityTypeEntityType()=="Cesantias"){
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Cesantias") {
                     $rEE->setEntityEntity($realSeverances);
                 }
             }
@@ -873,11 +874,10 @@ class EmployeeRestController extends FOSRestController
         }
 
         $view = View::create();
-        $view->setData(array('response'=>array('message'=>'added')))->setStatusCode(200);
+        $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
         return $view;
-
-
     }
+
     /**
      * Get the validation errors
      *
@@ -899,4 +899,5 @@ class EmployeeRestController extends FOSRestController
 
         return $view;
     }
+
 }

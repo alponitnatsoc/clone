@@ -19,44 +19,44 @@
 
                 Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
                 <div>        
-                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-                    <div class="col-sm-3 col-xs-12">
-                        <img src="/img/1-iconStep.png">
-                        <span>Nombre</span>
-                    </div>
-                    <div class="col-sm-3 col-xs-12">
-                        <img src="/img/2-iconStep.png">
-                        <span>Salud</span>
-                    </div>
-                    <div class="col-sm-3 col-xs-12">
-                        <img src="/img/3-iconStep.png">
-                        <span>Pensión</span>
-                    </div>
-                    <div class="col-sm-3 col-xs-12">
-                        <img src="/img/4-iconStep.png">
-                        <span>¿Registrará beneficiarios?</span>
-                    </div>
-                </div>
-                {% for employee in form.employerHasEmployees %}
                     <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(employee.nameEmployee) }}
+                            <img src="/img/1-iconStep.png">
+                            <span>Nombre</span>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(employee.wealth) }}
+                            <img src="/img/2-iconStep.png">
+                            <span>Salud</span>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(employee.pension) }}
+                            <img src="/img/3-iconStep.png">
+                            <span>Pensión</span>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{ form_row(employee.beneficiaries) }}
-                            {{ form_row(employee.idEmployerHasEmployee) }}
+                            <img src="/img/4-iconStep.png">
+                            <span>¿Registrará beneficiarios?</span>
                         </div>
                     </div>
-                {% endfor %}  
-            </div>
-            
-            
+                    {% for employee in form.employerHasEmployees %}
+                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                            <div class="col-sm-3 col-xs-12">
+                                {{ form_row(employee.nameEmployee) }}
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                {{ form_row(employee.wealth) }}
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                {{ form_row(employee.pension) }}
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                {{ form_row(employee.beneficiaries) }}
+                                {{ form_row(employee.idEmployerHasEmployee) }}
+                            </div>
+                        </div>
+                    {% endfor %}  
+                </div>
+
+
                 <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
             </div>
