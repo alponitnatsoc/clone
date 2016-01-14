@@ -73,7 +73,7 @@
                                 <li><a href="{{ path('show_calculator_form') }}">Calculadora</a></li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="{{ path('fos_user_security_login') }}" class="btn btn-ingresar pull-right">Ingresar <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+                                <li><a href="#loginModal" data-toggle="modal" class="btn btn-ingresar pull-right">Ingresar <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
                             </ul>
                         </div><!--/.navbar-collapse -->
                     </div>
@@ -112,7 +112,7 @@
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="{{ path('show_dashboard') }}">configuración inicial</a>
+                                        <a href="{{ path('show_dashboard') }}">Inicio</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_dashboard_employer') }}">Empleador</a>
@@ -296,5 +296,29 @@
             olark.identify('2239-144-10-4926');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
         <!-- end olark code -->
     {% endblock %}
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    {% include "RocketSellerTwoPickBundle:General:login.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="forgotModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    {% include "FOSUserBundle:Resetting:request_content.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
 {% extends "::base.html.twig" %}
 
-{% block fos_user_content %}
-{% include "FOSUserBundle:Resetting:request_content.html.twig" %}
-{% endblock fos_user_content %}
+{% block body %}
+<div class="container">
+	{% include "FOSUserBundle:Resetting:request_content.html.twig" %}
+</div>
+{% endblock body %}

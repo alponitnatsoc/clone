@@ -40,6 +40,8 @@ twig:
     strict_variables: "%kernel.debug%"
     form:
         resources: ['bootstrap_3_layout.html.twig', 'SonataMediaBundle:Form:media_widgets.html.twig']
+    globals:
+        fos_csrf_provider: "@form.csrf_provider"
 
 
 # Assetic Configuration
