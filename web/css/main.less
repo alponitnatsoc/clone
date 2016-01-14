@@ -925,6 +925,37 @@
         }
     }
 }
+
+.worktime {
+    & > div {
+        float: left;
+        margin-right: 15px;
+    }
+    & > div {
+        & > div {
+            select {
+                &:last-child {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+    .worktimeEnd {
+        label {
+            color: #fff!important;
+        }
+    }
+}
+
+div#register_employee_employeeHasEmployers_weekWorkableDays > div
+{
+    &.checkbox {
+        float: left;
+        margin-top: 0!important;
+        margin-right: 15px;
+    }
+}
+
 @media (max-width: @screen-sm-max) {
    .block-Intro-green {
       height: 250px;

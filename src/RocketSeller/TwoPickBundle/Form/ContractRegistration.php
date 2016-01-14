@@ -90,7 +90,7 @@ class ContractRegistration extends AbstractType
             ->add('workTimeEnd', 'time', array(
                 'input'  => 'timestamp',
                 'widget' => 'choice',
-                'label'=>' '
+                'label'=>'A:'
             ))
 
             ->add('startDate', 'date', array(
