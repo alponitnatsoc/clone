@@ -657,6 +657,10 @@ ul.phones li {
   font-style: italic;
   font-weight: 100;
 }
+.blockLeftBefore span.txtAU,
+.blockRightAfter span.txtAU {
+  height: 170px;
+}
 .blockLeftBefore span.txtAT bl,
 .blockRightAfter span.txtAT bl {
   color: #00CDCC;
@@ -748,5 +752,10 @@ ul.phones li {
     width: 120px;
     height: 120px;
     padding: 12px 0px;
+  }
+}
+@media (min-width: 1200px) {
+  .contenMessage {
+    margin-left: 20%;
   }
 }
