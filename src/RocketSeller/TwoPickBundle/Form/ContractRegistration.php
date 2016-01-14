@@ -78,7 +78,31 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'benefitsConditions',
                 'label'=>'Condiciones de los beneficios'
             ))
+
             ->add('document', new DocumentPick())
+
+            ->add('workTimeStart', 'time', array(
+                'input'  => 'timestamp',
+                'widget' => 'choice',
+                'label'=>'Horario*:'
+            ))
+
+            ->add('workTimeEnd', 'time', array(
+                'input'  => 'timestamp',
+                'widget' => 'choice',
+                'label'=>' '
+            ))
+
+            ->add('startDate', 'date', array(
+                'years' => range(2010,2020),
+                'label' => 'Fecha inicio de contrato*:',
+                ))
+
+            ->add('endDate', 'date', array(
+                'years' => range(2016,2020),
+                'label' => 'Fecha fin de contrato*:',
+                ))
+
             ->add('transportAid', 'choice', array(
                 'choices' => array(
                     ''=> 'Seleccionar',
@@ -90,6 +114,29 @@ class ContractRegistration extends AbstractType
                 'expanded' => false,
                 'label'=>'Desplazamiento al lugar de trabajo'
             ))
+
+            ->add('workableDaysMonth', 'choice', array(
+                'choices' => range(1,30),
+                'multiple' => false,
+                'expanded' => false,
+                'label'=>'Días laborales al mes'
+            ))
+
+            ->add('weekWorkableDays', 'choice', array(
+                'choices' => array(
+                    'lunes'=> 'Lunes',
+                    'martes' => 'Martes',
+                    'miercoles' => 'Miercoles',
+                    'jueves' => 'Jueves',
+                    'viernes' => 'Viernes',
+                    'sabado' => 'Sabado',
+                    'domingo' => 'Domingo',
+                ),
+                'multiple' => true,
+                'expanded' => true,
+                'label'=>'Días laborales de la semana*:'
+            ))
+
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'placeholder' => '',
@@ -100,6 +147,7 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'workplaceWorkplace',
                 'label'=>'Lugar de trabajo'
             ))
+
             ->add('payMethod', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PayType',
                 'property' => 'name',

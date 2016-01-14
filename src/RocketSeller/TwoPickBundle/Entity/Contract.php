@@ -53,10 +53,16 @@ class Contract
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
      */
     private $payrolls;
+
     /**
      * @ORM\OneToMany(targetEntity="ContractHasBenefits", mappedBy="contractContract", cascade={"persist"})
      */
     private $benefits;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
+     */
+    private $weekWorkableDays;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
@@ -126,16 +132,33 @@ class Contract
      */
     private $liquidations;
 
+    /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $startDate;
 
     /**
-     * Constructor
+     * @ORM\Column(type="date", nullable=TRUE)
      */
-    public function __construct()
-    {
-        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $endDate;
+
+    /**
+     * @ORM\Column(type="time", nullable=TRUE)
+     */
+    private $workTimeStart;
+
+    /**
+     * @ORM\Column(type="time", nullable=TRUE)
+     */
+    private $workTimeEnd;
+
+    /**
+     * @ORM\Column(type="integer", nullable=TRUE)
+     */
+    private $workableDaysMonth;
+
+
+
 
     /**
      * Get idContract
@@ -537,4 +560,169 @@ class Contract
     {
         return $this->transportAid;
     }
+
+    /**
+     * Set startDate
+     *
+     * @param \DateTime $startDate
+     *
+     * @return Contract
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * Get startDate
+     *
+     * @return \DateTime
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * Set endDate
+     *
+     * @param \DateTime $endDate
+     *
+     * @return Contract
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return \DateTime
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Set workTimeStart
+     *
+     * @param \DateTime $workTimeStart
+     *
+     * @return Contract
+     */
+    public function setWorkTimeStart($workTimeStart)
+    {
+        $this->workTimeStart = $workTimeStart;
+
+        return $this;
+    }
+
+    /**
+     * Get workTimeStart
+     *
+     * @return \DateTime
+     */
+    public function getWorkTimeStart()
+    {
+        return $this->workTimeStart;
+    }
+
+    /**
+     * Set workTimeEnd
+     *
+     * @param \DateTime $workTimeEnd
+     *
+     * @return Contract
+     */
+    public function setWorkTimeEnd($workTimeEnd)
+    {
+        $this->workTimeEnd = $workTimeEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get workTimeEnd
+     *
+     * @return \DateTime
+     */
+    public function getWorkTimeEnd()
+    {
+        return $this->workTimeEnd;
+    }
+
+    /**
+     * Set workableDaysMonth
+     *
+     * @param integer $workableDaysMonth
+     *
+     * @return Contract
+     */
+    public function setWorkableDaysMonth($workableDaysMonth)
+    {
+        $this->workableDaysMonth = $workableDaysMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get workableDaysMonth
+     *
+     * @return integer
+     */
+    public function getWorkableDaysMonth()
+    {
+        return $this->workableDaysMonth;
+    }
+
+    /**
+     * Add weekWorkableDay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
+     *
+     * @return Contract
+     */
+    public function addWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
+    {
+        $this->weekWorkableDays[] = $weekWorkableDay;
+
+        return $this;
+    }
+
+    /**
+     * Remove weekWorkableDay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
+     */
+    public function removeWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
+    {
+        $this->weekWorkableDays->removeElement($weekWorkableDay);
+    }
+
+    /**
+     * Get weekWorkableDays
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWeekWorkableDays()
+    {
+        return $this->weekWorkableDays;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }
