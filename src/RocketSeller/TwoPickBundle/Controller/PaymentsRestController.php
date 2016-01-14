@@ -12,12 +12,51 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use DateTime;
+use GuzzleHttp\Client;
 
 use EightPoints\Bundle\GuzzleBundle;
 
+  /**
+  *Contains all the web services to call the payment system.
+  * Get methods can be call as any function.
+  * If a post method is going to be call from within the application here is an
+  * example:
+  *   $request =  new Request();
+  *   $request->request->set("employee_id", "123456");
+  *   $request->request->set("concept_id", "1");
+  *   $this->postFunctionAction($request);
+  *
+  */
 class PaymentsRestController extends FOSRestController
 {
+  /**
+   * Verifies that the parameters to the web services, are in place and that
+   * have the ccorrect format.
+   * @param Array $parameters, Contains the parameters by the client.
+   * @param Array $regex, contains the key as parameter and a regex.
+   * @param Array $mandatory, contains a bool indicating if it is mandatory.
+   */
+  public function validateParamters($parameters, $regex, $mandatory) {
+
+     foreach($mandatory as $key => $value)
+     {
+       if(array_key_exists($key, $mandatory) &&
+          $mandatory[$key] &&
+          (!array_key_exists($key, $parameters) || $parameters[$key] == null ||
+          ($parameters[$key] !== "0" && empty($parameters[$key]))))
+            throw new HttpException(400, "The parameter " . $key . " is empty");
+
+       if(array_key_exists($key, $regex) &&
+          !preg_match('/^' . $regex[$key] . '$/', $parameters[$key]))
+         throw new HttpException(400, "The format of the parameter " .
+                                      $key . " is invalid, it doesn't match" .
+                                      $regex[$key]);
+     }
+  }
+
   /**
    * Calls the payments api, it receives the headers and the parameters and
    * makes a call using an absolute path, and returns a view with the Json or
@@ -32,7 +71,8 @@ class PaymentsRestController extends FOSRestController
   public function callApi($headers, $parameters, $path, $action="post",
                           $timeout=10)
   {
-    $client = $this->get('guzzle.client.api_rest');
+    //$client = $this->get('guzzle.client.api_rest');
+    $client = new Client(['http_errors' => false]);
     // $url_request = $this->container->getParameter('novo_payments_url') ;
 
     // URL used for test porpouses, the line above should be used in production.
@@ -43,17 +83,21 @@ class PaymentsRestController extends FOSRestController
                   'json'        => $parameters,
                   'timeout'     => $timeout
                 );
-    if ($action == "post")
-    {
-      $response = $client->post($url_request, $options);
-    }
-    else if ($action == "delete")
-    {
-      $response = $client->delete($url_request, $options);
-    }
-    else if ($action == "get")
-    {
-      $response = $client->get($url_request, $options);
+    try {
+      if ($action == "post")
+      {
+        $response = $client->post($url_request, $options);
+      }
+      else if ($action == "delete")
+      {
+        $response = $client->delete($url_request, $options);
+      }
+      else if ($action == "get")
+      {
+        $response = $client->get($url_request, $options);
+      }
+    }catch (Guzzle\Http\Exception\BadResponseException $e) {
+        // It menas it returned error code.
     }
     $view = View::create();
     $view->setStatusCode($response->getStatusCode());
@@ -68,23 +112,23 @@ class PaymentsRestController extends FOSRestController
    * It sets the headers for the payments request. Each request method, recieves
    * parameters in case the client wants something different, but in most cases
    * the header is the same, this function sets de default values.
-   * @param ParamFetcher with the options in the request $paramFetcher
+   * @param Array with the options in the request
    * @return Array with the header options.
    */
-  private function setHeaders($paramFetcher=null) {
+  private function setHeaders($parameters=null) {
     $header = array();
-    $header['x-channel'] = (!$paramFetcher || !$paramFetcher->get('channel')) ?
-                           'WEB' : $paramFetcher->get('channel');
-    $header['x-country'] = (!$paramFetcher || !$paramFetcher->get('country')) ?
-                           'CO' : $paramFetcher->get('country');
-    $header['language'] = (!$paramFetcher || !$paramFetcher->get('language')) ?
-                          'es' : $paramFetcher->get('language');
-    $header['content-type'] = (!$paramFetcher ||
-                              !$paramFetcher->get('content_type')) ?
+    $header['x-channel'] = (!$parameters || !isset($parameters['channel'])) ?
+                           'WEB' : $parameters['channel'];
+    $header['x-country'] = (!$parameters || !isset($parameters['country'])) ?
+                           'CO' : $parameters['country'];
+    $header['language'] = (!$parameters || !isset($parameters['language'])) ?
+                          'es' : $parameters['language'];
+    $header['content-type'] = (!$parameters ||
+                              !isset($parameters['content_type'])) ?
                               'application/json' :
-                              $paramFetcher->get('content_type');
-    $header['accept'] = (!$paramFetcher || !$paramFetcher->get('accept')) ?
-                              'application/json' : $paramFetcher->get('accept');
+                              $parameters['content_type'];
+    $header['accept'] = (!$parameters || !isset($parameters['accept'])) ?
+                              'application/json' : $parameters['accept'];
     return $header;
   }
 
@@ -101,48 +145,65 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
-   * @RequestParam(name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
-   * @RequestParam(name="year", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
-   * @RequestParam(name="month", nullable=false, requirements="([0-9]){2}", strict=true, description="month of birth.")
-   * @RequestParam(name="day", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
-   * @RequestParam(name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
-   * @RequestParam(name="email", nullable=false, strict=true, description="email.")
+   * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
+   * (name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
+   * (name="year", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
+   * (name="month", nullable=false, requirements="([0-9]){2}", strict=true, description="month of birth.")
+   * (name="day", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
+   * (name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
+   * (name="email", nullable=false, strict=true, description="email.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function postClientAction(ParamFetcher $paramFetcher)
+  public function postClientAction(Request $request)
   {
-    // Create the birth date in the right format.
-    $birth = $paramFetcher->get('day') . '/' . $paramFetcher->get('month') .
-             '/' . $paramFetcher->get('year');
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/";
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['documentType'] = '([A-Z|a-z]){2}';$mandatory['documentType'] = true;
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = true;
+    $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = true;
+    $regex['year'] = '([0-9]){4}'; $mandatory['year'] = true;
+    $regex['month'] = '([0-9]){2}'; $mandatory['month'] = true;
+    $regex['day'] = '([0-9]){2}'; $mandatory['day'] = true;
+    $regex['phone'] = '([0-9])+'; $mandatory['phone'] = true;
+    $mandatory['email'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
-    $parameters['document-type'] = $paramFetcher->get('documentType');
-    $parameters['document-number'] = $paramFetcher->get('documentNumber');
-    $parameters['name'] = $paramFetcher->get('name');
-    $parameters['last-name'] = $paramFetcher->get('lastName');
-    $parameters['birth-date'] = $birth;
-    $parameters['phone-number'] = $paramFetcher->get('phone');
-    $parameters['email'] = $paramFetcher->get('email');
+    // Create the birth date in the right format.
+    $birth = $parameters['day'] . '/' . $parameters['month'] .
+             '/' . $parameters['year'];
+
+    $parameters_fixed = array();
+    $parameters_fixed['document-type'] = $parameters['documentType'];
+    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['name'] = $parameters['name'];
+    $parameters_fixed['last-name'] = $parameters['lastName'];
+    $parameters_fixed['birth-date'] = $birth;
+    $parameters_fixed['phone-number'] = $parameters['phone'];
+    $parameters_fixed['email'] = $parameters['email'];
 
     /** @var View $res */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
@@ -270,54 +331,72 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * @RequestParam(name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="document type.")
-   * @RequestParam(name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type.")
-   * @RequestParam(name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
-   * @RequestParam(name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
-   * @RequestParam(name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * @RequestParam(name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
-   * @RequestParam(name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
-   * @RequestParam(name="paymentMode", nullable=false, requirements="([A-Z|a-z| ])+", strict=true, description="Payment mode.")
+   * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="document type.")
+   * (name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type.")
+   * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
+   * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
+   * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
+   * (name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
+   * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
+   * (name="paymentMode", nullable=false, requirements="([A-Z|a-z| ])+", strict=true, description="Payment mode.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function postClientPaymentmethodAction(ParamFetcher $paramFetcher)
+  public function postClientPaymentmethodAction(Request $request)
   {
     // Adjust the format of the expiration date.
     $expiration = null;
-    if ($paramFetcher->get('expirationYear') != null)
-      $expiration = $paramFetcher->get('expirationYear') . '-' .
-               $paramFetcher->get('expirationMonth') . '-' .
-               $paramFetcher->get('expirationDay');
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentType'] = '([A-Z|a-z]){2}';$mandatory['documentType'] = true;
+    $regex['paymentType'] = '([A-Z|a-z]| )+'; $mandatory[''] = true;
+    $regex['accountNumber'] = '([0-9])+'; $mandatory[''] = true;
+    $regex['expirationYear'] = '([0-9]){4}'; $mandatory[''] = false;
+    $regex['expirationMonth'] = '([0-9]){2}'; $mandatory[''] = false;
+    $regex['expirationDay'] = '([0-9]){2}'; $mandatory[''] = false;
+    $regex['codeCheck'] = '([0-9]){3}'; $mandatory[''] = false;
+    $regex['paymentMode'] = '([A-Z|a-z| ])+'; $mandatory[''] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+
+    if (isset($parameters['expirationYear']))
+      $expiration = $parameters['expirationYear'] . '-' .
+               $parameters['expirationMonth'] . '-' .
+               $parameters['expirationDay'];
 
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
+    $path = "/customer/" . $parameters['documentNumber'] .
             "/payment-method/";
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
-    $parameters['document-type'] = $paramFetcher->get('documentType');
-    $parameters['document-number'] = $paramFetcher->get('documentNumber');
-    $parameters['payment-type'] = $paramFetcher->get('paymentType');
-    $parameters['account-number'] = $paramFetcher->get('accountNumber');
-    $parameters['expiration-date'] = $expiration;
-    $parameters['code-check'] = $paramFetcher->get('codeCheck');
-    $parameters['payment-mode'] = $paramFetcher->get('paymentMode');
+    $parameters_fixed = array();
+    $parameters_fixed['document-type'] = $parameters['documentType'];
+    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['payment-type'] = $parameters['paymentType'];
+    $parameters_fixed['account-number'] = $parameters['accountNumber'];
+    $parameters_fixed['expiration-date'] = $expiration;
+    $parameters_fixed['code-check'] = $parameters['codeCheck'];
+    $parameters_fixed['payment-mode'] = $parameters['paymentMode'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
@@ -409,32 +488,45 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="paymentMethodId", nullable=false, requirements="([0-9A-Za-z])+", strict=true, description="id of the payment method.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="paymentMethodId", nullable=false, requirements="([0-9A-Za-z])+", strict=true, description="id of the payment method.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function deleteClientPaymentmethodAction(ParamFetcher $paramFetcher)
+  public function deleteClientPaymentmethodAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['paymentMethodId'] = '([0-9A-Za-z])+';
+    $mandatory['paymentMethodId'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/payment-method/" . $paramFetcher->get('paymentMethodId');
+    $path = "/customer/" . $parameters['documentNumber'] .
+            "/payment-method/" . $parameters['paymentMethodId'];
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
+    $parameters_fixed = array();
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path, 'delete');
+    $responseView = $this->callApi($header, $parameters_fixed, $path, 'delete');
 
     return $responseView;
   }
@@ -452,63 +544,90 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
-   * @RequestParam(name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
-   * @RequestParam(name="yearBirth", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
-   * @RequestParam(name="monthBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="month of birth.")
-   * @RequestParam(name="dayBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
-   * @RequestParam(name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
-   * @RequestParam(name="email", nullable=false, strict=true, description="email.")
-   * @RequestParam(name="companyId", nullable=false, strict=true, description="id of the company(NIT)")
-   * @RequestParam(name="companyBranch", nullable=true, description="Company branch id")
-   * @RequestParam(name="paymentMethodId", nullable=false, requirements="([0-9])+", description="payment method id(1-cash, 2-SVA, 3-account)")
-   * @RequestParam(name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
-   * @RequestParam(name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
-   * @RequestParam(name="PaymentType", nullable=true, description="Ahorros or Corriente")
+   * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
+   * (name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
+   * (name="yearBirth", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
+   * (name="monthBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="month of birth.")
+   * (name="dayBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
+   * (name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
+   * (name="email", nullable=false, strict=true, description="email.")
+   * (name="companyId", nullable=false, strict=true, description="id of the company(NIT)")
+   * (name="companyBranch", nullable=true, description="Company branch id")
+   * (name="paymentMethodId", nullable=false, requirements="([0-9])+", description="payment method id(1-cash, 2-SVA, 3-account)")
+   * (name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
+   * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
+   * (name="PaymentType", nullable=true, description="Ahorros or Corriente")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function postBeneficiaryAction(ParamFetcher $paramFetcher)
+  public function postBeneficiaryAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentType'] = '([A-Z|a-z]){2}'; $mandatory['documentType'] = true;
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = true;
+    $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = true;
+    $regex['yearBirth'] = '([0-9]){4}'; $mandatory['yearBirth'] = true;
+    $regex['monthBirth'] = '([0-9]){2}'; $mandatory['monthBirth'] = true;
+    $regex['dayBirth'] = '([0-9]){2}'; $mandatory['dayBirth'] = true;
+    $regex['phone'] = '([0-9])+'; $mandatory['phone'] = true;
+    $mandatory['email'] = true;
+    $mandatory['companyId'] = true;
+    $mandatory['companyBranch'] = true;
+    $regex['paymentMethodId'] = '([0-9])+';
+    $mandatory['paymentMethodId'] = true;
+    $regex['PaymentAccountNumber'] = '([0-9])+';
+    $mandatory['PaymentAccountNumber'] = true;
+    $regex['PaymentBankNumber'] = '([0-9])+';
+    $mandatory['PaymentBankNumber'] = true;
+    $mandatory['PaymentType'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     // Create the birth date in the right format.
-    $birth = $paramFetcher->get('dayBirth') . '/' .
-             $paramFetcher->get('monthBirth') . '/' .
-             $paramFetcher->get('yearBirth');
+    $birth = $parameters['dayBirth'] . '/' .
+             $parameters['monthBirth'] . '/' .
+             $parameters['yearBirth'];
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
+    $path = "/customer/" . $parameters['documentNumber'] .
             "/beneficiary/";
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
-    $parameters['document-type'] = $paramFetcher->get('documentType');
-    $parameters['document-number'] = $paramFetcher->get('documentNumber');
-    $parameters['name'] = $paramFetcher->get('name');
-    $parameters['last-name'] = $paramFetcher->get('lastName');
-    $parameters['birth-date'] = $birth;
-    $parameters['phone-number'] = $paramFetcher->get('phone');
-    $parameters['email'] = $paramFetcher->get('email');
-    $parameters['company-id'] = $paramFetcher->get('companyId');
-    $parameters['company-branch'] = $paramFetcher->get('companyBranch');
-    $parameters['payment-mode-id'] = $paramFetcher->get('paymentMethodId');
-    $parameters['payment-mode-account'] =
-        $paramFetcher->get('PaymentAccountNumber');
-    $parameters['payment-mode-bank'] = $paramFetcher->get('PaymentBankNumber');
-    $parameters['payment-mode-type'] = $paramFetcher->get('PaymentType');
+    $parameters_fixed = array();
+    $parameters_fixed['document-type'] = $parameters['documentType'];
+    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['name'] = $parameters['name'];
+    $parameters_fixed['last-name'] = $parameters['lastName'];
+    $parameters_fixed['birth-date'] = $birth;
+    $parameters_fixed['phone-number'] = $parameters['phone'];
+    $parameters_fixed['email'] = $parameters['email'];
+    $parameters_fixed['company-id'] = $parameters['companyId'];
+    $parameters_fixed['company-branch'] = $parameters['companyBranch'];
+    $parameters_fixed['payment-mode-id'] = $parameters['paymentMethodId'];
+    $parameters_fixed['payment-mode-account'] =
+         $parameters['PaymentAccountNumber'];
+    $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
+    $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
@@ -598,32 +717,44 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * @RequestParam(name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function deleteClientBeneficiaryAction(ParamFetcher $paramFetcher)
+  public function deleteClientBeneficiaryAction(Request $request)
   {
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['beneficiaryId'] = '([0-9])+'; $mandatory['beneficiaryId'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/beneficiary/" . $paramFetcher->get('beneficiaryId') ;
+    $path = "/customer/" . $parameters['documentNumber'] .
+            "/beneficiary/" . $parameters['beneficiaryId'] ;
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
+    $parameters_fixed = array();
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path, "delete");
+    $responseView = $this->callApi($header, $parameters_fixed, $path, "delete");
 
     return $responseView;
   }
@@ -641,55 +772,83 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * @RequestParam(name="paymentMethodId", nullable=true, requirements="([0-9]| )+", strict=true, description="Id of the payment method.")
-   * @RequestParam(name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
-   * @RequestParam(name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * @RequestParam(name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
-   * @RequestParam(name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
-   * @RequestParam(name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Total amount.")
-   * @RequestParam(name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax amount.")
-   * @RequestParam(name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax base.")
-   * @RequestParam(name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission amount.")
-   * @RequestParam(name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
+   * (name="paymentMethodId", nullable=true, requirements="([0-9]| )+", strict=true, description="Id of the payment method.")
+   * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
+   * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
+   * (name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
+   * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
+   * (name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Total amount.")
+   * (name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax amount.")
+   * (name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax base.")
+   * (name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission amount.")
+   * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function postPaymentAprovalAction(ParamFetcher $paramFetcher)
+  public function postPaymentAprovalAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+';
+    $mandatory['documentNumber'] = true;
+    $regex['paymentMethodId'] = '([0-9]| )+';
+    $mandatory['paymentMethodId'] = true;
+    $regex['expirationYear'] = '([0-9]){4}';
+    $mandatory['expirationYear'] = true;
+    $regex['expirationMonth'] = '([0-9]){2}';
+    $mandatory['expirationMonth'] = true;
+    $regex['expirationDay'] = '([0-9]){2}'; $mandatory['expirationDay'] = true;
+    $regex['codeCheck'] = '([0-9]){3}'; $mandatory['codeCheck'] = true;
+    $regex['totalAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
+    $mandatory['totalAmount'] = false;
+    $regex['taxAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
+    $mandatory['taxAmount'] = false;
+    $regex['taxBase'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
+    $mandatory['taxBase'] = false;
+    $regex['commissionAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
+    $mandatory['commissionAmount'] = false;
+    $regex['commissionBase'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
+    $mandatory['commissionBase'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     // Adjust the format of the expiration date.
-    $expiration = $paramFetcher->get('expirationYear') . '-' .
-             $paramFetcher->get('expirationMonth') . '-' .
-             $paramFetcher->get('expirationDay');
+    $expiration = $parameters['expirationYear'] . '-' .
+                  $parameters['expirationMonth'] . '-' .
+                  $parameters['expirationDay'];
 
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
-            "/charge";
+    $path = "/customer/" . $parameters['documentNumber'] . "/charge";
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
-    $parameters['method-id'] = $paramFetcher->get('paymentMethodId');
-    $parameters['expiration-date'] = $expiration;
-    $parameters['code-check'] = $paramFetcher->get('codeCheck');
-    $parameters['total-amount'] = $paramFetcher->get('totalAmount');
-    $parameters['tax-amount'] = $paramFetcher->get('taxAmount');
-    $parameters['tax-base'] = $paramFetcher->get('taxBase');
-    $parameters['commission-amount'] = $paramFetcher->get('commissionAmount');
-    $parameters['commission-base'] = $paramFetcher->get('commissionBase');
+    $parameters_fixed = array();
+    $parameters_fixed['method-id'] = $parameters['paymentMethodId'];
+    $parameters_fixed['expiration-date'] = $expiration;
+    $parameters_fixed['code-check'] = $parameters['codeCheck'];
+    $parameters_fixed['total-amount'] = $parameters['totalAmount'];
+    $parameters_fixed['tax-amount'] = $parameters['taxAmount'];
+    $parameters_fixed['tax-base'] = $parameters['taxBase'];
+    $parameters_fixed['commission-amount'] = $parameters['commissionAmount'];
+    $parameters_fixed['commission-base'] = $parameters['commissionBase'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
@@ -708,41 +867,58 @@ class PaymentsRestController extends FOSRestController
    *   }
    * )
    *
-   * @param ParamFetcher $paramFetcher Paramfetcher
+   * @param Request $request.
+   * Rest Parameters:
    *
-   * @RequestParam(name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * @RequestParam(name="chargeId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the charge.")
-   * @RequestParam(name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
-   * @RequestParam(name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
-   * @RequestParam(name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
+   * (name="chargeId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the charge.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
+   * (name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
+   * (name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
    *
-   * @RequestParam(name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * @RequestParam(name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * @RequestParam(name="language", nullable=true, description="Language code from ISO 639-1.")
-   * @RequestParam(name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * @RequestParam(name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
+   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
+   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
+   * (name="language", nullable=true, description="Language code from ISO 639-1.")
+   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
+   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
-  public function postClientPaymentAction(ParamFetcher $paramFetcher)
+  public function postClientPaymentAction(Request $request)
   {
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['chargeId'] = '([0-9]| )+'; $mandatory['chargeId'] = true;
+    $regex['beneficiaryId'] = '([0-9]| )+'; $mandatory['beneficiaryId'] = true;
+    $regex['beneficiaryAmount'] = '([0-9]| )+';
+    $mandatory['beneficiaryAmount'] = true;
+    $regex['beneficiaryPhone'] = '([0-9]| )+';
+    $mandatory['beneficiaryPhone'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $paramFetcher->get('documentNumber') .
+    $path = "/customer/" . $parameters['documentNumber'] .
             "/beneficiary/transfer";
 
     // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($paramFetcher);
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
-    $parameters['charge-id'] = $paramFetcher->get('chargeId');
-    $parameters['beneficiary-id'] = $paramFetcher->get('beneficiaryId');
-    $parameters['beneficiary-amount'] = $paramFetcher->get('beneficiaryAmount');
-    $parameters['beneficiary-phone-number'] =
-        $paramFetcher->get('beneficiaryPhone');
+    $parameters_fixed = array();
+    $parameters_fixed['charge-id'] = $parameters['chargeId'];
+    $parameters_fixed['beneficiary-id'] = $parameters['beneficiaryId'];
+    $parameters_fixed['beneficiary-amount'] = $parameters['beneficiaryAmount'];
+    $parameters_fixed['beneficiary-phone-number'] =
+        $parameters['beneficiaryPhone'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
@@ -892,6 +1068,5 @@ class PaymentsRestController extends FOSRestController
 
     return $responseView;
   }
-
 }
 ?>

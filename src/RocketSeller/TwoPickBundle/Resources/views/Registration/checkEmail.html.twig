@@ -3,11 +3,22 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block body %}
-    <p>Hemos enviado un correo electr&oacute;nico</p>
-    <p>a la direc&oacute;n ingresada</p>
-    <p>para finalizar el proceso de registro requerimos que</p>
-    <p>confirme la direcci&oacute;n ingresada haciendo click en el v&iacute;nculo</p>
-    <p>que se encuentra en el mensaje enviado.</p>
-    <p>&#161;Gracias por contar con Symplifica&#33;</p>
-    <p><a href="/" class="btn btn-default">Entendido</a></p>
+	<div class="row-fluid block-Intro-green">
+        <div class="col-sm-2 col-xs-12 boxIntro-Heading"><img src="/img/check-in.png"></div>
+        <div class="col-sm-3 hidden-xs"></div>
+        <div class="col-sm-9 col-xs-12 up-Intro">Hemos enviado un correo electr&oacute;nico a la direcci&oacute;n ingresada</div>
+    </div>
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-3 contenMessage">
+            <div class="" id="info1">
+                <p class="lead">Para finalizar el proceso de registro requerimos que confirme la direcci&oacute;n ingresada haciendo click en el v&iacute;nculo que se encuentra en el mensaje enviado.
+                </p>
+                <p class="lead">&#161;Gracias por contar con Symplifica&#33;</p>
+            </div>
+        </div>
+        
+        <div class="col-sm-12 col-xs-12 center">
+            <p><a href="/" class="btn btn-default" role="button">ENTENDIDO</a></p>
+        </div>
+   </div>
 {% endblock body %}
