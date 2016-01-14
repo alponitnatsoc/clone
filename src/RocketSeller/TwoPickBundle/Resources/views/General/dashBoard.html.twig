@@ -14,12 +14,12 @@
                 </div>
                 <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
                     <div id='' class='text-left' >
-                        <p>Paso <strong>{{step.paso}}</strong> de 3</p>
+                        <p>Paso {{step.paso}} de 3</p>
                         {{step.name}}
                     </div>
                 </div>
                 <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-                    {{step.state}}% {% if step.state==100 %}<min>Hecho</min>{% endif %}
+                    {{step.state}}% {% if step.state==100 %}{% endif %}
                 </div>
                 <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
                     <div id='' class='btn stepIni' >
