@@ -54,7 +54,7 @@ security:
             anonymous:    true
             logout:
                 path:           fos_user_security_logout
-                target:         /pages 
+                target:         home_landing 
                 #where to go after logout
             #d# anonymous: ~
             # activate different ways to authenticate
