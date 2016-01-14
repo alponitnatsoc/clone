@@ -1,257 +1,313 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-<div class="row-fluid">
-	<div class="col-sm-12 col-xs-12 block-Intro">
-		<span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
-	</div>
-</div>
-<div class="row"></div>
-<div id='registrationFormContainer' class=''>
-	{{ form_errors(form) }}
-	{{ form_start(form) }}
+    {% block stylesheets %}
+        <style>
+            .blockStep2 {
+                margin-top: 10px;
+                background: #3b4b5a !important;
+                background-image: none;
+                background: 0 0;
+                border: 1px solid #919191;
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 20px;
+                padding: 15px;
+                text-shadow: none;
+                color: #fff;
+                opacity: 0.8;
+            }
+            .blockStep2 .txt-AD1 {
+                font-family: "Open Sans";
+                font-size: 24px;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: #fff;
+                white-space: normal;
+            }
+        </style>
+    {% endblock %} 
+    <div id='' class='col-sm-12 col-xs-12 align-Resp'>
+        <div id='' class='col-sm-12 col-xs-12 blockStep2'>
+            <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+                <img src="/img/employ.png">                 
+            </div>
+            <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
+                <div id='' class='text-left' >
+                    DATOS DE LOS EMPLEADOS
+                </div>
+            </div>
+            <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
+            </div>
+            <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
+                <div id='' class=' stepIni' >
+                </div>
 
-	<ul class="nav nav-tabs nav-justified">
-		<li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-		<li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
-		<li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
-		<li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
-	</ul>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="col-sm-12 col-xs-12 block-Intro">
+            <span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
+        </div>
+    </div>
+    <div class="row"></div>
+    <div id='registrationFormContainer' class=''>
+        {{ form_errors(form) }}
+        {{ form_start(form) }}
 
-	<div class="tab-content">
-		<div id="basicData" class="tab-pane fade in active">
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
-			</div>
-			<div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
-				<div class="col-sm-6 col-xs-12">
-					<img src="/img/documentType.png">
-					{{ form_row(form.person.documentType) }}
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					<img src="/img/documentNumber.png">
-					{{ form_row(form.person.document) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.names) }}
-					{{ form_row(form.person.lastName1) }}
-					{{ form_row(form.person.lastName2) }}
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.personExtra.civilStatus) }}
-					{{ form_row(form.personExtra.gender) }}
-					{{ form_row(form.personExtra.documentExpeditionDate) }}
-					{{ form_row(form.personExtra.documentExpeditionPlace) }}
-				</div>
-			</div>
-			<h2>Datos de nacimiento</h2>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.birthDate) }}
-					{{ form_row(form.personExtra.birthDepartment) }}
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.personExtra.birthCity) }}
-					{{ form_row(form.personExtra.birthCountry) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-			</div>
-		</div>
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
+            <li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
+            <li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
+        </ul>
 
-		<div id="contactData" class="tab-pane fade in">
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Los campos marcados en * son obligatorios</span>
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.mainAddress) }}
-					<ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-						{% for phone in form.person.phones %}
-						<li id="phone_{{loop.index}}" class="phoneLi">
-							{{ form_row(phone.id) }}
-							{{ form_row(phone.phoneNumber) }}
-						</li>
-						{% endfor %}
-						<li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li>
-					</ul>
-				</div>
-				<div class="col-sm-6 col-xs-12">
-					{{ form_row(form.person.department) }}
-					{{ form_row(form.person.city) }}
-					{{ form_row(form.personExtra.email) }}
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<a class="btn btn-primary btnPrevious" >< Anterior</a>
-				<a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-			</div>
-		</div>
+        <div class="tab-content">
+            <div id="basicData" class="tab-pane fade in active">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
+                </div>
+                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
+                    <div class="col-sm-6 col-xs-12">
+                        <img src="/img/documentType.png">
+                        {{ form_row(form.person.documentType) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <img src="/img/documentNumber.png">
+                        {{ form_row(form.person.document) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.names) }}
+                        {{ form_row(form.person.lastName1) }}
+                        {{ form_row(form.person.lastName2) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.personExtra.civilStatus) }}
+                        {{ form_row(form.personExtra.gender) }}
+                        {{ form_row(form.personExtra.documentExpeditionDate) }}
+                        {{ form_row(form.personExtra.documentExpeditionPlace) }}
+                    </div>
+                </div>
+                <h2>Datos de nacimiento</h2>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.birthDate) }}
+                        {{ form_row(form.personExtra.birthDepartment) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.personExtra.birthCity) }}
+                        {{ form_row(form.personExtra.birthCountry) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div>
+            </div>
 
-		<div id="contractData" class="tab-pane fade">
-			<div class="col-sm-12 col-xs-12 block-Intro">
-				<span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
-			</div>
-			<div class="col-sm-12 col-xs-12 blockUpData">
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentType.png">
-					{{ form_row(form.employeeHasEmployers.employeeType) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/documentNumber.png">
-					{{ form_row(form.employeeHasEmployers.contractType) }}
-				</div>
-				<div class="col-sm-4 col-xs-12">
-					<img src="/img/lastName.png">
-					{{ form_row(form.employeeHasEmployers.timeCommitment) }}
-				</div>
-			</div>
-			<h2>1. Datos básicos del contrato</h2>
-			{{ form_row(form.employeeHasEmployers.startDate) }}
-			<div class="definite">
-				{{ form_row(form.employeeHasEmployers.endDate) }}
-			</div>
-			<div class="days">
-				{{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
-			</div>
-			{{ form_row(form.employeeHasEmployers.workTimeStart) }} A
-			{{ form_row(form.employeeHasEmployers.workTimeEnd) }}
-			<div class="days">
-				{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}
-			</div>
-			<div class="col-sm-12 col-xs-12">
-				<div class="col-sm-8 col-xs-12">
-					{{ form_row(form.employeeHasEmployers.position) }}
-					{{ form_row(form.employeeHasEmployers.salary) }}
-					{{ form_row(form.employeeHasEmployers.workplaces) }}
-					{{ form_row(form.employeeHasEmployers.transportAid) }}
-				</div>
-			</div>
-			<h2>Beneficios extralegales</h2>
-			<ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
-				{% for benefit in form.employeeHasEmployers.benefits %}
-				<li id="benefits_{{loop.index}}" class="benefitLi">
-					{{ form_row(benefit.benefits) }}
-				</li>
-				{% endfor %}
-			</ul>
-			{{ form_row(form.employeeHasEmployers.benefitsConditions) }}
-			<!-- Button trigger modal -->
-			2. ¿Ya cuenta con contrato firmado? *
-			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#siTarget" aria-expanded="false" aria-controls="collapseExample">
-				Si
-			</button>
-			<button class="btn btn-default" type="button" data-toggle="collapse" data-target="#noTarget" aria-expanded="false" aria-controls="collapseExample">
-				No
-			</button>
-			<div class="collapse" id="siTarget">
-				<div class="well">
-					<p>Proteger al empleador es nuestra prioridad</p>
-					<p>Por eso nuestro sistema busca almacenar toda la información relacionada con el empleado. Por favor escanee o tome uno fotografía de cada una de las páginas del contrato y suba los archivos.</p>
-					<p>Su contrato además debe incluir Reglamento de trabajo, Manual de funciones y manual de manejo de herramientas. › Más información</p>
-					<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#subirModal">
-						Subir Archivos
-					</button>
-				</div>
-			</div>
-			<div class="collapse" id="noTarget">
-				<div class="well">
-					<p>¡Nosotros le ayudamos!</p>
-					<p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema.</p>
-					<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#generarModal">
-						Generar Contrato
-					</button>
-				</div>
-			</div>
+            <div id="contactData" class="tab-pane fade in">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Los campos marcados en * son obligatorios</span>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.mainAddress) }}
+                        <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+                            {% for phone in form.person.phones %}
+                                <li id="phone_{{loop.index}}" class="phoneLi">
+                                    {{ form_row(phone.id) }}
+                                    {{ form_row(phone.phoneNumber) }}
+                                </li>
+                            {% endfor %}
+                            <li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.person.department) }}
+                        {{ form_row(form.person.city) }}
+                        {{ form_row(form.personExtra.email) }}
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div>
+            </div>
 
-
-			<!-- Modal si -->
-			<div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="myModalLabel">Subir documento nuevo</h4>
-						</div>
-						<div class="modal-body">
-							Almacene las fotos o digitalizaciones de los documentos que firme con su empleado.
-							Los campos marcados con * son obligatorios.
-							<p>¿Cómo tomar foto o escanear un documento?</p>
-							<p>Hay varias formas de hacerlo, pero la mejor de ellas es nuestra aplicación iOS (iPhone) o Android</p>
-							<p>Selección de archivo*:</p>
-							{{ form_row(form.employeeHasEmployers.document) }}
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-							<button type="button" class="btn btn-default">Guardar Cambios</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Modal no -->
-			<div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
-						</div>
-						<div class="modal-body">
-							<p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
-							<p>Este documento es necesario para que Symplifica se pueda hacer cargo de los trámites de afiliación suyos y de sus empleados.</p>
-							<p>Recuerde que una vez impreso  ES MUY IMPORTANTE que lo firmen el empleador y los empleados; luedo tomarle foto al documento o escanearlo y posteriormente subirlo a Symplifica.</p>
-
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Descargar Contrato</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<a class="btn btn-primary btnPrevious" >< Anterior</a>
-				<a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-			</div>
-
-		</div>
-		<div id="paymentMethod" class="tab-pane fade">
-			{{ form_row(form.employeeHasEmployers.payMethod) }}
-
-			<div id="payMethodFields">
-
-			</div>
-			<div id="userPayMethod">
-				<div class="col-sm-12 col-xs-12">
-					<div class="col-sm-6 col-xs-12">
-						{{ form_row(form.credit_card) }}
-						{{ form_row(form.expiry_date) }}
-					</div>
-					<div class="col-sm-6 col-xs-12">
-						{{ form_row(form.cvv) }}
-						{{ form_row(form.name_on_card) }}
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-xs-12 center">
-				<a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
-			</div>
-			<div id="toHide">
-
-				{{ form_widget(form) }}
-
-			</div>
-		</div>
+            <div id="contractData" class="tab-pane fade">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
+                </div>
+                <div class="col-sm-12 col-xs-12 blockUpData">
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentType.png">
+                        {{ form_row(form.employeeHasEmployers.employeeType) }}
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentNumber.png">
+                        {{ form_row(form.employeeHasEmployers.contractType) }}
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/lastName.png">
+                        {{ form_row(form.employeeHasEmployers.timeCommitment) }}
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <h2>1. Datos básicos del contrato</h2>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ form_row(form.employeeHasEmployers.startDate) }}
+                        </div>
+                        <div class="col-xs-6 definite">
+                            {{ form_row(form.employeeHasEmployers.endDate) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 days">
+                            {{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
+                        </div>
+                        <div class="col-sm-9 worktime">
+                            {{ form_row(form.employeeHasEmployers.workTimeStart) }} 
+                            <div style="line-height: 100px;">A</div>
+                            <div class="worktimeEnd">{{ form_row(form.employeeHasEmployers.workTimeEnd) }}</div>
+                        </div>
+                        <div class="col-xs-12 days">{{ form_row(form.employeeHasEmployers.weekWorkableDays) }}</div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-8 col-xs-12">
+                        {{ form_row(form.employeeHasEmployers.position) }}
+                        {{ form_row(form.employeeHasEmployers.salary) }}
+                        {{ form_row(form.employeeHasEmployers.workplaces) }}
+                        {{ form_row(form.employeeHasEmployers.transportAid) }}
+                    </div>
+                </div>
+                <h2>Beneficios extralegales</h2>
+                <ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
+                    {% for benefit in form.employeeHasEmployers.benefits %}
+                        <li id="benefits_{{loop.index}}" class="benefitLi">
+                            {{ form_row(benefit.benefits) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {{ form_row(form.employeeHasEmployers.benefitsConditions) }}
+                <!-- Button trigger modal -->
+                2. ¿Ya cuenta con contrato firmado? *
+                <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#siTarget" aria-expanded="false" aria-controls="collapseExample">
+                    Si
+                </button>
+                <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#noTarget" aria-expanded="false" aria-controls="collapseExample">
+                    No
+                </button>
+                <div class="collapse" id="siTarget">
+                    <div class="well">
+                        <p>Proteger al empleador es nuestra prioridad</p>
+                        <p>Por eso nuestro sistema busca almacenar toda la información relacionada con el empleado. Por favor escanee o tome uno fotografía de cada una de las páginas del contrato y suba los archivos.</p>
+                        <p>Su contrato además debe incluir Reglamento de trabajo, Manual de funciones y manual de manejo de herramientas. › Más información</p>
+                        <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#subirModal">
+                            Subir Archivos
+                        </button>
+                    </div>
+                </div>
+                <div class="collapse" id="noTarget">
+                    <div class="well">
+                        <p>¡Nosotros le ayudamos!</p>
+                        <p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema.</p>
+                        <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#generarModal">
+                            Generar Contrato
+                        </button>
+                    </div>
+                </div>
 
 
+                <!-- Modal si -->
+                <div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Subir documento nuevo</h4>
+                            </div>
+                            <div class="modal-body">
+                                Almacene las fotos o digitalizaciones de los documentos que firme con su empleado.
+                                Los campos marcados con * son obligatorios.
+                                <p>¿Cómo tomar foto o escanear un documento?</p>
+                                <p>Hay varias formas de hacerlo, pero la mejor de ellas es nuestra aplicación iOS (iPhone) o Android</p>
+                                <p>Selección de archivo*:</p>
+                                {{ form_row(form.employeeHasEmployers.document) }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-default">Guardar Cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal no -->
+                <div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
+                                <p>Este documento es necesario para que Symplifica se pueda hacer cargo de los trámites de afiliación suyos y de sus empleados.</p>
+                                <p>Recuerde que una vez impreso  ES MUY IMPORTANTE que lo firmen el empleador y los empleados; luedo tomarle foto al documento o escanearlo y posteriormente subirlo a Symplifica.</p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Descargar Contrato</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div>
+
+            </div>
+            <div id="paymentMethod" class="tab-pane fade">
+                {{ form_row(form.employeeHasEmployers.payMethod) }}
+
+                <div id="payMethodFields">
+
+                </div>
+                <div id="userPayMethod">
+                <h4>Información de la tarjeta de crédito</h4>
+				<p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.credit_card) }}
+                            {{ form_row(form.expiry_date) }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.cvv) }}
+                            {{ form_row(form.name_on_card) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                </div>
+                <div id="toHide">
+
+                    {{ form_widget(form) }}
+
+                </div>
+            </div>
 
 
-	</div>
+
+
+        </div>
 
 
 
-	{{ form_end(form) }}
-</div>
+        {{ form_end(form) }}
+    </div>
 {% endblock fos_user_content %}

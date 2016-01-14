@@ -1,0 +1,36 @@
+{% block content %}
+<table class="col-md-8">
+ <thead>
+  <tr>
+	<th>Nombre</th>
+	<th>Cedula</th>
+   	<th>Rut</th>
+	<th>Contrato</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+     <td>{{ employer.names }} {{ employer.lastName1}}</td>
+     <td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+     <td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+     <td>No necesitas</td>     
+  </tr>
+{% for employerHasEmployee in employerHasEmployees %}
+	<tr>
+		<td>{{ employerHasEmployee.employeeEmployee.personPerson.names }} {{ employerHasEmployee.employeeEmployee.personPerson.lastName1 }}</td>
+		<td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+		<td>No lo necesitas</td>
+		<td><a href="{{ path('documentos', {'id': employer.idPerson}) }}">Subir documento</a></td>
+	</tr>
+{% endfor %}
+ </tbody>
+</table>
+<table>
+	<thead>
+		<tr><th>Carta</th></tr>
+	</thead>
+	<tbody>
+		<tr><td>algo</td></tr>
+	</tbody>
+</table>
+{% endblock %}

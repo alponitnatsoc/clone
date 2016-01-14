@@ -58,9 +58,13 @@ class PayMethod
     private $accountTypeAccountType;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @var \RocketSeller\TwoPickBundle\Entity\Frequency
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Frequency")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="frequency_id_frequency", referencedColumnName="id_frequency")
+     * })
      */
-    private $frequency;
+    private $frequencyFrequency;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -203,29 +207,6 @@ class PayMethod
         $this->payMethodFields = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Set frecuency
-     *
-     * @param integer $frequency
-     *
-     * @return PayMethod
-     */
-    public function setFrequency($frequency)
-    {
-        $this->frequency = $frequency;
-
-        return $this;
-    }
-
-    /**
-     * Get frecuency
-     *
-     * @return integer
-     */
-    public function getFrequency()
-    {
-        return $this->frequency;
-    }
 
     /**
      * Set accountNumber
@@ -276,4 +257,29 @@ class PayMethod
     }
 
     
+
+
+    /**
+     * Set frequencyFrequency
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency
+     *
+     * @return PayMethod
+     */
+    public function setFrequencyFrequency(\RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency = null)
+    {
+        $this->frequencyFrequency = $frequencyFrequency;
+
+        return $this;
+    }
+
+    /**
+     * Get frequencyFrequency
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Frequency
+     */
+    public function getFrequencyFrequency()
+    {
+        return $this->frequencyFrequency;
+    }
 }
