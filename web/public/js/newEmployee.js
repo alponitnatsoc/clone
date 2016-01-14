@@ -121,7 +121,7 @@ function startEmployee(){
                 payTypeId:      $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']:checked").val(),
                 bankId:         $(form).find("select[name='method_type_fields[Bank]']").val(),
                 accountTypeId:  $(form).find("select[name='method_type_fields[AccountType]']").val(),
-                frequency:      $(form).find("input[name='method_type_fields[frecuency]']").val(),
+                frequencyId:      $(form).find("select[name='method_type_fields[Frequency]']").val(),
                 accountNumber:  $(form).find("input[name='method_type_fields[account_number]']").val(),
                 cellphone:      $(form).find("input[name='method_type_fields[cellphone]']").val(),
                 creditCard:     $(form).find("input[name='register_employee[credit_card]']").val(),

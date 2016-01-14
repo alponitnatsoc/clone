@@ -28,6 +28,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\Frequency;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -60,7 +61,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
-     * @RequestParam(name="frequency", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="frequencyId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
@@ -101,6 +102,7 @@ class EmployeeRestController extends FOSRestController
         $bankRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
         $accountTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
         $payTypeRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        $frequencyRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
 
 
         //Now for the payType and Pay Method
@@ -109,8 +111,6 @@ class EmployeeRestController extends FOSRestController
         $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
         //TODO check if vaild??
         $payMethod->setCellPhone($paramFetcher->get('cellphone'));
-        // frecuency in days
-        $payMethod->setFrequency($paramFetcher->get('frequency'));
         $payMethod->setUserUser($user);
 
         //check if the Pay Method Ids are valid: Bank payType and AccountType
@@ -145,6 +145,16 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $payMethod->setAccountTypeAccountType($tempAccountType);
+        }
+
+        if($paramFetcher->get('frequencyId')){
+            /** @var Frequency $tempFrequency */
+            $tempFrequency=$frequencyRepo->find($paramFetcher->get('frequencyId'));
+            if($tempFrequency==null){
+                $view->setStatusCode(404)->setHeader("error","The frequencyId ID ".$paramFetcher->get('frequencyId')." is invalid");
+                return $view;
+            }
+            $payMethod->setFrequencyFrequency($tempFrequency);
         }
 
         // add the user to pay
