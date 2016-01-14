@@ -5,7 +5,7 @@ namespace RocketSeller\TwoPickBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccountType
+ * CalculatorConstraints
  *
  * @ORM\Table(name="calculator_constraints")
  * @ORM\Entity
