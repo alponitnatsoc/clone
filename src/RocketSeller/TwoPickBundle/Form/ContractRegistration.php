@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use RocketSeller\TwoPickBundle\Entity\PayType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -150,7 +151,10 @@ class ContractRegistration extends AbstractType
 
             ->add('payMethod', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PayType',
-                'property' => 'name',
+                'property' => function ($payMethod) {
+                    /** @var  PayType $payMethod */
+                    return $payMethod->getName()." DESCRIPTION ".$payMethod->getDescripcion()." IMAGE ".$payMethod->getImage();
+                },
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'payTypePayType',
