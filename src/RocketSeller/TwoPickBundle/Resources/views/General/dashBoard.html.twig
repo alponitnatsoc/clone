@@ -44,7 +44,13 @@
             sendAjax($(this).attr('href'));
         });
         {# ajax que maneja los requests #}
-    //  sendAjax(state);
+        
+        // Simple ajax url manager
+        var redirector = getParameterByName('redirector');
+        //console.log(redirector);
+        if (redirector) {
+            sendAjax(redirector);
+        }
     });
 
     function sendAjax (url, form) {
@@ -115,5 +121,12 @@
         }
         return false;
     }
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
 </script>
 {% endblock javascripts %}
