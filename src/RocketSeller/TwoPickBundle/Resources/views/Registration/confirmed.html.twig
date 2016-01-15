@@ -9,13 +9,13 @@
         <div class="col-sm-3 hidden-xs"></div>
         <div class="col-sm-9 col-xs-12 up-Intro">Su registro finaliz&oacute; con &eacute;xito&#33;</div>
     </div>
-    <div class="container">
+    <div class="container topArea">
         <div class="col-sm-8 col-sm-offset-3 contenMessage">
             <div class="" id="info1">
                 <p class="lead">Antes de comenzar, le recomendamos tener presente que el proceso a seguir<br> cuando contrata un empleado es el siguiente:</p>
             </div>
         </div>
-        <div class="col-sm-12 col-xs-12">
+        <div class="col-sm-12 col-xs-12 firstBlock">
             <div class="col-sm-7 col-xs-12 blockLeftBefore center lineDivider">
                 <p>Antes de ingresar a trabajar</p>
                 <div class="lineDivider"></div>
@@ -92,51 +92,55 @@
         <div class="col-sm-12 col-xs-12 center">
             <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE ></a></p>
         </div>
-<div class="page-header" id="info2" style="display:none">
-    <div class="container">
-        <div class="col-sm-8 col-sm-offset-3 contenMessage">
-            <div class="" id="info1">
-                <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
+    </div>
+    <div class="container bottomArea" style="display:none">
+        <div class="page-header" id="info2" >
+            <div class="container">
+                <div class="col-sm-8 col-sm-offset-3 contenMessage">
+                    <div class="" id="info1">
+                        <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 bodyMessage">
+                    <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:</p>
+                    <div class="col-sm-12 col-xs-12 graficBlock">
+                        <div class="col-sm-4 col-xs-12 AR1">
+                            <span><b>1</b>Ingresar su información como empleador</span>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 AR2">
+                            <span><b>2</b>Ingresar la información de sus empleados</span>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 AR3">
+                            <span><b>3</b>Ingresar la información de afiliación a Seguridad Social</span>
+                        </div>
+                        <div class="col-sm-12 col-xs-12 AR4 center">
+                            <strong>¿No está afiliado?</strong> <em>¡Tranquilo! Nosotros le ayudamos</em>
+                        </div>
+                    </div>
+                    <p>Para facilitar el proceso con los siguientes documentos:</p>
+                    <ul>
+                        <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del empleador</span></li>
+                        <li><img src="/img/8-iconExit-Step.png"><span>RUT (Registro &Uacute;nico Tributario) del empleador</span></li>
+                        <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del(los) empleado(s)</span></li>
+                        <li><img src="/img/9-iconExit-Step.png"><span>Datos de contacto del(los) empelado(s)</span></li>
+                        <li><img src="/img/10-iconExit-Step.png"><span>Contrato con el(los) empleado(s). </br><small>Si no tiene, con nuestra herramienta puede generarlo</small></span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 center">
+                <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO ></a>
             </div>
         </div>
-        <div class="col-sm-12 col-xs-12 bodyMessage">
-            <p>Para sacar m&aacute;ximo provecho de Symplifica, debe iniciar haciendo lo siguiente:</p>
-            <div class="col-sm-12 col-xs-12 graficBlock">
-                <div class="col-sm-4 col-xs-12 AR1">
-                    <span><b>1</b>Ingresar su información como empleador</span>
-                </div>
-                <div class="col-sm-4 col-xs-12 AR2">
-                    <span><b>2</b>Ingresar la información de sus empleados</span>
-                </div>
-                <div class="col-sm-4 col-xs-12 AR3">
-                    <span><b>3</b>Ingresar la información de afiliación a Seguridad Social</span>
-                </div>
-                <div class="col-sm-12 col-xs-12 AR4 center">
-                    <strong>¿No está afiliado?</strong> <em>¡Tranquilo! Nosotros le ayudamos</em>
-                </div>
-            </div>
-            <p>Para facilitar el proceso con los siguientes documentos:</p>
-            <ul>
-                <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del empleador</span></li>
-                <li><img src="/img/8-iconExit-Step.png"><span>RUT (Registro &Uacute;nico Tributario) del empleador</span></li>
-                <li><img src="/img/7-iconExit-Step.png"><span>Documento de identidad del(los) empleado(s)</span></li>
-                <li><img src="/img/9-iconExit-Step.png"><span>Datos de contacto del(los) empelado(s)</span></li>
-                <li><img src="/img/10-iconExit-Step.png"><span>Contrato con el(los) empleado(s). </br><small>Si no tiene, con nuestra herramienta puede generarlo</small></span></li>
-            </ul>
-        </div>
     </div>
-    <div class="col-sm-12 col-xs-12 center">
-        <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO ></a>
-    </div>
-</div>
 {% endblock body %}
 {% endblock fos_user_content %}
 {% block javascripts %}
 {{ parent() }}
 <script>
 function nextInfo() {
-    $("#info1").hide();
-    $("#info2").show();
+    //$("#info1").hide();
+    $(".topArea").hide();
+    $(".bottomArea").show();
 }
 </script>
 {% endblock javascripts %}
