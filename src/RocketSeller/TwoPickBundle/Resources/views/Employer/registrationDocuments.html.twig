@@ -1,5 +1,30 @@
 {% block content %}
+<div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+    <div class="col-sm-3 col-xs-12">
+        <img src="/img/1-iconStep.png">
+        <span>Nombre</span>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+        <img src="/img/7-iconExit-Step.png">
+        <span>Documento de Identidad</span>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+        <img src="/img/8-iconExit-Step.png">
+        <span>Registro único tributario (RUT)</span>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+        <img src="/img/10-iconExit-Step.png">
+        <span>Contrato de trabajo</span>
+    </div>
+    <div class="col-sm-2 col-xs-12">
+        <img src="/img/10-iconExit-Step.png">
+        <span>Carta de Autorización a Symplifica</span>
+    </div>
+
+</div>
+
 <table class="col-md-8">
+<!--
  <thead>
   <tr>
 	<th>Nombre</th>
@@ -8,6 +33,7 @@
 	<th>Contrato</th>
   </tr>
  </thead>
+ -->
  <tbody>
   <tr>
      <td>{{ employer.names }} {{ employer.lastName1}}</td>
@@ -15,14 +41,14 @@
      	{% if documents[0] in documentsTypeByEmployer %}
 				Ya lo tienes
 		{% else %}
-				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+				<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
 		{% endif %}
      </td>
      <td>
      	{% if documents[1] in documentsTypeByEmployer %}
 				Ya lo tienes
 		{% else %}
-				<a href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
+				<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
 		{% endif %}
      </td>
      <td>No necesitas</td>     
@@ -35,7 +61,7 @@
 				{% if documents[0] in documentsTypeByEmployee[0] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+					<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 			<td>No lo necesitas</td>
@@ -43,7 +69,7 @@
 				{% if documents[2] in documentsTypeByEmployee[0] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+					<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 		</tr>
@@ -55,7 +81,7 @@
 				{% if documents[0] in documentsTypeByEmployee[i] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+					<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 			<td>No lo necesitas</td>
@@ -63,7 +89,7 @@
 				{% if documents[2] in documentsTypeByEmployee[i] %}
 					Ya lo tienes
 				{% else %}
-					<a href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+					<a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
 				{% endif %}			
 			</td>
 		</tr>
@@ -73,7 +99,7 @@
 </table>
 <table>
 	<thead>
-		<tr><th>Carta</th></tr>
+		<tr><th>Carta de Autorización a Symplifica</th></tr>
 	</thead>
 	<tbody>
 		<tr><td>algo</td></tr>
