@@ -151,11 +151,7 @@ class ContractRegistration extends AbstractType
 
             ->add('payMethod', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PayType',
-                'property' => function ($payMethod) {
-                    /** @var  PayType $payMethod */
-                    //return $payMethod->getName()." DESCRIPTION ".$payMethod->getDescripcion()." IMAGE ".$payMethod->getImage();
-                    return "<div class='paymentImage'><img src='". $payMethod->getImage() ."'' name='paymentImageDescription' /></div><h3 class='paymentTitle'>" . $payMethod->getName()."</h3><div class='paymentDescription'>".$payMethod->getDescripcion()."</div> ";
-                },
+                'property' => 'name',
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'payTypePayType',

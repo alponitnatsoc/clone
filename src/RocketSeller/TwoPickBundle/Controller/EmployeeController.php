@@ -304,8 +304,13 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
+        $choices = $options['choice_list']->getChoices();
         return $this->render(
-                        'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array('form' => $form->createView())
+            'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
+                'form' => $form->createView(),
+                'choices'=>$choices
+                )
         );
     }
 

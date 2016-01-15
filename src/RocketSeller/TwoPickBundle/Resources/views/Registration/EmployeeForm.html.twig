@@ -306,7 +306,17 @@
             <div id="paymentMethod" class="tab-pane fade">
                 <h4>Destino del pago*</h4>
                 Escoja el mecanismo del salario:<br />
-                {{ form_row(form.employeeHasEmployers.payMethod) }}
+                {% for child in form.employeeHasEmployers.payMethod %}
+                    {% set index = child.vars.value %}
+                    <tr>
+                        {{ form_widget(child) }}
+                        DESCRIPCIONNNN
+                        {{ choices[index].descripcion }}
+                        IMAGEEN
+                        {{ choices[index].image }}
+                        <div id="putFields_{{ index }}"></div>
+                    </tr>
+                {% endfor %}
 
                 <div id="payMethodFields">
 
@@ -345,21 +355,4 @@
 
         {{ form_end(form) }}
     </div>
-    <script type="text/javascript">
-        // I know, iknow, this is beyond a machete, this is massive!
-        jQuery(document).ready(function() {
-            $("#register_employee_employeeHasEmployers_payMethod label").each(function() {
-                $(this).html(function(index, text) {
-                    var returned = text;
-                    returned = returned.replace('&lt;', '<');
-                    returned = returned.replace('&gt;', '>');
-                    returned = returned.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-                    returned = returned.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-                    //console.log(returned);
-                    return returned;
-                });
-            });
-        });
-
-    </script>
 {% endblock fos_user_content %}
