@@ -1243,7 +1243,7 @@ class PayrollRestController extends FOSRestController
 
       $info = $this->getAbsenteeismEmployeeAction($parameters['employee_id'])->getData();
 
-      $unico['TIPOCON'] = 0;
+      $unico['TIPOCON'] = 1;
       $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
       $unico['TAUS_CODIGO'] = isset($parameters['absenteeism_type_id']) ? $parameters['absenteeism_type_id'] : $info['TAUS_CODIGO'];
       $unico['AUS_FECHA_INICIAL'] = isset($parameters['absenteeism_start_date']) ? $parameters['absenteeism_start_date'] : $info['AUS_FECHA_INICIAL'];
@@ -1303,5 +1303,173 @@ class PayrollRestController extends FOSRestController
       return $responseView;
     }
 
+    /**
+     * Insert a new extension for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Insert a new extension for an employee.y",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="contract_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     *    (name="contract_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     *    (name="extension_reason_id", nullable=false, requirements="(.*)", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
+     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *
+     * @return View
+     */
+    public function postAddExtensionEmployeeAction(Request $request)
+    {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['contract_type_id'] = '([0-9])+';$mandatory['contract_type_id'] = true;
+      $regex['contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['contract_start_date'] = true;
+      $regex['extension_reason_id'] = '(.*)';$mandatory['extension_reason_id'] = true;
+      $regex['employee_contract_number'] = '([0-9])+';$mandatory['employee_contract_number'] = false;
+      $regex['employee_leaving_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['employee_leaving_date'] = false;
+
+
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
+      $content = array();
+      $unico = array();
+
+      $unico['TIPOCON'] = 0;
+      $unico['EMP_CODIGO'] = $parameters['employee_id'];
+      $unico['TCO_CODIGO'] = $parameters['contract_type_id'];
+      $unico['HPRO_FECHA_INGRESO'] = $parameters['contract_start_date'];
+      $unico['MPRO_CODIGO'] = $parameters['extension_reason_id'];
+      $unico['HPRO_NRO_CONTRATO'] = $parameters['employee_contract_number'];
+      $unico['HPRO_EMP_FECHA_RETIRO'] = $parameters['employee_leaving_date'];
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '637';
+      $parameters['clXMLSolic'] = $this->createXml($content, 637);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Modifies a new extension for an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modifies a new extension for an employee.y",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="contract_type_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     *    (name="contract_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
+     *    (name="extension_reason_id", nullable=true, requirements="(.*)", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
+     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *
+     * @return View
+     */
+    public function postModifyExtensionEmployeeAction(Request $request)
+    {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['contract_type_id'] = '([0-9])+';$mandatory['contract_type_id'] = false;
+      $regex['contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['contract_start_date'] = false;
+      $regex['extension_reason_id'] = '(.*)';$mandatory['extension_reason_id'] = false;
+      $regex['employee_contract_number'] = '([0-9])+';$mandatory['employee_contract_number'] = false;
+      $regex['employee_leaving_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['employee_leaving_date'] = false;
+
+
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
+      $content = array();
+      $unico = array();
+
+      $info = $this->getExtensionEmployeeAction($parameters['employee_id'])->getData();
+
+      $unico['TIPOCON'] = 1;
+      $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
+      $unico['TCO_CODIGO'] = isset($parameters['contract_type_id']) ? $parameters['contract_type_id'] : $info['TCO_CODIGO'];
+      $unico['HPRO_FECHA_INGRESO'] = isset($parameters['contract_start_date']) ? $parameters['contract_start_date'] : $info['HPRO_FECHA_INGRESO'];
+      $unico['MPRO_CODIGO'] = isset($parameters['extension_reason_id']) ? $parameters['extension_reason_id'] : $info['MPRO_CODIGO'];
+      $unico['HPRO_NRO_CONTRATO'] = isset($parameters['employee_contract_number']) ? $parameters['employee_contract_number'] : $info['HPRO_NRO_CONTRATO'];
+      $unico['HPRO_EMP_FECHA_RETIRO'] = isset($parameters['employee_leaving_date']) ? $parameters['employee_leaving_date'] : $info['HPRO_EMP_FECHA_RETIRO'];
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '637';
+      $parameters['clXMLSolic'] = $this->createXml($content, 637);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
+    /**
+     * Gets the extensions of an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the extensions of an employee.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     *
+     * @return View
+     */
+    public function getExtensionEmployeeAction($employeeId)
+    {
+      $content = array();
+      $unico = array();
+
+      $unico['EMPCODIGO'] = $employeeId;
+
+      $content[] = $unico;
+      $parameters = array();
+
+      $parameters['inInexCod'] = '638';
+      $parameters['clXMLSolic'] = $this->createXml($content, 638, 2);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
 }
 ?>
