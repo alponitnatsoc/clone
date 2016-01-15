@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Application\Sonata\MediaBundle\Entity\Gallery;
 use Application\Sonata\MediaBundle\Entity\GalleryHasMedia;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DocumentController extends Controller
 {
@@ -30,14 +33,18 @@ class DocumentController extends Controller
 				'documents' => $documents
 				));
 	}
+	public function downloadContractAction($id)
+	{
+		echo "hola";
+	}
 	public function addDocumentAction($id,Request $request){
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
 		->find($id);
-		$document=new Document();
+		$document = new Document();
 		$document->setPersonPerson($person);
-
+		$document->setName('nombre');
 		$form = $this->createForm(new DocumentRegistration(),$document);
 
 		$form->handleRequest($request);
@@ -47,7 +54,7 @@ class DocumentController extends Controller
 			/** @var Media $media */
 			foreach ($medias as $media) {
 				$media->setBinaryContent($media);
-				$media->setName($document->getName());
+				$media->setName('documento');
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setProviderReference($media->getBinaryContent());				
 				$em->persist($media);
@@ -57,7 +64,7 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirectToRoute('manage_employees');
+			return $this->redirect('/pages?redirector=/matrix/choose');
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
@@ -75,6 +82,7 @@ class DocumentController extends Controller
 		$document=new Document();
 		$document->setPersonPerson($person);
 		$document->setStatus(1);
+		$document->setName('nombre');
 		$document->setDocumentTypeDocumentType($documentType);
 
 		$form = $this->createForm(new DocumentRegistration(),$document);
@@ -96,7 +104,7 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirectToRoute('ajax');
+			return $this->redirect('/pages?redirector=/matrix/choose');
 			//$this->redirect($request->server->get('HTTP_REFERER'));
 		}
 		return $this->render(
