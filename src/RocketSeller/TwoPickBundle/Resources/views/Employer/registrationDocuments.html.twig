@@ -7,7 +7,13 @@
     .nopadding .btn-sm {
         font-size: 12px !important;     
     }
-    
+    .employeesListHeader {
+        padding: 0 0 15px;
+    }
+    .employeesListEmployer, .employeesListEmployee, .employeesListEmployee {
+        border-bottom: 1px solid #ccc;
+        padding: 0 0 10px;
+    }
     
 </style>
 <div class="row employeesListHeader">
@@ -35,28 +41,28 @@
     </div>
 </div>
 <div class="row employeesListEmployer">
-    <div class="col-sm-12 col-xs-12" style="border-bottom: none;">
+    <div class="col-sm-12 col-xs-12 text-center" style="border-bottom: none;">
         <div class="col-sm-3 col-xs-12 nopadding">
             <span>{{ employer.names }} {{ employer.lastName1}}</span>
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
+        <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[0] in documentsTypeByEmployer %}
                     Ya lo tienes
             {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
             {% endif %}
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
+        <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[1] in documentsTypeByEmployer %}
                     Ya lo tienes
             {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Documento</a>
             {% endif %}
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
+        <div class="col-sm-2 col-xs-12 nopadding text-center">
             <span>No necesitas</span>
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
+        <div class="col-sm-2 col-xs-12 nopadding text-center">
             <span>Carta</span>
         </div>
     </div>
@@ -65,20 +71,20 @@
   {% if employees|length < 2 %}
     <div class="row employeesListEmployee">
         <div class="col-sm-12 col-xs-12 firstEmployeeList" style="border-bottom: none;">
-            <div class="col-sm-3 col-xs-12 nopadding">
+            <div class="col-sm-3 col-xs-12 nopadding text-center">
                 <span>{{ employees[0].personPerson.names }} {{ employees[0].personPerson.lastName1 }}</span>
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding">
+            <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[0] in documentsTypeByEmployee[0] %}
                     Ya lo tienes
                 {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                 {% endif %} 
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding">
+            <div class="col-sm-2 col-xs-12 nopadding text-center">
                 No lo necesitas
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding">
+            <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[2] in documentsTypeByEmployee[0] %}
                     Ya lo tienes
                 {% else %}
@@ -95,20 +101,20 @@
     {% for i in 0..employees|length-1  %}  
         <div class="row employeesListEmployee">
             <div class="col-sm-12 col-xs-12 restOfEmployeeList" style="border-bottom: none;">
-                <div class="col-sm-3 col-xs-12 nopadding">
+                <div class="col-sm-3 col-xs-12 nopadding text-center">
                     <span>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</span>
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding">
+                <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[0] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
                         <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                     {% endif %}  
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding">
+                <div class="col-sm-2 col-xs-12 nopadding text-center">
                     No lo necesitas
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding">
+                <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
@@ -122,6 +128,7 @@
         </div>
         {% endfor %}
   {% endif %}
+
 
 
 
