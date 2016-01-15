@@ -100,7 +100,6 @@
                 
                 
                 <a class="btn btn-primary btnPrevious" >< Anterior</a>
-
                 <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
 
@@ -119,9 +118,10 @@
                         </div>
                     </div>
                 </div>
-                <a class="btn btn-primary btnPrevious" >< Anterior</a>
-
-                {{ form_row(form.save) }}
+                <div class="">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    {{ form_row(form.save) }}
+                </div>
             </div>
 
 
