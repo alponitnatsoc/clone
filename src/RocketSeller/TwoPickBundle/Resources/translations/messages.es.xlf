@@ -2,6 +2,10 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="" >
         <body>
+            <trans-unit id="form_register_upload_file">
+                <source>Subir Archivo</source>
+                <target>Subir Archivo</target>
+            </trans-unit>
             <trans-unit id="form_register_person_birth_state">
                 <source>Departamento de Nacimiento</source>
                 <target>Departamento de Nacimiento</target>

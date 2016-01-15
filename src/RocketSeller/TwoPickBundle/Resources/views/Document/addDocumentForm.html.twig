@@ -2,6 +2,13 @@
 {% block fos_user_content %}
     {{ form_start(form) }}
     {{ form_errors(form) }}
-    {{ form_widget(form) }}
+    <div style="display: none;">
+    	{{ form_row(form.mediaMedia.unlink) }}
+    </div>    
+    {{ form_row(form.mediaMedia.binaryContent) }}
+        
+    <div style="display: none;">    	
+    	{{ form_row(form.documentTypeDocumentType) }}  
+    </div>      
     {{ form_end(form) }}
 {% endblock fos_user_content %}

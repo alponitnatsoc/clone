@@ -377,7 +377,7 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">delete this tag</a>');
+    var $removeFormA = $('<a href="#">Eliminar Campo</a>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

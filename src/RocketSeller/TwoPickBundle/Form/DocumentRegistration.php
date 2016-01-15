@@ -21,6 +21,7 @@ class DocumentRegistration extends AbstractType
 
         $builder
             ->add('mediaMedia', 'sonata_media_type', array(
+                'label'=> 'algo',
                 'provider' => 'sonata.media.provider.file',
                 'context'  => 'person'
             ))
@@ -32,12 +33,11 @@ class DocumentRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'documentTypeDocumentType'
             ))
-            ->add('name', 'text', array(
-                'label' => 'name',
-            ))
+
             ->add('save', 'submit', array(
                 'label' => 'Create',
             ));
+        $builder->get('mediaMedia')->add('binaryContent', 'file', ['label' => 'Subir Archivo' , 'translation_domain'=>'messages']);
     }
 
 

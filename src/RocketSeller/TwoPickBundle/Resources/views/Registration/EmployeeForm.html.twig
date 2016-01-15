@@ -225,7 +225,7 @@
                 <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#noTarget" aria-expanded="false" aria-controls="collapseExample">
                     No
                 </button>
-                <div class="collapse" id="siTarget">
+                <!--div class="collapse" id="siTarget">
                     <div class="well">
                         <p>Proteger al empleador es nuestra prioridad</p>
                         <p>Por eso nuestro sistema busca almacenar toda la información relacionada con el empleado. Por favor escanee o tome uno fotografía de cada una de las páginas del contrato y suba los archivos.</p>
@@ -234,7 +234,7 @@
                             Subir Archivos
                         </button>
                     </div>
-                </div>
+                </div!-->
                 <div class="collapse" id="noTarget">
                     <div class="well">
                         <p>¡Nosotros le ayudamos!</p>
@@ -247,7 +247,7 @@
 
 
                 <!-- Modal si -->
-                <div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <!--div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -260,7 +260,7 @@
                                 <p>¿Cómo tomar foto o escanear un documento?</p>
                                 <p>Hay varias formas de hacerlo, pero la mejor de ellas es nuestra aplicación iOS (iPhone) o Android</p>
                                 <p>Selección de archivo*:</p>
-                                {{ form_row(form.employeeHasEmployers.document) }}
+                                {# form_row(form.employeeHasEmployers.document) #}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -276,6 +276,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
+
                             </div>
                             <div class="modal-body">
                                 <p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
@@ -285,8 +286,14 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Descargar Contrato</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="contractDownload(this)">Descargar Contrato</button>
                             </div>
+                            <script>                  
+                                    function contractDownload() {    
+                                        var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();                  
+                                        window.open('/contractLayout/'+value);                                         
+                                    }
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -307,7 +314,7 @@
                 <br />
                 <div id="userPayMethod">
                 <h4>Información de la tarjeta de crédito</h4>
-				<p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
+                <p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 col-xs-12">
                             {{ form_row(form.credit_card) }}
@@ -355,5 +362,4 @@
         });
 
     </script>
-
 {% endblock fos_user_content %}

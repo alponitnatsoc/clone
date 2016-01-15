@@ -44,7 +44,7 @@ class DocumentController extends Controller
 				$filename = "terminoIndefinido.pdf";
 				break;			
 		}	 	
-	    $path = $this->get('kernel')->getRootDir(). "/../web/uploads/docs/";
+	    $path = $this->get('kernel')->getRootDir(). "/../web/public/";
 	    $content = file_get_contents($path.$filename);
 
 	    $response = new Response();
