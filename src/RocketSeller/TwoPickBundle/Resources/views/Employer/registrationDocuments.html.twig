@@ -1,49 +1,56 @@
 {% block content %}
+<style type="text/css">
+    .nopadding {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+</style>
+
 <div class="col-sm-12 col-xs-12" style="border-bottom: none;">
-    <div class="col-sm-3 col-xs-12">
+    <div class="col-sm-3 col-xs-12 nopadding">
         <img src="/img/1-iconStep.png">
         <span>Nombre</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <img src="/img/7-iconExit-Step.png">
         <span>Documento de Identidad</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <img src="/img/8-iconExit-Step.png">
         <span>Registro único tributario (RUT)</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <img src="/img/10-iconExit-Step.png">
         <span>Contrato de trabajo</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <img src="/img/10-iconExit-Step.png">
         <span>Carta de Autorización a Symplifica</span>
     </div>
 </div>
 
 <div class="col-sm-12 col-xs-12" style="border-bottom: none;">
-    <div class="col-sm-3 col-xs-12">
+    <div class="col-sm-3 col-xs-12 nopadding">
         <span>{{ employer.names }} {{ employer.lastName1}}</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         {% if documents[0] in documentsTypeByEmployer %}
                 Ya lo tienes
         {% else %}
                 <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
         {% endif %}
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         {% if documents[1] in documentsTypeByEmployer %}
                 Ya lo tienes
         {% else %}
                 <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
         {% endif %}
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <span>No necesitas</span>
     </div>
-    <div class="col-sm-2 col-xs-12">
+    <div class="col-sm-2 col-xs-12 nopadding">
         <span>Carta</span>
     </div>
 </div>
@@ -51,27 +58,27 @@
   {% if employees|length < 2 %}
 
     <div class="col-sm-12 col-xs-12 firstEmployeeList" style="border-bottom: none;">
-        <div class="col-sm-3 col-xs-12">
+        <div class="col-sm-3 col-xs-12 nopadding">
             <span>{{ employees[0].personPerson.names }} {{ employees[0].personPerson.lastName1 }}</span>
         </div>
-        <div class="col-sm-2 col-xs-12">
+        <div class="col-sm-2 col-xs-12 nopadding">
             {% if documents[0] in documentsTypeByEmployee[0] %}
                 Ya lo tienes
             {% else %}
                 <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
             {% endif %} 
         </div>
-        <div class="col-sm-2 col-xs-12">
+        <div class="col-sm-2 col-xs-12 nopadding">
             No lo necesitas
         </div>
-        <div class="col-sm-2 col-xs-12">
+        <div class="col-sm-2 col-xs-12 nopadding">
             {% if documents[2] in documentsTypeByEmployee[0] %}
                 Ya lo tienes
             {% else %}
                 <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
             {% endif %}  
         </div>
-        <div class="col-sm-2 col-xs-12">
+        <div class="col-sm-2 col-xs-12 nopadding">
             
         </div>
     </div>
@@ -81,33 +88,34 @@
     {% for i in 0..employees|length-1  %}  
 
             <div class="col-sm-12 col-xs-12 restOfEmployeeList" style="border-bottom: none;">
-                <div class="col-sm-3 col-xs-12">
+                <div class="col-sm-3 col-xs-12 nopadding">
                     <span>{{ employees[i].personPerson.names }} {{ employees[i].personPerson.lastName1 }}</span>
                 </div>
-                <div class="col-sm-2 col-xs-12">
+                <div class="col-sm-2 col-xs-12 nopadding">
                     {% if documents[0] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
                         <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
                     {% endif %}  
                 </div>
-                <div class="col-sm-2 col-xs-12">
+                <div class="col-sm-2 col-xs-12 nopadding">
                     No lo necesitas
                 </div>
-                <div class="col-sm-2 col-xs-12">
+                <div class="col-sm-2 col-xs-12 nopadding">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
                         <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
                     {% endif %}  
                 </div>
-                <div class="col-sm-2 col-xs-12">
+                <div class="col-sm-2 col-xs-12 nopadding">
                     
                 </div>
             </div>
 
         {% endfor %}
   {% endif %}
+
 
 
 <!--
