@@ -159,7 +159,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'payTypePayType',
-                'label'=>'Destino del pago'
+                'label'=>''
             ));
 
 
