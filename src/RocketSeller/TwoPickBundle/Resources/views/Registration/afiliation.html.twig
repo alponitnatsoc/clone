@@ -75,11 +75,9 @@
                     <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                         <div class="col-sm-6 col-xs-12">
                             <img src="/img/10-iconExit-Step.png">
-                            <span>Administradora de Riesgos Labolares*:</span>
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             <img src="/img/10-iconExit-Step.png">
-                            <span>Caja de Compensación Familiar*:</span>
                         </div>
                     </div>
                         <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
@@ -91,7 +89,9 @@
                             </div>
                         </div>
                 </div>
+                <br />
                 Indique la Actividad económica establecida en su Registro Único Tributario (RUT) o en su defecto mantenga el código asignado por Symplifica el cual corresponde a Empleador de Servicio Doméstico.
+
                 {{ form_row(form.economicalActivity) }}
                 
                 
@@ -108,13 +108,17 @@
 
             </div>
             <div id="docsMatrix" class="tab-pane fade in">
+            <h4>¡Sólo queda este paso para finalizar la configuración inicial!</h4>
+            Podrá terminar la configuración inicial una vez anexe los documentos que se relacionan a continuación
                 <div id='' class='col-xs-12'>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="">
+                        <div class="">
                             {{ render(controller(
                 		        'RocketSeller\TwoPickBundle:Employer:registrationDocuments'
                     		)) }}
-                        </div></div></div>
+                        </div>
+                    </div>
+                </div>
                 <a class="btn btn-primary btnPrevious" >< Anterior</a>
 
                 {{ form_row(form.save) }}
