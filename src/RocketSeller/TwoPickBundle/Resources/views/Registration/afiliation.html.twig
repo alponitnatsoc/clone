@@ -62,15 +62,43 @@
             </div>
 
             <div id="employerEntities" class="tab-pane fade in">
+
                 Ahora es necesario que escoja la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales se afiliará como empleador de acuerdo a la ley.
                 Si ya se encuentra afiliado y desea continuar afiliado a ellas, selecciónelas a continuación. Los campos marcados con * son obligatorios:
-
-                {{ employerName }}
-                {{ employerDocumentType }} {{ employerDocument }}
-                {{ form_row(form.severances) }}
-                {{ form_row(form.arl) }}
+                <div class="row text-center">
+                    
+                    <h3>{{ employerName }}<br /></h3>
+                    <h4>{{ employerDocumentType }} {{ employerDocument }}</h4>
+                    
+                </div>
+                <div class="row">        
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                        <div class="col-sm-6 col-xs-12">
+                            <img src="/img/10-iconExit-Step.png">
+                            <span>Administradora de Riesgos Labolares*:</span>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <img src="/img/10-iconExit-Step.png">
+                            <span>Caja de Compensación Familiar*:</span>
+                        </div>
+                    </div>
+                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                            <div class="col-sm-6 col-xs-12">
+                                {{ form_row(form.severances) }}
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                {{ form_row(form.arl) }}
+                            </div>
+                        </div>
+                </div>
                 Indique la Actividad económica establecida en su Registro Único Tributario (RUT) o en su defecto mantenga el código asignado por Symplifica el cual corresponde a Empleador de Servicio Doméstico.
                 {{ form_row(form.economicalActivity) }}
+                
+                
+                
+                
+                
+                
                 <a class="btn btn-primary btnPrevious" >< Anterior</a>
 
                 <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
@@ -84,8 +112,8 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             {{ render(controller(
-		        'RocketSeller\TwoPickBundle:Employer:registrationDocuments'
-    		)) }}
+                		        'RocketSeller\TwoPickBundle:Employer:registrationDocuments'
+                    		)) }}
                         </div></div></div>
                 <a class="btn btn-primary btnPrevious" >< Anterior</a>
 
