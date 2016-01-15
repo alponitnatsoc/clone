@@ -16,6 +16,7 @@ use Application\Sonata\MediaBundle\Entity\GalleryHasMedia;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Response;
 
 class DocumentController extends Controller
 {
@@ -34,8 +35,26 @@ class DocumentController extends Controller
 				));
 	}
 	public function downloadContractAction($id)
-	{
-		echo "hola";
+	{		
+		switch ($id) {
+			case 1:
+				$filename = "terminoFijo.pdf";			
+				break;
+			case 2:
+				$filename = "terminoIndefinido.pdf";
+				break;			
+		}	 	
+	    $path = $this->get('kernel')->getRootDir(). "/../web/uploads/docs/";
+	    $content = file_get_contents($path.$filename);
+
+	    $response = new Response();
+
+	    //set headers
+	    $response->headers->set('Content-Type', 'mime/type');
+	    $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+	    $response->setContent($content);
+	    return $response;
 	}
 	public function addDocumentAction($id,Request $request){
 		$em = $this->getDoctrine()->getManager();
