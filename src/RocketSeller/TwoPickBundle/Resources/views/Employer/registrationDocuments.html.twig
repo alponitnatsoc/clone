@@ -4,6 +4,11 @@
         padding: 0 !important;
         margin: 0 !important;
     }
+    .nopadding .btn-sm {
+        font-size: 12px !important;     
+    }
+    
+    
 </style>
 
 <div class="col-sm-12 col-xs-12" style="border-bottom: none;">
@@ -37,14 +42,14 @@
         {% if documents[0] in documentsTypeByEmployer %}
                 Ya lo tienes
         {% else %}
-                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
         {% endif %}
     </div>
     <div class="col-sm-2 col-xs-12 nopadding">
         {% if documents[1] in documentsTypeByEmployer %}
                 Ya lo tienes
         {% else %}
-                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Subir documento</a>
+                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Documento</a>
         {% endif %}
     </div>
     <div class="col-sm-2 col-xs-12 nopadding">
@@ -65,7 +70,7 @@
             {% if documents[0] in documentsTypeByEmployee[0] %}
                 Ya lo tienes
             {% else %}
-                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
             {% endif %} 
         </div>
         <div class="col-sm-2 col-xs-12 nopadding">
@@ -75,7 +80,7 @@
             {% if documents[2] in documentsTypeByEmployee[0] %}
                 Ya lo tienes
             {% else %}
-                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
             {% endif %}  
         </div>
         <div class="col-sm-2 col-xs-12 nopadding">
@@ -95,7 +100,7 @@
                     {% if documents[0] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
-                        <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Subir documento</a>
+                        <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                     {% endif %}  
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding">
@@ -105,7 +110,7 @@
                     {% if documents[2] in documentsTypeByEmployee[i] %}
                         Ya lo tienes
                     {% else %}
-                        <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Subir documento</a>
+                        <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
                     {% endif %}  
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding">
