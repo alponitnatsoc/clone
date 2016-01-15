@@ -61,7 +61,7 @@
             data: $(form).serializeArray(),
             statusCode: {
                 500: function() {
-                    alert(" 500 Server might not handle That yet");
+                    alert("Lo sentimos pero estamos teniendo problemas con esta funcionalidad, por favor intenta de nuevo más tarde.");
                 }
             }
             }).done(function(data) {
@@ -76,9 +76,12 @@
                     if (!jsLoader(url)) {
                         addSumbit();
                     }
+                    // This thing is not working, we should check this later
+                    //var currentPage = document.location;
+                    //document.location = currentPage + "?redirector=" + url;
                 }
             }).fail(function( jqXHR, textStatus, errorThrown ) {
-                alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
+                alert(jqXHR+", Lo sentimos, en este momento estamos teniendo problemas con nuestro sistema, nuestro departamento técnico ya fué informado de este evvento. --" + textStatus+" " + errorThrown);
         });
     }
     function addClick () {
