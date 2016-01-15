@@ -11,6 +11,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\EntityType;
+use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -315,6 +316,9 @@ class EmployeeController extends Controller
     public function postPayMethodAction($id)
     {
         $repository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayMethodFields");
+        $payTyperepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayType");
+        /** @var PayType $payType */
+        $payType=$payTyperepository->find($id);
         $fields = $repository->findBy(array('payTypePayType' => $id));
         $options = array();
         foreach ($fields as $field) {
@@ -322,7 +326,8 @@ class EmployeeController extends Controller
         }
         $form = $this->createForm(new PayMethod($fields));
         return $this->render(
-                        'RocketSellerTwoPickBundle:Registration:generalFormRender.html.twig', array('form' => $form->createView())
+                        'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
+                        'payType'=>$payType)
         );
     }
 
