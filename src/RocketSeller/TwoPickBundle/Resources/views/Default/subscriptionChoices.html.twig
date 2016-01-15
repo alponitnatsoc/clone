@@ -283,7 +283,7 @@
         //});
         $(".btn-change-state-contract-confirm").on('click', function (e) {
             if ($(".activo").length > 1 || $(button).html() == "Activar") {
-                sendAjax(button, contratoid);
+                ajax(button, contratoid);
             } else {
                 $('#modal_confirm').modal('hide');
             }
@@ -291,7 +291,7 @@
         //$("#open_pricing_calc").on('click', function (e) {
         //    $('#modal_price_calculator').modal('show');
         //});
-        function sendAjax(obj, url) {
+        function ajax(obj, url) {
             $.ajax({
                 url: url,
                 type: 'GET'

@@ -174,7 +174,7 @@ class EmployeeController extends Controller
             $employer->setEconomicalActivity("2435");
         }
         $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions, $severances, $arls), $employer, array(
-            'action' => $this->generateUrl('api_public_post_new_employee_submit'),
+            'action' => $this->generateUrl('api_public_post_matrix_choose_submit'),
             'method' => 'POST',
         ));
         $employees = $form->get('employerHasEmployees');
@@ -183,36 +183,38 @@ class EmployeeController extends Controller
             foreach ($employerHasEmployees as $eHE) {
                 if ($eHE->getIdEmployerHasEmployee() == $employee->get('idEmployerHasEmployee')->getData()) {
                     $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
-                    $eHEEntities=$eHE->getEmployeeEmployee()->getEntities();
-                    $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
-                    if($eHEEntities->count()!=0){
+                    $eHEEntities = $eHE->getEmployeeEmployee()->getEntities();
+                    if ($eHE->getEmployeeEmployee()->getAskBeneficiary()) {
+                        $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
+                    } else {
+                        $employee->get('beneficiaries')->setData('-1');
+                    }
+                    if ($eHEEntities->count() != 0) {
                         /** @var EmployeeHasEntity $enti */
                         foreach ($eHEEntities as $enti) {
-                            if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="EPS"){
+                            if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
                                 $employee->get('wealth')->setData($enti->getEntityEntity());
                             }
-                            if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="Pension"){
+                            if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
                                 $employee->get('pension')->setData($enti->getEntityEntity());
                             }
                         }
-
                     }
                     break;
                 }
             }
         }
-        $empEntities=$employer->getEntities();
-        if($empEntities->count()!=0){
+        $empEntities = $employer->getEntities();
+        if ($empEntities->count() != 0) {
             /** @var EmployerHasEntity $enti */
             foreach ($empEntities as $enti) {
-                if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="ARL"){
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARL") {
                     $form->get('arl')->setData($enti->getEntityEntity());
                 }
-                if($enti->getEntityEntity()->getEntityTypeEntityType()->getName()=="Cesantias"){
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Cesantias") {
                     $form->get('severances')->setData($enti->getEntityEntity());
                 }
             }
-
         }
         $personEmployer = $employer->getPersonPerson();
         $employerFullName = $personEmployer->getNames() . " " . $personEmployer->getLastName1() . " " . $personEmployer->getLastName2();
@@ -318,7 +320,7 @@ class EmployeeController extends Controller
         $repository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayMethodFields");
         $payTyperepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayType");
         /** @var PayType $payType */
-        $payType=$payTyperepository->find($id);
+        $payType = $payTyperepository->find($id);
         $fields = $repository->findBy(array('payTypePayType' => $id));
         $options = array();
         foreach ($fields as $field) {
@@ -327,7 +329,7 @@ class EmployeeController extends Controller
         $form = $this->createForm(new PayMethod($fields));
         return $this->render(
                         'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
-                        'payType'=>$payType)
+                    'payType' => $payType)
         );
     }
 

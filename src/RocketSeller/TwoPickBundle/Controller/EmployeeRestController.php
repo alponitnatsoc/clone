@@ -71,6 +71,8 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="expiryDate", nullable=false, strict=true, description="id of the contract.")
      * @RequestParam(name="cvv", nullable=false, strict=true, description="id of the contract.")
      * @RequestParam(name="nameOnCard", nullable=false, strict=true, description="id of the contract.")
+     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="id of the contract.")
+     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      *
      * @return View
      */
@@ -80,7 +82,8 @@ class EmployeeRestController extends FOSRestController
         $user = $this->getUser();
         /** @var Employee $employee */
         $employee = null;
-        $idContract = $paramFetcher->get("contractId");
+        $idContract = $paramFetcher->get("register_social_security");
+        $idEmployer = $idContract['idEmployer'];
         $view = View::create();
 
         //search the contract
@@ -698,6 +701,43 @@ class EmployeeRestController extends FOSRestController
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
+     *     404 = "Returned when any Id does not exist in the DB"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     *
+     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
+     *
+     * @return View
+     */
+    public function postMatrixChooseSubmitAction(ParamFetcher $paramFetcher)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $view = View::create();
+
+        if ($user) {
+            //return $this->forward('RocketSellerTwoPickBundle:Default:subscriptionChoices');
+            return $this->redirectToRoute('subscription_choices');
+            //$view->setData(array('url' => $this->generateUrl('subscription_choices')))->setStatusCode(200);
+        } else {
+            $view->setData(array("error" => array('contract' => "Sin usuario")))->setStatusCode(403);
+        }
+        return $view;
+    }
+
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
      *     404 = "Returned when the requested Ids don't exist"
      *   }
      * )
@@ -720,6 +760,7 @@ class EmployeeRestController extends FOSRestController
             $view->setData(array('error' => array('employee' => 'user not logged')))->setStatusCode(403);
             return $view;
         }
+
         $idEmployer = $paramFetcher->get('idEmployer');
         $idsEmployerHasEmployee = $paramFetcher->get('idEmployerHasEmployee');
         $beneficiaries = $paramFetcher->get('beneficiaries');
@@ -741,10 +782,15 @@ class EmployeeRestController extends FOSRestController
             /** @var EmployerHasEmployee $realEmployerHasEmployee */
             $realEmployerHasEmployee = $employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
             if ($realEmployerHasEmployees->contains($realEmployerHasEmployee)) {
+
                 /** @var Entity $tempPens */
                 $tempPens = $entityRepo->find($pension[$i]);
+
                 /** @var Entity $tempWealth */
                 $tempWealth = $entityRepo->find($wealth[$i]);
+
+                $beneficiarie = $beneficiaries[$i];
+
                 if ($tempPens == null || $tempWealth == null) {
                     $view = View::create();
                     $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
@@ -753,6 +799,7 @@ class EmployeeRestController extends FOSRestController
                 $realEmployee = $realEmployerHasEmployee->getEmployeeEmployee();
                 $realEmployeeEnt = $realEmployee->getEntities();
                 $em = $this->getDoctrine()->getManager();
+
                 if ($realEmployeeEnt->count() == 0) {
                     $employeeHasEntityPens = new EmployeeHasEntity();
                     $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
@@ -761,10 +808,8 @@ class EmployeeRestController extends FOSRestController
                     $employeeHasEntityWealth = new EmployeeHasEntity();
                     $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                     $employeeHasEntityWealth->setEntityEntity($tempWealth);
-                    $realEmployee->addEntity($employeeHasEntityPens);
+                    $realEmployee->addEntity($employeeHasEntityWealth);
                     $realEmployee->setAskBeneficiary((isset($beneficiaries[$i])) ? true : false);
-
-
 
                     $em->persist($employeeHasEntityPens);
                     $em->persist($employeeHasEntityWealth);
@@ -782,6 +827,7 @@ class EmployeeRestController extends FOSRestController
                             $em->persist($rEE);
                         }
                     }
+                    $realEmployee->setAskBeneficiary(($beneficiaries[$i]));
                     $em->persist($realEmployee);
                     $em->flush();
                 }

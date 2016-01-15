@@ -2,7 +2,34 @@
 
 {% block fos_user_content %}
 
-    <div id='registrationFormContainer' class=''>
+    {% block stylesheets %}
+        {{ parent() }}
+        <style>
+            .blockUpData .title {
+                text-align: center;
+                padding: 10px;
+                font-weight: bold;
+            }
+            .blockUpData label {
+                min-height: 0px; 
+            }
+            .blockUpData .radio {
+                padding: 5px 5px 5px 5px;
+                margin: 0px;
+                display: inline;
+                /* vertical-align: middle; */
+            }
+            .blockUpData{
+                border-bottom: 1px solid #E9E9E9;
+            }
+            .saveControl{
+                margin-left: 10px;
+                display: inline-block;
+            }
+        </style>
+    {% endblock %} 
+
+    <div id='registrationFormContainer' class='' style="margin-top: 10px;">
         {{ form_start(form) }}
 
         <ul class="nav nav-tabs nav-justified">
@@ -19,26 +46,26 @@
 
                 Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
                 <div>        
-                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-                        <div class="col-sm-3 col-xs-12">
-                            <img src="/img/1-iconStep.png">
-                            <span>Nombre</span>
+                    <div class="col-sm-12 col-xs-12 blockUpData">
+                        <div class="col-sm-3 col-xs-12 row">                                   
+                            <div><img src="/img/1-iconStep.png"></div>    
+                            <div class="title">Nombre</div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12">                           
+                            <div><img src="/img/2-iconStep.png"></div>              
+                            <div class="title">Salud</div>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            <img src="/img/2-iconStep.png">
-                            <span>Salud</span>
+                            <div><img src="/img/3-iconStep.png"></div>                            
+                            <div class="title">Pensión</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">
-                            <img src="/img/3-iconStep.png">
-                            <span>Pensión</span>
-                        </div>
-                        <div class="col-sm-3 col-xs-12">
-                            <img src="/img/4-iconStep.png">
-                            <span>¿Registrará beneficiarios?</span>
+                        <div class="col-sm-3 col-xs-12">                                                     
+                            <div><img src="/img/4-iconStep.png"></div>                         
+                            <div class="title">¿Registrará beneficiarios?</div>
                         </div>
                     </div>
                     {% for employee in form.employerHasEmployees %}
-                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                        <div class="col-sm-12 col-xs-12 blockUpData">
                             <div class="col-sm-3 col-xs-12">
                                 {{ form_row(employee.nameEmployee) }}
                             </div>
@@ -50,14 +77,16 @@
                             </div>
                             <div class="col-sm-3 col-xs-12">
                                 {{ form_row(employee.beneficiaries) }}
-                                {{ form_row(employee.idEmployerHasEmployee) }}
                             </div>
+                            {{ form_row(employee.idEmployerHasEmployee) }}
                         </div>
                     {% endfor %}  
                 </div>
 
+                <div class="col-sm-12 col-xs-12 center">
+                    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div> 
 
-                <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente</a>
 
             </div>
 
@@ -66,13 +95,13 @@
                 Ahora es necesario que escoja la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales se afiliará como empleador de acuerdo a la ley.
                 Si ya se encuentra afiliado y desea continuar afiliado a ellas, selecciónelas a continuación. Los campos marcados con * son obligatorios:
                 <div class="row text-center">
-                    
+
                     <h3>{{ employerName }}<br /></h3>
                     <h4>{{ employerDocumentType }} {{ employerDocument }}</h4>
-                    
+
                 </div>
                 <div class="row">        
-                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-12 col-xs-12 blockUpData">
                         <div class="col-sm-6 col-xs-12">
                             <img src="/img/10-iconExit-Step.png">
                         </div>
@@ -80,49 +109,39 @@
                             <img src="/img/10-iconExit-Step.png">
                         </div>
                     </div>
-                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-                            <div class="col-sm-6 col-xs-12">
-                                {{ form_row(form.severances) }}
-                            </div>
-                            <div class="col-sm-6 col-xs-12">
-                                {{ form_row(form.arl) }}
-                            </div>
+                    <div class="col-sm-12 col-xs-12 blockUpData">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.severances) }}
                         </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.arl) }}
+                        </div>
+                    </div>
                 </div>
                 <br />
                 Indique la Actividad económica establecida en su Registro Único Tributario (RUT) o en su defecto mantenga el código asignado por Symplifica el cual corresponde a Empleador de Servicio Doméstico.
 
                 {{ form_row(form.economicalActivity) }}
-                
-                
-                
-                
-                
-                
-                <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente</a>
-
-
-
-
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                </div> 
             </div>
             <div id="docsMatrix" class="tab-pane fade in">
-            <h4>¡Sólo queda este paso para finalizar la configuración inicial!</h4>
-            Podrá terminar la configuración inicial una vez anexe los documentos que se relacionan a continuación
-            <br /><br />
+                <h4>¡Sólo queda este paso para finalizar la configuración inicial!</h4>
+                Podrá terminar la configuración inicial una vez anexe los documentos que se relacionan a continuación
+                <br /><br />
                 <div id='' class='col-xs-12'>
                     <div class="">
                         <div class="">
-                            {{ render(controller(
-                		        'RocketSeller\TwoPickBundle:Employer:registrationDocuments'
-                    		)) }}
+                            {{ render(controller('RocketSeller\TwoPickBundle:Employer:registrationDocuments')) }}
                         </div>
                     </div>
-                </div>
-                <div class="">
+                </div>                        
+                <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                    {{ form_row(form.save) }}
-                </div>
+                    <div class="saveControl">{{ form_row(form.save) }}</div>                    
+                </div>                
             </div>
 
 
