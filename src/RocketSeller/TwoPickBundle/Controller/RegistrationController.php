@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
+use RocketSeller\TwoPickBundle\Entity\Invitation;
+use RocketSeller\TwoPickBundle\Entity\Referred;
 
 class RegistrationController extends BaseController
 {
@@ -45,7 +47,45 @@ class RegistrationController extends BaseController
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-            $person=new Person();
+
+            /**
+             * Referidos
+             */
+            $code = $form->get("invitation")->getData();
+            if ($code) {
+                $em = $this->getDoctrine()->getManager();
+                /** @var \RocketSeller\TwoPickBundle\Entity\User $userR */
+                $userR = $userManager->findUserBy(array("code" => $code)); // $userR usuario que refiere al nuevo usuario
+                $userEmail = $user->getEmail();
+                if (method_exists($userR, "getId")) {
+
+                    $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Invitation');
+                    /** @var \RocketSeller\TwoPickBundle\Entity\Invitation $invitation */
+                    $invitation = $repository->findOneBy(
+                        array('userId' => $userR->getId(), 'email' => $userEmail)
+                    );
+
+                    if ($invitation) {
+                        $invitation->setStatus(1);
+                    } else {
+                        $invitation = new Invitation();
+                        $invitation->setEmail($userEmail);
+                        $invitation->setUserId($userR);
+                        $invitation->setSent(true);
+                        $invitation->setStatus(1);
+                    }
+                    $em->persist($invitation);
+                    /** @var Referred $referred */
+                    $referred = new Referred();
+                    $referred->setInvitationId($invitation);
+                    $referred->setReferredUserId($user);
+                    $referred->setUserId($userR);
+                    $em->persist($referred);
+                    $em->flush();
+                }
+            }
+
+            $person = new Person();
             $person->setNames($form->get("name")->getData());
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
@@ -60,6 +100,13 @@ class RegistrationController extends BaseController
 
             return $response;
         }
+
+        $queryCode = $request->query->get("c");
+        echo $queryCode;
+//         $formData = $form->getData();
+//         $formData->get('invitation')->setData($queryCode);
+//         $form->setData($formData);
+        $form->get("invitation")->setData($queryCode);
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
             'form' => $form->createView(),

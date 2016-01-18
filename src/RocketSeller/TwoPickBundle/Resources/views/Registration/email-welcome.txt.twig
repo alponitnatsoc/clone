@@ -249,8 +249,47 @@ Director Symplifica
                     <p>Podrá recibir OTRO MES ADICIONAL por cada persona a la que usted refiera y adquiera alguno de nuestros paquetes de servicio usando el siguiente código:</p>
                     <span class="code"><strong>{{ codigoReferidos }}</strong></span>
                     <p>¡Compártalo con sus amigos y obtenga los beneficios!</p>
+{% set fbURL %}
+https://www.facebook.com/dialog/share?
+app_id=145634995501895
+&display=popup
+&href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
+&caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&description=Symplifica
+{% endset %}
+
+{% set twURL %}
+https://twitter.com/intent/tweet?
+text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+&via=symplifica
+&source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{% endset %}
+
+{% set gURL %}
+https://plus.google.com/share?
+url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+&t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+{% endset %}
+
+{% set emailURL %}
+mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{% endset %}
                     <span class="socials">
-                        <a href=""><img src="http://www.symplifica.com/public/img/mail/icon-face.png"></a><a href=""><img src="http://www.symplifica.com/public/img/mail/icon-twitter.png"></a><a href=""><img src="http://www.symplifica.com/public/img/mail/icon-googleplus.png"></a><a href=""><img src="http://www.symplifica.com/public/img/mail/icon-mail.png"></a>
+                        <a href="{{ fbURL }}">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-face.png">
+                        </a>
+                        <a href="{{ twURL }}">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-twitter.png">
+                        </a>
+                        <a href="{{ gURL }}">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-googleplus.png">
+                        </a>
+                        <a href="{{ emailURL }}">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-mail.png">
+                        </a>
                     </span>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
  namespace RocketSeller\TwoPickBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +18,15 @@ class RegistrationType extends AbstractType
         $builder->add('email', 'email', array('translation_domain' => 'FOSUserBundle', "attr" => array('placeholder' => 'form.email')))
             ->add('name', 'text', array("attr" => array('placeholder' => 'Name'), 'mapped' => false))
             ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password'), 'translation_domain' => 'FOSUserBundle'))
-        ;
+            ->add('invitation', 'text', array(
+                        "attr" => array(
+                            'placeholder' => 'Tienes un código de referido?'
+                        ),
+                        'mapped' => false,
+                        'property_path' => 'invitation',
+                        'required' => false,
+                    )
+                );
     }
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -33,4 +41,3 @@ class RegistrationType extends AbstractType
         return 'app_user_registration';
     }
 }
- ?>
