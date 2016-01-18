@@ -38,6 +38,8 @@ class EmployerController extends Controller
               ->find(2));
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
               ->find(3));
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->find(4));
         $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
         $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);               
         return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig',array('employer'=>$person , 'documents'=>$documents , 'employees'=>$employees ,'documentsTypeByEmployee'=>$documentsTypeByEmployee , 'documentsTypeByEmployer'=> $documentsTypeByEmployer));
