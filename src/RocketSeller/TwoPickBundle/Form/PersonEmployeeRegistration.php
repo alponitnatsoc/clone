@@ -53,7 +53,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'mapped' => false))
 
             ->add('save', 'submit', array(
-                'label' => 'Save',
+                'label' => 'Guardar',
             ));
 
 

@@ -10,14 +10,12 @@ function startEmployer(){
                 "register_employer[person][document]": "required",
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
-                "register_employer[person][lastName2]": "required",
                 "register_employer[person][mainAddress]": "required",
             },
             messages:{
                 "register_employer[person][document]": "Por favor Ingrese su documento",
                 "register_employer[person][names]": "Por favor Ingrese su nombre",
                 "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
-                "register_employer[person][lastName2]": "Por favor Ingrese su segundo apellido",
                 "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
             }
         });
@@ -80,7 +78,8 @@ function startEmployer(){
         var names=			$(form).find("input[name='register_employer[person][names]']");
         var lastName1= 		$(form).find("input[name='register_employer[person][lastName1]']");
         var lastName2= 		$(form).find("input[name='register_employer[person][lastName2]']");
-        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1)&&validator.element(lastName2))){
+        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
 
@@ -110,6 +109,7 @@ function startEmployer(){
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
         if (!(validator.element(mainAddress))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         var i =0;
@@ -126,6 +126,7 @@ function startEmployer(){
             phones[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         $.ajax({
@@ -211,6 +212,7 @@ function startEmployer(){
             addresses[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         i=0;
@@ -222,6 +224,7 @@ function startEmployer(){
             citys[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         i=0;
@@ -233,6 +236,7 @@ function startEmployer(){
             departments[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         $('#createdModal').modal('toggle');

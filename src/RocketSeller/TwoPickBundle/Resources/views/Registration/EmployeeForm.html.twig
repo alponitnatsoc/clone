@@ -143,11 +143,12 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.person.birthDate) }}
-                        {{ form_row(form.personExtra.birthDepartment) }}
+                        {{ form_row(form.personExtra.birthCountry) }}
+
                     </div>
                     <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.personExtra.birthDepartment) }}
                         {{ form_row(form.personExtra.birthCity) }}
-                        {{ form_row(form.personExtra.birthCountry) }}
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
@@ -227,7 +228,7 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-8 col-xs-12">
                         {{ form_row(form.employeeHasEmployers.position) }}
-                        {{ form_row(form.employeeHasEmployers.salary) }}
+                        {{ form_row(form.employeeHasEmployers.salary) }}<a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
                         {{ form_row(form.employeeHasEmployers.workplaces) }}
                         {{ form_row(form.employeeHasEmployers.transportAid) }}
                     </div>

@@ -42,7 +42,7 @@ class BasicPersonRegistration extends AbstractType
             ->add('names', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
-                ),'label' => 'Nombre Completo*',))
+                ),'label' => 'Nombres*',))
             ->add('lastName1', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
