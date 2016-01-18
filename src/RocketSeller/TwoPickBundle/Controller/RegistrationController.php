@@ -51,37 +51,39 @@ class RegistrationController extends BaseController
             /**
              * Referidos
              */
-            $code = $form->get("invitation")->getData();
-            if ($code) {
-                $em = $this->getDoctrine()->getManager();
-                /** @var \RocketSeller\TwoPickBundle\Entity\User $userR */
-                $userR = $userManager->findUserBy(array("code" => $code)); // $userR usuario que refiere al nuevo usuario
-                $userEmail = $user->getEmail();
-                if (method_exists($userR, "getId")) {
+            if ($form->has("invitation")) {
+                $code = $form->get("invitation")->getData();
+                if ($code) {
+                    $em = $this->getDoctrine()->getManager();
+                    /** @var \RocketSeller\TwoPickBundle\Entity\User $userR */
+                    $userR = $userManager->findUserBy(array("code" => $code)); // $userR usuario que refiere al nuevo usuario
+                    $userEmail = $user->getEmail();
+                    if (method_exists($userR, "getId")) {
 
-                    $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Invitation');
-                    /** @var \RocketSeller\TwoPickBundle\Entity\Invitation $invitation */
-                    $invitation = $repository->findOneBy(
-                        array('userId' => $userR->getId(), 'email' => $userEmail)
-                    );
+                        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Invitation');
+                        /** @var \RocketSeller\TwoPickBundle\Entity\Invitation $invitation */
+                        $invitation = $repository->findOneBy(
+                            array('userId' => $userR->getId(), 'email' => $userEmail)
+                        );
 
-                    if ($invitation) {
-                        $invitation->setStatus(1);
-                    } else {
-                        $invitation = new Invitation();
-                        $invitation->setEmail($userEmail);
-                        $invitation->setUserId($userR);
-                        $invitation->setSent(true);
-                        $invitation->setStatus(1);
+                        if ($invitation) {
+                            $invitation->setStatus(1);
+                        } else {
+                            $invitation = new Invitation();
+                            $invitation->setEmail($userEmail);
+                            $invitation->setUserId($userR);
+                            $invitation->setSent(true);
+                            $invitation->setStatus(1);
+                        }
+                        $em->persist($invitation);
+                        /** @var Referred $referred */
+                        $referred = new Referred();
+                        $referred->setInvitationId($invitation);
+                        $referred->setReferredUserId($user);
+                        $referred->setUserId($userR);
+                        $em->persist($referred);
+                        $em->flush();
                     }
-                    $em->persist($invitation);
-                    /** @var Referred $referred */
-                    $referred = new Referred();
-                    $referred->setInvitationId($invitation);
-                    $referred->setReferredUserId($user);
-                    $referred->setUserId($userR);
-                    $em->persist($referred);
-                    $em->flush();
                 }
             }
 
@@ -102,14 +104,12 @@ class RegistrationController extends BaseController
         }
 
         $queryCode = $request->query->get("c");
-        echo $queryCode;
-//         $formData = $form->getData();
-//         $formData->get('invitation')->setData($queryCode);
-//         $form->setData($formData);
-        $form->get("invitation")->setData($queryCode);
+        if ($form->has("invitation")) {
+            $form->get("invitation")->setData($queryCode);
+        }
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ));
     }
 

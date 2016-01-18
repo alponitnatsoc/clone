@@ -246,6 +246,9 @@ Director Symplifica
             <div class="container">
                 <div class="contentSection">
                     <p>Symplifica <m><strong>le obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
+
+                    {% if codigoReferidos %}
+
                     <p>Podrá recibir OTRO MES ADICIONAL por cada persona a la que usted refiera y adquiera alguno de nuestros paquetes de servicio usando el siguiente código:</p>
                     <span class="code"><strong>{{ codigoReferidos }}</strong></span>
                     <p>¡Compártalo con sus amigos y obtenga los beneficios!</p>
@@ -291,6 +294,9 @@ mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este
                         <img src="http://www.symplifica.com/public/img/mail/icon-mail.png">
                         </a>
                     </span>
+
+                    {% endif %}
+
                 </div>
             </div>
         </div>
