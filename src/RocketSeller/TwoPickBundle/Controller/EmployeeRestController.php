@@ -82,8 +82,10 @@ class EmployeeRestController extends FOSRestController
         $user = $this->getUser();
         /** @var Employee $employee */
         $employee = null;
-        $idContract = $paramFetcher->get("register_social_security");
-        $idEmployer = $idContract['idEmployer'];
+//        $idContract = $paramFetcher->get("register_social_security");
+//        $idEmployer = $idContract['idEmployer'];
+        $idContract = $paramFetcher->get("contractId");
+
         $view = View::create();
 
         //search the contract
