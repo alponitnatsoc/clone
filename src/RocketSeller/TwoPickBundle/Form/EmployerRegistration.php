@@ -66,7 +66,7 @@ class EmployerRegistration extends AbstractType
                 'by_reference' => false,
                 ))
             ->add('save', 'submit', array(
-                'label' => 'Create',
+                'label' => 'Guardar',
                 ));
 
 

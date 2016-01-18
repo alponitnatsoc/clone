@@ -72,6 +72,13 @@ function startEmployee(){
         }
 
     });
+    $("#register_employee_person_documentType").change(function(){
+        var selectedVal=$(this).find("option:selected").text();
+        if(selectedVal=="Tarjeta de identidad"){
+            $('#TIModal').modal('toggle');
+        }
+
+    });
     $("#register_employee_employeeHasEmployers_contractType").change(function(){
         var selectedVal=$(this).find("option:selected").text();
         if(selectedVal=="Término fijo"){

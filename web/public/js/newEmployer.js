@@ -41,6 +41,14 @@ function startEmployer(){
                 }
             });
         });
+        $("ul.workplaces select").each(function(){
+            $(this).rules("add", {
+                required: true,
+                messages:{
+                    required:   "Por favor selecione una opción"
+                }
+            });
+        });
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar Teléfono</a>');
@@ -109,9 +117,17 @@ function startEmployer(){
             idsPhones[i++]=$(this).val();
         });
         i =0;
+        var flagValid=true;
         $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             phones[i++]=$(this).val();
         });
+        if(!flagValid){
+            return;
+        }
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
@@ -178,7 +194,7 @@ function startEmployer(){
     var redirUri="";
     $("form").on("submit",function(e){
         e.preventDefault();
-        $('#createdModal').modal('toggle');
+
         var form =$("form");
         var addresses =[],citys=[],departments=[],ids=[];
         var i =0;
@@ -199,12 +215,27 @@ function startEmployer(){
         }
         i=0;
         $(form).find("ul.workplaces select[name*='city']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             citys[i++]=$(this).val();
         });
+        if(!flagValid){
+            return;
+        }
         i=0;
         $(form).find("ul.workplaces select[name*='department']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             departments[i++]=$(this).val();
         });
+        if(!flagValid){
+            return;
+        }
+        $('#createdModal').modal('toggle');
         $.ajax({
             url : form.attr('action'),
             type: $(form).attr('method'),
