@@ -33,11 +33,13 @@ class EmployerController extends Controller
             array_push($employees,$employerHasEmployee->getEmployeeEmployee());
         }
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(1)); 
+              ->findByName('Cedula'));               
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
               ->find(2));
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
               ->find(3));
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->find(4));
         $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
         $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);               
         return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig',array('employer'=>$person , 'documents'=>$documents , 'employees'=>$employees ,'documentsTypeByEmployee'=>$documentsTypeByEmployee , 'documentsTypeByEmployer'=> $documentsTypeByEmployer));

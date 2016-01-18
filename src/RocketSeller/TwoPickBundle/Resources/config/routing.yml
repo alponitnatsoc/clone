@@ -1,3 +1,7 @@
+rocket_seller_two_pick_invitation:
+    resource: "@RocketSellerTwoPickBundle/Resources/config/routing/invitation.yml"
+    prefix:   /invitation
+
 rocket_seller_two_pick_liquidation:
     resource: "@RocketSellerTwoPickBundle/Resources/config/routing/liquidation.yml"
     prefix:   /liquidations

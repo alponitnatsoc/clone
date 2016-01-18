@@ -1,0 +1,82 @@
+{% extends '::base.html.twig' %}
+
+{% block fos_user_content %}
+    <h1>Invitation list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Sent</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a class="nav-link" href="{{ path('invitation_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.email }}</td>
+                <td>{{ entity.status }}</td>
+                <td>{{ entity.sent }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a class="nav-link" href="{{ path('invitation_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ path('invitation_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a class="nav-link" href="{{ path('invitation_new') }}">
+                Enviar invitaciones
+            </a>
+        </li>
+    </ul>
+    <h2>Compartir en redes sociales</h2>
+    <div class="fb-share-button" data-href="{{ path("fos_user_registration_register",{"c": code}) }}" data-layout="icon" data-text="PRIEB"></div>
+
+{% set fbURL %}
+https://www.facebook.com/dialog/share?
+app_id=145634995501895
+&display=popup
+&href={{ absolute_url(path("fos_user_registration_register",{"c": code})) }}
+{# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
+&caption=Registrate en Symplifica con este codigo de referido {{ code }} y obten un descuento
+&title=Registrate en Symplifica con este codigo de referido {{ code }} y obten un descuento
+&description=Symplifica
+{% endset %}
+
+{% set twURL %}
+https://twitter.com/intent/tweet?
+text=Registrate en Symplifica con este codigo de referido {{ code }} y obten un descuento
+&url={{ absolute_url(path("fos_user_registration_register",{"c": code})) }}
+&via=symplifica
+&source={{ absolute_url(path("fos_user_registration_register",{"c": code})) }}
+{% endset %}
+
+{% set gURL %}
+https://plus.google.com/share?
+url={{ absolute_url(path("fos_user_registration_register",{"c": code})) }}
+&t=Registrate en Symplifica con este codigo de referido {{ code }} y obten un descuento
+{% endset %}
+
+{% set emailURL %}
+mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ code }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": code})) }}
+{% endset %}
+<a href="{{ fbURL }}" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/facebook.png" border="0" alt="Facebook"/></a>
+<a href="{{ twURL }}" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/twitter.png" border="0" alt="Twitter"/></a>
+<a href="{{ gURL }}" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/google_plusone_share.png" border="0" alt="Google+"/></a>
+<a href="{{ emailURL }}" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/email.png" border="0" alt="Email"/></a>
+
+
+{% endblock %}

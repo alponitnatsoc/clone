@@ -55,6 +55,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->date_created = new \DateTime("now");
+        $this->code = substr(md5(uniqid(rand(), true)), 0, 6);
         // your own logic
     }
 
@@ -94,19 +95,35 @@ class User extends BaseUser
      * 1 Activo
      * 2 Free
      * 3 Free3
-     * 
+     *
      * @var \SmallIntType
-     * 
+     *
      * @ORM\Column(type="smallint")
      */
     private $status = 2;
-    
+
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $date_created;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=200)
+     */
+    protected $code;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Invitation", mappedBy="userId", cascade={"persist"})
+     */
+    private $invitations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Referred", mappedBy="userId", cascade={"persist"})
+     */
+    private $referrals;
 
     /**
      * Set personPerson
@@ -474,5 +491,97 @@ class User extends BaseUser
     public function getDateCreated()
     {
         return $this->date_created;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return User
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Add invitation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Invitation $invitation
+     *
+     * @return User
+     */
+    public function addInvitation(\RocketSeller\TwoPickBundle\Entity\Invitation $invitation)
+    {
+        $this->invitations[] = $invitation;
+
+        return $this;
+    }
+
+    /**
+     * Remove invitation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Invitation $invitation
+     */
+    public function removeInvitation(\RocketSeller\TwoPickBundle\Entity\Invitation $invitation)
+    {
+        $this->invitations->removeElement($invitation);
+    }
+
+    /**
+     * Get invitations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    /**
+     * Add referral
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Referred $referral
+     *
+     * @return User
+     */
+    public function addReferral(\RocketSeller\TwoPickBundle\Entity\Referred $referral)
+    {
+        $this->referrals[] = $referral;
+
+        return $this;
+    }
+
+    /**
+     * Remove referral
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Referred $referral
+     */
+    public function removeReferral(\RocketSeller\TwoPickBundle\Entity\Referred $referral)
+    {
+        $this->referrals->removeElement($referral);
+    }
+
+    /**
+     * Get referrals
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReferrals()
+    {
+        return $this->referrals;
     }
 }

@@ -44,4 +44,13 @@ interface MailerInterface
      * @return void
      */
     public function sendWelcomeEmailMessage(UserInterface $user);
+
+    /**
+     * Sen email
+     *
+     * @param UserInterface $user
+     *
+     * @return void
+     */
+    public function sendEmail(UserInterface $user, $toEmail);
 }

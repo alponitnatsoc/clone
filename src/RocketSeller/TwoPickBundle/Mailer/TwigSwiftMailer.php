@@ -68,11 +68,23 @@ class TwigSwiftMailer implements MailerInterface
 
         $context = array(
             'fechaFin' => strftime("%d de %B de %Y", $date->getTimestamp()), //mas 30 dias
-            'codigoReferidos' => 'CAR2309ZY',
+            'codigoReferidos' => $user->getCode(),
             'user' => $user
         );
 
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
+    }
+
+    public function sendEmail(UserInterface $user, $toEmail)
+    {
+        $templateName = "FOSUserBundle:Invitation:email.txt.twig";
+        $context = array(
+            'toEmail' => $toEmail,
+            'user' => $user
+        );
+        $fromEmail = "from.email@com.co";
+        $toEmail = $toEmail;
+        return $this->sendMessage($templateName, $context, $fromEmail, $toEmail);
     }
 
     /**
