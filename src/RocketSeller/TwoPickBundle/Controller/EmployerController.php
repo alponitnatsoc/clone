@@ -33,7 +33,7 @@ class EmployerController extends Controller
             array_push($employees,$employerHasEmployee->getEmployeeEmployee());
         }
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(1)); 
+              ->findByName('Cedula'));               
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
               ->find(2));
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
