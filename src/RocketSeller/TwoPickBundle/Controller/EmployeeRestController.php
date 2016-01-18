@@ -39,6 +39,7 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use DateTime;
 
 class EmployeeRestController extends FOSRestController
@@ -84,8 +85,7 @@ class EmployeeRestController extends FOSRestController
         $employee = null;
 //        $idContract = $paramFetcher->get("register_social_security");
 //        $idEmployer = $idContract['idEmployer'];
-        $idContract = $paramFetcher->get("contractId");
-
+        - $idContract = $paramFetcher->get("contractId");
         $view = View::create();
 
         //search the contract
@@ -627,13 +627,13 @@ class EmployeeRestController extends FOSRestController
             $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
             $contract->setWorkTimeEnd($datetime);
 
-            if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
+            if ($contract->getContractTypeContractType()->getName() == "TÃ©rmino fijo") {
                 $endDate = $paramFetcher->get('endDate');
                 $datetime = new DateTime();
                 $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
                 $contract->setEndDate($datetime);
             }
-            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
+            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por dÃ­as") {
                 $weekWorkableDays = $paramFetcher->get('weekWorkableDays');
                 foreach ($weekWorkableDays as $key => $value) {
                     $weekWorkableDay = new WeekWorkableDays();
@@ -695,11 +695,11 @@ class EmployeeRestController extends FOSRestController
     }
 
     /**
-     * Create a Person from the submitted data.<br/>
+     * Save data<br/>
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Creates a new person from the submitted data.",
+     *   description = "Save data.",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
@@ -710,25 +710,165 @@ class EmployeeRestController extends FOSRestController
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      *
+     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(array=true, name="idEmployerHasEmployee", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="pension", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      *
      * @return View
      */
     public function postMatrixChooseSubmitAction(ParamFetcher $paramFetcher)
     {
-        /** @var User $user */
-        $user = $this->getUser();
+        $flag = false;
+        $save = $this->saveMatrixChooseSubmitStep1($paramFetcher);
+        if ($save->getData('response')['response']['message'] == 'added') {
+            $save2 = $this->saveMatrixChooseSubmitStep2($paramFetcher);
+            if ($save2->getData('response')['response']['message'] == 'added') {
+                $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
+                if ($save3->getData('response')['response']['message'] == 'added') {
+                    $flag = true;
+                } else {
+                    return $save3;
+                }
+            } else {
+                return $save2;
+            }
+        } else {
+            return $save;
+        }
 
-        $view = View::create();
-
-        if ($user) {
+        if ($flag) {
             //return $this->forward('RocketSellerTwoPickBundle:Default:subscriptionChoices');
             return $this->redirectToRoute('subscription_choices');
             //$view->setData(array('url' => $this->generateUrl('subscription_choices')))->setStatusCode(200);
         } else {
-            $view->setData(array("error" => array('contract' => "Sin usuario")))->setStatusCode(403);
+            $view = View::create();
+            $view->setData(array('response' => array('message' => 'something went wrong')))->setStatusCode(400);
+            return $view;
         }
+    }
+
+    private function saveMatrixChooseSubmitStep3(ParamFetcher $paramFetcher)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($user == null) {
+            $view = View::create();
+            $view->setData(array('error' => array('employee' => 'user not logged')))->setStatusCode(403);
+            return $view;
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $register_social_security = $paramFetcher->get("register_social_security");
+
+        $employerHasEmployeeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
+        $employerHasEmployees = $register_social_security['employerHasEmployees'];
+        $idEmployer = $register_social_security['idEmployer'];
+
+        foreach ($employerHasEmployees as $employerHasEmployee) {
+            /** @var EmployerHasEmployee $realEmployerHasEmployee */
+            $realEmployerHasEmployee = $employerHasEmployeeRepo->find($employerHasEmployee['idEmployerHasEmployee']);
+            $realEmployeer = $realEmployerHasEmployee->getEmployerEmployer();
+            if ($idEmployer == $realEmployeer->getIdEmployer()) {
+                $realEmployee = $realEmployerHasEmployee->getEmployeeEmployee();
+                $person = $realEmployee->getPersonPerson();
+                $documents = $documentsRepo->findByPersonPerson($person);
+                $this->validateDocumentsEmployee($person, $documents);
+            } else {
+                $view = View::create();
+                $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
+                return $view;
+            }
+        }
+
+        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $realEmployer = $employerRepo->find($idEmployer);
+        $person = $realEmployer->getPersonPerson();
+        $documents = $documentsRepo->findByPersonPerson($person);
+        $this->validateDocumentsEmployer($person, $documents);
+
+        $view = View::create();
+        $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
         return $view;
+    }
+
+    private function validateDocumentsEmployee($person, $documents)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $docs = array('Cedula' => false, 'Contrato' => false);
+        foreach ($docs as $type => $status) {
+            foreach ($documents as $key => $document) {
+                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
+                    $docs[$type] = true;
+                    break;
+                }
+            }
+            if (!$docs[$type]) {
+                $msj = "";
+                if ($type == 'Cedula') {
+                    $msj = "Subir copia del documento de identidad de " . $person->getFullName();
+                    $documentType = 'Cedula';
+                } elseif ($type == 'Contrato') {
+                    $msj = "Subir copia del contrato de " . $person->getFullName();
+                    $documentType = 'Contrato';
+                }
+                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
+                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                $this->createNotification($user->getPersonPerson(), $msj, $url);
+            }
+        }
+    }
+
+    private function validateDocumentsEmployer($person, $documents)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $docs = array('Cedula' => false, 'RUT' => false, 'Carta autorización Symplifica' => false);
+        foreach ($docs as $type => $status) {
+            foreach ($documents as $key => $document) {
+                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
+                    $docs[$type] = true;
+                    break;
+                }
+            }
+            if (!$docs[$type]) {
+                $msj = "";
+                if ($type == 'Cedula') {
+                    $msj = "Subir copia del documento de identidad de " . $person->getFullName();
+                    $documentType = 'Cedula';
+                } elseif ($type == 'RUT') {
+                    $msj = "Subir copia del RUT de " . $person->getFullName();
+                    $documentType = 'Contrato';
+                } elseif ($type == 'Carta autorización Symplifica') {
+                    $msj = "Subir carta de autorización symplifica de " . $person->getFullName();
+                    $documentType = 'Carta autorización Symplifica';
+                }
+                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
+                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                $this->createNotification($user->getPersonPerson(), $msj, $url);
+            }
+        }
+    }
+
+    private function createNotification($person, $descripcion, $url)
+    {
+        $notification = new Notification();
+        $notification->setPersonPerson($person);
+        $notification->setStatus(1);
+        $notification->setType('alert');
+        $notification->setDescription($descripcion);
+        $notification->setRelatedLink($url);
+        $notification->setAccion('Subir documento');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($notification);
+        $em->flush();
     }
 
     /**
@@ -746,14 +886,20 @@ class EmployeeRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="idEmployer", nullable=true, strict=true, description="employee type.")
      * @RequestParam(array=true, name="idEmployerHasEmployee", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(array=true, name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(array=true, name="pension", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      * @return View
      */
     public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
+    {
+        return $this->saveMatrixChooseSubmitStep1($paramFetcher);
+    }
+
+    private function saveMatrixChooseSubmitStep1(ParamFetcher $paramFetcher)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -763,35 +909,36 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
 
-        $idEmployer = $paramFetcher->get('idEmployer');
-        $idsEmployerHasEmployee = $paramFetcher->get('idEmployerHasEmployee');
-        $beneficiaries = $paramFetcher->get('beneficiaries');
-        $pension = $paramFetcher->get('pension');
-        $wealth = $paramFetcher->get('wealth');
         $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         $employerHasEmployeeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
         $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
+
+        $register_social_security = $paramFetcher->get("register_social_security");
         /** @var Employer $realEmployer */
-        $realEmployer = $employerRepo->find($idEmployer);
+        $realEmployer = $employerRepo->find($register_social_security['idEmployer']);
         if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
             $view = View::create();
             $view->setData(array('error' => array('user' => 'not the logged user')))->setStatusCode(403);
             return $view;
         }
-        $realEmployerHasEmployees = $realEmployer->getEmployerHasEmployees();
+
         $flag = false;
-        for ($i = 0; $i < count($idsEmployerHasEmployee); $i++) {
+        $employerHasEmployees = $register_social_security['employerHasEmployees'];
+        $realEmployerHasEmployees = $realEmployer->getEmployerHasEmployees();
+
+        foreach ($employerHasEmployees as $employerHasEmployee) {
+
             /** @var EmployerHasEmployee $realEmployerHasEmployee */
-            $realEmployerHasEmployee = $employerHasEmployeeRepo->find($idsEmployerHasEmployee[$i]);
+            $realEmployerHasEmployee = $employerHasEmployeeRepo->find($employerHasEmployee['idEmployerHasEmployee']);
             if ($realEmployerHasEmployees->contains($realEmployerHasEmployee)) {
 
                 /** @var Entity $tempPens */
-                $tempPens = $entityRepo->find($pension[$i]);
+                $tempPens = $entityRepo->find($employerHasEmployee['pension']);
 
                 /** @var Entity $tempWealth */
-                $tempWealth = $entityRepo->find($wealth[$i]);
+                $tempWealth = $entityRepo->find($employerHasEmployee['wealth']);
 
-                $beneficiarie = $beneficiaries[$i];
+                $beneficiarie = $employerHasEmployee['beneficiaries'];
 
                 if ($tempPens == null || $tempWealth == null) {
                     $view = View::create();
@@ -803,19 +950,22 @@ class EmployeeRestController extends FOSRestController
                 $em = $this->getDoctrine()->getManager();
 
                 if ($realEmployeeEnt->count() == 0) {
+
                     $employeeHasEntityPens = new EmployeeHasEntity();
                     $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
                     $employeeHasEntityPens->setEntityEntity($tempPens);
                     $realEmployee->addEntity($employeeHasEntityPens);
+                    $em->persist($employeeHasEntityPens);
+
                     $employeeHasEntityWealth = new EmployeeHasEntity();
                     $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                     $employeeHasEntityWealth->setEntityEntity($tempWealth);
                     $realEmployee->addEntity($employeeHasEntityWealth);
-                    $realEmployee->setAskBeneficiary((isset($beneficiaries[$i])) ? true : false);
-
-                    $em->persist($employeeHasEntityPens);
                     $em->persist($employeeHasEntityWealth);
+
+                    $realEmployee->setAskBeneficiary($beneficiarie);
                     $em->persist($realEmployee);
+
                     $em->flush();
                 } else {
                     /** @var EmployeeHasEntity $rEE */
@@ -829,7 +979,7 @@ class EmployeeRestController extends FOSRestController
                             $em->persist($rEE);
                         }
                     }
-                    $realEmployee->setAskBeneficiary(($beneficiaries[$i]));
+                    $realEmployee->setAskBeneficiary($beneficiarie);
                     $em->persist($realEmployee);
                     $em->flush();
                 }
@@ -840,6 +990,7 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
         }
+
         if ($flag) {
             $view = View::create();
             $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
@@ -870,16 +1021,25 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      * @return View
      */
     public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher)
+    {
+        return $this->saveMatrixChooseSubmitStep2($paramFetcher);
+    }
+
+    private function saveMatrixChooseSubmitStep2(ParamFetcher $paramFetcher)
     {
         /** @var User $user */
         $user = $this->getUser();
         if ($user == null) {
             return;
         }
-        $idEmployer = $paramFetcher->get('idEmployer');
+
+        $register_social_security = $paramFetcher->get("register_social_security");
+
+        $idEmployer = $register_social_security['idEmployer'];
         $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
         /** @var Employer $realEmployer */
@@ -887,9 +1047,9 @@ class EmployeeRestController extends FOSRestController
         if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
             return;
         }
-        $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity'));
-        $realArl = $entityRepo->find($paramFetcher->get('arl'));
-        $realSeverances = $entityRepo->find($paramFetcher->get('severances'));
+        $realEmployer->setEconomicalActivity($register_social_security['economicalActivity']);
+        $realArl = $entityRepo->find($register_social_security['arl']);
+        $realSeverances = $entityRepo->find($register_social_security['severances']);
         if ($realSeverances == null || $realArl == null) {
             return;
         }
