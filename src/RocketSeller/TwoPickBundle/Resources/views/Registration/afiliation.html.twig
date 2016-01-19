@@ -11,7 +11,7 @@
                 font-weight: bold;
             }
             .blockUpData label {
-                min-height: 0px; 
+                min-height: 0px;
             }
             .blockUpData .radio {
                 padding: 5px 5px 5px 5px;
@@ -27,7 +27,7 @@
                 display: inline-block;
             }
         </style>
-    {% endblock %} 
+    {% endblock %}
 
     <div id='registrationFormContainer' class='' style="margin-top: 10px;">
         {{ form_start(form) }}
@@ -45,22 +45,22 @@
                 Para finalizar el proceso es necesario confirmar la información de afiliación a Seguridad Social de sus empleados. Los campos marcados con * son obligatorios.
 
                 Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
-                <div>        
+                <div>
                     <div class="col-sm-12 col-xs-12 blockUpData">
-                        <div class="col-sm-3 col-xs-12 row">                                   
-                            <div><img src="/img/1-iconStep.png"></div>    
+                        <div class="col-sm-3 col-xs-12 row">
+                            <div><img src="/img/1-iconStep.png"></div>
                             <div class="title">Nombre</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">                           
-                            <div><img src="/img/2-iconStep.png"></div>              
+                        <div class="col-sm-3 col-xs-12">
+                            <div><img src="/img/2-iconStep.png"></div>
                             <div class="title">Salud</div>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            <div><img src="/img/3-iconStep.png"></div>                            
+                            <div><img src="/img/3-iconStep.png"></div>
                             <div class="title">Pensión</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">                                                     
-                            <div><img src="/img/4-iconStep.png"></div>                         
+                        <div class="col-sm-3 col-xs-12">
+                            <div><img src="/img/4-iconStep.png"></div>
                             <div class="title">¿Registrará beneficiarios?</div>
                         </div>
                     </div>
@@ -80,12 +80,12 @@
                             </div>
                             {{ form_row(employee.idEmployerHasEmployee) }}
                         </div>
-                    {% endfor %}  
+                    {% endfor %}
                 </div>
 
                 <div class="col-sm-12 col-xs-12 center">
                     <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-                </div> 
+                </div>
 
 
             </div>
@@ -100,7 +100,7 @@
                     <h4>{{ employerDocumentType }} {{ employerDocument }}</h4>
 
                 </div>
-                <div class="row">        
+                <div class="row">
                     <div class="col-sm-12 col-xs-12 blockUpData">
                         <div class="col-sm-6 col-xs-12">
                             <img src="/img/10-iconExit-Step.png">
@@ -125,7 +125,7 @@
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious" >< Anterior</a>
                     <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-                </div> 
+                </div>
             </div>
             <div id="docsMatrix" class="tab-pane fade in">
                 <h4>¡Sólo queda este paso para finalizar la configuración inicial!</h4>
@@ -137,11 +137,11 @@
                             {{ render(controller('RocketSeller\TwoPickBundle:Employer:registrationDocuments')) }}
                         </div>
                     </div>
-                </div>                        
+                </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                    <div class="saveControl">{{ form_row(form.save) }}</div>                    
-                </div>                
+                    <div class="saveControl">{{ form_row(form.save) }}</div>
+                </div>
             </div>
 
 
