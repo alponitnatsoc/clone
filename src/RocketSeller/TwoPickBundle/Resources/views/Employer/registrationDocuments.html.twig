@@ -92,7 +92,7 @@
 </div>
 
   {% if employees|length < 2 %}
-    {% set employeeDocs = employees.personPerson.docs %}
+    {% set employeeDocs = employees[0].personPerson.docs %}
     <div class="row employeesListEmployee">
         <div class="col-sm-12 col-xs-12 firstEmployeeList" style="border-bottom: none;">
             <div class="col-sm-3 col-xs-12 nopadding text-center">
