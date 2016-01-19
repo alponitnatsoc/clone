@@ -93,19 +93,43 @@
                     <span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
-                    <div class="col-sm-6 col-xs-12">
+                    <div class="col-sm-4 col-xs-12">
                         <img src="/img/documentType.png">
                         {{ form_row(form.person.documentType) }}
                     </div>
-                    <div class="col-sm-6 col-xs-12">
+                    <div class="col-sm-4 col-xs-12">
                         <img src="/img/documentNumber.png">
                         {{ form_row(form.person.document) }}
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentNumber.png">
+                        {{ form_row(form.person.lastName1) }}
+                    </div>
+                    <div class="col-sm-12 col-xs-12 center">
+                        <a id="btn-search" href="" class="btn btn-primary btnNext" >Consultar ></a>
+                    </div>
+                </div>
+                <!-- Modal TI -->
+                <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Advertencia Menor de edad</h4>
+                            </div>
+                            <div class="modal-body">
+                                Un menor de edad no puede trabajar mas de 6 horas diarias y tiene que tener el consentimiento de los padres
+                                <p>al presionar entendido acepta haber recibido esta información</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.person.names) }}
-                        {{ form_row(form.person.lastName1) }}
                         {{ form_row(form.person.lastName2) }}
                     </div>
                     <div class="col-sm-6 col-xs-12">
@@ -119,11 +143,12 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.person.birthDate) }}
-                        {{ form_row(form.personExtra.birthDepartment) }}
+                        {{ form_row(form.personExtra.birthCountry) }}
+
                     </div>
                     <div class="col-sm-6 col-xs-12">
+                        {{ form_row(form.personExtra.birthDepartment) }}
                         {{ form_row(form.personExtra.birthCity) }}
-                        {{ form_row(form.personExtra.birthCountry) }}
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
@@ -203,7 +228,7 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-8 col-xs-12">
                         {{ form_row(form.employeeHasEmployers.position) }}
-                        {{ form_row(form.employeeHasEmployers.salary) }}
+                        {{ form_row(form.employeeHasEmployers.salary) }}<a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
                         {{ form_row(form.employeeHasEmployers.workplaces) }}
                         {{ form_row(form.employeeHasEmployers.transportAid) }}
                     </div>
@@ -246,29 +271,7 @@
                 </div>
 
 
-                <!-- Modal si -->
-                <!--div class="modal fade" id="subirModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Subir documento nuevo</h4>
-                            </div>
-                            <div class="modal-body">
-                                Almacene las fotos o digitalizaciones de los documentos que firme con su empleado.
-                                Los campos marcados con * son obligatorios.
-                                <p>¿Cómo tomar foto o escanear un documento?</p>
-                                <p>Hay varias formas de hacerlo, pero la mejor de ellas es nuestra aplicación iOS (iPhone) o Android</p>
-                                <p>Selección de archivo*:</p>
-                                {# form_row(form.employeeHasEmployers.document) #}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-default">Guardar Cambios</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <!-- Modal no -->
                 <div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">

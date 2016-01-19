@@ -65,7 +65,7 @@ class ContractRegistration extends AbstractType
                     new NotBlank(),),
                 'currency' => 'COP',
                 'property_path' => 'salary',
-                'label'=>'Sueldo diario'
+                'label'=>'¿Cuánto le paga a su empleado mensualmente?'
             ))
 
             ->add('benefits', 'collection', array(

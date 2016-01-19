@@ -41,20 +41,37 @@
     </div>
 </div>
 <div class="row employeesListEmployer">
+    {% set employerDocs = employer.docs %}
     <div class="col-sm-12 col-xs-12 text-center" style="border-bottom: none;">
         <div class="col-sm-3 col-xs-12 nopadding">
             <span>{{ employer.names }} {{ employer.lastName1}}</span>
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[0] in documentsTypeByEmployer %}
-                    Ya lo tienes
+                {% for doc in employerDocs %}
+                    {% if (documents[0] == doc.documentTypeDocumentType) %}
+                        {% if doc.status %}
+                            <a href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                        {% else %}
+                            <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                        {% endif %}                                                                                             
+                    {% endif %}                                                
+                {% endfor %}
             {% else %}
-                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>                                           
             {% endif %}
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[1] in documentsTypeByEmployer %}
-                    Ya lo tienes
+                {% for doc in employerDocs %}
+                    {% if (documents[1] == doc.documentTypeDocumentType) %}
+                        {% if doc.status %}
+                            <a href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                        {% else %}
+                            <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[01].idDocumentType}) }}">Documento</a>
+                        {% endif %}                                                                                             
+                    {% endif %}                                                
+                {% endfor %}
             {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Documento</a>
             {% endif %}
@@ -63,12 +80,19 @@
             <span>No necesitas</span>
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
-            <span>Carta</span>
+            {% if documents[3] in documentsTypeByEmployer %}
+                    Ya lo firmaste
+            {% else %}
+                    <a id="auth-download-button" class="btn-default btn btn-sm" onclick="authDownload(this)">Descargar Carta</a>
+                    <a id="auth-upload-button" style="display:none;" class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">Documento</a>
+                    
+            {% endif %}
         </div>
     </div>
 </div>
 
   {% if employees|length < 2 %}
+    {% set employeeDocs = employees.personPerson.docs %}
     <div class="row employeesListEmployee">
         <div class="col-sm-12 col-xs-12 firstEmployeeList" style="border-bottom: none;">
             <div class="col-sm-3 col-xs-12 nopadding text-center">
@@ -76,7 +100,15 @@
             </div>
             <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[0] in documentsTypeByEmployee[0] %}
-                    Ya lo tienes
+                    {% for doc in employeeDocs %}
+                        {% if (documents[0] == doc.documentTypeDocumentType) %}
+                            {% if doc.status %}
+                                <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                            {% else %}
+                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                            {% endif %}                                                                                             
+                        {% endif %}                                                
+                    {% endfor %}
                 {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                 {% endif %} 
@@ -86,7 +118,15 @@
             </div>
             <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[2] in documentsTypeByEmployee[0] %}
-                    Ya lo tienes
+                    {% for doc in employeeDocs %}
+                        {% if (documents[2] == doc.documentTypeDocumentType) %}
+                            {% if doc.status %}
+                                <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                            {% else %}
+                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
+                            {% endif %}                                                                                             
+                        {% endif %}                                                
+                    {% endfor %}
                 {% else %}
                     <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
                 {% endif %}  
@@ -98,7 +138,8 @@
     </div>
 
   {% else %}
-    {% for i in 0..employees|length-1  %}  
+    {% for i in 0..employees|length-1  %}
+        {% set employeeDocs = employees[i].personPerson.docs %}  
         <div class="row employeesListEmployee">
             <div class="col-sm-12 col-xs-12 restOfEmployeeList" style="border-bottom: none;">
                 <div class="col-sm-3 col-xs-12 nopadding text-center">
@@ -106,7 +147,15 @@
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[0] in documentsTypeByEmployee[i] %}
-                        Ya lo tienes
+                        {% for doc in employeeDocs %}
+                            {% if (documents[0] == doc.documentTypeDocumentType) %}
+                                {% if doc.status %}
+                                    <a href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                                {% else %}
+                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                                {% endif %}                                                                                             
+                            {% endif %}                                                
+                        {% endfor %}
                     {% else %}
                         <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                     {% endif %}  
@@ -116,7 +165,15 @@
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
-                        Ya lo tienes
+                        {% for doc in employeeDocs %}
+                            {% if (documents[2] == doc.documentTypeDocumentType) %}
+                                {% if doc.status %}
+                                    <a href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                                {% else %}
+                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
+                                {% endif %}                                                                                             
+                            {% endif %}                                                
+                        {% endfor %}
                     {% else %}
                         <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
                     {% endif %}  
@@ -128,8 +185,6 @@
         </div>
         {% endfor %}
   {% endif %}
-
-
 
 
 <!--
@@ -160,4 +215,14 @@
 		<tr><td>algo</td></tr>
 	</tbody>
 </table>-->
+<script>
+
+    function authDownload() {                                                               
+        window.open('/contractLayout/cartaAutSymplifica');
+        var authDownload = document.getElementById('auth-download-button');
+        authDownload.style.display = 'none'; //or
+        var authUpload = document.getElementById('auth-upload-button');
+        authUpload.style.display = 'inline';                                         
+    }
+</script>
 {% endblock %}

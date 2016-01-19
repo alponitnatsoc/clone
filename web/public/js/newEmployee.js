@@ -7,18 +7,16 @@ function startEmployee(){
     $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
         validator = $("form[name='register_employee']").validate({
             rules: {
-                "register_employee[person][document]": "required",
+                "register_employee[person][document]": {required:true,number:true},
                 "register_employee[person][names]": "required",
                 "register_employee[person][lastName1]": "required",
-                "register_employee[person][lastName2]": "required",
                 "register_employee[person][mainAddress]": "required",
                 "register_employee[employeeHasEmployers][salary]":"required",
             },
             messages:{
-                "register_employee[person][document]": "Por favor Ingrese su documento",
+                "register_employee[person][document]": {required:"Por favor Ingrese su documento",number:"ingrese solamente dígitos"},
                 "register_employee[person][names]": "Por favor Ingrese su nombre",
                 "register_employee[person][lastName1]": "Por favor Ingrese su primer apellido",
-                "register_employee[person][lastName2]": "Por favor Ingrese su segundo apellido",
                 "register_employee[person][mainAddress]": "Por favor Ingrese una dirección",
                 "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario",
 
@@ -69,6 +67,13 @@ function startEmployee(){
             $(".days").each(function(){
                 $(this).hide();
             });
+        }
+
+    });
+    $("#register_employee_person_documentType").change(function(){
+        var selectedVal=$(this).find("option:selected").text();
+        if(selectedVal=="Tarjeta de identidad"){
+            $('#TIModal').modal('toggle');
         }
 
     });
@@ -200,7 +205,8 @@ function startEmployee(){
         var names=			$(form).find("input[name='register_employee[person][names]']");
         var lastName1= 		$(form).find("input[name='register_employee[person][lastName1]']");
         var lastName2= 		$(form).find("input[name='register_employee[person][lastName2]']");
-        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1)&&validator.element(lastName2))){
+        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
 
@@ -243,6 +249,7 @@ function startEmployee(){
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employee[person][mainAddress]']");
         if (!(validator.element(mainAddress))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         var i =0;
@@ -259,6 +266,7 @@ function startEmployee(){
             phones[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         $.ajax({
@@ -314,10 +322,12 @@ function startEmployee(){
         });
         var salary=$(form).find("input[name='register_employee[employeeHasEmployers][salary]']");
         if (!(validator.element(salary))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
 
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         $.ajax({

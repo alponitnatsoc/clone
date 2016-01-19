@@ -19,7 +19,12 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
-    public function registrationDocumentsAction(){
+    public function profileEmployerAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:Employer:profile.html.twig');
+    }
+    public function registrationDocumentsAction()
+    {
         $user = $this->getUser();
         $documents = array();
         $employees = array();
@@ -33,11 +38,13 @@ class EmployerController extends Controller
             array_push($employees,$employerHasEmployee->getEmployeeEmployee());
         }
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(1)); 
+              ->findByName('Cedula')[0]);              
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(2));
+              ->findByName('Rut')[0]);
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
-              ->find(3));
+              ->findByName('Contrato')[0]);
+        array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
+              ->findByName('Carta autorización Symplifica')[0]);
         $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
         $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);               
         return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig',array('employer'=>$person , 'documents'=>$documents , 'employees'=>$employees ,'documentsTypeByEmployee'=>$documentsTypeByEmployee , 'documentsTypeByEmployer'=> $documentsTypeByEmployer));

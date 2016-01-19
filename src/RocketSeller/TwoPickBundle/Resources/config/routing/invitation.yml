@@ -1,0 +1,30 @@
+invitation:
+    path:     /
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:index" }
+
+invitation_show:
+    path:     /{id}/show
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:show" }
+
+invitation_new:
+    path:     /new
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:new" }
+
+invitation_create:
+    path:     /create
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:create" }
+    methods:  POST
+
+invitation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:edit" }
+
+invitation_update:
+    path:     /{id}/update
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:update" }
+    methods:  [POST, PUT]
+
+invitation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "RocketSellerTwoPickBundle:Invitation:delete" }
+    methods:  [POST, DELETE]

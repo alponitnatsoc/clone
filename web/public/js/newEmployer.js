@@ -10,14 +10,12 @@ function startEmployer(){
                 "register_employer[person][document]": "required",
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
-                "register_employer[person][lastName2]": "required",
                 "register_employer[person][mainAddress]": "required",
             },
             messages:{
                 "register_employer[person][document]": "Por favor Ingrese su documento",
                 "register_employer[person][names]": "Por favor Ingrese su nombre",
                 "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
-                "register_employer[person][lastName2]": "Por favor Ingrese su segundo apellido",
                 "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
             }
         });
@@ -38,6 +36,14 @@ function startEmployer(){
                 required: true,
                 messages:{
                     required:   "Por favor ingrese una dirección"
+                }
+            });
+        });
+        $("ul.workplaces select").each(function(){
+            $(this).rules("add", {
+                required: true,
+                messages:{
+                    required:   "Por favor selecione una opción"
                 }
             });
         });
@@ -72,7 +78,8 @@ function startEmployer(){
         var names=			$(form).find("input[name='register_employer[person][names]']");
         var lastName1= 		$(form).find("input[name='register_employer[person][lastName1]']");
         var lastName2= 		$(form).find("input[name='register_employer[person][lastName2]']");
-        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1)&&validator.element(lastName2))){
+        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
 
@@ -102,6 +109,7 @@ function startEmployer(){
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
         if (!(validator.element(mainAddress))){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         var i =0;
@@ -109,9 +117,18 @@ function startEmployer(){
             idsPhones[i++]=$(this).val();
         });
         i =0;
+        var flagValid=true;
         $(form).find("ul.phones input[name*='phoneNumber']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             phones[i++]=$(this).val();
         });
+        if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
@@ -178,7 +195,7 @@ function startEmployer(){
     var redirUri="";
     $("form").on("submit",function(e){
         e.preventDefault();
-        $('#createdModal').modal('toggle');
+
         var form =$("form");
         var addresses =[],citys=[],departments=[],ids=[];
         var i =0;
@@ -195,16 +212,34 @@ function startEmployer(){
             addresses[i++]=$(this).val();
         });
         if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         i=0;
         $(form).find("ul.workplaces select[name*='city']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             citys[i++]=$(this).val();
         });
+        if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
         i=0;
         $(form).find("ul.workplaces select[name*='department']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
             departments[i++]=$(this).val();
         });
+        if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+        $('#createdModal').modal('toggle');
         $.ajax({
             url : form.attr('action'),
             type: $(form).attr('method'),
