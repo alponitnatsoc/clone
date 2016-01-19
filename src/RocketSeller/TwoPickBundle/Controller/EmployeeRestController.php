@@ -1073,7 +1073,7 @@ class EmployeeRestController extends FOSRestController
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "ARL") {
                     $rEE->setEntityEntity($realArl);
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Cesantias") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "CC Familiar") {
                     $rEE->setEntityEntity($realSeverances);
                 }
             }
