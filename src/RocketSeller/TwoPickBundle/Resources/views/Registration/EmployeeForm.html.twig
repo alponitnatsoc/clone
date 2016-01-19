@@ -110,11 +110,10 @@
                     </div>
                 </div>
                 <!-- Modal TI -->
-                <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title" id="myModalLabel">Advertencia Menor de edad</h4>
                             </div>
                             <div class="modal-body">
@@ -170,7 +169,7 @@
                                     {{ form_row(phone.phoneNumber) }}
                                 </li>
                             {% endfor %}
-                            <li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li>
+                            <!--li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li-->
                         </ul>
                     </div>
                     <div class="col-sm-6 col-xs-12">

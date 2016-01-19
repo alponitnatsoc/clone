@@ -51,9 +51,6 @@ class AffiliationEmployerEmployee extends AbstractType
                 'mapped' => false,
                 'label'=>'Administradora de Riesgos Labolares'
             ))
-            ->add('economicalActivity', 'number', array(
-                'label'=>'Actividad económica del empleador'
-            ))
             ->add('save', 'submit', array(
                 'label' => 'Save',
             ));

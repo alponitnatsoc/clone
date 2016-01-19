@@ -99,8 +99,6 @@ function startEmployee(){
             url : '/pay/method/fields/'+payMethod.val(),
             type: 'GET'
         }).done(function(data)  {
-
-            // CHANGE THISS <<<<<<<<<------------------------
             $('#putFields_'+payMethod.val()).html(
                 // ... with the returned one from the AJAX response.
                 $(data).find('#formFields'));
@@ -158,6 +156,7 @@ function startEmployee(){
         });
     });
     var $collectionHolderPhones;
+    /*
     var $addPhoneLink = $('<a href="#" class="add_phone_link">Add Phone</a>');
     var $newLinkLiPhone = $('<li></li>').append($addPhoneLink)
     $collectionHolderPhones = $('ul.phones');
@@ -171,6 +170,7 @@ function startEmployee(){
         e.preventDefault();
         addPhoneForm($collectionHolderPhones, $newLinkLiPhone);
     });
+    */
 
     var $collectionHolderB;
     var $collectionHolderW;
