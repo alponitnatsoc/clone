@@ -311,14 +311,13 @@
                 Escoja el mecanismo del salario:<br />
                 {% for child in form.employeeHasEmployers.payMethod %}
                     {% set index = child.vars.value %}
-                    <tr>
                         {{ form_widget(child) }}
                         DESCRIPCIONNNN
                         {{ choices[index].descripcion }}
                         IMAGEEN
                         {{ choices[index].image }}
                         <div id="putFields_{{ index }}"></div>
-                    </tr>
+
                 {% endfor %}
 
                 <div id="payMethodFields">

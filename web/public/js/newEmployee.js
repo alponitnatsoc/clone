@@ -98,10 +98,10 @@ function startEmployee(){
         $.ajax({
             url : '/pay/method/fields/'+payMethod.val(),
             type: 'GET'
-        }).done(function(data) {
+        }).done(function(data)  {
 
-            // CHANGE THISS <<<<<<<<<-------------------------
-            $('#payMethodFields').html(
+            // CHANGE THISS <<<<<<<<<------------------------
+            $('#putFields_'+payMethod.val()).html(
                 // ... with the returned one from the AJAX response.
                 $(data).find('#formFields'));
         });
