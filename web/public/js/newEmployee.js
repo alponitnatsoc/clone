@@ -94,6 +94,8 @@ function startEmployee(){
             url : '/pay/method/fields/'+payMethod.val(),
             type: 'GET'
         }).done(function(data) {
+
+            // CHANGE THISS <<<<<<<<<-------------------------
             $('#payMethodFields').html(
                 // ... with the returned one from the AJAX response.
                 $(data).find('#formFields'));
