@@ -30,7 +30,10 @@ class Workplace
      */
     private $employerEmployer;
 
-
+    /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $name;
 
     /**
      * @ORM\OneToMany(targetEntity="Contract", mappedBy="workplaceWorkplace", cascade={"persist"})
@@ -55,8 +58,6 @@ class Workplace
      * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
      */
     private $city;
-
-
 
      /**
      * Constructor
@@ -123,7 +124,7 @@ class Workplace
     {
         return $this->employerEmployer;
     }
-    
+
     /**
      * Set department
      *
@@ -205,5 +206,29 @@ class Workplace
     public function getContracts()
     {
         return $this->contracts;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Workplace
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
