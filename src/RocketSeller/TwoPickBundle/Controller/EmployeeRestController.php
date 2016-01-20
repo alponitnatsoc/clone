@@ -763,11 +763,9 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
 
-        $em = $this->getDoctrine()->getManager();
         $register_social_security = $paramFetcher->get("register_social_security");
 
         $employerHasEmployeeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $employerHasEmployees = $register_social_security['employerHasEmployees'];
         $idEmployer = $register_social_security['idEmployer'];
 
@@ -776,10 +774,8 @@ class EmployeeRestController extends FOSRestController
             $realEmployerHasEmployee = $employerHasEmployeeRepo->find($employerHasEmployee['idEmployerHasEmployee']);
             $realEmployeer = $realEmployerHasEmployee->getEmployerEmployer();
             if ($idEmployer == $realEmployeer->getIdEmployer()) {
-                $realEmployee = $realEmployerHasEmployee->getEmployeeEmployee();
-                $person = $realEmployee->getPersonPerson();
-                $documents = $documentsRepo->findByPersonPerson($person);
-                $this->validateDocumentsEmployee($person, $documents);
+                $this->validateDocumentsEmployee($realEmployerHasEmployee->getEmployeeEmployee());
+                $this->validateEntitiesEmployee($realEmployerHasEmployee->getEmployeeEmployee());
             } else {
                 $view = View::create();
                 $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
@@ -787,21 +783,41 @@ class EmployeeRestController extends FOSRestController
             }
         }
 
-        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
-        $realEmployer = $employerRepo->find($idEmployer);
-        $person = $realEmployer->getPersonPerson();
-        $documents = $documentsRepo->findByPersonPerson($person);
-        $this->validateDocumentsEmployer($person, $documents);
+        $this->validateDocumentsEmployer($idEmployer);
 
         $view = View::create();
         $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
         return $view;
     }
 
-    private function validateDocumentsEmployee($person, $documents)
+    private function validateEntitiesEmployee($realEmployee)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
+        $personEmployee = $realEmployee->getPersonPerson();
+        $employeeHasEntityRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity');
+        $entities_b = $employeeHasEntityRepo->findByEmployeeEmployee($realEmployee);
+        if (gettype($entities_b) != "array") {
+            $entities[] = $entities;
+        } else {
+            $entities = $entities_b;
+        }
+        foreach ($entities as $key => $value) {
+            $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a " . $value->getEntityEntity()->getName();
+            $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
+            $this->createNotification($user->getPersonPerson(), $msj, $url);
+        }
+    }
+
+    private function validateDocumentsEmployee($realEmployee)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $person = $realEmployee->getPersonPerson();
+        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
+        $documents = $documentsRepo->findByPersonPerson($person);
+
         $docs = array('Cedula' => false, 'Contrato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
@@ -826,10 +842,18 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function validateDocumentsEmployer($person, $documents)
+    private function validateDocumentsEmployer($idEmployer)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
+
+        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+        $realEmployer = $employerRepo->find($idEmployer);
+        $person = $realEmployer->getPersonPerson();
+
+        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
+        $documents = $documentsRepo->findByPersonPerson($person);
+
         $docs = array('Cedula' => false, 'RUT' => false, 'Carta autorización Symplifica' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {

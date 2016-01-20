@@ -143,6 +143,19 @@ class EmployeeController extends Controller
         }
     }
 
+    private function getConfigData()
+    {
+        $configRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config");
+        $configDataTmp = $configRepo->findAll();
+        $configData = array();
+        if ($configDataTmp) {
+            foreach ($configDataTmp as $key => $value) {
+                $configData[$value->getName()] = $value->getValue();
+            }
+        }
+        return $configData;
+    }
+
     public function matrixChooseAction()
     {
         /** @var User $user */
@@ -151,27 +164,28 @@ class EmployeeController extends Controller
         $employerHasEmployees = $employer->getEmployerHasEmployees();
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
         $entityTypes = $entityTypeRepo->findAll();
+        $configData = $this->getConfigData();
         $pensions = null;
         $eps = null;
         $severances = null;
         $arls = null;
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
-            if ($entityType->getName() == "EPS") {
+            if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
                 $eps = $entityType->getEntities();
             }
-            if ($entityType->getName() == "ARL") {
+            if ($entityType->getName() == (isset($configData['ARL']) ? $configData['ARL'] : "ARL")) {
                 $arls = $entityType->getEntities();
             }
-            if ($entityType->getName() == "Pension") {
+            if ($entityType->getName() == (isset($configData['Pension']) ? $configData['Pension'] : "Pension")) {
                 $pensions = $entityType->getEntities();
             }
-            if ($entityType->getName() == "CC Familiar") {
+            if ($entityType->getName() == (isset($configData['CC Familiar']) ? $configData['CC Familiar'] : "CC Familiar")) {
                 $severances = $entityType->getEntities();
             }
         }
         if ($employer->getEconomicalActivity() == null) {
-            $employer->setEconomicalActivity("2435");
+            $employer->setEconomicalActivity(isset($configData['RUT Actividad Economica']) ? $configData['RUT Actividad Economica'] : "2435");
         }
         $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions, $severances, $arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_matrix_choose_submit'),
@@ -307,10 +321,10 @@ class EmployeeController extends Controller
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render(
-            'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
-                'form' => $form->createView(),
-                'choices'=>$choices
-                )
+                        'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
+                    'form' => $form->createView(),
+                    'choices' => $choices
+                        )
         );
     }
 

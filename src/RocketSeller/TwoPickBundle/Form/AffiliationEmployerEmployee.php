@@ -31,6 +31,7 @@ class AffiliationEmployerEmployee extends AbstractType
             ->setAction($options['action'])
             ->setMethod($options['method'])
             ->add('idEmployer', 'hidden')
+            ->add('economicalActivity', 'hidden')
             ->add('employerHasEmployees', 'collection', array(
                 'type' => new EntitiesPick($this->wealthEntities,$this->pensionEntities),
                 'allow_add'    => false,
