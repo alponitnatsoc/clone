@@ -42,19 +42,29 @@ class FOSUBUserProvider extends BaseClass {
             $setter = 'set'.ucfirst($service);
             $setter_id = $setter.'Id';
             $setter_token = $setter.'AccessToken';
-            // create new user here
-            $user = $this->userManager->createUser();
+            //find if the user exist with that email, and if exist add the social network
+            $user=$this->userManager->findUserByEmail($response->getEmail());
+            if($user==null){
+                //if the user does not exist
+                // create new user here
+                $user = $this->userManager->createUser();
+                $people = new Person();
+                if($response->getEmail()==null){
+                    $user = parent::loadUserByOAuthUserResponse($response);
+                }else{
+                    $user->setUsername($response->getEmail());
+                    $user->setEmail($response->getEmail());
+                    $user->setPassword(md5($username+rand(0,1000000000)));
+                    $user->setEnabled(true);
+                    $people->setNames($response->getRealname());
+                    $user->setPersonPerson($people);
+                }
+
+            }
             $user->$setter_id($response->getEmail());
             $user->$setter_token($response->getAccessToken());
-            $people = new Person();
             //I have set all requested data with the user's username
             //modify here with relevant data
-            $user->setUsername($response->getEmail());
-            $user->setEmail($response->getEmail());
-            $user->setPassword(md5($username+rand(0,1000000000)));
-            $user->setEnabled(true);
-            $people->setNames($response->getRealname());
-            $user->setPersonPerson($people);
             $this->userManager->updateUser($user);
             return $user;
         }
