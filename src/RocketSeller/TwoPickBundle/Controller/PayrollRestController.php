@@ -808,7 +808,7 @@ class PayrollRestController extends FOSRestController
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
    *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
    *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-   *    (name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   *    (name="liquidation_type_id", nullable=false, requirements="([0-9A-Z ])+", strict=true, description="Code of the liquidation type")
    *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
    *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
    *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
@@ -824,7 +824,7 @@ class PayrollRestController extends FOSRestController
     $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
     $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = true;
     $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';$mandatory['novelty_value'] = false;
-    $regex['liquidation_type_id'] = '([0-9])+';$mandatory['liquidation_type_id'] = true;
+    $regex['liquidation_type_id'] = '([0-9A-Z ])+';$mandatory['liquidation_type_id'] = true; //TODO: siempre poner noc.
     $regex['unity_numbers'] = '([0-9])+';$mandatory['unity_numbers'] = false;
     $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = false;
     $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
@@ -837,11 +837,11 @@ class PayrollRestController extends FOSRestController
     $unico['TIPOCON'] = 0;
     $unico['EMP_CODIGO'] = $parameters['employee_id'];
     $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
-    $unico['NOV_VALOR_LOCAL'] = $parameters['novelty_value'];
+    $unico['NOV_VALOR_LOCAL'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : "";
     $unico['FLIQ_CODIGO'] = $parameters['liquidation_type_id'];
-    $unico['NOV_UNIDADES'] = $parameters['unity_numbers'];
-    $unico['NOV_FECHA_DESDE_CAUSA'] = $parameters['novelty_start_date'];
-    $unico['NOV_FECHA_HASTA_CAUSA'] = $parameters['novelty_end_date'];
+    $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : "";
+    $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : "";
+    $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
 
     $content[] = $unico;
     $parameters = array();
@@ -874,7 +874,7 @@ class PayrollRestController extends FOSRestController
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
    *    (name="novelty_concept_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL")
    *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-   *    (name="liquidation_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
+   *    (name="liquidation_type_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the liquidation type")
    *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
    *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
    *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
@@ -951,7 +951,7 @@ class PayrollRestController extends FOSRestController
 
     $unico['EMPCODIGO'] = $employeeId;
     if($liquidation_date != null)
-      $unico['NOV_FECHA_LIQ'] = $liquidation_date;
+      $unico['NOVFECHALIQ'] = $liquidation_date;
 
     $content[] = $unico;
     $parameters = array();
@@ -1014,7 +1014,7 @@ class PayrollRestController extends FOSRestController
       $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
       $unico['NOVF_VALOR'] = $parameters['novelty_value'];
       $unico['NOVF_FECHA_INICIAL'] = $parameters['novelty_start_date'];
-      $unico['NOVF_FECHA_FINAL'] = $parameters['novelty_end_date'];
+      $unico['NOVF_FECHA_FINAL'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
 
       $content[] = $unico;
       $parameters = array();
@@ -1183,7 +1183,7 @@ class PayrollRestController extends FOSRestController
       $unico['AUS_FECHA_INICIAL'] = $parameters['absenteeism_start_date'];
       $unico['AUS_FECHA_FINAL'] = $parameters['absenteeism_end_date'];
       $unico['AUS_UNIDADES'] = $parameters['absenteeism_units'];
-      $unico['AUS_ESTADO'] = $parameters['absenteeism_state'];
+      $unico['AUS_ESTADO'] = isset($parameters['absenteeism_state']) ? $parameters['absenteeism_state']: "";
 
       $content[] = $unico;
       $parameters = array();
@@ -1289,7 +1289,7 @@ class PayrollRestController extends FOSRestController
 
       $unico['EMPCODIGO'] = $employeeId;
       if($state != null)
-        $unico['AUS_ESTADO'] = $state;
+        $unico['AUSESTADO'] = $state;
 
       $content[] = $unico;
       $parameters = array();
@@ -1354,8 +1354,8 @@ class PayrollRestController extends FOSRestController
       $unico['TCO_CODIGO'] = $parameters['contract_type_id'];
       $unico['HPRO_FECHA_INGRESO'] = $parameters['contract_start_date'];
       $unico['MPRO_CODIGO'] = $parameters['extension_reason_id'];
-      $unico['HPRO_NRO_CONTRATO'] = $parameters['employee_contract_number'];
-      $unico['HPRO_EMP_FECHA_RETIRO'] = $parameters['employee_leaving_date'];
+      $unico['HPRO_NRO_CONTRATO'] = isset($parameters['employee_contract_number']) ? $parameters['employee_contract_number'] : "";
+      $unico['HPRO_EMP_FECHA_RETIRO'] = isset($parameters['employee_leaving_date']) ? $parameters['employee_leaving_date'] : "";
 
       $content[] = $unico;
       $parameters = array();
