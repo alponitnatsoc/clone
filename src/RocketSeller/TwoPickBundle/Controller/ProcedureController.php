@@ -18,10 +18,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class ProcedureController extends Controller
 {
     public function indexAction()
-    {
+    {   
+    	$procedures = $this->getdoctrine()
+		->getRepository('RocketSellerTwoPickBundle:RealProcedure')
+		->findAll();
         return $this->render(
-            'RocketSellerTwoPickBundle:Registration:procedure.html.twig'
+            'RocketSellerTwoPickBundle:BackOffice:procedures.html.twig',array('procedures'=>$procedures)
         );
+    }
+    public function procedureByIdAction($procedureId)
+    {
+    	$procedure = $this->loadClassById($procedureId,'RealProcedure');    	
+    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array('procedure'=>$procedure));
+
     }
     /**
      * estructura de tramite para generar vueltas y tramites
@@ -41,34 +50,40 @@ class ProcedureController extends Controller
 
     public function validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees)
     {		  		
-		$entityInscription = 1;
+		$entityInscription = 9;
 		$em = $this->getDoctrine()->getManager();	
 		$employerSearch = $this->loadClassById($id_employer,"Employer");
 		$userSearch = $this->loadClassById($id_user,"User");
 		$procedureTypeSearch = $this->loadClassById($id_procedure_type, "ProcedureType");
+
 		$procedure = new RealProcedure();
 		$procedure->setUserUser($userSearch);
+		$procedure->setCreatedAt(new \DateTime());
 		$procedure->setProcedureTypeProcedureType($procedureTypeSearch);
 		$procedure->setEmployerEmployer($employerSearch);
 		$em->persist($procedure);
 			    											
     		foreach ($employees as $employee) {
+    			$entities = array();
     			foreach ($employee["entities"] as $entity) {
     				$actionTypeFound = $this->loadClassById($entity["id_action_type"],"ActionType");
 		    		$employeeFound = $this->loadClassById($employee["id_employee"],"Employee");
-    				$employeeHasEntityFound = $this->loadClassByArray(array("employeeEmployee" => $employeeFound),"EmployeeHasEntity");
-				    	if($employeeHasEntityFound && $employeeHasEntityFound->getEntityEntity()->getEntityTypeEntityType()->getIdEntityType() == $entity["id_entity"]){
-				    	}else{
+		    		$entityFound = $this->loadClassById($entity["id_entity"],"Entity");
+    				$employeeHasEntityFound = $this->loadClassByArray(array("employeeEmployee" => $employeeFound, "entityEntity"=>$entityFound),"EmployeeHasEntity");				    					    				    				    	
+				    	if($employeeHasEntityFound){				    		
+				    	}else{				    		
 				    		if($this->loadClassByArray(array(
 				    			"personPerson" => $employeeFound->getPersonPerson(),
 				    			"actionTypeActionType" => $this->loadClassById(
 				            	$entityInscription,"ActionType"),
-				            	"entityEntity" =>$this->loadClassById($entity["id_entity"],"EntityType")
+				            	"entityEntity" =>$this->loadClassById($entity["id_entity"],"Entity")
 				    		),"Action")){
 				    			//se verifica que no hallan actions repetidos de inscripcion
 				    		}else{
 			    				$action = new Action();
 					            $action->setUserUser($userSearch);
+					            $action->setStatus('Nuevo');
+					            $action->setRealProcedureRealProcedure($procedure);
 					            $action->setEntityEntity($this->loadClassById($entity["id_entity"],"Entity"));
 					            $action->setActionTypeActionType($this->loadClassById(
 					            	$entityInscription,"ActionType"));
@@ -87,6 +102,8 @@ class ProcedureController extends Controller
 				    	}else{
 				    		$action = new Action();
 				            $action->setUserUser($userSearch);
+				            $action->setStatus('Nuevo');
+				            $action->setRealProcedureRealProcedure($procedure);
 				            $action->setEntityEntity($this->loadClassById($entity["id_entity"],"Entity"));
 				            $action->setActionTypeActionType($actionTypeFound);
 				            $action->setPersonPerson($employeeFound->getPersonPerson());
@@ -95,10 +112,19 @@ class ProcedureController extends Controller
 				            $procedure->addAction($action);
 				    	}	    								
     			}
-    		}    	
+    		}
     		$em->flush();
         return $procedure;
         
+    }
+    public function changeVueltaStateAction($procedureId,$actionId,$status)
+    {	
+    	$em = $this->getDoctrine()->getManager();	
+    	$action = $this->loadClassById($actionId,"Action");
+    	$action->setStatus($status);
+    	$em->persist($action);
+    	$em->flush();
+    	return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
     /**
      * hace un query de la clase para instanciarla
@@ -130,14 +156,14 @@ class ProcedureController extends Controller
      */
     public function testValidateAction()
     {
-    		$id_employer =1;
-    		$id_procedure_type = 1;
+    		$id_employer =20;
+    		$id_procedure_type = 2;
     		$priority = 1;
-    		$id_user = 1;
+    		$id_user = 36;
     		$id_contrato = 1; //preguntar para que el contrato?
     		$employees = array(
     			array(
-    				'id_employee' => 1,
+    				'id_employee' => 4,
     				'id_contrato' => 1,
 	    			'docs'  =>	array(
 		    					'id_doc1' => 'documento 1',
@@ -145,17 +171,17 @@ class ProcedureController extends Controller
 		    					),
 	    			"entities" => array(
 			    				array(
-				    					'id_entity' => 1,
-				    					'id_action_type' => 3,
+				    					'id_entity' => 61,
+				    					'id_action_type' => 5,
 				    					),
 			    				array(
-				    					'id_entity' => 2,
-				    					'id_action_type' => 2,
+				    					'id_entity' => 62,
+				    					'id_action_type' => 7,
 				    					)
 		    				)
     				),
     			array(
-    				'id_employee' => 2,
+    				'id_employee' => 5,
     				'id_contrato' => 2,
 	    			'docs'  =>	array(
 		    					'id_doc1' => 'documento 1',
@@ -163,19 +189,19 @@ class ProcedureController extends Controller
 		    					),
 	    			"entities" => array(
 				    				array(
-					    					'id_entity' => 1,
-					    					'id_action_type' => 3,
+					    					'id_entity' => 63,
+					    					'id_action_type' => 5,
 					    					),
 				    				array(
-					    					'id_entity' => 2,
-					    					'id_action_type' => 2,
+					    					'id_entity' => 65,
+					    					'id_action_type' => 6,
 					    					)
 			    				)
 		    				)
     			);
     		$procedures = $this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
 	        return $this->render(
-            'RocketSellerTwoPickBundle:Registration:procedure.html.twig',
+            'RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',
             array(
             		'procedures' => $procedures
             	));

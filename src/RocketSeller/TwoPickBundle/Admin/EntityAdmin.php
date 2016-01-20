@@ -59,7 +59,8 @@ class EntityAdmin extends Admin
                 'inline' => 'table',
                 'sortable'  => 'position'
             ))
-            ->add('action', null, array(                    
+            ->add('action', 'sonata_type_collection', array(
+                    'by_reference' => false
                 ), array(
                 'edit' => 'inline',
                 'inline' => 'table',
@@ -82,7 +83,8 @@ class EntityAdmin extends Admin
         $showMapper
             ->add('idEntity')
             ->add('entityTypeEntityType',null,array('label'=>'Entity type'))
-            ->add('action')
+            //->add('action')            
+            ->add('action.idAction',null,array('label'=>'Action'))
             ->add('entityFields')
             ->add('office',null,array('label'=>'Offices'))
         ;

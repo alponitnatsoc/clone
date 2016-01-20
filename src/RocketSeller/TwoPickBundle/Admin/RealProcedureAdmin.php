@@ -27,7 +27,7 @@ class RealProcedureAdmin extends Admin
     {
         $listMapper
             ->add('idProcedure')
-            ->add('employerEmployer.personPerson.')
+            ->add('employerEmployer.personPerson')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
@@ -72,7 +72,8 @@ class RealProcedureAdmin extends Admin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('idProcedure')
+            ->add('idProcedure')  
+            ->add('action.actionTypeActionType.name', array())            
         ;
     }
 }

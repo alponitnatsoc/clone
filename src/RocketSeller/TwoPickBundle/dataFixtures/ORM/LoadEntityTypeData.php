@@ -22,15 +22,21 @@ class LoadEntityTypeData extends AbstractFixture implements OrderedFixtureInterf
         $manager->persist($EntityTypeARL);
 
         $EntityTypePensiones = new EntityType();
-        $EntityTypePensiones->setName('Pensiones');                
+        $EntityTypePensiones->setName('Pension');                
 
         $manager->persist($EntityTypePensiones);
+
+        $EntityTypeCajaComp = new EntityType();
+        $EntityTypeCajaComp->setName('CC Familiar');                
+
+        $manager->persist($EntityTypeCajaComp);
 
         $manager->flush();
 
         $this->addReference('entityType-eps', $EntityTypeEPS);
         $this->addReference('entityType-arl', $EntityTypeARL);
         $this->addReference('entityType-pensiones', $EntityTypePensiones);
+        $this->addReference('entityType-cesantias', $EntityTypeCajaComp);
 
         
     }

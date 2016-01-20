@@ -1,0 +1,25 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	
+		<table class="col-md-12">
+			<thead>
+			<tr>
+				<th>Empleador</th>
+				<th>tipo de tramite</th>
+				<th>fecha</th>
+				<th>Accion</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for procedure in procedures %}
+				<tr>
+					<td>{{ procedure.employerEmployer.personPerson.names }} {{ procedure.employerEmployer.personPerson.lastName1 }}</td>
+					<td>{{ procedure.procedureTypeProcedureType.name }}</td>
+					<td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
+					<td><a href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>		
+	
+{% endblock %}

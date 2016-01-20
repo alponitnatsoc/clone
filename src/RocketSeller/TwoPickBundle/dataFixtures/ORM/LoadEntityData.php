@@ -58,6 +58,12 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
  		$EntityProteccion->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
         
         $manager->persist($EntityProteccion);
+
+        $EntityProteccionCesantias = new Entity();
+        $EntityProteccionCesantias->setName('Protección');
+        $EntityProteccionCesantias->setEntityTypeEntityType($this->getReference('entityType-cesantias'));
+        
+        $manager->persist($EntityProteccionCesantias);
         
         
 
@@ -71,6 +77,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-compensar', $EntityCompensar);
         $this->addReference('entity-porvenir', $EntityPorvenir);
         $this->addReference('entity-compensar-eps', $EntityCompensarEPS);
+        $this->addReference('entity-compensar-eps', $EntityProteccionCesantias);
     }
     public function getOrder()
     {

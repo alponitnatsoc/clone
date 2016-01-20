@@ -20,6 +20,12 @@ class Action
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idAction;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string")     
+     */
+    private $status;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\User
@@ -208,5 +214,29 @@ class Action
     public function getEntityEntity()
     {
         return $this->entityEntity;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Action
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

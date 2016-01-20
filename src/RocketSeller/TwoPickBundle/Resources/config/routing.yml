@@ -39,3 +39,18 @@ politica_privacidad:
 intro_sin_verificar:
     path: /verificar-cuenta
     defaults: { _controller: RocketSellerTwoPickBundle:Default:introSinVerificar }
+back_office:
+    path: /backoffice
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index }
+show_procedures:
+    path:     /backoffice/procedures
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index }
+show_procedure:
+    path:     /backoffice/procedure/{procedureId}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }
+change_action_status:
+    path:     /backoffice/procedure/{procedureId}/{actionId}/{status}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
+check_register:
+    path:     /backoffice/check/register/{idEmployer}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
