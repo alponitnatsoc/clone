@@ -475,6 +475,76 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
+   * List all the payment methods by client.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Get payment method by client.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Int $documentNumber The id of the client in the payments system.
+   *
+   * @return View
+   */
+  public function getClientListPaymentmethodsAction($documentNumber)
+  {
+    // This is the asigned path by NovoPayment to this action.
+    $path = "/customer/" . $documentNumber . "/payment-method/" ;
+
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
+
+    $parameters = array();
+
+    /** @var View $responseView */
+    $responseView = $this->callApi($header, $parameters, $path, 'get');
+    $card = "xxxxx";
+    $card = substr($card, 0, 4);
+    if(substr($card, 0, 1) == '4')
+    {
+      //Visa.
+    } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
+    substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
+    substr($card, 0, 2) == '55')
+    {
+      // Master card.
+    }
+    //$view->setData(json_decode($response->getBody(), true));
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
+
+    foreach($data['payments'] as &$i) {
+      $card = $i['account-number'];
+      $card = substr($card, 0, 4);
+      $type = '';
+      if(substr($card, 0, 1) == '4')
+      {
+        // Visa.
+        $i['payment-type'] = '3' ;
+      } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
+      substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
+      substr($card, 0, 2) == '55')
+      {
+        // Master card.
+        $i['payment-type'] = '2' ;
+      }
+    }
+    $view = View::create();
+    $view->setStatusCode($code);
+    $view->setData($data);
+    return $view;
+  }
+
+
+  /**
    * Delete payment method for a client.<br/>
    *
    * @ApiDoc(
