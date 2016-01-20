@@ -213,7 +213,7 @@ hwi_facebook_login:
 hwi_google_login:
     pattern: /login/check-google
 
-hwi_twitter_login:
+hwi_linkedin_login:
     pattern: /login/check-linkedin
 #
 #FOSRest
