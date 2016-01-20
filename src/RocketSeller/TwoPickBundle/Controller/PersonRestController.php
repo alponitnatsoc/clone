@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
 
 class PersonRestController extends FOSRestController
-{	
+{
 
     /**
      * Create a Person from the submitted data.<br/>
@@ -215,6 +215,7 @@ class PersonRestController extends FOSRestController
      *
      * @RequestParam(name="sameWorkHouse", nullable=false, strict=true, description="work is the same as the file.")
      * @RequestParam(array=true, name="workId", nullable=false, strict=true, description="id if exist else -1.")
+     * @RequestParam(array=true, name="workName", nullable=false, strict=true, description="workplace name.")
      * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
      * @RequestParam(array=true, name="workCity", nullable=false, strict=true, description="workplace city.")
      * @RequestParam(array=true, name="workDepartment", nullable=false, strict=true, description="workplace department.")
@@ -227,7 +228,6 @@ class PersonRestController extends FOSRestController
         /** @var Person $people */
         $people =$user->getPersonPerson();
         $employer=$people->getEmployer();
-
 
         //all the data is valid
         if (true) {
@@ -243,6 +243,7 @@ class PersonRestController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $employer->setSameWorkHouse($paramFetcher->get("sameWorkHouse"));
             $actualWorkplacesId=$paramFetcher->get('workId');
+            $actualWorkplacesName = $paramFetcher->get('workName');
             $actualWorkplacesAdd=$paramFetcher->get('workMainAddress');
             $actualWorkplacesCity=$paramFetcher->get('workCity');
             $actualWorkplacesDept=$paramFetcher->get('workDepartment');
@@ -261,6 +262,7 @@ class PersonRestController extends FOSRestController
                 }else{
                     $tempWorkplace=new Workplace();
                 }
+                $tempWorkplace->setName($actualWorkplacesName[$i]);
                 $tempWorkplace->setMainAddress($actualWorkplacesAdd[$i]);
                 $tempWorkplace->setCity($cityRepo->find($actualWorkplacesCity[$i]));
                 $tempWorkplace->setDepartment($depRepo->find($actualWorkplacesDept[$i]));

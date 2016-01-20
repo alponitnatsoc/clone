@@ -25,11 +25,11 @@
                 white-space: normal;
             }
         </style>
-    {% endblock %} 
+    {% endblock %}
     <div id='' class='col-sm-12 col-xs-12 align-Resp'>
         <div id='' class='col-sm-12 col-xs-12 blockStep2'>
             <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
-                <img src="/img/employ.png">                 
+                <img src="/img/employ.png">
             </div>
             <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
                 <div id='' class='text-left' >
@@ -155,6 +155,7 @@
                             <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;">
                                 <div class="col-sm-12 col-xs-12">
                                     {{ form_row(workplace.id) }}
+                                    {{ form_row(workplace.name) }}
                                     {{ form_row(workplace.mainAddress) }}
                                 </div>
                                 <div class="col-xs-12 col-md-6">
@@ -175,7 +176,7 @@
         {{ form_end(form) }}
 
         <!-- Modal success -->
-        <div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" 
+        <div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
              data-keyboard="false" >
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

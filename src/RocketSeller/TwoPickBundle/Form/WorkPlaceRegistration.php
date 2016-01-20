@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -18,6 +18,11 @@ class WorkPlaceRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                ),
+                "label"=>"Nombre"))
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
@@ -54,10 +59,9 @@ class WorkPlaceRegistration extends AbstractType
         	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Workplace',
         ));
     }
-    
+
     public function getName()
     {
         return 'register_workplaces';
     }
-} 
-?>
+}

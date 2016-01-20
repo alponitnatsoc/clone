@@ -199,7 +199,7 @@ function startEmployer(){
         e.preventDefault();
 
         var form =$("form");
-        var addresses =[],citys=[],departments=[],ids=[];
+        var names = [], addresses =[],citys=[],departments=[],ids=[];
         var i =0;
         $(form).find("ul.workplaces input[name*='id']").each(function(){
             ids[i++]=$(this).val();
@@ -212,6 +212,18 @@ function startEmployer(){
                 return;
             }
             addresses[i++]=$(this).val();
+        });
+        if(!flagValid){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+        i=0;
+        $(form).find("ul.workplaces input[name*='name']").each(function(){
+            if(!validator.element($(this))){
+                flagValid=false;
+                return;
+            }
+            names[i++]=$(this).val();
         });
         if(!flagValid){
             alert("Llenaste algunos campos incorrectamente");
@@ -248,6 +260,7 @@ function startEmployer(){
             data: {
                 sameWorkHouse: 	$(form).find("input[name='register_employer[sameWorkHouse]']:checked").val(),
                 workId:         ids,
+                workName: names,
                 workMainAddress:addresses,
                 workCity:       citys,
                 workDepartment: departments
