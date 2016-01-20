@@ -166,7 +166,7 @@ class EmployeeController extends Controller
             if ($entityType->getName() == "Pension") {
                 $pensions = $entityType->getEntities();
             }
-            if ($entityType->getName() == "Cesantias") {
+            if ($entityType->getName() == "CC Familiar") {
                 $severances = $entityType->getEntities();
             }
         }

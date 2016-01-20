@@ -20,8 +20,7 @@ class PersonAdmin extends Admin
             ->add('lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))            
             ->add('lastName2','text', array('label' => 'LastName2', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
             ->add('documentType', 'choice', array('label'=>'Document Type','choices'  => array('cedula ciudadana' => 'Cedula ciudadana', 'cedula extregaria' => 'Cedula extrangeria' ,'paspote' => 'Pasaporte'))) 
-            ->add('document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
-            ->add('phone','text', array('label' => 'CellPhone', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
+            ->add('document','text', array('label' => 'Document', 'translation_domain' => 'RocketSellerTwoPickBundle'))                          
             ->add('birthDate','date', array('label'=>'BirthDay','years'=> range(1910,2015),'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('mainAddress','text', array('label' => 'Address', 'translation_domain' => 'RocketSellerTwoPickBundle'))      
             ->add('gallery', 'sonata_type_model_list', array('required' => false), array('link_parameters'   => array('context' => 'person')))
@@ -35,8 +34,7 @@ class PersonAdmin extends Admin
             ->add('names')
             ->add('lastName1')
             ->add('lastName2')
-            ->add('document')
-            ->add('phone',null, array('label' => 'CellPhone', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
+            ->add('document')            
             ;
     }
 
@@ -48,8 +46,7 @@ class PersonAdmin extends Admin
             ->add('names')
             ->add('lastName1')
             ->add('lastName2')
-            ->add('mainAddress')            
-            ->add('phone',null, array('label' => 'CellPhone', 'translation_domain' => 'RocketSellerTwoPickBundle'))              
+            ->add('mainAddress')                        
             ->add('gallery',null,array('label'=>'Documents'))
             ->add('_action', 'actions', array(
                 'actions' => array(

@@ -31,6 +31,11 @@ class RealProcedure
     private $userUser;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\ProcedureType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ProcedureType")
      * @ORM\JoinColumns({
@@ -190,5 +195,29 @@ class RealProcedure
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return RealProcedure
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

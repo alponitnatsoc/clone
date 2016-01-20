@@ -1020,7 +1020,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
-     * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
      * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      * @return View
      */
@@ -1073,7 +1073,7 @@ class EmployeeRestController extends FOSRestController
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "ARL") {
                     $rEE->setEntityEntity($realArl);
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Cesantias") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "CC Familiar") {
                     $rEE->setEntityEntity($realSeverances);
                 }
             }

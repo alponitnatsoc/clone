@@ -96,6 +96,10 @@ class PaymentsRestController extends FOSRestController
       {
         $response = $client->get($url_request, $options);
       }
+      else if ($action == "put")
+      {
+        $response = $client->put($url_request, $options);
+      }
     }catch (Guzzle\Http\Exception\BadResponseException $e) {
         // It menas it returned error code.
     }
@@ -120,7 +124,7 @@ class PaymentsRestController extends FOSRestController
     $header['x-channel'] = (!$parameters || !isset($parameters['channel'])) ?
                            'WEB' : $parameters['channel'];
     $header['x-country'] = (!$parameters || !isset($parameters['country'])) ?
-                           'CO' : $parameters['country'];
+                           'Co' : $parameters['country'];
     $header['language'] = (!$parameters || !isset($parameters['language'])) ?
                           'es' : $parameters['language'];
     $header['content-type'] = (!$parameters ||
@@ -133,7 +137,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Insert a new client into the payments system.<br/>
+   * Insert a new client into the payments system(3.1 in Novopayment).<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -157,12 +161,6 @@ class PaymentsRestController extends FOSRestController
    * (name="day", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
    * (name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
    * (name="email", nullable=false, strict=true, description="email.")
-   *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
@@ -209,7 +207,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the client informatino from the payment system.<br/>
+   * Get the client informatino from the payment system.(3.2)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -244,7 +242,80 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the clients 10 last movements.<br/>
+   * Modifies a client in the payments system(3.3).<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Modifies a client in the payments system.",
+   *   statusCodes = {
+   *     201 = "Created",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
+   * (name="documentNumber", nullable=true, requirements="([0-9])+", strict=false, description="document.")
+   * (name="name", nullable=true, requirements="([a-z|A-Z| ])+", strict=false, description="first name.")
+   * (name="lastName", nullable=true, requirements="([a-z|A-Z| ])+", strict=false, description="last name.")
+   * (name="year", nullable=true, requirements="([0-9]){4}", strict=false, description="year of birth.")
+   * (name="month", nullable=true, requirements="([0-9]){2}", strict=false, description="month of birth.")
+   * (name="day", nullable=true, requirements="([0-9]){2}", strict=false, description="day of birth.")
+   * (name="phone", nullable=true, requirements="([0-9])+", strict=false, description="phone.")
+   * (name="email", nullable=true, strict=true, description="email.")
+   *
+   * @return View
+   */
+  public function postModifyClientAction(Request $request)
+  {
+    // This is the asigned path by NovoPayment to this action.
+
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+    // Set all the parameters info.
+    $regex['documentType'] = '([A-Z|a-z]){2}';$mandatory['documentType'] = true;
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = false;
+    $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = false;
+    $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = false;
+    $regex['year'] = '([0-9]){4}'; $mandatory['year'] = false;
+    $regex['month'] = '([0-9]){2}'; $mandatory['month'] = false;
+    $regex['day'] = '([0-9]){2}'; $mandatory['day'] = false;
+    $regex['phone'] = '([0-9])+'; $mandatory['phone'] = false;
+    $mandatory['email'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    // Set up the headers to default if none is provided.
+    $header = $this->setHeaders($parameters);
+
+    // Create the birth date in the right format.
+    $birth = $parameters['day'] . '/' . $parameters['month'] .
+             '/' . $parameters['year'];
+
+    $path = "/customer/" . $parameters['documentNumber'];
+
+    $parameters_fixed = array();
+    $parameters_fixed['document-type'] = $parameters['documentType'];
+    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['name'] = $parameters['name'];
+    $parameters_fixed['last-name'] = $parameters['lastName'];
+    $parameters_fixed['birth-date'] = $birth;
+    $parameters_fixed['phone-number'] = $parameters['phone'];
+    $parameters_fixed['email'] = $parameters['email'];
+
+    /** @var View $res */
+    $responseView = $this->callApi($header, $parameters_fixed, $path, "put");
+
+    return $responseView;
+  }
+
+  /**
+   * Get the clients 10 last movements.(3.4)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -261,7 +332,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getClientLast10MovementsAction($documentNumber)
+  public function getClientLast5MovementsAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $documentNumber . "/movement";
@@ -279,7 +350,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get a maximum number of transactions from a client in a day range.<br/>
+   * Get a maximum number of transactions from a client in a day range.(3.5)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -319,7 +390,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Set a payment method for a client.<br/>
+   * Set a payment method for a client.(4.1)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -337,19 +408,11 @@ class PaymentsRestController extends FOSRestController
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
    * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="document type.")
-   * (name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type.")
+   * (name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type, 2 MasterCard, 3 Visa.")
    * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
    * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
    * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * (name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
    * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
-   * (name="paymentMode", nullable=false, requirements="([A-Z|a-z| ])+", strict=true, description="Payment mode.")
-   *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
@@ -363,21 +426,18 @@ class PaymentsRestController extends FOSRestController
 
     // Set all the parameters info.
     $regex['documentType'] = '([A-Z|a-z]){2}';$mandatory['documentType'] = true;
-    $regex['paymentType'] = '([A-Z|a-z]| )+'; $mandatory[''] = true;
-    $regex['accountNumber'] = '([0-9])+'; $mandatory[''] = true;
-    $regex['expirationYear'] = '([0-9]){4}'; $mandatory[''] = false;
-    $regex['expirationMonth'] = '([0-9]){2}'; $mandatory[''] = false;
-    $regex['expirationDay'] = '([0-9]){2}'; $mandatory[''] = false;
-    $regex['codeCheck'] = '([0-9]){3}'; $mandatory[''] = false;
-    $regex['paymentMode'] = '([A-Z|a-z| ])+'; $mandatory[''] = true;
+    $regex['paymentType'] = '([A-Z|a-z]| )+'; $mandatory['paymentType'] = true;
+    $regex['accountNumber'] = '([0-9])+'; $mandatory['accountNumber'] = true;
+    $regex['expirationYear'] = '([0-9]){4}'; $mandatory['expirationYear'] = true;
+    $regex['expirationMonth'] = '([0-9]){2}'; $mandatory['expirationMonth'] = true;
+    $regex['codeCheck'] = '([0-9]){3}'; $mandatory['codeCheck'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);
 
 
     if (isset($parameters['expirationYear']))
       $expiration = $parameters['expirationYear'] . '-' .
-               $parameters['expirationMonth'] . '-' .
-               $parameters['expirationDay'];
+               $parameters['expirationMonth'] . '-01';
 
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $parameters['documentNumber'] .
@@ -393,7 +453,6 @@ class PaymentsRestController extends FOSRestController
     $parameters_fixed['account-number'] = $parameters['accountNumber'];
     $parameters_fixed['expiration-date'] = $expiration;
     $parameters_fixed['code-check'] = $parameters['codeCheck'];
-    $parameters_fixed['payment-mode'] = $parameters['paymentMode'];
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
@@ -402,11 +461,11 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the last 5 payment methods.<br/>
+   * List all the payment methods by client.(4.2)<br/>
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Get the last 5 payment methods.",
+   *   description = "Get payment method by client.",
    *   statusCodes = {
    *     200 = "OK",
    *     400 = "Bad Request",
@@ -419,10 +478,10 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getClientLast5PaymentmethodsAction($documentNumber)
+  public function getClientListPaymentmethodsAction($documentNumber)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $documentNumber ."/payment-method/";
+    $path = "/customer/" . $documentNumber . "/payment-method/" ;
 
     // We set up the default headers, so the client doesn't have to provide
     // anything in the get call.
@@ -431,13 +490,47 @@ class PaymentsRestController extends FOSRestController
     $parameters = array();
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path, "get");
+    $responseView = $this->callApi($header, $parameters, $path, 'get');
+    $card = "xxxxx";
+    $card = substr($card, 0, 4);
+    if(substr($card, 0, 1) == '4')
+    {
+      //Visa.
+    } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
+    substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
+    substr($card, 0, 2) == '55')
+    {
+      // Master card.
+    }
+    //$view->setData(json_decode($response->getBody(), true));
+    $temp = $this->handleView($responseView);
+    $data = json_decode($temp->getContent(), true);
+    $code = json_decode($temp->getStatusCode(), true);
 
-    return $responseView;
+    foreach($data['payments'] as &$i) {
+      $card = $i['account-number'];
+      $card = substr($card, 0, 4);
+      $type = '';
+      if(substr($card, 0, 1) == '4')
+      {
+        // Visa.
+        $i['payment-type'] = '3' ;
+      } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
+      substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
+      substr($card, 0, 2) == '55')
+      {
+        // Master card.
+        $i['payment-type'] = '2' ;
+      }
+    }
+    $view = View::create();
+    $view->setStatusCode($code);
+    $view->setData($data);
+    return $view;
   }
 
   /**
-   * Get payment method by client.<br/>
+   * Get payment method by client(4.3).<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -474,8 +567,9 @@ class PaymentsRestController extends FOSRestController
     return $responseView;
   }
 
+
   /**
-   * Delete payment method for a client.<br/>
+   * Delete payment method for a client.(4.4)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -493,12 +587,6 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    * (name="paymentMethodId", nullable=false, requirements="([0-9A-Za-z])+", strict=true, description="id of the payment method.")
-   *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
@@ -532,7 +620,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Insert a new beneficiary.<br/>
+   * Insert a new beneficiary.(5.1)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -563,12 +651,6 @@ class PaymentsRestController extends FOSRestController
    * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
    * (name="PaymentType", nullable=true, description="Ahorros or Corriente")
    *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
-   *
    * @return View
    */
   public function postBeneficiaryAction(Request $request)
@@ -592,10 +674,10 @@ class PaymentsRestController extends FOSRestController
     $regex['paymentMethodId'] = '([0-9])+';
     $mandatory['paymentMethodId'] = true;
     $regex['PaymentAccountNumber'] = '([0-9])+';
-    $mandatory['PaymentAccountNumber'] = true;
+    $mandatory['PaymentAccountNumber'] = false;
     $regex['PaymentBankNumber'] = '([0-9])+';
-    $mandatory['PaymentBankNumber'] = true;
-    $mandatory['PaymentType'] = true;
+    $mandatory['PaymentBankNumber'] = false;
+    $mandatory['PaymentType'] = false;
 
     $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -633,7 +715,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the information of a beneficiary of a client.<br/>
+   * Get the information of a beneficiary of a client.(5.2)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -669,7 +751,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get All the beneficiaries of a client.<br/>
+   * Get All the beneficiaries of a client.(5.3)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -704,7 +786,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Delete a beneficiary by client.<br/>
+   * Delete a beneficiary by client.(5.4)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -722,12 +804,6 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
@@ -759,8 +835,9 @@ class PaymentsRestController extends FOSRestController
     return $responseView;
   }
 
+
   /**
-   * Aproval for a clients payment.<br/>
+   * Aproval for a clients payment.(5.5)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -777,22 +854,15 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * (name="paymentMethodId", nullable=true, requirements="([0-9]| )+", strict=true, description="Id of the payment method.")
-   * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
-   * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * (name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
-   * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
+   * (name="paymentMethodId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the payment method.")
+   * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
+   * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
+   * (name="codeCheck", nullable=false, requirements="([0-9]){3}", strict=true, description="code check.")
    * (name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Total amount.")
    * (name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax amount.")
    * (name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax base.")
    * (name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission amount.")
    * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
-   *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
    *
    * @return View
    */
@@ -811,7 +881,6 @@ class PaymentsRestController extends FOSRestController
     $mandatory['expirationYear'] = true;
     $regex['expirationMonth'] = '([0-9]){2}';
     $mandatory['expirationMonth'] = true;
-    $regex['expirationDay'] = '([0-9]){2}'; $mandatory['expirationDay'] = true;
     $regex['codeCheck'] = '([0-9]){3}'; $mandatory['codeCheck'] = true;
     $regex['totalAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
     $mandatory['totalAmount'] = false;
@@ -828,8 +897,7 @@ class PaymentsRestController extends FOSRestController
 
     // Adjust the format of the expiration date.
     $expiration = $parameters['expirationYear'] . '-' .
-                  $parameters['expirationMonth'] . '-' .
-                  $parameters['expirationDay'];
+                  $parameters['expirationMonth'] . '-01';
 
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $parameters['documentNumber'] . "/charge";
@@ -854,7 +922,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Dispersion of beneficiary payment by client.<br/>
+   * Dispersion of beneficiary payment by client.(5.6)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -877,17 +945,10 @@ class PaymentsRestController extends FOSRestController
    * (name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
    * (name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
    *
-   * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
-   * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
-   * (name="language", nullable=true, description="Language code from ISO 639-1.")
-   * (name="content_type", nullable=true, description="Request format(application/xml, application/json).")
-   * (name="accept", nullable=true, description="Accepted response format(application/xml, application/json).")
-   *
    * @return View
    */
   public function postClientPaymentAction(Request $request)
   {
-
     $parameters = $request->request->all();
     $regex = array();
     $mandatory = array();
@@ -924,7 +985,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get a specific charge by client.<br/>
+   * Get all charges by client.(5.7)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -959,7 +1020,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get a specific charge by client.<br/>
+   * Get a specific charge by client.(5.8)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -977,7 +1038,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function getClientChargeAction($documentNumber, $chargeId)
+  public function getClientSpecificChargeAction($documentNumber, $chargeId)
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $documentNumber .
@@ -996,7 +1057,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get dispersion of transfer by client.<br/>
+   * Get dispersion of transfer by client.(5.9)<br/>
    *
    * @ApiDoc(
    *   resource = true,
@@ -1033,7 +1094,7 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the balance of a client.<br/>
+   * Get the balance of a client.(6.1)<br/>
    *
    * @ApiDoc(
    *   resource = true,

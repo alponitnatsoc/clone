@@ -150,13 +150,72 @@ class PaymentsRestTestController extends FOSRestController
     if ($document == 123456789)
     {
       $view->setStatusCode(201);
+      $view->setData((array('method-id' => 101)));
     }
     else
     {
       $view->setStatusCode(400);
+      $view->setData((array('method-id' => 102)));
     }
 
-     $view->setData((array('method-id' => 123456)));
+    return $view;
+  }
+
+  /**
+   * @Get("mock/customer/{customerid}/payment-method/")
+   * Mocks the list payment mehtods of client request<br/>
+   * If the document is 123456789 it will return some card, otherwise returns
+   * other numbers.
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Mocks the list payment mehtods of client request<br/>
+   *                  If the document is 123456789 it will return some card,
+   *                 otherwise returns other numbers.",
+   *   statusCodes = {
+   *     200 = "Created",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not found"
+   *   }
+   * )
+   *
+   * @param Int customer-id
+   * @return View
+   */
+  public function getMocksListPaymentsAction($customerid)
+  {
+    $view = View::create();
+    if ($customerid == 123456789)
+    {
+      $view->setStatusCode(200);
+      $response = array();
+      $response["payments"] = array();
+      $temp = array();
+      $temp["method-id"] = 101;
+      $temp["account-number"] = "5161********0012";
+      $response["payments"][] = $temp;
+      $temp = array();
+      $temp["method-id"] = 102;
+      $temp["account-number"] = "4561********0023";
+      $response["payments"][] = $temp;
+      $view->setData($response);
+    }
+    else
+    {
+      $view->setStatusCode(200);
+      $response = array();
+      $response["payments"] = array();
+      $temp = array();
+      $temp["method-id"] = 103;
+      $temp["account-number"] = "4012********1881";
+      $response["payments"][] = $temp;
+      $temp = array();
+      $temp["method-id"] = 104;
+      $temp["account-number"] = "5105********5100";
+      $response["payments"][] = $temp;
+      $view->setData($response);
+    }
     return $view;
   }
 

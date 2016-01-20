@@ -19,7 +19,12 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
-    public function registrationDocumentsAction(){
+    public function profileEmployerAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:Employer:profile.html.twig');
+    }
+    public function registrationDocumentsAction()
+    {
         $user = $this->getUser();
         $documents = array();
         $employees = array();

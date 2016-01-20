@@ -54,7 +54,8 @@ function startEmployer(){
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
-    $collectionHolderPhones.find('li').each(function() {
+
+    /*$collectionHolderPhones.find('li').each(function() {
         addTagFormDeleteLink($(this));
     });
     $collectionHolderPhones.append($newLinkLi);
@@ -64,6 +65,7 @@ function startEmployer(){
         e.preventDefault();
         addPhoneForm($collectionHolderPhones, $newLinkLi);
     });
+    */
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', ($collectionHolder.find(':input').length)/4);
