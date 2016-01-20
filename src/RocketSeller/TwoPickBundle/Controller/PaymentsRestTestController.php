@@ -150,13 +150,14 @@ class PaymentsRestTestController extends FOSRestController
     if ($document == 123456789)
     {
       $view->setStatusCode(201);
+      $view->setData((array('method-id' => 101)));
     }
     else
     {
       $view->setStatusCode(400);
+      $view->setData((array('method-id' => 102)));
     }
 
-     $view->setData((array('method-id' => 123456)));
     return $view;
   }
 

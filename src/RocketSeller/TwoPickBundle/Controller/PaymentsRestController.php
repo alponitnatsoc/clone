@@ -341,9 +341,7 @@ class PaymentsRestController extends FOSRestController
    * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
    * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
    * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * (name="expirationDay", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration day.")
    * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
-   * (name="paymentMode", nullable=false, requirements="([A-Z|a-z| ])+", strict=true, description="Payment mode.")
    *
    * (name="channel", nullable=true, description="Channel from where it is requested(MOBILE, WEB).")
    * (name="country", nullable=true, description="Country code from  ISO 3166-1.")
@@ -367,17 +365,14 @@ class PaymentsRestController extends FOSRestController
     $regex['accountNumber'] = '([0-9])+'; $mandatory[''] = true;
     $regex['expirationYear'] = '([0-9]){4}'; $mandatory[''] = false;
     $regex['expirationMonth'] = '([0-9]){2}'; $mandatory[''] = false;
-    $regex['expirationDay'] = '([0-9]){2}'; $mandatory[''] = false;
     $regex['codeCheck'] = '([0-9]){3}'; $mandatory[''] = false;
-    $regex['paymentMode'] = '([A-Z|a-z| ])+'; $mandatory[''] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);
 
 
     if (isset($parameters['expirationYear']))
       $expiration = $parameters['expirationYear'] . '-' .
-               $parameters['expirationMonth'] . '-' .
-               $parameters['expirationDay'];
+               $parameters['expirationMonth'] . '-01';
 
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $parameters['documentNumber'] .
@@ -393,7 +388,6 @@ class PaymentsRestController extends FOSRestController
     $parameters_fixed['account-number'] = $parameters['accountNumber'];
     $parameters_fixed['expiration-date'] = $expiration;
     $parameters_fixed['code-check'] = $parameters['codeCheck'];
-    $parameters_fixed['payment-mode'] = $parameters['paymentMode'];
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
