@@ -1,0 +1,40 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<p>Tramite No: {{ procedure.idProcedure }}</p>
+	<p>Person in charge: {{ procedure.userUser.username }}</p>
+	<table style="width:100%">
+	  <tr>
+	    <td>Vuelta</td> 
+	    <td>persona</td>
+	    <td>entidad</td>
+	    <td>Estado</td>
+	    <td>Acción</td>
+	    <td>Reportar</td>
+	  </tr>	  
+  		{% for action in procedure.action %}
+  			{% if action.status|lower == "error" %}
+				<tr style="background-color:#FF5555;">
+			{% elseif  action.status|lower == "nuevo" %}
+				<tr>
+			{% elseif action.status|lower == "iniciado" %}
+				<tr>
+  			{% endif %}  			
+				<td>{{ action.ActionTypeActionType.name }}</td>
+				<td>{{ action.personPerson.names }}</td>
+				<td>{{ action.entityEntity.name }}</td>
+				<td>{{ action.status}}</td>				
+				{% if action.ActionTypeActionType.name|lower == "validar registro" %}
+					<td><a href="{{ path('check_register',{'idEmployer':procedure.employerEmployer.idEmployer})}}">Validar registro</a></td>
+				{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+					<td>Validar documentos</td>
+				{% elseif action.ActionTypeActionType.name|lower == "llevar documentos a entidad" %}
+					<td>Llevar documentos a entidad</td>
+				{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+					<td>Hacer inscripción</td>
+				{% endif %}
+				<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Error'})}}">Error</a></td>
+
+		  	</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
