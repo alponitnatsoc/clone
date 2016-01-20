@@ -63,7 +63,7 @@ class DashBoardController extends Controller
             'name' => "Datos del empleador",
             'state' => $stateRegister,
             'paso' => 1,
-            'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Continuar",);
+            'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
         $steps ['0'] = $step1;
 
 
@@ -73,7 +73,7 @@ class DashBoardController extends Controller
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
                 'paso' => 2,
-                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Continuar",);
+                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
             $steps ['1'] = $step2;
 
             $step3 = array(
@@ -85,20 +85,20 @@ class DashBoardController extends Controller
             $steps ['2'] = $step3;
         } else {
             $step2 = array(
-                'url' => $this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
+                'url' => $stateRegister!=100 ?"":$this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
                 'paso' => 2,
-                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Continuar",);
+                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
             $steps ['1'] = $step2;
         }
 
         $step4 = array(
-            'url' => $this->generateUrl('matrix_choose'),
+            'url' => $stateEmployees!=100 ?"":$this->generateUrl('matrix_choose'),
             'name' => "Finalizar proceso",
             'paso' => 3,
             'state' => $stateEmployees,
-            'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Continuar",);
+            'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 
         return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', array('steps' => $steps));

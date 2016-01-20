@@ -8,7 +8,7 @@
     </div>
     {% for step in steps %}
         <div id='' class='col-sm-12 col-xs-12 align-Resp'>
-            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 100 %} btn-warning {% else %}btn-success{% endif %} nav-link' href="{{step.url}}">
+            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if step.state != 0 %} active {% else %}blocked{% endif %} nav-link' href="{{step.url}}">
                 <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
                     {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}                    
                 </div>
