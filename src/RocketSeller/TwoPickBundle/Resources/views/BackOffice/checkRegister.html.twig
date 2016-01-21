@@ -1,55 +1,24 @@
 {% extends "::base.html.twig" %}
 {% block content %}
+<div class="col-md-8">
+	<div class="col-md-12">
+		<ul>
+			<li>
+				{{ person.names}}
+			</li>
+			<li>
+				{{ person.lastName1}}
+			</li>
+			<li>
+				{{ person.lastName2}}
+			</li>
+			<li>
+				{{ person.documentType}}
+			</li>
+		</ul>
+	</div>
+</div>
 
-<h2>Empleador</h2>
-<table class="col-md-12">
-	<thead>
-		<tr>
-			<td>Nombre</td>
-			<td>Apellido1</td>
-			<td>Apellido2</td>
-			<td>tipo document</td>
-			<td>documento</td>
-			<td>email</td>
-			<td>direccion</td>			
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>{{ user.personPerson.names}}</td>
-			<td>{{ user.personPerson.lastName1}}</td>
-			<td>{{ user.personPerson.lastName2}}</td>
-			<td>{{ user.personPerson.documentType}}</td>
-			<td>{{ user.personPerson.document}}</td>
-			<td>{{ user.email}}</td>
-			<td>{{ user.personPerson.mainAddress}}</td>
-		</tr>
-	</tbody>
-</table>
-<h2>Empleados</h2>
-{% set employees = employer.employerHasEmployees %}
-	{% for employerHasEmployee in employees %}		
-		<div class="col-md-4">
-			<ul>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.names }}						
-				</li>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.lastName1 }}					
-				</li>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.lastName2 }}					
-				</li>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.documentType}}					
-				</li>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.document }}					
-				</li>
-				<li>
-					{{ employerHasEmployee.employeeEmployee.personPerson.email }}
-				</li>
-			</ul>
-		</div>		
-	{% endfor %}
+	{{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':idAction}))}}
+
 {% endblock %}

@@ -8,7 +8,7 @@ use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Action;
-
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use RocketSeller\TwoPickBundle\Entity\RealProcedure;
 use RocketSeller\TwoPickBundle\Entity\ProcedureType;
 
@@ -31,6 +31,92 @@ class ProcedureController extends Controller
     	$procedure = $this->loadClassById($procedureId,'RealProcedure');    	
     	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array('procedure'=>$procedure));
 
+    }
+    public function procedureAction($employerId,$idProcedureType)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$em2 = $this->getDoctrine()->getManager();
+    	$employerSearch = $this->loadClassById($employerId,"Employer");
+    	$procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
+    	$employerHasEmployees = $employerSearch->getEmployerHasEmployees();   	
+    	if ($procedureType->getName() == "Registro empleador y empleados") {
+			$procedure = new RealProcedure();
+			$procedure->setCreatedAt(new \DateTime());
+			$procedure->setProcedureTypeProcedureType($procedureType);
+			$procedure->setEmployerEmployer($employerSearch);			
+			$em2->persist($procedure);
+
+				$action = new Action();	            
+	            $action->setStatus('Nuevo');
+	            $action->setRealProcedureRealProcedure($procedure);	            
+	            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
+	            $action->setPersonPerson($employerSearch->getPersonPerson());
+	            $em->persist($action);
+	            $em->flush();
+
+				$action = new Action();	            
+	            $action->setStatus('Nuevo');
+	            $action->setRealProcedureRealProcedure($procedure);	            
+	            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar cliente'),"ActionType"));
+	            $action->setPersonPerson($employerSearch->getPersonPerson());
+	            $em->persist($action);
+	            $em->flush();						
+			foreach ($employerSearch->getEntities() as $entities) {
+
+				$action = new Action();	            
+	            $action->setStatus('Nuevo');
+	            $action->setRealProcedureRealProcedure($procedure);
+	            $action->setEntityEntity($entities->getEntityEntity());
+	            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+	            $action->setPersonPerson($employerSearch->getPersonPerson());
+	            $em->persist($action);
+	            $em->flush();
+
+				$action = new Action();	            
+	            $action->setStatus('Nuevo');
+	            $action->setRealProcedureRealProcedure($procedure);
+	            $action->setEntityEntity($entities->getEntityEntity());
+	            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
+	            $action->setPersonPerson($employerSearch->getPersonPerson());
+	            $em->persist($action);
+	            $em->flush();
+             	$procedure->addAction($action);
+			}
+         	foreach ($employerHasEmployees as $employerHasEmployee) {         		
+					$action = new Action();	            
+		            $action->setStatus('Nuevo');
+		            $action->setRealProcedureRealProcedure($procedure);
+		            //$action->setEntityEntity($entities->getEntityEntity());
+		            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
+		            $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+		            $em->persist($action);
+		            $em->flush();
+	             	$procedure->addAction($action);
+		        foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
+ 						$action = new Action();	            
+			            $action->setStatus('Nuevo');
+			            $action->setRealProcedureRealProcedure($procedure);
+			            $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+			            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+			            $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+			            $em->persist($action);
+			            $em->flush();
+		             	$procedure->addAction($action);
+
+ 						$action = new Action();	            
+			            $action->setStatus('Nuevo');
+			            $action->setRealProcedureRealProcedure($procedure);
+			            $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+			            $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
+			            $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+			            $em->persist($action);
+			            $em->flush();
+		             	$procedure->addAction($action);
+		        }
+         	}
+			$em2->flush();
+    	}
+    	return true;
     }
     /**
      * estructura de tramite para generar vueltas y tramites
@@ -199,7 +285,8 @@ class ProcedureController extends Controller
 			    				)
 		    				)
     			);
-    		$procedures = $this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
+    		//$procedures = $this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
+	        $procedure = $this->procedureAction($id_employer, $id_procedure_type);
 	        return $this->render(
             'RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',
             array(
