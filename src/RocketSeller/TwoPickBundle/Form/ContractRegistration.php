@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -67,7 +67,6 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'salary',
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?'
             ))
-
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),
                 'allow_add'    => true,
@@ -142,7 +141,7 @@ class ContractRegistration extends AbstractType
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'placeholder' => '',
                 'choices' => $this->workplaces,
-                'property' => 'mainAddress',
+                'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
@@ -168,10 +167,9 @@ class ContractRegistration extends AbstractType
         	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Contract',
         ));
     }
-    
+
     public function getName()
     {
         return 'add_contract';
     }
-} 
-?>
+}
