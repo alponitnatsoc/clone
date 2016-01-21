@@ -1,7 +1,13 @@
 {% extends "::base.html.twig" %}
 {% block content %}
 	<p>Tramite No: {{ procedure.idProcedure }}</p>
-	<p>Person in charge: {{ procedure.userUser.username }}</p>
+	<p>Person in charge: 
+		{% if procedure.userUser %}
+			{{ procedure.userUser.username }}
+		{% else %}
+			Nadie 
+		{% endif %}
+		</p>
 	<table style="width:100%">
 	  <tr>
 	    <td>Vuelta</td> 
@@ -12,7 +18,7 @@
 	    <td>Reportar</td>
 	  </tr>	  
   		{% for action in procedure.action %}
-  			{% if action.status|lower == "error" %}
+  			{% if action.actionErrorActionError %}
 				<tr style="background-color:#FF5555;">
 			{% elseif  action.status|lower == "nuevo" %}
 				<tr>
@@ -21,18 +27,31 @@
   			{% endif %}  			
 				<td>{{ action.ActionTypeActionType.name }}</td>
 				<td>{{ action.personPerson.names }}</td>
-				<td>{{ action.entityEntity.name }}</td>
-				<td>{{ action.status}}</td>				
-				{% if action.ActionTypeActionType.name|lower == "validar registro" %}
-					<td><a href="{{ path('check_register',{'idEmployer':procedure.employerEmployer.idEmployer})}}">Validar registro</a></td>
+				<td>
+					{% if action.entityEntity %}
+						{{ action.entityEntity.name }}
+					{% else %}
+						-
+					{% endif %}					
+				</td>
+				<td>{% if action.actionErrorActionError %}
+						Ver error
+					{% else %}
+						{{ action.status}}
+					{% endif %}
+				</td>				
+				{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
+					<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
 				{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 					<td>Validar documentos</td>
 				{% elseif action.ActionTypeActionType.name|lower == "llevar documentos a entidad" %}
 					<td>Llevar documentos a entidad</td>
 				{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
 					<td>Hacer inscripción</td>
+				{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
+					<td>Llamar</td>
 				{% endif %}
-				<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Error'})}}">Error</a></td>
+				<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a></td>
 
 		  	</tr>
 		{% endfor %}

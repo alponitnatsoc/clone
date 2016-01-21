@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
+use RocketSeller\TwoPickBundle\Entity\ActionError;
 
 class BackOfficeController extends Controller
 {
@@ -14,12 +15,31 @@ class BackOfficeController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
-	public function checkRegisterAction($idEmployer)
+	public function checkRegisterAction($idPerson,$idAction)
     {    	
-    	$employer = $this->loadClassById($idEmployer,"Employer");
-    	$person = $employer->getPersonPerson();
+    	$person = $this->loadClassById($idPerson,"Person");    	
     	$user =  $this->loadClassByArray(array('personPerson'=>$person),"User");
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'employer'=>$employer));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'idAction'=>$idAction));
+    }
+    public function reportErrorAction($idAction,Request $request)
+    {
+    	$action = $this->loadClassById($idAction,"Action");
+    	if ($request->getMethod() == 'POST') {
+    		$description = $request->request->get('description');    		
+    		$actionError = new ActionError();
+    		$actionError->setDescription($description);
+    		$action->setActionErrorActionError($actionError);
+    		$action->setStatus("Error");
+		   	$em = $this->getDoctrine()->getManager();	
+		    $em->persist($actionError);
+		    $em->persist($action);
+		    $em->flush();
+
+		    return $this->redirectToRoute('show_procedure', array('procedureId'=>$action->getRealProcedureRealProcedure()->getIdProcedure()), 301);
+    	}else{
+    		return $this->render('RocketSellerTwoPickBundle:BackOffice:reportError.html.twig',array('idAction'=>$idAction));	
+    	}
+    	
     }
     /**
      * hace un query de la clase para instanciarla

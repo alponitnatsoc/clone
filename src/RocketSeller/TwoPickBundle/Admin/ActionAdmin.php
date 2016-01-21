@@ -30,7 +30,8 @@ class ActionAdmin extends Admin
             ->add('personPerson',null, array('label' => 'Names', 'translation_domain' => 'RocketSellerTwoPickBundle'))
             ->add('personPerson.lastName1','text', array('label' => 'LastName1', 'translation_domain' => 'RocketSellerTwoPickBundle'))                       
             ->add('userUser.personPerson.names','text', array('label' => 'In charge', 'translation_domain' => 'RocketSellerTwoPickBundle'))
-            ->add('actionTypeActionType','text', array('label' => 'Id action type', 'translation_domain' => 'RocketSellerTwoPickBundle'))       
+            ->add('actionTypeActionType','text', array('label' => 'Id action type', 'translation_domain' => 'RocketSellerTwoPickBundle')) 
+            ->add('entityEntity','text', array('label' => 'Id action type', 'translation_domain' => 'RocketSellerTwoPickBundle'))             
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),
