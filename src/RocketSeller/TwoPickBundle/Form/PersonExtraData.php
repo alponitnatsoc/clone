@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -19,26 +19,27 @@ class PersonExtraData extends AbstractType
     {
         $builder
             ->add('civilStatus', 'choice', array(
-                    'choices' => array(
-                        'soltero'   => 'Soltero',
-                        'casado' => 'Casado',
-                        'unionLibre' => 'Union Libre',
-                        'viudo' => 'Viudo',
-                    ),
-                    'multiple' => false,
-                    'expanded' => false,
-                    'property_path' => 'civilStatus',)
-            )
+                'choices' => array(
+                    'soltero'   => 'Soltero',
+                    'casado' => 'Casado',
+                    'unionLibre' => 'Union Libre',
+                    'viudo' => 'Viudo',
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'civilStatus',
+                'label' => 'Estado civil'
+            ))
             ->add('gender', 'choice', array(
-                    'choices' => array(
-                        'MAS'   => 'Masculino',
-                        'FEM' => 'Femenino',
-                    ),
-                    'multiple' => false,
-                    'expanded' => false,
-                    'property_path' => 'gender',
-                    'label' => 'Género')
-            )
+                'choices' => array(
+                    'MAS'   => 'Masculino',
+                    'FEM' => 'Femenino',
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'gender',
+                'label' => 'Género'
+            ))
             ->add('documentExpeditionDate', 'date', array(
                 'years' => range(1900,2015),
                 'label' => 'Fecha de expedición de documento de identidad'
@@ -54,7 +55,7 @@ class PersonExtraData extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthCountry',
+                'property_path' => 'birthCountry'
             ))
             ->add('birthDepartment', 'entity', array(
                 'label' => 'Departamento de Nacimiento',
@@ -64,7 +65,7 @@ class PersonExtraData extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthDepartment',
+                'property_path' => 'birthDepartment'
             ))
             ->add('birthCity', 'entity', array(
                 'label' => 'Ciudad de Nacimiento',
@@ -74,28 +75,25 @@ class PersonExtraData extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthCity',
+                'property_path' => 'birthCity'
             ))
             ->add('email', 'text', array(
                 'constraints' => array(
                     new NotBlank(),
                 ),
-                'property_path' => 'email',));
-
-
+                'property_path' => 'email'
+            ));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person'
         ));
     }
-    
+
     public function getName()
     {
         return 'register_person_extra';
     }
-} 
-?>
+}
