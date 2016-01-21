@@ -238,10 +238,8 @@ class PayrollRestController extends FOSRestController
    *   (name="gender", nullable=false, requirements="(MAS|FEM)", strict=true, description="Employee gender(MAS or FEM).")
    *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
    *   (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
-   *   (name="days_company_seniority", nullable=false, requirements="([0-9])+", strict=true, description="Previous seniority on days.")
-   *   (name="last_contract_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Start day of the last work contract(format: DD-MM-YYYY).")
    *   (name="contract_number", nullable=false, requirements="([0-9])+", strict=true, description="Employee contract number.")
-   *   (name="last_contract_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
+   *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
    *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
    *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE).")
    *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks).")
@@ -264,10 +262,8 @@ class PayrollRestController extends FOSRestController
     $regex['gender'] = '(MAS|FEM)';$mandatory['gender'] = true;
     $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['birth_date'] = true;
     $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = true;
-    $regex['days_company_seniority'] = '([0-9])+';$mandatory['days_company_seniority'] = true;
-    $regex['last_contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_start_date'] = true;
     $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = true;
-    $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = true;
+    $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = false;
     $regex['worked_hours_days'] = '([0-9])+';$mandatory['worked_hours_days'] = true;
     $regex['payment_method'] = '(CHE|CON|EFE)';$mandatory['payment_method'] = true;
     $regex['liquidation_type'] = '(J|M|Q)';$mandatory['liquidation_type'] = true;
@@ -287,11 +283,10 @@ class PayrollRestController extends FOSRestController
     $unico['EMP_SEXO'] = $parameters['gender'];
     $unico['EMP_FECHA_NACI'] = $parameters['birth_date'];
     $unico['EMP_FECHA_INGRESO'] = $parameters['start_date'];
-    $unico['EMP_ANTIGUEDAD_ANT'] = $parameters['days_company_seniority'];
-    $unico['EMP_FECHA_INI_CONTRATO'] = $parameters['last_contract_start_date'];
+    $unico['EMP_ANTIGUEDAD_ANT'] = 0; // Default value by SQL Software.
+    $unico['EMP_FECHA_INI_CONTRATO'] = $parameters['start_date']; // Same date.
     $unico['EMP_NRO_CONTRATO'] = $parameters['contract_number'];
-    $unico['EMP_FECHA_FIN_CONTRATO'] = $parameters['last_contract_end_date'];
-    $unico['EMP_JORNADA'] = $parameters['shift'];
+    $unico['EMP_FECHA_FIN_CONTRATO'] = isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : '';
     $unico['EMP_HORAS_TRAB'] = $parameters['worked_hours_days'];
     $unico['EMP_FORMA_PAGO'] = $parameters['payment_method'];
     $unico['EMP_TIPOLIQ'] = $parameters['liquidation_type'];
@@ -335,7 +330,6 @@ class PayrollRestController extends FOSRestController
    *   (name="gender", nullable=true, requirements="(MAS|FEM)", description="Employee gender(MAS or FEM).")
    *   (name="birth_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Employee birth day on the format DD-MM-YYYY.")
    *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
-   *   (name="days_company_seniority", nullable=true, requirements="([0-9])+", description="Previous seniority on days.")
    *   (name="last_contract_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Start day of the last work contract(format: DD-MM-YYYY).")
    *   (name="contract_number", nullable=true, requirements="([0-9])+", description="Employee contract number.")
    *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Last work contract termination day(format: DD-MM-YYYY).")
@@ -360,7 +354,6 @@ class PayrollRestController extends FOSRestController
     $regex['gender'] = '(MAS|FEM)';$mandatory['gender'] = false;
     $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['birth_date'] = false;
     $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = false;
-    $regex['days_company_seniority'] = '([0-9])+';$mandatory['days_company_seniority'] = false;
     $regex['last_contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_start_date'] = false;
     $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = false;
     $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = false;
@@ -384,8 +377,7 @@ class PayrollRestController extends FOSRestController
     $unico['EMP_SEXO'] =  isset($parameters['gender']) ? $parameters['gender'] : $info['EMP_SEXO'];
     $unico['EMP_FECHA_NACI'] =  isset($parameters['birth_date']) ? $parameters['birth_date'] : $info['EMP_FECHA_NACI'];
     $unico['EMP_FECHA_INGRESO'] =  isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
-    $unico['EMP_ANTIGUEDAD_ANT'] =  isset($parameters['days_company_seniority']) ? $parameters['days_company_seniority'] : $info['EMP_ANTIGUEDAD_ANT'];
-    $unico['EMP_FECHA_INI_CONTRATO'] =  isset($parameters['last_contract_start_date']) ? $parameters['last_contract_start_date'] : $info['EMP_FECHA_INI_CONTRATO'];
+    $unico['EMP_FECHA_INI_CONTRATO'] =  isset($parameters['start_date']) ? $parameters['start_date'] : $info['EMP_FECHA_INGRESO'];
     $unico['EMP_NRO_CONTRATO'] =  isset($parameters['contract_number']) ? $parameters['contract_number'] : $info['EMP_NRO_CONTRATO'];
     $unico['EMP_FECHA_FIN_CONTRATO'] =  isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : $info['EMP_FECHA_FIN_CONTRATO'];
     $unico['EMP_HORAS_TRAB'] =  isset($parameters['worked_hours_days']) ? $parameters['worked_hours_days'] : $info['EMP_HORAS_TRAB'];
@@ -458,7 +450,6 @@ class PayrollRestController extends FOSRestController
    * @var Request $request
    *
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   *    (name="concept_id", nullable=false, requirements="([0-9])+", description="ID of the concept as described by SQL Software.")
    *    (name="value", nullable=false, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
    *
    *
@@ -472,7 +463,6 @@ class PayrollRestController extends FOSRestController
     $mandatory = array();
     // Set all the parameters info.
     $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
-    $regex['concept_id'] = '([0-9])+';$mandatory['concept_id'] = true;
     $regex['value'] = '([0-9])+(.[0-9]+)?';$mandatory['value'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);
@@ -481,7 +471,7 @@ class PayrollRestController extends FOSRestController
     $unico = array();
     $unico['TIPOCON'] = 0;
     $unico['EMP_CODIGO'] = $parameters['employee_id'];
-    $unico['CON_CODIGO'] = $parameters['concept_id'];
+    $unico['CON_CODIGO'] = 1; // 1 is salary, it is always our case.
     $unico['COF_VALOR'] = $parameters['value'];
 
     $content[] = $unico;
@@ -513,7 +503,6 @@ class PayrollRestController extends FOSRestController
    * Rest Parameters:
    *
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
-   *    (name="concept_id", nullable=true, requirements="([0-9])+", description="ID of the concept as described by SQL Software.")
    *    (name="value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
    *
    * @return View
@@ -525,7 +514,6 @@ class PayrollRestController extends FOSRestController
     $mandatory = array();
     // Set all the parameters info.
     $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
-    $regex['concept_id'] = '([0-9])+';$mandatory['concept_id'] = false;
     $regex['value'] = '([0-9])+(.[0-9]+)?';$mandatory['value'] = false;
 
     $this->validateParamters($parameters, $regex, $mandatory);
@@ -536,7 +524,6 @@ class PayrollRestController extends FOSRestController
 
     $unico['TIPOCON'] = 1;
     $unico['EMP_CODIGO'] =  isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
-    $unico['CON_CODIGO'] = isset($parameters['concept_id']) ? $parameters['concept_id'] : $info['CON_CODIGO'];
     $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
 
     $content[] = $unico;
