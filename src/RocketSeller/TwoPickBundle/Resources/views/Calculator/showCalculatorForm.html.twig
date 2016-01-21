@@ -1,5 +1,6 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+<div id="registrationFormContainer">
     {{ form_start(form) }}
     {{ form_errors(form) }}
     {{ form_row(form.tipo) }}
@@ -27,6 +28,7 @@
 
     {{ form_widget(form) }}
     {{ form_end(form) }}
+</div>
 {% endblock fos_user_content %}
 {% block javascripts %}
     {{ parent() }}
@@ -40,12 +42,12 @@
                     type: $(form).attr('method'),
                     data: {
                         tipo: $(form).find("input[name='form[tipo]']").val(),
-                        salarioM: $(form).find("input[name='form[salarioM]']").val(),
-                        salarioD: $(form).find("input[name='form[salarioD]']").val(),
+                        salarioM: accounting.unformat($(form).find("input[name='form[salarioM]']").val()),
+                        salarioD: accounting.unformat($(form).find("input[name='form[salarioD]']").val()),
                         numberOfDays: $(form).find("select[name='form[numberOfDays]']").val(),
                         transporte: $(form).find("input[name='form[transporte]']").val(),
                         auxilio: $(form).find("input[name='form[auxilio]']").val(),
-                        auxilioD: $(form).find("input[name='form[auxilioD]']").val(),
+                        auxilioD: accounting.unformat($(form).find("input[name='form[auxilioD]']").val()),
                         sisben: $(form).find("input[name='form[sisben]']").val(),
                     },
                     statusCode: {
