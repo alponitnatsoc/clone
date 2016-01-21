@@ -52,5 +52,5 @@ interface MailerInterface
      *
      * @return void
      */
-    public function sendEmail(UserInterface $user, $toEmail);
+    public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail);
 }

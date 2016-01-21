@@ -57,7 +57,7 @@ class InvitationController extends Controller
 
             /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
             $smailer = $this->get('symplifica.mailer.twig_swift');
-            $send = $smailer->sendEmail($this->getUser(), $toEmail);
+            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
             if ($send) {
                 $entity->setSent(true);
                 $em->persist($entity);

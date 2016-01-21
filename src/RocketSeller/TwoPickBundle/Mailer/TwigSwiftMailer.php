@@ -75,14 +75,14 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
-    public function sendEmail(UserInterface $user, $toEmail)
+    public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail)
     {
-        $templateName = "FOSUserBundle:Invitation:email.txt.twig";
+//         $templateName = $template;
         $context = array(
             'toEmail' => $toEmail,
             'user' => $user
         );
-        $fromEmail = "from.email@com.co";
+//         $fromEmail = $fromEmail;
         $toEmail = $toEmail;
         return $this->sendMessage($templateName, $context, $fromEmail, $toEmail);
     }
