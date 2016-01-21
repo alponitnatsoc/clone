@@ -2,6 +2,9 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+registration_confirmed_start:
+    path:      /registration/confirmed/start
+    defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerConfirmedStart}
 matrix_choose:
     path:      /matrix/choose
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose}
