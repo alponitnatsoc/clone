@@ -65,7 +65,11 @@ class ContractRegistration extends AbstractType
                     new NotBlank(),),
                 'currency' => 'COP',
                 'property_path' => 'salary',
-                'label'=>'¿Cuánto le paga a su empleado mensualmente?'
+                'label'=>'¿Cuánto le paga a su empleado mensualmente?',
+                "attr" => array(
+                    'onclick' => 'formatMoney($(this))',
+                    'class' => 'format-money'
+                )
             ))
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),

@@ -12,12 +12,12 @@ function calculatorCalculate(){
             type: $(form).attr('method'),
             data: {
                 type:           $(form).find("input[name='form[tipo]']:checked").val(),
-                salaryM:        $(form).find("input[name='form[salarioM]']").val(),
-                salaryD:        $(form).find("input[name='form[salarioD]']").val(),
+                salaryM:        accounting.unformat($(form).find("input[name='form[salarioM]']").val()),
+                salaryD:        accounting.unformat($(form).find("input[name='form[salarioD]']").val()),
                 numberOfDays:   $(form).find("select[name='form[numberOfDays]']").val(),
                 transport:      $(form).find("input[name='form[transporte]']:checked").val(),
                 aid:            $(form).find("input[name='form[auxilio]']:checked").val(),
-                aidD:           $(form).find("input[name='form[auxilioD]']").val(),
+                aidD:           accounting.unformat($(form).find("input[name='form[auxilioD]']").val()),
                 sisben:         $(form).find("input[name='form[sisben]']:checked").val(),
             },
             statusCode:{

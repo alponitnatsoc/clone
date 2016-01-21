@@ -338,7 +338,7 @@ function startEmployee(){
                 contractType:       $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']").val(),
                 timeCommitment:     $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']").val(),
                 position:           $(form).find("select[name='register_employee[employeeHasEmployers][position]']").val(),
-                salary:             salary.val(),
+                salary:             accounting.unformat(salary.val()),
                 idsBenefits:        idsBenef,
                 amountBenefits:     amountBenef,
                 periodicityBenefits:periodicityBenef,

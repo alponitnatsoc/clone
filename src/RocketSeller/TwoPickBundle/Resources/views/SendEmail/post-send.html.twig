@@ -11,6 +11,12 @@ To 4: <input value="" name="to[3][email]" type="text" />
 <a href="javascript:void(0)" onclick="javascript:test2()">TEST</a>
 <a href="javascript:void(0)" onclick="javascript:test()">Service Status User</a>
 <a href="javascript:void(0)" onclick="javascript:test3()">Service update User status</a>
+
+
+<input onkeypress="formatMoneyTest($(this))" type="text" id="register_employee_employeeHasEmployers_salary" name="register_employee[employeeHasEmployers][salary]" required="required" class="format-money form-control" aria-required="true">
+<span class="input-group-addon"> COP</span>
+<button onclick="unformat($('.format-money'))">UNFORMAT</button>
+
 <script type='text/javascript'>
 function test3() {
 	$.ajax({
@@ -76,3 +82,38 @@ function test2() {
 }
 </script>
 {%  endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+accounting.settings = {
+    currency: {
+        symbol : "$",   // default currency symbol is '$'
+        format: "%s%v", // controls output: %s = symbol, %v = value/number (can be object: see below)
+        decimal : ".",  // decimal point separator
+        thousand: ",",  // thousands separator
+        precision : 2   // decimal places
+    },
+    number: {
+        precision : 2,  // default precision on numbers is 0
+        thousand: ",",
+        decimal : "."
+    }
+}
+function formatMoneyTest(element) {
+// $(element).bind('keydown keyup keypress focus blur paste change', function() {
+// // $(".format-money").bind('keydown keyup keypress focus blur paste change', function() {
+//     $(element).val(accounting.formatMoney($(element).val()));
+// });
+$(element).priceFormat({
+    prefix: '$ ',
+    centsSeparator: '.',
+    thousandsSeparator: ',',
+    centsLimit: 2
+});
+}
+function unformat(element) {
+    $(element).val(accounting.unformat($(element).val()));
+//     $(element).val($(element).unmask());
+}
+</script>
+{% endblock javascripts %}

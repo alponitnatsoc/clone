@@ -55,6 +55,16 @@ class Action
     private $actionTypeActionType;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\ActionError
+     *
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\ActionError",cascade={"persist", "remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="action_error_id_action_error", referencedColumnName="id")
+     * })
+     */
+    private $actionErrorActionError;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="action")
      * @ORM\JoinColumns({
@@ -238,5 +248,29 @@ class Action
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set actionErrorActionError
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError
+     *
+     * @return Action
+     */
+    public function setActionErrorActionError(\RocketSeller\TwoPickBundle\Entity\ActionError $actionErrorActionError = null)
+    {
+        $this->actionErrorActionError = $actionErrorActionError;
+
+        return $this;
+    }
+
+    /**
+     * Get actionErrorActionError
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\ActionError
+     */
+    public function getActionErrorActionError()
+    {
+        return $this->actionErrorActionError;
     }
 }
