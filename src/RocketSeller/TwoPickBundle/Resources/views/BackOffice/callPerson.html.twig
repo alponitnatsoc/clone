@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+	<div class="col-md-8">
+		<p>{{ action.personPerson.names }}</p>
+		<p>{{ action.personPerson.lastName1 }}</p>
+		<p>{{ action.personPerson.lastName2 }}</p>
+		{% set  phones = action.personPerson.phones %}
+		{% for phone in phones %}
+			<p>{{ phone.phoneNumber }}</p>
+		{% endfor %}
+		
+	</div>
+	{{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
+
+{% endblock %}

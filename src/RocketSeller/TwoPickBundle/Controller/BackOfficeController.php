@@ -19,7 +19,26 @@ class BackOfficeController extends Controller
     {    	
     	$person = $this->loadClassById($idPerson,"Person");    	
     	$user =  $this->loadClassByArray(array('personPerson'=>$person),"User");
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'idAction'=>$idAction));
+    	$action = $this->loadClassById($idAction,"Action");
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action));
+    }
+    public function makeAfiliationAction($idAction)
+    {        
+    	$action = $this->loadClassById($idAction,"Action"); 
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action));	
+    }
+    public function callPersonAction($idAction)
+    {
+    	$action = $this->loadClassById($idAction,"Action"); 
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:callPerson.html.twig',array('action'=>$action));
+    }
+	public function callEntityAction($idAction)
+    {    	
+    	$action = $this->loadClassById($idAction,"Action"); 
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:callEntity.html.twig',array('action'=>$action));
     }
     public function reportErrorAction($idAction,Request $request)
     {
@@ -52,7 +71,7 @@ class BackOfficeController extends Controller
 		->getRepository('RocketSellerTwoPickBundle:'.$entity)
 		->find($parameter);
 		return $loadedClass;
-    }
+    }    
     /**
      * hace un query de la clase para instanciarla
      * @param  [type] $array  array de parametros que desea pasar

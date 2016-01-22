@@ -261,3 +261,21 @@ services:
         arguments: [~, RocketSeller\TwoPickBundle\Entity\Config, SonataAdminBundle:CRUD]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Config, label: Config}
+
+    rocket_seller_two_pick.admin.role:
+        class: RocketSeller\TwoPickBundle\Admin\RoleAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Role, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Admin, label: Role}
+
+    rocket_seller_two_pick.admin.role_has_task:
+        class: RocketSeller\TwoPickBundle\Admin\RoleHasTaskAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\RoleHasTask, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Admin, label: RoleHasTask}
+
+    rocket_seller_two_pick.admin.task:
+        class: RocketSeller\TwoPickBundle\Admin\TaskAdmin
+        arguments: [~, RocketSeller\TwoPickBundle\Entity\Task, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Admin, label: Task}

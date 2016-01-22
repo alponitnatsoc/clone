@@ -302,7 +302,7 @@ function startEmployer(){
 
 
 function jsonToHTML(data) {
-    var htmls="<option value=''></option>";
+    var htmls="<option value=''>Seleccionar una opción</option>";
     for(var i=0;i<data.length;i++){
         htmls+="<option value='"+data[i].id_city+"'>"+data[i].name+"</option>";
     }

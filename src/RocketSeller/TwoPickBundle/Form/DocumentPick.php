@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -31,25 +31,23 @@ class DocumentPick extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'documentTypeDocumentType',
-                'read_only' =>true,
+                'read_only' =>true
             ))
             ->add('name', 'text', array(
                 'label' => 'name',
-                'read_only' =>true,
+                'read_only' =>true
             ));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Document',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Document'
         ));
     }
-    
+
     public function getName()
     {
         return 'pick_document';
     }
-} 
-?>
+}

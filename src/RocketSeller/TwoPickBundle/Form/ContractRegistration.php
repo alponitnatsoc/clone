@@ -25,43 +25,48 @@ class ContractRegistration extends AbstractType
         $builder
             ->add('employeeType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:EmployeeContractType',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'employeeContractTypeEmployeeContractType',
-                'label'=>'Tipo de empleado'
+                'label'=>'Tipo de empleado',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('contractType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:ContractType',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
-                'label'=>'Tipo de contrato'
+                'label'=>'Tipo de contrato',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('timeCommitment', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'Dedicación de tiempo'
+                'label'=>'Dedicación de tiempo',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('position', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Position',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Cargo'
+                'label'=>'Cargo',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('salary', 'money', array(
                 'constraints' => array(
-                    new NotBlank(),),
+                    new NotBlank()
+                ),
                 'currency' => 'COP',
                 'property_path' => 'salary',
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?',
@@ -92,22 +97,23 @@ class ContractRegistration extends AbstractType
             ))
             ->add('startDate', 'date', array(
                 'years' => range(2010,2020),
-                'label' => 'Fecha inicio de contrato*:',
+                'label' => 'Fecha inicio de contrato*:'
             ))
             ->add('endDate', 'date', array(
                 'years' => range(2016,2020),
-                'label' => 'Fecha fin de contrato*:',
+                'label' => 'Fecha fin de contrato*:'
             ))
             ->add('transportAid', 'choice', array(
                 'choices' => array(
-                    ''=> 'Seleccionar',
                     'auxilio' => 'Recibe auxilio de transporte',
                     'empleador' => 'Transporte brindado por el empleador',
                     'reside' => 'Reside en el lugar de trabajo',
                 ),
                 'multiple' => false,
                 'expanded' => false,
-                'label'=>'Desplazamiento al lugar de trabajo'
+                'label'=>'Desplazamiento al lugar de trabajo',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('workableDaysMonth', 'choice', array(
                 'choices' => range(1,30),
@@ -131,13 +137,14 @@ class ContractRegistration extends AbstractType
             ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
-                'placeholder' => '',
                 'choices' => $this->workplaces,
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'Lugar de trabajo'
+                'label'=>'Lugar de trabajo',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('payMethod', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:PayType',
@@ -152,7 +159,7 @@ class ContractRegistration extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Contract',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Contract'
         ));
     }
 
