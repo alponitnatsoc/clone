@@ -1,29 +1,16 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-<div class="col-md-8">
-	<div class="col-md-12">
-		<ul>
-			<li>
-				{{ person.names}}
-			</li>
-			<li>
-				{{ person.lastName1}}
-			</li>
-			<li>
-				{{ person.lastName2}}
-			</li>
-			<li>
-				{{ person.documentType}}
-			</li>
-		</ul>
-	</div>
-	<p>¿ el registro esta completo?</p>
+	<div class="col-md-8">
+		<h1>{{ action.entityEntity.name }}</h1>
+		<h2>{{ action.entityEntity.contact }}</h2>
+		<p>{{ action.personPerson.names }}</p>
+		<p>{{ action.personPerson.lastName1 }}</p>
+		<p>{{ action.personPerson.lastName2 }}</p>
+		<p>{{ action.personPerson.document }}</p>
+		<p>la person:{{ action.personPerson.names }} esta en la entidad?</p>
 		<button type="button" class="btn btn-success"><a href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
 		<button type="button" class="btn btn-danger">No</button>
-
-</div>
-
-
+	</div>
 	{{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
 
 {% endblock %}

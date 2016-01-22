@@ -30,6 +30,7 @@ class EntityAdmin extends Admin
         $listMapper
             ->add('idEntity')
             ->add('name')
+            ->add('contact','text',array('label'=>'Contact'))
             ->add('office',null,array('label'=>'Offices'))
             ->add('entityTypeEntityType',null,array('label'=>'Entity Type'))            
             ->add('_action', 'actions', array(
@@ -48,7 +49,7 @@ class EntityAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name',null,array('label'=>'Name'))
+            ->add('name',null,array('label'=>'Name'))        
             ->add('entityTypeEntityType', 'sonata_type_model_list', array(
                 ), array(
                     'placeholder' => 'No entity selected'
@@ -59,6 +60,7 @@ class EntityAdmin extends Admin
                 'inline' => 'table',
                 'sortable'  => 'position'
             ))
+            ->add('contact',null,array('label'=>'Contact'))
             ->add('action', 'sonata_type_collection', array(
                     'by_reference' => false
                 ), array(

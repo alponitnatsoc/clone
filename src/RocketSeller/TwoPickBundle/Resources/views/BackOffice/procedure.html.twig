@@ -22,6 +22,8 @@
 				<tr style="background-color:#FF5555;">
 			{% elseif  action.status|lower == "nuevo" %}
 				<tr>
+			{% elseif  action.status|lower == "completado" %}
+				<tr style="background-color:#A2E383;">
 			{% elseif action.status|lower == "iniciado" %}
 				<tr>
   			{% endif %}  			
@@ -44,12 +46,12 @@
 					<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
 				{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 					<td>Validar documentos</td>
-				{% elseif action.ActionTypeActionType.name|lower == "llevar documentos a entidad" %}
-					<td>Llevar documentos a entidad</td>
 				{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-					<td>Hacer inscripción</td>
+					<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
 				{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-					<td>Llamar</td>
+					<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
+				{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
+					<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
 				{% endif %}
 				<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a></td>
 

@@ -57,3 +57,15 @@ check_register:
 report_error:
     path:     /backoffice/report/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
+call_entity:
+    path:     /backoffice/call/entity/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:callEntity }
+call_person:
+    path:     /backoffice/call/person/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:callPerson }
+export_documents_person:
+    path:     /backoffice/export/person/documents/{idPerson}
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }
+make_afiliation:
+    path:     /backoffice/afiliation/person/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:makeAfiliation }

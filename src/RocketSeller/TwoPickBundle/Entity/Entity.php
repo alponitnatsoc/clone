@@ -43,6 +43,10 @@ class Entity
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $name;
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $contact;
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="entityEntity", cascade={"persist"})
@@ -274,5 +278,29 @@ class Entity
     public function getEntityHasDocumentType()
     {
         return $this->entityHasDocumentType;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     *
+     * @return Entity
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 }
