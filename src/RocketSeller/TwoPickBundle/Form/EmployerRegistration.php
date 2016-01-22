@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -29,7 +29,6 @@ class EmployerRegistration extends AbstractType
                 'expanded' => true,
                 'choice_attr' => function($key, $val, $index) {
                     $disabled = $key=="empresa";
-
                     return $disabled ? ['disabled' => 'disabled'] : [];
                 },
                 'label' => 'Usted es*',
@@ -38,22 +37,24 @@ class EmployerRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('numberOfWorkplaces', 'choice', array(
                 'choices' => array(
-                    '1'   => '1',
+                    '1' => '1',
                     '2' => '2',
                     '3' => '3',
                     '4' => '4',
                     '5' => '5',
-                    '6' => '6',
+                    '6' => '6'
                 ),
                 'multiple' => false,
                 'expanded' => false,
-                'mapped' => false, 
-                "label" => "¿En cuántos lugares trabajará(n) su(s) empleado(s)?")
-            )
+                'mapped' => false,
+                "label" => "¿En cuántos lugares trabajará(n) su(s) empleado(s)?",
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
             ->add('sameWorkHouse', 'choice', array(
                 'choices' => array(
                     true   => 'Si',
-                    false  => 'No',
+                    false  => 'No'
                 ),
                 'multiple' => false,
                 'expanded' => true,
@@ -63,26 +64,22 @@ class EmployerRegistration extends AbstractType
                 'type' => new WorkPlaceRegistration(),
                 'allow_add'    => true,
                 'allow_delete' => true,
-                'by_reference' => false,
-                ))
+                'by_reference' => false
+            ))
             ->add('save', 'submit', array(
-                'label' => 'Guardar',
-                ));
-
-
+                'label' => 'Guardar'
+            ));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employer',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employer'
         ));
     }
-    
+
     public function getName()
     {
         return 'register_employer';
     }
-} 
-?>
+}

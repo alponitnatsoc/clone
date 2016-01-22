@@ -28,7 +28,8 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'civilStatus',
-                'label' => 'Estado civil'
+                'label' => 'Estado civil',
+//                 'empty_value' => 'Choose an option',
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(

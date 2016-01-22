@@ -7,12 +7,14 @@ function startEmployer(){
     $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
         validator = $("form[name='register_employer']").validate({
             rules: {
+                "register_employer[person][documentType]": "required",
                 "register_employer[person][document]": "required",
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
                 "register_employer[person][mainAddress]": "required",
             },
             messages:{
+                "register_employer[person][documentType]": "Por favor seleccione el tipo de documento",
                 "register_employer[person][document]": "Por favor Ingrese su documento",
                 "register_employer[person][names]": "Por favor Ingrese su nombre",
                 "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
@@ -76,11 +78,12 @@ function startEmployer(){
     $('#btn-1').click(function(e){
         e.preventDefault();
         var form =$("form");
+        var documentType=       $(form).find("select[name='register_employer[person][documentType]']");
         var document= 		$(form).find("input[name='register_employer[person][document]']");
         var names=			$(form).find("input[name='register_employer[person][names]']");
         var lastName1= 		$(form).find("input[name='register_employer[person][lastName1]']");
         var lastName2= 		$(form).find("input[name='register_employer[person][lastName2]']");
-        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
+        if (!(validator.element(documentType)&&validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
@@ -90,7 +93,7 @@ function startEmployer(){
             type: 'POST',
             data: {
                 youAre: 		$(form).find("input[name='register_employer[youAre]']:checked").val(),
-                documentType: 	$(form).find("select[name='register_employer[person][documentType]']").val(),
+                documentType: 	documentType.val(),
                 document: 		document.val(),
                 names:			names.val(),
                 lastName1: 		lastName1.val(),
@@ -110,7 +113,9 @@ function startEmployer(){
         var form =$("form");
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employer[person][mainAddress]']");
-        if (!(validator.element(mainAddress))){
+        var department = $(form).find("select[name='register_employer[person][department]']");
+        var city = $(form).find("select[name='register_employer[person][city]']");
+        if (!(validator.element(mainAddress)&&validator.element(department)&&validator.element(city))){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
@@ -139,8 +144,8 @@ function startEmployer(){
                 neighborhood: 	"",
                 phonesIds:      idsPhones,
                 phones:         phones,
-                department: 	$(form).find("select[name='register_employer[person][department]']").val(),
-                city: 			$(form).find("select[name='register_employer[person][city]']").val(),
+                department: 	department.val(),
+                city: 			city.val(),
             }
         }).done(function(data) {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');

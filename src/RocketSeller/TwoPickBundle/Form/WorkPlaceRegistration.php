@@ -20,43 +20,42 @@ class WorkPlaceRegistration extends AbstractType
         $builder
             ->add('name', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
+                    new NotBlank()
                 ),
                 "label"=>"Nombre"))
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
+                    new NotBlank()
                 ),"label"=>"Dirección"))
             ->add('id', 'hidden', array(
-                'property_path' => 'idWorkplace',
+                'property_path' => 'idWorkplace'
             ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
-                "label" => "Departamento"
-                ))
+                "label" => "Departamento",
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'city',
-                "label" => "Ciudad"
-                ));
-
-
+                "label" => "Ciudad",
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Workplace',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Workplace'
         ));
     }
 
