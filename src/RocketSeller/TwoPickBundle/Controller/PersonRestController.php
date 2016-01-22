@@ -311,7 +311,11 @@ class PersonRestController extends FOSRestController
                 }
                 $em->persist($user);
                 $em->flush();
-                $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
+                if($employer->getEmployerHasEmployees()->count()==0){
+                    $view->setData(array('url'=>$this->generateUrl('register_employee')) )->setStatusCode(200);
+                }else{
+                    $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
+                }
                 return $view;
             } else {
                 $view = $this->getErrorsView($errors);

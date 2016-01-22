@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -50,6 +51,7 @@ class BasicPersonRegistration extends AbstractType
                     new NotBlank()
                 ),'label' => 'Segundo Apellido'))
             ->add('birthDate', 'date', array(
+                'data' => new DateTime('1975-01-01'),
                 'years' => range(1900,2015),
                 'constraints' => array(
                     new NotBlank()

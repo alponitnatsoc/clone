@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -42,6 +43,7 @@ class PersonExtraData extends AbstractType
                 'label' => 'Género'
             ))
             ->add('documentExpeditionDate', 'date', array(
+                'data' => new DateTime('1975-01-01'),
                 'years' => range(1900,2015),
                 'label' => 'Fecha de expedición de documento de identidad'
             ))
