@@ -36,20 +36,6 @@ class EmployerRegistration extends AbstractType
                 'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
-            ->add('numberOfWorkplaces', 'choice', array(
-                'choices' => array(
-                    '1'   => '1',
-                    '2' => '2',
-                    '3' => '3',
-                    '4' => '4',
-                    '5' => '5',
-                    '6' => '6',
-                ),
-                'multiple' => false,
-                'expanded' => false,
-                'mapped' => false, 
-                "label" => "¿En cuántos lugares trabajará(n) su(s) empleado(s)?")
-            )
             ->add('sameWorkHouse', 'choice', array(
                 'choices' => array(
                     true   => 'Si',

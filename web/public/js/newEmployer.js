@@ -49,26 +49,26 @@ function startEmployer(){
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar Teléfono</a>');
+    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar Lugar de Trabajo</a>');
     var $newLinkLi = $('<li></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
 
-    /*$collectionHolderPhones.find('li').each(function() {
+    $collectionHolder.find('li').each(function() {
         addTagFormDeleteLink($(this));
     });
-    $collectionHolderPhones.append($newLinkLi);
-    $collectionHolderPhones.data('index', $collectionHolderPhones.find(':input').length);
+    $collectionHolder.append($newLinkLi);
+    $collectionHolder.data('index', ($collectionHolder.find(':input').length)/5);
+
     $addPhoneLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
-        addPhoneForm($collectionHolderPhones, $newLinkLi);
+        addPhoneForm($collectionHolder, $newLinkLi);
     });
-    */
+
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', ($collectionHolder.find(':input').length)/4);
     //el cambio de tabs entre el formulario de registro
     $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
@@ -152,8 +152,11 @@ function startEmployer(){
     addListeners();
 
     //colocar el select en el valor del tamaño del arreglo
-    var $dropDownWork = $collectionHolder.data('index');
-    $('#register_employer_numberOfWorkplaces').val($dropDownWork);
+    var dropDownWork = $collectionHolder.data('index');
+    if(dropDownWork==1&&$("input[name='register_employer[sameWorkHouse]']:checked").val()!='0'){
+        $('ul.workplaces').hide();
+    }
+   /* $('#register_employer_numberOfWorkplaces').val($dropDownWork);
     //listener para el que agrega workplaces
     $('#register_employer_numberOfWorkplaces').change(function() {
         // get the numberof Workplaces that the user wants
@@ -187,13 +190,13 @@ function startEmployer(){
                 index=parseInt(index)+1;
                 console.log("Index New:" + index );
                 // Display the form in the page in an li, before the "Add a tag" link li
-                var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append('<div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;"><div class="col-sm-12 col-xs-12">'+newForm+'</div></div>');
+                var $newFormLi = $('<li id="workSpace_'+ index +'" class="workSpaceLi"></li>').append('<div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid rgba(0, 0, 0, 0);"><div class="col-sm-12 col-xs-12">'+newForm+'</div></div>');
                 $collectionHolder.append($newFormLi);
             }
             //add the corresponding listeners
             addListeners();
         }
-    });
+    });*/
     var redirUri="";
     $("form").on("submit",function(e){
         e.preventDefault();
@@ -326,15 +329,19 @@ function addListeners() {
     $("input[name='register_employer[sameWorkHouse]']").change(function(){
         var selected=$("input[name='register_employer[sameWorkHouse]']:checked").val();
         if(selected=="1"){
+            $('ul.workplaces').hide();
             var select= $("#register_employer_workplaces_0_id");
             if(select.val()==""){
+                $("#register_employer_workplaces_0_name").val("Dirección Principal");
                 $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
                 $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
                 $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
             }
         }else{
+            $('ul.workplaces').show();
             if($("#register_employer_workplaces_0_mainAddress").val()==$("#register_employer_person_mainAddress").val()){
                 $("#register_employer_workplaces_0_id").val("");
+                $("#register_employer_workplaces_0_name").val("");
                 $("#register_employer_workplaces_0_mainAddress").val("");
                 $("#register_employer_workplaces_0_department").val("");
                 $("#register_employer_workplaces_0_city").val("");
