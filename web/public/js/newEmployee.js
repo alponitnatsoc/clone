@@ -7,6 +7,7 @@ function startEmployee(){
     $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
         validator = $("form[name='register_employee']").validate({
             rules: {
+                "register_employee[person][documentType]": "required",
                 "register_employee[person][document]": {required:true,number:true},
                 "register_employee[person][names]": "required",
                 "register_employee[person][lastName1]": "required",
@@ -14,12 +15,12 @@ function startEmployee(){
                 "register_employee[employeeHasEmployers][salary]":"required",
             },
             messages:{
+                "register_employee[person][documentType]": "Por favor Ingrese su tipo de documento",
                 "register_employee[person][document]": {required:"Por favor Ingrese su documento",number:"ingrese solamente dígitos"},
                 "register_employee[person][names]": "Por favor Ingrese su nombre",
                 "register_employee[person][lastName1]": "Por favor Ingrese su primer apellido",
                 "register_employee[person][mainAddress]": "Por favor Ingrese una dirección",
                 "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario",
-
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function(){
@@ -56,7 +57,6 @@ function startEmployee(){
     $(".definite").each(function(){
         $(this).hide();
     });
-
     $("#register_employee_employeeHasEmployers_timeCommitment").change(function(){
         var selectedVal=$(this).find("option:selected").text();
         if(selectedVal=="Trabajo por días"){
@@ -68,14 +68,12 @@ function startEmployee(){
                 $(this).hide();
             });
         }
-
     });
     $("#register_employee_person_documentType").change(function(){
         var selectedVal=$(this).find("option:selected").text();
         if(selectedVal=="Tarjeta de identidad"){
             $('#TIModal').modal('toggle');
         }
-
     });
     $("#register_employee_employeeHasEmployers_contractType").change(function(){
         var selectedVal=$(this).find("option:selected").text();
@@ -88,7 +86,6 @@ function startEmployee(){
                 $(this).hide();
             });
         }
-
     });
     //funcion que agrega un listener a cada department
     addListeners();
@@ -122,7 +119,6 @@ function startEmployee(){
             url : form.attr('action'),
             type: $(form).attr('method'),
             data: {
-
                 payTypeId:      $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']:checked").val(),
                 bankId:         $(form).find("select[name='method_type_fields[Bank]']").val(),
                 accountTypeId:  $(form).find("select[name='method_type_fields[AccountType]']").val(),
@@ -134,7 +130,6 @@ function startEmployee(){
                 cvv:            $(form).find("input[name='register_employee[cvv]']").val(),
                 nameOnCard:     $(form).find("input[name='register_employee[name_on_card]']").val(),
                 contractId:     $(form).find("input[name='register_employee[idContract]']").val(),
-
             },
             statusCode:{
                 200: function(data){
@@ -143,12 +138,9 @@ function startEmployee(){
                 },
                 400 : function(){
                     alert("400 :"+errorThrown+"\n"+data.responseJSON.error.exception[0].message);
-
                 }
-
             }
         }).done(function(data){
-
         }).fail(function (data, textStatus, errorThrown) {
             console.log(data);
             console.log(textStatus);
@@ -201,11 +193,12 @@ function startEmployee(){
     $('#btn-1').click(function(e){
         e.preventDefault();
         var form =$("form");
+        var documentType = $(form).find("select[name='register_employee[person][documentType]']");
         var document= 		$(form).find("input[name='register_employee[person][document]']");
         var names=			$(form).find("input[name='register_employee[person][names]']");
         var lastName1= 		$(form).find("input[name='register_employee[person][lastName1]']");
         var lastName2= 		$(form).find("input[name='register_employee[person][lastName2]']");
-        if (!(validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
+        if (!(validator.element(documentType)&&validator.element(document)&&validator.element(names)&&validator.element(lastName1))){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
@@ -214,11 +207,11 @@ function startEmployee(){
             url : $(this).attr('href'),
             type: 'POST',
             data: {
-                documentType: 	$(form).find("select[name='register_employee[person][documentType]']").val(),
-                document: 		$(form).find("input[name='register_employee[person][document]']").val(),
-                names:			$(form).find("input[name='register_employee[person][names]']").val(),
-                lastName1: 		$(form).find("input[name='register_employee[person][lastName1]']").val(),
-                lastName2: 		$(form).find("input[name='register_employee[person][lastName2]']").val(),
+                documentType: 	documentType.val(),
+                document: 		document.val(),
+                names:			names.val(),
+                lastName1: 		lastName1.val(),
+                lastName2: 		lastName2.val(),
                 civilStatus:    $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(),
                 year: 			$(form).find("select[name='register_employee[person][birthDate][year]']").val(),
                 month: 			$(form).find("select[name='register_employee[person][birthDate][month]']").val(),
@@ -232,7 +225,6 @@ function startEmployee(){
                 gender: 		$(form).find("select[name='register_employee[personExtra][gender]']").val(),
                 employeeId:     $(form).find("input[name='register_employee[idEmployee]']").val(),
                 documentExpeditionPlace:    $(form).find("input[name='register_employee[personExtra][documentExpeditionPlace]']").val(),
-
             }
         }).done(function(data) {
             console.log(data);
@@ -358,7 +350,6 @@ function startEmployee(){
                 workTimeEnd:        {   'hour':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][hour]']").val(),
                                         'minute':$(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
                 weekWorkableDays:   weekWorkableDaysIds,
-
             }
         }).done(function(data) {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -367,8 +358,6 @@ function startEmployee(){
             alert(jqXHR+"Server might not handle That yet" + textStatus+" " + errorThrown);
         });
     });
-
-
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
@@ -399,9 +388,8 @@ function addTagFormDeleteLink($tagFormLi) {
         $tagFormLi.remove();
     });
 }
-
 function jsonToHTML(data) {
-    var htmls="<option value=''></option>";
+    var htmls="<option value=''>Seleccionar una opción</option>";
     for(var i=0;i<data.length;i++){
         htmls+="<option value='"+data[i].id_city+"'>"+data[i].name+"</option>";
     }
@@ -428,6 +416,5 @@ function addListeners() {
             // ... with the returned one from the AJAX response.
             jsonToHTML(data)
         );});
-
     });
 }
