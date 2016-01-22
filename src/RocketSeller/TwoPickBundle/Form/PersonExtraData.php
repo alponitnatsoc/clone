@@ -23,23 +23,26 @@ class PersonExtraData extends AbstractType
                     'soltero'   => 'Soltero',
                     'casado' => 'Casado',
                     'unionLibre' => 'Union Libre',
-                    'viudo' => 'Viudo',
+                    'viudo' => 'Viudo'
                 ),
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'civilStatus',
                 'label' => 'Estado civil',
-//                 'empty_value' => 'Choose an option',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(
                     'MAS'   => 'Masculino',
-                    'FEM' => 'Femenino',
+                    'FEM' => 'Femenino'
                 ),
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'gender',
-                'label' => 'Género'
+                'label' => 'Género',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('documentExpeditionDate', 'date', array(
                 'years' => range(1900,2015),
@@ -52,35 +55,38 @@ class PersonExtraData extends AbstractType
                 'label' => 'País de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Country',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthCountry'
+                'property_path' => 'birthCountry',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('birthDepartment', 'entity', array(
                 'label' => 'Departamento de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Department',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthDepartment'
+                'property_path' => 'birthDepartment',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('birthCity', 'entity', array(
                 'label' => 'Ciudad de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:City',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'birthCity'
+                'property_path' => 'birthCity',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('email', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
+                    new NotBlank()
                 ),
                 'property_path' => 'email'
             ));

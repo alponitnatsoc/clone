@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -15,7 +15,6 @@ class BenefitPick extends AbstractType
         $builder
             ->add('benefitType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Benefits',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
@@ -39,21 +38,17 @@ class BenefitPick extends AbstractType
                 'expanded' => false,
                 'label'=>' '
             ));
-
-
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\ContractHasBenefits',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\ContractHasBenefits'
         ));
     }
-    
+
     public function getName()
     {
         return 'pick_benefits';
     }
-} 
-?>
+}

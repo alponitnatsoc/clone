@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -34,7 +34,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'mapped' => false,
             ))
             ->add('idContract', 'hidden', array(
-                'mapped' => false,
+                'mapped' => false
             ))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
@@ -42,7 +42,6 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('employeeHasEmployers', new ContractRegistration($this->workplaces), array(
                 'mapped' => false))
-
             ->add('credit_card', 'text', array(
                 'mapped' => false))
             ->add('expiry_date', 'text', array(
@@ -51,25 +50,20 @@ class PersonEmployeeRegistration extends AbstractType
                 'mapped' => false))
             ->add('name_on_card', 'text', array(
                 'mapped' => false))
-
             ->add('save', 'submit', array(
-                'label' => 'Guardar',
+                'label' => 'Guardar'
             ));
-
-
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employee',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employee'
         ));
     }
-    
+
     public function getName()
     {
         return 'register_employee';
     }
-} 
-?>
+}
