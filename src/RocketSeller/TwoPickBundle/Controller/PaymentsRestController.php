@@ -854,7 +854,6 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * (name="paymentMethodId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the payment method.")
    * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
    * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
    * (name="codeCheck", nullable=false, requirements="([0-9]){3}", strict=true, description="code check.")
@@ -875,8 +874,6 @@ class PaymentsRestController extends FOSRestController
     // Set all the parameters info.
     $regex['documentNumber'] = '([0-9])+';
     $mandatory['documentNumber'] = true;
-    $regex['paymentMethodId'] = '([0-9]| )+';
-    $mandatory['paymentMethodId'] = true;
     $regex['expirationYear'] = '([0-9]){4}';
     $mandatory['expirationYear'] = true;
     $regex['expirationMonth'] = '([0-9]){2}';
@@ -906,7 +903,6 @@ class PaymentsRestController extends FOSRestController
     $header = $this->setHeaders($parameters);
 
     $parameters_fixed = array();
-    $parameters_fixed['method-id'] = $parameters['paymentMethodId'];
     $parameters_fixed['expiration-date'] = $expiration;
     $parameters_fixed['code-check'] = $parameters['codeCheck'];
     $parameters_fixed['total-amount'] = $parameters['totalAmount'];

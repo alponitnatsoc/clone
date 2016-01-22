@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -15,104 +15,99 @@ use RocketSeller\TwoPickBundle\Form\WorkPlaceRegistration;
 
 class PersonRegistration extends AbstractType
 {
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
         $builder
             ->add('youAre', 'choice', array(
 			    'choices' => array(
 			        'persona'   => 'Persona',
-			        'empresa' => 'Empresa',
+			        'empresa' => 'Empresa'
 			    ),
 			    'multiple' => false,
 			    'expanded' => true,
-			    'mapped' => false,))
+			    'mapped' => false))
             ->add('documentType', 'choice', array(
 			    'choices' => array(
 			        'CC'   => 'Cedula Ciudadania',
 			        'CE' => 'Cedula Extrangeria',
-                    'PP' => 'Pasaporte',
+                    'PP' => 'Pasaporte'
 			    ),
 			    'multiple' => false,
 			    'expanded' => false,
-			    'property_path' => 'documentType',)
+			    'property_path' => 'documentType',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+			    )
             )
             ->add('document', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
+                    new NotBlank()
                 ),
                 'property_path' => 'document'
             ))
             ->add('names', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('lastName1', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('lastName2', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('birthDate', 'date', array(
                 'years' => range(1900,2015),
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             //Tab 2
-        	
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('neighborhood', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('phone', 'text', array(
                 'constraints' => array(
-                    new NotBlank(),
-                ),))
+                    new NotBlank()
+                )))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
                 ))
             ->add('city', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:City',
-                'placeholder' => '',
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'city',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('employer', new EmployerRegistration())
-
-
             ->add('save', 'submit', array(
-                'label' => 'Create',
-                ));
-
+                'label' => 'Create'
+            ));
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person',
+        	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person'
         ));
     }
-    
+
     public function getName()
     {
         return 'register_person_tabs';
     }
-} 
-?>
+}
