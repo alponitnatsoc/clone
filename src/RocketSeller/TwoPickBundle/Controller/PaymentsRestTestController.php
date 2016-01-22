@@ -280,19 +280,17 @@ class PaymentsRestTestController extends FOSRestController
   public function postMockPaymentApprovalAction(ParamFetcher $paramFetcher, $id)
   {
     $view = View::create();
-    if ($id == 123456789)
-    {
-      $view->setStatusCode(201);
-    }
-    else
+    if ($id == 987654321)
     {
       $view->setStatusCode(400);
     }
-    $view->setData((array('charge-id' => 23456)));
+    else
+    {
+      $view->setStatusCode(201);
+      $view->setData((array('charge-id' => 23456)));
+    }
     return $view;
   }
-
-
 
   /**
    * @Post("mock/customer/{id}/beneficiary/transfer")
@@ -319,15 +317,16 @@ class PaymentsRestTestController extends FOSRestController
   public function postMockPaymentTransferAction(ParamFetcher $paramFetcher, $id)
   {
     $view = View::create();
-    if ($id == 123456789)
-    {
-      $view->setStatusCode(201);
-    }
-    else
+    if ($id == 987654321)
     {
       $view->setStatusCode(400);
     }
-    $view->setData((array('transfer-id' => 34567)));
+    else
+    {
+      $view->setStatusCode(201);
+      $view->setData((array('transfer-id' => 34567)));
+    }
+
     return $view;
   }
 }
