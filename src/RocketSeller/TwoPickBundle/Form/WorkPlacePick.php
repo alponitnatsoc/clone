@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -26,7 +26,7 @@ class WorkPlacePick extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                "label" => "Dirección"
+                "label" => "Dirección*"
                 ));
 
 
@@ -39,10 +39,10 @@ class WorkPlacePick extends AbstractType
         	'data_class' => 'RocketSeller\TwoPickBundle\Entity\ContractHasWorkplace',
         ));
     }
-    
+
     public function getName()
     {
         return 'pick_workplaces';
     }
-} 
+}
 ?>
