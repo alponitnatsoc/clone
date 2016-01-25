@@ -55,9 +55,9 @@
         {{ form_start(form) }}
 
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-            <li><a data-toggle="tab" href="#contactData">Datos de contacto</a></li>
-            <li><a data-toggle="tab" href="#workplacesData">Lugares de trabajo</a></li>
+            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
         </ul>
 
         <div class="tab-content">
@@ -121,7 +121,7 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <div class="col-xs-6">
-                        <a class="btn btn-primary btnPrevious" style="width: 100%" >< Anterior</a>
+                        <a class="btn btn-primary btnPrevious" style="width: 100%">< Anterior</a>
                     </div>
                     <div class="col-xs-6">
                         <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
@@ -165,7 +165,7 @@
                     {% endfor %}
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                    <a class="btn btn-primary btnPrevious">< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
                 </div>
             </div>
         </div>
