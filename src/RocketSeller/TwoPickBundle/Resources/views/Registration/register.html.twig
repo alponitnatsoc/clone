@@ -1,26 +1,25 @@
 {% extends "::base.html.twig" %}
 {% set body_color = "#3c4b5a" %}
 {% block body %}
-    <div class="row-fluid block-Intro-blue">
+    <div class="row-fluid block-Intro-blue hidden">
         <div class="up-Intro">Estás a un paso de poder gestionar</div>
         <div class="down-Intro">con un solo clic a tus empleados</div>
     </div>
     <div class="container">
         <div class="col-sm-12 txt-A1-register">Regístrese <m>GRATIS</m> y simplifique el pago de sueldo y aportes a Seguridad Social. </br>Tiene dos opciones para hacerlo:</div>
-        <div id='' class='col-sm-12 col-md-6'>
+        <div id='' class='col-sm-12 col-md-8'>
             <div class="left-headline">
                 <img src="/img/arrow.png">
                 <span>Regístrate con tus datos personales</span>
             </div>
         	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
         </div>
-        <div id='' class='col-sm-12 col-md-6'>
+        <div id='' class='col-sm-12 col-md-4'>
             <div class="right-headline">
                 <img src="/img/heart.png">
                 <span>Regístrate con tu red social favorita</span>
             </div>
             {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
         </div>
-        <div class="col-sm-12 txt-A1-terms">Al registrarme acepto todos los <a href="#">Términos y Condiciones</a></div>
     </div>
 {% endblock body %}

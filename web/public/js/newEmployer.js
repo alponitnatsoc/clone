@@ -51,14 +51,14 @@ function startEmployer(){
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar Lugar de Trabajo</a>');
+    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar lugar de trabajo</a>');
     var $newLinkLi = $('<li></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
 
     $collectionHolder.find('li').each(function() {
-        addTagFormDeleteLink($(this));
+        addTagFormDeleteLink($(this), "lugar de trabajo");
     });
     $collectionHolder.append($newLinkLi);
     $collectionHolder.data('index', ($collectionHolder.find(':input').length)/5);
@@ -360,12 +360,12 @@ function addPhoneForm($collectionHolderB, $newLinkLi) {
     var newForm = prototype.replace(/__name__/g, index);
     $collectionHolderB.data('index', index + 1);
     var $newFormLi = $('<li></li>').append(newForm);
-    addTagFormDeleteLink($newFormLi);
+    addTagFormDeleteLink($newFormLi,"lugar de trabajo");
     $newLinkLi.before($newFormLi);
 }
-function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">Eliminar Campo</a>');
-    $tagFormLi.append($removeFormA);
+function addTagFormDeleteLink($tagFormLi, $tipo) {
+    var $removeFormA = $('<a href="#" class="remove_phone_link">Eliminar '+$tipo+'</a>');
+    $tagFormLi.prepend($removeFormA);
 
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL

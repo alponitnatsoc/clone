@@ -10,6 +10,7 @@
    @dark_gray: #3C4B5A;
    @light_gray: #4B4B4B;
    @dark_green: #3b4b5a;
+   @error_color: #f00;
    @open: "Open Sans";
    @roboto: "Roboto Slab";
    @lato: "Lato";
@@ -133,11 +134,54 @@
    .panel.panel-info {
     border: none;
    }
+   .modal {
+    background-color: rgba(0, 0, 0, 0.6);
+   }
+   .vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+    border-radius: 11px;
+    .close {
+        span {
+            font-size: 34px;
+        }
+        opacity: 0.8!important;
+    }
+    .block-Intro-green {
+        height: auto;
+        padding: 10px 0;
+        margin: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        .boxIntro-Heading {
+            top: 0;
+            left: 0;
+            position: relative;
+            padding: 10px 0;
+            height: auto;
+        }
+    }
+}
    footer {
     @media (min-width: @screen-md-min) {
-        position:fixed;
-        bottom:0;
         height:60px;
+        padding-top: 3px;
     }
     width:100%;
     background-color:#ededed;
@@ -468,11 +512,13 @@
    .txt-A1-terms {
     font-family: @open;
     color:#ffffff;
-    text-align:center;
     margin:25px 0px;
     font-size:14px;
     font-weight:100;
     display:block;
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
    }
    .left-headline, .right-headline {
     display:block;
@@ -483,7 +529,6 @@
    .left-headline span, .right-headline span {
     font-family: @open;
     color:#ffffff;
-    text-transform:uppercase;
     font-size:22px;
     font-weight:bold;
    }
@@ -509,10 +554,11 @@
     padding-bottom:10px;
     font-weight:bold;
     margin-bottom:16px;
-    width:100%;
+    width:50%;
     color:#ffffff;
     border:none;
     border-radius:4px;
+    float: right;
    }
    .btn-facebook:hover, .btn-linkedin:hover, .btn-google:hover {
     background:#00cdcc;
@@ -528,7 +574,7 @@
     input, textarea {
         background:transparent;
         border:1px solid #919191;
-        border-radius:0px;
+        border-radius:5px;
         padding:10px 12px;
         color:#ffffff;
         height:auto;
@@ -708,12 +754,33 @@
             font-weight: bold;
         }
     }
+    &.blocked {
+        cursor: default;
+        opacity: 0.4;
+        background-color: #ddd;
+        .txt-AD2 {
+            color: @dark_gray!important;
+        }
+        .stepIni {
+            background-color: @dark_gray!important;
+            cursor: default;
+        }
+        &:hover {
+            background-color: #ddd;
+            .txt-AD1 {
+                color: @dark_gray;
+            }
+        }
+    }
    }
    .btn.blockStep:hover {
     background: @dark_blue;
     .txt-AD1 {
         color:#fff;
     }
+   }
+   .add_phone_link, .remove_phone_link  {
+    font-size: 15px;
    }
    .nav.nav-tabs.nav-justified {
     font-family: @open;
@@ -809,6 +876,19 @@
         }
     }
    }
+
+   label {
+    &.error {
+        width: 100%;
+        padding: 5px;
+        background-color: @error_color;
+        margin-top: 5px;
+        font-weight: normal!important;
+        font-size: 12px!important;
+        min-height: 0;
+        color: #fff!important;
+    }
+}
 
    ul.phones {
     padding-left: 0px;
