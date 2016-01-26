@@ -167,7 +167,7 @@ function startEmployee(){
     var $collectionHolderB;
     var $collectionHolderW;
     $("#toHide").children().hide();
-    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
+    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Agregar Beneficio</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
     // Get the ul that holds the collection of benefits
     $collectionHolderB = $('ul.benefits');
@@ -395,8 +395,8 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">Eliminar Campo</a>');
-    $tagFormLi.append($removeFormA);
+    var $removeFormA = $('<a href="#">Eliminar Beneficio</a>');
+    $tagFormLi.prepend($removeFormA);
 
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL

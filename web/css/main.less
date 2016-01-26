@@ -14,6 +14,7 @@
    @open: "Open Sans";
    @roboto: "Roboto Slab";
    @lato: "Lato";
+   @color_boton: #ffc107;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -719,12 +720,12 @@
     background-image: none;
     background: transparent;
     border: 1px solid @gray;
-    border-radius: 0px;
-    box-shadow: none;
+    border-radius: 2px;
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 5px!important;
     text-shadow: none;
     color: @gray;
+     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)!important;
 
     
     .txt-AD0 img {
@@ -734,9 +735,10 @@
         font-family: @open;
         font-size: 24px;
         font-weight: bold;
-        text-transform: uppercase;
+        text-transform: initial;
         color: @dark_gray;
         white-space: normal;
+        margin-top: 15px;
         p {
             font-size: 14px;
             font-family: @lato;
@@ -747,8 +749,9 @@
     .txt-AD2 {
         font-family: @roboto;
         color: @blue;
-        font-size: 60px;
+        font-size: 45px;
         font-weight: bold;
+        margin-top: 11px;
     }
     .txt-AD2 min {
         font-size: 14px;
@@ -761,11 +764,12 @@
     .txt-AD3 {
         margin-top: 25px;
         .btn.stepIni {
-            background: @blue;
+            background: @color_boton;
             color: #fff;
             font-family: @open;
             font-size: 16px;
             font-weight: bold;
+            box-shadow: none!important;
         }
     }
     &.complete {
@@ -775,7 +779,7 @@
         background: 0 0;
         border: 1px solid #919191;
         border-radius: 0;
-        box-shadow: none;
+        box-shadow: none!important;
         margin-bottom: 20px;
         padding: 15px;
         text-shadow: none;
@@ -785,7 +789,7 @@
                 font-family: "Open Sans";
                 font-size: 24px;
                 font-weight: 700;
-                text-transform: uppercase;
+                text-transform: initial;
                 color: #fff;
                 white-space: normal;
                 p {
@@ -815,10 +819,7 @@
     }
    }
    .btn.blockStep:hover {
-    background: @dark_blue;
-    .txt-AD1 {
-        color:#fff;
-    }
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)!important;
    }
    .add_phone_link, .remove_phone_link  {
     font-size: 15px;
@@ -1161,8 +1162,28 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
         margin-left: 20%;
     }
 }
-.btn {
+.btn-symplifica {
     text-transform: capitalize;
+    background-color: @color_boton;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: #fff;
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: #fff;
+    }
+    &:hover {
+        color: #fff;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    &:focus {
+        color: #fff;
+        outline: none!important;
+    }
 }
 
 .navbar {

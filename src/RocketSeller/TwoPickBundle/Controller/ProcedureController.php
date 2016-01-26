@@ -32,13 +32,14 @@ class ProcedureController extends Controller
     	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array('procedure'=>$procedure));
 
     }
+
     public function procedureAction($employerId,$idProcedureType)
     {
     	$em = $this->getDoctrine()->getManager();
     	$em2 = $this->getDoctrine()->getManager();
     	$employerSearch = $this->loadClassById($employerId,"Employer");
     	$procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
-    	$employerHasEmployees = $employerSearch->getEmployerHasEmployees();   	
+    	$employerHasEmployees = $employerSearch->getEmployerHasEmployees();
     	if ($procedureType->getName() == "Registro empleador y empleados") {
 			$procedure = new RealProcedure();
 			$procedure->setCreatedAt(new \DateTime());
@@ -114,6 +115,9 @@ class ProcedureController extends Controller
 		             	$procedure->addAction($action);
 		        }
          	}
+			$em2->flush();
+    	}else{
+    		$em2->remove($procedure);
 			$em2->flush();
     	}
     	return true;
@@ -242,8 +246,8 @@ class ProcedureController extends Controller
      */
     public function testValidateAction()
     {
-    		$id_employer =20;
-    		$id_procedure_type = 2;
+    		$id_employer =21;
+    		$id_procedure_type = 3;
     		$priority = 1;
     		$id_user = 36;
     		$id_contrato = 1; //preguntar para que el contrato?

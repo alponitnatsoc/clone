@@ -149,9 +149,6 @@ show_form_entity:
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
     requirements:
         id:     \d+
-inactive_user:
-    path: /activar-suscripcion
-    defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
 edit_profile:
     path:      /register/edit/{step}
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, step: 0 }
@@ -312,3 +309,9 @@ help_detail:
 subscription_choices:
     path:     /subscription
     defaults: { _controller: RocketSellerTwoPickBundle:Default:subscriptionChoices }
+activate_subscription:
+    path: /activar-suscripcion
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
+inactive_user:
+    path: /suscripcion-inactiva
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:suscripcionInactiva }
