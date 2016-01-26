@@ -121,7 +121,6 @@ class EmployeeRestController extends FOSRestController
 
         //check if the Pay Method Ids are valid: Bank payType and AccountType
 
-
         if ($paramFetcher->get('bankId')) {
             /** @var Bank $tempBank */
             $tempBank = $bankRepo->find($paramFetcher->get('bankId'));
