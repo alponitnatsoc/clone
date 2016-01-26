@@ -17,9 +17,17 @@ class LoadPersonData extends AbstractFixture implements OrderedFixtureInterface
         $personAdmin->setLastName1('Gaviria');        
 
         $manager->persist($personAdmin);
+
+        $personBackOffice = new Person();
+        $personBackOffice->setNames('Back');
+        $personBackOffice->setLastName1('Office');        
+
+        $manager->persist($personBackOffice);
+        
         $manager->flush();
 
         $this->addReference('admin-person', $personAdmin);
+        $this->addReference('back-office-person', $personBackOffice);
     }
     public function getOrder()
     {
