@@ -38,6 +38,17 @@
                 f.parentNode.insertBefore(j, f);
             })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');</script>
         <!-- End Google Tag Manager -->
+        {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+            <nav class="navbar navbar-inverse navbar-fixed-top interna" role="navigation">
+                        <div class="row-fluid up-Help-Phone">
+                            <div class="container">
+                                <div class="txthelp">
+                                    <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá¡ 411-2233</span>
+                                </div>
+                            </div>
+                        </div>
+            </nav>
+        {% endif %}
         {% block header %}
             <!--[if lt IE 8]>
                 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -140,6 +151,9 @@
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_help') }}">Ayuda</a>
+                                    </div>
+                                    <div class="well well-lg">
+                                        <a href="{{ path('show_help') }}">Hola Mundo</a>
                                     </div>
 
                                 </div>
@@ -355,7 +369,6 @@
 
         </script>
         <!-- End Ajax scripts -->
-
         <!-- begin olark code -->
         <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark || (function (c) {
                 var f = window, d = document, l = f.location.protocol == "https:" ? "https:" : "http:", z = c.name, r = "load";
@@ -426,7 +439,10 @@
             })({
                 loader: "static.olark.com/jsclient/loader0.js", name: "olark", methods: ["configure", "extend", "declare", "identify"]});
             /* custom configuration goes here (www.olark.com/documentation) */
-            olark.identify('2239-144-10-4926');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
+            olark.identify('2239-144-10-4926');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contáctanos" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
+            <script type="text/javascript">
+                olark.configure("locale.unavailable_title", "Contáctanos");
+            </script>
         <!-- end olark code -->
     {% endblock %}
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
@@ -436,7 +452,7 @@
                     <div class="modal-body" style="padding: 0">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                            <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <img src="/img/logo-claro.png" /></div>
+                            <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <br /><img src="/img/logo-claro.png" /></div>
                         </div>
                         <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                             <div class="col-xs-12">

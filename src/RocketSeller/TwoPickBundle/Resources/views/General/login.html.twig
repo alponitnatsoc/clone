@@ -3,7 +3,7 @@
 	{% set last_username = "" %}
 {% endif %}
 <div class="row">
-	<div class="col-md-6" style="border-left:1px solid #ccc;height:160px">
+	<div class="col-md-6" style="border-left:1px solid #ccc; margin-bottom: 15px;">
 		{% if error is defined %}
 			{% if error %}
 			    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>

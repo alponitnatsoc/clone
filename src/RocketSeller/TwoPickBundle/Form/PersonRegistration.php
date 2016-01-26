@@ -95,7 +95,7 @@ class PersonRegistration extends AbstractType
             ))
             ->add('employer', new EmployerRegistration())
             ->add('save', 'submit', array(
-                'label' => 'Create'
+                'label' => 'Guardar y continuar'
             ));
     }
 

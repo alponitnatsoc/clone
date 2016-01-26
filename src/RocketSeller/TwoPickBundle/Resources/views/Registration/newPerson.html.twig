@@ -24,8 +24,19 @@
                 color: #fff;
                 white-space: normal;
             }
+
+            .blockStep2 .txt-AD1 p {
+                font-size: 14px;
+                font-family: @lato;
+                font-weight: 100;
+                margin-bottom: 0px;
+            }
         </style>
     {% endblock %}
+    <div class="col-sm-12 col-xs-12 block-Data">
+        <h1>Configuración inicial</h1>
+        <span>Para obtener el mayor beneficio posible de nuestra herramienta, requerimos contar con su información como empleador, de sus empleados y lo referente a la afiliación a las administradoras de salud, pensión, riesgos laborales y Caja de Compensación Familiar.</span>
+    </div>
     <div id='' class='col-sm-12 col-xs-12 align-Resp'>
         <div id='' class='col-sm-12 col-xs-12 blockStep2'>
             <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
@@ -33,6 +44,7 @@
             </div>
             <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
                 <div id='' class='text-left' >
+                    <p>Paso 1 de 3</p>
                     DATOS DEL EMPLEADOR
                 </div>
             </div>
@@ -91,8 +103,8 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <div class="col-sm-6 col-sm-push-6">
-                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
+                    <div class="col-sm-6 col-sm-push-3">
+                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext">Siguiente</a>
                     </div>
                 </div>
 
@@ -121,10 +133,10 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <div class="col-xs-6">
-                        <a class="btn btn-primary btnPrevious" style="width: 100%">< Anterior</a>
+                        <a class="btn btn-primary btnPrevious">Anterior</a>
                     </div>
                     <div class="col-xs-6">
-                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="width: 100%">Siguiente ></a>
+                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="min-width: 75%">Siguiente</a>
                     </div>
                 </div>
 
@@ -134,7 +146,7 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span>Corresponden a los puntos donde laborará o dependerá cada empleado.Los campos marcados con * son obligatorios.</span>
                 </div>
-                <div class="col-sm-12 col-xs-12 blockUpData">
+                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                     <div class="col-sm-12 col-xs-12">
                         {{ form_row(form.sameWorkHouse) }}
                     </div>
@@ -147,24 +159,26 @@
          {% endfilter %} "  style="list-style: none">
                     {% for workplace in form.workplaces %}
                         <li id="workSpace_{{loop.index}}" class="workSpaceLi">
-                            <div class="col-sm-12 col-xs-12" style="border-bottom: 1px solid #000;">
-                                <div class="col-sm-12 col-xs-12">
-                                    {{ form_row(workplace.id) }}
-                                    {{ form_row(workplace.name) }}
-                                    {{ form_row(workplace.mainAddress) }}
-                                </div>
-                                <div class="col-xs-12 col-md-6">
-                                    {{ form_row(workplace.department) }}
-                                </div>
-                                <div class="col-xs-12 col-md-6">
-                                    {{ form_row(workplace.city) }}
+                            <div class="row">
+                                <div class="col-sm-8 col-sm-push-2 col-xs-12" style="border-bottom: none">
+                                    <div class="col-sm-12 col-xs-12">
+                                        {{ form_row(workplace.id) }}
+                                        {{ form_row(workplace.name) }}
+                                        {{ form_row(workplace.mainAddress) }}
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        {{ form_row(workplace.department) }}
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        {{ form_row(workplace.city) }}
+                                    </div>
                                 </div>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious">< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                    <a class="btn btn-primary btnPrevious">Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
                 </div>
             </div>
         </div>

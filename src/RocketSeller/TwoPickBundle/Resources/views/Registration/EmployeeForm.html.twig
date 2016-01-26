@@ -94,19 +94,17 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
                     <div class="col-sm-4 col-xs-12">
+                        <img src="/img/documentNumber.png">
+                        {{ form_row(form.person.names) }}
+                        
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
                         <img src="/img/documentType.png">
                         {{ form_row(form.person.documentType) }}
                     </div>
                     <div class="col-sm-4 col-xs-12">
                         <img src="/img/documentNumber.png">
                         {{ form_row(form.person.document) }}
-                    </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentNumber.png">
-                        {{ form_row(form.person.lastName1) }}
-                    </div>
-                    <div class="col-sm-12 col-xs-12 center">
-                        <a id="btn-search" href="" class="btn btn-primary btnNext" >Consultar ></a>
                     </div>
                 </div>
                 <!-- Modal TI -->
@@ -128,7 +126,7 @@
                 </div>
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.names) }}
+                        {{ form_row(form.person.lastName1) }}
                         {{ form_row(form.person.lastName2) }}
                     </div>
                     <div class="col-sm-6 col-xs-12">
@@ -162,6 +160,10 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-6 col-xs-12">
                         {{ form_row(form.person.mainAddress) }}
+                        {{ form_row(form.person.department) }}
+                        {{ form_row(form.personExtra.email) }}
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
                         <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
                             {% for phone in form.person.phones %}
                                 <li id="phone_{{loop.index}}" class="phoneLi">
@@ -171,16 +173,14 @@
                             {% endfor %}
                             <!--li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li-->
                         </ul>
-                    </div>
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.department) }}
                         {{ form_row(form.person.city) }}
-                        {{ form_row(form.personExtra.email) }}
                     </div>
                 </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                <div class="col-xs-6 text-right">
+                    <a class="btn btn-primary btnPrevious" >Anterior</a>
+                </div>
+                <div class="col-xs-6">
+                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" style="min-width: 75%">Siguiente</a>
                 </div>
             </div>
 
@@ -188,17 +188,14 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
                 </div>
-                <div class="col-sm-12 col-xs-12 blockUpData">
+                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                     <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentType.png">
                         {{ form_row(form.employeeHasEmployers.employeeType) }}
                     </div>
                     <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentNumber.png">
                         {{ form_row(form.employeeHasEmployers.contractType) }}
                     </div>
                     <div class="col-sm-4 col-xs-12">
-                        <img src="/img/lastName.png">
                         {{ form_row(form.employeeHasEmployers.timeCommitment) }}
                     </div>
                 </div>
@@ -227,9 +224,17 @@
                 <div class="col-sm-12 col-xs-12">
                     <div class="col-sm-8 col-xs-12">
                         {{ form_row(form.employeeHasEmployers.position) }}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                {{ form_row(form.employeeHasEmployers.workplaces) }}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form_row(form.employeeHasEmployers.transportAid) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
                         {{ form_row(form.employeeHasEmployers.salary) }}<a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
-                        {{ form_row(form.employeeHasEmployers.workplaces) }}
-                        {{ form_row(form.employeeHasEmployers.transportAid) }}
                     </div>
                 </div>
                 <h2>Beneficios extralegales</h2>

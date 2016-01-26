@@ -5,9 +5,12 @@
 {% block fos_user_content %}
 {% block body %}
     <div class="row-fluid block-Intro-green">
-        <div class="col-sm-2 col-xs-12 boxIntro-Heading"><img src="/img/check-in.png"></div>
-        <div class="col-sm-3 hidden-xs"></div>
-        <div class="col-sm-9 col-xs-12 up-Intro">Su registro finaliz&oacute; con &eacute;xito&#33;</div>
+        <div class="container">
+            <div class="col-sm-4 col-md-3">
+                <div class="boxIntro-Heading"><img src="/img/check-in.png"></div>
+            </div>
+            <div class="col-sm-8 col-md-9 col-xs-12 up-Intro">Su registro finaliz&oacute; con &eacute;xito&#33;</div>
+        </div>
     </div>
     <div class="container topArea">
         <div class="col-sm-8 col-sm-offset-3 contenMessage">
@@ -90,7 +93,7 @@
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 center">
-            <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">SIGUIENTE ></a></p>
+            <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">Siguiente</a></p>
         </div>
     </div>
     <div class="container bottomArea" style="display:none">
@@ -128,7 +131,7 @@
                 </div>
             </div>
             <div class="col-sm-12 col-xs-12 center">
-                <a href="{{ path('ajax') }}" class="btn btn-default" role="button">ENTENDIDO ></a>
+                <a href="{{ path('ajax') }}" class="btn btn-default" role="button">Entendido</a>
             </div>
         </div>
     </div>
