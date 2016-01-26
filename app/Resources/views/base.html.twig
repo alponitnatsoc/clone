@@ -259,7 +259,7 @@
 
             jQuery(document).ready(function () {
                 if (!jsLoader(location.href)) {
-                    $(".body-container a").on("click", function (e) {
+                    $("#main").find("a").not(".notAjax").on("click", function (e) {
                         e.preventDefault();
                         var href = $(this).attr('href');
                         history.pushState({}, '', href);
