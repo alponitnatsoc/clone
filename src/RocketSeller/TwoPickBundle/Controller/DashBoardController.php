@@ -60,7 +60,7 @@ class DashBoardController extends Controller
 
         $step1 = array(
             'url' => $this->generateUrl('edit_profile'),
-            'name' => "Datos del empleador",
+            'name' => "Mis datos como empleador",
             'state' => $stateRegister,
             'paso' => 1,
             'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
@@ -70,7 +70,7 @@ class DashBoardController extends Controller
         if ($stateEmployees == 100) {
             $step2 = array(
                 'url' => $this->generateUrl('manage_employees'),
-                'name' => "Datos de los empleados",
+                'name' => "Datos de mis empleados",
                 'state' => $stateEmployees,
                 'paso' => 2,
                 'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
@@ -95,7 +95,7 @@ class DashBoardController extends Controller
 
         $step4 = array(
             'url' => $stateEmployees!=100 ?"":$this->generateUrl('matrix_choose'),
-            'name' => "Finalizar proceso",
+            'name' => "Datos y documentos para la afiliación",
             'paso' => 3,
             'state' => $stateEmployees,
             'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
