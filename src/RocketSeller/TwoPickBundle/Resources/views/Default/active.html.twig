@@ -1,7 +1,334 @@
 {% extends "::base.html.twig" %}
+{% block title %}Symplifica - Activar Suscripción{% endblock %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css">
+        span{
+            overflow: visible;
+        }
+        .infoFacturacion{
+            text-align: center;
+        }
+        .infoFacturacion label{
+            font-weight: normal;
+        }
+        /*.infoTarjeta input[type="text"] {
+            background-color: #fff;
+            border: 1px solid #e5e5e5;
+            color: #333;
+            display: block;
+            font-size: 18px;
+            height: 32px;
+            padding: 0 5px;
+            width: 275px;
+            -moz-box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+        }*/
+        .infoTarjeta #card_number {
+            background-image: url(public/img/creditCard.png), url(public/img/creditCard.png);
+            background-position: 2px -117px, 233px -55px;
+            background-size: 120px 361px, 120px 361px;
+            background-repeat: no-repeat;
+            padding-left: 54px;
+            /*width: 225px;*/
+        }
+        .infoTarjeta #card_number.visa {
+            background-position: 2px -159px, 260px -61px;
+        }
+        .infoTarjeta #card_number.visa_electron {
+            background-position: 2px -201px, 260px -61px;
+        }
+        .infoTarjeta #card_number.mastercard {
+            background-position: 2px -243px, 260px -61px;
+        }
+        .infoTarjeta #card_number.maestro {
+            background-position: 2px -285px, 260px -61px;
+        }
+        .infoTarjeta #card_number.discover {
+            background-position: 2px -327px, 260px -61px;
+        }
+        .infoTarjeta #card_number.valid.visa {
+            background-position: 2px -159px, 233px -82px;
+        }
+        .infoTarjeta #card_number.valid.visa_electron {
+            background-position: 2px -201px, 233px -82px;
+        }
+        .infoTarjeta #card_number.valid.mastercard {
+            background-position: 2px -243px, 233px -82px;
+        }
+        .infoTarjeta #card_number.valid.maestro {
+            background-position: 2px -285px, 233px -82px;
+        }
+        .infoTarjeta #card_number.valid.discover {
+            background-position: 2px -327px, 233px -82px;
+        }
+        .toHide{
+            display: none;
+        }
+        .blockUpData .radio {
+            width: 50%;
+            display: inline-flex;
+        }
+        .blockUpData label{
+            min-height: 1px;
+        }
+        #pagoMembresiaFormContainer input{
+            color: #919191;
+        }
+        #expiry_date_month, #expiry_date_year, #cvv{
+            width: 70px;
+        }
+        .cvvHelp{
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px black dotted;
+        }
+        .cvvHelp:hover{
+            cursor: pointer;
+        }
+    </style>
+{% endblock stylesheet %}
 {% block fos_user_content %}
-    <div class="alert alert-danger" role="alert" style="display: inline-block;">
-        Tu cuenta se encuentra inactiva.
-        <a href="{{ path('subscription_choices') }}" class="alert-link"> Adquirir suscripción</a>
+
+
+    <div class="row-fluid" id='pagoMembresiaFormContainer'>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div id="infoFacturacion" class="infoFacturacion">
+            <span style="margin: 20px">Ingrese la información de pago. Los campos marcados con * son obligatorios:</span>
+            <div style="margin: 20px">
+                <span>Nombre del titular y dirección de facturación</span>
+                <input type="checkbox" name="chkSameAdress" id="chkSameAdress" value="1" checked/>
+                <label for="chkSameAdress">Los mismos datos del empleador</label>
+                <div name="divSameAdress" id="divSameAdress">
+                    <label style="font-weight: bold;">{{ employer.names ~" "~ employer.lastName1 ~" "~ employer.lastName2  }}</label><br>
+                    <label>{{ employer.mainAddress }}</label><br>
+                    <label>{{ employer.city.name ~", "~ employer.department.name }}</label>
+                </div>
+                <div name="divOtherAdress" id="divOtherAdress" class="toHide">
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: 1px #333 dotted; margin: 10px;">
+                        <div class="col-sm-4 col-xs-12">
+                            <img id="typePerson" src="/img/typePerson.png">
+                            {{ form_row(form.personType, { 'attr': {'class': 'foo'} }) }}
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <img id="documentType" src="/img/documentType.png">
+                            {{ form_row(form.documentType) }}
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <img id="documentNumber" src="/img/documentNumber.png">
+                            {{ form_row(form.document) }}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: 1px #333 dotted; margin: 10px;">                        
+                        <div id="datosNIT" name="datosNIT" class="toHide">
+                            <div class="col-sm-12 col-xs-12">
+                                {{ form_row(form.razonSocial) }}
+                            </div>
+                            <br><span>Datos del administrador de la herramienta</span><br>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.names) }}
+                            {{ form_row(form.lastName1) }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.lastName2) }}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-xs-12 blockUpData">
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.department) }}
+                            {{ form_row(form.city) }}
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            {{ form_row(form.address) }}
+                            {{ form_row(form.phone) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+
+        <div id="infoTarjeta" class="infoTarjeta form-group">
+            <span style="margin: 20px">Información de la tarjeta de crédito:</span>
+            <input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+            <label for="chkSameTCC">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>
+            <div id="divSameTCC">    
+                <select id="paymentMethod" name="paymentMethod" required="required">
+                    <option value="">Seleccione...</option>
+                    {% for paymentMethod in paymentMethods %}
+                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
+                    {% endfor  %}
+                </select>
+            </div>
+            <div id="divOtherTCC" class="col-sm-12 col-xs-12 toHide">
+                <div class="col-sm-12 col-xs-12">
+                    <label>Número tarjeta de crédito*</label><br>
+                    <input type="text" name="card_number" id="card_number" placeholder="1234 5678 9012 3456" required="required">
+                    <select id="cuotas" name="cuotas" required="required">
+                        <option value="1">1</option>
+                        <option value="1">2</option>
+                        <option value="1">3</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    <label>Fecha de vencimiento*</label><br>
+                    <div style="display: inline-block">
+                        <label>Mes</label><br>
+                        <input type="text" name="expiry_date_month" id="expiry_date_month" maxlength="2" placeholder="mm" required="required">
+                    </div>
+                    <div style="display: inline-block">
+                        <label>Año</label><br>
+                        <input type="text" name="expiry_date_year" id="expiry_date_year" maxlength="4" placeholder="yyyy" required="required">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    <label>Código de seguridad</label><br>
+                    <div style="display: inline-block">
+                        <label></label><br>
+                        <input type="text" name="cvv" id="cvv" maxlength="3" placeholder="123" required="required"><div class="cvvHelp">?</div>
+                        <div id="cvvHelp" class="toHide">
+                            Corresponde a los tres dígitos ubicados al respaldo de su tarjeta de crédito
+                            <img src="/img/cvvHelp.png"> 
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+        <div id="codigoReferido" class="codigoReferido form-group">
+            <label>¿Cuenta con algún código de promoción?</label>
+            <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
+            <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código">
+
+        </div>
+        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+        <div id="confirmacionPago" class="confirmacionPago form-group">
+            <label>Confirmación de pago</label>
+        </div>       
+        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+        <a class="btn btn-default" href="{{ path('subscription_choices') }}" > Adquirir suscripción</a>
+
+        {{ form_end(form) }}
     </div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('public/js/jquery.creditCardValidator.js') }}"></script>
+    <script type="text/javascript">
+
+        function addListeners() {
+            $('select').filter(function () {
+                return this.id.match(/department/);
+            }).change(function () {
+                var $department = $(this);
+                // ... retrieve the corresponding form.
+                var $form = $(this).closest('form');
+                // Simulate form data, but only include the selected department value.
+                var data = {};
+                data[$department.attr('name')] = $department.val();
+                var citySelectId = $department.attr("id").replace("_department", "_city");
+                // Submit data via AJAX to the form's action path.
+                $.ajax({
+                    method: "POST",
+                    url: "/api/public/v1/cities",
+                    data: {department: $department.val()}
+                }).done(function (data) {
+                    $('#' + citySelectId).html(
+                            // ... with the returned one from the AJAX response.
+                            jsonToHTML(data)
+                            );
+                });
+
+            });
+        }
+        $(document).ready(function () {
+            $(".cvvHelp").on('click', function () {
+                $("#cvvHelp").toggleClass('toHide');
+            });
+            $("#pago_membresia_personType_0").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#pago_membresia_documentType").html('<option value="" selected="selected">Seleccionar una opción</option><option value="CC">Cedula Ciudadania</option><option value="CE">Cedula Extranjeria</option><option value="TI">Tarjeta de identidad</option>');
+                    $("#datosNIT").addClass('toHide');
+                }
+            });
+            $("#pago_membresia_personType_1").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#pago_membresia_documentType").html('<option value="" selected="selected">Seleccionar una opción</option><option value="NIT">NIT</option>');
+                    $("#datosNIT").removeClass('toHide');
+                }
+            });
+
+            $("#pago_membresia_personType_0").prop('checked', true);
+
+            $("#chkSameAdress").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#divSameAdress").removeClass('toHide');
+                    $("#divOtherAdress").addClass('toHide');
+                } else {
+                    $("#divOtherAdress").removeClass('toHide');
+                    $("#divSameAdress").addClass('toHide');
+                }
+            });
+
+            $("#chkSameTCC").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#divSameTCC").removeClass('toHide');
+                    $("#divOtherTCC").addClass('toHide');
+                } else {
+                    $("#divOtherTCC").removeClass('toHide');
+                    $("#divSameTCC").addClass('toHide');
+                }
+            });
+        });
+        $(function () {
+            $('#card_number').validateCreditCard(function (result) {
+                $(this).removeClass();
+                if (result.card_type == null) {
+                    $('.vertical.maestro').slideUp({
+                        duration: 200
+                    }).animate({
+                        opacity: 0
+                    }, {
+                        queue: false,
+                        duration: 200
+                    });
+                    return;
+                }
+                $(this).addClass(result.card_type.name);
+                if (result.card_type.name === 'maestro') {
+                    $('.vertical.maestro').slideDown({
+                        duration: 200
+                    }).animate({
+                        opacity: 1
+                    }, {
+                        queue: false
+                    });
+                } else {
+                    $('.vertical.maestro').slideUp({
+                        duration: 200
+                    }).animate({
+                        opacity: 0
+                    }, {
+                        queue: false,
+                        duration: 200
+                    });
+                }
+                if (result.valid) {
+                    return $(this).addClass('valid');
+                } else {
+                    return $(this).removeClass('valid');
+                }
+            });
+        });
+    </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 <?php
 
 namespace RocketSeller\TwoPickBundle\Entity;
+
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Person
 {
+
     /**
      * @var integer
      *
@@ -40,26 +42,32 @@ class Person
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $documentType;
+
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $document;
+
     /**
      * @ORM\Column(type="date", nullable=TRUE)
      */
     private $documentExpeditionDate;
+
     /**
      * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $documentExpeditionPlace;
+
     /**
      * @ORM\Column(type="string", length=50, nullable=TRUE)
      */
     private $email;
+
     /**
      * @ORM\Column(type="date", nullable=TRUE)
      */
     private $birthDate;
+
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
@@ -69,6 +77,7 @@ class Person
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     private $neighborhood;
+
     /**
      * @ORM\ManyToOne(targetEntity="Department")
      * @ORM\JoinColumns({
@@ -76,10 +85,12 @@ class Person
      * })
      */
     private $department;
+
     /**
      * @ORM\OneToMany(targetEntity="Phone", mappedBy="personPerson", cascade={"persist"})
      */
     private $phones;
+
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(name="id_city", referencedColumnName="id_city")
@@ -98,7 +109,6 @@ class Person
      */
     private $employee;
 
-
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      * @ORM\OneToMany(targetEntity="\RocketSeller\TwoPickBundle\Entity\Document", mappedBy="personPerson", cascade={"persist"})
@@ -115,7 +125,6 @@ class Person
      */
     private $action;
 
-
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Gallery
      * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", cascade={"persist"}, fetch="LAZY")
@@ -129,6 +138,7 @@ class Person
      * })
      */
     private $birthCountry;
+
     /**
      * @ORM\ManyToOne(targetEntity="Department")
      * @ORM\JoinColumns({
@@ -147,12 +157,16 @@ class Person
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $civilStatus;
+
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $gender;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="BillingAddress", mappedBy="personPerson", cascade={"persist", "remove"})
+     */
+    private $billingAddress;
 
     /**
      * Constructor
@@ -160,6 +174,7 @@ class Person
     public function __construct()
     {
         $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->billingAddress = new \Doctrine\Common\Collections\ArrayCollection();
         $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
         $this->action = new \Doctrine\Common\Collections\ArrayCollection();
@@ -247,9 +262,9 @@ class Person
         return $this->lastName2;
     }
 
-    public function getFullName() {
-        return $this->getNames()." ".$this->getLastName1()." ".$this->getLastName2();
-        
+    public function getFullName()
+    {
+        return $this->getNames() . " " . $this->getLastName1() . " " . $this->getLastName2();
     }
 
     /**
@@ -794,7 +809,7 @@ class Person
     /**
      * Get documentExpeditionPlace
      *
-    string     */
+      string */
     public function getDocumentExpeditionPlace()
     {
         return $this->documentExpeditionPlace;
@@ -823,8 +838,45 @@ class Person
     {
         return $this->gender;
     }
+
     public function __toString()
     {
         return (string) $this->names;
     }
+
+    /**
+     * Add billingAddress
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\BillingAddress $billingAddress
+     *
+     * @return Person
+     */
+    public function addBillingAddress(\RocketSeller\TwoPickBundle\Entity\BillingAddress $billingAddress)
+    {
+        $billingAddress->setPersonPerson($this);
+        $this->billingAddress[] = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * Remove billingAddress
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\BillingAddress $billingAddress
+     */
+    public function removeBillingAddress(\RocketSeller\TwoPickBundle\Entity\BillingAddress $billingAddress)
+    {
+        $this->billingAddress->removeElement($billingAddress);
+    }
+
+    /**
+     * Get billingAddress
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
 }

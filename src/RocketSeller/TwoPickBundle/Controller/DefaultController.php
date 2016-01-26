@@ -3,10 +3,10 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\Type\ContactType;
+use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
+use RocketSeller\TwoPickBundle\Entity\BillingAddress;
 
 class DefaultController extends Controller
 {
@@ -107,7 +107,30 @@ class DefaultController extends Controller
     public function activarSuscripcionAction()
     {
         $user = $this->getUser();
-        return $this->render('RocketSellerTwoPickBundle:Default:active.html.twig');
+        $person = $user->getPersonPerson();
+        $billingAdress = $person->getBillingAddress();
+        $documentNumber = $person->getDocument();
+
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+        $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
+        $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
+            'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format' => 'json')),
+            'method' => 'POST',
+        ));
+
+        return $this->render('RocketSellerTwoPickBundle:Default:active.html.twig', array(
+                    'form' => $form->createView(),
+                    'employer' => $person,
+                    'paymentMethods' => isset($responcePaymentsMethods['payments']) ? $responcePaymentsMethods['payments'] : false,
+                    'billingAdress' => (count($billingAdress) > 0) ? $billingAdress : false
+        ));
+    }
+
+    public function suscripcionInactivaAction()
+    {
+        $user = $this->getUser();
+        return $this->render('RocketSellerTwoPickBundle:Default:inactive.html.twig');
     }
 
     public function introSinVerificarAction()
