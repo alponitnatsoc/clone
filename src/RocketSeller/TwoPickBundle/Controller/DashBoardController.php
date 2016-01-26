@@ -95,7 +95,7 @@ class DashBoardController extends Controller
 
         $step4 = array(
             'url' => $stateEmployees!=100 ?"":$this->generateUrl('matrix_choose'),
-            'name' => "Datos y documentos para la afiliación",
+            'name' => "Finalizar afiliación",
             'paso' => 3,
             'state' => $stateEmployees,
             'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);

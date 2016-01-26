@@ -117,15 +117,15 @@
                                         <span class="icon-bar"></span>
                                         <span class="icon-bar"></span>
                                     </button>
-                                    <a class="navbar-brand sidebar" href="#">
+                                    <a class="navbar-brand sidebar visible-xs" href="#">
                                         <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
                                     </a>
                                 </div>
                                 <div id="navbarSidebar" class="section about navbar-collapse collapse">
-                                    <div class="well well-lg">
+                                    <div class="well well-lg leftColumnLogo">
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
-                                    <div class="well well-lg">
+                                    <div class="well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
                                     </div>
                                     <div class="well well-lg">
@@ -134,26 +134,23 @@
                                     <div class="well well-lg">
                                         <a href="{{ path('manage_employees') }}">Empleados</a>
                                     </div>
-                                    <div class="well well-lg">
-                                        <a href="{{ path('payroll') }}">pago a empleados</a>
+                                    <div class="well well-lg separador">
+                                        <a href="{{ path('payroll') }}">Pago a empleados</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_certificates') }}">Certificados</a>
                                     </div>
-                                    <div class="well well-lg">
+                                    <div class="well well-lg separador">
                                         <a href="">Reportes</a>
                                     </div>
                                     <div class="well well-lg">
-                                        <a href="{{ path('show_calculator_form') }}">calculadora salarial</a>
+                                        <a href="{{ path('show_calculator_form') }}">Calculadora salarial</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="">Configuración</a>
                                     </div>
                                     <div class="well well-lg">
                                         <a href="{{ path('show_help') }}">Ayuda</a>
-                                    </div>
-                                    <div class="well well-lg">
-                                        <a href="{{ path('show_help') }}">Hola Mundo</a>
                                     </div>
 
                                 </div>
@@ -166,7 +163,7 @@
                                         <div class="col-sm-12 col-xs-12 profile-Data">
                                             <div class="col-sm-4 col-xs-11 person">
                                                 <div class="col-sm-12 col-xs-12">
-                                                    <h4>{{app.user.getPersonPerson().getFullName()}}</h4>
+                                                    <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
                                                         <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span> 
                                                     </div>
