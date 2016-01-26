@@ -167,7 +167,9 @@
                                             <div class="col-sm-4 col-xs-11 person">
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getFullName()}}</h4>
-                                                    <span id="logout" onclick="logoutRedirect(this)">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</span>
+                                                    <div class="pull-right">
+                                                        <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span> 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

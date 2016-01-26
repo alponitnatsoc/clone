@@ -167,7 +167,7 @@ function startEmployee(){
     var $collectionHolderB;
     var $collectionHolderW;
     $("#toHide").children().hide();
-    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Add benefit</a>');
+    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Agregar Beneficio</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
     // Get the ul that holds the collection of benefits
     $collectionHolderB = $('ul.benefits');
@@ -240,7 +240,11 @@ function startEmployee(){
         var form =$("form");
         var idsPhones=[],phones=[];
         var mainAddress=$(form).find("input[name='register_employee[person][mainAddress]']");
-        if (!(validator.element(mainAddress))){
+
+        var department = $(form).find("select[name='register_employee[person][department]']");
+        var city = $(form).find("select[name='register_employee[person][city]']");
+
+        if (!(validator.element(mainAddress)&&validator.element(department)&&validator.element(city))){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
@@ -282,6 +286,18 @@ function startEmployee(){
     $('#btn-3').click(function(e){
         e.preventDefault();
         var form =$("form");
+
+        var employeeType = $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']");
+        var contractType = $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']");
+        var timeCommitment = $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']");
+        var position = $(form).find("select[name='register_employee[employeeHasEmployers][position]']");
+        var idWorkplace = $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']");
+
+        if (!(validator.element(employeeType)&&validator.element(contractType)&&validator.element(timeCommitment)&&validator.element(position)&&validator.element(idWorkplace))){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+
         var idsBenef=[],amountBenef=[],periodicityBenef=[], weekWorkableDaysIds=[];
         var flagValid=true;
         var i =0;
@@ -322,19 +338,20 @@ function startEmployee(){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
+
         $.ajax({
             url : $(this).attr('href'),
             type: 'POST',
             data: {
-                employeeType:       $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']").val(),
-                contractType:       $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']").val(),
-                timeCommitment:     $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']").val(),
-                position:           $(form).find("select[name='register_employee[employeeHasEmployers][position]']").val(),
+                employeeType:       employeeType.val(),
+                contractType:       contractType.val(),
+                timeCommitment:     timeCommitment.val(),
+                position:           position.val(),
                 salary:             accounting.unformat(salary.val()),
                 idsBenefits:        idsBenef,
                 amountBenefits:     amountBenef,
                 periodicityBenefits:periodicityBenef,
-                idWorkplace:        $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']").val(),
+                idWorkplace:        idWorkplace.val(),
                 transportAid:       $(form).find("select[name='register_employee[employeeHasEmployers][transportAid]']").val(),
                 benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
                 employeeId:         $(form).find("input[name='register_employee[idEmployee]']").val(),
@@ -378,8 +395,8 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">Eliminar Campo</a>');
-    $tagFormLi.append($removeFormA);
+    var $removeFormA = $('<a href="#">Eliminar Beneficio</a>');
+    $tagFormLi.prepend($removeFormA);
 
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
