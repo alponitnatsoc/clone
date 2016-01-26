@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -30,41 +30,42 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->wealthEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>' '
+                'label'=>' ',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('pension', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->pensionEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>' '
+                'label'=>' ',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('beneficiaries', 'choice', array(
                 'choices' => array(
                     1 => 'Si',
-                    -1 => 'No',
+                    -1 => 'No'
                 ),
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>' '
+                'label'=>' ',
+                'required' => true
             ))
             ->add('idEmployerHasEmployee', 'hidden');
-
-
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee',
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee'
         ));
     }
-    
+
     public function getName()
     {
         return 'pick_entities';
     }
-} 
-?>
+}

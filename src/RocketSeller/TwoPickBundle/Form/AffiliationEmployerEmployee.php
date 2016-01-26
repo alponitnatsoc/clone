@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -36,40 +36,40 @@ class AffiliationEmployerEmployee extends AbstractType
                 'type' => new EntitiesPick($this->wealthEntities,$this->pensionEntities),
                 'allow_add'    => false,
                 'allow_delete' => false,
-                'by_reference' => false,
+                'by_reference' => false
             ))
             ->add('severances', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Caja de Compensación Familiar'
+                'label'=>'Caja de Compensación Familiar*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arlEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Administradora de Riesgos Labolares'
+                'label'=>'Administradora de Riesgos Labolares*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
             ))
             ->add('save', 'submit', array(
-                'label' => 'Save',
+                'label' => 'Save'
             ));
-
-
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employer',
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\Employer'
         ));
     }
-    
+
     public function getName()
     {
         return 'register_social_security';
     }
-} 
-?>
+}

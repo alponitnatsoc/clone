@@ -12,7 +12,7 @@ function startEmployee(){
                 "register_employee[person][names]": "required",
                 "register_employee[person][lastName1]": "required",
                 "register_employee[person][mainAddress]": "required",
-                "register_employee[employeeHasEmployers][salary]":"required",
+                "register_employee[employeeHasEmployers][salary]":"required"
             },
             messages:{
                 "register_employee[person][documentType]": "Por favor Ingrese su tipo de documento",
@@ -20,7 +20,7 @@ function startEmployee(){
                 "register_employee[person][names]": "Por favor Ingrese su nombre",
                 "register_employee[person][lastName1]": "Por favor Ingrese su primer apellido",
                 "register_employee[person][mainAddress]": "Por favor Ingrese una dirección",
-                "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario",
+                "register_employee[employeeHasEmployers][salary]":"Por favor Ingrese un salario"
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function(){
