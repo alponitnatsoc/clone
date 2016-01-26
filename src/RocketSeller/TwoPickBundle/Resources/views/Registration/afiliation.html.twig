@@ -33,9 +33,9 @@
         {{ form_start(form) }}
 
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" href="#employeeEntities">Entidades de tus empleados</a></li>
-            <li><a data-toggle="tab" href="#employerEntities">Tus Entidades</a></li>
-            <li><a data-toggle="tab" href="#docsMatrix">Documentos requeridos</a></li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Entidades de tus empleados</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employerEntities">Tus Entidades</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#docsMatrix">Documentos requeridos</a></li>
         </ul>
 
         <div class="tab-content">

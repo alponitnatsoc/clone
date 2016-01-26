@@ -18,14 +18,14 @@
 {% endblock %}
 <ul class="nav nav-tabs">
   <li class="active col-md-6"><a data-toggle="tab" href="#home">Datos basicos y de contacto</a></li>
-  <li class="col-md-6"><a data-toggle="tab" href="#menu1">Lugar(es) donde trabajan los empleados</a></li>  
+  <li class="col-md-6"><a data-toggle="tab" href="#menu1">Lugar(es) donde trabajan los empleados</a></li>
 </ul>
 
 <div class="tab-content">
-  <div id="home" class="tab-pane fade in active">		
+  <div id="home" class="tab-pane fade in active">
 		<div class="container-tab1 col-md-12">
 			<div class="top-container">
-				<h3 class="col-md-12">{{ user.personPerson.names }} {{ user.personPerson.lastName1 }}</h3>				
+				<h3 class="col-md-12">{{ user.personPerson.names }} {{ user.personPerson.lastName1 }}</h3>
 				<p>{{ user.personPerson.document}}</p>
 			</div>
 			<div class="bottom-container col-md-12">
@@ -37,7 +37,7 @@
 					<p class="col-md-12">{{ user.personPerson.mainAddress}} </p>
 
 					<p class="col-md-12 label-title">Departamento:</p>
-					<p class="col-md-12">{{ user.personPerson.department}} </p>			    	
+					<p class="col-md-12">{{ user.personPerson.department}} </p>
 				</div>
 				<div class="right-panel col-md-6">
 					<p class="col-md-12 label-title">Ciudad:</p>
@@ -47,12 +47,12 @@
 						<p class="col-md-12 label-title">Telefonos:</p>
 						{% for phone in phones %}
 							<p class="col-md-12">{{ phone.phoneNumber}} </p>
-						{% endfor %}										
+						{% endfor %}
 					<p class="col-md-12 label-title">Codigo para compartir:</p>
-					<p class="col-md-12">{{ user.code }} <a btn class="btn btn-default" href="{{ path('invitation') }}" class="nav-link">Referir</a></p>					
-				</div>				  			   
-			</div>			
-		</div>	  
+					<p class="col-md-12">{{ user.code }} <a btn class="btn btn-default" href="{{ path('invitation') }}" class="nav-link">Referir</a></p>
+				</div>
+			</div>
+		</div>
   </div>
   <div id="menu1" class="tab-pane fade">
   	{% set workplaces = employer.workplaces %}
@@ -61,7 +61,7 @@
   		{% endfor %}
   </div>
   <div class="button-bottom">
-	<a btn class="btn btn-default" href="/pages?redirector=/register/edit" class="nav-link">Editar datos</a>  	
+	<a btn class="btn btn-default" href="/pages?redirector=/register/edit" class="nav-link">Editar datos</a>
   </div>
 </div>
 

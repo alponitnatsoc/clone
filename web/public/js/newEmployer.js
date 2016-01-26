@@ -12,6 +12,7 @@ function startEmployer(){
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
                 "register_employer[person][mainAddress]": "required",
+                "register_employer[sameWorkHouse]": "required"
             },
             messages:{
                 "register_employer[person][documentType]": "Por favor seleccione el tipo de documento",
@@ -19,6 +20,7 @@ function startEmployer(){
                 "register_employer[person][names]": "Por favor Ingrese su nombre",
                 "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
                 "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
+                "register_employer[sameWorkHouse]": "Por favor seleccione una opción"
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function(){
@@ -261,6 +263,14 @@ function startEmployer(){
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
+        i=0;
+
+        var sameWorkHouse = $(form).find("input[name='register_employer[sameWorkHouse]']");
+        if (!(validator.element(sameWorkHouse))){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+
         $('#createdModal').modal('toggle');
         $.ajax({
             url : form.attr('action'),

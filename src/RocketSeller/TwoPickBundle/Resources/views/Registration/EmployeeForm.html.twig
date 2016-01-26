@@ -50,11 +50,11 @@
 
             }
         </style>
-    {% endblock %} 
+    {% endblock %}
     <div id='' class='col-sm-12 col-xs-12 align-Resp'>
         <div id='' class='col-sm-12 col-xs-12 blockStep2'>
             <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
-                <img src="/img/employ.png">                 
+                <img src="/img/employ.png">
             </div>
             <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
                 <div id='' class='text-left' >
@@ -81,10 +81,10 @@
         {{ form_start(form) }}
 
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" href="#basicData">Datos básicos</a></li>
-            <li><a data-toggle="tab" href="#contactData">Datos de Contacto</a></li>
-            <li><a data-toggle="tab" href="#contractData">Información del contrato</a></li>
-            <li><a data-toggle="tab" href="#paymentMethod">Método de pago</a></li>
+            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
+            <li><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+            <li><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
         </ul>
 
         <div class="tab-content">
@@ -217,7 +217,7 @@
                             {{ form_row(form.employeeHasEmployers.workableDaysMonth) }}
                         </div>
                         <div class="col-sm-9 worktime">
-                            {{ form_row(form.employeeHasEmployers.workTimeStart) }} 
+                            {{ form_row(form.employeeHasEmployers.workTimeStart) }}
                             <div style="line-height: 100px;">A</div>
                             <div class="worktimeEnd">{{ form_row(form.employeeHasEmployers.workTimeEnd) }}</div>
                         </div>
@@ -290,10 +290,10 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="contractDownload(this)">Descargar Contrato</button>
                             </div>
-                            <script>                  
-                                    function contractDownload() {    
-                                        var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();                  
-                                        window.open('/contractLayout/'+value);                                         
+                            <script>
+                                    function contractDownload() {
+                                        var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();
+                                        window.open('/contractLayout/'+value);
                                     }
                             </script>
                         </div>

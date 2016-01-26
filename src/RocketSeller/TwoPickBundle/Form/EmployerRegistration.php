@@ -42,8 +42,10 @@ class EmployerRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'label' => '¿Su dirección principal es la misma donde trabajará(n)?',
-                'property_path' => 'sameWorkHouse'))
+                'label' => '¿Su dirección principal es la misma donde trabajará(n)?*',
+                'property_path' => 'sameWorkHouse',
+                'required' => true
+            ))
             ->add('workplaces', 'collection', array(
                 'type' => new WorkPlaceRegistration(),
                 'allow_add'    => true,

@@ -31,7 +31,7 @@ class PersonEmployeeRegistration extends AbstractType
             ->setMethod($options['method'])
             ->add('idEmployee', 'hidden', array(
                 'data' => $this->idEmployee,
-                'mapped' => false,
+                'mapped' => false
             ))
             ->add('idContract', 'hidden', array(
                 'mapped' => false

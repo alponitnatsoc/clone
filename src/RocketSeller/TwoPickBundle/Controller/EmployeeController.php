@@ -156,7 +156,7 @@ class EmployeeController extends Controller
         return $configData;
     }
 
-    public function matrixChooseAction()
+    public function matrixChooseAction($tab)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -239,7 +239,8 @@ class EmployeeController extends Controller
                     'numberOfEmployees' => $employerHasEmployees->count(),
                     'employerName' => $employerFullName,
                     'employerDocument' => $personEmployer->getDocument(),
-                    'employerDocumentType' => $personEmployer->getDocumentType())
+                    'employerDocumentType' => $personEmployer->getDocumentType(),
+                    'tab' =>    $tab)
         );
     }
 
