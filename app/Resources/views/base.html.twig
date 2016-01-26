@@ -40,13 +40,13 @@
         <!-- End Google Tag Manager -->
         {% if is_granted("IS_AUTHENTICATED_FULLY") %}
             <nav class="navbar navbar-inverse navbar-fixed-top interna" role="navigation">
-                        <div class="row-fluid up-Help-Phone">
-                            <div class="container">
-                                <div class="txthelp">
-                                    <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá¡ 411-2233</span>
-                                </div>
-                            </div>
+                <div class="row-fluid up-Help-Phone">
+                    <div class="container">
+                        <div class="txthelp">
+                            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá¡ 411-2233</span>
                         </div>
+                    </div>
+                </div>
             </nav>
         {% endif %}
         {% block header %}
@@ -71,9 +71,9 @@
                                 <span class="icon-bar"></span>
                             </button>
                             <a class="navbar-brand" href="#">
-                            {% if not is_granted("IS_AUTHENTICATED_FULLY") %}
-                                <img src="{{ asset('img/logo.png') }}" alt="Sympifica" style="display: block!important"/>
-                            {% endif %}
+                                {% if not is_granted("IS_AUTHENTICATED_FULLY") %}
+                                    <img src="{{ asset('img/logo.png') }}" alt="Sympifica" style="display: block!important"/>
+                                {% endif %}
                             </a>
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
@@ -256,116 +256,119 @@
         <!-- End Google Analytics -->
         <!-- Begin Ajax scripts -->
         <script>
-            var state="/old";
+            var state = "/old";
 
-            jQuery(document).ready(function() {
-                if(!jsLoader(location.href)){
-                    $(".body-container a").on("click",function(e){
+            jQuery(document).ready(function () {
+                if (!jsLoader(location.href)) {
+                    $(".body-container a").on("click", function (e) {
                         e.preventDefault();
-                        var href=$(this).attr('href');
+                        var href = $(this).attr('href');
                         history.pushState({}, '', href);
                         sendAjax(href);
                     });
-                }else{
-                    $(".body-container a:not(#main a)").on("click",function(e){
+                } else {
+                    $(".body-container a:not(#main a)").on("click", function (e) {
                         e.preventDefault();
-                        var href=$(this).attr('href');
+                        var href = $(this).attr('href');
                         history.pushState({}, '', href);
                         sendAjax(href);
                     });
                 }
-                {# ajax que maneja los requests #}
-                $(window).on("popstate", function(e) {
-                    sendAjax(location.href);
-                });
-                // Simple ajax url manager
-                var redirector = getParameterByName('redirector');
-                //console.log(redirector);
-                if (redirector) {
-                    sendAjax(redirector);
-                }
-            });
-
-            function sendAjax (url, form) {
-
-                $.ajax({
-                    url : url,
-                    type: $(form).attr('method'),
-                    data: $(form).serializeArray(),
-                    statusCode: {
-                        500: function() {
-                            alert("Lo sentimos pero estamos teniendo problemas con esta funcionalidad, por favor intenta de nuevo más tarde.");
-                        }
+            {# ajax que maneja los requests #}
+                    $(window).on("popstate", function (e) {
+                        sendAjax(location.href);
+                    });
+                    // Simple ajax url manager
+                    var redirector = getParameterByName('redirector');
+                    //console.log(redirector);
+                    if (redirector) {
+                        sendAjax(redirector);
                     }
-                }).done(function(data) {
-                    if(data["url"]!=null){
-                        console.log(data["url"]);
-                        sendAjax(data["url"]);
-                    }else{
-                        $('#main').replaceWith(
-                                // ... with the returned one from the AJAX response.
-                                $(data).find('#main'));
-                        addClick();
-                        if (!jsLoader(url)) {
-                            addSumbit();
+                });
+
+                function sendAjax(url, form) {
+
+                    $.ajax({
+                        url: url,
+                        type: $(form).attr('method'),
+                        data: $(form).serializeArray(),
+                        statusCode: {
+                            500: function () {
+                                alert("Lo sentimos pero estamos teniendo problemas con esta funcionalidad, por favor intenta de nuevo más tarde.");
+                            }
                         }
-                        // This thing is not working, we should check this later
-                        //var currentPage = document.location;
-                        //document.location = currentPage + "?redirector=" + url;
-                    }
-                }).fail(function( jqXHR, textStatus, errorThrown ) {
-                    console.log(jqXHR);
-                    alert(jqXHR+", Lo sentimos, en este momento estamos teniendo problemas con nuestro sistema, nuestro departamento técnico ya fué informado de este evvento. --" + textStatus+" " + errorThrown);
-                });
-            }
-            function addClick () {
-                $("#main").find(".nav-link").on("click",function(e){
-                    e.preventDefault();
-                    var href=$(this).attr('href');
-                    history.pushState({}, '', href);
-                    sendAjax(href);
-                });
-            }
-            function addSumbit () {
-                $("form").on("submit",function(e){
-                    e.preventDefault();
-                    sendAjax($(this).attr('action'), $(this));
-                });
-            }
-            function jsLoader(url){
-                if(url.indexOf("{{ path('edit_profile') }}")!==-1){
-                    $.getScript( "{{ asset('public/js/newEmployer.js') }}").done(function(){
-                        startEmployer();
-                    })
-
-                    return true;
-                }else if(url.indexOf("{{ path('register_employee') }}")!==-1){
-                    $.getScript( "{{ asset('public/js/newEmployee.js') }}").done(function(){
-                        startEmployee();
-                    })
-
-                    return true;
-                }else if(url.indexOf("{{ path('show_calculator_form') }}")!==-1){
-                    $.getScript( "{{ asset('public/js/calculator.js') }}").done(function(){
-                        calculatorCalculate();
-                    })
-
-                    return true;
-                }else if(url.indexOf("{{ path('matrix_choose') }}")!==-1){
-                    $.getScript( "{{ asset('public/js/afiliation.js') }}").done(function(){
-                        startAfiliation();
-                    })
-
-                    return true;
+                    }).done(function (data) {
+                        if (data["url"] != null) {
+                            console.log(data["url"]);
+                            sendAjax(data["url"]);
+                        } else {
+                            $('#main').replaceWith(
+                                    // ... with the returned one from the AJAX response.
+                                    $(data).find('#main'));
+                            addClick();
+                            if (!jsLoader(url)) {
+                                addSumbit();
+                            }
+                            // This thing is not working, we should check this later
+                            //var currentPage = document.location;
+                            //document.location = currentPage + "?redirector=" + url;
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        alert(jqXHR + ", Lo sentimos, en este momento estamos teniendo problemas con nuestro sistema, nuestro departamento técnico ya fué informado de este evvento. --" + textStatus + " " + errorThrown);
+                    });
                 }
-                return false;
-            }
-            function getParameterByName(name) {
-                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                        results = regex.exec(location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            }
+                function addClick() {
+                    $("#main").find(".nav-link").on("click", function (e) {
+                        e.preventDefault();
+                        var href = $(this).attr('href');
+                        history.pushState({}, '', href);
+                        sendAjax(href);
+                    });
+                }
+                function addSumbit() {
+                    $("form").on("submit", function (e) {
+                        e.preventDefault();
+                        sendAjax($(this).attr('action'), $(this));
+                    });
+                }
+                function jsLoader(url) {
+                    if (typeof url !== 'undefined') {
+                        if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/newEmployer.js') }}").done(function () {
+                                startEmployer();
+                            })
+
+                            return true;
+                        } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
+                                startEmployee();
+                            })
+
+                            return true;
+                        } else if (url.indexOf("{{ path('show_calculator_form') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
+                                calculatorCalculate();
+                            })
+
+                            return true;
+                        } else if (url.indexOf("{{ path('matrix_choose') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/afiliation.js') }}").done(function () {
+                                startAfiliation();
+                            })
+
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                }
+                function getParameterByName(name) {
+                    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                            results = regex.exec(location.search);
+                    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+                }
 
         </script>
         <!-- End Ajax scripts -->
@@ -440,9 +443,9 @@
                 loader: "static.olark.com/jsclient/loader0.js", name: "olark", methods: ["configure", "extend", "declare", "identify"]});
             /* custom configuration goes here (www.olark.com/documentation) */
             olark.identify('2239-144-10-4926');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contáctanos" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
-            <script type="text/javascript">
-                olark.configure("locale.unavailable_title", "Contáctanos");
-            </script>
+        <script type="text/javascript">
+            olark.configure("locale.unavailable_title", "Contáctanos");
+        </script>
         <!-- end olark code -->
     {% endblock %}
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
