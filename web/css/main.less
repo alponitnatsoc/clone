@@ -15,7 +15,8 @@
    @roboto: "Roboto Slab";
    @lato: "Lato";
    @color_boton: #ffc107;
-   @fondo: #fdfded;
+   @fondo: #fdfdf8;
+   @lightGrayBars: #efefef;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -121,7 +122,7 @@
     color: #fff;
    }
    .up-Help-Phone {
-    background:#efefef;
+    background:@lightGrayBars;
     padding:5px 0px;
     .txthelp {
         text-align:right;
@@ -186,7 +187,7 @@
     }
 }
    footer {
-    position: fixed;
+    background-color:@lightGrayBars;
     bottom: 0;
     @media (min-width: @screen-md-min) {
         height:60px;
@@ -296,7 +297,6 @@
         height: 150px;
         padding: 28px 0px;
         img {
-            border: 2px solid @light_blue;
         }
     }
    }
@@ -635,8 +635,9 @@
    #sidebar {
     &+#main {
         border-left: 1px solid #e9e9e9;
-         box-shadow: 2px 0px 3px rgba(0,0,0,0.12) inset;
+        box-shadow: 2px 0px 3px rgba(0,0,0,0.12) inset;
         background-color: @fondo;
+        min-height: 685px;
     }
 
     .leftColumnLogo {
