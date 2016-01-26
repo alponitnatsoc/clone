@@ -29,7 +29,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'employeeContractTypeEmployeeContractType',
-                'label'=>'Tipo de empleado',
+                'label'=>'Tipo de empleado*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -39,7 +39,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
-                'label'=>'Tipo de contrato',
+                'label'=>'Tipo de contrato*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -49,7 +49,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'Dedicación de tiempo',
+                'label'=>'Dedicación de tiempo*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -69,7 +69,7 @@ class ContractRegistration extends AbstractType
                 ),
                 'currency' => 'COP',
                 'property_path' => 'salary',
-                'label'=>'¿Cuánto le paga a su empleado mensualmente?',
+                'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
                 "attr" => array(
                     'onclick' => 'formatMoney($(this))'
                 )
@@ -119,7 +119,7 @@ class ContractRegistration extends AbstractType
                 'choices' => range(1,30),
                 'multiple' => false,
                 'expanded' => false,
-                'label'=>'Días laborales al mes'
+                'label'=>'Días laborales al mes*'
             ))
             ->add('weekWorkableDays', 'choice', array(
                 'choices' => array(
@@ -142,7 +142,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'Lugar de trabajo',
+                'label'=>'Lugar de trabajo*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))

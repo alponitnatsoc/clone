@@ -30,8 +30,7 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'civilStatus',
                 'label' => 'Estado civil',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'placeholder' => 'Seleccionar una opción'
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(
@@ -42,8 +41,7 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'gender',
                 'label' => 'Género',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'placeholder' => 'Seleccionar una opción'
             ))
             ->add('documentExpeditionDate', 'date', array(
                 'data' => new DateTime('1975-01-01'),
@@ -61,8 +59,7 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthCountry',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'placeholder' => 'Seleccionar una opción'
             ))
             ->add('birthDepartment', 'entity', array(
                 'label' => 'Departamento de Nacimiento',
@@ -72,8 +69,7 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthDepartment',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'placeholder' => 'Seleccionar una opción'
             ))
             ->add('birthCity', 'entity', array(
                 'label' => 'Ciudad de Nacimiento',
@@ -83,8 +79,7 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthCity',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'placeholder' => 'Seleccionar una opción'
             ))
             ->add('email', 'text', array(
                 'constraints' => array(
