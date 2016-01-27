@@ -2,6 +2,7 @@
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>
+            /*
             .blockStep2 {
                 margin-top: 10px;
                 background: #3b4b5a !important;
@@ -31,35 +32,33 @@
                 font-weight: 100;
                 margin-bottom: 0px;
             }
+            */
         </style>
     {% endblock %}
     <div class="col-sm-12 col-xs-12 block-Data">
-        <h1>Configuración inicial</h1>
-        <span>Para obtener el mayor beneficio posible de nuestra herramienta, requerimos contar con su información como empleador, de sus empleados y lo referente a la afiliación a las administradoras de salud, pensión, riesgos laborales y Caja de Compensación Familiar.</span>
+        <h1>SYMPLIFÍCATE</h1>
+        <span>
+            Configura tu perfil para que nuestra herramienta haga el trabajo por ti.
+            Con tu información como empleador sabremos qué necesitan tú y tus empleados y sabremos cómo ayudarte.
+        </span>
     </div>
-    <div id='' class='col-sm-12 col-xs-12 align-Resp'>
-        <div id='' class='col-sm-12 col-xs-12 blockStep2'>
-            <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
-                <img src="/img/employ.png">
+    <div class="col-sm-12 col-xs-12 align-Resp" id="">
+        <div href="/register/edit" class="btn col-sm-12 col-xs-12 blockStep  complete  nav-link" id="">
+            <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0" id="">
+                <img src="/img/employ.png">                    
             </div>
-            <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
-                <div id='' class='text-left' >
-                    <p>Paso 1 de 3</p>
-                    DATOS DEL EMPLEADOR
+            <div class="col-md-6 col-xs-12 txt-AD1" id="">
+                <div class="text-left" id="">
+                    <p>Paso <strong>1</strong> de 3</p>
+                    Mis datos como empleador
                 </div>
-            </div>
-            <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-            </div>
-            <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
-                <div id='' class=' stepIni' >
-                </div>
-
             </div>
         </div>
     </div>
+
     <div class="row-fluid">
         <div class="col-sm-12 col-xs-12 block-Intro">
-            <span>Por favor ingrese la información solicitada para efectuar el registro:</span>
+            <span>Ingresa tu información para hacer efectivo tu registro</span>
         </div>
     </div>
     <div class="row"></div>
@@ -218,4 +217,5 @@
             </div>
         </div>
     </div>
+    <br /><br />
 {% endblock fos_user_content%}
