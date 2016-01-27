@@ -1,6 +1,7 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -360,6 +361,51 @@ class PersonRestController extends FOSRestController
             return $view;
         } else {
             $view->setStatusCode(404)->setHeader("error","Department does't exist");
+            return $view;
+        }
+    }
+
+    /**
+     * Get the cities of a department.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Finds the cities of a department.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     404 = "Returned when the department id doesn't exists "
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="lastName1", nullable=false,   strict=true, description="lastName1.")
+     * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="document", nullable=false, strict=true, description="document.")
+     * @return View
+     */
+    public function postInquiryDocumentAction(ParamFetcher $paramFetcher)
+    {
+        $documentType=$paramFetcher->get('documentType');
+        $document=$paramFetcher->get('document');
+        $personRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+        /** @var QueryBuilder  $query */
+        $query = $personRepo->createQueryBuilder('c')
+            ->where('c.documentType = :documentType AND c.document = :document')
+            ->setParameter('documentType', $documentType)
+            ->setParameter('document', $document)
+            ->getQuery();
+
+
+        $person= $query->setMaxResults(1)->getOneOrNullResult();
+        $view = View::create();
+
+        if ( $person!=null) {
+            $view->setData($person)->setStatusCode(200);
+            return $view;
+        } else {
+            $view->setStatusCode(404)->setHeader("error","The person does not exist");
             return $view;
         }
     }

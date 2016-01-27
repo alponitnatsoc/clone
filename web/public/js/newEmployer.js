@@ -77,6 +77,33 @@ function startEmployer(){
     $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
     });
+    $('#btn-inquiry').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        var documentType=       $(form).find("select[name='register_employer[person][documentType]']");
+        var document= 		$(form).find("input[name='register_employer[person][document]']");
+        var lastName1= 		$(form).find("input[name='register_employer[person][lastName1]']");
+        if (!(validator.element(documentType)&&validator.element(document)&&validator.element(lastName1))){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                documentType: 	documentType.val(),
+                document: 		document.val(),
+                lastName1: 		lastName1.val(),
+            }
+        }).done(function() {
+            alert("La cédula que nos proporcionó, ya existe en nuestro sistema, intente buscar en sus cuentas de correo electrónico algún asunto de symplifica");
+            sendAjax("/dashboard");
+
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            //show the other stuf
+        });
+    });
     $('#btn-1').click(function(e){
         e.preventDefault();
         var form =$("form");
