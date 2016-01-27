@@ -9,6 +9,7 @@
    @gray: #919191;
    @dark_gray: #3C4B5A;
    @light_gray: #4B4B4B;
+   @lightGrayText: #CCCCCC;
    @dark_green: #3b4b5a;
    @error_color: #f00;
    @open: "Open Sans","Roboto", Arial;
@@ -887,22 +888,19 @@
    }
    .nav-tabs.nav-justified > li:first-child a {
     border-width: 2px 0px 0px 0px;
+    margin: 0 15px 0 0;
    }
    .nav-tabs.nav-justified > li:last-child a {
     border-width: 2px 0px 0px 0px;
+    margin: 0 0 0 0;
    }
    .nav-tabs.nav-justified > li > a {
-    margin-right: 0px;
-    color: @blue;
-    border-radius: 0px;
-    background: transparent;
+    color: @lightGrayText;
     border-width: 2px 0px 0px 0px;
-    border-color: @blue;
+    border-color: @lightGrayText;
+    margin: 0 15px 0 0;
    }
    .nav-tabs.nav-justified > li > a:hover {
-    background: @blue; 
-    border-color: @blue; 
-    color: #fff; 
    }
    .form-horizontal {
     .spacing {
