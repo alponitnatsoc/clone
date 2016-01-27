@@ -110,6 +110,7 @@ class DefaultController extends Controller
         $person = $user->getPersonPerson();
         $billingAdress = $person->getBillingAddress();
         $documentNumber = $person->getDocument();
+        $employees = $this->getEmployees($user->getPersonPerson());
 
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
         $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
@@ -122,6 +123,7 @@ class DefaultController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Default:active.html.twig', array(
                     'form' => $form->createView(),
                     'employer' => $person,
+                    'employees' => $employees,
                     'paymentMethods' => isset($responcePaymentsMethods['payments']) ? $responcePaymentsMethods['payments'] : false,
                     'billingAdress' => (count($billingAdress) > 0) ? $billingAdress : false
         ));
@@ -139,6 +141,17 @@ class DefaultController extends Controller
                     'dateCreated' => $this->getRequest()->query->get("dc"),
                     'ct' => $this->getRequest()->query->get("q"),
                     'id' => $this->getRequest()->query->get("ui")
+        ));
+    }
+
+    public function getAllRoutesAction()
+    {
+        /** @var Router $router */
+        $router = $this->get('router');
+        $routes = $router->getRouteCollection();
+
+        return $this->render("RocketSellerTwoPickBundle:Default:routes.html.twig", array(
+                    'routes' => $routes
         ));
     }
 

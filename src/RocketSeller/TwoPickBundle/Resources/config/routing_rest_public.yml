@@ -38,6 +38,14 @@ payments_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PaymentsRest"
     name_prefix: api_public_
+refered_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:ReferredRest"
+    name_prefix: api_public_
+invitation_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:InvitationRest"
+    name_prefix: api_public_
 liquidation_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:LiquidationRest"

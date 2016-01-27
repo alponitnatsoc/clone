@@ -88,6 +88,12 @@
         .cvvHelp:hover{
             cursor: pointer;
         }
+        .codigo_referido_valido{
+            color: green;
+        }
+        .codigo_referido_invalido{
+            color: red;
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
@@ -109,7 +115,7 @@
                     <label>{{ employer.city.name ~", "~ employer.department.name }}</label>
                 </div>
                 <div name="divOtherAdress" id="divOtherAdress" class="toHide">
-                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: 1px #333 dotted; margin: 10px;">
+                    <div class="col-sm-12 col-xs-12 blockUpData" >
                         <div class="col-sm-4 col-xs-12">
                             <img id="typePerson" src="/img/typePerson.png">
                             {{ form_row(form.personType, { 'attr': {'class': 'foo'} }) }}
@@ -124,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: 1px #333 dotted; margin: 10px;">                        
+                    <div class="col-sm-12 col-xs-12 blockUpData">                        
                         <div id="datosNIT" name="datosNIT" class="toHide">
                             <div class="col-sm-12 col-xs-12">
                                 {{ form_row(form.razonSocial) }}
@@ -154,21 +160,24 @@
             </div>
         </div>
 
-        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
 
         <div id="infoTarjeta" class="infoTarjeta form-group">
             <span style="margin: 20px">Información de la tarjeta de crédito:</span>
             <input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
             <label for="chkSameTCC">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>
             <div id="divSameTCC">    
-                <select id="paymentMethod" name="paymentMethod" required="required">
-                    <option value="">Seleccione...</option>
-                    {% for paymentMethod in paymentMethods %}
-                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
-                    {% endfor  %}
-                </select>
+                <div class="col-sm-12 col-xs-12 blockUpData">
+                    <div class="col-sm-4 col-xs-12">
+                        <select id="paymentMethod" name="paymentMethod" required="required" class="form-control">
+                            <option value="">Seleccione...</option>
+                            {% for paymentMethod in paymentMethods %}
+                                <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
+                            {% endfor  %}
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div id="divOtherTCC" class="col-sm-12 col-xs-12 toHide">
+            <div id="divOtherTCC" class="col-sm-12 col-xs-12 blockUpData toHide">
                 <div class="col-sm-12 col-xs-12">
                     <label>Número tarjeta de crédito*</label><br>
                     <input type="text" name="card_number" id="card_number" placeholder="1234 5678 9012 3456" required="required">
@@ -203,20 +212,27 @@
 
             </div>
         </div>
-        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+        <div ><br></div>
         <div id="codigoReferido" class="codigoReferido form-group">
             <label>¿Cuenta con algún código de promoción?</label>
             <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
             <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código">
-
+            <div id="codigo_referido_estado"></div>
         </div>
-        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
+        <div ><br></div>
         <div id="confirmacionPago" class="confirmacionPago form-group">
             <label>Confirmación de pago</label>
         </div>       
-        <div style="border-bottom: 1px #333 dotted; margin: 10px;"><br></div>
-        <a class="btn btn-default" href="{{ path('subscription_choices') }}" > Adquirir suscripción</a>
+        <div ><br></div>
 
+        <div class="col-sm-12 col-xs-12" style="display: -webkit-inline-box; padding: 10px; text-align: center;">
+            <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
+                <a class="btn-default btn" href="{{ path('subscription_choices') }}">Atras</a>
+            </div>
+            <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
+                {{ form_row(form.save) }}
+            </div>
+        </div>
         {{ form_end(form) }}
     </div>
 
@@ -288,6 +304,23 @@
                     $("#divOtherTCC").removeClass('toHide');
                     $("#divSameTCC").addClass('toHide');
                 }
+            });
+
+            $("#codigo_referido").focusout(function () {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path('api_public_post_validate_code') }}",
+                    data: {code: $(this).val(), user: {{ }}},
+                    beforeSend: function (xhr) {
+                        $("#codigo_referido_estado").html('Validando código');
+                    }
+                }).done(function (data) {
+                    if (data) {
+                        $("#codigo_referido_estado").html('<span class="codigo_referido_valido">Código valido</span>');
+                    } else {
+                        $("#codigo_referido_estado").html('<span class="codigo_referido_invalido">Código invalido</span>');
+                    }
+                });
             });
         });
         $(function () {

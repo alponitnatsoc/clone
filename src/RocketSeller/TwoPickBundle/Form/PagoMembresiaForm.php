@@ -117,7 +117,11 @@ class PagoMembresiaForm extends AbstractType
                     'label' => 'Ciudad*',
                     'placeholder' => 'Seleccionar una opción',
                     'required' => true
+                ))
+                ->add('save', 'submit', array(
+                    'label' => 'Finalizar'
         ));
+
 
         $formModifier = function (FormInterface $form, Department $department = null) {
             $citys = null === $department ? array() : $department->getCitys();

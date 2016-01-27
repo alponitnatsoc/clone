@@ -82,21 +82,23 @@
 
     {% for employee in employees %}
         {% for contract in employee.contracts %}
-            <div class="col-md-3 {{ contract.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
-                <div> 
-                    <img class="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+            {% if contract.state != 'UnActive' %}
+                <div class="col-md-3 {{ contract.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
+                    <div> 
+                        <img class="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                    </div>
+                    <div class="employee_name">
+                        {{ employee.employeeEmployee.personPerson.names }}
+                    </div>
+                    {% set tipo_tiempo_contrato = contract.timeCommitmentTimeCommitment.name|split(' ') %}
+                    <div class="{{ tipo_tiempo_contrato|join("_") }}">
+                        {{ contract.timeCommitmentTimeCommitment.name }}
+                    </div>
+                    <div>
+                        <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_contract', {'id':  contract.idContract }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ contract.state == 'Active'?'Inactivar':'Activar' }}</button>
+                    </div>
                 </div>
-                <div class="employee_name">
-                    {{ employee.employeeEmployee.personPerson.names }}
-                </div>
-                {% set tipo_tiempo_contrato = contract.timeCommitmentTimeCommitment.name|split(' ') %}
-                <div class="{{ tipo_tiempo_contrato|join("_") }}">
-                    {{ contract.timeCommitmentTimeCommitment.name }}
-                </div>
-                <div>
-                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_contract', {'id':  contract.idContract }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ contract.state == 'Active'?'Inactivar':'Activar' }}</button>
-                </div>
-            </div>
+            {% endif %}
 
 
         {% endfor %}
@@ -218,7 +220,7 @@
             tiempo_parcialSlider.noUiSlider.on('change', function () {
                 calculatePrice("_calc");
             });
-            tiempo_parcialSlider.noUiSlider.set($(".activo > .Trabajo_por_dias").length);
+            tiempo_parcialSlider.noUiSlider.set($(".activo > .Trabajo_por_días").length);
 
             medio_tiempoSlider = document.getElementById('medio_tiempo');
             noUiSlider.create(medio_tiempoSlider, {
@@ -262,7 +264,7 @@
             tiempo_completoSlider.noUiSlider.on('change', function () {
                 calculatePrice("_calc");
             });
-            tiempo_completoSlider.noUiSlider.set($(".activo > .Tiempo_Completo").length);
+            tiempo_completoSlider.noUiSlider.set($(".activo > .Tiempo_completo").length);
 
             calculatePrice('');
         });
@@ -335,18 +337,18 @@
             });
         }
         function calculatePrice(contenedor) {
-            var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_dias = 0;
+            var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0;
             var descuento_html = '';
             var descuento = 0;
             var total = 0;
             if (contenedor == '_calc') {
                 Tiempo_Completo = tiempo_completoSlider ? parseInt(tiempo_completoSlider.noUiSlider.get()) : 0;
                 Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
-                Trabajo_por_dias = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
+                Trabajo_por_días = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
             } else {
-                Tiempo_Completo = $(".activo > .Tiempo_Completo").length;
+                Tiempo_Completo = $(".activo > .Tiempo_completo").length;
                 Medio_tiempo = $(".activo > .Medio_tiempo").length;
-                Trabajo_por_dias = $(".activo > .Trabajo_por_dias").length;
+                Trabajo_por_días = $(".activo > .Trabajo_por_días").length;
             }
             if (Tiempo_Completo > 0) {
                 total = total + (Tiempo_Completo * 25000);
@@ -354,11 +356,11 @@
             if (Medio_tiempo > 0) {
                 total = total + (Medio_tiempo * 20000);
             }
-            if (Trabajo_por_dias > 0) {
-                total = total + (Trabajo_por_dias * 15000);
+            if (Trabajo_por_días > 0) {
+                total = total + (Trabajo_por_días * 15000);
             }
 
-            if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_dias) >= 3) {
+            if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_días) >= 3) {
                 descuento = (total * 0.1);
                 descuento_html = "El descuento del 10% por valor de " + getPrice(descuento) + " ya fue aplicado.";
                 $("#result_discount" + contenedor).html(descuento_html);

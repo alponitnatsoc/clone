@@ -10,7 +10,7 @@ class PayrollController extends Controller
 {
     public function payAction()
     {
-        if($this->isGranted('PAYROLL', $this->getUser())) {
+        //if($this->isGranted('PAYROLL', $this->getUser())) {
         	$user=$this->getUser();
             $employeesData=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
             $salaries = array();
@@ -57,9 +57,9 @@ class PayrollController extends Controller
                 "payrolls" => $payrolls,
                 "novelties" => $novelties
             ));
-        } else {
-            throw $this->createAccessDeniedException("No tiene suficientes permisos");
-        }
+        //} else {
+        //    throw $this->createAccessDeniedException("No tiene suficientes permisos");
+       // }
     }
 
     public function calculateAction(Request $request)

@@ -1,0 +1,14 @@
+
+<table>
+    {% for key, route in routes %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ route.path }}</td>
+            {% if route.defaults['_controller'] is defined %}
+                <td>{{ route.defaults['_controller'] }}</td>
+            {% else %}
+                <td>{{ route.defaults|json_encode() }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
