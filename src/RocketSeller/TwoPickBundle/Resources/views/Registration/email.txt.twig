@@ -1,7 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}
-: Bienvenido a Symplifica
-{% endblock %}
+{% block subject %}: Bienvenido a Symplifica{% endblock %}
 {% block body_text %}
 {% autoescape false %}
 {{ 'registration.email.message'|trans({'%username%': user.email, '%confirmationUrl%': confirmationUrl}) }}
