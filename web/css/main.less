@@ -110,7 +110,7 @@
     padding:6px 20px;
     color:#ffffff;
     margin-top:7px;
-    text-transform:capitalize;
+    text-transform:none;
     font-weight:bold;
     font-size:16px;
     text-shadow: none;
@@ -123,10 +123,11 @@
         border-color: @color_boton !important;
    }
 
-   .btn-orange:hover {
-        color: @darkerButtonText;
-        background-color: @color_boton;
-        border-color: @color_boton;
+   .btn-orange:hover, .btn-orange:focus, .btn-orange:active   {
+        color: @darkerButtonText !important;
+        background-color: @color_boton !important;
+        border-color: @color_boton !important;
+        opacity:0.8;
    }
 
 
