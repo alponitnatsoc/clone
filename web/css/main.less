@@ -16,9 +16,10 @@
    @robotoCondensed: "Roboto Condensed";
    @lato: "Lato";
    @color_boton: #ffc107;
-   @fondo: #fdfdf8;
+   @fondo: #f8f8f8;
    @lightGrayBars: #efefef;
    @darkerButtonText: #000000;
+   @lightBLue: #1fcecb;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -76,8 +77,8 @@
         margin:10px 0px;
     }
     ul.navbar-nav li a.btn-ingresar {
-        border:2px solid #1fcecb;
-        background:#1fcecb;
+        border:2px solid @lightBLue;
+        background:@lightBLue;
         padding:6px 20px;
         color:#ffffff;
         margin-top:7px;
@@ -90,7 +91,7 @@
     }
     ul.navbar-nav li a.btn-ingresar:hover {
         color:#ffffff;
-        border:2px solid #1fcecb;
+        border:2px solid @lightBLue;
     }
     ul.navbar-nav li a:hover {
         color:#c2c2c2;
@@ -99,13 +100,13 @@
         border-left:none;
     }
     & + .content {
-        padding-top: 120px;
+        padding-top: 75px;
     }
    }
    .btn.btnNext, .btnPrevious, .btn-default, .btn.pull-right {
     font-family: @open;
-    border:2px solid #1fcecb;
-    background:#1fcecb;
+    border:2px solid @lightBLue;
+    background:@lightBLue;
     padding:6px 20px;
     color:#ffffff;
     margin-top:7px;
@@ -119,7 +120,7 @@
     opacity:0.8;
    }
    .btnPrevious:hover, .btn-default:hover, .btn-default:focus {
-    border: 2px solid #1FCECB;
+    border: 2px solid @lightBLue;
     background: @blue none repeat scroll 0% 0%;
     color: #fff;
    }
@@ -281,6 +282,7 @@
     margin:10px 0px 25px 0px;
     position: relative;
     min-height: 160px;
+    width: 100%;
     .up-Intro {
         font-family: @open;
         color:#ffffff;
@@ -1192,7 +1194,7 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
 }
 @media (min-width: @screen-lg-min) {
     .contenMessage {
-        margin-left: 20%;
+        
     }
 }
 .btn-symplifica {
