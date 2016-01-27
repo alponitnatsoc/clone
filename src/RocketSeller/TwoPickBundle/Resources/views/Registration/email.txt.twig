@@ -1,7 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}
-: Bienvenido a Symplifica!
-{% endblock %}
+{% block subject %}{% autoescape false %}: Bienvenido a Symplifica{% endautoescape %}{% endblock %}
 {% block body_text %}
 {% autoescape false %}
 {{ 'registration.email.message'|trans({'%username%': user.email, '%confirmationUrl%': confirmationUrl}) }}
@@ -168,13 +166,6 @@
             <div class="container">
                 <a href="{{ confirmationUrl }}">{{ confirmationUrl }}</a>
             </div>
-        </div>
-    </section>
-    <section>
-        <div class="container">
-            <p>Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor aún, minizaremos al máximo el riesgo de eventualidades a futuro.</p>
-            <p>Atentamente</p>
-            <span><strong>CAMILO MÉNDEZ</strong><br /><em style="display: block">Director Symplifica</em></span>
         </div>
     </section>
     <footer>
