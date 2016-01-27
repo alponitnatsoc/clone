@@ -1,5 +1,15 @@
 {% extends "::base.html.twig" %}
 {% set body_color = "#3c4b5a" %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css">
+        .btn.disabled{
+            cursor: not-allowed;
+        }
+    </style>    
+{% endblock %}
+
 {% block body %}
     <div class="row-fluid block-Intro-blue hidden">
         <div class="up-Intro">Estás a un paso de poder gestionar</div>
@@ -10,13 +20,13 @@
             <span>Estamos listos para facilitarte la gestión de tus empleados</span>
             <m>¿Empezamos?</m>
             <span>Regístrate gratis, puedes hacerlo de dos formas:</span>
-            </div>
+        </div>
         <div id='' class='col-sm-12 col-md-7'>
             <div class="left-headline">
                 <img src="/img/arrow.png">
                 <span>Regístrate con tus datos personales</span>
             </div>
-        	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+            {% include "FOSUserBundle:Registration:register_content.html.twig" %}
         </div>
         <div id='' class='col-sm-12 col-md-1'>
         </div>
@@ -29,3 +39,16 @@
         </div>
     </div>
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $("#chkTOS").change(function () {
+            if ($(this).is(':checked')) {
+                $("#btnSubmit").removeClass('disabled');
+            } else {
+                $("#btnSubmit").addClass('disabled');
+            }
+        });
+    </script>
+{% endblock %}
