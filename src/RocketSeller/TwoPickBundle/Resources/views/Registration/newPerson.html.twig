@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <div class="col-sm-6 col-sm-push-3">
-                        <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext">Consultar</a>
+                        <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext" style="display: none;">Consultar</a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12">
@@ -161,9 +161,9 @@
 
                 {# iterate over each existing workplaces and render its fields #}
                 <ul class="workplaces" data-prototype="
-         {% filter escape %}
-             {{ include('RocketSellerTwoPickBundle:DataPrototypes:workplacesPrototype.html.twig', { 'form': form.workplaces.vars.prototype|e }) }}
-         {% endfilter %} "  style="list-style: none">
+                    {% filter escape %}
+                        {{ include('RocketSellerTwoPickBundle:DataPrototypes:workplacesPrototype.html.twig', { 'form': form.workplaces.vars.prototype|e }) }}
+                    {% endfilter %} "  style="list-style: none">
                     {% for workplace in form.workplaces %}
                         <li id="workSpace_{{loop.index}}" class="workSpaceLi">
                             <div class="row">
@@ -194,7 +194,7 @@
         <!-- Modal success -->
         <div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
              data-keyboard="false" >
-             <div class="vertical-alignment-helper">
+            <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center" role="document">
                     <div class="modal-content">
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
