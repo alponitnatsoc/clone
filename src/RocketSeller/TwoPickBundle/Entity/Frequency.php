@@ -25,6 +25,11 @@ class Frequency
      * @ORM\Column(type="string", length=30)
      */
     private $name;
+    /**
+     * @ORM\Column(type="string", length=4)
+     */
+    private $payroll_code;
+
 
 
 
@@ -60,5 +65,29 @@ class Frequency
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set payroll code
+     *
+     * @param string $payroll_code
+     *
+     * @return PayType
+     */
+    public function setPayrollCode($payroll_code)
+    {
+        $this->payroll_code = $payroll_code;
+
+        return $this;
+    }
+
+    /**
+     * Get payroll_code
+     *
+     * @return string
+     */
+    public function getPayrollCode()
+    {
+        return $this->payroll_code;
     }
 }

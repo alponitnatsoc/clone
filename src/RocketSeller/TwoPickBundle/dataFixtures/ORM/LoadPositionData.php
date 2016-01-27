@@ -12,19 +12,23 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
     public function load(ObjectManager $manager)
     {
         $PositionDomestica = new Position();
-        $PositionDomestica->setName('Empleada(o) domestico');        
+        $PositionDomestica->setName('Empleada(o) domestico');
+        $PositionDomestica->setPayrollCoverageCode('1'); // Code 0.522.
         $manager->persist($PositionDomestica);
-        
+
         $PositionJardinero = new Position();
-        $PositionJardinero->setName('Jardinero');        
+        $PositionJardinero->setName('Jardinero');
+        $PositionJardinero->setPayrollCoverageCode('3'); //  Code 2.436
         $manager->persist($PositionJardinero);
 
         $PositionVarios = new Position();
-        $PositionVarios->setName('Varios');        
+        $PositionVarios->setName('Varios');
+        $PositionVarios->setPayrollCoverageCode('2'); // Code 1.044
         $manager->persist($PositionVarios);
 
         $PositionOtros = new Position();
-        $PositionOtros->setName('Otros');        
+        $PositionOtros->setName('Conductor');
+        $PositionOtros->setPayrollCoverageCode('4'); // Code 4.35
         $manager->persist($PositionOtros);
 
         $manager->flush();
@@ -41,4 +45,3 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
         return 8;
     }
 }
-    

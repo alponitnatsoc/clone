@@ -11,73 +11,120 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        /* EPS This is temporary, while SQL sends the web service to get this.*/
+
         $EntityCoomeva = new Entity();
         $EntityCoomeva->setName('Coomeva');
- 		$EntityCoomeva->setEntityTypeEntityType($this->getReference('entityType-eps'));
+        $EntityCoomeva->setPayrollCode('70');
+ 		    $EntityCoomeva->setEntityTypeEntityType($this->getReference('entityType-eps'));
 
         $manager->persist($EntityCoomeva);
 
         $EntityCaprecom = new Entity();
         $EntityCaprecom->setName('Caprecom');
- 		$EntityCaprecom->setEntityTypeEntityType($this->getReference('entityType-eps'));
+        $EntityCaprecom->setPayrollCode('255');
+ 		    $EntityCaprecom->setEntityTypeEntityType($this->getReference('entityType-eps'));
 
         $manager->persist($EntityCaprecom);
 
         $EntitySura = new Entity();
         $EntitySura->setName('Sura');
- 		$EntitySura->setEntityTypeEntityType($this->getReference('entityType-eps'));
+        $EntitySura->setPayrollCode('170');
+ 		    $EntitySura->setEntityTypeEntityType($this->getReference('entityType-eps'));
 
         $manager->persist($EntitySura);
 
         $EntityCompensarEPS = new Entity();
         $EntityCompensarEPS->setName('Compensar');
- 		$EntityCompensarEPS->setEntityTypeEntityType($this->getReference('entityType-eps'));
+        $EntityCompensarEPS->setPayrollCode('50');
+ 		    $EntityCompensarEPS->setEntityTypeEntityType($this->getReference('entityType-eps'));
 
         $manager->persist($EntityCompensarEPS);
 
+        $EntityFamisanarEPS = new Entity();
+        $EntityFamisanarEPS->setName('Famisanar');
+        $EntityFamisanarEPS->setPayrollCode('90');
+        $EntityFamisanarEPS->setEntityTypeEntityType($this->getReference('entityType-eps'));
+
+        $manager->persist($EntityFamisanarEPS);
+
+
+        // ARL.
         $EntitySuraARL = new Entity();
         $EntitySuraARL->setName('Sura');
- 		$EntitySuraARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntitySuraARL->setPayrollCode('670');
+ 		    $EntitySuraARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
         $manager->persist($EntitySuraARL);
 
-        $EntityCompensar = new Entity();
-        $EntityCompensar->setName('Compensar');
- 		$EntityCompensar->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityColpatriaARL = new Entity();
+        $EntityColpatriaARL->setName('Sura');
+        $EntityColpatriaARL->setPayrollCode('635');
+ 		    $EntityColpatriaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
-        $manager->persist($EntityCompensar);
+        $manager->persist($EntityColpatriaARL);
 
+        // Pensiones.
         $EntityPorvenir = new Entity();
         $EntityPorvenir->setName('Porvenir');
- 		$EntityPorvenir->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
+        $EntityPorvenir->setPayrollCode('300');
+ 		    $EntityPorvenir->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
         $manager->persist($EntityPorvenir);
 
         $EntityProteccion = new Entity();
         $EntityProteccion->setName('Protección');
- 		$EntityProteccion->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
+        $EntityProteccion->setPayrollCode('330');
+ 		    $EntityProteccion->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
         $manager->persist($EntityProteccion);
 
-        $EntityProteccionCesantias = new Entity();
-        $EntityProteccionCesantias->setName('Protección');
-        $EntityProteccionCesantias->setEntityTypeEntityType($this->getReference('entityType-cesantias'));
+        $EntityColfondos = new Entity();
+        $EntityColfondos->setName('Colfondos');
+        $EntityColfondos->setPayrollCode('330');
+ 		    $EntityColfondos->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
-        $manager->persist($EntityProteccionCesantias);
+        $manager->persist($EntityProteccion);
+
+        // Caja compensasion.
+        $EntityComfacundi = new Entity();
+        $EntityComfacundi->setName('Comfacundi');
+        $EntityComfacundi->setPayrollCode('548');
+ 		    $EntityComfacundi->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
+
+        $manager->persist($EntityComfacundi);
+
+        $EntityCafam = new Entity();
+        $EntityCafam->setName('Cafam');
+        $EntityCafam->setPayrollCode('507');
+        $EntityCafam->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
+
+        $manager->persist($EntityCafam);
+
 
 
 
         $manager->flush();
 
+        // EPS.
         $this->addReference('entity-coomeva', $EntityCoomeva);
         $this->addReference('entity-caprecom', $EntityCaprecom);
         $this->addReference('entity-sura', $EntitySura);
-        $this->addReference('entity-sura-arl', $EntitySuraARL);
-        $this->addReference('entity-proteccion', $EntityProteccion);
-        $this->addReference('entity-compensar', $EntityCompensar);
-        $this->addReference('entity-porvenir', $EntityPorvenir);
         $this->addReference('entity-compensar-eps', $EntityCompensarEPS);
-        $this->addReference('entity-proteccion-cesantias', $EntityProteccionCesantias);
+        $this->addReference('entity-famisanar-eps', $EntityFamisanarEPS);
+
+        // ARL.
+        $this->addReference('entity-sura-arl', $EntitySuraARL);
+        $this->addReference('entity-colpatria-arl', $EntityColpatriaARL);
+
+        // Pensiones.
+        $this->addReference('entity-proteccion', $EntityProteccion);
+        $this->addReference('entity-colfondos', $EntityColfondos);
+        $this->addReference('entity-porvenir', $EntityPorvenir);
+
+        //Caja compensasion.
+        $this->addReference('entity-comfacundi', $EntityComfacundi);
+        $this->addReference('entity-cafam', $EntityCafam);
     }
     public function getOrder()
     {
