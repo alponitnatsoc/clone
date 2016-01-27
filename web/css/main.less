@@ -11,13 +11,14 @@
    @light_gray: #4B4B4B;
    @dark_green: #3b4b5a;
    @error_color: #f00;
-   @open: "Roboto","Open Sans";
+   @open: "Open Sans","Roboto";
    @roboto: "Roboto";
    @robotoCondensed: "Roboto Condensed";
    @lato: "Lato";
    @color_boton: #ffc107;
    @fondo: #fdfdf8;
    @lightGrayBars: #efefef;
+   @darkerButtonText: #000000;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -1199,21 +1200,21 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
     background-color: @color_boton;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     outline: none;
-    color: #fff;
+    color: @darkerButtonText;
     &:active {
         opacity: 0.7;
         box-shadow: 0 8px rgba(0,0,0,0.2);
         outline: none;
-        color: #fff;
+        color: @darkerButtonText;
     }
     &:hover {
-        color: #fff;
+        color: @darkerButtonText;
         outline: none;
         background-color: @color_boton;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
     &:focus {
-        color: #fff;
+        color: @darkerButtonText;
         outline: none!important;
     }
 }
