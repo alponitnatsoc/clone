@@ -4,14 +4,18 @@
 {% block sidebar %}{% endblock sidebar %}
 {% block fos_user_content %}
 {% block body %}
+
     <div class="row-fluid block-Intro-green">
         <div class="container">
-            <div class="col-sm-4 col-md-3">
+            <div class="col-sm-3 col-md-2">
                 <div class="boxIntro-Heading"><img src="/img/check-in.png"></div>
             </div>
             <div class="col-sm-8 col-md-9 col-xs-12 up-Intro">Su registro finaliz&oacute; con &eacute;xito&#33;</div>
         </div>
     </div>
+
+
+    <!--
     <div class="container topArea">
         <div class="col-sm-8 col-sm-offset-3 contenMessage">
             <div class="" id="info1">
@@ -96,10 +100,11 @@
             <p><a href="javascript:void(0)" onclick="javascript:nextInfo()" class="btn btn-default" role="button">Siguiente</a></p>
         </div>
     </div>
-    <div class="container bottomArea" style="display:none">
+    -->
+    <div class="container bottomArea" style="display:block">
         <div class="page-header" id="info2" >
             <div class="container">
-                <div class="col-sm-8 col-sm-offset-3 contenMessage">
+                <div class="col-sm-8 col-sm-offset-2 contenMessage">
                     <div class="" id="info1">
                         <p class="lead">Ahora s&iacute;, est&aacute; todo listo para que gestione a sus empleados de forma eficiente y segura</p>
                     </div>
@@ -131,10 +136,11 @@
                 </div>
             </div>
             <div class="col-sm-12 col-xs-12 center">
-                <a href="{{ path('edit_profile') }}" class="btn btn-default" role="button">Entendido</a>
+                <a href="{{ path('edit_profile') }}" class="btn btn-default btn-orange" role="button">Entendido</a>
             </div>
         </div>
     </div>
+    <br /><br />
 {% endblock body %}
 {% endblock fos_user_content %}
 {% block javascripts %}
