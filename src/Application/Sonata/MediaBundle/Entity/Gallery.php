@@ -24,12 +24,20 @@ use RocketSeller\TwoPickBundle\Entity\Person;
  */
 class Gallery extends BaseGallery
 {
+
     /**
      * @var integer $id
      */
     protected $id;
 
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Person
+     *
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="gallery")
+     * 
+     */
     private $person;
+
     /**
      * Get id
      *
@@ -87,4 +95,5 @@ class Gallery extends BaseGallery
     {
         return $this->person;
     }
+
 }

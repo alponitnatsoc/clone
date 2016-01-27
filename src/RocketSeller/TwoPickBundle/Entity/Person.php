@@ -127,7 +127,7 @@ class Person
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Gallery
-     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", cascade={"persist"}, fetch="LAZY")
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", mappedBy="person", cascade={"persist"}, fetch="LAZY")
      */
     protected $gallery;
 

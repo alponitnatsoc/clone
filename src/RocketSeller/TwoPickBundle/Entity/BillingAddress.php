@@ -26,7 +26,7 @@ class BillingAddress
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="billingAddress")
      * @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")
      * 
      */
