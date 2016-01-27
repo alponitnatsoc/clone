@@ -85,7 +85,7 @@ class EmployeeRestController extends FOSRestController
         $employee = null;
 //        $idContract = $paramFetcher->get("register_social_security");
 //        $idEmployer = $idContract['idEmployer'];
-        - $idContract = $paramFetcher->get("contractId");
+        $idContract = $paramFetcher->get("contractId");
         $view = View::create();
 
         //search the contract
@@ -273,6 +273,11 @@ class EmployeeRestController extends FOSRestController
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
                 $employee = $repository->find($id);
                 //verify if the Id exists or it belongs to the logged user
+                if ($employee == null){
+                    $view->setStatusCode(404)->setHeader("error", "The Employee ID " . $paramFetcher->get('employeeId') . " is invalid");
+                    $view->setData(array('url'=>'/dashboard'));
+                    return $view;
+                }
                 $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
                 $flag = false;
                 /** @var EmployerHasEmployee $ee */
@@ -283,11 +288,17 @@ class EmployeeRestController extends FOSRestController
                         break;
                     }
                 }
-                if ($employee == null || !$flag) {
-                    $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-                    return $this->render(
-                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                                'employees' => $employeesData));
+                if($employee->getPersonPerson()->getDocumentType()==$paramFetcher->get('documentType')&&$employee->getPersonPerson()->getDocument()==$paramFetcher->get('document')){
+                    $flag=true;
+                    $employerEmployee = new EmployerHasEmployee();
+                    $employerEmployee->setEmployeeEmployee($employee);
+                    $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
+                    $employee->addEmployeeHasEmployer($employerEmployee);
+                }
+                if (!$flag) {
+                    $view->setStatusCode(403)->setHeader("error", "Not your Employee");
+                    $view->setData(array('url'=>'/dashboard'));
+                    return $view;
                 }
             }
             /** @var Person $person */
