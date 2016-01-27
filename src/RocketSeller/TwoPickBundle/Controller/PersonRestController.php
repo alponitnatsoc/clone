@@ -387,6 +387,12 @@ class PersonRestController extends FOSRestController
      */
     public function postInquiryDocumentAction(ParamFetcher $paramFetcher)
     {
+        $view = View::create();
+        if($this->getUser()==null){
+            $view->setStatusCode(403)->setHeader("error","You are not allowed to get information");
+            return $view;
+        }
+
         $documentType=$paramFetcher->get('documentType');
         $document=$paramFetcher->get('document');
         $personRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
@@ -398,11 +404,36 @@ class PersonRestController extends FOSRestController
             ->getQuery();
 
 
+        /** @var Person $person */
         $person= $query->setMaxResults(1)->getOneOrNullResult();
-        $view = View::create();
+
 
         if ( $person!=null) {
-            $view->setData($person)->setStatusCode(200);
+
+            $view->setData(array(
+                'names' => $person->getNames(),
+                'lastName2' => $person->getLastName2(),
+                'civilStatus' => $person->getCivilStatus(),
+                'gender' => $person->getGender(),
+                'documentExpeditionDate' => array(
+                    'year'=>$person->getDocumentExpeditionDate()->format("Y"),
+                    'month'=>intval($person->getDocumentExpeditionDate()->format("m")),
+                    'day'=>intval($person->getDocumentExpeditionDate()->format("d")),),
+                'documentExpeditionPlace' => $person->getDocumentExpeditionPlace(),
+                'birthDate' => array(
+                    'year'=>$person->getBirthDate()->format("Y"),
+                    'month'=>intval($person->getBirthDate()->format("m")),
+                    'day'=>intval($person->getBirthDate()->format("d")),),
+                'birthCountry' => $person->getBirthCountry(),
+                'birthDepartment' => $person->getBirthDepartment(),
+                'birthCity' => $person->getBirthCity(),
+                'mainAddress' => $person->getMainAddress(),
+                'department' => $person->getDepartment(),
+                'email' => $person->getEmail(),
+                'city' => $person->getCity(),
+                'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
+                'idEmployee' => $person->getEmployee()->getIdEmployee()
+            ))->setStatusCode(200);
             return $view;
         } else {
             $view->setStatusCode(404)->setHeader("error","The person does not exist");
