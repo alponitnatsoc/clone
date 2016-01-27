@@ -30,6 +30,11 @@ class EntityType
      */
     private $entities;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $payroll_code;
+
 
     /**
      * Get idEntityType
@@ -64,6 +69,32 @@ class EntityType
     {
         return $this->name;
     }
+
+    
+    /**
+     * Set payroll code
+     *
+     * @param string $payroll_code
+     *
+     * @return PayType
+     */
+    public function setPayrollCode($payroll_code)
+    {
+        $this->payroll_code = $payroll_code;
+
+        return $this;
+    }
+
+    /**
+     * Get payroll_code
+     *
+     * @return string
+     */
+    public function getPayrollCode()
+    {
+        return $this->payroll_code;
+    }
+
     public function __toString()
     {
         return (string) $this->name;
