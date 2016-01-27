@@ -190,6 +190,53 @@ function startEmployee(){
         e.preventDefault();
         addBenefitForm($collectionHolderB, $newLinkLi);
     });
+    $('#btn-inquiry').click(function(e){
+        e.preventDefault();
+        var form =$("form");
+        var documentType=       $(form).find("select[name='register_employee[person][documentType]']");
+        var document= 		$(form).find("input[name='register_employee[person][document]']");
+        var lastName1= 		$(form).find("input[name='register_employee[person][lastName1]']");
+        if (!(validator.element(documentType)&&validator.element(document)&&validator.element(lastName1))){
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+
+        $.ajax({
+            url : $(this).attr('href'),
+            type: 'POST',
+            data: {
+                documentType: 	documentType.val(),
+                document: 		document.val(),
+                lastName1: 		lastName1.val(),
+            }
+        }).done(function(data) {
+            alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
+            //load the data
+            var form =$("form");
+            $(form).find("input[name='register_employee[person][names]']").val(data["names"]);
+            $(form).find("input[name='register_employee[person][lastName2]']").val(data["lastName2"]);
+            $(form).find("select[name='register_employee[personExtra][civilStatus]']").val(data["civilStatus"]);
+            $(form).find("select[name='register_employee[person][birthDate][year]']").val(data["birthDate"]["year"]);
+            $(form).find("select[name='register_employee[person][birthDate][month]']").val(data["birthDate"]["month"]);
+            $(form).find("select[name='register_employee[person][birthDate][day]']").val(data["birthDate"]["day"]);
+            $(form).find("select[name='register_employee[personExtra][documentExpeditionDate][year]']").val(data["documentExpeditionDate"]["year"]);
+            $(form).find("select[name='register_employee[personExtra][documentExpeditionDate][month]']").val(data["documentExpeditionDate"]["month"]);
+            $(form).find("select[name='register_employee[personExtra][documentExpeditionDate][day]']").val(data["documentExpeditionDate"]["day"]);
+            $(form).find("select[name='register_employee[personExtra][birthCountry]']").val(data["birthCountry"]["id_country"]);
+            $(form).find("select[name='register_employee[personExtra][birthDepartment]']").val(data["birthDepartment"]["id_department"]);
+            $(form).find("select[name='register_employee[personExtra][birthCity]']").val(data["birthCity"]["id_city"]);
+            $(form).find("select[name='register_employee[personExtra][gender]']").val(data["gender"]);
+            $(form).find("input[name='register_employee[idEmployee]']").val(data["idEmployee"]);
+            $(form).find("input[name='register_employee[personExtra][documentExpeditionPlace]']").val(data["documentExpeditionPlace"]);
+            $(form).find("select[name='register_employee[person][department]']").val(data["department"]["id_department"]);
+            $(form).find("select[name='register_employee[person][city]']").val(data["city"]["id_city"]);
+            $(form).find("input[name='register_employee[personExtra][email]']").val(data["email"]);
+            $(form).find("input[name='register_employee[person][mainAddress]']").val(data["mainAddress"]);
+
+        }).fail(function( jqXHR, textStatus, errorThrown ) {
+            //show the other stuf
+        });
+    });
     $('#btn-1').click(function(e){
         e.preventDefault();
         var form =$("form");
