@@ -1,7 +1,7 @@
 <?php
 
-
 namespace RocketSeller\TwoPickBundle\Controller;
+
 use RocketSeller\TwoPickBundle\Entity\Person;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use FOS\UserBundle\FOSUserEvents;
@@ -20,16 +20,18 @@ use RocketSeller\TwoPickBundle\Entity\Referred;
 
 class RegistrationController extends BaseController
 {
+
     public function registerConfirmedStartAction()
     {
         /** @var User $user */
-        $user=$this->getUser();
-        if($user->getPersonPerson()->getEmployer()==null){
+        $user = $this->getUser();
+        if ($user->getPersonPerson()->getEmployer() == null) {
             return $this->render('RocketSellerTwoPickBundle:Registration:confirmed.html.twig');
-        }else{
+        } else {
             return $this->redirectToRoute('ajax');
         }
     }
+
     public function registerAction(Request $request)
     {
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
@@ -54,7 +56,6 @@ class RegistrationController extends BaseController
         $form->setData($user);
 
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -74,7 +75,7 @@ class RegistrationController extends BaseController
                         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Invitation');
                         /** @var \RocketSeller\TwoPickBundle\Entity\Invitation $invitation */
                         $invitation = $repository->findOneBy(
-                            array('userId' => $userR->getId(), 'email' => $userEmail)
+                                array('userId' => $userR->getId(), 'email' => $userEmail)
                         );
 
                         if ($invitation) {
@@ -114,13 +115,13 @@ class RegistrationController extends BaseController
             return $response;
         }
 
-        $queryCode = $request->query->get("c");
-        if ($form->has("invitation")) {
-            $form->get("invitation")->setData($queryCode);
-        }
+        //$queryCode = $request->query->get("c");
+        //if ($form->has("invitation")) {
+        //    $form->get("invitation")->setData($queryCode);
+        //}
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ));
     }
 
@@ -132,16 +133,13 @@ class RegistrationController extends BaseController
     //     $email = $this->get('session')->get('fos_user_send_confirmation_email/email');
     //     $this->get('session')->remove('fos_user_send_confirmation_email/email');
     //     $user = $this->get('fos_user.user_manager')->findUserByEmail($email);
-
     //     if (null === $user) {
     //         throw new NotFoundHttpException(sprintf('The user with email "%s" does not exist', $email));
     //     }
-
     //     return $this->render('FOSUserBundle:Registration:checkEmail.html.twig', array(
     //         'user' => $user,
     //     ));
     // }
-
 //     /**
 //      * Receive the confirmation token from user email provider, login the user
 //      */
@@ -149,34 +147,24 @@ class RegistrationController extends BaseController
 //     {
 //         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
 //         $userManager = $this->get('fos_user.user_manager');
-
 //         $user = $userManager->findUserByConfirmationToken($token);
-
 //         if (null === $user) {
 //             throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
 //         }
-
 //         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
 //         $dispatcher = $this->get('event_dispatcher');
-
 //         $user->setConfirmationToken(null);
 //         $user->setEnabled(true);
-
 //         $event = new GetResponseUserEvent($user, $request);
 //         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
-
 //         $userManager->updateUser($user);
-
 //         if (null === $response = $event->getResponse()) {
 //             $url = $this->generateUrl('fos_user_registration_confirmed');
 //             $response = new RedirectResponse($url);
 //         }
-
 //         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
-
 //         return $response;
 //     }
-
     // /**
     //  * Tell the user his account is now confirmed
     //  */
@@ -186,13 +174,11 @@ class RegistrationController extends BaseController
     //     if (!is_object($user) || !$user instanceof UserInterface) {
     //         throw new AccessDeniedException('This user does not have access to this section.');
     //     }
-
     //     return $this->render('FOSUserBundle:Registration:confirmed.html.twig', array(
     //         'user' => $user,
     //         'targetUrl' => $this->getTargetUrlFromSession(),
     //     ));
     // }
-
     // private function getTargetUrlFromSession()
     // {
     //     // Set the SecurityContext for Symfony <2.6
@@ -201,9 +187,7 @@ class RegistrationController extends BaseController
     //     } else {
     //         $tokenStorage = $this->get('security.context');
     //     }
-
     //     $key = sprintf('_security.%s.target_path', $tokenStorage->getToken()->getProviderKey());
-
     //     if ($this->get('session')->has($key)) {
     //         return $this->get('session')->get($key);
     //     }
