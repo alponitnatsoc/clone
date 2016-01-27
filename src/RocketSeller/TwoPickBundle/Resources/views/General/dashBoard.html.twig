@@ -10,19 +10,19 @@
     {% for step in steps %}
         <div id='' class='col-sm-12 col-xs-12 align-Resp'>
             <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and anteriorListo) %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
-                <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
+                <div id='' class='col-md-2 col-xs-12 txt-AD0' style="text-align: left;">
                     {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}                    
                 </div>
-                <div id='' class='col-sm-6 col-xs-12 txt-AD1'>
+                <div id='' class='col-md-6 col-xs-12 txt-AD1'>
                     <div id='' class='text-left' >
                         <p>Paso {{step.paso}} de 3</p>
                         {{step.name}}
                     </div>
                 </div>
-                <div id='' class='col-sm-2 col-xs-12 txt-AD2' style="font-family: 'Roboto Slab', serif;">
+                <div id='' class='col-md-2 col-xs-12 txt-AD2' style="font-family: 'Roboto Slab', serif; text-align: left;">
                     {{step.state}}% {% if step.state==100 %}{% endif %}
                 </div>
-                <div id='' class='col-sm-2 col-xs-12 txt-AD3'>
+                <div id='' class='col-md-2 col-xs-12 txt-AD3'>
                     
                         <div id='' class='btn stepIni btn-symplifica' style="float: right">
                                 {{step.stateMessage}}
