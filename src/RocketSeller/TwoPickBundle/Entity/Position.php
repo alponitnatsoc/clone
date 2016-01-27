@@ -25,6 +25,11 @@ class Position
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $payroll_coverage_code;
+
 
 
     /**
@@ -60,4 +65,31 @@ class Position
     {
         return $this->name;
     }
+
+
+
+        /**
+         * Set payroll code
+         *
+         * @param string $payroll_code
+         *
+         * @return PayType
+         */
+        public function setPayrollCoverageCode($payroll_code)
+        {
+            $this->payroll_code = $payroll_code;
+
+            return $this;
+        }
+
+        /**
+         * Get payroll_code
+         *
+         * @return string
+         */
+        public function getPayrollCoverageCode()
+        {
+            return $this->payroll_code;
+        }
+
 }

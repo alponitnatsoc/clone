@@ -1,14 +1,12 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}
-{% autoescape false %}
-Someone invites you to join Symplifica
-{% endautoescape %}
-{% endblock %}
+{% block subject %}{% autoescape false %}Te recomiendo Symplfica{% endautoescape %}{% endblock %}
 {% block body_text %}
 {% autoescape false %}
 &#161;Hola&#33;
 
-Su amigo {{ user.personPerson.names }} acaba de recomendarle un servicio que le evitar&aacute; riesgos de multas y demandas por el manejo de sus empleados, gracias a herramientas que entre otras cosas le permitir&aacute;n hacer:
+Tu amigo {{ user.personPerson.names }} te ha recomendado para que disfrutes 
+de los beneficios que tiene administrar tus responsabilidades con tus empleados,
+en un mismo lugar. Entre otros servicios con nosotros encontrarás
 
 Reg&iacute;strese y le obsequiamos UN MES de servicio completo.
 Podr&aacute; recibir OTRO MES adicional si adquiere alguno de nuestros planes de servicio y utiliza el siguiente c&oacute;digo al momento del pago:
@@ -950,24 +948,20 @@ div{color:#202020}.logo div a{color:#202020}.logo div a:hover{color:#202020 !imp
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 20px;padding-right: 20px;word-break: break-word;word-wrap: break-word;">
 
 
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Su amigo {{ user.personPerson.names }} acaba de recomendarle un servicio que le evitar&aacute; riesgos de multas y demandas por el manejo de sus empleados, gracias a herramientas que entre otras cosas le permitir&aacute;n hacer:</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Tu amigo {{ user.personPerson.names }} te ha recomendado para que disfrutes de los beneficios que tiene administrar tus responsabilidades con tus empleados, en un mismo lugar. Entre otros servicios con nosotros encontrarás</em>.&nbsp;</p>
 <ul>
-<li>Verificaci&#243;n de  seguridad y ex&#225;men m&#233;dico de la persona a contratar</li>
-<li>Generaci&#243;n de contrato y afiliaci&#243;n al empleado y al empleador a Seguridad Social</li>
-<li>Gesti&#243;n de la informaci&#243;n relacionada al empleado de acuerdo a lo exigido por la ley</li>
-<li>Liquidaci&#243;n y pago de sueldo y aportes a Seguridad Social</li>
+<li>Estudio de seguridad y ex&#225;menes médicos de las personas a contratar</li>
+<li>Afiliaci&#243;n r&#225;pida del empleado y empleador a las entidades de la Seguridad Social</li>
+<li>Facilidad en la liquidaci&#243;n y pago de n&#243;mina y aportes a la Seguridad Social</li>
 </ul>
 
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Reg&iacute;strese y <b>le obsequiamos UN MES</b> de servicio completo</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Reg&iacute;strate y <b>te obsequiamos UN MES</b> de servicio completo</em>.&nbsp;</p>
 <p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Podr&#225; recibir <b>OTRO MES ADICIONAL</b> si adquiere alguno de nuestros </em>.&nbsp;</p>
 <p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">planes de servicio y utiliza el siguiente c&oacute;digo al momento del pago:</em>.&nbsp;</p>
 <p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">{{ user.code }}</em>.&nbsp;</p>
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 10px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Tendr&aacute; siempre a su alcance su c&oacute;digo en la p&aacute;gina "Mi perfil" una vez se registre.</em>.&nbsp;</p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 10px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><em style="text-align:center">Guarda este correo con el c&oacute;digo para cuando te suscribas a nuestro servicio.</em>.&nbsp;</p>
 
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><a href="{{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}">Reg&iacute;strese YA</a></p>
-
-<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'>&nbsp;</p><p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><span style="color:rgb(51, 51, 51); text-align:center">Nuestro compromiso es simplificar su vida ofreci&eacute;ndole las mejores herramientas para el pago de sueldo y aportes a seguridad social de sus empleados.</span></p><p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'>&nbsp;</p><p class="size-13" style="font-style: normal;font-weight:
-400;Margin-bottom: 0;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><span>Atentamente,</span></p><p class="size-13" style="font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><strong style="font-weight: bold;">CAMILO M&#201;NDEZ</strong></p><p class="size-13" style="font-style: normal;font-weight: 400;Margin-bottom: 27px;Margin-top: 27px;font-size: 13px;line-height: normal;font-family: arial regular,arial;color: #353638;text-align: center;"><span>Director Symplifica</span></p>
+<p style='font-style: normal;font-weight: 400;Margin-bottom: 0;Margin-top: 0;font-size: 17px;line-height: 25px;font-family: "PT Serif",Georgia,serif;color: #353638;text-align: center;'><a href="{{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}">¡Regístrate y SYMPLIFÍCATE!</a></p>
 
                       </td>
                     </tr>

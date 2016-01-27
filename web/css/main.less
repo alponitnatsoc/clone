@@ -11,13 +11,15 @@
    @light_gray: #4B4B4B;
    @dark_green: #3b4b5a;
    @error_color: #f00;
-   @open: "Roboto","Open Sans";
+   @open: "Open Sans","Roboto", Arial;
    @roboto: "Roboto";
-   @robotoCondensed: "Roboto Condensed";
+   @robotoCondensed: "Open Sans Condensed";
    @lato: "Lato";
    @color_boton: #ffc107;
-   @fondo: #fdfdf8;
+   @fondo: #f8f8f8;
    @lightGrayBars: #efefef;
+   @darkerButtonText: #000000;
+   @lightBLue: #1fcecb;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -75,8 +77,8 @@
         margin:10px 0px;
     }
     ul.navbar-nav li a.btn-ingresar {
-        border:2px solid #1fcecb;
-        background:#1fcecb;
+        border:2px solid @lightBLue;
+        background:@lightBLue;
         padding:6px 20px;
         color:#ffffff;
         margin-top:7px;
@@ -89,7 +91,7 @@
     }
     ul.navbar-nav li a.btn-ingresar:hover {
         color:#ffffff;
-        border:2px solid #1fcecb;
+        border:2px solid @lightBLue;
     }
     ul.navbar-nav li a:hover {
         color:#c2c2c2;
@@ -98,27 +100,42 @@
         border-left:none;
     }
     & + .content {
-        padding-top: 120px;
+        padding-top: 75px;
     }
    }
    .btn.btnNext, .btnPrevious, .btn-default, .btn.pull-right {
     font-family: @open;
-    border:2px solid #1fcecb;
-    background:#1fcecb;
+    border:2px solid @lightBLue;
+    background:@lightBLue;
     padding:6px 20px;
     color:#ffffff;
     margin-top:7px;
-    text-transform:capitalize;
+    text-transform:none;
     font-weight:bold;
     font-size:16px;
     text-shadow: none;
     box-shadow: none;
    }
+
+   .btn-orange {
+        color: @darkerButtonText !important;
+        background-color: @color_boton !important;
+        border-color: @color_boton !important;
+   }
+
+   .btn-orange:hover, .btn-orange:focus, .btn-orange:active   {
+        color: @darkerButtonText !important;
+        background-color: @color_boton !important;
+        border-color: @color_boton !important;
+        opacity:0.8;
+   }
+
+
    .btn:hover {
     opacity:0.8;
    }
    .btnPrevious:hover, .btn-default:hover, .btn-default:focus {
-    border: 2px solid #1FCECB;
+    border: 2px solid @lightBLue;
     background: @blue none repeat scroll 0% 0%;
     color: #fff;
    }
@@ -280,6 +297,7 @@
     margin:10px 0px 25px 0px;
     position: relative;
     min-height: 160px;
+    width: 100%;
     .up-Intro {
         font-family: @open;
         color:#ffffff;
@@ -766,7 +784,7 @@
     .txt-AD1 {
         font-family: @robotoCondensed;
         font-size: 24px;
-        font-weight: 400;
+        font-weight: 700;
         text-transform: initial;
         color: @dark_gray;
         white-space: normal;
@@ -1191,7 +1209,7 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
 }
 @media (min-width: @screen-lg-min) {
     .contenMessage {
-        margin-left: 20%;
+        
     }
 }
 .btn-symplifica {
@@ -1199,21 +1217,21 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
     background-color: @color_boton;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     outline: none;
-    color: #fff;
+    color: @darkerButtonText;
     &:active {
         opacity: 0.7;
         box-shadow: 0 8px rgba(0,0,0,0.2);
         outline: none;
-        color: #fff;
+        color: @darkerButtonText;
     }
     &:hover {
-        color: #fff;
+        color: @darkerButtonText;
         outline: none;
         background-color: @color_boton;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
     &:focus {
-        color: #fff;
+        color: @darkerButtonText;
         outline: none!important;
     }
 }

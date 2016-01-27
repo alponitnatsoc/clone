@@ -13,21 +13,25 @@ class LoadEntityTypeData extends AbstractFixture implements OrderedFixtureInterf
     {
         $EntityTypeEPS = new EntityType();
         $EntityTypeEPS->setName('EPS');
-        
+        $EntityTypeEPS->setPayrollCode('EPS');
+
         $manager->persist($EntityTypeEPS);
-        
+
         $EntityTypeARL = new EntityType();
-        $EntityTypeARL->setName('ARL');        
+        $EntityTypeARL->setName('ARL');
+        $EntityTypeARL->setPayrollCode('ARP');
 
         $manager->persist($EntityTypeARL);
 
         $EntityTypePensiones = new EntityType();
-        $EntityTypePensiones->setName('Pension');                
+        $EntityTypePensiones->setName('Pension');
+        $EntityTypePensiones->setPayrollCode('AFP');
 
         $manager->persist($EntityTypePensiones);
 
         $EntityTypeCajaComp = new EntityType();
-        $EntityTypeCajaComp->setName('CC Familiar');                
+        $EntityTypeCajaComp->setName('CC Familiar');
+        $EntityTypeCajaComp->setPayrollCode('PARAFISCAL');
 
         $manager->persist($EntityTypeCajaComp);
 
@@ -36,9 +40,9 @@ class LoadEntityTypeData extends AbstractFixture implements OrderedFixtureInterf
         $this->addReference('entityType-eps', $EntityTypeEPS);
         $this->addReference('entityType-arl', $EntityTypeARL);
         $this->addReference('entityType-pensiones', $EntityTypePensiones);
-        $this->addReference('entityType-cesantias', $EntityTypeCajaComp);
+        $this->addReference('entityType-cajacomp', $EntityTypeCajaComp);
 
-        
+
     }
     public function getOrder()
     {
@@ -47,4 +51,3 @@ class LoadEntityTypeData extends AbstractFixture implements OrderedFixtureInterf
         return 9;
     }
 }
-    

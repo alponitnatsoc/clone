@@ -37,6 +37,16 @@ class NoveltyType
     private $requiredFields;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $payroll_code;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $absenteeismOrNovelty;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -77,6 +87,58 @@ class NoveltyType
     {
         return $this->name;
     }
+
+
+
+    /**
+     * Set Absenteeism or Novelty
+     *
+     * @param string $absenteeismOrNovelty
+     *
+     * @return PayType
+     */
+    public function setAbsenteeismOrNovelty($absenteeismOrNovelty)
+    {
+        $this->absenteeismOrNovelty = $absenteeismOrNovelty;
+
+        return $this;
+    }
+
+    /**
+     * Get Absenteeism or Novelty
+     *
+     * @return string
+     */
+    public function getAbsenteeismOrNovelty()
+    {
+        return $this->absenteeismOrNovelty;
+    }
+
+    /**
+     * Set payroll code
+     *
+     * @param string $payroll_code
+     *
+     * @return PayType
+     */
+    public function setPayrollCode($payroll_code)
+    {
+        $this->payroll_code = $payroll_code;
+
+        return $this;
+    }
+
+    /**
+     * Get payroll_code
+     *
+     * @return string
+     */
+    public function getPayrollCode()
+    {
+        return $this->payroll_code;
+    }
+
+
 
     /**
      * Add requiredDocument

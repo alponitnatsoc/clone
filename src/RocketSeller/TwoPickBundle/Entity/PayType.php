@@ -33,6 +33,11 @@ class PayType
     private $descripcion;
 
     /**
+     * @ORM\Column(type="string", length=4, nullable=TRUE)
+     */
+    private $payroll_code;
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $image;
@@ -140,6 +145,30 @@ class PayType
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Set payroll code
+     *
+     * @param string $payroll_code
+     *
+     * @return PayType
+     */
+    public function setPayrollCode($payroll_code)
+    {
+        $this->payroll_code = $payroll_code;
+
+        return $this;
+    }
+
+    /**
+     * Get payroll_code
+     *
+     * @return string
+     */
+    public function getPayrollCode()
+    {
+        return $this->payroll_code;
     }
 
     /**
