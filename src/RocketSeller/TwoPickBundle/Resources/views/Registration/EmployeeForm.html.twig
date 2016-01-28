@@ -322,7 +322,10 @@
                 <ul id='' class="benefits" data-prototype="{{ form_widget(form.employeeHasEmployers.benefits.vars.prototype)|e }}">
                     {% for benefit in form.employeeHasEmployers.benefits %}
                         <li id="benefits_{{loop.index}}" class="benefitLi">
-                            {{ form_row(benefit.benefits) }}
+                            {{ form_row(benefit.idContractHasBenefits) }}
+                            {{ form_row(benefit.benefitType) }}
+                            {{ form_row(benefit.amount) }}
+                            {{ form_row(benefit.periodicity) }}
                         </li>
                     {% endfor %}
                 </ul>
@@ -397,10 +400,8 @@
                 {% for child in form.employeeHasEmployers.payMethod %}
                     {% set index = child.vars.value %}
                     {{ form_widget(child) }}
-                    DESCRIPCIONNNN
                     {{ choices[index].descripcion }}
-                    IMAGEEN
-                    {{ choices[index].image }}
+                    <!--{{ choices[index].image }}-->
                     <div id="putFields_{{ index }}"></div>
 
                 {% endfor %}

@@ -53,8 +53,8 @@ function startEmployer() {
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link">Agregar lugar de trabajo</a>');
-    var $newLinkLi = $('<li></li>').append($addPhoneLink);
+    var $addPhoneLink = $('<a href="#" class="col-md-4 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo lugar de trabajo</a>');
+    var $newLinkLi = $('<li class="col-md-12"></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
@@ -405,13 +405,13 @@ function addPhoneForm($collectionHolderB, $newLinkLi) {
     var index = $collectionHolderB.data('index');
     var newForm = prototype.replace(/__name__/g, index);
     $collectionHolderB.data('index', index + 1);
-    var $newFormLi = $('<li></li>').append(newForm);
+    var $newFormLi = $('<li class="col-sm-12"></li>').append(newForm);
     addTagFormDeleteLink($newFormLi, "lugar de trabajo");
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi, $tipo) {
-    var $removeFormA = $('<a href="#" class="remove_phone_link">Eliminar ' + $tipo + '</a>');
-    $tagFormLi.prepend($removeFormA);
+    var $removeFormA = $('<a href="#" class="col-sm-5 remove_phone_link" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar esta dirección de trabajo</a>');
+    $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function (e) {
         // prevent the link from creating a "#" on the URL

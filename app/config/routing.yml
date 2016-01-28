@@ -287,15 +287,19 @@ employee_login_two_auth:
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:twoFactorLogin }
 
 show_certificates:
-    path:     /employee/generate/certificate
+    path:     /employee/certificate/generate
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }
 
 generate_certificate:
-    path:     /employee/generate/certificate/{employee}
+    path:     /employee/certificate/generate/{idEmployee}/{idCertificate}
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generateCertificate }
 
-download_certificate:
-    path:     /certificate
+download_certificate_get:
+    path:     /employee/certificate/download/{idEmployee}/{idCertificate}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdfGet }
+    
+download_certificate_post:
+    path:     /employee/certificate/download
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
 
 show_help:

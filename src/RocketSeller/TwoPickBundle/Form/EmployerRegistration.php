@@ -39,10 +39,11 @@ class EmployerRegistration extends AbstractType
                 'choices' => array(
                     true   => 'Si',
                     false  => 'No'
-                ),
+                ),                
                 'multiple' => false,
                 'expanded' => true,
-                'label' => '¿Su dirección principal es la misma donde trabajará(n)?*',
+                'label' => '¿Su dirección principal es la misma donde trabajarán?*',
+                'data' => true,
                 'property_path' => 'sameWorkHouse',
                 'required' => true
             ))
@@ -53,7 +54,9 @@ class EmployerRegistration extends AbstractType
                 'by_reference' => false
             ))
             ->add('save', 'submit', array(
-                'label' => 'Guardar'
+                'label' => 'Salvar',
+                'attr'   =>  array(
+                'class'   => 'btn btn-primary btnNext btn-orange')
             ));
     }
 

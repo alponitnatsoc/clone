@@ -85,7 +85,7 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
-                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.youAre) }}    
@@ -115,6 +115,14 @@
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.names)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.names) }}
+                        </div>                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
                             {{ form_label(form.person.lastName1)}}
                         </div>
                         <div class="col-sm-6 form-group input">
@@ -124,14 +132,6 @@
                     </div>
                     <div class="col-sm-12 col-sm-push-3">
                         <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext" style="display: none;">Consultar</a>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.names)}}
-                        </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ form_widget(form.person.names) }}
-                        </div>                        
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -161,43 +161,70 @@
             
             <div id="contactData" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.mainAddress) }}
+                <br></br>
+                <div class="col-sm-10 col-xs-12 content-input">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.mainAddress)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.mainAddress) }}
+                        </div>                    
+                    </div>
+                    <div class="col-sm-12">
                         <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
                             {% for phone in form.person.phones %}
                                 <li id="phone_{{loop.index}}" class="phoneLi">
                                     {{ form_row(phone.id) }}
-                                    {{ form_row(phone.phoneNumber) }}
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(phone.phoneNumber)}}    
+                                    </div>
+                                    <div class="col-sm-6 form-group input">
+                                        {{ form_widget(phone.phoneNumber)}}    
+                                    </div>                                                                        
                                 </li>
                             {% endfor %}
                         </ul>
+                    </div> 
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.department)}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.person.department) }}
+                        </div>                    
                     </div>
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.department) }}
-                        {{ form_row(form.person.city) }}
-                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.city)}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.person.city) }}
+                        </div>                    
+                    </div>                                          
+                    
                 </div>
+                <br/><br/>
                 <div class="col-sm-12 col-xs-12 center">
-                    <div class="col-xs-6">
-                        <a class="btn btn-primary btnPrevious">Anterior</a>
+                        
+                            <a class="btn btn-primary btnPrevious">Anterior</a>
+                        
+                        
+                            <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            <br /><br />
+                        
                     </div>
-                    <div class="col-xs-6">
-                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
-                        <br /><br />
-                    </div>
-
-                </div>
-                <br /><br />
             </div>
 
-            <div id="workplacesData" class="tab-pane fade h3">
+            <div id="workplacesData" class="tab-pane fade h3">                
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Corresponden a los puntos donde laborará o dependerá cada empleado.Los campos marcados con * son obligatorios.</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Corresponden a los puntos donde laborará o dependerá cada empleado.</span>
                 </div>
-                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
+                
+                <div class="col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
                     <div class="col-sm-12 col-xs-12">
                         {{ form_row(form.sameWorkHouse) }}
                     </div>
@@ -209,24 +236,50 @@
                         {{ include('RocketSellerTwoPickBundle:DataPrototypes:workplacesPrototype.html.twig', { 'form': form.workplaces.vars.prototype|e }) }}
                     {% endfilter %} "  style="list-style: none">
                     {% for workplace in form.workplaces %}
-                        <li id="workSpace_{{loop.index}}" class="workSpaceLi">
+                        <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
                             <div class="row">
-                                <div class="col-sm-8 col-sm-push-2 col-xs-12" style="border-bottom: none">
+                                <div class="col-sm-10 col-xs-12" style="border-bottom: none">
                                     <div class="col-sm-12 col-xs-12">
                                         {{ form_row(workplace.id) }}
-                                        {{ form_row(workplace.name) }}
-                                        {{ form_row(workplace.mainAddress) }}
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(workplace.name) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group input">
+                                            {{ form_widget(workplace.name) }}
+                                        </div>                                                                                
                                     </div>
-                                    <div class="col-xs-12 col-md-6">
-                                        {{ form_row(workplace.department) }}
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(workplace.mainAddress) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group input">
+                                            {{ form_widget(workplace.mainAddress) }}
+                                        </div>
                                     </div>
-                                    <div class="col-xs-12 col-md-6">
-                                        {{ form_row(workplace.city) }}
+                                    <div class="col-xs-12 col-sm-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(workplace.department)}}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(workplace.department)}}
+                                        </div>                                                                            
                                     </div>
+                                    <div class="col-xs-12 col-sm-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(workplace.city) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(workplace.city) }}
+                                        </div>                                        
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        </li>
-                    {% endfor %}
+                        </div>
+                        <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;|">
+                                        
+                                    </div>
+                    {% endfor %}                    
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>

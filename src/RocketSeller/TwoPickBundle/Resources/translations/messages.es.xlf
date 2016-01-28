@@ -359,24 +359,24 @@
                 <target>Cancelar</target>
             </trans-unit>
             <trans-unit id="label_per_page">
-              <source>label_per_page</source>
-              <target>Por página</target>
+                <source>label_per_page</source>
+                <target>Por página</target>
             </trans-unit>
             <trans-unit id="list_select">
-              <source>list_select</source>
-              <target>Seleccionar</target>
+                <source>list_select</source>
+                <target>Seleccionar</target>
             </trans-unit>
             <trans-unit id="confirm_exit">
                 <source>confirm_exit</source>
                 <target>Tienes cambios sin guardar.</target>
             </trans-unit>
             <trans-unit id="link_edit_acl">
-              <source>link_edit_acl</source>
-              <target>Editar ACL</target>
+                <source>link_edit_acl</source>
+                <target>Editar ACL</target>
             </trans-unit>
             <trans-unit id="btn_update_acl">
-              <source>btn_update_acl</source>
-              <target>Actualizar ACL</target>
+                <source>btn_update_acl</source>
+                <target>Actualizar ACL</target>
             </trans-unit>
             <trans-unit id="flash_acl_update_success">
                 <source>flash_acl_edit_success</source>
@@ -387,8 +387,8 @@
                 <target>ACL</target>
             </trans-unit>
             <trans-unit id="short_object_description_placeholder">
-              <source>short_object_description_placeholder</source>
-              <target>Ninguna selección</target>
+                <source>short_object_description_placeholder</source>
+                <target>Ninguna selección</target>
             </trans-unit>
             <trans-unit id="title_search_results">
                 <source>title_search_results</source>
@@ -417,6 +417,65 @@
             <trans-unit id="message_form_group_empty">
                 <source>message_form_group_empty</source>
                 <target>No hay campos disponibles.</target>
+            </trans-unit>
+            <!-- Meses -->
+            <trans-unit id="January">
+                <source>January</source>
+                <target>Enero</target>
+            </trans-unit>
+            <trans-unit id="February">
+                <source>February</source>
+                <target>Febrero</target>
+            </trans-unit>
+            <trans-unit id="March">
+                <source>March</source>
+                <target>Marzo</target>
+            </trans-unit>
+            <trans-unit id="April">
+                <source>April</source>
+                <target>Abril</target>
+            </trans-unit>
+            <trans-unit id="May">
+                <source>May</source>
+                <target>Mayo</target>
+            </trans-unit>
+            <trans-unit id="June">
+                <source>June</source>
+                <target>Junio</target>
+            </trans-unit>
+            <trans-unit id="July">
+                <source>July</source>
+                <target>Julio</target>
+            </trans-unit>
+            <trans-unit id="August">
+                <source>August</source>
+                <target>Agosto</target>
+            </trans-unit>
+            <trans-unit id="September">
+                <source>September</source>
+                <target>Septiembre</target>
+            </trans-unit>
+            <trans-unit id="October">
+                <source>October</source>
+                <target>Octubre</target>
+            </trans-unit>
+            <trans-unit id="November">
+                <source>November</source>
+                <target>Noviembre</target>
+            </trans-unit>
+            <trans-unit id="December">
+                <source>December</source>
+                <target>Diciembre</target>
+            </trans-unit>
+            <!-- FIN Meses -->
+            
+            <trans-unit id="CC">
+                <source>CC</source>
+                <target>C.C.</target>
+            </trans-unit>
+            <trans-unit id="CC_name">
+                <source>CC_name</source>
+                <target>Cédula de ciudadanía</target>
             </trans-unit>
         </body>
     </file>

@@ -8,3 +8,6 @@ liquidations_by_ehe:
 liquidation_show:
     path: /show/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:show }
+final_liquidation:
+    path: /final/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidation }
