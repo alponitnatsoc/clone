@@ -83,13 +83,13 @@ function startEmployer() {
         var documentType = $(form).find("select[name='register_employer[person][documentType]']");
         var document = $(form).find("input[name='register_employer[person][document]']");
         var lastName1 = $(form).find("input[name='register_employer[person][lastName1]']");
-        if (!form.valid()) {
-            return;
-        }
-        //if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
-        //    alert("Llenaste algunos campos incorrectamente");
+        //if (!form.valid()) {
         //    return;
         //}
+        if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
+            //    alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
 
         $.ajax({
             url: $(this).attr('href'),

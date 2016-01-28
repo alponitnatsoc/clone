@@ -197,24 +197,28 @@ function startEmployee() {
         var documentType = $(form).find("select[name='register_employee[person][documentType]']");
         var document = $(form).find("input[name='register_employee[person][document]']");
         var lastName1 = $(form).find("input[name='register_employee[person][lastName1]']");
-        if (!form.valid()) {
-            return;
-        }
-        //if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
-        ////alert("Llenaste algunos campos incorrectamente");
+        //if (!form.valid()) {
         //    return;
         //}
+        if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
+            //alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
 
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
+            beforeSend: function () {
+                $('#btn-inquiry').html('Buscando...');
+            },
             data: {
                 documentType: documentType.val(),
                 document: document.val(),
                 lastName1: lastName1.val(),
             }
         }).done(function (data) {
-            alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
+            $('#btn-inquiry').html('Consultar');
+            //alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
             //load the data
             var form = $("form");
             $(form).find("input[name='register_employee[person][names]']").val(data["names"]);
