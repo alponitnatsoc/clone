@@ -323,26 +323,27 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
-        $contracts = $employerHasEmployee->getContracts();
-        if($contracts->count()!=0){
-            $currentContract=null;
-            /** @var Contract $contract */
-            foreach ($contracts as $contract) {
-                if($contract->getState()=="Active")
-                    $currentContract=$contract;
-            }
+        if($employerHasEmployee!=null){
+            $contracts = $employerHasEmployee->getContracts();
+            if($contracts->count()!=0){
+                $currentContract=null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()=="Active")
+                        $currentContract=$contract;
+                }
 
-            $form->get('employeeHasEmployers')->setData($currentContract);
-            $weekWDs=$currentContract->getWeekWorkableDays();
-            /** @var WeekWorkableDays $weekWD */
-            $arrayWWD=array();
-            foreach ($weekWDs as $weekWD) {
-                $arrayWWD[]=$weekWD->getDayName();
+                $form->get('employeeHasEmployers')->setData($currentContract);
+                $weekWDs=$currentContract->getWeekWorkableDays();
+                /** @var WeekWorkableDays $weekWD */
+                $arrayWWD=array();
+                foreach ($weekWDs as $weekWD) {
+                    $arrayWWD[]=$weekWD->getDayName();
+                }
+                $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
+                $form->get('idContract')->setData($currentContract->getIdContract());
             }
-            $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
-            $form->get('idContract')->setData($currentContract->getIdContract());
         }
-
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render(

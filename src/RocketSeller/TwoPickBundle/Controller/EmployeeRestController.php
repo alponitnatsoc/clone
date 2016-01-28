@@ -583,13 +583,6 @@ class EmployeeRestController extends FOSRestController
             $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
             /** @var Contract $contract */
             $contract = $contractRepo->find($idContract);
-            if ($user->getPersonPerson()->getEmployer()->getIdEmployer() != $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer()) {
-                //TODO return him to step 2
-                $view->setStatusCode(403)->setData(array(
-                    "error" => array('contract' => "You don't have that contract"),
-                    "ulr" => ""));
-                return $view;
-            }
             if ($contract == null) {
                 //Create the contract
                 $contract = new Contract();
@@ -597,6 +590,14 @@ class EmployeeRestController extends FOSRestController
                 $contract->setState("Active");
                 $employerEmployee->addContract($contract);
             }
+            if ($user->getPersonPerson()->getEmployer()->getIdEmployer() != $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer()) {
+                //TODO return him to step 2
+                $view->setStatusCode(403)->setData(array(
+                    "error" => array('contract' => "You don't have that contract"),
+                    "ulr" => ""));
+                return $view;
+            }
+
 
 
 
