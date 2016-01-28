@@ -1,13 +1,47 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+<form action="{{ path('api_public_post_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
     <div>
         {% if invalid_username is defined %}
             <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
         {% endif %}
-        <input type="text" id="username" name="username" required="required" placeholder="Email" style="width: 100%;"/>
+        <input type="email" id="username" name="username" required="required" placeholder="Email" style="width: 100%;"/>
+        <div class="alert alert-danger" role="alert" style="display: none">No fue posible enviar el correo con el link para resetear la contraseña</div>
     </div>
     <div>
-        <button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right" style="">Recuperar contraseña</button>
+        <button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right" data-loading-text="Enviando..." data-complete-text="Enviado">Recuperar contraseña</button>
     </div>
 </form>
+<script>
+$("form.fos_user_resetting_request").on('submit', function(e) {
+    e.preventDefault();
+
+    var form = $("form.fos_user_resetting_request");
+    var btn = form.find("#_submit").button('loading');
+//     alert(form.attr('action'));
+    $.ajax({
+        url : form.attr('action'),
+        type: form.attr('method'),
+        data: form.serialize()
+    }).done(function( data ) {
+        var div = form.parent("div");
+        div.html("<div class='col-sm-8 col-md-12 col-xs-12'>Hemos enviado un mensaje a tu dirección de correo electrónico con las instrucciones para reestablecer tu contraseña.</div>" +
+                "<div class='col-sm-12 col-xs-12 center'>" +
+                    '<a class="btn btn-default btn-orange" href="/login">Entendido</a>' +
+                "</div>"
+            );
+        btn.button('complete');
+    }).fail(function( jqXHR, textStatus, errorThrown ) {
+        console.log(jqXHR + " Server might not handle That yet " + textStatus + " " + errorThrown + " Code " + jqXHR.status);
+        var alert = form.find(".alert");
+        alert.slideDown();
+
+        var code = jqXHR.status;
+        if ( code == 400) {
+        } else if (code = 401) {
+        }
+
+        btn.button('reset');
+    });
+});
+</script>

@@ -74,3 +74,7 @@ registration_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:RegistrationRest"
     name_prefix: api_plublic_
+resetting_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:ResettingRest"
+    name_prefix: api_public_
