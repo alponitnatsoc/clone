@@ -169,7 +169,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span> 
+                                                        <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -201,7 +201,7 @@
                         <div class="col-sm-4"><a href="{{ path('_nosotros') }}">Nosotros</a></div>
                         <div class="col-sm-4"><a href="{{ path('show_help') }}">Ayuda</a></div>
                         <div class="col-sm-4"><a href="https://medium.com/blog-symplifica" target="_blank">Blog</a></div>
-                        
+
                     </div>
                     <div class="col-sm-5 social">
                         <div class="red facebook"><a href="#" target="_blank"></a></div>
@@ -478,13 +478,13 @@
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                             <div class="col-sm-12 col-xs-12 up-Intro" style="margin:0 0 0 190px">¿Olvidaste<br>tu contraseña?</div>
                         </div>
-                        
+
                         <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                             <div class="col-md-4 " style="">
                                 <p><img src="/img/key.png" style="width: 152px; margin: -105px 0 0 -15px;"></p>
                             </div>
                             <div class="col-md-8">
-                                <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te permita restear la contraseña</p>
+                                <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te permita resetear la contraseña</p>
                                 {% include "RocketSellerTwoPickBundle:Resetting:request_content.html.twig" %}
                             </div>
                         </div>
