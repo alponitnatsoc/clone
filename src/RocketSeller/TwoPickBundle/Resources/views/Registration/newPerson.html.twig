@@ -36,6 +36,9 @@
            .label-group{
             text-align: right !important;
            }
+           .form-select{
+            color: yellow !important;
+           }
         </style>
     {% endblock %}
     <!--
@@ -96,7 +99,7 @@
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.person.documentType)}}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 form-group">
                             {{ form_widget(form.person.documentType) }}
                         </div>
                         <!--<img src="/img/documentType.png">-->
@@ -142,7 +145,7 @@
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.person.birthDate)}}
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 form-group">
                             {{ form_widget(form.person.birthDate) }}
                         </div>                                               
                     </div>
