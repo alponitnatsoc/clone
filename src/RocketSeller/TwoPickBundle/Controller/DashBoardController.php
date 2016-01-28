@@ -24,6 +24,7 @@ class DashBoardController extends Controller
         $user = $this->getUser();
         $stateRegister = 0;
         $stateEmployees = 0;
+        $stateAfiliation = 0;
         $idCurrentEmployee = -1;
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
@@ -52,6 +53,9 @@ class DashBoardController extends Controller
                         //si nó el contrato todavía no se ha diligenciado y solo se
                         //puede sumar 1 unidad minima al porcentaje
                         $stateEmployees+=$minUnit;
+                    }
+                    if($value->getEmployeeEmployee()->getEntities()->count()>0){
+                        $stateAfiliation+=$minUnit * 2;
                     }
                 }
             }
@@ -92,13 +96,12 @@ class DashBoardController extends Controller
                 'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
             $steps ['1'] = $step2;
         }
-
         $step4 = array(
             'url' => $stateEmployees!=100 ?"":$this->generateUrl('matrix_choose'),
             'name' => "Finalizar afiliación",
             'paso' => 3,
             'state' => $stateEmployees,
-            'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
+            'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 
         return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', array('steps' => $steps));
