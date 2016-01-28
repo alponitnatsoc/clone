@@ -35,6 +35,7 @@
             */
         </style>
     {% endblock %}
+    <!--
     <div class="col-sm-12 col-xs-12 block-Data">
         <h1>SYMPLIFÍCATE</h1>
         <span>
@@ -42,6 +43,7 @@
             Con tu información como empleador sabremos qué necesitan tú y tus empleados y sabremos cómo ayudarte.
         </span>
     </div>
+    -->
     <div class="col-sm-12 col-xs-12 align-Resp" id="">
         <div href="/register/edit" class="btn col-sm-12 col-xs-12 blockStep  complete  nav-link" id="">
             <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0" id="">
@@ -111,7 +113,7 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <div class="col-sm-6 col-sm-push-3">
-                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext">Siguiente</a>
+                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext btn-orange">Siguiente</a>
                     </div>
                 </div>
 
@@ -143,7 +145,7 @@
                         <a class="btn btn-primary btnPrevious">Anterior</a>
                     </div>
                     <div class="col-xs-6">
-                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext" style="min-width: 75%">Siguiente</a>
+                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange" style="min-width: 75%">Siguiente</a>
                     </div>
                 </div>
 
@@ -190,7 +192,7 @@
             </div>
         </div>
         {{ form_end(form) }}
-
+        <br /><br />
         <!-- Modal success -->
         <div class="modal fade" id="createdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
              data-keyboard="false" >
@@ -217,5 +219,5 @@
             </div>
         </div>
     </div>
-    <br /><br />
+    
 {% endblock fos_user_content%}
