@@ -103,9 +103,9 @@
                     {% for doc in employeeDocs %}
                         {% if (documents[0] == doc.documentTypeDocumentType) %}
                             {% if doc.status %}
-                                <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                                <a href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
                             {% else %}
-                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                             {% endif %}                                                                                             
                         {% endif %}                                                
                     {% endfor %}
@@ -121,9 +121,9 @@
                     {% for doc in employeeDocs %}
                         {% if (documents[2] == doc.documentTypeDocumentType) %}
                             {% if doc.status %}
-                                <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
+                                <a href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
                             {% else %}
-                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
+                                <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
                             {% endif %}                                                                                             
                         {% endif %}                                                
                     {% endfor %}
@@ -152,7 +152,7 @@
                                 {% if doc.status %}
                                     <a href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
                                 {% else %}
-                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
+                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">Documento</a>
                                 {% endif %}                                                                                             
                             {% endif %}                                                
                         {% endfor %}
@@ -170,7 +170,7 @@
                                 {% if doc.status %}
                                     <a href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Descargar</a>
                                 {% else %}
-                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
+                                    <a class="btn-default btn btn-sm" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">Documento</a>
                                 {% endif %}                                                                                             
                             {% endif %}                                                
                         {% endfor %}
