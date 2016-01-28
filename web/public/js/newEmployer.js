@@ -84,12 +84,12 @@ function startEmployer() {
         var document = $(form).find("input[name='register_employer[person][document]']");
         var lastName1 = $(form).find("input[name='register_employer[person][lastName1]']");
         if (!form.valid()) {
-
-        }
-        if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
-            alert("Llenaste algunos campos incorrectamente");
             return;
         }
+        //if (!(validator.element(documentType) && validator.element(document) && validator.element(lastName1))) {
+        //    alert("Llenaste algunos campos incorrectamente");
+        //    return;
+        //}
 
         $.ajax({
             url: $(this).attr('href'),
@@ -115,10 +115,13 @@ function startEmployer() {
         var names = $(form).find("input[name='register_employer[person][names]']");
         var lastName1 = $(form).find("input[name='register_employer[person][lastName1]']");
         var lastName2 = $(form).find("input[name='register_employer[person][lastName2]']");
-        if (!(validator.element(documentType) && validator.element(document) && validator.element(names) && validator.element(lastName1))) {
-            alert("Llenaste algunos campos incorrectamente");
+        if (!form.valid()) {
             return;
         }
+        //if (!(validator.element(documentType) && validator.element(document) && validator.element(names) && validator.element(lastName1))) {
+        //    alert("Llenaste algunos campos incorrectamente");
+        //    return;
+        //}
 
         $.ajax({
             url: $(this).attr('href'),
@@ -147,10 +150,13 @@ function startEmployer() {
         var mainAddress = $(form).find("input[name='register_employer[person][mainAddress]']");
         var department = $(form).find("select[name='register_employer[person][department]']");
         var city = $(form).find("select[name='register_employer[person][city]']");
-        if (!(validator.element(mainAddress) && validator.element(department) && validator.element(city))) {
-            alert("Llenaste algunos campos incorrectamente");
+        if (!form.valid()) {
             return;
         }
+        //if (!(validator.element(mainAddress) && validator.element(department) && validator.element(city))) {
+        //    alert("Llenaste algunos campos incorrectamente");
+        //    return;
+        //}
         var i = 0;
         $(form).find("ul.phones input[name*='id']").each(function () {
             idsPhones[i++] = $(this).val();
