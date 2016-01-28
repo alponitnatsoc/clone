@@ -101,14 +101,14 @@ span {
   box-shadow: none;
 }
 .btn-orange {
-  color: #000000 !important;
+  color: white !important;
   background-color: #ffc107 !important;
   border-color: #ffc107 !important;
 }
 .btn-orange:hover,
 .btn-orange:focus,
 .btn-orange:active {
-  color: #000000 !important;
+  color: white !important;
   background-color: #ffc107 !important;
   border-color: #ffc107 !important;
   opacity: 0.8;
@@ -615,14 +615,14 @@ a.helpTxt {
 }
 .form-group select,
 .form-horizontal select {
-  background-image: url(../img/select-arrow.png);
-  background-position: right;
-  background-repeat: no-repeat;
+  /*background-image: url(../img/select-arrow.png);
+        background-position: right;
+        background-repeat: no-repeat;*/
   height: 46px;
   border: 1px solid #919191;
-  -webkit-appearance: none;
-  border-radius: 0;
-  min-width: 100px;
+  /*-webkit-appearance: none;
+        border-radius: 0;
+        min-width: 100px;*/
 }
 .block-Intro .lead {
   font-family: "Open Sans", "Roboto", Arial;
@@ -720,7 +720,7 @@ a.helpTxt {
   color: #3C4B5A;
 }
 .block-Intro span {
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 }
 .profile-Data .person {
   float: right;
@@ -944,9 +944,9 @@ a.helpTxt {
   text-align: center;
 }
 .blockUpData label {
-  font-weight: bold !important;
+  font-weight: 300 !important;
   font-family: "Open Sans", "Roboto", Arial !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   min-height: 60px;
 }
 .blockUpData .radio {
@@ -1182,22 +1182,22 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div.checkbox {
   background-color: #ffc107;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   outline: none;
-  color: #000000;
+  color: white;
 }
 .btn-symplifica:active {
   opacity: 0.7;
   box-shadow: 0 8px rgba(0, 0, 0, 0.2);
   outline: none;
-  color: #000000;
+  color: white;
 }
 .btn-symplifica:hover {
-  color: #000000;
+  color: white;
   outline: none;
   background-color: #ffc107;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .btn-symplifica:focus {
-  color: #000000;
+  color: white;
   outline: none!important;
 }
 .navbar {
