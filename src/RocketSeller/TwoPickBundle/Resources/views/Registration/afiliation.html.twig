@@ -42,9 +42,16 @@
             <div id="employeeEntities" class="tab-pane fade in {%   if tab==1 %}active{% endif %}">
                 {# render the task's only field: description #}
                 {{ form_row(form.idEmployer) }}
-                Para finalizar el proceso es necesario confirmar la información de afiliación a Seguridad Social de sus empleados. Los campos marcados con * son obligatorios.
+                <p>Ten en cuenta que debes confirmar la información de afiliación a la Seguridad Social de tus empleados.
+                    Los campos con * son obligatorios.</p>
 
-                Tenga presente que deberá asignar la entidad con la cual tiene afiliación actualmente y de no contar con ella, Symplifica se encargará de realizarla. Si el empleado desea cambiar de entidad, deberá contactarse con nosotros para asesorarlo.
+                <p>La información que aparece a continuación es fundamental para el proceso de registro.
+                    <b>Si no la conoces o no la tienes Symplifica lo hace por ti</b>. En caso de que tu empleado quiera
+                    cambiar de entidad, debe <a href="{{ path('contact') }}">contactarse con nosotros</a> para ofrecerle asesoría.</p>
+
+                <div class="col-sm-12 col-xs-12 center">
+                    <h4>Selecciona la información correcta en cada espacio:</h4>              
+                </div>
                 <div>
                     <div class="col-sm-12 col-xs-12 blockUpData">
                         <div class="col-sm-3 col-xs-12 row">
@@ -82,9 +89,11 @@
                         </div>
                     {% endfor %}
                 </div>
-
+                <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
+                    <input type="checkbox" name="chkAcept" id="chkAcept"/>Acepto que la información anterior fue verificada por los empleados.                    
+                </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext disabled" >Confirmar información</a>
                 </div>
 
 
