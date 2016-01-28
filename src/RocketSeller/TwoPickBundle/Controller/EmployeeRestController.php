@@ -81,6 +81,7 @@ class EmployeeRestController extends FOSRestController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
         /** @var Employee $employee */
         $employee = null;
 //        $idContract = $paramFetcher->get("register_social_security");
@@ -109,8 +110,15 @@ class EmployeeRestController extends FOSRestController
         $accountTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
         $payTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
         $frequencyRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
-
-
+        $payMethod=$contract->getPayMethodPayMethod();
+        if($payMethod!=null){
+            $payMethod->setCellPhone("");
+            $payMethod->setAccountNumber("");
+            $payMethod->setBankBank(null);
+            $payMethod->setAccountTypeAccountType(null);
+            $payMethod->setFrequencyFrequency(null);
+            $payMethod->setPayTypePayType(null);
+        }
         //Now for the payType and Pay Method
         $payMethod = new PayMethod();
         //TODO check if valid??
@@ -188,6 +196,7 @@ class EmployeeRestController extends FOSRestController
 //        }
 //        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
+
         $contract->setPayMethodPayMethod($payMethod);
 
 
@@ -196,7 +205,7 @@ class EmployeeRestController extends FOSRestController
 
 
 
-        $em = $this->getDoctrine()->getManager();
+
         if (count($errors) == 0) {
             $em->persist($contract);
             $em->flush();

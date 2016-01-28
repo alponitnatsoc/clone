@@ -64,19 +64,23 @@
 {% endblock %}
 
 {% block fos_user_content %}
+    <h3>Activación de la suscripción</h3>
     <div style="margin: 10px;padding: 10px; text-align: center; display: inline-block;">
         {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
         {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
-        {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("M") %}
+        {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
         {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
         {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
-        {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("M") %}
-        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}
+        {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
+        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}        
         <p>
-            En este momento cuenta con SERVICIO GRATUITO hasta el {{ day }} de {{ month }} de {{ year }}. Sin embargo ya puede llevar a cabo la activación de la suscripción al servicio de Symplifica.
+            A partir de este momento y hasta el próximo {{ day }} de {{ month }} de {{ year }} tienes GRATIS los servicios de Symplifica.
         </p>
         <p>
-            De acuerdo a la información registrada, usted cuenta con los siguientes empleados:
+            A continuación podrás activar tu suscripción.
+        </p>
+        <p>
+            Has registrado los siguientes empleados:
         </p> 
     </div>
 
@@ -106,18 +110,20 @@
 
     <div class="col-lg-1 result_ajax"></div>
     <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
-        El valor mensual del servicio de Symplifica para su caso es:
+        Este servicio tendrá el siguiente valor:
         <div class="div_price">     
             <div id="result_price"></div>      
             A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}.
             <div id="result_discount"></div>    
         </div>
     </div>
-    <div style="text-align: center; margin-top: 20px;">Si cuenta con tres o más empleados registrados recibirá un <b>10% de descuento</b> en la suscripción.</div>
-    <div style="text-align: center; margin-top: 20px; font-weight: bold">Calcule el valor de suscripción</div>
-    <div style="text-align: center; margin-top: 20px;"><span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> y conozca el precio por simplificar la manera de gestionarlos</div>
+    <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
+    <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
     <div style="text-align: center; margin-top: 20px;">
-        <a class="btn btn-default notAjax"  href="{{ path('activate_subscription') }}">Continuar con el pago</a>
+        <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a class="btn btn-default notAjax"  href="{{ path('activate_subscription') }}">Continuación del pago</a>
     </div>
 
     <!-- Modal Confirm-->
@@ -375,7 +381,7 @@
                     .toFixed(0)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return "$" + price;
+            return "$ " + price;
         }
     </script>
 {% endblock %}
