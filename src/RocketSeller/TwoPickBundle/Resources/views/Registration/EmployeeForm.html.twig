@@ -2,6 +2,7 @@
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>
+            /*
             .blockStep2 {
                 margin-top: 10px;
                 background: #3b4b5a !important;
@@ -23,7 +24,7 @@
                 text-transform: uppercase;
                 color: #fff;
                 white-space: normal;
-            }
+            }*/
 
             .register_employee_employeeHasEmployers_payMethod label input {
 
@@ -49,27 +50,34 @@
                 margin: 0 0 20px 80px
 
             }
+
+
+            .label-group{
+            text-align: right !important;
+           }
+           .label-group > h3 {
+            text-align: left;
+           }
+           .form-select{
+            color: yellow !important;
+           }
         </style>
     {% endblock %}
-    <div id='' class='col-sm-12 col-xs-12 align-Resp'>
-        <div id='' class='col-sm-12 col-xs-12 blockStep2'>
-            <div id='' class='col-sm-2 col-xs-12 txt-AD0'>
-                <img src="/img/employ.png">
+    <div class="col-sm-12 col-xs-12 align-Resp">
+        <div class="btn col-sm-12 col-xs-12 blockStep complete nav-link">
+            <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0 statusBarIcon">
+                <img src="/img/employ_white.png">                    
             </div>
-            <div id='' class='col-sm-4 col-xs-12 txt-AD1'>
-                <div id='' class='text-left' >
-                    DATOS DE LOS EMPLEADOS
+            <div class="col-md-6 col-xs-12 txt-AD1">
+                <div class="text-left" id="">
+                    <p>Paso <strong>2</strong> de 3</p>
+                    Datos de los empleados
                 </div>
-            </div>
-            <div id='' class='col-sm-3 col-xs-12 txt-AD2'>
-            </div>
-            <div id='' class='col-sm-3 col-xs-12 txt-AD3'>
-                <div id='' class=' stepIni' >
-                </div>
-
             </div>
         </div>
     </div>
+
+
     <div class="row-fluid">
         <div class="col-sm-12 col-xs-12 block-Intro">
             <span>Por favor diligencia los siguientes campos para consultar los datos de tu empleado:</span>
@@ -90,74 +98,205 @@
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in active">
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Por favor diligencia los datos que se encuentren en blanco. Los campos marcados en * son obligatorios</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
-                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none">
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentNumber.png">
-                        {{ form_row(form.person.lastName1) }}
-
+                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-xs-12 label-group">
+                            <h3>Datos básicos</h3>
+                        </div>
                     </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentType.png">
-                        {{ form_row(form.person.documentType) }}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.documentType) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.documentType) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
                     </div>
-                    <div class="col-sm-4 col-xs-12">
-                        <img src="/img/documentNumber.png">
-                        {{ form_row(form.person.document) }}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.document) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.document) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
                     </div>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <div class="col-sm-6 col-sm-push-3">
-                        <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext">Consultar</a>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.names) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.names) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
                     </div>
-                </div>
-                <!-- Modal TI -->
-                <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel">Advertencia Menor de edad</h4>
-                            </div>
-                            <div class="modal-body">
-                                Un menor de edad no puede trabajar mas de 6 horas diarias y tiene que tener el consentimiento de los padres
-                                <p>al presionar entendido acepta haber recibido esta información</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-                            </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.lastName1) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.lastName1) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.lastName2) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.lastName2) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.civilStatus) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.civilStatus) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.gender) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.gender) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.documentExpeditionDate) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.documentExpeditionDate) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.documentExpeditionPlace) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.documentExpeditionPlace) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-xs-12 label-group">
+                            <h3>Datos de nacimiento</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.birthDate) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.person.birthDate) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.birthCountry) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.birthCountry) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.birthDepartment) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.birthDepartment) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.personExtra.birthCity) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.personExtra.birthCity) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
+                    </div>
+                    <div class="col-sm-12 col-xs-12 center">
+                        <div class="col-sm-6 col-sm-push-3">
+                            <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            <br /><br />
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.names) }}
-                        {{ form_row(form.person.lastName2) }}
-                    </div>
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.personExtra.civilStatus) }}
-                        {{ form_row(form.personExtra.gender) }}
-                        {{ form_row(form.personExtra.documentExpeditionDate) }}
-                        {{ form_row(form.personExtra.documentExpeditionPlace) }}
-                    </div>
-                </div>
-                <h2>Datos de nacimiento</h2>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.birthDate) }}
-                        {{ form_row(form.personExtra.birthCountry) }}
-
-                    </div>
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.personExtra.birthDepartment) }}
-                        {{ form_row(form.personExtra.birthCity) }}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-primary btnNext" >Siguiente ></a>
-                </div>
             </div>
 
+            <div id="contactData" class="tab-pane fade in">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                </div>
+                <br></br>
+                <div class="col-sm-10 col-xs-12 content-input">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.mainAddress)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.mainAddress) }}
+                        </div>                    
+                    </div>
+                    <div class="col-sm-12">
+                        <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+                            {% for phone in form.person.phones %}
+                                <li id="phone_{{loop.index}}" class="phoneLi">
+                                    {{ form_row(phone.id) }}
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(phone.phoneNumber)}}    
+                                    </div>
+                                    <div class="col-sm-6 form-group input">
+                                        {{ form_widget(phone.phoneNumber)}}    
+                                    </div>                                                                        
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div> 
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.department)}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.person.department) }}
+                        </div>                    
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.city)}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.person.city) }}
+                        </div>                    
+                    </div>                                          
+                    
+                </div>
+                <br/><br/>
+                <div class="col-sm-12 col-xs-12 center">
+                        
+                            <a class="btn btn-primary btnPrevious">Anterior</a>
+                        
+                        
+                            <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            <br /><br />
+                        
+                    </div>
+            </div>
+
+            <!--
             <div id="contactData" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span>Los campos marcados en * son obligatorios</span>
@@ -176,7 +315,7 @@
                                     {{ form_row(phone.phoneNumber) }}
                                 </li>
                             {% endfor %}
-                            <!--li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li-->
+                            <!--li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li--><!--
                         </ul>
                         {{ form_row(form.person.city) }}
                     </div>
@@ -187,7 +326,7 @@
                 <div class="col-xs-6">
                     <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" style="min-width: 75%">Siguiente</a>
                 </div>
-            </div>
+            </div>-->
 
             <div id="contractData" class="tab-pane fade">
                 <div class="col-sm-12 col-xs-12 block-Intro">
@@ -366,5 +505,22 @@
 
 
         {{ form_end(form) }}
+    </div>
+    <!-- Modal TI -->
+    <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Advertencia Menor de edad</h4>
+                </div>
+                <div class="modal-body">
+                    Un menor de edad no puede trabajar mas de 6 horas diarias y tiene que tener el consentimiento de los padres
+                    <p>al presionar entendido acepta haber recibido esta información</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock fos_user_content %}

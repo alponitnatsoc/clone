@@ -3,7 +3,7 @@
  */
 function startAfiliation() {
     var validator;
-    $.getScript( "http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function(){
+    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='register_social_security']").validate({
             rules: {
                 "register_social_security[severances]": "required",
@@ -14,14 +14,22 @@ function startAfiliation() {
                 "register_social_security[arl]": "Por favor seleccione su ARL"
             }
         });
-        $("select").each(function(){
+        $("select").each(function () {
             $(this).rules("add", {
                 required: true,
-                messages:{
-                    required:   "Por favor seleccione una opción"
+                messages: {
+                    required: "Por favor seleccione una opción"
                 }
             });
         });
+    });
+
+    $("#chkAcept").on('click', function () {
+        if ($(this).is(':checked')) {
+            $("#btn-1").removeClass('disabled');
+        } else {
+            $("#btn-1").addClass('disabled');
+        }
     });
 
     $('.btnPrevious').click(function () {
@@ -36,32 +44,32 @@ function startAfiliation() {
             idEmployees[i++] = $(this).val();
         });
         i = 0;
-        var flagValid=true;
+        var flagValid = true;
         $(form).find("select[name*='[wealth]']").each(function () {
-            if(!validator.element($(this))){
-                flagValid=false;
+            if (!validator.element($(this))) {
+                flagValid = false;
                 return;
             }
             wealth[i++] = $(this).val();
         });
         i = 0;
         $(form).find("select[name*='[pension]']").each(function () {
-            if(!validator.element($(this))){
-                flagValid=false;
+            if (!validator.element($(this))) {
+                flagValid = false;
                 return;
             }
             pension[i++] = $(this).val();
         });
         i = 0;
         $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
-            if(!validator.element($(this))){
-                flagValid=false;
+            if (!validator.element($(this))) {
+                flagValid = false;
                 return;
             }
             beneficiaries[i++] = $(this).val();
         });
 
-        if(!flagValid){
+        if (!flagValid) {
             alert("Llenaste algunos campos incorrectamente");
             return;
         }
@@ -91,7 +99,7 @@ function startAfiliation() {
 
         var severances = $(form).find("select[name='register_social_security[severances]']");
         var arl = $(form).find("select[name='register_social_security[arl]']");
-        if (!(validator.element(severances)&&validator.element(arl))){
+        if (!(validator.element(severances) && validator.element(arl))) {
             alert("Llenaste algunos campos incorrectamente");
             return;
         }

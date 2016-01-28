@@ -19,7 +19,7 @@
    @color_boton: #ffc107;
    @fondo: #f8f8f8;
    @lightGrayBars: #efefef;
-   @darkerButtonText: #000000;
+   @darkerButtonText: white;
    @lightBLue: #1fcecb;
 
    @screen-xs-max: 480px;
@@ -615,7 +615,7 @@
    .form-group, .form-horizontal {
     input, textarea {
         background:transparent;
-        border:1px solid #919191;
+        /*border:1px solid #919191;*/
         border-radius:5px;
         padding:10px 12px;
         color:#ffffff;
@@ -623,14 +623,14 @@
         font-size:16px;
     }
     select {
-        background-image: url(../img/select-arrow.png);
+        /*background-image: url(../img/select-arrow.png);
         background-position: right;
-        background-repeat: no-repeat;
+        background-repeat: no-repeat;*/
         height: 46px;
-        border:1px solid #919191;
-        -webkit-appearance: none;
+        /*border:1px solid #919191;
+        /*-webkit-appearance: none;
         border-radius: 0;
-        min-width: 100px;
+        min-width: 100px;*/
     }
    }
    .block-Intro {
@@ -737,7 +737,7 @@
    }
    .block-Intro {
     span {
-        margin-bottom: 25px;
+        margin-bottom: 5px;
     }
    }
    .profile-Data {
@@ -963,16 +963,17 @@
     }
    }
    .blockUpData {
-    border-bottom: 1px solid #E9E9E9;
+    margin-top: 20px;
+    /*border-bottom: 1px solid #E9E9E9;*/
     img {
     }
     div {
         text-align: center;
     }
     label {
-        font-weight: bold !important;
+        font-weight: 300 !important;
         font-family: @open !important;
-        font-size: 18px !important;
+        font-size: 16px !important;
         min-height: 60px;
     }
     .radio {
@@ -1269,5 +1270,14 @@ input {
 select {
     &.error {
         border: 1px solid @error_color;
+    }
+}
+
+.label-group {
+    h3 {
+        font-weight: 200;
+        font-size: 20px;
+        color: @light_blue;
+        font-family: @lato;
     }
 }
