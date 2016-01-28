@@ -33,6 +33,12 @@
                 margin-bottom: 0px;
             }
             */
+           .label-group{
+            text-align: right !important;
+           }
+           .form-select{
+            color: yellow !important;
+           }
         </style>
     {% endblock %}
     <!--
@@ -79,36 +85,69 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
-                <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-                    <div class="col-sm-3 col-xs-12">
-                        <!--<img src="/img/typePerson.png">-->
-                        {{ form_row(form.youAre) }}
+                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.youAre) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.youAre) }}    
+                        </div>
+                        <!--<img src="/img/typePerson.png">-->                        
                     </div>
-                    <div class="col-sm-3 col-xs-12">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.documentType)}}
+                        </div>
+                        <div class="col-md-6 form-group">
+                            {{ form_widget(form.person.documentType) }}
+                        </div>
                         <!--<img src="/img/documentType.png">-->
-                        {{ form_row(form.person.documentType) }}
                     </div>
-                    <div class="col-sm-3 col-xs-12">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.document)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.document) }}
+                        </div>
                         <!--<img src="/img/documentNumber.png">-->
-                        {{ form_row(form.person.document) }}
                     </div>
-                    <div class="col-sm-3 col-xs-12">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.lastName1)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.lastName1) }}
+                        </div>
                         <!--<img src="/img/documentNumber.png">-->
-                        {{ form_row(form.person.lastName1) }}
                     </div>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <div class="col-sm-6 col-sm-push-3">
+                    <div class="col-sm-12 col-sm-push-3">
                         <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext" style="display: none;">Consultar</a>
                     </div>
-                </div>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.names) }}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.names)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.names) }}
+                        </div>                        
                     </div>
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.lastName2) }}
-                        {{ form_row(form.person.birthDate) }}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.lastName2)}}
+                        </div>
+                        <div class="col-sm-6 form-group input">
+                            {{ form_widget(form.person.lastName2) }}
+                        </div>                       
+                    </div>
+                    <div class="col-sm-12 col-xs-12"> 
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.person.birthDate)}}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.person.birthDate) }}
+                        </div>                                               
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
