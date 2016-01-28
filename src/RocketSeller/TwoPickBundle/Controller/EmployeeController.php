@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
@@ -15,6 +16,7 @@ use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Form\AffiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\AfiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
@@ -283,6 +285,7 @@ class EmployeeController extends Controller
         /** @var User $user */
         $user = $this->getUser();
         $employee = null;
+        $employerHasEmployee=null;
         if ($id == -1) {
             $employee = new Employee();
         } else {
@@ -295,6 +298,7 @@ class EmployeeController extends Controller
             $flag = false;
             foreach ($employee->getEmployeeHasEmployers() as $ee) {
                 if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                    $employerHasEmployee=$ee;
                     $flag = true;
                     break;
                 }
@@ -319,6 +323,26 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $contracts = $employerHasEmployee->getContracts();
+        if($contracts->count()!=0){
+            $currentContract=null;
+            /** @var Contract $contract */
+            foreach ($contracts as $contract) {
+                if($contract->getState()=="Active")
+                    $currentContract=$contract;
+            }
+
+            $form->get('employeeHasEmployers')->setData($currentContract);
+            $weekWDs=$currentContract->getWeekWorkableDays();
+            /** @var WeekWorkableDays $weekWD */
+            $arrayWWD=array();
+            foreach ($weekWDs as $weekWD) {
+                $arrayWWD[]=$weekWD->getDayName();
+            }
+            $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
+            $form->get('idContract')->setData($currentContract->getIdContract());
+        }
+
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render(

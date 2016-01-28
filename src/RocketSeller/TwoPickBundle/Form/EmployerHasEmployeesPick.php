@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BenefitPick extends AbstractType
+class EmployerHasEmployeesPick extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
