@@ -324,10 +324,8 @@
                 {% for child in form.employeeHasEmployers.payMethod %}
                     {% set index = child.vars.value %}
                     {{ form_widget(child) }}
-                    DESCRIPCIONNNN
                     {{ choices[index].descripcion }}
-                    IMAGEEN
-                    {{ choices[index].image }}
+                    <!--{{ choices[index].image }}-->
                     <div id="putFields_{{ index }}"></div>
 
                 {% endfor %}
