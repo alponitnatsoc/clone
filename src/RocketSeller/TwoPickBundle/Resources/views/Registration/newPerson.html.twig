@@ -77,23 +77,23 @@
             <div id="basicData" class="tab-pane fade in active">
                 {# render the task's only field: description #}
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados con * son obligatorios</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                     <div class="col-sm-3 col-xs-12">
-                        <img src="/img/typePerson.png">
+                        <!--<img src="/img/typePerson.png">-->
                         {{ form_row(form.youAre) }}
                     </div>
                     <div class="col-sm-3 col-xs-12">
-                        <img src="/img/documentType.png">
+                        <!--<img src="/img/documentType.png">-->
                         {{ form_row(form.person.documentType) }}
                     </div>
                     <div class="col-sm-3 col-xs-12">
-                        <img src="/img/documentNumber.png">
+                        <!--<img src="/img/documentNumber.png">-->
                         {{ form_row(form.person.document) }}
                     </div>
                     <div class="col-sm-3 col-xs-12">
-                        <img src="/img/documentNumber.png">
+                        <!--<img src="/img/documentNumber.png">-->
                         {{ form_row(form.person.lastName1) }}
                     </div>
                 </div>
@@ -113,7 +113,8 @@
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <div class="col-sm-6 col-sm-push-3">
-                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext btn-orange">Siguiente</a>
+                        <a id="btn-1" href="{{ path('api_public_post_edit_person_submit_step1') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                        <br /><br />
                     </div>
                 </div>
                 <br /><br />
@@ -145,8 +146,10 @@
                         <a class="btn btn-primary btnPrevious">Anterior</a>
                     </div>
                     <div class="col-xs-6">
-                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange" style="min-width: 75%">Siguiente</a>
+                        <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                        <br /><br />
                     </div>
+
                 </div>
                 <br /><br />
             </div>
@@ -187,7 +190,8 @@
                     {% endfor %}
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious">Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                    <a class="btn btn-primary btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
+                    <br /><br />
                 </div>
             </div>
         </div>

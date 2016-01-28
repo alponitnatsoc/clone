@@ -22,8 +22,8 @@ class EmployerRegistration extends AbstractType
             ->setMethod($options['method'])
             ->add('youAre', 'choice', array(
                 'choices' => array(
-                    'persona'   => 'Persona',
-                    'empresa' => 'Empresa (muy pronto)'
+                    'persona'   => 'Una persona',
+                    'empresa' => 'Una empresa (muy pronto)'
                 ),
                 'multiple' => false,
                 'expanded' => true,
@@ -31,7 +31,7 @@ class EmployerRegistration extends AbstractType
                     $disabled = $key=="empresa";
                     return $disabled ? ['disabled' => 'disabled'] : [];
                 },
-                'label' => 'Usted es*',
+                'label' => 'Soy*',
                 'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
