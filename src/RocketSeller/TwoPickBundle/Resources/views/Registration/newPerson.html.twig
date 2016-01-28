@@ -164,7 +164,7 @@
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <br></br>
-                <div class="col-sm-10 col-xs-12 content-input">
+                <div class="col-sm-10 col-xs-12 blockUpData">
                     <div class="col-sm-12">
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.person.mainAddress)}}
@@ -238,7 +238,7 @@
                     {% for workplace in form.workplaces %}
                         <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
                             <div class="row">
-                                <div class="col-sm-10 col-xs-12" style="border-bottom: none">
+                                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
                                     <div class="col-sm-12 col-xs-12">
                                         {{ form_row(workplace.id) }}
                                         <div class="col-sm-6 label-group">
@@ -276,9 +276,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;|">
+                        <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
                                         
-                                    </div>
+                        </div>
                     {% endfor %}                    
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
