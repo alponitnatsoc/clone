@@ -392,7 +392,6 @@ function addListeners() {
         } else {
             $('ul.workplaces').show();
             if ($("#register_employer_workplaces_0_mainAddress").val() == $("#register_employer_person_mainAddress").val()) {
-                $("#register_employer_workplaces_0_id").val("");
                 $("#register_employer_workplaces_0_name").val("");
                 $("#register_employer_workplaces_0_mainAddress").val("");
                 $("#register_employer_workplaces_0_department").val("");
