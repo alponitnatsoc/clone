@@ -1,18 +1,67 @@
 {% extends "::base.html.twig" %}
-{% block content %}
-	<form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('download_certificate',{'id': employee.idEmployee })}}">		
-		<div class="certificate">
-			<h3>{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</h3>
-			<p>{{ employer.personPerson.document }}</p>
-			<h3>CERTIFICA QUE</h3>
-			<P>La persona {{ employee.personPerson.names }} {{employee.personPerson.lastName1 }} identificada con {{ employee.personPerson.documentType }} número {{ employee.personPerson.document }} de Bogotá desempeñó labores de servicio doméstico durante el periodo SEPTIEMBRE 1 de 2015 hasta {{ "now"|date("F")|upper }} {{ "now"|date("d") }} de {{ "now"|date("Y") }}, de acuerdo a la relación contractual que se encuentra establecida conmigo, con una asignación salarial de $45.000 pesos colombianos diarios.</P>
-		 
-			<P>La anterior certificación se expide a solicitud del interesado, a los {{ "now"|date("d") }} días del mes de {{ "now"|date("F") }} de {{ "now"|date("Y") }}.</P>	
 
-		</div>		
-		<div class="col-md-12">
-			<input type="hidden" name="id" value="{{ employee.idEmployee }}">
-			<button class="btn btn-large btn-primary" type="submit">Imprimir</button>	
-		</div>		
-	</form>
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css">
+        .divider {
+            height: 1px;
+            width:100%;
+            display:block; /* for use on default inline elements like span */
+            margin: 9px 0;
+            overflow: hidden;
+            background-color: #e5e5e5;
+        }
+        .center{
+            text-align: center;
+        }
+        .glyphicon{
+            margin: 10px;
+        }
+        .divSubmit{
+            margin: 10px;
+        }
+        .employerName{
+            font-weight: bold;
+        }
+        .certificate{
+            margin: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="divider"></div>
+    <div class="center">
+        <div class="glyphicon glyphicon-ok-sign"></div>El certificado fue creado exitosamente.
+
+    </div>
+    <div class="divider"></div>
+    <div class="center col-md-12 col-sm-12">
+        <div class="col-md-3 col-sm-3">
+
+        </div>
+        <div class="col-md-3 col-sm-3">
+            <div class="glyphicon glyphicon-refresh"></div><b>Fecha de creación</b>
+                {{ "now"|date("d") ~' de ' ~ "now"|date("F")|trans|lower  ~ ' de ' ~ "now"|date("Y") }} 
+        </div>
+        <div class="col-md-3 col-sm-3">
+            <div class="glyphicon glyphicon-list-alt"></div><b>Tipo de certifido</b>
+                {{ certificate['name'] }}
+        </div>
+        <div class="col-md-3 col-sm-3">
+
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{ path('download_certificate_post') }}">
+        <div class="certificate">
+            {{ content|raw }}
+        </div>	
+        <div class="divSubmit center col-md-12">
+            <input type="hidden" name="idEmployee" value="{{ employee.idEmployee }}"/>
+            <input type="hidden" name="idCertificate" value="{{ certificate['id'] }}"/>
+            <button class="btn btn-default" type="submit">Imprimir</button>	
+        </div>		
+    </form>
 {% endblock %}
