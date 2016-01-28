@@ -13,6 +13,7 @@ class BenefitPick extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('idContractHasBenefits', 'hidden')
             ->add('benefitType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Benefits',
                 'property' => 'name',

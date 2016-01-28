@@ -702,6 +702,7 @@ class Contract
      */
     public function removeWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
     {
+        $weekWorkableDay->setContractContract(null);
         $this->weekWorkableDays->removeElement($weekWorkableDay);
     }
 

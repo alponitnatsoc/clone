@@ -84,14 +84,14 @@ class ContractRegistration extends AbstractType
                 'property_path' => 'benefitsConditions',
                 'label'=>'Condiciones de los beneficios'
             ))
-            ->add('document', new DocumentPick())
+            ->add('documentDocument', new DocumentPick())
             ->add('workTimeStart', 'time', array(
-                'input'  => 'timestamp',
+                'input'  => 'datetime',
                 'widget' => 'choice',
                 'label'=>'Horario*:'
             ))
             ->add('workTimeEnd', 'time', array(
-                'input'  => 'timestamp',
+                'input'  => 'datetime',
                 'widget' => 'choice',
                 'label'=>'A:'
             ))
@@ -133,6 +133,8 @@ class ContractRegistration extends AbstractType
                 ),
                 'multiple' => true,
                 'expanded' => true,
+                'mapped' =>false,
+                'mapped' =>false,
                 'label'=>'Días laborales de la semana*:'
             ))
             ->add('workplaces', 'entity', array(
@@ -151,7 +153,7 @@ class ContractRegistration extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => true,
-                'property_path' => 'payTypePayType',
+                'property_path' => 'payMethodPayMethod',
                 'label'=>' '
             ));
     }

@@ -362,21 +362,25 @@ function startEmployee() {
         //    return;
         //}
 
-        var idsBenef = [], amountBenef = [], periodicityBenef = [], weekWorkableDaysIds = [];
+        var idsBenef = [], amountBenef = [], periodicityBenef = [], weekWorkableDaysIds = [],benefType=[];
         var flagValid = true;
         var i = 0;
+        $(form).find("ul.benefits input[name*='idContractHasBenefits']").each(function () {
+            idsBenef[i++] = $(this).val();
+        });
+        i = 0;
         $(form).find("ul.benefits select[name*='benefitType']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
                 return;
             }
-            idsBenef[i++] = $(this).val();
+            benefType[i++] = $(this).val();
         });
-        var i = 0;
+         i = 0;
         $(form).find("[name='register_employee[employeeHasEmployers][weekWorkableDays][]']:checked").each(function () {
             weekWorkableDaysIds[i++] = $(this).val();
         });
-        var i = 0;
+         i = 0;
         $(form).find("ul.benefits input[name*='amount']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -384,7 +388,7 @@ function startEmployee() {
             }
             amountBenef[i++] = $(this).val();
         });
-        var i = 0;
+         i = 0;
         $(form).find("ul.benefits select[name*='periodicity']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -413,6 +417,7 @@ function startEmployee() {
                 position: position.val(),
                 salary: accounting.unformat(salary.val()),
                 idsBenefits: idsBenef,
+                benefType: benefType,
                 amountBenefits: amountBenef,
                 periodicityBenefits: periodicityBenef,
                 idWorkplace: idWorkplace.val(),
@@ -431,6 +436,7 @@ function startEmployee() {
                 workTimeEnd: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][hour]']").val(),
                     'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
                 weekWorkableDays: weekWorkableDaysIds,
+                contractId: $(form).find("input[name='register_employee[idContract]']").val()
             }
         }).done(function (data) {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
