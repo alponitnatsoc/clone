@@ -39,10 +39,11 @@ class EmployerRegistration extends AbstractType
                 'choices' => array(
                     true   => 'Si',
                     false  => 'No'
-                ),
+                ),                
                 'multiple' => false,
                 'expanded' => true,
                 'label' => '¿Su dirección principal es la misma donde trabajarán?*',
+                'data' => true,
                 'property_path' => 'sameWorkHouse',
                 'required' => true
             ))
