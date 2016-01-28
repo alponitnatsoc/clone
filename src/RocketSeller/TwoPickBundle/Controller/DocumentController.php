@@ -123,7 +123,9 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
-			return $this->redirect('/pages?redirector=/matrix/choose');
+
+			return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
+			//return $this->redirect('/pages?redirector=/matrix/choose');
 			//$this->redirect($request->server->get('HTTP_REFERER'));
 		}
 		return $this->render(

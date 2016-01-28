@@ -20,7 +20,7 @@ class EmployerRegistration extends AbstractType
         $builder
             ->setAction($options['action'])
             ->setMethod($options['method'])
-            ->add('youAre', 'choice', array(
+            ->add('youAre', 'choice', array(                
                 'choices' => array(
                     'persona'   => 'Una persona',
                     'empresa' => 'Una empresa (muy pronto)'
