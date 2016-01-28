@@ -5,16 +5,16 @@
             <div class="col-sm-3 col-md-2">
                 <div class="boxIntro-Heading"><img src="/img/cross.png"></div>
             </div>
-            <div class="col-sm-8 col-md-9 col-xs-12 up-Intro">No hemos recibido confirmaci&oacute;n<br />de su correo electr&oacute;nico</div>
+            <div class="col-sm-8 col-md-9 col-xs-12 up-Intro">Nuestro sistema a&uacute;n no registra la confirmaci&oacute;n de tu correo electr&oacute;nico
+            </div>
         </div>
     </div>
     <div class="container" id="msgSinVerificar2">
         <div class="col-sm-8 col-sm-offset-2 contenMessage">
-            <p>Por favor chequee su correo electr&oacute;nico, ingrese al mensaje que le </p>
-            <p>enviamos el d&iacute;a {{ dateCreated }} y haga clic en el enlace que se encuentra all&iacute;. </p>
-            <p>Quiz&aacute;s deba buscar en la carpeta de correos no deseados.</p>
-            <p></p>
-            <p>Si no recibi&oacute; el correo haga clic en el siguiente bot&oacute;n:</p>
+             
+            <p>Revisa tu correo electr&oacute;nico, ingresa al correo que te enviamos el pasado 15 de diciembre de 2015 y dale clic al vínculo que aparece.</p>
+            <p>Recuerda revisar la carpeta de correos filtrados.</p>
+            <p>Si no has recibido el correo, presiona el siguiente bot&oacute;n:</p>
             <a class="btn btn-default btn-orange loading" data-loading-text="Cargando..." data-complete-text="El correo fue enviado" onclick="javascript:sendConfirmationEmail($(this))">Reenviar correo de confirmaci&oacute;n</a>
         </div>
     </div>
@@ -28,15 +28,6 @@
             </div>
         </div>
 
-        <div class="container"> 
-            <div class="col-sm-8 col-sm-offset-2 contenMessage">
-                <p>Puede consultar nuevamente su correo electr&oacute;nico. Una</p>
-                <p>vez haga clic en el v&iacute;nculo su cuenta en Symplifica se </p>
-                <p>encontrar&aacute; activa.</p>
-                <p>&#161;Esperamos contar pronto con usted&#33;</p>
-                <a class="btn btn-default btn-orange" href="/">Entendido</a>
-            </div>
-        </div>
     </div>
     <br /><br />
 {% endblock body %}
