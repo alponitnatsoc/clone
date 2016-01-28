@@ -191,7 +191,7 @@
 
             <div id="contractData" class="tab-pane fade">
                 <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios <a href="" class="helpTxt">> ayuda</a></span>
+                    <span>Los campos marcados en * son obligatorios <a href="{{ path('show_help') }}" class="helpTxt">> ayuda</a></span>
                 </div>
                 <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
                     <div class="col-sm-4 col-xs-12">
@@ -301,10 +301,10 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="contractDownload(this)">Descargar Contrato</button>
                             </div>
                             <script>
-                                    function contractDownload() {
-                                        var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();
-                                        window.open('/contractLayout/'+value);
-                                    }
+                                function contractDownload() {
+                                    var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();
+                                    window.open('/contractLayout/' + value);
+                                }
                             </script>
                         </div>
                     </div>
@@ -320,12 +320,12 @@
                 Escoja el mecanismo del salario:<br />
                 {% for child in form.employeeHasEmployers.payMethod %}
                     {% set index = child.vars.value %}
-                        {{ form_widget(child) }}
-                        DESCRIPCIONNNN
-                        {{ choices[index].descripcion }}
-                        IMAGEEN
-                        {{ choices[index].image }}
-                        <div id="putFields_{{ index }}"></div>
+                    {{ form_widget(child) }}
+                    DESCRIPCIONNNN
+                    {{ choices[index].descripcion }}
+                    IMAGEEN
+                    {{ choices[index].image }}
+                    <div id="putFields_{{ index }}"></div>
 
                 {% endfor %}
 
@@ -334,8 +334,8 @@
                 </div>
                 <br />
                 <div id="userPayMethod">
-                <h4>Información de la tarjeta de crédito</h4>
-                <p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
+                    <h4>Información de la tarjeta de crédito</h4>
+                    <p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 col-xs-12">
                             {{ form_row(form.credit_card) }}
