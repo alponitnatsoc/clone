@@ -94,6 +94,9 @@
         .codigo_referido_invalido{
             color: red;
         }
+        .form-group select{            
+            width: 100%
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
@@ -106,7 +109,7 @@
         <div id="infoFacturacion" class="infoFacturacion">
             <span style="margin: 20px">Ingrese la información de pago. Los campos marcados con * son obligatorios:</span>
             <div style="margin: 20px">
-                <span>Nombre del titular y dirección de facturación</span>
+                <span><b>Nombre del titular y dirección de facturación</b></span>
                 <input type="checkbox" name="chkSameAdress" id="chkSameAdress" value="1" checked/>
                 <label for="chkSameAdress">Los mismos datos del empleador</label>
                 <div name="divSameAdress" id="divSameAdress">
@@ -162,43 +165,51 @@
 
 
         <div id="infoTarjeta" class="infoTarjeta form-group">
-            <span style="margin: 20px">Información de la tarjeta de crédito:</span>
-            <input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-            <label for="chkSameTCC">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>
-            <div id="divSameTCC">    
-                <div class="col-sm-12 col-xs-12 blockUpData">
-                    <div class="col-sm-4 col-xs-12">
-                        <select id="paymentMethod" name="paymentMethod" required="required" class="form-control">
-                            <option value="">Seleccione...</option>
-                            {% for paymentMethod in paymentMethods %}
-                                <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
-                            {% endfor  %}
+            <div class="col-md-12 center">
+                <span style="margin-top: 20px"><b>Información de la tarjeta de crédito</b></span>
+                <input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>       
+            </div>     
+            <div class="col-md-12" style="margin-top: 20px">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label>Número tarjeta de crédito</label><br>
+                        <div id="divCardNumber" class="toHide" >
+                            <input type="text" id="card_number" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" required="required">
+                        </div>
+                        <div id="divPaymentMethods">
+                            <select id="paymentMethod" name="paymentMethod" class="form-control" required="required">
+                                <option value="">Seleccione...</option>
+                                {% for paymentMethod in paymentMethods %}
+                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
+                                {% endfor  %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div id="cType"></div>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Cuotas</label><br>
+                        <select id="cuotas" name="cuotas" class="form-control" required="required">
+                            <option value="1">1</option>
+                            <option value="1">2</option>
+                            <option value="1">3</option>
                         </select>
                     </div>
                 </div>
-            </div>
-            <div id="divOtherTCC" class="col-sm-12 col-xs-12 blockUpData toHide">
-                <div class="col-sm-12 col-xs-12">
-                    <label>Número tarjeta de crédito*</label><br>
-                    <input type="text" name="card_number" id="card_number" placeholder="1234 5678 9012 3456" required="required">
-                    <select id="cuotas" name="cuotas" required="required">
-                        <option value="1">1</option>
-                        <option value="1">2</option>
-                        <option value="1">3</option>
-                    </select>
-                </div>
-                <div class="col-sm-6 col-xs-6">
-                    <label>Fecha de vencimiento*</label><br>
+                <div class="col-md-3" style="margin-top: 10px">
+                    <label>Fecha de vencimiento</label><br>
                     <div style="display: inline-block">
                         <label>Mes</label><br>
                         <input type="text" name="expiry_date_month" id="expiry_date_month" maxlength="2" placeholder="mm" required="required">
-                    </div>
+                    </div>                    
                     <div style="display: inline-block">
                         <label>Año</label><br>
                         <input type="text" name="expiry_date_year" id="expiry_date_year" maxlength="4" placeholder="yyyy" required="required">
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-6">
+                <div class="col-md-3" style="margin-top: 10px">
                     <label>Código de seguridad</label><br>
                     <div style="display: inline-block">
                         <label></label><br>
@@ -212,22 +223,42 @@
 
             </div>
         </div>
-        <div ><br></div>
+
         <div id="codigoReferido" class="codigoReferido form-group">
-            <label>¿Cuenta con algún código de promoción?</label>
-            <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
-            <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código">
-            <div id="codigo_referido_estado"></div>
+            <div class="col-md-12 center" style="margin-top: 20px">
+                <label>¿Cuenta con algún código de promoción?</label>
+                <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
+                <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código"  style="margin-top: 20px">
+                <div id="codigo_referido_estado"></div>
+            </div>
         </div>
-        <div ><br></div>
-        <div id="confirmacionPago" class="confirmacionPago form-group">
-            <label>Confirmación de pago</label>
-        </div>       
-        <div ><br></div>
+
+        <div id="confirmacionPago" class="confirmacionPago form-group" style="margin-top: 10px">
+            <div class="col-md-12 center" style="margin-top: 30px">
+                <div class="col-md-12" style="margin-bottom: 20px;">
+                    <label>Confirmación de pago</label>
+                </div>
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-5 text-left">
+                    <div class="col-md-12 center" style="margin-bottom: 10px;">
+                        <b>Producto</b>
+                    </div>
+                    Servicio mensual Symplifica por:
+                    {% for employee in employerHasEmployee %}
+                        <div class="col-md-12">
+                            <div class="glyphicon glyphicon-user"></div>
+                            employee.employeeEmployee.personPerson.names {{ contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name  }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div> 
 
         <div class="col-sm-12 col-xs-12" style="display: -webkit-inline-box; padding: 10px; text-align: center;">
             <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
-                <a class="btn-default btn" href="{{ path('subscription_choices') }}">Atras</a>
+                <a class="btn btn-default notAjax" href="{{ path('subscription_choices') }}">Atras</a>
             </div>
             <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
                 {{ form_row(form.save) }}
@@ -298,11 +329,11 @@
 
             $("#chkSameTCC").change(function () {
                 if ($(this).is(':checked')) {
-                    $("#divSameTCC").removeClass('toHide');
-                    $("#divOtherTCC").addClass('toHide');
+                    $("#divCardNumber").addClass('toHide');
+                    $("#divPaymentMethods").removeClass('toHide');
                 } else {
-                    $("#divOtherTCC").removeClass('toHide');
-                    $("#divSameTCC").addClass('toHide');
+                    $("#divPaymentMethods").addClass('toHide');
+                    $("#divCardNumber").removeClass('toHide');
                 }
             });
 

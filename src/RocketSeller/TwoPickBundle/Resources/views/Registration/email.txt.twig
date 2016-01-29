@@ -25,8 +25,9 @@
             font-size: 32px;
         }
         p {
-            font-size: 16px;
-            font-weight: 100;
+            font-size: 18px;
+            font-weight: 400;
+/*             font-weight:bold; */
         }
         p strong {
             font-weight: bold;
@@ -35,15 +36,34 @@
             background: #3b4b5a;
             display: block;
             border-bottom: 1px solid #fff;
-            height: 80px;
-            padding-top: 80px;
+            height: 60px;
+            padding-top: 10px;
         }
         .blockBlueCentral {
-            background: #00cdcc;
-            display: block;
-            padding: 30px 0px;
-            margin: 25px 0px;
-            font-size: 16px;
+/*             background: #00cdcc; */
+/*             display: block; */
+/*             padding: 30px 0px; */
+/*             margin: 25px 0px; */
+/*             font-size: 16px; */
+
+            color:#00cdcc;
+            text-decoration:none;
+            display:inline-block;
+            min-height:38px;
+            line-height:38px;
+            padding-top:0;
+            padding-right:16px;
+            padding-bottom:0;
+            padding-left:16px;
+            border:0;
+            outline:0;
+            background-color:#00cdcc;
+            font-size:25px;
+            font-style:normal;
+            font-weight:bold;
+            text-align:center;
+            white-space:nowrap;
+            border-radius:999em
         }
         .blockBlueCentral a {
             color: #fff;
@@ -150,7 +170,8 @@
     </header>
     <section>
         <div class="imgUp" style="width: 100%">
-            <img src="http://www.symplifica.com/public/img/mail/imgUpBanner1.png" alt="Symplifica" style="width: 50%; float: left; margin: 0; padding: 0;" /><img src="http://www.symplifica.com/public/img/mail/imgUpBanner2.png" alt="Symplifica"  style="width: 50%; float: left; margin: 0; padding: 0;" />
+            <img src="http://52.91.121.67/public/img/mail/imgUpBanner1.jpg" alt="Symplifica" />
+{#             <img src="http://www.symplifica.com/public/img/mail/imgUpBanner2.png" alt="Symplifica"  style="width: 50%; float: left; margin: 0; padding: 0;" />#}
         </div>
     </section>
     <section style="display: block">
@@ -158,14 +179,20 @@
 {#             <h1><strong>!Ya falta muy poco!</strong></h1>#}
             <p style="font-family: sans-serif;">Estás muy cerca de acceder a la plataforma más conveniente para
             administrar a tus empleados.</p>
-            <p style="font-family: sans-serif;">Para finalizar tu registro, haz clic en el siguiente link o cópialo y pégalo en tu navegador:</p>
+            <p style="font-family: sans-serif;">Para finalizar tu registro, haz clic en el siguiente link:</p>
         </div>
     </section>
     <section>
         <div class="blockBlueCentral">
             <div class="container" style="font-family: sans-serif;">
-                <a href="{{ confirmationUrl }}">{{ confirmationUrl }}</a>
+                <a href="{{ confirmationUrl }}">Confirmar email</a>
             </div>
+        </div>
+    </section>
+    <section style="display: block">
+        <div class="container">
+            <p style="font-family: sans-serif;">O cópialo y pégalo en tu navegador:</p>
+            <a href="{{ confirmationUrl }}">{{ confirmationUrl }}</a>
         </div>
     </section>
     <footer>

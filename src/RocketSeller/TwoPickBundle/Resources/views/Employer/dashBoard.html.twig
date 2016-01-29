@@ -4,10 +4,13 @@
         <style>
             .dashboard_employer_pending_tasks {
                 display: inline-block;
-                border:1px solid black;
-                background: #FBFBFB;
+                border:1px solid #efefef;
+                background: white;
                 margin: 10px;      
-                height: 180px;
+                height: 300px;
+                border-radius: 0px !important;
+                padding-left: 0px !important;
+                padding-right: 0px !important;
             }
             .dashboard_employer_pending_tasks_list {
                 display: inline-block;
@@ -15,18 +18,13 @@
                 background: #FBFBFB;
                 margin: 5px;
             }
-            .dashboard_employer_pending_tasks:hover{
-                background: #dcdcdc;
-            }
-            .dashboard_employer_pending_tasks_list:hover{
-                background: #dcdcdc;
-            }
+
             .panel_btn{    
                 text-align: center;
                 bottom: 0px;
                 position: absolute;
                 width: 100%;
-                margin-left: -15px;
+               
                 margin-bottom: 10px;
             }       
             .panel-deadline{
@@ -35,7 +33,9 @@
                 position: absolute;
                 width: 100%;
                 margin-left: -15px;
-                margin-bottom: 10px;
+                height: 30px;
+                background-color: #efefef;
+
             }
             .panel-title{
                 margin-left: 10px;
@@ -96,15 +96,22 @@
                 font-size: 13px;
                 color: orange;
             }
-            .label-as-badge{    
-                margin-top: -5px;
-                margin-left: -25px;
-                height: 20px;
-                width: 20px;
+            .panel-heading{
+                padding: 0px !important;
+            }
+            .panel-body{
                 text-align: center;
+            }
+            .panel-logo{
+                height: 100px;
+            }
+            .label-as-badge{                  
+                height: 20px;
+                width: 100%;                
                 padding: 2px;
                 color: black;
                 font-size: 15px;
+                border-radius: 0px !important;
             }
             .label_list{    
                 padding: 0px 10px 5px 10px;
@@ -113,34 +120,23 @@
                 vertical-align: -webkit-baseline-middle;
             }
             .glyphicon-th-large{                
-                height:  10px;
+                color:#00CDCC;
             }
-            .glyphicon-th-large:hover{                
+            .glyphicon-th-large:hover{ 
+                color:#00CDCC;               
                 cursor: pointer;
             }
             .glyphicon-th-list{              
-                height:  10px;
+                color:#00CDCC;
             }
             .dashboard_employer_order_by_select{
-                width: 100%;
+                width: 25%;
                 height: 35px;
             }
             .dashboard_employer_contador_div{
                 padding: 5px 30px 5px 30px;
                 display: inline-block;
                 text-align: center;
-                border-top-color: black;
-                border-top-style: solid;
-                border-top-width: 0px;
-                border-right-color: black;
-                border-right-style: dotted;
-                border-right-width: 1px;
-                border-bottom-color: black;
-                border-bottom-style: solid;
-                border-bottom-width: 0px;
-                border-left-color: black;
-                border-left-style: solid;
-                border-left-width: 0px;
             }
             .dashboard_employer_reminder{
                 display: -webkit-box;
@@ -151,31 +147,37 @@
             }
             .dashboard_employer_head{
                 padding: 10px;
-                display: -webkit-inline-box
+                display: -webkit-inline-box;
+                border-bottom: solid #efefef;
+                border-width: 2px;
             }
             .dashboard_employer_contador_type_alert{
                 background-color: orange;
-                height: 20px;
-                width: 20px;
-                display: inline-block;
-                border-radius: 5px;
+                height: 10px;
+                width: 100%;
+                display: inline-block;                
+            }
+            .contador_logo{
+                height: 50px;
             }
             .dashboard_employer_contador_type_notification{
                 background-color: lightgreen;
-                height: 20px;
-                width: 20px;
-                display: inline-block;
-                border-radius: 5px;
+                height: 10px;
+                width: 100%;
+                display: inline-block;                
             }
             .dashboard_employer_contador_type_mensaje{
-                background-color: lightskyblue;
-                height: 20px;
-                width: 20px;
-                display: inline-block;
-                border-radius: 5px;
+                background-color: #00CDCC;
+                height: 10px;
+                width: 100%;
+                display: inline-block;                
             }
             .dashboard_employer_order_by{
-                width: 25%;
+                width: 100%;
+                border-left: solid #efefef;
+                border-width: 2px;
+                padding-left: 20px;
+                padding-bottom: 20px;
             }
             .dashboard_employer_contador{
                 width: 60%;
@@ -201,9 +203,6 @@
             .deadline_list{                
                 display: -webkit-inline-box;
                 vertical-align: -webkit-baseline-middle;
-            }
-            .btn{
-                width: 100px;
             }
             .report_novedad{
                 display: block;
@@ -239,26 +238,26 @@
         <h4>¡Bienvenido a tu centro de control de tareas pendientes!</h4>
         {# dump(notifications) #}
         <div class="dashboard_employer_head">
-            <div class="dashboard_employer_contador">
-                <div class="dashboard_employer_contador_div">
+            <div class="col-sm-12 dashboard_employer_contador">
+                <div class="col-sm-4 dashboard_employer_contador_div">
+                    <div class="contador_logo"> </div>
                     <span class="dashboard_employer_contador_type_alert"></span>
-                    <span class="dashboard_employer_contador_text"><p>Alertas</p></span>
-                    <span class="dashboard_employer_contador_alert_count">0</span>
+                    <span class="txthelp"><p>Alertas</p></span>
                 </div>
-                <div class="dashboard_employer_contador_div">
+                <div class="col-sm-4 dashboard_employer_contador_div">
+                    <div class="contador_logo"> </div>
                     <span class="dashboard_employer_contador_type_notification"></span>
-                    <span class="dashboard_employer_contador_text"><p>Notificaciones</p></span>
-                    <span class="dashboard_employer_contador_notification_count">0</span>
+                    <span class="txthelp"><p>Notificaciones</p></span>                    
                 </div>
-                <div class="dashboard_employer_contador_div">
+                <div class="col-sm-4 dashboard_employer_contador_div">
+                    <div class="contador_logo"> </div>
                     <span class="dashboard_employer_contador_type_mensaje"></span>
-                    <span class="dashboard_employer_contador_text"><p>Mensajes</p></span>
-                    <span class="dashboard_employer_contador_mensaje_count">0</span>
+                    <span class="txthelp"><p>Mensajes</p></span>
                 </div>
             </div>
-            <div class="dashboard_employer_order_by">
-                <label>Ordenar por:</label>
-                <select class="dashboard_employer_order_by_select">
+            <div class="col-sm-12 dashboard_employer_order_by">
+                <p class="txthelp col-sm-12">Ordenar por:</p>
+                <select class="col-sm-12 form-group form-control dashboard_employer_order_by_select">
                     {% set view = {'view' : app.request.get('view')} %}
                     <option value="{{ path('show_dashboard_employer',  view|merge( { 'orderBy': 'deadline' })) }}"
                             {{ app.request.get('orderBy') == 'deadline'?'selected':''  }}>Fecha Límite</option>
@@ -266,12 +265,15 @@
                             {{ app.request.get('orderBy') == 'type'?'selected':''  }}>Tipo Tarea</option>
                 </select>
                 {% set orderBy = {'orderBy' : app.request.get('orderBy')} %}
-                <span class="glyphicon glyphicon-th-large view">
-                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" >Cuadricula</a> 
-                </span>
-                <span class="glyphicon glyphicon-th-list view">
-                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}">Listado</a> 
-                </span>
+
+                <div class="col-sm-12">
+                    <span class="glyphicon glyphicon-th-large view">
+                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important;">Cuadricula</a>                        
+                    </span>
+                    <span class="glyphicon glyphicon-th-list view">
+                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important;">Listado</a> 
+                    </span>
+                </div>                
             </div>
         </div>
         <div class="notification_contenedor">
@@ -322,12 +324,14 @@
                                     <div class="label label-as-badge label-success pull-left">!</div>
                                 {% endif %}
                             </div>
+                            <div class="col-sm-12 panel-logo">
+                                
+                            </div>
                             <div class="panel-body">
-                                <p class="description">
+                                <p class="label-group">
                                     {{ notification.description }}
                                 </p>
-                            </div>
-                            <div class="panel-deadline">
+                                <div class="panel-deadline col-sm-12">
                                 {% if notification.deadline %}
                                     {% set str_deadline = 'Fecha límite: ' %}
                                     {% set deadline_type =  ''%}
@@ -345,11 +349,18 @@
                                     <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
                                 {% endif %}
                             </div>
-                            <div class="panel_btn">
+                            </div>
+                            
+                            <div class="panel_btn col-sm-12">
                                 {% if notification.accion %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default">{{ notification.accion }}</a>
+                                    {% if notification.accion|lower == "subir documento" %}
+                                        <a href="{{ notification.relatedlink }}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</a>
+                                    {% else %}
+                                        <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
+                                    {% endif %}
+                                    
                                 {% else %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
+                                    <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">View</a>
                                 {% endif %}
                             </div>
                         </div>
