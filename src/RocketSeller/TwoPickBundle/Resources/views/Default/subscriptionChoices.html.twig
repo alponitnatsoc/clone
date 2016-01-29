@@ -84,28 +84,25 @@
         </p> 
     </div>
 
-    {% for employee in employees %}
-        {% for contract in employee.contracts %}
-            {% if contract.state != 'UnActive' %}
-                <div class="col-md-3 {{ contract.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
-                    <div> 
-                        <img class="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
-                    </div>
-                    <div class="employee_name">
-                        {{ employee.employeeEmployee.personPerson.names }}
-                    </div>
-                    {% set tipo_tiempo_contrato = contract.timeCommitmentTimeCommitment.name|split(' ') %}
-                    <div class="{{ tipo_tiempo_contrato|join("_") }}">
-                        {{ contract.timeCommitmentTimeCommitment.name }}
-                    </div>
-                    <div>
-                        <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_contract', {'id':  contract.idContract }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ contract.state == 'Active'?'Inactivar':'Activar' }}</button>
-                    </div>
-                </div>
-            {% endif %}
+    {% for employee in employerHasEmployee %}
+
+        <div class="col-md-3 {{ employee.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
+            <div> 
+                <img class="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+            </div>
+            <div class="employee_name">
+                {{ employee.employeeEmployee.personPerson.names }}
+            </div>
+            {% set tipo_tiempo_contrato = contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name|split(' ') %}
+            <div class="{{ tipo_tiempo_contrato|join("_") }}">
+                {{ contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name }}
+            </div>
+            <div>
+                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ employee.state == 'Active'?'Inactivar':'Activar' }}</button>
+            </div>
+        </div>
 
 
-        {% endfor %}
     {% endfor %}
 
     <div class="col-lg-1 result_ajax"></div>
@@ -308,7 +305,7 @@
                 female = parent.find(".female").length;
                 male = parent.find(".male").length;
                 state = '';
-                if (data.state == 'Inactive') {
+                if (data.state == 'UnActive') {
                     $(obj).html("Activar");
                     if (female > 0) {
                         state = "inactivada";
