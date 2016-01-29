@@ -508,18 +508,45 @@
                     <h4>Información de la tarjeta de crédito</h4>
                     <p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
                     <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 col-xs-12">
-                            {{ form_row(form.credit_card) }}
-                            {{ form_row(form.expiry_date) }}
+
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.credit_card) }}    
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form_widget(form.credit_card) }}    
+                            </div>                        
                         </div>
-                        <div class="col-sm-6 col-xs-12">
-                            {{ form_row(form.cvv) }}
-                            {{ form_row(form.name_on_card) }}
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.expiry_date) }}    
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form_widget(form.expiry_date) }}    
+                            </div>                        
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.name_on_card) }}    
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form_widget(form.name_on_card) }}    
+                            </div>                        
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.cvv) }}    
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form_widget(form.cvv) }}    
+                            </div>                        
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a><div class="saveControl">{{ form_row(form.save) }}</div>
+                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-primary btnNext btn-orange">Salvar</a>
+                    <!--<div class="saveControl">{{ form_row(form.save) }}</div>-->
                 </div>
                 <div id="toHide">
 
