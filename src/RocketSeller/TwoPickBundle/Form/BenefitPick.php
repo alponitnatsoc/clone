@@ -20,16 +20,16 @@ class BenefitPick extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'benefitsBenefits',
-                'label'=>'Tipo de Beneficio'
+                'label'=>'Tipo de Beneficio*'
             ))
             ->add('amount', 'money', array(
                 'currency' => 'COP',
                 'property_path' => 'amount',
-                'label'=>' '
+                'label'=>'Valor*'
             ))
             ->add('periodicity', 'choice', array(
                 'choices' => array(
-                    ''   => 'Periodicidad',
+                    ''   => 'Seleccione una opción',
                     1 => 'Mensual',
                     3 => 'Trimestral',
                     6 => 'Semestral',
@@ -37,7 +37,7 @@ class BenefitPick extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => false,
-                'label'=>' '
+                'label'=>'Periodicidad*'
             ));
     }
 
