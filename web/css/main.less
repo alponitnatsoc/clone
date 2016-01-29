@@ -988,12 +988,12 @@
     /*border-bottom: 1px solid #E9E9E9;*/
     img {
     }
-    .title{
+    .title{        
         text-align: center;
         font-family: @open !important;
         text-align: center;
         padding: 10px;
-        font-weight: bold; 
+        font-weight: bold !important; 
     }
     i {
         color:#00CDCC;
@@ -1309,4 +1309,39 @@ select {
         color: @light_blue;
         font-family: @lato;
     }
+}
+.upload-link{
+    color:@selectedMenuColor;
+    text-decoration: none;
+    &:active{
+        color:@selectedMenuColor;
+    }
+    &:hover{
+        color:@selectedMenuColor;
+        text-decoration: none;
+    }
+    &:focus{
+        color:@selectedMenuColor;
+        text-decoration: none;
+    }    
+}
+.download-link{
+    color:@blue;
+    text-decoration: none;
+    &:active{
+        color:@blue;
+    }
+    &:hover{
+        color:@blue;
+        text-decoration: none;
+    }
+    &:focus{
+        color:@blue;
+        text-decoration: none;
+    } 
+}
+.employer-row , .restOfEmployeeList , .restOfEmployeeList{
+    border-bottom: none;
+    height: 50px;
+    padding-top: 15px;    
 }
