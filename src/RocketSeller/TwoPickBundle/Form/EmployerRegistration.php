@@ -42,7 +42,7 @@ class EmployerRegistration extends AbstractType
                 ),                
                 'multiple' => false,
                 'expanded' => true,
-                'label' => '¿Su dirección principal es la misma donde trabajarán?*',
+                'label' => '¿Su dirección principal es la misma donde trabajarán sus empleados? *',
                 'data' => true,
                 'property_path' => 'sameWorkHouse',
                 'required' => true
