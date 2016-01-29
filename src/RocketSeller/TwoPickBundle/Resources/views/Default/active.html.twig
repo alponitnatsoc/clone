@@ -310,7 +310,7 @@
                 $.ajax({
                     method: "POST",
                     url: "{{ path('api_public_post_validate_code') }}",
-                    data: {code: $(this).val(), user: {{ }}},
+                    data: {code2: $(this).val()},
                     beforeSend: function (xhr) {
                         $("#codigo_referido_estado").html('Validando código');
                     }
@@ -320,6 +320,13 @@
                     } else {
                         $("#codigo_referido_estado").html('<span class="codigo_referido_invalido">Código invalido</span>');
                     }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $("#codigo_referido_estado").html('<span class="codigo_referido_invalido">No se pudo validar el código</span>');
+                    console.log("FAIL codigo_referido {{ path('api_public_post_validate_code') }}:");
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+
                 });
             });
         });

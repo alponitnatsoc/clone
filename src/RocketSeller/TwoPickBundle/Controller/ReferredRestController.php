@@ -7,7 +7,10 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Traits\ReferredMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Invitation;
+use RocketSeller\TwoPickBundle\Entity\Referred;
 
 class ReferredRestController extends FOSRestController
 {
@@ -35,15 +38,7 @@ class ReferredRestController extends FOSRestController
      */
     public function getValidateCodeAction($code)
     {
-        $data = $this->validateCode($code);
-        $view = View::create();
-        $view->setData($data);
-        if ($data) {
-            $view->setStatusCode(200);
-        } else {
-            $view->setStatusCode(400);
-        }
-        return $view;
+        return $this->validateCode($code);
     }
 
     /**
@@ -70,13 +65,52 @@ class ReferredRestController extends FOSRestController
      */
     public function postValidateCodeAction(ParamFetcher $paramFetcher)
     {
-        $data = $this->validateCode($paramFetcher->get('code'));
+        $code = $paramFetcher->get('code') ? $paramFetcher->get('code') : false;
+        return $this->validateCode($code);
+    }
+
+    private function validateCode($code)
+    {
         $view = View::create();
-        $view->setData($data);
-        if ($data) {
-            $view->setStatusCode(200);
+        $view->setStatusCode(200);
+        if ($this->getUser()) {
+            $user_dueno = $this->userValidateCode($code)[0];
+            if ($user_dueno) {
+                $refered = $this->referedValidateCode($user_dueno->getId(), $this->getUser()->getId())[0];
+                if (!$refered) {
+
+                    $em = $this->getDoctrine()->getManager();
+
+                    $invitation = new Invitation();
+                    $invitation->setUserId($user_dueno);
+                    $invitation->setEmail($this->getUser()->getEmail());
+                    $invitation->setStatus(1);
+                    $invitation->setSent(1);
+                    $em->persist($invitation);
+                    $em->flush();
+
+                    $refered = new Referred();
+                    $refered->setUserId($user_dueno);
+                    $refered->setReferredUserId($this->getUser());
+                    $refered->setStatus(0);
+                    $refered->setInvitationId($invitation);
+
+                    $em->persist($refered);
+                    $em->flush();
+                }
+                if ($user_dueno && $refered) {
+                    $view->setData(true);
+                } else {
+                    $view->setStatusCode(400);
+                    $view->setData('valid code, error al redimir');
+                }
+            } else {
+                $view->setStatusCode(400);
+                $view->setData('no valid code');
+            }
         } else {
             $view->setStatusCode(400);
+            $view->setData('no user');
         }
         return $view;
     }

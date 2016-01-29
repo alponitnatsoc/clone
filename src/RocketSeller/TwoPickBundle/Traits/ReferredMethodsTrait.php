@@ -6,17 +6,35 @@ trait ReferredMethodsTrait
 {
 
     /**
-     * Retorna el usuario dueño del codigo de referido
+     * Valida si el codigo existe en la tabla de usuarios y retorna los registros
      * @param type $code
      * @return type
      */
-    protected function validateCode($code)
+    protected function userValidateCode($code)
     {
         if ($code) {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
             $user = $repository->findBy(array('code' => $code));
             if ($user) {
                 return $user;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Valida si el codigo existe en la tabla de referidos y retorna los registros
+     * @param type $userId
+     * @param type $referredUserId
+     * @return type
+     */
+    protected function referedValidateCode($userId, $referredUserId)
+    {
+        if ($userId) {
+            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Referred');
+            $referencia = $repository->findBy(array('userId' => $userId, 'referredUserId' => $referredUserId));
+            if ($referencia) {
+                return $referencia;
             }
         }
         return false;
