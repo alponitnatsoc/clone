@@ -9,21 +9,17 @@
     {% set anteriorListo = true %}
     {% for step in steps %}
 
-
-
         {% if step.boxStyle=="small" %}
         <div class='col-sm-12 col-xs-12 wizardAddLink text-right'>
             <a href="{{step.url}}">
                 <i class="fa fa-user-plus"></i> Agregar un nuevo empleado
             </a>
         </div>
-
-
         {% else %}
         <div id='' class='col-sm-12 col-xs-12 align-Resp'>
             <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and step.url!="") %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
                 <div id='' class='col-md-2 col-xs-12 txt-AD0' style="text-align: left;">
-                    {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}                    
+                    {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}
                 </div>
                 <div id='' class='col-md-6 col-xs-12 txt-AD1'>
                     <div id='' class='text-left' >
@@ -32,25 +28,23 @@
                     </div>
                 </div>
                 <div id='' class='col-md-2 col-xs-12 txt-AD2' style="font-family: 'Roboto Slab', serif; text-align: left;">
-                    {{step.state}}% {% if step.state==100 %}{% endif %}
+                    {{ step.state|round }}% {% if step.state==100 %}{% endif %}
                 </div>
                 <div id='' class='col-md-2 col-xs-12 txt-AD3'>
-                    
-                        <div id='' class='btn stepIni btn-symplifica btn-orange' style="float: right">
-                                {{step.stateMessage}}
-                        </div>
-                    
+                    <div id='' class='btn stepIni btn-symplifica btn-orange' style="float: right">
+                        {{step.stateMessage}}
+                    </div>
                 </div>
             </a>
         </div>
         {% endif %}
-
 
         {% if step.state==100 %}
             {% set anteriorListo = true %}
         {% else %}
             {% set anteriorListo = false %}
         {% endif %}
+
     {% endfor %}
 
 {% endblock fos_user_content %}
