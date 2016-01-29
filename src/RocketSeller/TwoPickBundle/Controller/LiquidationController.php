@@ -68,4 +68,40 @@ class LiquidationController extends Controller
             "idEhE" => $id
         ));
     }
+
+    /**
+     * REalizar la liquidacion final de un empleado
+     * @param integer $id - Id de la relacion EmployerHasEmployee
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function finalLiquidationAction($id)
+    {
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $this->getEmployee($id);
+        /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
+        $person = $employee->getPersonPerson();
+        $employeeInfo = array(
+            'name' => $person->getNames(),
+            'lastName1' => $person->getLastName1(),
+            'lastName2' => $person->getLastName2(),
+            'document' => $person->getDocument(),
+            'documentType' => $person->getDocumentType(),
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
+        );
+
+
+        $contract = $this->getActiveContract($id);
+        var_dump(count($contract));
+
+        $contractInfo = array(
+            'contractType',
+            'contractPeriod',
+            'salary',
+            'vacationDays'
+        );
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
+            "employeeInfo" => $employeeInfo
+        ));
+    }
 }
