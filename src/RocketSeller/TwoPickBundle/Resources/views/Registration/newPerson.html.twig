@@ -2,6 +2,42 @@
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
+
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
             /*
             .blockStep2 {
                 margin-top: 10px;
@@ -296,10 +332,12 @@
                 <div class="modal-dialog vertical-align-center" role="document">
                     <div class="modal-content">
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                            <div class="col-sm-3 hidden-xs"></div>
-                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 22px; top: 30%;">¡Muy bien! <br />Realizó satisfactoriamente el registro del empleador!</div>
+                            <div class="col-xs-9 col-xs-push-3 up-Intro" style="font-size: 22px;">¡Muy bien! <br />Realizó satisfactoriamente el registro del empleador!</div>
                         </div>
                         <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                            <div class="col-xs-4 " style="">
+                                <p><img src="/img/check-in.png" style="width: 152px; margin: -105px 0 0 -15px; max-width: 100%;"></p>
+                            </div>
                             <div class="col-md-9 col-md-push-3">
                                 <p>Ahora tenga a la mano los siguientes documentos para continuar con el registro de la información de los empleados:</p>
                                 <ul class="lista_listo">
@@ -307,7 +345,7 @@
                                     <li>Datos de contacto (Teléfono y dirección - email opcional)</li>
                                     <li>Contrato vigente (si cuenta con uno)</li>
                                 </ul>
-                                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Entendido &gt;</button>
+                                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
                             </div>
                         </div>
                     </div>
@@ -315,5 +353,12 @@
             </div>
         </div>
     </div>
-    
+    <div id="exceptionModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+        <span class="close">x</span>
+        <p>Some text in the Modal..</p>
+        </div>
+    </div>
+
 {% endblock fos_user_content%}
