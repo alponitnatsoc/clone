@@ -381,12 +381,11 @@ function addListeners() {
         if (selected == "1") {
             //$('ul.workplaces').hide();
             var select = $("#register_employer_workplaces_0_id");
-            if (select.val() == "") {
                 $("#register_employer_workplaces_0_name").val("Dirección Principal");
                 $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
                 $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
                 $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
-            }
+
         } else {
             $('ul.workplaces').show();
             if ($("#register_employer_workplaces_0_mainAddress").val() == $("#register_employer_person_mainAddress").val()) {
