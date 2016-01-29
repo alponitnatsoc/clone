@@ -482,11 +482,11 @@
                 {% for child in form.employeeHasEmployers.payMethod %}
                     <div class="paymentMethodDetail">
                         {% set index = child.vars.value %}
-                        <img src="{{ choices[index].image }}" class="paymentMethodImage" />
                         {{ form_widget(child) }}
+                        <img src="{{ choices[index].image }}" class="paymentMethodImage" />
                         <div class="paymentMethodDescription">
                             {{ choices[index].descripcion }}
-                            <br />
+                            <br /><br />
                             <a class="btn btn-orange">Más Información</a>
                         </div>
                         <div class="paymentMethodsOptions" id="putFields_{{ index }}"></div>

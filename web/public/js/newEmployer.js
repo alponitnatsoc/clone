@@ -252,6 +252,7 @@ function startEmployer() {
         });
         i = 0;
         var flagValid = true;
+        var modal = document.getElementById('exceptionModal');
         $(form).find("ul.workplaces input[name*='mainAddress']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -260,7 +261,7 @@ function startEmployer() {
             addresses[i++] = $(this).val();
         });
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            modal.style.display = "block";
             return;
         }
         i = 0;
@@ -272,7 +273,7 @@ function startEmployer() {
             names[i++] = $(this).val();
         });
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            modal.style.display = "block";
             return;
         }
         i = 0;
@@ -283,8 +284,9 @@ function startEmployer() {
             }
             citys[i++] = $(this).val();
         });
+
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            modal.style.display = "block";
             return;
         }
         i = 0;
@@ -295,16 +297,30 @@ function startEmployer() {
             }
             departments[i++] = $(this).val();
         });
+
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            modal.style.display = "block";
             return;
         }
         i = 0;
 
         var sameWorkHouse = $(form).find("input[name='register_employer[sameWorkHouse]']");
-        if (!(validator.element(sameWorkHouse))) {
-            alert("Llenaste algunos campos incorrectamente");
+        
+        if (!(validator.element(sameWorkHouse))) {            
+            modal.style.display = "block";
+            //alert("Llenaste algunos campos incorrectamente")
             return;
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal('hide');
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
 
         $('#createdModal').modal('toggle');
@@ -343,7 +359,6 @@ function startEmployer() {
     $("#employerDismiss").on('click', function () {
         sendAjax(redirUri);
     });
-
 }
 
 
