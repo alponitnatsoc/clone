@@ -68,4 +68,24 @@ trait EmployerHasEmployeeMethodsTrait
 
         return $pagosRecibidos;
     }
+
+    protected function getEmployee($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $repository->find($id);
+        $employee = $employerHasEmployee->getEmployeeEmployee();
+
+        return $employee;
+    }
+
+    protected function getActiveContract($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $repository->find($id);
+        $contract = $employerHasEmployee->getContracts();
+
+        return $contract;
+    }
 }

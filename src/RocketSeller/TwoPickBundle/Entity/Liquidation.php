@@ -64,6 +64,10 @@ class Liquidation
      */
     private $employerHasEmployee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="LiquidationHasLiquidationReason", mappedBy="liquidation", cascade={"persist"})
+     */
+    private $liquidationReasons;
 
     /**
      * Get id
@@ -217,5 +221,46 @@ class Liquidation
     public function getEmployerHasEmployee()
     {
         return $this->employerHasEmployee;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->liquidationReasons = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add liquidationReason
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason
+     *
+     * @return Liquidation
+     */
+    public function addLiquidationReason(\RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason)
+    {
+        $this->liquidationReasons[] = $liquidationReason;
+
+        return $this;
+    }
+
+    /**
+     * Remove liquidationReason
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason
+     */
+    public function removeLiquidationReason(\RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason)
+    {
+        $this->liquidationReasons->removeElement($liquidationReason);
+    }
+
+    /**
+     * Get liquidationReasons
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLiquidationReasons()
+    {
+        return $this->liquidationReasons;
     }
 }
