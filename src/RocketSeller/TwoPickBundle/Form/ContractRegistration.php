@@ -59,7 +59,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Cargo',
+                'label'=>'Cargo*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -78,11 +78,12 @@ class ContractRegistration extends AbstractType
                 'type' => new BenefitPick(),
                 'allow_add'    => true,
                 'allow_delete' => true,
-                'by_reference' => false,
+                'by_reference' => false
                 ))
             ->add('benefitsConditions', 'textarea', array(
                 'property_path' => 'benefitsConditions',
-                'label'=>'Condiciones de los beneficios'
+                'label'=>'Condiciones de los beneficios',
+                'required' => false
             ))
             ->add('documentDocument', new DocumentPick())
             ->add('workTimeStart', 'time', array(
@@ -111,7 +112,7 @@ class ContractRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => false,
-                'label'=>'Desplazamiento al lugar de trabajo',
+                'label'=>'Desplazamiento al lugar de trabajo*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))

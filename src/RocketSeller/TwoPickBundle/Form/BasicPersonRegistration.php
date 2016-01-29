@@ -49,7 +49,10 @@ class BasicPersonRegistration extends AbstractType
             ->add('lastName2', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Segundo Apellido'))
+                ),
+                'label' => 'Segundo Apellido',
+                'required' => false
+            ))
             ->add('birthDate', 'date', array(
                 'data' => new DateTime('1975-01-01'),
                 'years' => range(1900,2015),

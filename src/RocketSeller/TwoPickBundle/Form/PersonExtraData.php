@@ -30,7 +30,8 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'civilStatus',
                 'label' => 'Estado civil',
-                'placeholder' => 'Seleccionar una opción'
+                'placeholder' => 'Seleccionar una opción',
+                'required' => false
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(
@@ -41,7 +42,8 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'gender',
                 'label' => 'Género',
-                'placeholder' => 'Seleccionar una opción'
+                'placeholder' => 'Seleccionar una opción',
+                'required' => false
             ))
             ->add('documentExpeditionDate', 'date', array(
                 'data' => new DateTime('1975-01-01'),
@@ -49,7 +51,8 @@ class PersonExtraData extends AbstractType
                 'label' => 'Fecha de expedición de documento de identidad'
             ))
             ->add('documentExpeditionPlace', 'text', array(
-                'label' => 'Lugar de expedición de documento de identidad'
+                'label' => 'Lugar de expedición de documento de identidad',
+                'required' => false
             ))
             ->add('birthCountry', 'entity', array(
                 'label' => 'País de Nacimiento',
@@ -59,7 +62,8 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthCountry',
-                'placeholder' => 'Seleccionar una opción'
+                'placeholder' => 'Seleccionar una opción',
+                'required' => false
             ))
             ->add('birthDepartment', 'entity', array(
                 'label' => 'Departamento de Nacimiento',
@@ -69,7 +73,8 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthDepartment',
-                'placeholder' => 'Seleccionar una opción'
+                'placeholder' => 'Seleccionar una opción',
+                'required' => false
             ))
             ->add('birthCity', 'entity', array(
                 'label' => 'Ciudad de Nacimiento',
@@ -79,13 +84,15 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'birthCity',
-                'placeholder' => 'Seleccionar una opción'
+                'placeholder' => 'Seleccionar una opción',
+                'required' => false
             ))
             ->add('email', 'text', array(
                 'constraints' => array(
                     new NotBlank()
                 ),
-                'property_path' => 'email'
+                'property_path' => 'email',
+                'required' => false
             ));
     }
 
