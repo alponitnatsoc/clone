@@ -4,12 +4,7 @@
 
     {% block stylesheets %}
         {{ parent() }}
-        <style>
-            .blockUpData .title {
-                text-align: center;
-                padding: 10px;
-                font-weight: bold;
-            }
+        <style>            
             .blockUpData label {
                 min-height: 0px;
             }
@@ -31,9 +26,27 @@
 
     <div id='registrationFormContainer' class='' style="margin-top: 10px;">
         {{ form_start(form) }}
-
+        <div class="col-sm-12 col-xs-12 align-Resp">
+            <div class="btn col-sm-12 col-xs-12 blockStep complete nav-link">
+                <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0 statusBarIcon">
+                    <img src="/img/employ_white.png">                    
+                </div>
+                <div class="col-md-6 col-xs-12 txt-AD1">
+                    <div class="text-left" id="">
+                        <p>Paso <strong>3</strong> de 3</p>
+                        Finalizar afiliación
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="col-sm-12 col-xs-12 block-Intro">
+                <span>La información que aparece a continuación es fundamental para el proceso de registro.</span>
+                <span>Si no la conoces o no la tienes Symplifica<a href="{{ path('contact') }}"> lo hace por ti.</a></span>
+            </div>
+        </div>        
         <ul class="nav nav-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Entidades de tus empleados</a></li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Entidades de los empleados</a></li>
             <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employerEntities">Tus Entidades</a></li>
             <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#docsMatrix">Documentos requeridos</a></li>
         </ul>
@@ -41,34 +54,24 @@
         <div class="tab-content">
             <div id="employeeEntities" class="tab-pane fade in {%   if tab==1 %}active{% endif %}">
                 {# render the task's only field: description #}
-                {{ form_row(form.idEmployer) }}
-                <p>Ten en cuenta que debes confirmar la información de afiliación a la Seguridad Social de tus empleados.
-                    Los campos con * son obligatorios.</p>
-
-                <p>La información que aparece a continuación es fundamental para el proceso de registro.
-                    <b>Si no la conoces o no la tienes Symplifica lo hace por ti</b>. En caso de que tu empleado quiera
-                    cambiar de entidad, debe <a href="{{ path('contact') }}">contactarse con nosotros</a> para ofrecerle asesoría.</p>
-
-                <div class="col-sm-12 col-xs-12 center">
-                    <h4>Selecciona la información correcta en cada espacio:</h4>              
+                {{ form_row(form.idEmployer) }}                            
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios.</span>
+                    
                 </div>
                 <div>
                     <div class="col-sm-12 col-xs-12 blockUpData">
-                        <div class="col-sm-3 col-xs-12 row">
-                            <div><img src="/img/1-iconStep.png"></div>
-                            <div class="title">Nombre</div>
+                        <div class="col-sm-3 col-xs-12 row">                            
+                            <div class="title"><i class="fa fa-user"></i> Nombre</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">
-                            <div><img src="/img/2-iconStep.png"></div>
-                            <div class="title">Salud</div>
+                        <div class="col-sm-3 col-xs-12">                            
+                            <div class="title"><i class="fa fa-medkit"></i> Salud</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">
-                            <div><img src="/img/3-iconStep.png"></div>
-                            <div class="title">Pensión</div>
+                        <div class="col-sm-3 col-xs-12">                            
+                            <div class="title"><i class="fa fa-file-powerpoint-o"></i> Pensión</div>
                         </div>
-                        <div class="col-sm-3 col-xs-12">
-                            <div><img src="/img/4-iconStep.png"></div>
-                            <div class="title">¿Registrará beneficiarios?</div>
+                        <div class="col-sm-3 col-xs-12">                            
+                            <div class="title"><i class="fa fa-users"></i> ¿Registrará beneficiarios?</div>
                         </div>
                     </div>
                     {% for employee in form.employerHasEmployees %}
@@ -92,8 +95,14 @@
                 <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
                     <input type="checkbox" name="chkAcept" id="chkAcept"/>Acepto que la información anterior fue verificada por los empleados.                    
                 </div>
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> En caso de que tu empleado quiera
+                    cambiar de entidad, debe <a href="{{ path('contact') }}">contactarse con nosotros</a> para ofrecerle asesoría.</span>                    
+                </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext disabled" >Confirmar información</a>
+                    <a id="btn-1" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-primary btnNext btn-orange disabled" >Confirmar información</a>
+                    <br></br>
+                <br></br>
                 </div>
 
 
@@ -102,35 +111,43 @@
             <div id="employerEntities" class="tab-pane fade in {%   if tab==2 %}active{% endif %}">
 
                 Ahora es necesario que escoja la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales se afiliará como empleador de acuerdo a la ley.
-                Si ya se encuentra afiliado y desea continuar afiliado a ellas, selecciónelas a continuación. Los campos marcados con * son obligatorios:
-                <div class="row text-center">
-
-                    <h3>{{ employerName }}<br /></h3>
-                    <h4>{{ employerDocumentType }} {{ employerDocument }}</h4>
-
+                Si ya se encuentra afiliado y desea continuar afiliado a ellas, selecciónelas a continuación.
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios.</span>                    
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12 blockUpData">
-                        <div class="col-sm-6 col-xs-12">
-                            <img src="/img/10-iconExit-Step.png">
+
+                <div class="row">                    
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom:none;">
+                        <div class="row text-center">
+
+                            <h3>{{ employerName }}<br /></h3>
+                            <h4>{{ employerDocumentType }} {{ employerDocument }}</h4>
+
                         </div>
                         <div class="col-sm-6 col-xs-12">
-                            <img src="/img/10-iconExit-Step.png">
+                            <div class="col-sm-12  label-group">
+                                <i class="fa fa-home"></i>
+                                {{ form_label(form.severances)}}
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                {{ form_widget(form.severances) }}
+                            </div>                            
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 blockUpData">
                         <div class="col-sm-6 col-xs-12">
-                            {{ form_row(form.severances) }}
-                        </div>
-                        <div class="col-sm-6 col-xs-12">
-                            {{ form_row(form.arl) }}
+                            <div class="col-sm-12 label-group">
+                                <i class="fa fa-home"></i>
+                                {{ form_label(form.arl)}}
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                {{ form_widget(form.arl) }}
+                            </div>                             
                         </div>
                     </div>
                 </div>
                 <br />
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                    <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext" >Siguiente ></a>
+                    <a class="btn btn-primary btnPrevious" >Anterior</a>
+                    <a id="btn-2" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-primary btnNext btn-orange" >Siguiente</a>
                 </div>
             </div>
             <div id="docsMatrix" class="tab-pane fade in {%   if tab==3 %}active{% endif %}">
@@ -145,7 +162,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
+                    <a class="btn btn-primary btnPrevious" > Anterior</a>
                     <div class="saveControl">{{ form_row(form.save) }}</div>
                 </div>
             </div>

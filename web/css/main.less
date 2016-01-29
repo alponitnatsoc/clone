@@ -6,6 +6,7 @@
    @blue: #00CDCC;
    @dark_blue: #3b4b5a;
    @light_blue: #99ebeb;
+   @dark_purple: #3c4b5a;
    @gray: #919191;
    @dark_gray: #3C4B5A;
    @light_gray: #4B4B4B;
@@ -16,7 +17,7 @@
    @roboto: "Roboto";
    @robotoCondensed: "Open Sans Condensed";
    @lato: "Lato";
-   @color_boton: #ffc107;
+   @color_boton: #ffa13f;
    @fondo: #f8f8f8;
    @lightGrayBars: #efefef;
    @darkerButtonText: white;
@@ -110,8 +111,8 @@
    }
    .btn.btnNext, .btnPrevious, .btn-default, .btn.pull-right {
     font-family: @open;
-    border:2px solid @lightBLue;
-    background:@lightBLue;
+    border:2px solid @dark_purple;
+    background:@dark_purple;
     padding:6px 20px;
     color:#ffffff;
     margin-top:7px;
@@ -635,6 +636,9 @@
     }
    }
    .block-Intro {
+    a {
+        font-size:16px;
+    }
     .lead {
         font-family: @open;
         font-size: 26px;
@@ -969,6 +973,16 @@
     margin-top: 20px;
     /*border-bottom: 1px solid #E9E9E9;*/
     img {
+    }
+    .title{
+        text-align: center;
+        font-family: @open !important;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold; 
+    }
+    i {
+        color:#00CDCC;
     }
     div {
         text-align: center;
