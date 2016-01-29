@@ -159,7 +159,7 @@ class RegistrationController extends BaseController
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
         $userManager->updateUser($user);
         if (null === $response = $event->getResponse()) {
-            $url = $this->generateUrl('show_dashboard');
+            $url = $this->generateUrl('edit_profile');
             $response = new RedirectResponse($url);
         }
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
