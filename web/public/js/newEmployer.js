@@ -396,6 +396,16 @@ function addListeners() {
             }
         }
     })
+    var selected = $("input[name='register_employer[sameWorkHouse]']:checked").val();
+    if (selected == "1") {
+        //$('ul.workplaces').hide();
+        var select = $("#register_employer_workplaces_0_id");
+        $("#register_employer_workplaces_0_name").val("Dirección Principal");
+        $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
+        $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
+        $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
+
+    }
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
