@@ -12,15 +12,21 @@ function startEmployer() {
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
                 "register_employer[person][mainAddress]": "required",
-                "register_employer[sameWorkHouse]": "required"
+                "register_employer[sameWorkHouse]": "required",
+                "register_employer[person][department]": "required",
+                "register_employer[person][city]": "required",
+                "register_employer[workplaces]": "required",
             },
             messages: {
-                "register_employer[person][documentType]": "Por favor seleccione el tipo de documento",
-                "register_employer[person][document]": "Por favor Ingrese su documento",
-                "register_employer[person][names]": "Por favor Ingrese su nombre",
-                "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
-                "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
-                "register_employer[sameWorkHouse]": "Por favor seleccione una opción"
+                "register_employer[person][documentType]": "Por favor selecciona el tipo de documento",
+                "register_employer[person][document]": "Por favor ingresa tu documento",
+                "register_employer[person][names]": "Por favor ingresa tu nombre",
+                "register_employer[person][lastName1]": "Por favor ingresa tu primer apellido",
+                "register_employer[person][mainAddress]": "Por favor ingrese una dirección",
+                "register_employer[sameWorkHouse]": "Por favor selecciona una opción",
+                "register_employer[person][department]": "Por favor selecciona un departamento",
+                "register_employer[person][city]": "Por favor selecciona una ciudad",
+                "register_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function () {
@@ -29,9 +35,9 @@ function startEmployer() {
                 required: true,
                 number: true,
                 messages: {
-                    minlength: "Por favor ingrese un número valido",
-                    required: "Por favor ingrese un número de telefono",
-                    number: "Por favor ingrese solo digitos"
+                    minlength: "Por favor ingresa un número valido",
+                    required: "Por favor ingresa un número de telefono",
+                    number: "Por favor ingresa solo digitos"
                 }
             });
         });
@@ -39,7 +45,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor ingrese una dirección"
+                    required: "Por favor ingresa una dirección"
                 }
             });
         });
@@ -47,7 +53,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor selecione una opción"
+                    required: "Por favor seleciona una opción"
                 }
             });
         });
@@ -217,8 +223,8 @@ function startEmployer() {
      index=parseInt(index)-1;
      };
      $collectionHolder.data('index', workplacesCount);
-     
-     
+
+
      }
      else{
      //add the diference of workplaces
