@@ -74,27 +74,28 @@ class ContractRegistration extends AbstractType
                     'onclick' => 'formatMoney($(this))'
                 )
             ))
-            ->add('benefits', 'collection', array(
-                'type' => new BenefitPick(),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                ))
-            ->add('benefitsConditions', 'textarea', array(
-                'property_path' => 'benefitsConditions',
-                'label'=>'Condiciones de los beneficios'
-            ))
-            ->add('documentDocument', new DocumentPick())
-            ->add('workTimeStart', 'time', array(
-                'input'  => 'datetime',
-                'widget' => 'choice',
-                'label'=>'Hora inicio*:'
-            ))
-            ->add('workTimeEnd', 'time', array(
-                'input'  => 'datetime',
-                'widget' => 'choice',
-                'label'=>'Hora fin:'
-            ))
+            // ->add('benefits', 'collection', array(
+            //     'type' => new BenefitPick(),
+            //     'allow_add'    => true,
+            //     'allow_delete' => true,
+            //     'by_reference' => false,
+            //     ))
+            // ->add('benefitsConditions', 'textarea', array(
+            //     'property_path' => 'benefitsConditions',
+            //     'label'=>'Condiciones de los beneficios'
+            // ))
+            // ->add('documentDocument', new DocumentPick())
+            
+            // ->add('workTimeStart', 'time', array(
+            //     'input'  => 'datetime',
+            //     'widget' => 'choice',
+            //     'label'=>'Hora inicio*:'
+            // ))
+            // ->add('workTimeEnd', 'time', array(
+            //     'input'  => 'datetime',
+            //     'widget' => 'choice',
+            //     'label'=>'Hora fin:'
+            // ))
             ->add('startDate', 'date', array(
                 'years' => range(2010,2020),
                 'label' => 'Fecha inicio de contrato*:'
