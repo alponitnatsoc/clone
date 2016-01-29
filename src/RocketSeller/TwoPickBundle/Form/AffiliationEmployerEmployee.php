@@ -57,7 +57,7 @@ class AffiliationEmployerEmployee extends AbstractType
                 'required' => true
             ))
             ->add('save', 'submit', array(
-                'label' => 'Save'
+                'label' => 'Save'                
             ));
     }
 
