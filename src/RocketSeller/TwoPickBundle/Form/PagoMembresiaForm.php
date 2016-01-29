@@ -117,9 +117,6 @@ class PagoMembresiaForm extends AbstractType
                     'label' => 'Ciudad*',
                     'placeholder' => 'Seleccionar una opción',
                     'required' => true
-                ))
-                ->add('save', 'submit', array(
-                    'label' => 'Finalizar'
         ));
 
 
@@ -153,6 +150,11 @@ class PagoMembresiaForm extends AbstractType
     }
 
     public function getName()
+    {
+        return 'pago_membresia';
+    }
+
+    public function getId()
     {
         return 'pago_membresia';
     }
