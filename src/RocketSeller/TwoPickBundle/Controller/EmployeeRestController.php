@@ -297,8 +297,9 @@ class EmployeeRestController extends FOSRestController
                         break;
                     }
                 }
-//                 @todo Gabriel revisar porque está generando entradas duplicadas en la BD en employer_has_employee
-                if($employee->getPersonPerson()->getDocumentType()==$paramFetcher->get('documentType')&&$employee->getPersonPerson()->getDocument()==$paramFetcher->get('document')){
+//              @todo Gabriel revisar porque está generando entradas duplicadas en la BD en employer_has_employee
+
+                if(!$flag&&($employee->getPersonPerson()->getDocumentType()==$paramFetcher->get('documentType')&&$employee->getPersonPerson()->getDocument()==$paramFetcher->get('document'))){
                     $flag=true;
                     $employerEmployee = new EmployerHasEmployee();
                     $employerEmployee->setEmployeeEmployee($employee);
