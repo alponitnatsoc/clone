@@ -168,7 +168,7 @@ function startEmployee() {
     var $collectionHolderB;
     var $collectionHolderW;
     $("#toHide").children().hide();
-    var $addBenefitLink = $('<a href="#" class="add_benefit_link">Agregar Beneficio</a>');
+    var $addBenefitLink = $('<a href="#" class="col-md-4 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo beneficio</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
     // Get the ul that holds the collection of benefits
     $collectionHolderB = $('ul.benefits');
@@ -465,7 +465,7 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a href="#">Eliminar Beneficio</a>');
+    var $removeFormA = $('<a href="#" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar este beneficio</a>');
     $tagFormLi.prepend($removeFormA);
 
     $removeFormA.on('click', function (e) {
