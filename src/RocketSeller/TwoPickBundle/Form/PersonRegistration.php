@@ -56,7 +56,9 @@ class PersonRegistration extends AbstractType
             ->add('lastName2', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                )))
+                ),
+                'required' => false
+            ))
             ->add('birthDate', 'date', array(
                 'years' => range(1900,2015),
                 'constraints' => array(

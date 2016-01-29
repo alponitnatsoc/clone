@@ -297,6 +297,7 @@ class EmployeeRestController extends FOSRestController
                         break;
                     }
                 }
+//                 @todo Gabriel revisar porque está generando entradas duplicadas en la BD en employer_has_employee
                 if($employee->getPersonPerson()->getDocumentType()==$paramFetcher->get('documentType')&&$employee->getPersonPerson()->getDocument()==$paramFetcher->get('document')){
                     $flag=true;
                     $employerEmployee = new EmployerHasEmployee();
@@ -334,22 +335,25 @@ class EmployeeRestController extends FOSRestController
             $conRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country');
 
             $tempBCity = $cityRepo->find($paramFetcher->get('birthCity'));
-            if ($tempBCity == null) {
-                $view->setStatusCode(404)->setHeader("error", "The city ID " . $paramFetcher->get('birthCity') . " is invalid");
-                return $view;
-            }
+//             @todo No es un campo obligatorio para el registro
+//             if ($tempBCity == null) {
+//                 $view->setStatusCode(404)->setHeader("error", "The city ID " . $paramFetcher->get('birthCity') . " is invalid");
+//                 return $view;
+//             }
             $person->setBirthCity($tempBCity);
             $tempBDep = $depRepo->find($paramFetcher->get('birthDepartment'));
-            if ($tempBDep == null) {
-                $view->setStatusCode(404)->setHeader("error", "The department ID " . $paramFetcher->get('birthDepartment') . " is invalid");
-                return $view;
-            }
+//             @todo No es un campo obligatorio para el registro
+//             if ($tempBDep == null) {
+//                 $view->setStatusCode(404)->setHeader("error", "The department ID " . $paramFetcher->get('birthDepartment') . " is invalid");
+//                 return $view;
+//             }
             $person->setBirthDepartment($tempBDep);
             $tempBCou = $conRepo->find($paramFetcher->get('birthCountry'));
-            if ($tempBCou == null) {
-                $view->setStatusCode(404)->setHeader("error", "The country ID " . $paramFetcher->get('birthCountry') . " is invalid");
-                return $view;
-            }
+//             @todo No es un campo obligatorio para el registro
+//             if ($tempBCou == null) {
+//                 $view->setStatusCode(404)->setHeader("error", "The country ID " . $paramFetcher->get('birthCountry') . " is invalid");
+//                 return $view;
+//             }
             $person->setBirthCountry($tempBCou);
             $em = $this->getDoctrine()->getManager();
             $errors = $this->get('validator')->validate($employee, array('Update'));
