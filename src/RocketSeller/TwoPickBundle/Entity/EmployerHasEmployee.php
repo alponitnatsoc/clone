@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EmployerHasEmployee
 {
+
     /**
      * @var integer
      *
@@ -49,6 +50,10 @@ class EmployerHasEmployee
      */
     private $liquidations;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $state = 'Active';
 
     /**
      * Set idEmployerHasEmployee
@@ -121,6 +126,7 @@ class EmployerHasEmployee
     {
         return $this->employeeEmployee;
     }
+
     /**
      * Constructor
      */
@@ -163,7 +169,6 @@ class EmployerHasEmployee
         return $this->contracts;
     }
 
-
     /**
      * Add liquidation
      *
@@ -197,4 +202,29 @@ class EmployerHasEmployee
     {
         return $this->liquidations;
     }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
 }

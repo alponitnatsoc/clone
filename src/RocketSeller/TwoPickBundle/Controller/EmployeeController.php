@@ -26,6 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Employee controller.
@@ -66,6 +67,41 @@ class EmployeeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Employee:show.html.twig', array(
                     'entity' => $entity,
         ));
+    }
+
+    /**
+     * Cambia el estado del contrato para activarlo o desactivarlo
+     * @param string $id id del contrato
+     * @return type
+     */
+    public function changeStateEmployeeAction($id)
+    {
+        //$user = $this->getUser();
+        /** @var Contract $contract */
+        $employerEmployee = $this->getEmployerEmployee($id);
+        $state = 'Active';
+        if ($employerEmployee->getState() == 'Active') {
+            $state = 'UnActive';
+        } else if ($employerEmployee->getState() == 'Inactive') {
+            $state = 'Active';
+        }
+        $employerEmployee->setState($state);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($employerEmployee);
+        $em->flush();
+        return new JsonResponse(array('state' => $state));
+    }
+
+    /**
+     * 
+     * @param string $id EmployerHasEmployee
+     * @return EmployerHasEmployee
+     */
+    private function getEmployerEmployee($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $employerEmployee = $repository->find($id);
+        return $employerEmployee;
     }
 
     /**
@@ -242,7 +278,7 @@ class EmployeeController extends Controller
                     'employerName' => $employerFullName,
                     'employerDocument' => $personEmployer->getDocument(),
                     'employerDocumentType' => $personEmployer->getDocumentType(),
-                    'tab' =>    $tab)
+                    'tab' => $tab)
         );
     }
 
@@ -285,7 +321,7 @@ class EmployeeController extends Controller
         /** @var User $user */
         $user = $this->getUser();
         $employee = null;
-        $employerHasEmployee=null;
+        $employerHasEmployee = null;
         if ($id == -1) {
             $employee = new Employee();
         } else {
@@ -298,7 +334,7 @@ class EmployeeController extends Controller
             $flag = false;
             foreach ($employee->getEmployeeHasEmployers() as $ee) {
                 if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
-                    $employerHasEmployee=$ee;
+                    $employerHasEmployee = $ee;
                     $flag = true;
                     break;
                 }
@@ -323,22 +359,22 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
-        if($employerHasEmployee!=null){
+        if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
-            if($contracts->count()!=0){
-                $currentContract=null;
+            if ($contracts->count() != 0) {
+                $currentContract = null;
                 /** @var Contract $contract */
                 foreach ($contracts as $contract) {
-                    if($contract->getState()=="Active")
-                        $currentContract=$contract;
+                    if ($contract->getState() == "Active")
+                        $currentContract = $contract;
                 }
 
                 $form->get('employeeHasEmployers')->setData($currentContract);
-                $weekWDs=$currentContract->getWeekWorkableDays();
+                $weekWDs = $currentContract->getWeekWorkableDays();
                 /** @var WeekWorkableDays $weekWD */
-                $arrayWWD=array();
+                $arrayWWD = array();
                 foreach ($weekWDs as $weekWD) {
-                    $arrayWWD[]=$weekWD->getDayName();
+                    $arrayWWD[] = $weekWD->getDayName();
                 }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
                 $form->get('idContract')->setData($currentContract->getIdContract());

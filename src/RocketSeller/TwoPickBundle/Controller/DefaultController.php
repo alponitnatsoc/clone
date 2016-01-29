@@ -66,13 +66,23 @@ class DefaultController extends Controller
         ));
     }
 
-    public function getEmployees($person)
+    public function getEmployerHasEmployee($person)
     {
         try {
-            $employees = $this->getdoctrine()
+            $employerHasEmployee = $this->getdoctrine()
                     ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
                     ->findByEmployerEmployer($this->getEmployer($person));
-            return $employees;
+            $contratos = array();
+            foreach ($employerHasEmployee as $key => $employee) {
+                $contracts = $employee->getContracts();
+                foreach ($contracts as $key => $contract) {
+                    if ($contract->getState() == 'Active') {
+                        $contratos[$employee->getIdEmployerHasEmployee()] = $contract;
+                        break;
+                    }
+                }
+            }
+            return array($employerHasEmployee, $contratos);
         } catch (Exception $ex) {
             $logger = $this->get('logger');
             $logger->error(json_encode($ex));
@@ -97,9 +107,10 @@ class DefaultController extends Controller
     public function subscriptionChoicesAction()
     {
         $user = $this->getUser();
-        $employees = $this->getEmployees($user->getPersonPerson());
+        $employees = $this->getEmployerHasEmployee($user->getPersonPerson());
         return $this->render('RocketSellerTwoPickBundle:Default:subscriptionChoices.html.twig', array(
-                    'employees' => $employees,
+                    'employerHasEmployee' => $employees[0],
+                    'contratos' => $employees[1],
                     'user' => $user
         ));
     }
@@ -110,7 +121,7 @@ class DefaultController extends Controller
         $person = $user->getPersonPerson();
         $billingAdress = $person->getBillingAddress();
         $documentNumber = $person->getDocument();
-        $employees = $this->getEmployees($user->getPersonPerson());
+        $employees = $this->getEmployerHasEmployee($user->getPersonPerson());
 
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
         $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
