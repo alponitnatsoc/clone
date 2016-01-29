@@ -12,21 +12,15 @@ function startEmployer() {
                 "register_employer[person][names]": "required",
                 "register_employer[person][lastName1]": "required",
                 "register_employer[person][mainAddress]": "required",
-                "register_employer[sameWorkHouse]": "required",
-                "register_employer[person][department]": "required",
-                "register_employer[person][city]": "required",
-                "register_employer[workplaces]": "required",
+                "register_employer[sameWorkHouse]": "required"
             },
             messages: {
-                "register_employer[person][documentType]": "Por favor selecciona el tipo de documento",
-                "register_employer[person][document]": "Por favor ingresa tu documento",
-                "register_employer[person][names]": "Por favor ingresa tu nombre",
-                "register_employer[person][lastName1]": "Por favor ingresa tu primer apellido",
-                "register_employer[person][mainAddress]": "Por favor ingrese una dirección",
-                "register_employer[sameWorkHouse]": "Por favor selecciona una opción",
-                "register_employer[person][department]": "Por favor selecciona un departamento",
-                "register_employer[person][city]": "Por favor selecciona una ciudad",
-                "register_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
+                "register_employer[person][documentType]": "Por favor seleccione el tipo de documento",
+                "register_employer[person][document]": "Por favor Ingrese su documento",
+                "register_employer[person][names]": "Por favor Ingrese su nombre",
+                "register_employer[person][lastName1]": "Por favor Ingrese su primer apellido",
+                "register_employer[person][mainAddress]": "Por favor Ingrese una dirección",
+                "register_employer[sameWorkHouse]": "Por favor seleccione una opción"
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function () {
@@ -35,9 +29,9 @@ function startEmployer() {
                 required: true,
                 number: true,
                 messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
+                    minlength: "Por favor ingrese un número valido",
+                    required: "Por favor ingrese un número de telefono",
+                    number: "Por favor ingrese solo digitos"
                 }
             });
         });
@@ -45,7 +39,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor ingresa una dirección"
+                    required: "Por favor ingrese una dirección"
                 }
             });
         });
@@ -53,7 +47,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor seleciona una opción"
+                    required: "Por favor selecione una opción"
                 }
             });
         });
@@ -412,6 +406,16 @@ function addListeners() {
             }
         }
     })
+    var selected = $("input[name='register_employer[sameWorkHouse]']:checked").val();
+    if (selected == "1") {
+        //$('ul.workplaces').hide();
+        var select = $("#register_employer_workplaces_0_id");
+        $("#register_employer_workplaces_0_name").val("Dirección Principal");
+        $("#register_employer_workplaces_0_mainAddress").val($("#register_employer_person_mainAddress").val());
+        $("#register_employer_workplaces_0_department").val($("#register_employer_person_department").val());
+        $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
+
+    }
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
