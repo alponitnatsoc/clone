@@ -197,7 +197,7 @@ function startEmployer() {
     //colocar el select en el valor del tamaño del arreglo
     var dropDownWork = $collectionHolder.data('index');
     if (dropDownWork == 1 && $("input[name='register_employer[sameWorkHouse]']:checked").val() != '0') {
-        $('ul.workplaces').hide();
+        //$('ul.workplaces').hide();
     }
     /* $('#register_employer_numberOfWorkplaces').val($dropDownWork);
      //listener para el que agrega workplaces
