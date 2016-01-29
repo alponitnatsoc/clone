@@ -127,7 +127,7 @@ class DefaultController extends Controller
         $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
         $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
-            'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format' => 'json')),
+            'action' => $this->generateUrl('api_public_post_pay_membresia', array('format' => 'json')),
             'method' => 'POST',
         ));
 
