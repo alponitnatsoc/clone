@@ -480,17 +480,17 @@
                 <h4>Destino del pago *</h4>
                 Escoja el mecanismo de pago para del salario:<br />
                 {% for child in form.employeeHasEmployers.payMethod %}
-
-                    {% set index = child.vars.value %}
-                    {{ form_widget(child) }}
-                    <img src="{{ choices[index].image }}" class="paymentMethodImage" />
-                    <div class="paymentMethodDescription">
-                        {{ choices[index].descripcion }}
-                        <a class="btn btn-primary btn-orange">Más Información</a>
+                    <div class="paymentMethodDetail">
+                        {% set index = child.vars.value %}
+                        <img src="{{ choices[index].image }}" class="paymentMethodImage" />
+                        {{ form_widget(child) }}
+                        <div class="paymentMethodDescription">
+                            {{ choices[index].descripcion }}
+                            <br />
+                            <a class="btn btn-orange">Más Información</a>
+                        </div>
+                        <div class="paymentMethodsOptions" id="putFields_{{ index }}"></div>
                     </div>
-                    
-
-                    <div class="paymentMethodsOptions" id="putFields_{{ index }}"></div>
 
                 {% endfor %}
 
