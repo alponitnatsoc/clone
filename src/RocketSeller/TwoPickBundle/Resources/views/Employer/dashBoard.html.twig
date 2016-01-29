@@ -18,12 +18,7 @@
                 background: #FBFBFB;
                 margin: 5px;
             }
-            .dashboard_employer_pending_tasks:hover{
-                background: #dcdcdc;
-            }
-            .dashboard_employer_pending_tasks_list:hover{
-                background: #dcdcdc;
-            }
+
             .panel_btn{    
                 text-align: center;
                 bottom: 0px;
@@ -38,7 +33,6 @@
                 position: absolute;
                 width: 100%;
                 margin-left: -15px;
-                margin-bottom: 20px;
                 height: 30px;
                 background-color: #efefef;
 
@@ -359,7 +353,12 @@
                             
                             <div class="panel_btn col-sm-12">
                                 {% if notification.accion %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
+                                    {% if notification.accion|lower == "subir documento" %}
+                                        <a href="{{ notification.relatedlink }}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</a>
+                                    {% else %}
+                                        <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
+                                    {% endif %}
+                                    
                                 {% else %}
                                     <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">View</a>
                                 {% endif %}
