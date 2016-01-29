@@ -12,20 +12,9 @@
 
 
         {% if step.boxStyle=="small" %}
-        <div id='' class='col-sm-12 col-xs-12 align-Resp dashBoardAddLink'>
-            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and step.url!="") %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
-                <div id='' class='col-md-6 col-xs-12 txt-AD1'>
-                    <div id='' class='text-left' >
-                        {{step.name}}
-                    </div>
-                </div>
-                <div id='' class='col-md-2 col-xs-12 txt-AD3'>
-                    
-                        <div id='' class='btn stepIni btn-symplifica btn-orange' style="float: right">
-                                {{step.stateMessage}}
-                        </div>
-                    
-                </div>
+        <div class='col-sm-12 col-xs-12 wizardAddLink text-right'>
+            <a href="{{step.url}}">
+                <i class="fa fa-user-plus"></i> Agregar un nuevo empleado
             </a>
         </div>
 
