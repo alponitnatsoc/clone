@@ -127,7 +127,7 @@ fos_user:
             name:               app_user_registration_form
             validation_groups:  [Registration, Default]
     resetting:
-        token_ttl: 300
+        token_ttl: 86400
         email:
             from_email: # Use this node only if you don't want the global email address for the resetting email
                 address:        "%from_email_address_resetting%"
