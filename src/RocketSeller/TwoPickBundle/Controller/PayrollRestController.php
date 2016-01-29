@@ -237,8 +237,8 @@ class PayrollRestController extends FOSRestController
    *   (name="document", nullable=false, requirements="([0-9])+", strict=true, description="Employee document number")
    *   (name="gender", nullable=false, requirements="(MAS|FEM)", strict=true, description="Employee gender(MAS or FEM).")
    *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
-   *   (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
-   *   (name="contract_number", nullable=false, requirements="([0-9])+", strict=true, description="Employee contract number.")
+   *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
+   *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
    *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
    *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
    *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
@@ -261,8 +261,8 @@ class PayrollRestController extends FOSRestController
     $regex['document'] = '([0-9])+';$mandatory['document'] = true;
     $regex['gender'] = '(MAS|FEM)';$mandatory['gender'] = true;
     $regex['birth_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['birth_date'] = true;
-    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = true;
-    $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = true;
+    $regex['start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['start_date'] = false;
+    $regex['contract_number'] = '([0-9])+';$mandatory['contract_number'] = false;
     $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['last_contract_end_date'] = false;
     $regex['worked_hours_days'] = '([0-9])+';$mandatory['worked_hours_days'] = true;
     $regex['payment_method'] = '(CHE|CON|EFE)';$mandatory['payment_method'] = true;
@@ -362,7 +362,7 @@ class PayrollRestController extends FOSRestController
     $regex['payment_method'] = '(CHE|CON|EFE)';$mandatory['payment_method'] = false;
     $regex['liquidation_type'] = '(J|M|Q)';$mandatory['liquidation_type'] = false;
     $regex['salary_type'] = '([0-9])';$mandatory['salary_type'] = false;
-    $regex['contract_type'] = '([0-9])';$mandatory['contract_type'] = true;
+    $regex['contract_type'] = '([0-9])';$mandatory['contract_type'] = false;
 
     $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -797,8 +797,7 @@ class PayrollRestController extends FOSRestController
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
    *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL, it can be found in the table novelty_type, under payroll_code")
    *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-   *    (name="liquidation_type_id", nullable=false, requirements="([0-9A-Z ])+", strict=true, description="Code of the liquidation type")
-   *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty")
+   *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty, it can be in hours or days, depending on the novelty.")
    *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
    *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
    *
@@ -813,7 +812,6 @@ class PayrollRestController extends FOSRestController
     $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
     $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = true;
     $regex['novelty_value'] = '([0-9])+(.[0-9]+)?';$mandatory['novelty_value'] = false;
-    $regex['liquidation_type_id'] = '([0-9A-Z ])+';$mandatory['liquidation_type_id'] = true; //TODO: siempre poner noc.
     $regex['unity_numbers'] = '([0-9])+';$mandatory['unity_numbers'] = false;
     $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = false;
     $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
@@ -827,7 +825,7 @@ class PayrollRestController extends FOSRestController
     $unico['EMP_CODIGO'] = $parameters['employee_id'];
     $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
     $unico['NOV_VALOR_LOCAL'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : "";
-    $unico['FLIQ_CODIGO'] = $parameters['liquidation_type_id'];
+    $unico['FLIQ_CODIGO'] = 'NOC'; // It means novedad ocasional, it's always the same.
     $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : "";
     $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : "";
     $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
@@ -975,7 +973,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL, it can be found in the table novelty_type, under payroll_code")
-     *    (name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional")
+     *    (name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional, and is the monthly value.")
      *    (name="novelty_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
      *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
      *
@@ -1310,11 +1308,10 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="contract_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     *    (name="contract_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
      *    (name="contract_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
-     *    (name="extension_reason_id", nullable=false, requirements="(.*)", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
-     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
-     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of the emplyee contract.")
+     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Retirement day.")
      *
      * @return View
      */
@@ -1327,7 +1324,6 @@ class PayrollRestController extends FOSRestController
       $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
       $regex['contract_type_id'] = '([0-9])+';$mandatory['contract_type_id'] = true;
       $regex['contract_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['contract_start_date'] = true;
-      $regex['extension_reason_id'] = '(.*)';$mandatory['extension_reason_id'] = true;
       $regex['employee_contract_number'] = '([0-9])+';$mandatory['employee_contract_number'] = false;
       $regex['employee_leaving_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['employee_leaving_date'] = false;
 
@@ -1342,7 +1338,7 @@ class PayrollRestController extends FOSRestController
       $unico['EMP_CODIGO'] = $parameters['employee_id'];
       $unico['TCO_CODIGO'] = $parameters['contract_type_id'];
       $unico['HPRO_FECHA_INGRESO'] = $parameters['contract_start_date'];
-      $unico['MPRO_CODIGO'] = $parameters['extension_reason_id'];
+      $unico['MPRO_CODIGO'] = 4; // It is Boss request, which we will use it by default.
       $unico['HPRO_NRO_CONTRATO'] = isset($parameters['employee_contract_number']) ? $parameters['employee_contract_number'] : "";
       $unico['HPRO_EMP_FECHA_RETIRO'] = isset($parameters['employee_leaving_date']) ? $parameters['employee_leaving_date'] : "";
 
@@ -1373,13 +1369,12 @@ class PayrollRestController extends FOSRestController
      *
      * @param Request $request.
      * Rest Parameters:
-     *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="contract_type_id", nullable=true, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL")
+     *    (name="contract_type_id", nullable=true, requirements="([0-9])+", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
      *    (name="contract_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
-     *    (name="extension_reason_id", nullable=true, requirements="(.*)", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
-     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
-     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
+     *    (name="extension_reason_id", nullable=true, requirements="(.*)", strict=true, description="Reason of the extension as described by SQL, default is 4, boss request.")
+     *    (name="employee_contract_number", nullable=true, requirements="([0-9])+", description="Number of the emplyee contract.")
+     *    (name="employee_leaving_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Retirement day.")
      *
      * @return View
      */
@@ -1395,8 +1390,6 @@ class PayrollRestController extends FOSRestController
       $regex['extension_reason_id'] = '(.*)';$mandatory['extension_reason_id'] = false;
       $regex['employee_contract_number'] = '([0-9])+';$mandatory['employee_contract_number'] = false;
       $regex['employee_leaving_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['employee_leaving_date'] = false;
-
-
 
       $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -1478,22 +1471,26 @@ class PayrollRestController extends FOSRestController
      * )
      *
      * @param Int $employeeId The id of the employee to be queried.
-     * @param Int $period Period of the liquidation. // TODO: Complete comment.
+     * @param Int $period Period of the liquidation, 2 or 4 if it is bimonthly,
+     *        depending on the week to be paid, monthly always 4.
      * @param Int $month Month of the liquidation.
      * @param Int $year Year of the liquidation.
      *
      * @return View
      */
-    public function getGeneralPayrollAction($employeeId, $period, $month,
-                                               $year)
+    public function getGeneralPayrollAction($employeeId, $period=null,
+                                            $month=null, $year=null)
     {
       $content = array();
       $unico = array();
 
       $unico['EMPCODIGO'] = $employeeId;
-      $unico['NOMI_PERIODO'] = $period;
-      $unico['NOMI_MES'] = $month;
-      $unico['NOMI_ANO'] = $year;
+      if($period)
+        $unico['NOMI_PERIODO'] = $period;
+      if($month)
+        $unico['NOMI_MES'] = $month;
+      if($year)
+        $unico['NOMI_ANO'] = $year;
 
       $content[] = $unico;
       $parameters = array();
@@ -1522,14 +1519,15 @@ class PayrollRestController extends FOSRestController
      * )
      *
      * @param Int $employeeId The id of the employee to be queried.
-     * @param Int $period Period of the liquidation. // TODO: Complete comment.
+     * @param Int $period Period of the liquidation, 2 or 4 if it is bimonthly,
+     *        depending on the week to be paid, monthly always 4.
      * @param Int $month Month of the liquidation.
      * @param Int $year Year of the liquidation.
      *
      * @return View
      */
-    public function getGeneralCumulativeAction($employeeId, $period, $month,
-                                               $year)
+    public function getGeneralCumulativeAction($employeeId, $period=null,
+                                                $month=null, $year=null)
     {
       $content = array();
       $unico = array();
@@ -1569,13 +1567,13 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="username", nullable=false, requirements="(.*)", strict=true, description="Username of the person generating the parameters.")
+     *    (name="username", nullable=false, requirements="(.*)", strict=true, description="Username of the employer.")
      *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
      *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
      *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
      *    (name="cutDate", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date of the cut for the process execution(format: DD-MM-YYYY).")
      *    (name="processDate", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Date of the of the process execution(format: DD-MM-YYYY)")
-     *    (name="retirementCause", nullable=false, requirements="([0-9])+", strict=true, description="ID of the retirement cause.")
+     *    (name="retirementCause", nullable=false, requirements="([0-9])+", strict=true, description="ID of the retirement cause.")//TODO: Complete comment saying where to find the information.
      *
      * @return View
      */
