@@ -134,7 +134,8 @@ class DefaultController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Default:active.html.twig', array(
                     'form' => $form->createView(),
                     'employer' => $person,
-                    'employees' => $employees,
+                    'employerHasEmployee' => $employees[0],
+                    'contratos' => $employees[1],
                     'paymentMethods' => isset($responcePaymentsMethods['payments']) ? $responcePaymentsMethods['payments'] : false,
                     'billingAdress' => (count($billingAdress) > 0) ? $billingAdress : false
         ));
