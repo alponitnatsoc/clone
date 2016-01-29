@@ -236,7 +236,7 @@
     <title>{% block title %}Dashboard - Employer{% endblock %}</title>  
     {# dump(user) #}
     {% if notifications %}
-        <h4>¡Bienvenido {{ user.names }}! Este es su resumen de tareas:</h4>
+        <h4>¡Bienvenido a tu centro de control de tareas pendientes!</h4>
         {# dump(notifications) #}
         <div class="dashboard_employer_head">
             <div class="dashboard_employer_contador">
@@ -359,22 +359,24 @@
         </div>
 
         <div class="report_novedad">
-            <a class="btn-bg btn-default" href="{{ path('show_dashboard_employer') }}">Reportar novedad</a>
-        </div>         
-        <div class="reminder_title">
-            Requerde que
-        </div>
+            <a class="btn-bg btn-default" href="{{ path('manage_employees') }}">Reportar novedad</a>
+        </div>     
+        {% if(notifications) %}
+            <div class="reminder_title">
+                Requerde que
+            </div>
 
-        {% for notification in notifications %}
-            {% if notification.type == 'reminder' %}
-                <div class="dashboard_employer_reminder col-md-6">
-                    <div class="label-as-badge label_list label-success">!</div>
-                    <div class="description_list">
-                        {{ notification.description }}
-                    </div>                   
-                </div>
-            {% endif %}
-        {% endfor %}
+            {% for notification in notifications %}
+                {% if notification.type == 'reminder' %}
+                    <div class="dashboard_employer_reminder col-md-6">
+                        <div class="label-as-badge label_list label-success">!</div>
+                        <div class="description_list">
+                            {{ notification.description }}
+                        </div>                   
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
 
     {% else %}
         <h4>No tienes tareas pendientes.</h4>

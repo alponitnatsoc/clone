@@ -54,7 +54,7 @@ class DashBoardController extends Controller
                         //puede sumar 1 unidad minima al porcentaje
                         $stateEmployees+=$minUnit;
                     }
-                    if($value->getEmployeeEmployee()->getEntities()->count()>0){
+                    if($value->getEmployeeEmployee()->getEntities()->count()!=0){
                         $stateAfiliation+=$minUnit * 2;
                     }
                 }
@@ -100,7 +100,7 @@ class DashBoardController extends Controller
             'url' => $stateEmployees!=100 ?"":$this->generateUrl('matrix_choose'),
             'name' => "Finalizar afiliación",
             'paso' => 3,
-            'state' => $stateEmployees,
+            'state' => $stateAfiliation,
             'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 
