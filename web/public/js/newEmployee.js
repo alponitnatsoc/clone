@@ -85,7 +85,8 @@ function startEmployee() {
     $(".definite").each(function () {
         $(this).hide();
     });
-    $("#register_employee_employeeHasEmployers_timeCommitment").change(function () {
+    var timeCommitment =$("#register_employee_employeeHasEmployers_timeCommitment");
+    timeCommitment.change(function () {
         var selectedVal = $(this).find("option:selected").text();
         if (selectedVal == "Trabajo por días") {
             $(".days").each(function () {
@@ -97,13 +98,24 @@ function startEmployee() {
             });
         }
     });
+    var selectedVal = $(timeCommitment).find("option:selected").text();
+    if (selectedVal == "Trabajo por días") {
+        $(".days").each(function () {
+            $(this).show();
+        });
+    } else {
+        $(".days").each(function () {
+            $(this).hide();
+        });
+    }
     $("#register_employee_person_documentType").change(function () {
         var selectedVal = $(this).find("option:selected").text();
         if (selectedVal == "Tarjeta de identidad") {
             $('#TIModal').modal('toggle');
         }
     });
-    $("#register_employee_employeeHasEmployers_contractType").change(function () {
+    var contractType=$("#register_employee_employeeHasEmployers_contractType");
+    contractType.change(function () {
         var selectedVal = $(this).find("option:selected").text();
         if (selectedVal == "Término fijo") {
             $(".definite").each(function () {
@@ -115,6 +127,16 @@ function startEmployee() {
             });
         }
     });
+    selectedVal = $(contractType).find("option:selected").text();
+    if (selectedVal == "Término fijo") {
+        $(".definite").each(function () {
+            $(this).show();
+        });
+    } else {
+        $(".definite").each(function () {
+            $(this).hide();
+        });
+    }
     //funcion que agrega un listener a cada department
     addListeners();
 
