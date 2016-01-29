@@ -1,12 +1,11 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
     {% if employees %}
-        {% for employee in employees %}
-
-            <div id='' class='col-xs-12'>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-
+        <div class="row-fluidclearfix" >
+            <div class="col-xs-12">
+                <h2>Empleados</h2>
+                {% for employee in employees %}
+                    <div class="row">
                         <div id='' class='col-xs-2'>
                             {{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}
                         </div>
@@ -15,7 +14,6 @@
                                 {{employee.employeeEmployee.personPerson.documentType}}: {{employee.employeeEmployee.personPerson.document}}
                             </div>
                         </div>
-
                         {% if user.status != 1 %}
                             <div id='' class='col-xs-1'>
                                 <a id='' class='nav-link' href="{{ path('manage_contracts' , {'id': employee.idEmployerHasEmployee}) }}">
@@ -61,11 +59,9 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-
-        {% endfor %}
-        
+        </div>
     {% endif %}
     
     <div id='' class='col-xs-12'>

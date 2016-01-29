@@ -141,8 +141,8 @@
     opacity:0.8;
    }
    .btnPrevious:hover, .btn-default:hover, .btn-default:focus {
-    border: 2px solid @lightBLue;
-    background: @blue none repeat scroll 0% 0%;
+    border: 2px solid @dark_purple;
+    background: @dark_purple none repeat scroll 0% 0%;
     color: #fff;
    }
    .up-Help-Phone {
@@ -988,12 +988,12 @@
     /*border-bottom: 1px solid #E9E9E9;*/
     img {
     }
-    .title{
+    .title{        
         text-align: center;
         font-family: @open !important;
         text-align: center;
         padding: 10px;
-        font-weight: bold; 
+        font-weight: bold !important; 
     }
     i {
         color:#00CDCC;
@@ -1005,7 +1005,7 @@
         font-weight: 300 !important;
         font-family: @open !important;
         font-size: 16px !important;
-        min-height: 60px;
+        min-height: 30px;
     }
     .radio {
         padding-top: 0;
@@ -1124,18 +1124,34 @@
 
    }
    .paymentMethodDetail {
-
+    margin: 25px 0 0 0;
    }
 
-   .paymentMethodDetail .radio > label {
-
+   .paymentMethodDetail label {
+        display: block;
+        padding-left: 90px;
+        text-indent: -90px;
    }
 
+   .paymentMethodDetail input {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0 90px 0 0 !important;
+        vertical-align: bottom;
+        position: relative !important;
+        top: -2px;
+        *overflow: hidden;
+   }
+    .paymentMethodsOptions {
+        margin: 15px 0 0 113px;
+        width: 60%;
+    }
    .paymentMethodImage {
-
+        margin: -60px 0 0 30px;
    }
    .paymentMethodDescription {
-
+        margin: -25px 0 0 113px;
    }
 
 #navbarSidebar.collapse.in, #navbarSidebar.collapsing {
@@ -1309,4 +1325,39 @@ select {
         color: @light_blue;
         font-family: @lato;
     }
+}
+.upload-link{
+    color:@selectedMenuColor;
+    text-decoration: none;
+    &:active{
+        color:@selectedMenuColor;
+    }
+    &:hover{
+        color:@selectedMenuColor;
+        text-decoration: none;
+    }
+    &:focus{
+        color:@selectedMenuColor;
+        text-decoration: none;
+    }    
+}
+.download-link{
+    color:@blue;
+    text-decoration: none;
+    &:active{
+        color:@blue;
+    }
+    &:hover{
+        color:@blue;
+        text-decoration: none;
+    }
+    &:focus{
+        color:@blue;
+        text-decoration: none;
+    } 
+}
+.employer-row , .restOfEmployeeList , .restOfEmployeeList{
+    border-bottom: none;
+    height: 50px;
+    padding-top: 15px;    
 }

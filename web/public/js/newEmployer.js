@@ -252,6 +252,7 @@ function startEmployer() {
         });
         i = 0;
         var flagValid = true;
+        var modal = document.getElementById('exceptionModal');
         $(form).find("ul.workplaces input[name*='mainAddress']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -260,7 +261,7 @@ function startEmployer() {
             addresses[i++] = $(this).val();
         });
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            //modal.style.display = "block";
             return;
         }
         i = 0;
@@ -272,7 +273,7 @@ function startEmployer() {
             names[i++] = $(this).val();
         });
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            //modal.style.display = "block";
             return;
         }
         i = 0;
@@ -283,8 +284,9 @@ function startEmployer() {
             }
             citys[i++] = $(this).val();
         });
+
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            //modal.style.display = "block";
             return;
         }
         i = 0;
@@ -295,17 +297,14 @@ function startEmployer() {
             }
             departments[i++] = $(this).val();
         });
+
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
+            //modal.style.display = "block";
             return;
         }
         i = 0;
 
         var sameWorkHouse = $(form).find("input[name='register_employer[sameWorkHouse]']");
-        if (!(validator.element(sameWorkHouse))) {
-            alert("Llenaste algunos campos incorrectamente");
-            return;
-        }
 
         $('#createdModal').modal('toggle');
         $.ajax({
@@ -343,7 +342,6 @@ function startEmployer() {
     $("#employerDismiss").on('click', function () {
         sendAjax(redirUri);
     });
-
 }
 
 
