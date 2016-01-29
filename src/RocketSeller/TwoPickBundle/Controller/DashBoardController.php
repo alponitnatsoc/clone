@@ -67,6 +67,7 @@ class DashBoardController extends Controller
             'name' => "Mis datos como empleador",
             'state' => $stateRegister,
             'paso' => 1,
+            'boxStyle' => "big",
             'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
         $steps ['0'] = $step1;
 
@@ -77,6 +78,7 @@ class DashBoardController extends Controller
                 'name' => "Datos de mis empleados",
                 'state' => $stateEmployees,
                 'paso' => 2,
+                'boxStyle' => "big",
                 'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
             $steps ['1'] = $step2;
 
@@ -85,6 +87,7 @@ class DashBoardController extends Controller
                 'name' => "Agregar un nuevo Empleado?",
                 'state' => 0,
                 'paso' => 2,
+                'boxStyle' => "small",
                 'stateMessage' => "Iniciar",);
             $steps ['2'] = $step3;
         } else {
@@ -93,6 +96,7 @@ class DashBoardController extends Controller
                 'name' => "Datos de los empleados",
                 'state' => $stateEmployees,
                 'paso' => 2,
+                'boxStyle' => "big",
                 'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
             $steps ['1'] = $step2;
         }
@@ -101,6 +105,7 @@ class DashBoardController extends Controller
             'name' => "Finalizar afiliación",
             'paso' => 3,
             'state' => $stateAfiliation,
+            'boxStyle' => "big",
             'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 

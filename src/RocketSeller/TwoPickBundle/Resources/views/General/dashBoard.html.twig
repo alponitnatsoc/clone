@@ -3,13 +3,39 @@
 {% block header %}{% endblock header %}
 {% block fos_user_content %}
     <div class="col-sm-12 col-xs-12 block-Data">
-        <h1>SYMPLIFÍCATE</h1>
+        <h1>Symplifícate</h1>
         <span>Configura tu perfil para que nuestra herramienta haga el trabajo por ti. <br />Con tu información como empleador y la de tus empleados, sabremos cómo ayudarte.</span>
     </div>
     {% set anteriorListo = true %}
     {% for step in steps %}
+
+
+
+        {% if step.boxStyle=="small" %}
+        <div id='' class='col-sm-12 col-xs-12 align-Resp dashBoardAddLink'>
+            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and anteriorListo) %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
+                <div id='' class='col-md-6 col-xs-12 txt-AD1'>
+                    <div id='' class='text-left' >
+                        {{step.name}}
+                    </div>
+                </div>
+                <div id='' class='col-md-2 col-xs-12 txt-AD2' style="font-family: 'Roboto Slab', serif; text-align: left;">
+                    {{step.state}}% {% if step.state==100 %}{% endif %}
+                </div>
+                <div id='' class='col-md-2 col-xs-12 txt-AD3'>
+                    
+                        <div id='' class='btn stepIni btn-symplifica btn-orange' style="float: right">
+                                {{step.stateMessage}}
+                        </div>
+                    
+                </div>
+            </a>
+        </div>
+
+
+        {% else %}
         <div id='' class='col-sm-12 col-xs-12 align-Resp'>
-            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and step.url!="") %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
+            <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and anteriorListo) %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
                 <div id='' class='col-md-2 col-xs-12 txt-AD0' style="text-align: left;">
                     {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}                    
                 </div>
@@ -31,7 +57,10 @@
                 </div>
             </a>
         </div>
-        {% if step.paso==100 %}
+        {% endif %}
+
+
+        {% if step.state==100 %}
             {% set anteriorListo = true %}
         {% else %}
             {% set anteriorListo = false %}
