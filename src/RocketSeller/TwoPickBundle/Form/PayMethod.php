@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -29,29 +29,27 @@ class PayMethod extends AbstractType
                         'property' => 'name',
                         'multiple' => false,
                         'expanded' => false,
+                        'placeholder' => 'Selecciona una opción'
                     ));
             }else{
                 $builder
                     ->add($field->getColumnName(), $field->getDataType(), array(
                         'constraints' => array(
-                            new NotBlank(),),
+                            new NotBlank()
+                        )
                     ));
             }
         }
-
-
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
         ));
     }
-    
+
     public function getName()
     {
         return 'method_type_fields';
     }
-} 
-?>
+}

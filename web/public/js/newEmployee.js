@@ -21,12 +21,17 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
                 "register_employee[employeeHasEmployers][position]": "required",
                 "register_employee[employeeHasEmployers][workplaces]": "required",
-                "register_employee[employeeHasEmployers][transportAid]": "required"
+                "register_employee[employeeHasEmployers][transportAid]": "required",
+                "register_employee[employeeHasEmployers][payMethod]": "required",
+                "register_employee[credit_card]": "required",
+                "register_employee[cvv]": "required",
+                "register_employee[expiry_date]": "required",
+                "register_employee[name_on_card]": "required"
 
             },
             messages: {
                 "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
-                "register_employee[person][document]": {required: "Por favor ngresa un documento", number: "ingresa solamente dígitos"},
+                "register_employee[person][document]": {required: "Por favor ingresa un documento", number: "ingresa solamente dígitos"},
                 "register_employee[person][names]": "Por favor ingresa el nombre",
                 "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
                 "register_employee[person][mainAddress]": "Por favor ingresa una dirección",
@@ -38,7 +43,12 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción"
+                "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
+                "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
+                "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
+                "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
+                "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function () {
@@ -132,6 +142,10 @@ function startEmployee() {
         $(form).find("ul.workplaces select[name*='workplaces']").each(function () {
             idsWorkpl[i++] = $(this).val();
         });
+
+        if (!form.valid()) {
+            return;
+        }
 
         $.ajax({
             url: form.attr('action'),

@@ -86,7 +86,6 @@ class ContractRegistration extends AbstractType
                 'required' => false
             ))
             ->add('documentDocument', new DocumentPick())
-            
             ->add('workTimeStart', 'time', array(
                 'input'  => 'datetime',
                 'widget' => 'choice',
