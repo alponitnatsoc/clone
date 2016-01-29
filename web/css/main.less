@@ -13,7 +13,7 @@
    @lightGrayText: #CCCCCC;
    @dark_green: #3b4b5a;
    @error_color: #f00;
-   @open: "Open Sans","Roboto", Arial;
+   @open: "Open Sans","Roboto",Helvetica,Arial;
    @roboto: "Roboto";
    @robotoCondensed: "Open Sans Condensed";
    @lato: "Lato";
@@ -34,6 +34,7 @@
    }
    body, html {
     min-height: 100%;
+    font-family: @open;
    }
    span {
     font-family: @open;
@@ -1123,6 +1124,12 @@
    #paymentMethod {
 
    }
+   .blueFormTitle {
+        color: #99ebeb;
+        font-family: Lato;
+        font-size: 20px;
+        font-weight: 200;        
+   }
    .paymentMethodDetail {
     margin: 25px 0 0 0;
    }
@@ -1153,6 +1160,8 @@
         padding: 10px;
         text-align: right;
         width: 40%;
+        font-family: "Open Sans";
+        font-size: 16px;
     }
 
     .paymentMethodsOptions select, .paymentMethodsOptions input  {
@@ -1167,6 +1176,8 @@
    .paymentMethodDescription {
         margin: -25px 0 0 94px;
    }
+
+
 
 #navbarSidebar.collapse.in, #navbarSidebar.collapsing {
       .well.well-lg{
