@@ -379,7 +379,7 @@ function addListeners() {
     $("input[name='register_employer[sameWorkHouse]']").change(function () {
         var selected = $("input[name='register_employer[sameWorkHouse]']:checked").val();
         if (selected == "1") {
-            $('ul.workplaces').hide();
+            //$('ul.workplaces').hide();
             var select = $("#register_employer_workplaces_0_id");
             if (select.val() == "") {
                 $("#register_employer_workplaces_0_name").val("Dirección Principal");
