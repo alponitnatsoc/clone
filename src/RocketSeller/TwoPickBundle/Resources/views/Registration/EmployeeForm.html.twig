@@ -290,45 +290,149 @@
                             <a class="btn btn-primary btnPrevious">Anterior</a>
                         
                         
-                            <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
                             <br /><br />
                         
                     </div>
             </div>
 
-            <!--
-            <div id="contactData" class="tab-pane fade in">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span>Los campos marcados en * son obligatorios</span>
-                </div>
-                <div class="col-sm-12 col-xs-12">
-                    <div class="col-sm-6 col-xs-12">
-                        {{ form_row(form.person.mainAddress) }}
-                        {{ form_row(form.person.department) }}
-                        {{ form_row(form.personExtra.email) }}
-                    </div>
-                    <div class="col-sm-6 col-xs-12">
-                        <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-                            {% for phone in form.person.phones %}
-                                <li id="phone_{{loop.index}}" class="phoneLi">
-                                    {{ form_row(phone.id) }}
-                                    {{ form_row(phone.phoneNumber) }}
-                                </li>
-                            {% endfor %}
-                            <!--li class="form-group addPhone"><a href=""><i class="fa fa-plus"></i></a><input class="form-control" placeholder="Add phone"/></li--><!--
-                        </ul>
-                        {{ form_row(form.person.city) }}
-                    </div>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <a class="btn btn-primary btnPrevious" >Anterior</a>
-                </div>
-                <div class="col-xs-6">
-                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext" style="min-width: 75%">Siguiente</a>
-                </div>
-            </div>-->
-
             <div id="contractData" class="tab-pane fade">
+                <div class="col-sm-12 col-xs-12 block-Intro">
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios<a href="{{ path('show_help') }}" class="helpTxt">> ayuda</a></span>
+                </div>
+                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.employeeType) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.employeeType) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.contractType) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.contractType) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.timeCommitment) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.timeCommitment) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-xs-12 label-group">
+                            <h3>Datos básicos del contrato</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.startDate) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.startDate) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 definite">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.endDate) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.endDate) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 days">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.workableDaysMonth) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.workableDaysMonth) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 days">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.weekWorkableDays) }}      
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.weekWorkableDays) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 worktime">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.workTimeStart) }}   
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.workTimeStart) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 worktimeEnd">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.workTimeEnd) }}      
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.workTimeEnd) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.position) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.position) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.workplaces) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.workplaces) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.transportAid) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.transportAid) }}    
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.salary) }}    
+                        </div>
+                        <div class="col-sm-6">
+                            {{ form_widget(form.employeeHasEmployers.salary) }}
+                            <div style="text-align: right">
+                                <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-xs-12 label-group">
+                            <h3>Beneficios extralegales</h3>
+                        </div>
+                    </div>
+                    <ul id='' class="benefits" data-prototype="
+                        {% filter escape %}
+                            {{ include('RocketSellerTwoPickBundle:DataPrototypes:benefitsPrototype.html.twig', { 'form': form.employeeHasEmployers.benefits.vars.prototype|e }) }}
+                        {% endfilter %}" style="list-style: none">
+                        {% for benefit in form.employeeHasEmployers.benefits %}
+                            <li id="benefits_{{loop.index}}" class="benefitLi">
+                                {{ form_row(benefit.idContractHasBenefits) }}
+                                {{ form_row(benefit.benefitType) }}
+                                {{ form_row(benefit.amount) }}
+                                {{ form_row(benefit.periodicity) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            <!--
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span>Los campos marcados en * son obligatorios <a href="{{ path('show_help') }}" class="helpTxt">> ayuda</a></span>
                 </div>
@@ -393,7 +497,7 @@
                     {% endfor %}
                 </ul>
                 {{ form_row(form.employeeHasEmployers.benefitsConditions) }}
-                <!-- Button trigger modal -->
+                
                 2. ¿Ya cuenta con contrato firmado? *
                 <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#siTarget" aria-expanded="false" aria-controls="collapseExample">
                     Si
@@ -410,7 +514,7 @@
                             Subir Archivos
                         </button>
                     </div>
-                </div!-->
+                </div!--><!--
                 <div class="collapse" id="noTarget">
                     <div class="well">
                         <p>¡Nosotros le ayudamos!</p>
@@ -423,7 +527,7 @@
 
 
 
-                <!-- Modal no -->
+                <!-- Modal no --><!--
                 <div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -455,6 +559,7 @@
                     <a class="btn btn-primary btnPrevious" >< Anterior</a>
                     <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext" >Siguiente ></a>
                 </div>
+                -->
 
             </div>
             <div id="paymentMethod" class="tab-pane fade">
