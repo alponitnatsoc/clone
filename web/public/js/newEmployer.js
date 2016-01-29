@@ -53,7 +53,7 @@ function startEmployer() {
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="col-md-4 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo lugar de trabajo</a>');
+    var $addPhoneLink = $('<a href="#" class="col-md-5 col-xs-8 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo lugar de trabajo</a>');
     var $newLinkLi = $('<li class="col-md-12"></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
@@ -410,7 +410,7 @@ function addPhoneForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 }
 function addTagFormDeleteLink($tagFormLi, $tipo) {
-    var $removeFormA = $('<a href="#" class="col-sm-5 remove_phone_link" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar esta dirección de trabajo</a>');
+    var $removeFormA = $('<a href="#" class="col-sm-5 col-xs-8 remove_phone_link" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar esta dirección de trabajo</a>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function (e) {
