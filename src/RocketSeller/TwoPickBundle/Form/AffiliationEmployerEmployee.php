@@ -43,10 +43,11 @@ class AffiliationEmployerEmployee extends AbstractType
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Caja de Compensación Familiar*',
+                'label'=>'Caja de Compensación Familiar*',                
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
+
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arlEntities,
@@ -57,7 +58,9 @@ class AffiliationEmployerEmployee extends AbstractType
                 'required' => true
             ))
             ->add('save', 'submit', array(
-                'label' => 'Save'                
+                'label' => 'Save',
+                'attr'   =>  array(
+                'class'   => 'btn btn-primary btnNext btn-orange')                
             ));
     }
 
