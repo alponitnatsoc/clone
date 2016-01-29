@@ -21,6 +21,7 @@
    @lightGrayBars: #efefef;
    @darkerButtonText: white;
    @lightBLue: #1fcecb;
+   @selectedMenuColor: #FD5C5C;
 
    @screen-xs-max: 480px;
    @screen-sm-max: 768px;
@@ -690,6 +691,9 @@
         }
         a {
             color: @dark_gray;
+        }
+        .activeMenu a {
+            color:@selectedMenuColor !important;
         }
         img {
             margin-top: 20px;
