@@ -191,6 +191,12 @@ function startEmployee() {
         e.preventDefault();
         addBenefitForm($collectionHolderB, $newLinkLi);
     });
+    $('#si_tiene_contrato').change(function(evt) {
+        $('#noTarget').collapse('hide')
+    });
+    $('#no_tiene_contrato').change(function(evt) {
+        $('#noTarget').collapse('show')
+    });
     $('#btn-inquiry').click(function (e) {
         e.preventDefault();
         var form = $("form");
@@ -466,7 +472,7 @@ function addBenefitForm($collectionHolderB, $newLinkLi) {
 }
 function addTagFormDeleteLink($tagFormLi) {
     var $removeFormA = $('<a href="#" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar este beneficio</a>');
-    $tagFormLi.prepend($removeFormA);
+    $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function (e) {
         // prevent the link from creating a "#" on the URL

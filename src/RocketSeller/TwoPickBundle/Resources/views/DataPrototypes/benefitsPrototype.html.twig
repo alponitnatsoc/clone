@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-10 col-xs-12" style="border-bottom: none">
+        <div class="col-sm-12 col-xs-12">
+            {{ form_row(form.idContractHasBenefits) }}
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <div class="col-sm-6 label-group">
+                {{ form_label(form.benefitType) }}
+            </div>
+            <div class="col-sm-6 form-group">
+                {{ form_widget(form.benefitType) }}
+            </div>                                        
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <div class="col-sm-6 label-group">
+                {{ form_label(form.amount) }}
+            </div>
+            <div class="col-sm-6 form-group">
+                {{ form_widget(form.amount) }}
+            </div>                                        
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <div class="col-sm-6 label-group">
+                {{ form_label(form.periodicity) }}
+            </div>
+            <div class="col-sm-6 form-group">
+                {{ form_widget(form.periodicity) }}
+            </div>                                        
+        </div>
+    </div>
+</div>
