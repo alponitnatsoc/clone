@@ -141,18 +141,6 @@ function startEmployee() {
     addListeners();
     var payType=$("input[name='register_employee[employeeHasEmployers][payMethod]']");
     var payTypeChecked=$("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
-
-    payType.on('change', function () {
-        var payMethod = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
-        $.ajax({
-            url: '/pay/method/fields/' + payMethod.val(),
-            type: 'GET'
-        }).done(function (data) {
-            $('#putFields_' + payMethod.val()).html(
-                    // ... with the returned one from the AJAX response.
-                    $(data).find('#formFields'));
-        });
-    });
     if(payTypeChecked.val()!=null){
         $.ajax({
             url: '/pay/method/fields/' + payTypeChecked.val()+'/'+$("input[name='register_employee[idContract]']").val(),
@@ -163,6 +151,22 @@ function startEmployee() {
                 $(data).find('#formFields'));
         });
     }
+
+    payType.on('change', function () {
+        var payMethod = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
+        $.ajax({
+            url: '/pay/method/fields/' + payMethod.val(),
+            type: 'GET'
+        }).done(function (data) {
+            $('#putFields_' + payMethod.val()).html(
+                    // ... with the returned one from the AJAX response.
+                    $(data).find('#formFields'));
+            $('#putFields_' + payTypeChecked.val()).html("");
+            payTypeChecked=payMethod;
+
+        });
+    });
+
 
 
     $("form").on("submit", function (e) {
