@@ -36,6 +36,11 @@ class PayMethodFields
     private $columnName;
 
     /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private $label;
+
+    /**
      * @ORM\Column(type="string", length=30)
      */
     private $dataType;
@@ -145,5 +150,29 @@ class PayMethodFields
     public function getDataType()
     {
         return $this->dataType;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     *
+     * @return PayMethodFields
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 }

@@ -118,9 +118,10 @@ class EmployeeRestController extends FOSRestController
             $payMethod->setAccountTypeAccountType(null);
             $payMethod->setFrequencyFrequency(null);
             $payMethod->setPayTypePayType(null);
+        }else{
+            $payMethod = new PayMethod();
         }
         //Now for the payType and Pay Method
-        $payMethod = new PayMethod();
         //TODO check if valid??
         $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
         //TODO check if vaild??

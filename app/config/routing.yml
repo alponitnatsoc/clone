@@ -109,8 +109,8 @@ edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
 pay_method_fields:
-    path:      /pay/method/fields/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:postPayMethod, id: -1}
+    path:      /pay/method/fields/{id}/{idContract}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:postPayMethod, idContract: -1, }
     requirements:
         id:     \d+
 novelty_fields:

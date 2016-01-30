@@ -154,7 +154,7 @@ class ContractRegistration extends AbstractType
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => true,
-                'property_path' => 'payMethodPayMethod',
+                'mapped' => false,
                 'label'=>' '
             ));
     }

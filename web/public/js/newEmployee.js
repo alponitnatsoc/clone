@@ -139,8 +139,10 @@ function startEmployee() {
     }
     //funcion que agrega un listener a cada department
     addListeners();
+    var payType=$("input[name='register_employee[employeeHasEmployers][payMethod]']");
+    var payTypeChecked=$("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
 
-    $("input[name='register_employee[employeeHasEmployers][payMethod]']").on('change', function () {
+    payType.on('change', function () {
         var payMethod = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
         $.ajax({
             url: '/pay/method/fields/' + payMethod.val(),
@@ -151,6 +153,17 @@ function startEmployee() {
                     $(data).find('#formFields'));
         });
     });
+    if(payTypeChecked.val()!=null){
+        $.ajax({
+            url: '/pay/method/fields/' + payTypeChecked.val()+'/'+$("input[name='register_employee[idContract]']").val(),
+            type: 'GET'
+        }).done(function (data) {
+            $('#putFields_' + payTypeChecked.val()).html(
+                // ... with the returned one from the AJAX response.
+                $(data).find('#formFields'));
+        });
+    }
+
 
     $("form").on("submit", function (e) {
         e.preventDefault();
@@ -174,10 +187,10 @@ function startEmployee() {
             type: $(form).attr('method'),
             data: {
                 payTypeId: $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']:checked").val(),
-                bankId: $(form).find("select[name='method_type_fields[Bank]']").val(),
-                accountTypeId: $(form).find("select[name='method_type_fields[AccountType]']").val(),
-                frequencyId: $(form).find("select[name='method_type_fields[Frequency]']").val(),
-                accountNumber: $(form).find("input[name='method_type_fields[account_number]']").val(),
+                bankId: $(form).find("select[name='method_type_fields[bankBank]']").val(),
+                accountTypeId: $(form).find("select[name='method_type_fields[accountTypeAccountType]']").val(),
+                frequencyId: $(form).find("select[name='method_type_fields[frequencyFrequency]']").val(),
+                accountNumber: $(form).find("input[name='method_type_fields[accountNumber]']").val(),
                 cellphone: $(form).find("input[name='method_type_fields[cellphone]']").val(),
                 creditCard: $(form).find("input[name='register_employee[credit_card]']").val(),
                 expiryDate: $(form).find("input[name='register_employee[expiry_date]']").val(),

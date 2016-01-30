@@ -376,6 +376,10 @@ class EmployeeController extends Controller
                 foreach ($weekWDs as $weekWD) {
                     $arrayWWD[] = $weekWD->getDayName();
                 }
+                $payType=$contract->getPayMethodPayMethod();
+                if($payType!=null){
+                    $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
+                }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
@@ -396,18 +400,25 @@ class EmployeeController extends Controller
      * @param $id
      * @return Response
      */
-    public function postPayMethodAction($id)
+    public function postPayMethodAction($id,$idContract)
     {
         $repository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayMethodFields");
-        $payTyperepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayType");
+        $payTypeRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayType");
+        $contractRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
         /** @var PayType $payType */
-        $payType = $payTyperepository->find($id);
+        $payType = $payTypeRepository->find($id);
+        /** @var Contract $contract */
+        $contract = $contractRepository->find($idContract);
         $fields = $repository->findBy(array('payTypePayType' => $id));
         $options = array();
         foreach ($fields as $field) {
             $options[] = $field;
         }
-        $form = $this->createForm(new PayMethod($fields));
+        if($contract==null||$contract->getPayMethodPayMethod()==null){
+            $form = $this->createForm(new PayMethod($fields));
+        }else{
+            $form = $this->createForm(new PayMethod($fields),$contract->getPayMethodPayMethod());
+        }
         return $this->render(
                         'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
                     'payType' => $payType)

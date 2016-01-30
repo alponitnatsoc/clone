@@ -23,17 +23,18 @@ class PayMethod extends AbstractType
             // si es una letra en altas
             if($field->getDataType()[0]<="Z"){
                 $builder
-                    ->add($field->getDataType(), 'entity', array(
+                    ->add($field->getColumnName(), 'entity', array(
                         'class' => 'RocketSellerTwoPickBundle:'.$field->getDataType(),
-                        'placeholder' => '',
                         'property' => 'name',
                         'multiple' => false,
                         'expanded' => false,
+                        'label' =>$field->getLabel(),
                         'placeholder' => 'Selecciona una opción'
                     ));
             }else{
                 $builder
                     ->add($field->getColumnName(), $field->getDataType(), array(
+                        'label' =>$field->getLabel(),
                         'constraints' => array(
                             new NotBlank()
                         )
@@ -45,6 +46,7 @@ class PayMethod extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\PayMethod'
         ));
     }
 
