@@ -58,7 +58,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($EntitySuraARL);
 
         $EntityColpatriaARL = new Entity();
-        $EntityColpatriaARL->setName('Sura');
+        $EntityColpatriaARL->setName('Colpatria');
         $EntityColpatriaARL->setPayrollCode('635');
  		    $EntityColpatriaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
@@ -85,6 +85,20 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
  		    $EntityColfondos->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
         $manager->persist($EntityProteccion);
+
+        $EntityNoAporta = new Entity();
+        $EntityNoAporta->setName('No aporta');
+        $EntityNoAporta->setPayrollCode('0');
+ 		    $EntityNoAporta->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
+
+        $manager->persist($EntityNoAporta);
+
+        $EntityPensionado = new Entity();
+        $EntityPensionado->setName('Pensionado');
+        $EntityPensionado->setPayrollCode('0');
+ 		    $EntityPensionado->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
+
+        $manager->persist($EntityPensionado);
 
         // Caja compensasion.
         $EntityComfacundi = new Entity();
@@ -121,6 +135,8 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-proteccion', $EntityProteccion);
         $this->addReference('entity-colfondos', $EntityColfondos);
         $this->addReference('entity-porvenir', $EntityPorvenir);
+        $this->addReference('entity-no-aporta', $EntityNoAporta);
+        $this->addReference('entity-pensionado', $EntityPensionado);
 
         //Caja compensasion.
         $this->addReference('entity-comfacundi', $EntityComfacundi);
