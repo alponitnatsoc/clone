@@ -14,24 +14,28 @@ class LiquidationReasonData extends AbstractFixture implements OrderedFixtureInt
         $LiquidationReasonRenuncia = new LiquidationReason();
         $LiquidationReasonRenuncia->setName('Renuncia');
         $LiquidationReasonRenuncia->setDescription('El empleado renuncia a su puesto de trabajo');
+        $LiquidationReasonRenuncia->setPayrollCode('7');
 
         $manager->persist($LiquidationReasonRenuncia);
 
         $LiquidationReasonAcuerdo = new LiquidationReason();
         $LiquidationReasonAcuerdo->setName('Mutuo acuerdo');
         $LiquidationReasonAcuerdo->setDescription('La finalización del contrato se da por mutuo acuerdo');
+        $LiquidationReasonAcuerdo->setPayrollCode('10');
 
         $manager->persist($LiquidationReasonAcuerdo);
 
         $liquidationReasonJustaCausa = new LiquidationReason();
         $liquidationReasonJustaCausa->setName('Despido con justa causa');
         $liquidationReasonJustaCausa->setDescription('El empleado incumplió el reglamento interno de trabajo');
+        $liquidationReasonJustaCausa->setPayrollCode('2');
 
         $manager->persist($liquidationReasonJustaCausa);
 
         $liquidationReasonSinJustaCausa = new LiquidationReason();
         $liquidationReasonSinJustaCausa->setName('Despido sin justa causa');
         $liquidationReasonSinJustaCausa->setDescription('El empleador finaliza el contrato sin una causa justa');
+        $liquidationReasonSinJustaCausa->setPayrollCode('3');
 
         $manager->persist($liquidationReasonSinJustaCausa);
 
