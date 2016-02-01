@@ -208,6 +208,10 @@ class EmployeeRestController extends FOSRestController
 
 
         if (count($errors) == 0) {
+            $employee=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
+            if($employee->getRegisterState()==75){
+                $employee->setRegisterState(100);
+            }
             $em->persist($contract);
             $em->flush();
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
@@ -360,6 +364,9 @@ class EmployeeRestController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $errors = $this->get('validator')->validate($employee, array('Update'));
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==0){
+                    $employee->setRegisterState(25);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
@@ -504,6 +511,9 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==25){
+                    $employee->setRegisterState(50);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -770,6 +780,9 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($contract, array('Update'));
             $view = View::create();
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==50){
+                    $employee->setRegisterState(75);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);

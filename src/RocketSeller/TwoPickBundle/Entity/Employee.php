@@ -20,7 +20,10 @@ class Employee
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idEmployee;
-
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $registerState;
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
@@ -319,5 +322,29 @@ class Employee
     public function getAskBeneficiary()
     {
         return $this->askBeneficiary;
+    }
+
+    /**
+     * Set registerState
+     *
+     * @param integer $registerState
+     *
+     * @return Employee
+     */
+    public function setRegisterState($registerState)
+    {
+        $this->registerState = $registerState;
+
+        return $this;
+    }
+
+    /**
+     * Get registerState
+     *
+     * @return integer
+     */
+    public function getRegisterState()
+    {
+        return $this->registerState;
     }
 }
