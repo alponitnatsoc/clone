@@ -35,6 +35,10 @@ class LiquidationReason
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $payroll_code;
 
     /**
      * Get id
@@ -92,5 +96,29 @@ class LiquidationReason
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set payroll code
+     *
+     * @param string $payroll_code
+     *
+     * @return PayType
+     */
+    public function setPayrollCode($payroll_code)
+    {
+        $this->payroll_code = $payroll_code;
+
+        return $this;
+    }
+
+    /**
+     * Get payroll_code
+     *
+     * @return string
+     */
+    public function getPayrollCode()
+    {
+        return $this->payroll_code;
     }
 }

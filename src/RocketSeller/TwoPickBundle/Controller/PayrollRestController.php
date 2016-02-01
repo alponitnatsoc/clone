@@ -141,7 +141,7 @@ class PayrollRestController extends FOSRestController
     str_replace( "%20", "", $test );
     $test = trim(preg_replace('/\s\s+/', '', $test));
     $response = $client->request('GET', $url_request . '?' . str_replace( "%20", "",urldecode($test)));//, ['query' => urldecode($test)]);
-
+    //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
     // We parse the xml recieved into an xml object, that we will transform.
     $plain_text = (String)$response->getBody();
 
@@ -634,7 +634,9 @@ class PayrollRestController extends FOSRestController
    *
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
    *    (name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software, it can be found in the table entity_type, field payroll_code")
-   *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code, if it is an ARP, and in entity for AFP under payroll_code. For EPS, it should always be used the code 1, meaning that it is individual.")
+   *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.
+   *                                                                                              If it is AFP, it should be 1 in normal conditions, if the entity is no aporta 0 and pensionado 2, and the entity is 0 as described on the table. 
+   *                                                                                              For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
    *    (name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software, it is found in the table entity, under payroll_code")
    *    (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
    *
@@ -973,7 +975,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL, it can be found in the table novelty_type, under payroll_code")
-     *    (name="novelty_value", nullable=false, requirements="([0-9])+", description="Value in COP of the novelty, is optional, and is the monthly value.")
+     *    (name="novelty_value", nullable=true, requirements="([0-9])+", description="Value in COP of the novelty, is optional, and is the monthly value.")
      *    (name="novelty_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
      *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="(optional)Day the novelty ends(format: DD-MM-YYYY)")
      *
@@ -987,7 +989,7 @@ class PayrollRestController extends FOSRestController
       // Set all the parameters info.
       $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
       $regex['novelty_concept_id'] = '([0-9])+';$mandatory['novelty_concept_id'] = true;
-      $regex['novelty_value'] = '([0-9])+';$mandatory['novelty_value'] = true;
+      $regex['novelty_value'] = '([0-9])+';$mandatory['novelty_value'] = false;
       $regex['novelty_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_start_date'] = true;
       $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['novelty_end_date'] = false;
 
@@ -999,7 +1001,7 @@ class PayrollRestController extends FOSRestController
       $unico['TIPOCON'] = 0;
       $unico['EMP_CODIGO'] = $parameters['employee_id'];
       $unico['CON_CODIGO'] = $parameters['novelty_concept_id'];
-      $unico['NOVF_VALOR'] = $parameters['novelty_value'];
+      $unico['NOVF_VALOR'] = isset($parameters['novelty_value']) ? $parameters['novelty_value'] : "";
       $unico['NOVF_FECHA_INICIAL'] = $parameters['novelty_start_date'];
       $unico['NOVF_FECHA_FINAL'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
 

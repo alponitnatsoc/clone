@@ -47,6 +47,11 @@ class NoveltyType
     private $absenteeismOrNovelty;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $period;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -138,7 +143,29 @@ class NoveltyType
         return $this->payroll_code;
     }
 
+    /**
+     * Set period
+     *
+     * @param string $period
+     *
+     * @return NoveltyType
+     */
+    public function setPeriod($period)
+    {
+        $this->period = $period;
 
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return string
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
 
     /**
      * Add requiredDocument
