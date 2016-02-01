@@ -263,7 +263,7 @@ class EmployeeController extends Controller
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARL") {
                     $form->get('arl')->setData($enti->getEntityEntity());
                 }
-                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Cesantias") {
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "CC Familiar") {
                     $form->get('severances')->setData($enti->getEntityEntity());
                 }
             }
