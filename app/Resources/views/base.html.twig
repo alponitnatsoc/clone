@@ -260,7 +260,15 @@
         <!-- Begin Ajax scripts -->
         <script>
             var state = "/old";
-
+            
+            //disable exit on key escape o click out
+            $(function () {
+                $('.modal').modal({
+                    show: false,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            });
             jQuery(document).ready(function () {
                 if (!jsLoader(location.href)) {
                     $("#main").find("a").not(".notAjax").on("click", function (e) {

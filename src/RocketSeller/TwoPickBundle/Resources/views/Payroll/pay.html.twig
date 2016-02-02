@@ -1,124 +1,194 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}RocketSellerTwoPickBundle:Payroll:pay{% endblock %}
+{% block title %}Pago Nómina{% endblock %}
 
 {% block fos_user_content %}
-	<div class="payroll pay">
-		<form method="post" action="/payroll/calculate" id="form_calculate">
-			<h1>Pagar a empleados</h1>
-			<h2>Diciembre 2015 I (2ª Quincena)</h2>
-			<div class="row">
-				{% for employee in employees %}
-					<div class="col-sm-6">
-						<div class="row-fluid clearfix employee">
-							<div class="col-xs-12">
-								<div class="row">
-									<div class="col-xs-8">
-										<span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
-									</div>
-									<div class="col-xs-4 text-right">
-										Pagar <input type="checkbox" class="pay" name="employee[]" value="{{employee.idEmployerHasEmployee}}" checked="checked">
-									</div>
-								</div>
-								<div class="row aportes">
-									<div class="col-md-4">
-										<h4>Salario</h4>
-										${{salaries[employee.idEmployerHasEmployee]|number_format}}
-									</div>
-									<div class="col-md-4">
-										<h4>Aportes Seguridad Social</h4>
-										$0
-									</div>
-									<div class="col-md-4">
-										<h4>Total</h4>
-										${{salaries[employee.idEmployerHasEmployee]|number_format}}
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-xs-12 detail">
-										<div class="row-fluid">
-											<a href="#">&gt; Ver detalle de la liquidación</a>
-										</div>
-									</div>
-								</div>
-								<div class="row novedades">
-									<div class="col-xs-12">
-										<h2>Novedades reportadas en este periodo</h2>
-									</div>
-									<div class="col-xs-12">
-										<div class="row row-centered">
-											{% for novelty in novelties[employee.idEmployerHasEmployee] %}
+    <div class="payroll pay">
+        <form method="post" action="/payroll/calculate" id="form_calculate">
+            <h1>Pagar a empleados</h1>
+            {% if "now"|date('j') <= 15%}
+                {% set quincena = 'I (1ª Quincena)' %}
+            {% else %}
+                {% set quincena = 'II (2ª Quincena)' %}
+            {% endif %}
+            <h2>{{ "now"|date('F')|trans }} {{ "now"|date('Y') }}  {{ quincena }} </h2>
+            <div class="row">
+                {% for employee in employees %}
+                    <div class="col-sm-6">
+                        <div class="row-fluid clearfix employee">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        <span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
+                                    </div>
+                                    <div class="col-xs-4 text-right">
+                                        Pagar <input type="checkbox" class="pay" name="employee[]" value="{{employee.idEmployerHasEmployee}}" checked="checked">
+                                    </div>
+                                </div>
+                                <div class="row aportes">
+                                    <div class="col-md-4">
+                                        <h4>Salario</h4>
+                                        $ {{salaries[employee.idEmployerHasEmployee]|number_format}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4>Aportes Seguridad Social</h4>
+                                        $ {{aportes[employee.idEmployerHasEmployee]|number_format}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h4>Total</h4>
+                                        $ {{salaries[employee.idEmployerHasEmployee]|number_format}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 detail">
+                                        <div class="row-fluid">
+                                            <a href="#">&gt; Ver detalle de la liquidación</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row novedades">
+                                    <div class="col-xs-12">
+                                        <h2>Novedades reportadas en este periodo</h2>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <div class="row row-centered">
+                                            {% for novelty in novelties[employee.idEmployerHasEmployee] %}
                                                 {% if novelty %}
-												<div class="col-md-4 col-centered novedad">
-													<div class="row-fluid clearfix">
-														<div class="col-xs-12">
-															{{novelty[0].noveltyTypeNoveltyType.name}} <br/>
-															{% if novelty[0].payDate %}
-                                                                {{ novelty[0].payDate.date }}
-                                                            {% endif %}
-														</div>
-													</div>
-												</div>
+                                                    <div class="col-md-4 col-centered novedad">
+                                                        <div class="row-fluid clearfix">
+                                                            <div class="col-xs-12">
+                                                                {{novelty.noveltyTypeNoveltyType.name}} <br/>
+                                                                {% if novelty.startDate is defined %}
+                                                                    {{ novelty.startDate|date('d/m/Y') }}
+                                                                {% endif %}
+                                                                {% if novelty.duration is defined %}
+                                                                    {{ novelty.duration }}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 {% endif %}
-											{% else %}
-												<div class="col-xs-12 text-center">
-													<span style="font-size: 12px; font-style: italic;">No hay novedades reportadas para este empleado</span>
-												</div>
-											{% endfor %}
-										</div>
-									</div>
-									<div class="col-xs-12 add">
-										<input type="button" class="btn btn-default center-block" value="Agregar Novedad" onClick="addNovelty({{payrolls[employee.idEmployerHasEmployee].idPayroll}})"/>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-			<div class="row reminder">
-				<div class="alert alert-success clearfix" role="alert">
-					<div class="media">
-					  <div class="media-left">
-					    <i class="fa fa-lightbulb-o"></i>
-					  </div>
-					  <div class="media-body">
-					    <h4 class="media-heading">Importante</h4>
-					    Evite cualquier inconveniente a futuro reportando las novedades a las que haya a lugar, ya sea porque afectan a la nómina o a los aportes a Seguridad Social los cuales son regulados por entidades del estado.
-					  </div>
-					</div>
-				</div>
-			</div>
-			<div class="row buttons">
-					<div class="col-xs-12">
-						<input type="submit" id="btnCalculate" class="btn btn-primary center-block" value="Cálculo final del pago" />
-					</div>
-			</div>
-		</form>
-	</div>
+                                            {% else %}
+                                                <div class="col-xs-12 text-center">
+                                                    <span style="font-size: 12px; font-style: italic;">No hay novedades reportadas para este empleado</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 center">
+                                        <input type="button" class="btn btn-default center btn-add-novelty" value="Agregar Novedad" data-employee-name="{{ employee.employeeEmployee.personPerson.names }}"  href="{{ path('novelty_select',{'idPayroll':'1'}) }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row reminder">
+                <div class="alert alert-success clearfix" role="alert">
+                    <div class="media">
+                        <div class="media-left">
+                            <i class="fa fa-lightbulb-o"></i>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">Importante</h4>
+                            Evite cualquier inconveniente a futuro reportando las novedades a las que haya a lugar, ya sea porque afectan a la nómina o a los aportes a Seguridad Social los cuales son regulados por entidades del estado.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row buttons">
+                <div class="col-xs-12">
+                    <input type="submit" id="btnCalculate" class="btn btn-primary center-block" value="Cálculo final del pago" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Modal add novelty-->
+    <div class="modal fade"  role="dialog" id="modal_add_novelty">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-title_add_novelty"></h4>
+                </div>
+                <div class="modal-body" id="modal_body_add_novelty">
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>-->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Modal loader-->
+    <div class="modal fade"  role="dialog" id="modal_loader">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <img src="/img/loader.gif">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 {% endblock %}
 
 {% block stylesheet %}
-{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+
+    <style type="text/css">
+
+    </style>
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
-	<script>
-		$('.employee .pay').on('change', function(e) {
-			var i = 0;
-			$('.employee .pay').each(function(index, element) {
-				if($(element)[0].checked) {
-					i++;
-				}
-			});
-			$('#btnCalculate').prop('disabled', i==0);
-		});
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('.employee .pay').on('change', function (e) {
+                var i = 0;
+                $('.employee .pay').each(function (index, element) {
+                    if ($(element)[0].checked) {
+                        i++;
+                    }
+                });
+                $('#btnCalculate').prop('disabled', i == 0);
+            });
+            $('.btn-add-novelty').on('click', function (event) {
+                event.preventDefault();
+                button = $(event.relatedTarget);
+                employeeName = button.data('employee-name');
+                url = $(this).attr('href');
+                $.ajax({
+                    url: url,
+                    //data: data,
+                    //success: success,
+                    //dataType: dataType,
+                    beforeSend: function (xhr) {
+                        $('#modal_loader').modal('show');
+                    }
+                }).done(function (data) {
+                    //$('#modal_body_add_novelty').html($(data).find('#main'));
+                    $('#modal_body_add_novelty').replaceWith($(data).find('#main')); // ... with the returned one from the AJAX response.
+                    $('#modal-title_add_novelty').html(employeeName);
+                    $('#modal_add_novelty').modal('show');
 
-		function addNovelty(payroll) {
-			document.location = "/novelty/select/"+payroll;
-		}
-	</script>
+                    //$('.result_ajax').html(name + " fue " + state + " exitosamente.").show(1000);
+                    //setTimeout(function () {
+                    //    $('.result_ajax').html("").hide(1000);
+                    //}, 2000);
+                }).fail(function (data) {
+                    //$("#modal_body_add_novelty").html(data);
+                }).always(function () {
+                    $('#modal_loader').modal('hide');
+                });
+                //document.location = "/novelty/select/" + payroll;
+            });
+        });
+    </script>
 {% endblock %}
