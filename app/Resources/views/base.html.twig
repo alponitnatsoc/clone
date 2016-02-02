@@ -169,7 +169,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                        <span id="profile" style="display: inline"> <a class="notAjax" href=" {{ path('fos_user_profile_show') }}">Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
