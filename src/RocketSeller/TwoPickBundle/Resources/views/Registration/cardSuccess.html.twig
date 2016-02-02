@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% block content %}
+{% block fos_user_content %}
 	<div class="col-md-4">
 		<h3>Credit card info</h3>
 			{{ data["credit_card"] }}
@@ -10,4 +10,4 @@
 			<br></br>
 			{{ data["name_on_card"] }}
 	</div>
-{% endblock %}
+{% endblock fos_user_content %}

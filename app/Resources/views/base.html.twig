@@ -340,25 +340,31 @@
                         if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
                             $.getScript("{{ asset('public/js/newEmployer.js') }}").done(function () {
                                 startEmployer();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
                             $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
                                 startEmployee();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('show_calculator_form') }}") !== -1) {
                             $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
                                 calculatorCalculate();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('matrix_choose') }}") !== -1) {
                             $.getScript("{{ asset('public/js/afiliation.js') }}").done(function () {
                                 startAfiliation();
-                            })
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('payments_method') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/paymentMethod.js') }}").done(function () {
+                                startPayment();
+                            });
 
                             return true;
                         }
