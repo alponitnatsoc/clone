@@ -2,9 +2,9 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use RocketSeller\TwoPickBundle\Entity\Payroll;
 
 class PayrollController extends Controller
 {
@@ -25,10 +25,10 @@ class PayrollController extends Controller
             $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
             foreach ($contracts as $contract) {
                 $repository = $this->getDoctrine()
-                        ->getRepository('RocketSellerTwoPickBundle:Payroll');
+                    ->getRepository('RocketSellerTwoPickBundle:Payroll');
                 $query = $repository->createQueryBuilder('p');
                 $query->andWhere('p.contractContract = :contract')
-                        ->setParameter('contract', $contract->getIdContract());
+                    ->setParameter('contract', $contract->getIdContract());
                 $payroll = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
 
                 if (!$payroll) {
@@ -41,10 +41,10 @@ class PayrollController extends Controller
                     $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] = array();
                     foreach ($payroll->getPayrollDetails() as $detail) {
                         $repository = $this->getDoctrine()
-                                ->getRepository('RocketSellerTwoPickBundle:Novelty');
+                            ->getRepository('RocketSellerTwoPickBundle:Novelty');
                         $query = $repository->createQueryBuilder('n');
                         $query->andWhere('n.payrollDetailPayrollDetail = :payroll')
-                                ->setParameter('payroll', $detail->getIdPayrollDetail());
+                            ->setParameter('payroll', $detail->getIdPayrollDetail());
                         $novelties[$employerHasEmployee->getIdEmployerHasEmployee()][] = $query->getQuery()->getResult()[0];
                     }
                 }
@@ -56,11 +56,11 @@ class PayrollController extends Controller
         }
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
-                    "employees" => $employeesData,
-                    "salaries" => $salaries,
-                    "aportes" => $aportes,
-                    "payrolls" => $payrolls,
-                    "novelties" => $novelties
+            "employees" => $employeesData,
+            "salaries" => $salaries,
+            "aportes" => $aportes,
+            "payrolls" => $payrolls,
+            "novelties" => $novelties
         ));
         //} else {
         //    throw $this->createAccessDeniedException("No tiene suficientes permisos");
@@ -77,12 +77,12 @@ class PayrollController extends Controller
             $user = $this->getUser();
             $employer = $user->getPersonPerson()->getEmployer();
             $repository = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
             $query = $repository->createQueryBuilder('e');
             $query->andWhere('e.idEmployerHasEmployee IN (:ids)')
-                    ->setParameter('ids', $employees)
-                    ->andWhere('e.employerEmployer = :employer')
-                    ->setParameter('employer', $employer->getIdEmployer());
+                ->setParameter('ids', $employees)
+                ->andWhere('e.employerEmployer = :employer')
+                ->setParameter('employer', $employer->getIdEmployer());
             $employeesData = $query->getQuery()->getResult();
             $salaries = array();
             $total = 0;
@@ -96,9 +96,9 @@ class PayrollController extends Controller
                 $total += $salaries[$employerHasEmployee->getIdEmployerHasEmployee()];
             }
             return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', array(
-                        "employees" => $employeesData,
-                        "salaries" => $salaries,
-                        "total" => $total
+                "employees" => $employeesData,
+                "salaries" => $salaries,
+                "total" => $total
             ));
         } else {
             return $this->redirect("/payroll", 301);
@@ -115,12 +115,12 @@ class PayrollController extends Controller
             $user = $this->getUser();
             $employer = $user->getPersonPerson()->getEmployer();
             $repository = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
             $query = $repository->createQueryBuilder('e');
             $query->andWhere('e.idEmployerHasEmployee IN (:ids)')
-                    ->setParameter('ids', $employees)
-                    ->andWhere('e.employerEmployer = :employer')
-                    ->setParameter('employer', $employer->getIdEmployer());
+                ->setParameter('ids', $employees)
+                ->andWhere('e.employerEmployer = :employer')
+                ->setParameter('employer', $employer->getIdEmployer());
             $employeesData = $query->getQuery()->getResult();
             $salaries = array();
             $total = 0;
@@ -134,13 +134,22 @@ class PayrollController extends Controller
                 $total += $salaries[$employerHasEmployee->getIdEmployerHasEmployee()];
             }
             return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                        "employees" => $employeesData,
-                        "salaries" => $salaries,
-                        "total" => $total
+                "employees" => $employeesData,
+                "salaries" => $salaries,
+                "total" => $total
             ));
         } else {
             return $this->redirect("/payroll", 301);
         }
+    }
+
+    public function detailAction($idPayroll, Request $request)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:Payroll:detail.html.twig', array());
     }
 
 }
