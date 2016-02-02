@@ -89,19 +89,20 @@ class LiquidationController extends Controller
             'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
         );
 
-
+        /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
         $contract = $this->getActiveContract($id);
-        var_dump(count($contract));
+//         var_dump(count($contract));
 
         $contractInfo = array(
-            'contractType',
-            'contractPeriod',
-            'salary',
-            'vacationDays'
+            'contractType' => $contract[0]->getContractTypeContractType()->getName(),
+            'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
+            'salary' => $contract[0]->getSalary(),
+            'vacationDays' => ""
         );
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
-            "employeeInfo" => $employeeInfo
+            "employeeInfo" => $employeeInfo,
+            "contractInfo" => $contractInfo
         ));
     }
 }

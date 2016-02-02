@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * EmployerHasEmployee
@@ -167,6 +168,7 @@ class EmployerHasEmployee
     public function getContracts()
     {
         return $this->contracts;
+
     }
 
     /**
@@ -225,6 +227,15 @@ class EmployerHasEmployee
     public function getState()
     {
         return $this->state;
+    }
+
+    public function getContractByState($state)
+    {
+
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("state", $state));
+
+        return $this->contracts->matching($criteria);
     }
 
 }

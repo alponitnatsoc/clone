@@ -1,0 +1,108 @@
+{% extends '::base.html.twig' %}
+{% block title %}Symplifica - Liquidación final del empleado{% endblock %}
+{% block fos_user_content %}
+{% block stylesheets %}
+    <style>
+        .dashboard_employer_pending_tasks {
+            display: inline-block;
+            border:1px solid #efefef;
+            background: white;
+            margin: 10px;
+            height: 300px;
+            border-radius: 0px !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+        .dashboard_employer_pending_tasks_list {
+            display: inline-block;
+            width: 100%;
+            background: #FBFBFB;
+            margin: 5px;
+        }
+        .glyphicon-th-large{
+            color:#00CDCC;
+        }
+        .glyphicon-th-large:hover{
+            color:#00CDCC;
+            cursor: pointer;
+        }
+        .glyphicon-th-list{
+            color:#00CDCC;
+        }
+        .employee_data_info{
+            padding: 5px 30px 5px 30px;
+            display: inline-block;
+            text-align: center;
+        }
+        .employee_head_liquidation{
+            padding: 10px;
+            display: -webkit-inline-box;
+            border-bottom: solid #efefef;
+            border-width: 2px;
+        }
+        .dashboard_employer_contador_type_alert{
+            background-color: orange;
+            height: 10px;
+            width: 100%;
+            display: inline-block;
+        }
+        .contador_logo{
+            height: 50px;
+        }
+        .dashboard_employer_contador_type_notification{
+            background-color: lightgreen;
+            height: 10px;
+            width: 100%;
+            display: inline-block;
+        }
+        .dashboard_employer_contador_type_mensaje{
+            background-color: #00CDCC;
+            height: 10px;
+            width: 100%;
+            display: inline-block;
+        }
+        .dashboard_employer_order_by{
+            width: 100%;
+            border-left: solid #efefef;
+            border-width: 2px;
+            padding-left: 20px;
+            padding-bottom: 20px;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+        .dashboard_employer_order_by_select{
+            margin-bottom: 10px;
+        }
+        .col-sm-20{
+            width: 20%;
+        }
+    </style>
+{% endblock %}
+    <h4>Liquidación final de empleado</h4>
+    <div class="employee_head_liquidation">
+        <div class="col-sm-12 employee_data">
+            <div class="col-sm-2 col-sm-20 employee_data_info">
+                <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+                <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
+                <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
+            </div>
+            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+                <p><strong>Tipo contrato</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
+            </div>
+            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+                <p><strong>Duración contrato</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
+            </div>
+            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+                <p><strong>Salario</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
+            </div>
+            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+                <p><strong>Días tomados de vacaciones</strong></p>
+                <span class="txthelp"><p></p></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
