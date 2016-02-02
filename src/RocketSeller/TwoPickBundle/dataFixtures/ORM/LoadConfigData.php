@@ -7,7 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\Config;
 
-class LoadCityData extends AbstractFixture implements OrderedFixtureInterface
+class LoadConfigData extends AbstractFixture implements OrderedFixtureInterface
 {
 
     public function load(ObjectManager $manager)
