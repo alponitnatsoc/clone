@@ -951,7 +951,8 @@ class EmployeeRestController extends FOSRestController
                     $documentType = 'Contrato';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
-                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                //$url = $this->generateUrl("api_public_post_doc_from", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                $url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url);
             }
         }
@@ -990,7 +991,8 @@ class EmployeeRestController extends FOSRestController
                     $documentType = 'Carta autorización Symplifica';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
-                $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                //$url = $this->generateUrl("api_public_post_doc_from", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                $url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url);
             }
         }

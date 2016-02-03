@@ -1,0 +1,16 @@
+{% block content %}
+	<style>
+	  .thumb {
+	    height: 75px;
+	    border: 1px solid #000;
+	    margin: 10px 5px 0 0;
+	  }
+	</style>
+	<form class="form" method="POST" enctype="multipart/form-data" action="{{path('documents_upload',{id : 1})}}">		
+		<input type="file" id="files" name="files[]" multiple />
+		<output id="list"></output>
+		<button class="btn btn-large btn-primary" type="submit">Upload</button>
+	</form>
+{% endblock %}
+
+

@@ -392,12 +392,32 @@
     {% else %}
         <h4>No tienes tareas pendientes.</h4>
     {% endif %}
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body" id="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 {% endblock fos_user_content %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
+    <script>        
         $(document).ready(function () {
+
             $(".dashboard_employer_order_by_select").on('change', function () {
                 window.location.replace($(this).val());
             });
@@ -431,6 +451,42 @@
             $(".dashboard_employer_contador_alert_count").html($(".type_alert").length);
             $(".dashboard_employer_contador_notification_count").html($(".type_notification").length);
             $(".dashboard_employer_contador_mensaje_count").html($(".type_mensaje").length);
+            
+            $(".download-link").each(function(){
+                $(this).click(function(event){
+                    event.preventDefault();     
+                           
+                    var uri = $(this).prop("href"); 
+                    
+                    $.ajax({
+                         method: "POST",
+                         url: uri,
+                         //(data: $('form[name="pago_membresia"]').serialize(),
+                         beforeSend: function (xhr) {
+                            
+                         }
+                     }).done(function (data) {
+                        $("#modal-body").html(data);
+                        $("#myModal").modal('show');
+                        var files;
+                        // Add events
+                        $('input[type=file]').on('change', prepareUpload);
+
+                        // Grab the files and set them to our variable
+                        function prepareUpload(event)
+                        {
+                          files = event.target.files;
+                        }
+                     }).fail(function (jqXHR, textStatus, errorThrown) {
+                         console.log(jqXHR);
+                         console.log(textStatus);
+                         console.log(errorThrown);                     
+                     });
+
+                    
+                });
+            });
+
         });
     </script>
 {% endblock javascripts %}
