@@ -84,7 +84,8 @@ trait EmployerHasEmployeeMethodsTrait
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
         /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $repository->find($id);
-        $contract = $employerHasEmployee->getContracts();
+
+        $contract = $employerHasEmployee->getContractByState("active");
 
         return $contract;
     }

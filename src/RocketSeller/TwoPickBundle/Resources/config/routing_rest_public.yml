@@ -78,3 +78,7 @@ resetting_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:ResettingRest"
     name_prefix: api_public_
+document_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:DocumentRest"
+    name_prefix: api_public_
