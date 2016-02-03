@@ -90,7 +90,7 @@ class DocumentController extends Controller
 				array('form' => $form->createView()));
 	}
 
-	public function addDocAction($id,$idDocumentType,Request $request){
+	public function addDocAction($id,$idDocumentType,$idNotification,Request $request){
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
@@ -122,12 +122,45 @@ class DocumentController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($document);
 			$em->flush();
-
-
-			return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
+			//$view = View::createView();
+			
+			//return new Response('guwegwei');
+			if ($idNotification!=0) {
+				$em = $this->getDoctrine()->getManager();
+				$notification = $this->getDoctrine()
+				->getRepository('RocketSellerTwoPickBundle:Notification')
+				->find($idNotification);
+				$notification->setStatus(0);
+				$em->flush();
+				return $this->redirect($request->server->get('HTTP_REFERER'));
+			}else{
+				return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
+			}
+			//return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 			//return $this->redirect('/pages?redirector=/matrix/choose');
-			//$this->redirect($request->server->get('HTTP_REFERER'));
+		 	
 		}
+		return $this->render(
+			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
+				array('form' => $form->createView(),'id'=>$id,'idDocumentType'=>$idDocumentType,'idNotification'=>$idNotification));
+	}
+	public function addDocModalAction($id,$idDocumentType,Request $request){
+		$em = $this->getDoctrine()->getManager();
+		$person = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Person')
+		->find($id);
+		$documentType = $this->getDoctrine()
+		->getRepository('RocketSellerTwoPickBundle:DocumentType')
+		->find($idDocumentType);
+		$document=new Document();
+		$document->setPersonPerson($person);
+		$document->setStatus(1);
+		$document->setName('nombre');
+		$document->setDocumentTypeDocumentType($documentType);
+
+		$form = $this->createForm(new DocumentRegistration(),$document);
+
+		$form->handleRequest($request);
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
 				array('form' => $form->createView()));
