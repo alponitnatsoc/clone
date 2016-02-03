@@ -28,7 +28,24 @@ use Symfony\Component\HttpFoundation\Response;
 class NoveltyController extends Controller {
 
     public function selectNoveltyAction($idPayroll, Request $request) {
+        $noveltyTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
+        $noveltyTypes=$noveltyTypeRepo->findAll();
+        $noveltyTypesGroups=array();
+        /** @var NoveltyType $NT */
+        foreach ($noveltyTypes as $NT) {
+            if(!isset($noveltyTypesGroups[$NT->getGroup()])){
+                $noveltyTypesGroups[$NT->getGroup()]=$NT->getGroup();
+            }
+        }
+
         $form = $this->createFormBuilder()
+                ->add('noveltyTypeGroup', 'choice', array(
+                    'choices' => $noveltyTypesGroups,
+                    'multiple' => false,
+                    'expanded' => true,
+                    'mapped' => false,
+                    'label' => 'Tipo de novedad',
+                    'property_path' => 'noveltyTypeNoveltyType'))
                 ->add('noveltyType', 'entity', array(
                     'class' => 'RocketSellerTwoPickBundle:NoveltyType',
                     'property' => 'name',

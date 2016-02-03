@@ -3,6 +3,9 @@
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
 		<div id="formFields">
+			{{ form_widget(form.noveltyTypeGroup) }}
+			Separador
+			<br>
 			{% for child in form.noveltyType %}
 					{% set index = child.vars.value %}
 					<div class="{{ choices[index].group }}" class="noveltySelect" >
@@ -10,7 +13,37 @@
 					</div>
 
 			{% endfor %}
-			{{ form_widget(form) }}
 		</div>
 	{{ form_end(form) }}
 {% endblock fos_user_content %}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready( function(){
+			hideAll();
+			$("input[name='form[noveltyTypeGroup]']").change(function(){
+				var selectedVal = $("input[name='form[noveltyTypeGroup]']:checked");
+				hideAll();
+				var group=$("."+selectedVal.val());
+				if(group.length==1){
+					group.each(function(){
+						$(this).show();
+						$(this).find("input").prop( "checked", true );
+					});
+				}else{
+					group.each(function(){
+						$(this).show();
+					});
+				}
+			})
+		});
+		function hideAll(){
+			$("input[name='form[noveltyTypeGroup]']").each(function(){
+
+				$("."+$(this).val()).each(function(){
+					$(this).hide();
+				});
+			})
+		}
+	</script>
+{% endblock javascripts %}
