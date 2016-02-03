@@ -52,6 +52,11 @@ class NoveltyType
     private $period;
 
     /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $group;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -233,5 +238,29 @@ class NoveltyType
     public function getRequiredFields()
     {
         return $this->requiredFields;
+    }
+
+    /**
+     * Set group
+     *
+     * @param string $group
+     *
+     * @return NoveltyType
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return string
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }

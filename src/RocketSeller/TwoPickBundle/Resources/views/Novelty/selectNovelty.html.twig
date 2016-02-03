@@ -3,9 +3,13 @@
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
 		<div id="formFields">
-			{{ form_row(form.noveltyType) }}
-			<div id="noveltyTypeDetails">
-			</div>
+			{% for child in form.noveltyType %}
+					{% set index = child.vars.value %}
+					<div class="{{ choices[index].group }}" class="noveltySelect" >
+						{{ form_widget(child) }}
+					</div>
+
+			{% endfor %}
 			{{ form_widget(form) }}
 		</div>
 	{{ form_end(form) }}

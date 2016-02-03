@@ -31,15 +31,14 @@ class NoveltyController extends Controller {
         $form = $this->createFormBuilder()
                 ->add('noveltyType', 'entity', array(
                     'class' => 'RocketSellerTwoPickBundle:NoveltyType',
-                    'placeholder' => '',
                     'property' => 'name',
                     'multiple' => false,
-                    'expanded' => false,
+                    'expanded' => true,
                     'mapped' => false,
                     'label' => 'Tipo de novedad',
                     'property_path' => 'noveltyTypeNoveltyType'))
                 ->add('save', 'submit', array(
-                    'label' => 'Create',
+                    'label' => 'Siguiente',
                 ))
                 ->getForm();
         $form->handleRequest($request);
@@ -51,7 +50,11 @@ class NoveltyController extends Controller {
                         'idPayroll' => $idPayroll,
                         'noveltyTypeId' => $noveltyType->getIdNoveltyType()), 301);
         }
-        return $this->render('RocketSellerTwoPickBundle:Novelty:selectNovelty.html.twig', array('form' => $form->createView()));
+        $options = $form->get('noveltyType')->getConfig()->getOptions();
+        $choices = $options['choice_list']->getChoices();
+        return $this->render('RocketSellerTwoPickBundle:Novelty:selectNovelty.html.twig', array(
+            'form' => $form->createView(),
+            'choices' => $choices));
     }
 
     /**
