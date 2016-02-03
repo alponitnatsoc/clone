@@ -31,8 +31,8 @@ documentos:
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 
 documentos_employee:
-    path:      /document/add/{id}/{idDocumentType}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc}
+    path:      /document/add/{id}/{idDocumentType}/{idNotification}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc , idNotification: 0}
 
 documentos_contract:
     path:      /contractLayout/{id}

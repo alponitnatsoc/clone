@@ -15,7 +15,7 @@
     <div class="row"></div>
     <div class="row-fluid" id='registrationFormContainer'>
         <div id="basicData" class="tab-pane fade in active">
-            {{ form_start(form) }}
+            {{ form_start(form,{'action': path('documentos_employee',{'id': id , 'idDocumentType':idDocumentType,'idNotification':idNotification}), 'method': 'POST'}) }}
             {{ form_errors(form) }}
             <div style="display: none;">
             	{{ form_row(form.mediaMedia.unlink) }}

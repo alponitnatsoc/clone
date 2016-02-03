@@ -278,7 +278,7 @@
         </div>
         <div class="notification_contenedor">
             {% for notification in notifications %}
-                {% if notification.type == 'alert'  or notification.type == 'notification' or notification.type == 'mensaje'  %}
+                {% if notification.status == 1 and (notification.type == 'alert'  or notification.type == 'notification' or notification.type == 'mensaje'  ) %}
                     {% if app.request.get('view') == 'list'  %}
                         <div class="dashboard_employer_pending_tasks_list">
                             {% if notification.type  %}
@@ -354,7 +354,7 @@
                             <div class="panel_btn col-sm-12">
                                 {% if notification.accion %}
                                     {% if notification.accion|lower == "subir documento" %}
-                                        <a href="{{ notification.relatedlink }}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</a>
+                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</span>
                                     {% else %}
                                         <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
                                     {% endif %}
@@ -452,40 +452,40 @@
             $(".dashboard_employer_contador_notification_count").html($(".type_notification").length);
             $(".dashboard_employer_contador_mensaje_count").html($(".type_mensaje").length);
             
-            $(".download-link").each(function(){
-                $(this).click(function(event){
-                    event.preventDefault();     
-                           
-                    var uri = $(this).prop("href"); 
-                    
-                    $.ajax({
-                         method: "POST",
-                         url: uri,
-                         //(data: $('form[name="pago_membresia"]').serialize(),
-                         beforeSend: function (xhr) {
-                            
-                         }
-                     }).done(function (data) {
-                        $("#modal-body").html(data);
-                        $("#myModal").modal('show');
-                        var files;
-                        // Add events
-                        $('input[type=file]').on('change', prepareUpload);
 
-                        // Grab the files and set them to our variable
-                        function prepareUpload(event)
-                        {
-                          files = event.target.files;
-                        }
-                     }).fail(function (jqXHR, textStatus, errorThrown) {
-                         console.log(jqXHR);
-                         console.log(textStatus);
-                         console.log(errorThrown);                     
-                     });
+            $(".download-link").on('click',function(event){                
+                event.preventDefault(); 
+                var uri = $(this).attr("href");
 
-                    
-                });
+                alert(uri);
+                $.ajax({
+                     //method: "POST",
+                     url: uri,
+                     //(data: $('form[name="pago_membresia"]').serialize(),
+                     beforeSend: function (xhr) {
+                        
+                     }
+                 }).done(function (data) {
+                    //$("#modal-body").html(data);
+                    $('#modal-body').replaceWith($(data).find('#main'));
+                    $("#myModal").modal('show');
+                    var files;
+                    // Add events
+                    $('input[type=file]').on('change', prepareUpload);
+
+                    // Grab the files and set them to our variable
+                    function prepareUpload(event)
+                    {
+                      files = event.target.files;
+                    }
+                 }).fail(function (jqXHR, textStatus, errorThrown) {
+                     console.log(jqXHR);
+                     console.log(textStatus);
+                     console.log(errorThrown);                     
+                 });
+
             });
+
 
         });
     </script>
