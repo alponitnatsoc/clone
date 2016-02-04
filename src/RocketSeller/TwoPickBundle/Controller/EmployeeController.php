@@ -460,8 +460,14 @@ class EmployeeController extends Controller
             $lastName1 = $this->get('request')->request->get('lastName1');
 
             $em = $this->getDoctrine()->getManager();
-            $person = $this->loadClassByArray(array('document' => $document, 'phone' => $cellphone, 'lastName1' => $lastName1), "Person");
-            $employee = $this->loadClassByArray(array('personPerson' => $person), "Employee");
+            $person = $this->loadClassByArray(array('document' => $document, 'lastName1' => $lastName1), "Person");
+            $phones = $person->getPhones();
+            foreach ($phones as $phone) {
+                if($phone->getPhoneNumber()==$cellphone){
+                    $employee = $this->loadClassByArray(array('personPerson' => $person), "Employee");
+                    $sendPhone = $phone;
+                }
+            }                                                              
             if ($employee) {
                 $code = rand(100000, 999999);
                 $employee->setTwoFactorCode($code);
@@ -471,7 +477,7 @@ class EmployeeController extends Controller
                         "+19562671001", "+57" . $cellphone, "Hola este es tu codigo de autenticación: " . $code
                 );
                 $em->flush($employee);
-                return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig', array('employee' => $employee)
+                return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig', array('employee' => $employee,'sendPhone'=> $sendPhone)
                 );
                 return $this->redirect('employee_login_two_auth', array('employee' => $employee));
             } else {
@@ -481,6 +487,11 @@ class EmployeeController extends Controller
             return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee.html.twig');
         }
     }
+    public function dashboardAction($id){
+        $employee = $this->loadClassById($id, "Employee");
+        
+        return $this->render('RocketSellerTwoPickBundle:Employee:dashboardEmployee.html.twig',array('employee'=>$employee));
+    }
 
     public function twoFactorLoginAction($id, Request $request)
     {
@@ -488,8 +499,8 @@ class EmployeeController extends Controller
         if ($request->getMethod() == 'POST') {
             $code = $this->get('request')->request->get('codigoTwo');
             $id = $request->query->get('id');
-            if ($code == $employee->getTwoFactorCode()) {
-                return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
+            if ($code == $employee->getTwoFactorCode()) {                
+                return $this->redirectToRoute('employee_dashboard',array('id'=>$employee->getIdEmployee()));                
             } else {
                 var_dump($id);
                 throw $this->createNotFoundException('Unable to find.');

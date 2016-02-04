@@ -309,7 +309,11 @@
                             </div>
                             <div class="btn_list pull-right">
                                 {% if notification.accion %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default">{{ notification.accion }}</a>
+                                    {% if notification.accion|lower == "subir documento" %}
+                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</span>
+                                    {% else %}
+                                        <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
+                                    {% endif %}
                                 {% else %}
                                     <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
                                 {% endif %}

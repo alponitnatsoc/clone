@@ -1,27 +1,70 @@
 {% extends "::base.html.twig" %}
-{% block content %}
-	<form data-toggle="validator" role="form" class="form col-md-6" method="POST" action="{{path('employee_login')}}">	
-		<div class="form-group col-md-12">
-		  <label>Número de documento:</label>
-		  <input class="form-control" name="document" required>
-		  </input>
+{% block header %}
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="row-fluid up-Help-Phone">
+            <div class="container">
+                <div class="txthelp">
+                    <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    {% if not is_granted("IS_AUTHENTICATED_FULLY") %}
+                        <img src="{{ asset('img/logo.png') }}" alt="Sympifica" style="display: block!important"/>
+                    {% endif %}
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('show_help') }}">Ayuda</a></li>
+                    <li><a href="https://medium.com/blog-symplifica" target="_blank">Blog</a></li>
+                    <li><a href="/contact">Contáctenos</a></li>
+                </ul>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </nav>
+{% endblock %}
+{% block body %}
+	<div class="container col-md-12">
+		<h1 class="login_title" center>Regístrate GRATIS en Symplifica</h1>
+		<div class="col-md-3">
+			
 		</div>
-		<div class="form-group col-md-12">
-		  <label>Primer apellido:</label>
-		  <input class="form-control" name="lastName1">
-		  </input>
+		<div class="col-md-6">
+				<form data-toggle="validator" role="form" class="form col-md-6" method="POST" action="{{path('employee_login')}}">	
+				<div class=" col-md-12">
+				  <label>Número de documento:</label>
+				  <input class="form-control" name="document" required>
+				  </input>
+				</div>
+				<div class=" col-md-12">
+				  <label>Primer apellido:</label>
+				  <input class="form-control" name="lastName1">
+				  </input>
+				</div>
+				<div class=" col-md-12">
+				  <label>Número telefónico:</label>
+				  <input class="form-control" name="cellphone">
+				  </input>
+				</div>
+				<button class="col-md-12 btn btn-large btn-primary" type="submit">Solicitar codigo</button>
+			</form>
+			<div class="col-md-6">
+				<div class="col-md-12">
+					<h2>Registrate con tu cuenta de Facebook</h2>		
+				</div>
+				<button class="col-md-12 btn btn-large btn-primary">iniciar session con FACEBOOK</button>
+			</div>
 		</div>
-		<div class="form-group col-md-12">
-		  <label>Número telefónico:</label>
-		  <input class="form-control" name="cellphone">
-		  </input>
-		</div>
-		<button class="col-md-12 btn btn-large btn-primary" type="submit">Solicitar codigo</button>
-	</form>
-	<div class="col-md-6">
-		<div class="col-md-12">
-			<h2>Registrate con tu cuenta de Facebook</h2>		
-		</div>
-		<button class="col-md-12 btn btn-large btn-primary">iniciar session con FACEBOOK</button>
+		
 	</div>
+
 {% endblock %}
