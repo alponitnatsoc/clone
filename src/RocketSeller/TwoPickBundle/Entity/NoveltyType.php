@@ -173,31 +173,6 @@ class NoveltyType
     }
 
     /**
-     * Set grupo
-     *
-     * @param string $grupo
-     *
-     * @return PayType
-     */
-    public function setGrupo($grupo)
-    {
-        $this->grupo = $grupo;
-
-        return $this;
-    }
-
-    /**
-     * Get grupo
-     *
-     * @return string
-     */
-    public function getGrupo()
-    {
-        return $this->grupo;
-    }
-
-
-    /**
      * Add requiredDocument
      *
      * @param \RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType $requiredDocument
