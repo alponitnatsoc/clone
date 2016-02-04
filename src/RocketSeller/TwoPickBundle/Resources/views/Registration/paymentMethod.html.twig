@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
+{% block fos_user_content %}
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
-{% endblock %}
-{% block content %}
+{% endblock stylesheets %}
 	<div class="col-md-4">
 	  	{{ form_start(form) }}
 		<div class="col-md-12">
@@ -32,19 +32,4 @@
 	</div>
 	<p class="log"></p>
 	</form>
-{% endblock %}
-{% block javascripts %}
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="{{ asset('public/js/jquery.creditCardValidator.js') }}"></script>	
-	<script>
-	    $(function() {
-	        $('input').validateCreditCard(function(result) {
-	            $('.log').html('Card type: ' + (result.card_type == null ? '-' : result.card_type.name)
-	                     + '<br>Valid: ' + result.valid
-	                     + '<br>Length valid: ' + result.length_valid
-	                     + '<br>Luhn valid: ' + result.luhn_valid);
-
-	        });
-	    });
-	</script>	
-{% endblock %}
+{% endblock fos_user_content %}

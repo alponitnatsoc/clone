@@ -53,9 +53,19 @@ class Novelty
     private $documents;
 
     /**
-     * @ORM\Column(type="date", length=20, nullable=TRUE, name="pay_date")
+     * @ORM\Column(type="date", nullable=TRUE, name="pay_date")
      */
     private $payDate;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE, name="date_start")
+     */
+    private $dateStart;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE, name="date_end")
+     */
+    private $dateEnd;
     /**
      * @ORM\Column(type="float", length=20, nullable=TRUE, name="ammount_borrowed")
      */
@@ -239,5 +249,53 @@ class Novelty
     public function getAmmountBorrowed()
     {
         return $this->ammountBorrowed;
+    }
+
+    /**
+     * Set dateStart
+     *
+     * @param \DateTime $dateStart
+     *
+     * @return Novelty
+     */
+    public function setDateStart($dateStart)
+    {
+        $this->dateStart = $dateStart;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     *
+     * @return Novelty
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
     }
 }

@@ -12,8 +12,8 @@ procedure_test:
     path:     /protest
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:testValidate }
 payments_method:
-    path:     /paymentmethod
-    defaults: { _controller: RocketSellerTwoPickBundle:PaymentMethod:index }
+    path:     /paymentmethod/{idNotification}
+    defaults: { _controller: RocketSellerTwoPickBundle:PaymentMethod:index, idNotification: -1 }
 #Payments
 show_payments:
     path: /show/payments/{id}

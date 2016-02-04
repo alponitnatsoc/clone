@@ -31,8 +31,8 @@ documentos:
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}
 
 documentos_employee:
-    path:      /document/add/{id}/{idDocumentType}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc}
+    path:      /document/add/{id}/{idDocumentType}/{idNotification}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDoc , idNotification: 0}
 
 documentos_contract:
     path:      /contractLayout/{id}
@@ -145,8 +145,11 @@ payroll_calculate:
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
 
 payroll_confirm:
-    path: /payroll/confirm
+    path: /payroll/confirm/
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:confirm}
+payroll_detail:
+    path: /payroll/detail/{idPayroll}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:detail}
 
 show_form_entity:
     path:      /register/entity/{id}

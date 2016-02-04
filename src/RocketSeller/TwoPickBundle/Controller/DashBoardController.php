@@ -42,22 +42,19 @@ class DashBoardController extends Controller
             //minima de un 100%
             //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees > 0) {
-                $minUnit = 100 / ($numEmployees * 2);
+                $minUnit = 67 / ($numEmployees +1);
                 /** @var EmployerHasEmployee $value */
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
-                    if (count($value->getContracts()) > 0) {
-                        $stateEmployees+=$minUnit * 2;
-                    } else {
-                        $idCurrentEmployee = $value->getEmployeeEmployee()->getIdEmployee();
-                        //si nó el contrato todavía no se ha diligenciado y solo se
-                        //puede sumar 1 unidad minima al porcentaje
-                        $stateEmployees+=$minUnit;
-                    }
+                    $stateEmployees+=$value->getEmployeeEmployee()->getRegisterState();
                     if($value->getEmployeeEmployee()->getEntities()->count()!=0){
-                        $stateAfiliation+=$minUnit * 2;
+                        $stateAfiliation+=$minUnit;
                     }
                 }
+                if($employer->getEntities()->count()>0){
+                    $stateAfiliation+=$minUnit;
+                }
+                $stateEmployees=$stateEmployees/$numEmployees;
             }
         }
 

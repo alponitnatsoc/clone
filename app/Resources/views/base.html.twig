@@ -169,7 +169,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="logout" style="display: inline"> <a href="#">Mi cuenta</a></span> | <span  style="display: inline" id="logout" onclick="logoutRedirect(this)"><a href="#">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                        <span id="profile" style="display: inline"> <a class="notAjax" href=" {{ path('fos_user_profile_show') }}">Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -260,7 +260,15 @@
         <!-- Begin Ajax scripts -->
         <script>
             var state = "/old";
-
+            
+            //disable exit on key escape o click out
+            $(function () {
+                $('.modal').modal({
+                    show: false,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            });
             jQuery(document).ready(function () {
                 if (!jsLoader(location.href)) {
                     $("#main").find("a").not(".notAjax").on("click", function (e) {
@@ -340,25 +348,31 @@
                         if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
                             $.getScript("{{ asset('public/js/newEmployer.js') }}").done(function () {
                                 startEmployer();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
                             $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
                                 startEmployee();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('show_calculator_form') }}") !== -1) {
                             $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
                                 calculatorCalculate();
-                            })
+                            });
 
                             return true;
                         } else if (url.indexOf("{{ path('matrix_choose') }}") !== -1) {
                             $.getScript("{{ asset('public/js/afiliation.js') }}").done(function () {
                                 startAfiliation();
-                            })
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('payments_method') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/paymentMethod.js') }}").done(function () {
+                                startPayment();
+                            });
 
                             return true;
                         }

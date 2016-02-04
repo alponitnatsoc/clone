@@ -68,10 +68,10 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
-     * @RequestParam(name="creditCard", nullable=false, strict=true, description="id of the contract.")
-     * @RequestParam(name="expiryDate", nullable=false, strict=true, description="id of the contract.")
-     * @RequestParam(name="cvv", nullable=false, strict=true, description="id of the contract.")
-     * @RequestParam(name="nameOnCard", nullable=false, strict=true, description="id of the contract.")
+     * @RequestParam(name="creditCard", nullable=true, strict=true, description="id of the contract.")
+     * @RequestParam(name="expiryDate", nullable=true, strict=true, description="id of the contract.")
+     * @RequestParam(name="cvv", nullable=true, strict=true, description="id of the contract.")
+     * @RequestParam(name="nameOnCard", nullable=true, strict=true, description="id of the contract.")
      * @RequestParam(name="idEmployer", nullable=false, strict=true, description="id of the contract.")
      * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      *
@@ -197,6 +197,21 @@ class EmployeeRestController extends FOSRestController
 //        }
 //        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
+        //if the CC data is null then add notification to add it
+        if($paramFetcher->get("creditCard")==null){
+            $notification=new Notification();
+            $notification->setPersonPerson($user->getPersonPerson());
+            $notification->setAccion("Tarjeta de Crédito");
+            $notification->setDescription("Agregar la información de la tarjeta de crédito");
+            $notification->setStatus(1);
+            $notification->setType("alert");
+            $em->persist($notification);
+            $em->flush();
+            $notification->setRelatedLink($this->generateUrl("payments_method",array("idNotification"=>$notification->getId())));
+            $em->persist($notification);
+        }else{
+            //NovoPaymentcall
+        }
 
         $contract->setPayMethodPayMethod($payMethod);
 
@@ -208,6 +223,10 @@ class EmployeeRestController extends FOSRestController
 
 
         if (count($errors) == 0) {
+            $employee=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
+            if($employee->getRegisterState()==75){
+                $employee->setRegisterState(100);
+            }
             $em->persist($contract);
             $em->flush();
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
@@ -360,6 +379,9 @@ class EmployeeRestController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $errors = $this->get('validator')->validate($employee, array('Update'));
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==0){
+                    $employee->setRegisterState(25);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
@@ -504,6 +526,9 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==25){
+                    $employee->setRegisterState(50);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setStatusCode(200);
@@ -770,6 +795,9 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($contract, array('Update'));
             $view = View::create();
             if (count($errors) == 0) {
+                if($employee->getRegisterState()==50){
+                    $employee->setRegisterState(75);
+                }
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
@@ -924,6 +952,7 @@ class EmployeeRestController extends FOSRestController
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                //$url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url);
             }
         }
@@ -963,6 +992,7 @@ class EmployeeRestController extends FOSRestController
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                //$url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url);
             }
         }
