@@ -29,6 +29,15 @@ class Novelty
      * })
      */
     private $payrollDetailPayrollDetail;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="novelties")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
+     * })
+     */
+    private $payrollPayroll;
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\NoveltyType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType")
@@ -297,5 +306,29 @@ class Novelty
     public function getDateEnd()
     {
         return $this->dateEnd;
+    }
+
+    /**
+     * Set payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return Novelty
+     */
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    {
+        $this->payrollPayroll = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getPayrollPayroll()
+    {
+        return $this->payrollPayroll;
     }
 }

@@ -123,9 +123,9 @@ class NoveltyController extends Controller {
         if ($form->isValid()) {
 
             $novelty->setName($noveltyType->getName());
-            $payRollDetail->setPayrollPayroll($payRol);
+            $payRol->addNovelty($novelty);
             $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($novelty);
+            $em->persist($payRol);
             $em->flush();
             if ($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
@@ -200,6 +200,7 @@ class NoveltyController extends Controller {
     }
 
     /**
+     *
      * @param Novelty $novelty
      * @param Form $form
      * @return bool

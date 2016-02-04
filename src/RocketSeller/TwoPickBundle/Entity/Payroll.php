@@ -36,6 +36,11 @@ class Payroll
     private $payrollDetails;
 
     /**
+     * @ORM\OneToMany(targetEntity="Novelty", mappedBy="payrollPayroll", cascade={"persist"})
+     */
+    private $novelties;
+
+    /**
      * @ORM\OneToMany(targetEntity="PurchaseOrders", mappedBy="payrollPayroll", cascade={"persist"})
      */
     private $purchaseOrders;
@@ -161,5 +166,39 @@ class Payroll
     public function getPurchaseOrders()
     {
         return $this->purchaseOrders;
+    }
+
+    /**
+     * Add novelty
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Novelty $novelty
+     *
+     * @return Payroll
+     */
+    public function addNovelty(\RocketSeller\TwoPickBundle\Entity\Novelty $novelty)
+    {
+        $this->novelties[] = $novelty;
+        $novelty->getPayrollDetailPayrollDetail()->setPayrollPayroll($this);
+        return $this;
+    }
+
+    /**
+     * Remove novelty
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Novelty $novelty
+     */
+    public function removeNovelty(\RocketSeller\TwoPickBundle\Entity\Novelty $novelty)
+    {
+        $this->novelties->removeElement($novelty);
+    }
+
+    /**
+     * Get novelties
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNovelties()
+    {
+        return $this->novelties;
     }
 }
