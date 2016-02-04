@@ -57,6 +57,25 @@ class PayrollRestController extends FOSRestController
      }
   }
 
+  // It is used to see how many levels of UNICO are, mostly for get general
+  // payroll function.
+  public function array_depth(array $array) {
+      $max_depth = 1;
+
+      foreach ($array as $value) {
+          if (is_array($value)) {
+              $depth = $this->array_depth($value) + 1;
+
+              if ($depth > $max_depth) {
+                  $max_depth = $depth;
+              }
+          }
+      }
+
+      return $max_depth;
+  }
+
+
   public function getContentRecursive($array, &$result, &$errorCode)
   {
     $cuenta = array();
@@ -72,37 +91,54 @@ class PayrollRestController extends FOSRestController
         {
           $temp = array();
           $count = 0;
-
-          foreach($val as $i => $j)
+          // if solo hay uno dbe ser val.
+          $unicos = array();
+          // This is because, there are cases with more than one unico, in This
+          // cases we have to treat it different.
+          if($this->array_depth($val) == 2){ // Many Unicos.
+            // If there are many we just make it equal.
+            $unicos = $val;
+          } else {
+            // If there is just one we make it deeper.
+            $unicos[] = $val;
+          }
+          $conta = 0;
+          foreach($unicos as $val2)
           {
-            $content = '';
-            if($i == 'END_REG')continue;
-            if(!is_array($j))
+            $temp = array();
+            foreach($val2 as $i => $j)
             {
-              $temp[$i] =(String)$j;
-            } else
-            {
-              // In case is an empty array which means that is an empty text,
-              // We just add it as normal but empty.
-              if(empty($j))
+              $content = '';
+
+              if($i == 'END_REG')continue;
+              if(!is_array($j))
               {
-                $temp[$i] = '';
-                continue;
-              }
-              foreach($j as $index => $text)
+                $temp[$i] =(String)$j;
+              } else
               {
-                if(!(count($temp) > $index))
+                // In case is an empty array which means that is an empty text,
+                // We just add it as normal but empty.
+                if(empty($j))
                 {
-                  $temp[] = array();
+                  $temp[$i] = '';
+                  continue;
                 }
-                if(is_array($text))
-                  $temp[$index][$i] = '';
-                else
-                  $temp[$index][$i] = $text;
+                foreach($j as $index => $text)
+                {
+                  if(!(count($temp) > $index))
+                  {
+                    $temp[] = array();
+                  }
+                  if(is_array($text))
+                    $temp[$index][$i] = '';
+                  else
+                    $temp[$index][$i] = $text;
+                }
               }
             }
+            $result[] = $temp;
+            $conta++;
           }
-          $result[] = $temp;
         }else
         {
             $this->getContentRecursive($val, $result, $errorCode);
@@ -128,6 +164,7 @@ class PayrollRestController extends FOSRestController
     // TODO(daniel.serrano): Make the user and password into variables.
     // URL used for test porpouses, the line below should be used in production.
      $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
+     $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
     //TODO(daniel.serrano): Remove the mock URL.
     // This URL is only for testing porpouses and should be removed.
 
@@ -166,7 +203,7 @@ class PayrollRestController extends FOSRestController
     $result = array();
     $errorCode = 201;
     $this->getContentRecursive($array, $result,$errorCode);
-    if(count($result)>0)
+    if(count($result) == 1)
       $result = $result[0];
 
     $view = View::create();
@@ -635,7 +672,7 @@ class PayrollRestController extends FOSRestController
    *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
    *    (name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software, it can be found in the table entity_type, field payroll_code")
    *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.
-   *                                                                                              If it is AFP, it should be 1 in normal conditions, if the entity is no aporta 0 and pensionado 2, and the entity is 0 as described on the table. 
+   *                                                                                              If it is AFP, it should be 1 in normal conditions, if the entity is no aporta 0 and pensionado 2, and the entity is 0 as described on the table.
    *                                                                                              For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
    *    (name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software, it is found in the table entity, under payroll_code")
    *    (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
