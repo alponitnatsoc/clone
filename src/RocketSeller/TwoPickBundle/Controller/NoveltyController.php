@@ -33,8 +33,8 @@ class NoveltyController extends Controller {
         $noveltyTypesGroups=array();
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
-            if(!isset($noveltyTypesGroups[$NT->getGroup()])){
-                $noveltyTypesGroups[$NT->getGroup()]=$NT->getGroup();
+            if(!isset($noveltyTypesGroups[$NT->getGrupo()])){
+                $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
         }
 
@@ -118,7 +118,7 @@ class NoveltyController extends Controller {
         }
         $requiredFields = $noveltyType->getRequiredFields();
 
-        $form = $this->createForm(new NoveltyForm($requiredFields, $hasDocuments), $novelty);
+        $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
 

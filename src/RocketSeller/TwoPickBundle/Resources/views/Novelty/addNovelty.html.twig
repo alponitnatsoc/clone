@@ -4,8 +4,28 @@
 	    {{ form_errors(form) }}
 		<div id="formFields">
 			{{ form_row(form.noveltyType) }}
-			<div id="noveltyTypeDetails">
-			</div>
+			{% if form.documents is defined %}
+				{% for document in form.documents %}
+					<div style="display: none;">
+						{{ form_row(document.mediaMedia.unlink) }}
+					</div>
+
+					<div style="display: none;">
+						{{ form_row(document.documentTypeDocumentType) }}
+					</div>
+					<div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+						<div class="col-sm-12 col-xs-12">
+							<div class="col-sm-6 label-group">
+								{{ form_widget(document.name) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_widget(document.mediaMedia.binaryContent) }}
+							</div>
+							<!--<img src="/img/typePerson.png">-->
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
 			{{ form_widget(form) }}
 		</div>
 	{{ form_end(form) }}
