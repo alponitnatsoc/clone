@@ -71,6 +71,10 @@ class PayrollRestTestController extends FOSRestController
           return $this->addEmployee($xml);
         if($codigo_interfaz == 602)
           return $this->getEmployee($xml);
+        if($codigo_interfaz == 616)
+          return $this->getGeneralPayroll($xml);
+        if($codigo_interfaz == 606)
+          return $this->getConceptosFijos($xml);
     }
 
   public function addEmployee($xml)
@@ -235,6 +239,198 @@ class PayrollRestTestController extends FOSRestController
       {
         $response = new Response(
             $xmlModelIncorrect,
+            Response::HTTP_OK,
+            array(
+                'Content-Type' => 'application/xml',
+            )
+        );
+        return $response;
+      }
+  }
+
+  public function getConceptosFijos($xml)
+  {
+      $xmlModelCorrect = '<Interfaz606Resp>
+                          <UNICO>
+                          <EMP_CODIGO>333333333</EMP_CODIGO>
+                          <CON_CODIGO>1 </CON_CODIGO>
+                          <COF_VALOR>689454</COF_VALOR>
+                          </UNICO>
+                          <InfoProceso>
+                          <MensajeRetorno/>
+                          <LogProceso>
+                          ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+                          </LogProceso>
+                          </InfoProceso>
+                          </Interfaz606Resp>';
+      $xmlModelCorrect2 = '<Interfaz606Resp>
+                          <UNICO>
+                          <EMP_CODIGO>123456789</EMP_CODIGO>
+                          <CON_CODIGO>1 </CON_CODIGO>
+                          <COF_VALOR>2500000</COF_VALOR>
+                          </UNICO>
+                          <InfoProceso>
+                          <MensajeRetorno/>
+                          <LogProceso>
+                          ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+                          </LogProceso>
+                          </InfoProceso>
+                          </Interfaz606Resp>';
+
+      $destination = array();
+      $parsed = new \SimpleXMLElement($xml);
+      $components = array();
+      foreach ($parsed as $element) {
+        foreach($element as $key => $val) {
+         $components[$key] = (String)$val;
+        }
+      }
+
+      if($components['EMPCODIGO'] != 123456789)
+      {
+          $response = new Response(
+              $xmlModelCorrect,
+              Response::HTTP_OK,
+              array(
+                  'Content-Type' => 'application/xml',
+              )
+          );
+          return $response;
+      } else
+      {
+        $response = new Response(
+            $xmlModelCorrect2,
+            Response::HTTP_OK,
+            array(
+                'Content-Type' => 'application/xml',
+            )
+        );
+        return $response;
+      }
+  }
+
+
+
+  public function getGeneralPayroll($xml)
+  {
+      $xmlModelCorrect =
+      '<Interfaz616Resp>
+        <UNICO>
+          <EMP_CODIGO>222222222 </EMP_CODIGO>
+          <NOMI_PERIODO>4</NOMI_PERIODO>
+          <NOMI_MES>01</NOMI_MES>
+          <NOMI_ANO>2015</NOMI_ANO>
+          <PROC_CODIGO>1</PROC_CODIGO>
+          <NOMI_FECHA_PAGO>12-12-2015</NOMI_FECHA_PAGO>
+          <NOMI_VALOR_LOCAL>100000 </NOMI_VALOR_LOCAL>
+          <CON_CODIGO>150</CON_CODIGO>
+          <NOMI_VALOR>100000</NOMI_VALOR>
+          <NOMI_BASE>0 </NOMI_BASE>
+          <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+          <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+          <NOV_CONSEC>545</NOV_CONSEC>
+        </UNICO>
+        <UNICO>
+          <EMP_CODIGO>222222222 </EMP_CODIGO>
+          <NOMI_PERIODO>4</NOMI_PERIODO>
+          <NOMI_MES>01</NOMI_MES>
+          <NOMI_ANO>2015 </NOMI_ANO>
+          <PROC_CODIGO>1</PROC_CODIGO>
+          <NOMI_FECHA_PAGO>08-12-2015</NOMI_FECHA_PAGO>
+          <NOMI_VALOR_LOCAL>250000 </NOMI_VALOR_LOCAL>
+          <CON_CODIGO>145</CON_CODIGO>
+          <NOMI_VALOR>50000</NOMI_VALOR>
+          <NOMI_BASE>0</NOMI_BASE>
+          <NOMI_UNIDADES>5</NOMI_UNIDADES>
+          <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+          <NOV_CONSEC>545</NOV_CONSEC>
+        </UNICO>
+        <InfoProceso>
+        <MensajeRetorno/>
+        <LogProceso>
+        ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+        </LogProceso>
+        </InfoProceso>
+        </Interfaz616Resp>';
+
+
+        $xmlModelCorrect2 = '<Interfaz616Resp>
+          <UNICO>
+            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>05</NOMI_MES>
+            <NOMI_ANO>2015</NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>100000 </NOMI_VALOR_LOCAL>
+            <CON_CODIGO>3120</CON_CODIGO>
+            <NOMI_VALOR>100000</NOMI_VALOR>
+            <NOMI_BASE>0 </NOMI_BASE>
+            <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>545</NOV_CONSEC>
+          </UNICO>
+          <UNICO>
+            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>06</NOMI_MES>
+            <NOMI_ANO>2015 </NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>09-12-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>20000 </NOMI_VALOR_LOCAL>
+            <CON_CODIGO>4810</CON_CODIGO>
+            <NOMI_VALOR>20000</NOMI_VALOR>
+            <NOMI_BASE>0</NOMI_BASE>
+            <NOMI_UNIDADES>1</NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>545</NOV_CONSEC>
+          </UNICO>
+          <UNICO>
+            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>06</NOMI_MES>
+            <NOMI_ANO>2015 </NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>09-12-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>400000 </NOMI_VALOR_LOCAL>
+            <CON_CODIGO>145</CON_CODIGO>
+            <NOMI_VALOR>400000</NOMI_VALOR>
+            <NOMI_BASE>0</NOMI_BASE>
+            <NOMI_UNIDADES>1</NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>545</NOV_CONSEC>
+          </UNICO>
+          <InfoProceso>
+          <MensajeRetorno/>
+          <LogProceso>
+          ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+          </LogProceso>
+          </InfoProceso>
+          </Interfaz616Resp>';
+
+      $destination = array();
+      $parsed = new \SimpleXMLElement($xml);
+      $components = array();
+      foreach ($parsed as $element) {
+        foreach($element as $key => $val) {
+         $components[$key] = (String)$val;
+        }
+      }
+
+      if($components['EMPCODIGO'] == 123456789)
+      {
+          $response = new Response(
+              $xmlModelCorrect,
+              Response::HTTP_OK,
+              array(
+                  'Content-Type' => 'application/xml',
+              )
+          );
+          return $response;
+      } else
+      {
+        $response = new Response(
+            $xmlModelCorrect2,
             Response::HTTP_OK,
             array(
                 'Content-Type' => 'application/xml',

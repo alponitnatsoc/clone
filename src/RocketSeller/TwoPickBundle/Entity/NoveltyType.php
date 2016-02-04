@@ -44,7 +44,7 @@ class NoveltyType
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
-    private $absenteeismOrNovelty;
+    private $absenteeism;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
@@ -55,6 +55,11 @@ class NoveltyType
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $grupo;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $naturaleza;
 
     /**
      * Constructor
@@ -101,27 +106,27 @@ class NoveltyType
 
 
     /**
-     * Set Absenteeism or Novelty
+     * Set Absenteeism
      *
-     * @param string $absenteeismOrNovelty
+     * @param string $absenteeism
      *
      * @return PayType
      */
-    public function setAbsenteeismOrNovelty($absenteeismOrNovelty)
+    public function setAbsenteeism($absenteeism)
     {
-        $this->absenteeismOrNovelty = $absenteeismOrNovelty;
+        $this->absenteeism = $absenteeism;
 
         return $this;
     }
 
     /**
-     * Get Absenteeism or Novelty
+     * Get Absenteeism
      *
      * @return string
      */
-    public function getAbsenteeismOrNovelty()
+    public function getAbsenteeism()
     {
-        return $this->absenteeismOrNovelty;
+        return $this->absenteeism;
     }
 
     /**
@@ -170,6 +175,30 @@ class NoveltyType
     public function getPeriod()
     {
         return $this->period;
+    }
+
+    /**
+     * Set naturaleza
+     *
+     * @param string $period
+     *
+     * @return NoveltyType
+     */
+    public function setNaturaleza($naturaleza)
+    {
+        $this->naturaleza = $naturaleza;
+
+        return $this;
+    }
+
+    /**
+     * Get naturaleza
+     *
+     * @return string
+     */
+    public function getNaturaleza()
+    {
+        return $this->naturaleza;
     }
 
     /**
