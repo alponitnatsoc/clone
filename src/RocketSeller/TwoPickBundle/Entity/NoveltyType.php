@@ -52,6 +52,11 @@ class NoveltyType
     private $period;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $grupo;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -168,6 +173,31 @@ class NoveltyType
     }
 
     /**
+     * Set grupo
+     *
+     * @param string $grupo
+     *
+     * @return PayType
+     */
+    public function setGrupo($grupo)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return string
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
+    }
+
+
+    /**
      * Add requiredDocument
      *
      * @param \RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType $requiredDocument
@@ -176,6 +206,7 @@ class NoveltyType
      */
     public function addRequiredDocument(\RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType $requiredDocument)
     {
+        $requiredDocument->setNoveltyTypeNoveltyType=$this;
         $this->requiredDocuments[] = $requiredDocument;
 
         return $this;

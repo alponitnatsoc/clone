@@ -23,7 +23,7 @@ class NoveltyTypeHasDocumentType
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\NoveltyType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType", inversedBy="requiredDocuments")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType", inversedBy="requiredDocuments",cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="novelty_type_id_novelty_type", referencedColumnName="id_novelty_type")
      * })
@@ -32,7 +32,7 @@ class NoveltyTypeHasDocumentType
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType",cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
      * })
