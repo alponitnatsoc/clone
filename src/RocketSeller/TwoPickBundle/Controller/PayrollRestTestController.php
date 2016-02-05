@@ -1,6 +1,6 @@
 <?php
-namespace RocketSeller\TwoPickBundle\Controller;
 
+namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -18,7 +18,6 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use DateTime;
-
 use EightPoints\Bundle\GuzzleBundle;
 
 /**
@@ -27,21 +26,21 @@ use EightPoints\Bundle\GuzzleBundle;
  */
 class PayrollRestTestController extends FOSRestController
 {
-  /**
-   * It sets the headers for the payments request.
-   * @return Array with the header options.
-   */
-  private function setHeaders() {
-    $header = array();
-    $header['x-channel'] = 'WEB';
-    $header['x-country'] = 'CO' ;
-    $header['language'] = 'es' ;
-    $header['content-type'] = 'application/json';
-    $header['accept'] = 'application/json';
-    return $header;
-  }
 
-
+    /**
+     * It sets the headers for the payments request.
+     * @return Array with the header options.
+     */
+    private function setHeaders()
+    {
+        $header = array();
+        $header['x-channel'] = 'WEB';
+        $header['x-country'] = 'CO';
+        $header['language'] = 'es';
+        $header['content-type'] = 'application/json';
+        $header['accept'] = 'application/json';
+        return $header;
+    }
 
     /**
      * @Get("mock/sql/default")
@@ -65,22 +64,22 @@ class PayrollRestTestController extends FOSRestController
      */
     public function getDefaultUrlAction(Request $request)
     {
-        $codigo_interfaz =  $request->query->get('inInexCod');
+        $codigo_interfaz = $request->query->get('inInexCod');
         $xml = $request->query->get('clXMLSolic');
-        if($codigo_interfaz == 601)
-          return $this->addEmployee($xml);
-        if($codigo_interfaz == 602)
-          return $this->getEmployee($xml);
-        if($codigo_interfaz == 616)
-          return $this->getGeneralPayroll($xml);
-        if($codigo_interfaz == 606)
-          return $this->getConceptosFijos($xml);
+        if ($codigo_interfaz == 601)
+            return $this->addEmployee($xml);
+        if ($codigo_interfaz == 602)
+            return $this->getEmployee($xml);
+        if ($codigo_interfaz == 616)
+            return $this->getGeneralPayroll($xml);
+        if ($codigo_interfaz == 606)
+            return $this->getConceptosFijos($xml);
     }
 
-  public function addEmployee($xml)
-  {
+    public function addEmployee($xml)
+    {
 
-      $xmlModelCorrect = '<InfoProceso>
+        $xmlModelCorrect = '<InfoProceso>
                             <MensajeRetorno/>
                             <LogProceso>
                             Tipo registro 1 - Se valida el bloque - Kic_Adm_Ice.Pic_Ins_Reg_Blq -
@@ -134,50 +133,43 @@ class PayrollRestTestController extends FOSRestController
                             " ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 2 0 2 TOTALES Registros leídos Registros buenos Registros rechazados 2 0 2 ----------------------------------------------------------------------------------------
                             </LogProceso>
                             </InfoProceso>';
-      $xmlModelIncorrect = '<InfoProceso>
+        $xmlModelIncorrect = '<InfoProceso>
                             <MensajeRetorno/>
                             <LogProceso>
                             ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
                             </LogProceso>
                             </InfoProceso>';
-                  $destination = array();
-      $parsed = new \SimpleXMLElement($xml);
-      $components = array();
-      foreach ($parsed as $element) {
-        foreach($element as $key => $val) {
-         // echo "___{$key}____: ***{$val}***";
-         $components[$key] = (String)$val;
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                // echo "___{$key}____: ***{$val}***";
+                $components[$key] = (String) $val;
+            }
         }
-      }
-      //die(print_r($components, true));
+        //die(print_r($components, true));
 
-      if($components['EMP_CODIGO'] == 123456789)
-      {
-          $response = new Response(
-              $xmlModelCorrect,
-              Response::HTTP_OK,
-              array(
-                  'Content-Type' => 'application/xml',
-              )
-          );
-          return $response;
-      } else
-      {
-        $response = new Response(
-            $xmlModelIncorrect,
-            Response::HTTP_OK,
-            array(
+        if ($components['EMP_CODIGO'] == 123456789) {
+            $response = new Response(
+                    $xmlModelCorrect, Response::HTTP_OK, array(
                 'Content-Type' => 'application/xml',
-            )
-        );
-        return $response;
-      }
-  }
+                    )
+            );
+            return $response;
+        } else {
+            $response = new Response(
+                    $xmlModelIncorrect, Response::HTTP_OK, array(
+                'Content-Type' => 'application/xml',
+                    )
+            );
+            return $response;
+        }
+    }
 
-
-  public function getEmployee($xml)
-  {
-      $xmlModelCorrect = '<Interfaz602Resp>
+    public function getEmployee($xml)
+    {
+        $xmlModelCorrect = '<Interfaz602Resp>
                           <UNICO>
                           <EMP_NOMBRE>JUAN</EMP_NOMBRE>
                           <EMP_APELLIDO1>PEPE</EMP_APELLIDO1>
@@ -204,7 +196,7 @@ class PayrollRestTestController extends FOSRestController
                           </LogProceso>
                           </InfoProceso>
                           </Interfaz602Resp>';
-    $xmlModelIncorrect = '<Interfaz602Resp>
+        $xmlModelIncorrect = '<Interfaz602Resp>
                           <InfoProceso>
                           <MensajeRetorno>
                           Se ejecuta la sentencia antes del cargue - Kic_Adm_Ice.Pic_Proc_Int_SW_Publ - Se ejecuta la sentencia antes del cargue - Kic_Adm_Ice.Pic_Adm_Proc_Int_Tabl -
@@ -216,41 +208,35 @@ class PayrollRestTestController extends FOSRestController
                           </LogProceso>
                           </InfoProceso>
                           </Interfaz602Resp>';
-                  $destination = array();
-      $parsed = new \SimpleXMLElement($xml);
-      $components = array();
-      foreach ($parsed as $element) {
-        foreach($element as $key => $val) {
-         $components[$key] = (String)$val;
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                $components[$key] = (String) $val;
+            }
         }
-      }
 
-      if($components['EMPCODIGO'] == 123456789)
-      {
-          $response = new Response(
-              $xmlModelCorrect,
-              Response::HTTP_OK,
-              array(
-                  'Content-Type' => 'application/xml',
-              )
-          );
-          return $response;
-      } else
-      {
-        $response = new Response(
-            $xmlModelIncorrect,
-            Response::HTTP_OK,
-            array(
+        if ($components['EMPCODIGO'] == 123456789) {
+            $response = new Response(
+                    $xmlModelCorrect, Response::HTTP_OK, array(
                 'Content-Type' => 'application/xml',
-            )
-        );
-        return $response;
-      }
-  }
+                    )
+            );
+            return $response;
+        } else {
+            $response = new Response(
+                    $xmlModelIncorrect, Response::HTTP_OK, array(
+                'Content-Type' => 'application/xml',
+                    )
+            );
+            return $response;
+        }
+    }
 
-  public function getConceptosFijos($xml)
-  {
-      $xmlModelCorrect = '<Interfaz606Resp>
+    public function getConceptosFijos($xml)
+    {
+        $xmlModelCorrect = '<Interfaz606Resp>
                           <UNICO>
                           <EMP_CODIGO>333333333</EMP_CODIGO>
                           <CON_CODIGO>1 </CON_CODIGO>
@@ -263,7 +249,7 @@ class PayrollRestTestController extends FOSRestController
                           </LogProceso>
                           </InfoProceso>
                           </Interfaz606Resp>';
-      $xmlModelCorrect2 = '<Interfaz606Resp>
+        $xmlModelCorrect2 = '<Interfaz606Resp>
                           <UNICO>
                           <EMP_CODIGO>123456789</EMP_CODIGO>
                           <CON_CODIGO>1 </CON_CODIGO>
@@ -277,68 +263,65 @@ class PayrollRestTestController extends FOSRestController
                           </InfoProceso>
                           </Interfaz606Resp>';
 
-      $destination = array();
-      $parsed = new \SimpleXMLElement($xml);
-      $components = array();
-      foreach ($parsed as $element) {
-        foreach($element as $key => $val) {
-         $components[$key] = (String)$val;
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                $components[$key] = (String) $val;
+            }
         }
-      }
 
-      if($components['EMPCODIGO'] != 123456789)
-      {
-          $response = new Response(
-              $xmlModelCorrect,
-              Response::HTTP_OK,
-              array(
-                  'Content-Type' => 'application/xml',
-              )
-          );
-          return $response;
-      } else
-      {
-        $response = new Response(
-            $xmlModelCorrect2,
-            Response::HTTP_OK,
-            array(
+        if ($components['EMPCODIGO'] != 123456789) {
+            $response = new Response(
+                    $xmlModelCorrect, Response::HTTP_OK, array(
                 'Content-Type' => 'application/xml',
-            )
-        );
-        return $response;
-      }
-  }
-
-  public function getSalary($document) {
-    $personRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
-    /** @var Person $person */
-    $person = $personRepo->findOneByDocument(1020772075);
-
-    $ehE = $person->getEmployee()->getEmployeeHasEmployers();
-
-    /** @var EmployerHasEmployee $ehEs */
-    foreach ($ehE as $ehEs) {
-        $contracts = $ehEs->getContracts();
-        /** @var Contract    $contract */
-        foreach ($contracts as $contract) {
-            return $contract->getSalary();
+                    )
+            );
+            return $response;
+        } else {
+            $response = new Response(
+                    $xmlModelCorrect2, Response::HTTP_OK, array(
+                'Content-Type' => 'application/xml',
+                    )
+            );
+            return $response;
         }
     }
-    return 1;
-  }
 
+    public function getSalary($document)
+    {
+        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
+        /** @var Person $person */
+        $person = $personRepo->findOneByDocument($document);
 
-  public function getGeneralPayroll($xml)
-  {
-    $destination = array();
-    $parsed = new \SimpleXMLElement($xml);
-    $components = array();
-    foreach ($parsed as $element) {
-      foreach($element as $key => $val) {
-       $components[$key] = (String)$val;
-      }
+        $ehE = $person->getEmployee()->getEmployeeHasEmployers();
+
+        /** @var EmployerHasEmployee $ehEs */
+        foreach ($ehE as $ehEs) {
+            if ($ehEs->getState() == 'Active') {
+                $contracts = $ehEs->getContracts();
+                /** @var Contract    $contract */
+                foreach ($contracts as $contract) {
+                    if ($contract->getState() == 'Active') {
+                        return $contract->getSalary();
+                    }
+                }
+            }
+        }
+        return 1;
     }
 
+    public function getGeneralPayroll($xml)
+    {
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                $components[$key] = (String) $val;
+            }
+        }
 
         $xmlModelCorrect2 = '<Interfaz616Resp>
           <UNICO>
@@ -363,9 +346,9 @@ class PayrollRestTestController extends FOSRestController
             <NOMI_ANO>2015</NOMI_ANO>
             <PROC_CODIGO>1</PROC_CODIGO>
             <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
-            <NOMI_VALOR_LOCAL>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR_LOCAL>
+            <NOMI_VALOR_LOCAL>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR_LOCAL>
             <CON_CODIGO>3010</CON_CODIGO>
-            <NOMI_VALOR>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR>
+            <NOMI_VALOR>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR>
             <NOMI_BASE>0 </NOMI_BASE>
             <NOMI_UNIDADES>1 </NOMI_UNIDADES>
             <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
@@ -378,9 +361,9 @@ class PayrollRestTestController extends FOSRestController
             <NOMI_ANO>2015</NOMI_ANO>
             <PROC_CODIGO>1</PROC_CODIGO>
             <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
-            <NOMI_VALOR_LOCAL>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR_LOCAL>
+            <NOMI_VALOR_LOCAL>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR_LOCAL>
             <CON_CODIGO>3020</CON_CODIGO>
-            <NOMI_VALOR>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR>
+            <NOMI_VALOR>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR>
             <NOMI_BASE>0 </NOMI_BASE>
             <NOMI_UNIDADES>1 </NOMI_UNIDADES>
             <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
@@ -440,14 +423,11 @@ class PayrollRestTestController extends FOSRestController
           </Interfaz616Resp>';
 
         $response = new Response(
-            $xmlModelCorrect2,
-            Response::HTTP_OK,
-            array(
-                'Content-Type' => 'application/xml',
-            )
+                $xmlModelCorrect2, Response::HTTP_OK, array(
+            'Content-Type' => 'application/xml',
+                )
         );
         return $response;
-
-  }
+    }
 
 }
