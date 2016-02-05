@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
 
 /**
  * Contract
@@ -53,6 +54,15 @@ class Contract
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
      */
     private $payrolls;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
+     * })
+     */
+    private $activePayroll;
 
     /**
      * @ORM\OneToMany(targetEntity="ContractHasBenefits", mappedBy="contractContract", cascade={"persist"})
@@ -726,4 +736,28 @@ class Contract
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Set activePayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $activePayroll
+     *
+     * @return Contract
+     */
+    public function setActivePayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $activePayroll = null)
+    {
+        $this->activePayroll = $activePayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get activePayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getActivePayroll()
+    {
+        return $this->activePayroll;
+    }
 }
