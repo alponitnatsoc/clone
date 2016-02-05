@@ -3,22 +3,6 @@
 {% block fos_user_content %}
 {% block stylesheets %}
     <style>
-        .dashboard_employer_pending_tasks {
-            display: inline-block;
-            border:1px solid #efefef;
-            background: white;
-            margin: 10px;
-            height: 300px;
-            border-radius: 0px !important;
-            padding-left: 0px !important;
-            padding-right: 0px !important;
-        }
-        .dashboard_employer_pending_tasks_list {
-            display: inline-block;
-            width: 100%;
-            background: #FBFBFB;
-            margin: 5px;
-        }
         .glyphicon-th-large{
             color:#00CDCC;
         }
@@ -38,71 +22,146 @@
             padding: 10px;
             display: -webkit-inline-box;
             border-bottom: solid #efefef;
+            border-top: solid #efefef;
             border-width: 2px;
-        }
-        .dashboard_employer_contador_type_alert{
-            background-color: orange;
-            height: 10px;
-            width: 100%;
-            display: inline-block;
         }
         .contador_logo{
             height: 50px;
         }
-        .dashboard_employer_contador_type_notification{
-            background-color: lightgreen;
-            height: 10px;
-            width: 100%;
-            display: inline-block;
-        }
-        .dashboard_employer_contador_type_mensaje{
-            background-color: #00CDCC;
-            height: 10px;
-            width: 100%;
-            display: inline-block;
-        }
-        .dashboard_employer_order_by{
-            width: 100%;
-            border-left: solid #efefef;
-            border-width: 2px;
-            padding-left: 20px;
-            padding-bottom: 20px;
-        }
         a:hover{
             text-decoration: none;
         }
-        .dashboard_employer_order_by_select{
-            margin-bottom: 10px;
-        }
-        .col-sm-20{
-            width: 20%;
+        .liq-container {
+            border-bottom: solid #efefef;
+            padding: 10px;
+            display: -webkit-inline-box;
         }
     </style>
 {% endblock %}
-    <h4>Liquidación final de empleado</h4>
+    <h2>Liquidación final de empleado</h2>
     <div class="employee_head_liquidation">
         <div class="col-sm-12 employee_data">
-            <div class="col-sm-2 col-sm-20 employee_data_info">
+            <div class="col-sm-3 employee_data_info">
                 <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
                 <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
                 <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
             </div>
-            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+            <div class="col-sm-3 employee_data_info">
                 <p><strong>Tipo contrato</strong></p>
                 <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
             </div>
-            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+            <div class="col-sm-3 employee_data_info">
                 <p><strong>Duración contrato</strong></p>
                 <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
             </div>
-            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
+            <div class="col-sm-3 employee_data_info">
                 <p><strong>Salario</strong></p>
                 <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
             </div>
-            <div class="col-sm-2 col-sm-20 dashboard_employer_contador_div">
-                <p><strong>Días tomados de vacaciones</strong></p>
-                <span class="txthelp"><p></p></span>
+{#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
+{#                 <p><strong>Días tomados de vacaciones</strong></p>#}
+{#                 <span class="txthelp"><p></p></span>#}
+{#             </div>#}
+        </div>
+    </div>
+    <div id="liquidationStep1">
+        <div class="liq-container">
+            <h3>Diligencie los siguientes datos y calcularemos el valor de la liquidación</h3>
+        </div>
+        <div class="liq-container">
+            <div class="col-sm-6">
+                ¿Cuál es el último día de trabajo de su empleado?
+                {{ form_widget(form.lastWorkDay) }}
+            </div>
+            <div class="col-sm-6">
+                <span class="txthelp"><strong>Fecha inicio del contrato</strong></span>
+                <span class="txthelp" id="startDate" startdate="{{ contractInfo.startDate|date("Y-m-d") }}">{{ contractInfo.startDay }}</span>
+            </div>
+        </div>
+        <div class="liq-container">
+            <div class="col-sm-12">
+                <p>¿Cuál es la razón para finalizar el contrato?</p>
+                {{ form_widget(form.liquidationReason) }}
+                <p>El valor de la liquidación es:</p>
+                <span class="txthelp"><p>* Basado en la información que actualmente registra el sistema. Puede variar si debe reportar novedades.</p></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center">
+            <div class="col-sm-6 col-sm-push-3">
+                <a id="btn-1" onclick="javascript:liquidation($('#liquidationStep1'), $('#liquidationStep2'))" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
+                <br /><br />
             </div>
         </div>
     </div>
+    <div id="liquidationStep2" style="display:none">
+        <div class="liq-container">
+            <div class="col-sm-12">
+                <h3>1. Estas son las novedades vigentes asociadas a Lucía ¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h3>
+            </div><br />
+            <div class="col-sm-12">
+                NOVEDADES
+                <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>
+            </div>
+        </div>
+        <div class="liq-container">
+            <div class="col-sm-12">
+                <h3>2. Descagar el documento para ser firmado por el empleado</h3>
+            </div>
+            <br />
+            <div class="col-sm-12">
+                <span class="txthelp">Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
+                Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</span>
+            </div>
+            <br />
+            <div class="col-sm-12 col-xs-12 center">
+                <div class="col-sm-6 col-sm-push-3">
+                    <a id="btn-1" href="" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+        <div class="liq-container">
+            <div class="col-sm-12">
+                <h3>2. Razones para liquidación con justa causa</h3>
+            </div>
+            <br/>
+            <div class="col-sm-12">
+                <span class="txthelp">Para finalizar el contrato con un empleado de forma unilateral
+                debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
+                empleador del pago de indemnización, debe tener el documento donde se le haya llamado la
+                atención así como también sus correspondientes descargos.</span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center">
+            <div class="col-sm-6 col-sm-push-3">
+                <a id="btn-1" href="" class="btn btn-primary btnNext btn-orange">Continuar</a>
+                <br /><br />
+            </div>
+        </div>
+        <div class="liq-container">
+            <div class="col-sm-6">
+                <strong>Le puede interesar este contenido de nuestro blog:</strong>
+                <ol>
+                    <li>Qué es una justa causa de terminación de contrato</li>
+                    <li>Cúrese en salud y haga finalización de contrato como lo exige la ley</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+                <span class="txthelp">¿Necesita ayuda? Contamos con un</span>
+                <span class="txthelp"><strong>Consultorio Jurídico</strong></span>
+                <span class="txthelp">a su disposición</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+<!--
+function liquidation(lastElement, nextElement) {
+    $(lastElement).hide();
+    $(nextElement).show();
+}
+//-->
+</script>
 {% endblock %}

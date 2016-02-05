@@ -7,6 +7,7 @@ use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiquidationRestController extends FOSRestController
 {
@@ -62,6 +63,31 @@ class LiquidationRestController extends FOSRestController
         $view->setData($data)->setStatusCode(200);
 
         return $view;
+    }
+
+    /**
+     * .<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Paso 1 liquidacion final",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     * (name="username", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="Username o email")
+     *
+     * @return View
+     */
+    public function postFinalLiquidationStep1(Request $request)
+    {
+
     }
 
 }

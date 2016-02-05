@@ -70,6 +70,16 @@ class Liquidation
     private $liquidationReasons;
 
     /**
+     * @ORM\Column(type="date", length=20, nullable=TRUE, name="last_work_day")
+     */
+    private $lastWorkDay;
+
+    /**
+     * @ORM\Column(type="float", nullable=TRUE)
+     */
+    private $cost;
+
+    /**
      * Get id
      *
      * @return integer
@@ -262,5 +272,53 @@ class Liquidation
     public function getLiquidationReasons()
     {
         return $this->liquidationReasons;
+    }
+
+    /**
+     * Set lastWorkDay
+     *
+     * @param \DateTime $lastWorkDay
+     *
+     * @return Liquidation
+     */
+    public function setLastWorkDay($lastWorkDay)
+    {
+        $this->lastWorkDay = $lastWorkDay;
+
+        return $this;
+    }
+
+    /**
+     * Get lastWorkDay
+     *
+     * @return \DateTime
+     */
+    public function getLastWorkDay()
+    {
+        return $this->lastWorkDay;
+    }
+
+    /**
+     * Set cost
+     *
+     * @param float $cost
+     *
+     * @return Liquidation
+     */
+    public function setCost($cost)
+    {
+        $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get cost
+     *
+     * @return float
+     */
+    public function getCost()
+    {
+        return $this->cost;
     }
 }

@@ -9,6 +9,8 @@ use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
+use RocketSeller\TwoPickBundle\Form\LiquidationType;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 
 /**
  * Liquidation controller.
@@ -76,6 +78,7 @@ class LiquidationController extends Controller
      */
     public function finalLiquidationAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $this->getEmployee($id);
         /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
@@ -91,18 +94,29 @@ class LiquidationController extends Controller
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
         $contract = $this->getActiveContract($id);
-//         var_dump(count($contract));
-
+        $startDate = $contract[0]->getStartDate();
         $contractInfo = array(
             'contractType' => $contract[0]->getContractTypeContractType()->getName(),
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
             'salary' => $contract[0]->getSalary(),
-            'vacationDays' => ""
+            'vacationDays' => "",
+            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDate' => $startDate
         );
+
+        $form = $this->createForm(new LiquidationType());
+
+        $payroll = new Payroll();
+        $payroll->setContractContract($contract[0]);
+
+//         $em->persist($contract);
+//         $em->flush();
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
             "employeeInfo" => $employeeInfo,
-            "contractInfo" => $contractInfo
+            "contractInfo" => $contractInfo,
+            "form" => $form->createView(),
+            "payroll" => $payroll
         ));
     }
 }
