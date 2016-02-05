@@ -17,6 +17,7 @@ use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeHasDocumentType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PayrollDetail;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\NoveltyForm;
@@ -130,10 +131,7 @@ class NoveltyController extends Controller {
             if ($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
                 $user = $this->getUser();
-                $notification = new Notification();
-                $notification->setPersonPerson($user->getPersonPerson());
-                $notification->setStatus(1);
-                $notification->setDescription("Faltan llenar algunos datos de la novedad");
+                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                 $em->persist($notification);
                 $em->flush();
                 $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
@@ -168,13 +166,11 @@ class NoveltyController extends Controller {
             $em->flush();
             if (!($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form))) {
                 if ($notificationReferenced != -1) {
+                    $user = $this->getUser();
                     $notificationRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
                     /** @var Notification $notification */
                     $notification = $notificationRepo->find($notificationReferenced);
-                    $notification->setStatus(0);
-                    $notification->setSawDate(new \DateTime());
-                    $notification->setRelatedLink(null);
-                    $notification->setDescription("Los datos de la novedad se llenaron correctamente");
+                    $notification=$this->createNotification($notification,0,new \DateTime(),null,"Los datos de la novedad se llenaron correctamente",null,null,null,$user->getPersonPerson());
                     $em->persist($notification);
                     $em->flush();
                 }
@@ -182,11 +178,7 @@ class NoveltyController extends Controller {
                 if ($notificationReferenced == -1) {
                     /** @var User $user */
                     $user = $this->getUser();
-                    $notification = new Notification();
-                    $notification->setPersonPerson($user->getPersonPerson());
-                    $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty())));
-                    $notification->setStatus(1);
-                    $notification->setDescription("Faltan llenar algunos datos de la novedad");
+                    $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                     $em->persist($notification);
                     $em->flush();
                     $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
@@ -197,6 +189,31 @@ class NoveltyController extends Controller {
             return $this->redirectToRoute('ajax', array(), 301);
         }
         return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @param Notification $notification
+     * @param $status
+     * @param $sawDate
+     * @param $relatedLink
+     * @param $description
+     * @param $title
+     * @param $action
+     * @param $type
+     * @param Person $person
+     * @return Notification
+     */
+    private function createNotification($notification=null, $status, $sawDate,$relatedLink,$description, $title, $action,$type, $person) {
+        $notification= $notification==null?new Notification():$notification;
+        $notification->setAccion($action);
+        $notification->setRelatedLink($relatedLink);
+        $notification->setSawDate($sawDate);
+        $notification->setStatus($status);
+        $notification->setDescription($description);
+        $notification->setTitle($title);
+        $notification->setType($type);
+        $notification->setPersonPerson($person);
+        return $notification;
     }
 
     /**

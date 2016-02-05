@@ -32,6 +32,7 @@ class NoveltyForm extends AbstractType
             'multiple' => false,
             'expanded' => false,
             'read_only' =>true,
+             'attr'=>array("disabled"=>true),
             'label' => 'Tipo de novedad',
             'property_path' => 'noveltyTypeNoveltyType'));
         //if has documents add the form for the medias
