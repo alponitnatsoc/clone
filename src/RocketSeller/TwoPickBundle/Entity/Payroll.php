@@ -177,8 +177,9 @@ class Payroll
      */
     public function addNovelty(\RocketSeller\TwoPickBundle\Entity\Novelty $novelty)
     {
-        $this->novelties[] = $novelty;
         $novelty->getPayrollDetailPayrollDetail()->setPayrollPayroll($this);
+        $novelty->setPayrollPayroll($this);
+        $this->novelties[] = $novelty;
         return $this;
     }
 
