@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Pago Nómina{% endblock %}
+{% block title %}Pagar Nómina{% endblock %}
 
 {% block fos_user_content %}
     <div class="payroll pay">
@@ -14,6 +14,7 @@
             <h2>{{ "now"|date('F')|trans }} {{ "now"|date('Y') }}  {{ quincena }} </h2>
             <div class="row">
                 {% for employee in employees %}
+                    <input type="hidden"  name="payroll[{{ employee.idEmployerHasEmployee }}]" value="{{ payrolls[employee.idEmployerHasEmployee].idPayroll }}" >
                     <div class="col-sm-6">
                         <div class="row-fluid clearfix employee">
                             <div class="col-xs-12">
@@ -76,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-12 center">
-                                        <button class="btn btn-default center btn-add-novelty" value="Agregar Novedad" data-employee-name="{{ employee.employeeEmployee.personPerson.names }}"  href="{{ path('novelty_select',{'idPayroll':'1'}) }}"/>Agregar Novedad</button>
+                                        <button class="btn btn-default center btn-add-novelty" value="Agregar Novedad" data-employee-name="{{ employee.employeeEmployee.personPerson.names }}"  href="{{ path('novelty_select',{'idPayroll':payrolls[employee.idEmployerHasEmployee].idPayroll}) }}"/>Agregar Novedad</button>
                                     </div>
                                 </div>
                             </div>

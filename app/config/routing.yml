@@ -145,11 +145,14 @@ payroll_calculate:
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
 
 payroll_confirm:
-    path: /payroll/confirm/
+    path: /payroll/confirm
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:confirm}
 payroll_detail:
     path: /payroll/detail/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:detail}
+payroll_voucher:
+    path: /payroll/voucher/{idPayroll}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}
 
 show_form_entity:
     path:      /register/entity/{id}
