@@ -309,69 +309,100 @@ class PayrollRestTestController extends FOSRestController
       }
   }
 
+  public function getSalary($document) {
+    $personRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
+    /** @var Person $person */
+    $person = $personRepo->findOneByDocument(1020772075);
+
+    $ehE = $person->getEmployee()->getEmployeeHasEmployers();
+
+    /** @var EmployerHasEmployee $ehEs */
+    foreach ($ehE as $ehEs) {
+        $contracts = $ehEs->getContracts();
+        /** @var Contract    $contract */
+        foreach ($contracts as $contract) {
+            return $contract->getSalary();
+        }
+    }
+    return 1;
+  }
 
 
   public function getGeneralPayroll($xml)
   {
-      $xmlModelCorrect =
-      '<Interfaz616Resp>
-        <UNICO>
-          <EMP_CODIGO>222222222 </EMP_CODIGO>
-          <NOMI_PERIODO>4</NOMI_PERIODO>
-          <NOMI_MES>01</NOMI_MES>
-          <NOMI_ANO>2015</NOMI_ANO>
-          <PROC_CODIGO>1</PROC_CODIGO>
-          <NOMI_FECHA_PAGO>12-12-2015</NOMI_FECHA_PAGO>
-          <NOMI_VALOR_LOCAL>100000 </NOMI_VALOR_LOCAL>
-          <CON_CODIGO>150</CON_CODIGO>
-          <NOMI_VALOR>100000</NOMI_VALOR>
-          <NOMI_BASE>0 </NOMI_BASE>
-          <NOMI_UNIDADES>1 </NOMI_UNIDADES>
-          <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
-          <NOV_CONSEC>545</NOV_CONSEC>
-        </UNICO>
-        <UNICO>
-          <EMP_CODIGO>222222222 </EMP_CODIGO>
-          <NOMI_PERIODO>4</NOMI_PERIODO>
-          <NOMI_MES>01</NOMI_MES>
-          <NOMI_ANO>2015 </NOMI_ANO>
-          <PROC_CODIGO>1</PROC_CODIGO>
-          <NOMI_FECHA_PAGO>08-12-2015</NOMI_FECHA_PAGO>
-          <NOMI_VALOR_LOCAL>250000 </NOMI_VALOR_LOCAL>
-          <CON_CODIGO>145</CON_CODIGO>
-          <NOMI_VALOR>50000</NOMI_VALOR>
-          <NOMI_BASE>0</NOMI_BASE>
-          <NOMI_UNIDADES>5</NOMI_UNIDADES>
-          <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
-          <NOV_CONSEC>545</NOV_CONSEC>
-        </UNICO>
-        <InfoProceso>
-        <MensajeRetorno/>
-        <LogProceso>
-        ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
-        </LogProceso>
-        </InfoProceso>
-        </Interfaz616Resp>';
+    $destination = array();
+    $parsed = new \SimpleXMLElement($xml);
+    $components = array();
+    foreach ($parsed as $element) {
+      foreach($element as $key => $val) {
+       $components[$key] = (String)$val;
+      }
+    }
 
 
         $xmlModelCorrect2 = '<Interfaz616Resp>
           <UNICO>
-            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>05</NOMI_MES>
+            <NOMI_ANO>2015</NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>15-11-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>' . $this->getSalary($components['EMPCODIGO']) . '</NOMI_VALOR_LOCAL>
+            <CON_CODIGO>1</CON_CODIGO>
+            <NOMI_VALOR>' . $this->getSalary($components['EMPCODIGO']) . '</NOMI_VALOR>
+            <NOMI_BASE>0 </NOMI_BASE>
+            <NOMI_UNIDADES>1</NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>545</NOV_CONSEC>
+          </UNICO>
+          <UNICO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
             <NOMI_PERIODO>4</NOMI_PERIODO>
             <NOMI_MES>05</NOMI_MES>
             <NOMI_ANO>2015</NOMI_ANO>
             <PROC_CODIGO>1</PROC_CODIGO>
             <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
-            <NOMI_VALOR_LOCAL>100000 </NOMI_VALOR_LOCAL>
-            <CON_CODIGO>3120</CON_CODIGO>
-            <NOMI_VALOR>100000</NOMI_VALOR>
+            <NOMI_VALOR_LOCAL>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR_LOCAL>
+            <CON_CODIGO>3010</CON_CODIGO>
+            <NOMI_VALOR>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR>
             <NOMI_BASE>0 </NOMI_BASE>
             <NOMI_UNIDADES>1 </NOMI_UNIDADES>
             <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
-            <NOV_CONSEC>545</NOV_CONSEC>
+            <NOV_CONSEC>546</NOV_CONSEC>
           </UNICO>
           <UNICO>
-            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>05</NOMI_MES>
+            <NOMI_ANO>2015</NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR_LOCAL>
+            <CON_CODIGO>3020</CON_CODIGO>
+            <NOMI_VALOR>' .( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ).   '</NOMI_VALOR>
+            <NOMI_BASE>0 </NOMI_BASE>
+            <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>547</NOV_CONSEC>
+          </UNICO>
+          <UNICO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+            <NOMI_PERIODO>4</NOMI_PERIODO>
+            <NOMI_MES>05</NOMI_MES>
+            <NOMI_ANO>2015</NOMI_ANO>
+            <PROC_CODIGO>1</PROC_CODIGO>
+            <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+            <NOMI_VALOR_LOCAL>150000 </NOMI_VALOR_LOCAL>
+            <CON_CODIGO>3120</CON_CODIGO>
+            <NOMI_VALOR>150000</NOMI_VALOR>
+            <NOMI_BASE>0 </NOMI_BASE>
+            <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+            <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+            <NOV_CONSEC>548</NOV_CONSEC>
+          </UNICO>
+          <UNICO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . ' </EMP_CODIGO>
             <NOMI_PERIODO>4</NOMI_PERIODO>
             <NOMI_MES>06</NOMI_MES>
             <NOMI_ANO>2015 </NOMI_ANO>
@@ -383,10 +414,10 @@ class PayrollRestTestController extends FOSRestController
             <NOMI_BASE>0</NOMI_BASE>
             <NOMI_UNIDADES>1</NOMI_UNIDADES>
             <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
-            <NOV_CONSEC>545</NOV_CONSEC>
+            <NOV_CONSEC>549</NOV_CONSEC>
           </UNICO>
           <UNICO>
-            <EMP_CODIGO>33333333 </EMP_CODIGO>
+            <EMP_CODIGO>' . $components['EMPCODIGO'] . ' </EMP_CODIGO>
             <NOMI_PERIODO>4</NOMI_PERIODO>
             <NOMI_MES>06</NOMI_MES>
             <NOMI_ANO>2015 </NOMI_ANO>
@@ -398,7 +429,7 @@ class PayrollRestTestController extends FOSRestController
             <NOMI_BASE>0</NOMI_BASE>
             <NOMI_UNIDADES>1</NOMI_UNIDADES>
             <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
-            <NOV_CONSEC>545</NOV_CONSEC>
+            <NOV_CONSEC>550</NOV_CONSEC>
           </UNICO>
           <InfoProceso>
           <MensajeRetorno/>
@@ -408,27 +439,6 @@ class PayrollRestTestController extends FOSRestController
           </InfoProceso>
           </Interfaz616Resp>';
 
-      $destination = array();
-      $parsed = new \SimpleXMLElement($xml);
-      $components = array();
-      foreach ($parsed as $element) {
-        foreach($element as $key => $val) {
-         $components[$key] = (String)$val;
-        }
-      }
-
-      if($components['EMPCODIGO'] == 123456789)
-      {
-          $response = new Response(
-              $xmlModelCorrect,
-              Response::HTTP_OK,
-              array(
-                  'Content-Type' => 'application/xml',
-              )
-          );
-          return $response;
-      } else
-      {
         $response = new Response(
             $xmlModelCorrect2,
             Response::HTTP_OK,
@@ -437,7 +447,7 @@ class PayrollRestTestController extends FOSRestController
             )
         );
         return $response;
-      }
+
   }
 
 }
