@@ -42,7 +42,7 @@
                                 <div class="row">
                                     <div class="col-xs-12 detail">
                                         <div class="row-fluid">
-                                            <a href="#">&gt; Ver detalle de la liquidación</a>
+                                            <span class="view_detail" data-employee-name="{{ employee.employeeEmployee.personPerson.names }}"  href="{{ path('payroll_detail',{'idPayroll': payrolls[employee.idEmployerHasEmployee].idPayroll}) }}">&gt; Ver detalle de la liquidación</span>
                                         </div>
                                     </div>
                                 </div>
@@ -85,21 +85,19 @@
                 {% endfor %}
             </div>
             <div class="row reminder">
-                <div class="alert alert-success clearfix" role="alert">
-                    <div class="media">
-                        <div class="media-left">
-                            <i class="fa fa-lightbulb-o"></i>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">Importante</h4>
-                            Evite cualquier inconveniente a futuro reportando las novedades a las que haya a lugar, ya sea porque afectan a la nómina o a los aportes a Seguridad Social los cuales son regulados por entidades del estado.
-                        </div>
+                <div class="media">
+                    <div class="media-left">
+                        <i class="fa fa-lightbulb-o"></i>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">Importante</h4>
+                        Evite cualquier inconveniente a futuro reportando las novedades a las que haya a lugar, ya sea porque afectan a la nómina o a los aportes a Seguridad Social los cuales son regulados por entidades del estado.
                     </div>
                 </div>
             </div>
             <div class="row buttons">
                 <div class="col-xs-12">
-                    <input type="submit" id="btnCalculate" class="btn btn-primary center-block" value="Cálculo final del pago" />
+                    <input type="submit" id="btnCalculate" class="btn btn-default center-block" value="Cálculo final del pago" />
                 </div>
             </div>
         </form>
@@ -159,6 +157,18 @@
 {% block stylesheet %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
+    <style type="text/css">
+        .view_detail:hover{
+            cursor: pointer;
+            color: blue;
+        }
+        .reminder{
+            margin: 10px;
+            padding: 10px;
+            border-top: 1px #000 dotted;
+            border-bottom: 1px #000 dotted;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}

@@ -12,12 +12,12 @@ class LoadContractTypeData extends AbstractFixture implements OrderedFixtureInte
     public function load(ObjectManager $manager)
     {
         $contractTypeFijo = new ContractType();
-        $contractTypeFijo->setName('Termino fijo');
+        $contractTypeFijo->setName('Término fijo');
         $contractTypeFijo->setPayrollCode('2');
         $manager->persist($contractTypeFijo);
 
         $contractTypeIndefinido = new ContractType();
-        $contractTypeIndefinido->setName('Termino indefinido');
+        $contractTypeIndefinido->setName('Término indefinido');
         $contractTypeIndefinido->setPayrollCode('1');
         $manager->persist($contractTypeIndefinido);
 

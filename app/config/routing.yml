@@ -120,8 +120,8 @@ novelty_fields:
         noveltyId:     \d+
     
 register_employee:
-    path:      /register/employee/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1}
+    path:      /register/employee/{id}/{tab}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1, tab: 1}
     requirements:
         id:     \d+
 send_email:

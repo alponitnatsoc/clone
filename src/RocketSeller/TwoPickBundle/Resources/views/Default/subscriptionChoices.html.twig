@@ -88,7 +88,7 @@
 
         <div class="col-md-3 {{ employee.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
             <div> 
-                <img class="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'femenino'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
             </div>
             <div class="employee_name">
                 {{ employee.employeeEmployee.personPerson.names }}

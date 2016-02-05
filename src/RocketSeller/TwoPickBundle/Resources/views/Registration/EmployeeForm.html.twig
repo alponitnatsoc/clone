@@ -53,14 +53,14 @@
 
 
             .label-group{
-            text-align: right !important;
-           }
-           .label-group > h3 {
-            text-align: left;
-           }
-           .form-select{
-            color: yellow !important;
-           }
+                text-align: right !important;
+            }
+            .label-group > h3 {
+                text-align: left;
+            }
+            .form-select{
+                color: yellow !important;
+            }
         </style>
     {% endblock %}
     <div class="col-sm-12 col-xs-12 align-Resp">
@@ -88,11 +88,12 @@
         {{ form_errors(form) }}
         {{ form_start(form) }}
 
-        <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
-            <li><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
-            <li><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
+        <ul class="nav nav-tabs nav-justified">            
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
+
         </ul>
 
         <div class="tab-content">
@@ -293,14 +294,14 @@
                 </div>
                 <br/><br/>
                 <div class="col-sm-12 col-xs-12 center">
-                        
-                            <a class="btn btn-primary btnPrevious">Anterior</a>
-                        
-                        
-                            <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
-                            <br /><br />
-                        
-                    </div>
+
+                    <a class="btn btn-primary btnPrevious">Anterior</a>
+
+
+                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                    <br /><br />
+
+                </div>
             </div>
 
             <div id="contractData" class="tab-pane fade">
@@ -372,21 +373,21 @@
                     <!--
                     <div class="col-sm-12 col-xs-12 worktime">
                         <div class="col-sm-6 label-group">
-                            {# form_label(form.employeeHasEmployers.workTimeStart) #}  
-                        </div>
-                        <div class="col-sm-6">
-                            {# form_widget(form.employeeHasEmployers.workTimeStart) #}
-                        </div>
-                    </div>
+                    {# form_label(form.employeeHasEmployers.workTimeStart) #}  
+                </div>
+                <div class="col-sm-6">
+                    {# form_widget(form.employeeHasEmployers.workTimeStart) #}
+                </div>
+            </div>
 
-                    <div class="col-sm-12 col-xs-12 worktimeEnd">
-                        <div class="col-sm-6 label-group">
-                            {# form_label(form.employeeHasEmployers.workTimeEnd) #}
-                        </div>
-                        <div class="col-sm-6">
-                            {# form_widget(form.employeeHasEmployers.workTimeEnd) #}
-                        </div>
-                    </div>
+            <div class="col-sm-12 col-xs-12 worktimeEnd">
+                <div class="col-sm-6 label-group">
+                    {# form_label(form.employeeHasEmployers.workTimeEnd) #}
+                </div>
+                <div class="col-sm-6">
+                    {# form_widget(form.employeeHasEmployers.workTimeEnd) #}
+                </div>
+            </div>
                     -->
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -430,49 +431,49 @@
                         </div>
                     </div>
                     <ul id='' class="benefits" data-prototype="
-                        {% filter escape %}
-                            {{ include('RocketSellerTwoPickBundle:DataPrototypes:benefitsPrototype.html.twig', { 'form': form.employeeHasEmployers.benefits.vars.prototype|e }) }}
-                        {% endfilter %}" style="list-style: none">
-                        {% for benefit in form.employeeHasEmployers.benefits %}
-                            <li id="benefits_{{loop.index}}" class="benefitLi">
-                                {{ form_row(benefit.idContractHasBenefits) }}
-                                {{ form_row(benefit.benefitType) }}
-                                {{ form_row(benefit.amount) }}
-                                {{ form_row(benefit.periodicity) }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.benefitsConditions) }}    
-                        </div>
-                        <div class="col-sm-6">
-                            {{ form_widget(form.employeeHasEmployers.benefitsConditions) }}    
-                        </div>
+                    {% filter escape %}
+                        {{ include('RocketSellerTwoPickBundle:DataPrototypes:benefitsPrototype.html.twig', { 'form': form.employeeHasEmployers.benefits.vars.prototype|e }) }}
+                    {% endfilter %}" style="list-style: none">
+                    {% for benefit in form.employeeHasEmployers.benefits %}
+                        <li id="benefits_{{loop.index}}" class="benefitLi">
+                        {{ form_row(benefit.idContractHasBenefits) }}
+                        {{ form_row(benefit.benefitType) }}
+                        {{ form_row(benefit.amount) }}
+                        {{ form_row(benefit.periodicity) }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-sm-6 label-group">
+                    {{ form_label(form.employeeHasEmployers.benefitsConditions) }}    
+                </div>
+                <div class="col-sm-6">
+                    {{ form_widget(form.employeeHasEmployers.benefitsConditions) }}    
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+                <div class="col-sm-6 label-group">
+                    ¿Ya cuenta con un contrato firmado?*
+                </div>
+                <div class="col-sm-1">
+                    <div class="radio" style="text-align: left;">
+                        <label class="required" aria-required="true">
+                            <input id="si_tiene_contrato" type="radio" name="tiene_contrato" checked="checked"> Si
+                        </label>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            ¿Ya cuenta con un contrato firmado?*
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="radio" style="text-align: left;">
-                                <label class="required" aria-required="true">
-                                    <input id="si_tiene_contrato" type="radio" name="tiene_contrato" checked="checked"> Si
-                                </label>
-                            </div>
-                            <div class="radio" style="text-align: left;">
-                                <label >
-                                    <input id="no_tiene_contrato" type="radio" name="tiene_contrato"> No
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="collapse" id="noTarget" style="text-align: left; color: #ccc">
-                                    <p><i class="fa fa-info-circle"></i> ¡Nosotros le ayudamos!</p>
-                                    <p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema. <a href="#generarModal" data-toggle="modal" style="color: #00CDCC;">Generar Contrato</a></p>
-                            </div>
-                        </div>
+                    <div class="radio" style="text-align: left;">
+                        <label >
+                            <input id="no_tiene_contrato" type="radio" name="tiene_contrato"> No
+                        </label>
                     </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="collapse" id="noTarget" style="text-align: left; color: #ccc">
+                            <p><i class="fa fa-info-circle"></i> ¡Nosotros le ayudamos!</p>
+                            <p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema. <a href="#generarModal" data-toggle="modal" style="color: #00CDCC;">Generar Contrato</a></p>
+                    </div>
+                </div>
+            </div>
                     -->
 
                     <div class="col-sm-12 col-xs-12 center">
@@ -583,30 +584,30 @@
     </div>
     <!-- Modal no -->
     <div class="modal fade" id="generarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Descargar documento</h4>
 
-                            </div>
-                            <div class="modal-body">
-                                <p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
-                                <p>Este documento es necesario para que Symplifica se pueda hacer cargo de los trámites de afiliación suyos y de sus empleados.</p>
-                                <p>Recuerde que una vez impreso  ES MUY IMPORTANTE que lo firmen el empleador y los empleados; luedo tomarle foto al documento o escanearlo y posteriormente subirlo a Symplifica.</p>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="contractDownload(this)">Descargar Contrato</button>
-                            </div>
-                            <script>
-                                function contractDownload() {
-                                    var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();
-                                    window.open('/contractLayout/' + value);
-                                }
-                            </script>
-                        </div>
-                    </div>
                 </div>
+                <div class="modal-body">
+                    <p>El contrato se descargará automáticamente, si no sucede haga clic aquí para descargarlo.</p>
+                    <p>Este documento es necesario para que Symplifica se pueda hacer cargo de los trámites de afiliación suyos y de sus empleados.</p>
+                    <p>Recuerde que una vez impreso  ES MUY IMPORTANTE que lo firmen el empleador y los empleados; luedo tomarle foto al documento o escanearlo y posteriormente subirlo a Symplifica.</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="contractDownload(this)">Descargar Contrato</button>
+                </div>
+                <script>
+                    function contractDownload() {
+                        var value = $('select[id=register_employee_employeeHasEmployers_contractType]').val();
+                        window.open('/contractLayout/' + value);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
 {% endblock fos_user_content %}

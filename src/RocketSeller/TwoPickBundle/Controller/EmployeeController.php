@@ -316,7 +316,7 @@ class EmployeeController extends Controller
      * @param el Request y el Id del empleado, si lo desean editar
      * @return La vista de el formulario de la nuevo empleado
      * */
-    public function newEmployeeAction($id)
+    public function newEmployeeAction($id, $tab)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -376,8 +376,8 @@ class EmployeeController extends Controller
                 foreach ($weekWDs as $weekWD) {
                     $arrayWWD[] = $weekWD->getDayName();
                 }
-                $payType=$contract->getPayMethodPayMethod();
-                if($payType!=null){
+                $payType = $contract->getPayMethodPayMethod();
+                if ($payType != null) {
                     $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
                 }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($arrayWWD);
@@ -386,12 +386,11 @@ class EmployeeController extends Controller
         }
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
-        return $this->render(
-                        'RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
                     'form' => $form->createView(),
-                    'choices' => $choices
-                        )
-        );
+                    'tab' => $tab,
+                    'choices' => $choices,
+        ));
     }
 
     /**
@@ -400,7 +399,7 @@ class EmployeeController extends Controller
      * @param $id
      * @return Response
      */
-    public function postPayMethodAction($id,$idContract)
+    public function postPayMethodAction($id, $idContract)
     {
         $repository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayMethodFields");
         $payTypeRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PayType");
@@ -414,10 +413,10 @@ class EmployeeController extends Controller
         foreach ($fields as $field) {
             $options[] = $field;
         }
-        if($contract==null||$contract->getPayMethodPayMethod()==null){
+        if ($contract == null || $contract->getPayMethodPayMethod() == null) {
             $form = $this->createForm(new PayMethod($fields));
-        }else{
-            $form = $this->createForm(new PayMethod($fields),$contract->getPayMethodPayMethod());
+        } else {
+            $form = $this->createForm(new PayMethod($fields), $contract->getPayMethodPayMethod());
         }
         return $this->render(
                         'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
@@ -463,11 +462,11 @@ class EmployeeController extends Controller
             $person = $this->loadClassByArray(array('document' => $document, 'lastName1' => $lastName1), "Person");
             $phones = $person->getPhones();
             foreach ($phones as $phone) {
-                if($phone->getPhoneNumber()==$cellphone){
+                if ($phone->getPhoneNumber() == $cellphone) {
                     $employee = $this->loadClassByArray(array('personPerson' => $person), "Employee");
                     $sendPhone = $phone;
                 }
-            }                                                              
+            }
             if ($employee) {
                 $code = rand(100000, 999999);
                 $employee->setTwoFactorCode($code);
@@ -477,7 +476,7 @@ class EmployeeController extends Controller
                         "+19562671001", "+57" . $cellphone, "Hola este es tu codigo de autenticación: " . $code
                 );
                 $em->flush($employee);
-                return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig', array('employee' => $employee,'sendPhone'=> $sendPhone)
+                return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig', array('employee' => $employee, 'sendPhone' => $sendPhone)
                 );
                 return $this->redirect('employee_login_two_auth', array('employee' => $employee));
             } else {
@@ -487,10 +486,12 @@ class EmployeeController extends Controller
             return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee.html.twig');
         }
     }
-    public function dashboardAction($id){
+
+    public function dashboardAction($id)
+    {
         $employee = $this->loadClassById($id, "Employee");
-        
-        return $this->render('RocketSellerTwoPickBundle:Employee:dashboardEmployee.html.twig',array('employee'=>$employee));
+
+        return $this->render('RocketSellerTwoPickBundle:Employee:dashboardEmployee.html.twig', array('employee' => $employee));
     }
 
     public function twoFactorLoginAction($id, Request $request)
@@ -499,8 +500,8 @@ class EmployeeController extends Controller
         if ($request->getMethod() == 'POST') {
             $code = $this->get('request')->request->get('codigoTwo');
             $id = $request->query->get('id');
-            if ($code == $employee->getTwoFactorCode()) {                
-                return $this->redirectToRoute('employee_dashboard',array('id'=>$employee->getIdEmployee()));                
+            if ($code == $employee->getTwoFactorCode()) {
+                return $this->redirectToRoute('employee_dashboard', array('id' => $employee->getIdEmployee()));
             } else {
                 var_dump($id);
                 throw $this->createNotFoundException('Unable to find.');
