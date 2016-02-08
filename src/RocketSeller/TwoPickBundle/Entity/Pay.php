@@ -41,6 +41,15 @@ class Pay
     private $userIdUser;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", inversedBy="payPay")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="purchase_id_purchase_orders_description", referencedColumnName="id_purchase_orders_description")
+     * })
+     */
+    private $purchaseOrdersDescription;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus")
      * @ORM\JoinColumns({

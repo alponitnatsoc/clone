@@ -42,8 +42,7 @@ class PurchaseOrdersDescription
     private $taxTax;
 
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Pay
-     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Pay", mappedBy="id_pay", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Pay", mappedBy="purchaseOrdersDescription", cascade={"persist"})
      */
     private $payPay;
 

@@ -24,7 +24,7 @@ class PurchaseOrders
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrders")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
