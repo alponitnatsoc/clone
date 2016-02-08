@@ -7,11 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pay
  *
- * @ORM\Table(name="pay", indexes={@ORM\Index(name="fk_pay_pay_type1", columns={"pay_type_id_pay_type"}), @ORM\Index(name="fk_pay_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), @ORM\Index(name="fk_pay_pay_method1", columns={"pay_method_id_pay_method"})})
+ * @ORM\Table(name="pay", indexes={@ORM\Index(name="fk_pay_pay_method1", columns={"pay_method_id_pay_method"})})
  * @ORM\Entity
  */
 class Pay
 {
+
     /**
      * @var integer
      *
@@ -20,24 +21,6 @@ class Pay
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPay;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
-     * })
-     */
-    private $purchaseOrdersPurchaseOrders;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\PayType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pay_type_id_pay_type", referencedColumnName="id_pay_type")
-     * })
-     */
-    private $payTypePayType;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
@@ -56,6 +39,20 @@ class Pay
      * })
      */
     private $userIdUser;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_status", referencedColumnName="id_purchase_orders_status")
+     * })
+     */
+    private $purchaseOrdersStatusPurchaseOrdersStatus;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $status;
 
     /**
      * Set idPay
@@ -176,4 +173,53 @@ class Pay
     {
         return $this->userIdUser;
     }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Pay
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return Pay
+     */
+    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     */
+    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    {
+        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
+    }
+
 }

@@ -13,6 +13,7 @@ use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
  */
 class Contract
 {
+
     /**
      * @var integer
      *
@@ -39,7 +40,6 @@ class Contract
      * })
      */
     private $contractTypeContractType;
-
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Workplace
@@ -75,13 +75,15 @@ class Contract
     private $weekWorkableDays;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     * @ORM\Column(type="boolean", nullable=TRUE)
      */
-    private $state;
+    private $state = 1;
+
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $transportAid;
+
     /**
      * @ORM\Column(type="text", length=500, nullable=TRUE)
      */
@@ -127,6 +129,7 @@ class Contract
      * })
      */
     private $payMethodPayMethod;
+
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Document")
@@ -166,9 +169,6 @@ class Contract
      * @ORM\Column(type="integer", nullable=TRUE)
      */
     private $workableDaysMonth;
-
-
-
 
     /**
      * Get idContract
@@ -725,6 +725,7 @@ class Contract
     {
         return $this->weekWorkableDays;
     }
+
     /**
      * Constructor
      */
@@ -735,7 +736,6 @@ class Contract
         $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Set activePayroll
@@ -760,4 +760,5 @@ class Contract
     {
         return $this->activePayroll;
     }
+
 }

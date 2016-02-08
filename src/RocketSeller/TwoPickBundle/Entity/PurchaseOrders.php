@@ -7,11 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PurchaseOrders
  *
- * @ORM\Table(name="purchase_orders", indexes={@ORM\Index(name="fk_purchase_orders_purchase_orders_type1", columns={"purchase_orders_type_id_purchase_orders_type"}), @ORM\Index(name="fk_purchase_orders_payroll1", columns={"payroll_id_payroll"})})
+ * @ORM\Table(name="purchase_orders", indexes={@ORM\Index(name="fk_purchase_orders_payroll1", columns={"payroll_id_payroll"})})
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository")
  */
 class PurchaseOrders
 {
+
     /**
      * @var integer
      *
@@ -20,15 +21,6 @@ class PurchaseOrders
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrders;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="purchase_orders_type_id_purchase_orders_type", referencedColumnName="id_purchase_orders_type")
-     * })
-     */
-    private $purchaseOrdersTypePurchaseOrdersType;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
@@ -63,10 +55,10 @@ class PurchaseOrders
     private $idUser;
 
     /**
-    * @var \DateTime
-    *
-    * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-    */
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
+     */
     private $date_created;
 
     /**
@@ -186,6 +178,7 @@ class PurchaseOrders
     {
         return $this->purchaseOrdersStatusPurchaseOrdersStatus;
     }
+
     /**
      * Constructor
      */
@@ -371,4 +364,5 @@ class PurchaseOrders
     {
         return $this->value;
     }
+
 }
