@@ -198,6 +198,55 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyDiscountLoan->setNaturaleza('DED');
         $manager->persist($NoveltyDiscountLoan);
 
+        // Entities that shouldn't be inserted, only for query.
+        $NoveltyHealth = new NoveltyType();
+        $NoveltyHealth->setName('Aporte salud');
+        $NoveltyHealth->setPayrollCode('3010');
+        $NoveltyHealth->setPeriod('%');
+        $NoveltyHealth->setGrupo('no_show');
+        $NoveltyHealth->setNaturaleza('DED');
+        $manager->persist($NoveltyHealth);
+
+        $NoveltyPension = new NoveltyType();
+        $NoveltyPension->setName('Aporte pension');
+        $NoveltyPension->setPayrollCode('3020');
+        $NoveltyPension->setPeriod('%');
+        $NoveltyPension->setGrupo('no_show');
+        $NoveltyPension->setNaturaleza('DED');
+        $manager->persist($NoveltyPension);
+
+        $NoveltyLegalBounty = new NoveltyType();
+        $NoveltyLegalBounty->setName('Prima legal');
+        $NoveltyLegalBounty->setPayrollCode('130');
+        $NoveltyLegalBounty->setPeriod('dia');
+        $NoveltyLegalBounty->setGrupo('no_show');
+        $NoveltyLegalBounty->setNaturaleza('DEV');
+        $manager->persist($NoveltyLegalBounty);
+
+        $NoveltySeverance = new NoveltyType();
+        $NoveltySeverance->setName('Cesantias definitivas');
+        $NoveltySeverance->setPayrollCode('185');
+        $NoveltySeverance->setPeriod('dia');
+        $NoveltySeverance->setGrupo('no_show');
+        $NoveltySeverance->setNaturaleza('DEV');
+        $manager->persist($NoveltySeverance);
+
+        $NoveltySeveranceInterests = new NoveltyType();
+        $NoveltyDiscountLoan->setName('Intereses sobre cesantias');
+        $NoveltyDiscountLoan->setPayrollCode('190');
+        $NoveltyDiscountLoan->setPeriod('dia');
+        $NoveltyDiscountLoan->setGrupo('no_show');
+        $NoveltyDiscountLoan->setNaturaleza('DEV');
+        $manager->persist($NoveltyDiscountLoan);
+
+        $NoveltyCompensation = new NoveltyType();
+        $NoveltyCompensation->setName('Indemnizacion');
+        $NoveltyCompensation->setPayrollCode('195');
+        $NoveltyCompensation->setPeriod('dia');
+        $NoveltyCompensation->setGrupo('no_show');
+        $NoveltyCompensation->setNaturaleza('DEV');
+        $manager->persist($NoveltyCompensation);
+
         $manager->flush();
 
         // Abstenteeisms.
@@ -225,6 +274,15 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novlety-vacation-money', $NoveltyVacationMoney);
         $this->addReference('novlety-liberty-bonus', $NoveltyLibertyBonus);
         $this->addReference('novlety-discount-loan', $NoveltyDiscountLoan);
+
+        // No show.
+        $this->addReference('novelty-health', $NoveltyHealth);
+        $this->addReference('novelty-', $NoveltyPension);
+        $this->addReference('novelty-legal-bounty', $NoveltyLegalBounty);
+        $this->addReference('novelty-severance', $NoveltySeverance);
+        $this->addReference('novelty-severance-interests', $NoveltySeveranceInterests);
+        $this->addReference('novelty-compensation', $NoveltyCompensation);
+
     }
     public function getOrder()
     {

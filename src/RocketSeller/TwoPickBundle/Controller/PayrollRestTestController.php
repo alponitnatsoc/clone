@@ -74,6 +74,10 @@ class PayrollRestTestController extends FOSRestController
             return $this->getGeneralPayroll($xml);
         if ($codigo_interfaz == 606)
             return $this->getConceptosFijos($xml);
+        if ($codigo_interfaz == 620)
+            return $this->AddFinalLiquidation($xml);
+        if ($codigo_interfaz == 611)
+            return $this->ProcessFinalLiquidation($xml);
     }
 
     public function addEmployee($xml)
@@ -294,7 +298,8 @@ class PayrollRestTestController extends FOSRestController
         $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
         /** @var Person $person */
         $person = $personRepo->findOneByDocument($document);
-
+        if($person == null)
+          return 689455;
         $ehE = $person->getEmployee()->getEmployeeHasEmployers();
 
         /** @var EmployerHasEmployee $ehEs */
@@ -309,7 +314,7 @@ class PayrollRestTestController extends FOSRestController
                 }
             }
         }
-        return 1;
+        return 689455;
     }
 
     public function getGeneralPayroll($xml)
@@ -422,12 +427,219 @@ class PayrollRestTestController extends FOSRestController
           </InfoProceso>
           </Interfaz616Resp>';
 
+
+          $xmlModelLiquidation = '<Interfaz616Resp>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>15-11-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>' . $this->getSalary($components['EMPCODIGO']) . '</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>1</CON_CODIGO>
+              <NOMI_VALOR>' . $this->getSalary($components['EMPCODIGO']) . '</NOMI_VALOR>
+              <NOMI_BASE>0 </NOMI_BASE>
+              <NOMI_UNIDADES>1</NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+              <NOV_CONSEC>545</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>3010</CON_CODIGO>
+              <NOMI_VALOR>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR>
+              <NOMI_BASE>0 </NOMI_BASE>
+              <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+              <NOV_CONSEC>546</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>3020</CON_CODIGO>
+              <NOMI_VALOR>' . ( ($this->getSalary($components['EMPCODIGO']) * 4) / 100 ) . '</NOMI_VALOR>
+              <NOMI_BASE>0 </NOMI_BASE>
+              <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+              <NOV_CONSEC>547</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>180000 </NOMI_VALOR_LOCAL>
+              <CON_CODIGO>3120</CON_CODIGO>
+              <NOMI_VALOR>180000</NOMI_VALOR>
+              <NOMI_BASE>0 </NOMI_BASE>
+              <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>180000</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>3120</CON_CODIGO>
+              <NOMI_VALOR>180000</NOMI_VALOR>
+              <NOMI_BASE>0 </NOMI_BASE>
+              <NOMI_UNIDADES>1 </NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015 </NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>1000000</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>130</CON_CODIGO>
+              <NOMI_VALOR>1000000</NOMI_VALOR>
+              <NOMI_BASE>0</NOMI_BASE>
+              <NOMI_UNIDADES>1</NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015</NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>2000000</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>185</CON_CODIGO>
+              <NOMI_VALOR>2000000</NOMI_VALOR>
+              <NOMI_BASE>0</NOMI_BASE>
+              <NOMI_UNIDADES>1</NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015</NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>100000</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>190</CON_CODIGO>
+              <NOMI_VALOR>100000</NOMI_VALOR>
+              <NOMI_BASE>0</NOMI_BASE>
+              <NOMI_UNIDADES>1</NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015</NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <UNICO>
+              <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
+              <NOMI_PERIODO>4</NOMI_PERIODO>
+              <NOMI_MES>05</NOMI_MES>
+              <NOMI_ANO>2015</NOMI_ANO>
+              <PROC_CODIGO>1</PROC_CODIGO>
+              <NOMI_FECHA_PAGO>11-12-2015</NOMI_FECHA_PAGO>
+              <NOMI_VALOR_LOCAL>100000</NOMI_VALOR_LOCAL>
+              <CON_CODIGO>190</CON_CODIGO>
+              <NOMI_VALOR>100000</NOMI_VALOR>
+              <NOMI_BASE>0</NOMI_BASE>
+              <NOMI_UNIDADES>1</NOMI_UNIDADES>
+              <NOMI_FECHA_NOV>12-12-2015</NOMI_FECHA_NOV>
+              <NOV_CONSEC>548</NOV_CONSEC>
+            </UNICO>
+            <InfoProceso>
+            <MensajeRetorno/>
+            <LogProceso>
+            ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+            </LogProceso>
+            </InfoProceso>
+            </Interfaz616Resp>';
+
+
+        if (substr($components['EMPCODIGO'], -1) == "9") {
+          $response = new Response(
+                  $xmlModelLiquidation, Response::HTTP_OK, array(
+              'Content-Type' => 'application/xml',
+                  )
+          );
+          return $response;
+        } else {
+          $response = new Response(
+                  $xmlModelCorrect2, Response::HTTP_OK, array(
+              'Content-Type' => 'application/xml',
+                  )
+          );
+          return $response;
+        }
+    }
+
+    public function addFinalLiquidation($xml)
+    {
+        $xmlModelCorrect = '<InfoProceso>
+                            <MensajeRetorno/>
+                            <LogProceso>
+                            ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+                            </LogProceso>
+                            </InfoProceso>';
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                // echo "___{$key}____: ***{$val}***";
+                $components[$key] = (String) $val;
+            }
+        }
+        //die(print_r($components, true));
         $response = new Response(
-                $xmlModelCorrect2, Response::HTTP_OK, array(
+                $xmlModelCorrect, Response::HTTP_OK, array(
             'Content-Type' => 'application/xml',
                 )
-        );
-        return $response;
+        );return $response;
+
+    }
+
+    public function ProcessFinalLiquidation($xml)
+    {
+        $xmlModelCorrect = '<InfoProceso>
+                            <MensajeRetorno/>
+                            <LogProceso>
+                            ---------------------------------------------------------------------------------------- ESTADÍSTICAS ---------------------------------------------------------------------------------------- Tipo de registro Registros leídos Registros buenos Registros rechazados 1 1 1 0 TOTALES Registros leídos Registros buenos Registros rechazados 1 1 0 ----------------------------------------------------------------------------------------
+                            </LogProceso>
+                            </InfoProceso>';
+        $destination = array();
+        $parsed = new \SimpleXMLElement($xml);
+        $components = array();
+        foreach ($parsed as $element) {
+            foreach ($element as $key => $val) {
+                // echo "___{$key}____: ***{$val}***";
+                $components[$key] = (String) $val;
+            }
+        }
+        //die(print_r($components, true));
+        $response = new Response(
+                $xmlModelCorrect, Response::HTTP_OK, array(
+            'Content-Type' => 'application/xml',
+                )
+        );return $response;
+
     }
 
 }
