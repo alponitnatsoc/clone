@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="/css/public.css">
+	<!-- Include Simple Slider JavaScript and CSS -->
+</head>
+<body>
+	<div class="header">
+		<div class="bg-lightGray">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8"></div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-12">
+								<p class="margin-none padding-top padding-bottom">
+								¿Necesita ayuda?
+								<span class="ico-contact-phone"></span>
+								01-8000-112233 · Bogotá 411-2233
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<nav class="navbar">
+					<div class="container-fluid">
+						<div class="row">
+							<!-- Brand and toggle get grouped for better mobile display -->
+							<div class="navbar-header">
+								<button type="button" class="border-all-lightBlue navbar-toggle collapsed" data-toggle="collapse" data-target="#header-responsive" aria-expanded="false">
+									<span class="bg-lightBlue sr-only">Toggle navigation</span>
+									<span class="bg-lightBlue icon-bar"></span>
+									<span class="bg-lightBlue icon-bar"></span>
+									<span class="bg-lightBlue icon-bar"></span>
+								</button>
+								<a class="navbar-brand padding-top padding-bottom" href="#">
+									<span class="ico-symplifica"></span>
+								</a>
+							</div>
+							<!-- Collect the nav links, forms, and other content for toggling -->
+							<div class="collapse navbar-collapse" id="header-responsive">
+								<div class="row">
+									<ul class="nav navbar-nav">
+										<li class="active">
+											<a class="border-right-lightBlue" href="#">BENEFICIOS</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">CALCULADORA SALARIAL</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">PRECIOS</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">NOSOTROS</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">AYUDA</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">BLOG</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">CONTÁCTENOS</a>
+										</li>
+										<li>
+											<a class="border-right-lightBlue" href="#">REGISTRARSE</a>
+										</li>
+									</ul>
+									<div class="pull-right">
+										<a class="btn bg-lightBlue login-btn pull-rigth" href="#">
+											Ingresar >
+										</a>
+									</div>
+								</div>
+							</div><!-- /.navbar-collapse -->
+						</div>
+					</div><!-- /.container-fluid -->
+				</nav>
+			</div>
+		</div>
+		<div class="separator bg-lightGray"></div>
+	</div>
+	<!-- Main container -->
+	<div class="body">
+		{% block body %}{% endblock %}
+	</div>
+	<div class="footer">
+	<div class="container">
+
+	</div>
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<script src="/bower_components/jquery-simple-slider/js/simple-slider.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("[data-slider]").simpleSlider();
+			$(".services-bar-item a").on("click", function (e) {
+				e.preventDefault();
+
+				var $this = $(this)
+					value = $this.attr("value") * 104.6
+					$bar = $(this).parent().find("input")
+					$dragger = $(this).parent().find(".dragger");
+
+				$dragger.css("left", value);
+			});
+
+		});
+	</script>
+</body>
+</html>

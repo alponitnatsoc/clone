@@ -36,4 +36,8 @@ class HomeController extends Controller
 		->find($id);
 		return $this->render('RocketSellerTwoPickBundle:General:helpDetail.html.twig',array('helpCategory'=>$helpCategory));
     }
+
+    public function homeAction() {
+        return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');   
+    }
 }
