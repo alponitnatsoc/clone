@@ -40,6 +40,8 @@ class NoveltyController extends Controller {
         }
 
         $form = $this->createFormBuilder()
+                ->setAction("/novelty/add/$idPayroll/")
+                ->setMethod('POST')
                 ->add('noveltyTypeGroup', 'choice', array(
                     'choices' => $noveltyTypesGroups,
                     'multiple' => false,
@@ -119,7 +121,7 @@ class NoveltyController extends Controller {
         }
         $requiredFields = $noveltyType->getRequiredFields();
 
-        $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
+        $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll))), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
 

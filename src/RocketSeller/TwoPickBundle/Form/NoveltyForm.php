@@ -19,7 +19,9 @@ class NoveltyForm extends AbstractType
 {
     private $fields;
     private $hasDocuments;
-    function __construct($fields,$hasDocuments){
+    private $url;
+    function __construct($fields,$hasDocuments,$url=null){
+        $this->url=$url;
         $this->fields=$fields;
         $this->hasDocuments=$hasDocuments;
     }
@@ -33,7 +35,8 @@ class NoveltyForm extends AbstractType
             'expanded' => false,
             'read_only' =>true,
             'label' => 'Tipo de novedad',
-            'property_path' => 'noveltyTypeNoveltyType'));
+            'property_path' => 'noveltyTypeNoveltyType'))
+            ->setAction($this->url);
         //if has documents add the form for the medias
         if($this->hasDocuments){
             $builder->add('documents', 'collection', array(
@@ -72,9 +75,9 @@ class NoveltyForm extends AbstractType
             }
         }
         $builder->add('save', 'submit', array(
-            'label' => 'Create',));
+            'label' => 'Crear',));
         $builder->add('later', 'submit', array(
-            'label' => 'Later',));
+            'label' => 'Llenar Luego',));
 
 
     }

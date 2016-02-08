@@ -1,54 +1,40 @@
-{% extends "::base.html.twig" %}
-{% block fos_user_content %}
-	{{ form_start(form) }}
-	    {{ form_errors(form) }}
-		<h2>Selecciona el tipo de novedad</h2>
-		<div id="formFields">
-			{{ form_widget(form.noveltyTypeGroup) }}
-			Separador
-			<br>
-			{% for child in form.noveltyType %}
-					{% set index = child.vars.value %}
-					<div class="{{ choices[index].grupo }}" class="noveltySelect" >
-						{{ form_widget(child) }}
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#noveltyModal">Agregar Novedad</button>
+
+	<!-- Modal -->
+	<div id="noveltyModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Agregar Novedad</h4>
+				</div>
+				<div class="modal-body">
+					{{ form_start(form) }}
+					{{ form_errors(form) }}
+					<h2>Selecciona el tipo de novedad</h2>
+					<div id="formFields">
+						{{ form_widget(form.noveltyTypeGroup) }}
+						<hr>
+						<br>
+						{% for child in form.noveltyType %}
+							{% set index = child.vars.value %}
+							<div class="{{ choices[index].grupo }}" class="noveltySelect" >
+								{{ form_widget(child) }}
+							</div>
+
+						{% endfor %}
 					</div>
+					{{ form_widget(form.save) }}
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					{{ form_end(form) }}
+				</div>
+				<div class="modal-footer">
 
-			{% endfor %}
+				</div>
+			</div>
+
 		</div>
-	{{ form_end(form) }}
-{% endblock fos_user_content %}
-{% block javascripts %}
-	{{ parent() }}
-	<script>
-		function addNoveltySelectListener() {
-
-		}
-		$(document).ready( function(){
-			hideAll();
-			$("input[name='form[noveltyTypeGroup]']").change(function(){
-				var selectedVal = $("input[name='form[noveltyTypeGroup]']:checked");
-				hideAll();
-				var group=$("."+selectedVal.val());
-				if(group.length==1){
-					group.each(function(){
-						$(this).show();
-						$(this).find("input").prop( "checked", true );
-					});
-				}else{
-					group.each(function(){
-						$(this).show();
-					});
-				}
-			})
-			addNoveltySelectListener();
-		});
-		function hideAll(){
-			$("input[name='form[noveltyTypeGroup]']").each(function(){
-
-				$("."+$(this).val()).each(function(){
-					$(this).hide();
-				});
-			})
-		}
-	</script>
-{% endblock javascripts %}
+	</div>

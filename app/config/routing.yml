@@ -25,7 +25,7 @@ novelty_edit:
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:editNovelty, notificationReferenced: -1}
 novelty_select:
     path:      /novelty/select/{idPayroll}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:selectNovelty, idPayroll: -1}
 documentos:
     path:      /document/add/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:addDocument}

@@ -375,6 +375,12 @@
                             });
 
                             return true;
+                        }else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
+                                startNovelty();
+                            });
+
+                            return true;
                         }
                         return false;
                     }

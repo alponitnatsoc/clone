@@ -1,5 +1,6 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+	<div id="formForm">
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
 		<div id="formFields">
@@ -28,5 +29,6 @@
 			{% endif %}
 			{{ form_widget(form) }}
 		</div>
+	</div>
 	{{ form_end(form) }}
 {% endblock fos_user_content %}
