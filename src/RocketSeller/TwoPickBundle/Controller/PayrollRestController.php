@@ -1806,7 +1806,7 @@ class PayrollRestController extends FOSRestController
       $mandatory = array();
       // Set all the parameters info.
       $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
-      $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory[''] = true;
+      $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['exit_date'] = true;
       $regex['period'] = '([0-9])+';$mandatory['period'] = true;
       $regex['month'] = '([0-9])+';$mandatory['month'] = true;
       $regex['year'] = '([0-9])+';$mandatory['year'] = true;
@@ -1822,7 +1822,7 @@ class PayrollRestController extends FOSRestController
       $content = array();
       $unico = array();
 
-      $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters[''] : '';
+      $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : '';
 
 
       $unico['TIPOCON'] = 0;
@@ -1886,7 +1886,7 @@ class PayrollRestController extends FOSRestController
       $mandatory = array();
       // Set all the parameters info.
       $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
-      $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory[''] = false;
+      $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';$mandatory['exit_date'] = false;
       $regex['period'] = '([0-9])+';$mandatory['period'] = false;
       $regex['month'] = '([0-9])+';$mandatory['month'] = false;
       $regex['year'] = '([0-9])+';$mandatory['year'] = false;
@@ -1904,7 +1904,7 @@ class PayrollRestController extends FOSRestController
 
       $info = $this->getVacationParametersAction($parameters['employee_id'])->getData();
 
-      $unico['USERNAME'] = isset($parameters['username']) ? $parameters[''] : $info[''];
+      $unico['USERNAME'] = isset($parameters['username']) ? $parameters['username'] : $info[''];
 
 
       $unico['TIPOCON'] = 1;
@@ -2043,5 +2043,59 @@ class PayrollRestController extends FOSRestController
 
       return $responseView;
     }
+
+    /**
+     * Executes the final liquidation process.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the final liquidation process.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postExecuteFinalLiquidationAction(Request $request)
+    {
+      $parameters = $request->request->all();
+      $regex = array();
+      $mandatory = array();
+      // Set all the parameters info.
+      $regex['employee_id'] = '([0-9])+';$mandatory['employee_id'] = true;
+      $regex['execution_type'] = '(P|D|C)';$mandatory['execution_type'] = true;
+
+      $this->validateParamters($parameters, $regex, $mandatory);
+
+      $content = array();
+      $unico = array();
+
+
+      $unico['COD_PROC'] = 3; // Final liquidation is always 3.
+      $unico['USUARIO'] = ''; // Empty by default.
+      $unico['EMP_CODIGO'] = $parameters['employee_id'];
+      $unico['TIP_EJEC'] = $parameters['execution_type'];
+
+      $content[] = $unico;
+      $parameters = array();
+      $parameters['inInexCod'] = '611';
+      $parameters['clXMLSolic'] = $this->createXml($content, 611);
+
+      /** @var View $res */
+      $responseView = $this->callApi($parameters);
+
+      return $responseView;
+    }
+
 }
 ?>

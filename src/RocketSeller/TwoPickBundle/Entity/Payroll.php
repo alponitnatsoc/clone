@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Payroll
 {
+
     /**
      * @var integer
      *
@@ -20,6 +21,21 @@ class Payroll
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPayroll;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $period;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $year;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $month;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
@@ -41,9 +57,9 @@ class Payroll
     private $novelties;
 
     /**
-     * @ORM\OneToMany(targetEntity="PurchaseOrders", mappedBy="payrollPayroll", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="PurchaseOrdersDescription", mappedBy="payrollPayroll", cascade={"persist"})
      */
-    private $purchaseOrders;
+    private $purchaseOrdersDescription;
 
     /**
      * Set idPayroll
@@ -92,6 +108,7 @@ class Payroll
     {
         return $this->contractContract;
     }
+
     /**
      * Constructor
      */
@@ -202,4 +219,101 @@ class Payroll
     {
         return $this->novelties;
     }
+
+    /**
+     * Set period
+     *
+     * @param string $period
+     *
+     * @return Payroll
+     */
+    public function setPeriod($period)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return string
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * Set year
+     *
+     * @param string $year
+     *
+     * @return Payroll
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    /**
+     * Get year
+     *
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * Set month
+     *
+     * @param string $month
+     *
+     * @return Payroll
+     */
+    public function setMonth($month)
+    {
+        $this->month = $month;
+
+        return $this;
+    }
+
+    /**
+     * Get month
+     *
+     * @return string
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    /**
+     * Set purchaseOrdersDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription
+     *
+     * @return Payroll
+     */
+    public function setPurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription = null)
+    {
+        $this->purchaseOrdersDescription = $purchaseOrdersDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersDescription
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
+     */
+    public function getPurchaseOrdersDescription()
+    {
+        return $this->purchaseOrdersDescription;
+    }
+
 }

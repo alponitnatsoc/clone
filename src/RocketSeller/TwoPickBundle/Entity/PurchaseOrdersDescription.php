@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PurchaseOrdersDescription
 {
+
     /**
      * @var integer
      *
@@ -20,6 +21,16 @@ class PurchaseOrdersDescription
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrdersDescription;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrdersDescription")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
+     * })
+     *
+     */
+    private $payrollPayroll;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Tax
@@ -31,6 +42,12 @@ class PurchaseOrdersDescription
     private $taxTax;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Pay
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Pay", mappedBy="id_pay", cascade={"persist"})
+     */
+    private $payPay;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions")
      * @ORM\JoinColumns({
@@ -38,6 +55,15 @@ class PurchaseOrdersDescription
      * })
      */
     private $purchaseOrdersPurchaseOrders;
+
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_status", referencedColumnName="id_purchase_orders_status")
+     * })
+     */
+    private $purchaseOrdersStatusPurchaseOrdersStatus;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Product
@@ -172,4 +198,95 @@ class PurchaseOrdersDescription
     {
         return $this->description;
     }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add payPay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Pay $payPay
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function addPayPay(\RocketSeller\TwoPickBundle\Entity\Pay $payPay)
+    {
+        $this->payPay[] = $payPay;
+
+        return $this;
+    }
+
+    /**
+     * Remove payPay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Pay $payPay
+     */
+    public function removePayPay(\RocketSeller\TwoPickBundle\Entity\Pay $payPay)
+    {
+        $this->payPay->removeElement($payPay);
+    }
+
+    /**
+     * Get payPay
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayPay()
+    {
+        return $this->payPay;
+    }
+
+    /**
+     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     */
+    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    {
+        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
+    }
+
+    /**
+     * Set payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    {
+        $this->payrollPayroll = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getPayrollPayroll()
+    {
+        return $this->payrollPayroll;
+    }
+
 }

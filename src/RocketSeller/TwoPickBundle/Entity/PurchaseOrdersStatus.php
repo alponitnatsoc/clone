@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PurchaseOrdersStatus
  *
- * @ORM\Table(name="purchase_orders_status")
+ * @ORM\Table(name="purchase_orders_status", indexes={@ORM\Index(name="fk_id_novo_pay", columns={"id_novo_pay"})})
  * @ORM\Entity
  *
  * Estados de las ordenes de compra:
@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PurchaseOrdersStatus
 {
+
     /**
      * @var integer
      *
@@ -25,6 +26,11 @@ class PurchaseOrdersStatus
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idPurchaseOrdersStatus;
+
+    /**
+     * @ORM\Column(name="id_novo_pay", type="string", length=100)
+     */
+    private $idNovoPay;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -93,4 +99,29 @@ class PurchaseOrdersStatus
     {
         return $this->description;
     }
+
+    /**
+     * Set idNovoPay
+     *
+     * @param string $idNovoPay
+     *
+     * @return PurchaseOrdersStatus
+     */
+    public function setIdNovoPay($idNovoPay)
+    {
+        $this->idNovoPay = $idNovoPay;
+
+        return $this;
+    }
+
+    /**
+     * Get idNovoPay
+     *
+     * @return string
+     */
+    public function getIdNovoPay()
+    {
+        return $this->idNovoPay;
+    }
+
 }
