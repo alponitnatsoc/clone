@@ -85,7 +85,7 @@ trait EmployerHasEmployeeMethodsTrait
         /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $repository->find($id);
 
-        $contract = $employerHasEmployee->getContractByState("active");
+        $contract = $employerHasEmployee->getContractByState(1);
 
         return $contract;
     }
