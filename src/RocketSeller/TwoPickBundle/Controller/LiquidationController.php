@@ -106,17 +106,20 @@ class LiquidationController extends Controller
 
         $form = $this->createForm(new LiquidationType());
 
-        $payroll = new Payroll();
-        $payroll->setContractContract($contract[0]);
+        /** @var Payroll $payroll */
+        $payroll = $contract[0]->getActivePayroll();
+        $novelties = $payroll->getNovelties();
+        echo count($novelties);
+        echo $payroll->getIdPayroll();
+        echo $contract[0]->getIdContract();
 
-//         $em->persist($contract);
-//         $em->flush();
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
             "employeeInfo" => $employeeInfo,
             "contractInfo" => $contractInfo,
             "form" => $form->createView(),
-            "payroll" => $payroll
+            "payroll" => $payroll,
+            "novelties" => $novelties
         ));
     }
 }

@@ -152,8 +152,11 @@ payroll_detail:
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:detail}
 payroll_voucher:
     path: /payroll/voucher/{idPayroll}
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}
-
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}    
+get_pdf_payroll_voucher:
+    path: /payroll/get_pdf/{idPayroll}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:getPdf}
+    
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }

@@ -82,10 +82,14 @@ class LiquidationRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      * (name="username", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="Username o email")
+     * (name="last_work_day", nullable=false, requirements="([0-9])+", strict=true, description="Ultimo dia de trabajo")
+     * (name="last_work_month", nullable=false, requirements="([0-9])+", strict=true, description="")
+     * (name="last_work_year", nullable=false, requirements="([0-9])+", strict=true, description="")
+     * (name="liquidation_reason", nullable=false, requirements="([0-9])+", strict=true, description="")
      *
      * @return View
      */
-    public function postFinalLiquidationStep1(Request $request)
+    public function postFinalLiquidationStep1Action(Request $request)
     {
 
     }

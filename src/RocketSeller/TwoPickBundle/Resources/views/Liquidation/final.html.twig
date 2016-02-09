@@ -38,6 +38,9 @@
         }
     </style>
 {% endblock %}
+<form action="" method="post"{{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
+{{ form_errors(form) }}
+
     <h2>Liquidación final de empleado</h2>
     <div class="employee_head_liquidation">
         <div class="col-sm-12 employee_data">
@@ -88,7 +91,7 @@
         </div>
         <div class="col-sm-12 col-xs-12 center">
             <div class="col-sm-6 col-sm-push-3">
-                <a id="btn-1" onclick="javascript:liquidation($('#liquidationStep1'), $('#liquidationStep2'))" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
+                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
                 <br /><br />
             </div>
         </div>
@@ -96,11 +99,21 @@
     <div id="liquidationStep2" style="display:none">
         <div class="liq-container">
             <div class="col-sm-12">
-                <h3>1. Estas son las novedades vigentes asociadas a Lucía ¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h3>
+                <h3>1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} ¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h3>
             </div><br />
             <div class="col-sm-12">
-                NOVEDADES
-                <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>
+                <ul class="list-group">
+                    {% for novelty in novelties %}
+                        <li class="list-group-item">
+                            {{ novelty.name }}
+                            {{ novelty.dateStart.date }}
+                        </li>
+                    {% endfor %}
+                </ul>
+{#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
+
+                <div id="agregarNovedad"></div>
+
             </div>
         </div>
         <div class="liq-container">
@@ -153,15 +166,63 @@
             </div>
         </div>
     </div>
+
+    {{ form_rest(form) }}
+<input type="submit" />
+</form>
+
+{# {{ form_start(form) }}#}
+{# {{ form_end(form) }}#}
+
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
 <!--
-function liquidation(lastElement, nextElement) {
-    $(lastElement).hide();
-    $(nextElement).show();
+function validateLiqForm() {
+    var validator;
+    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+        validator = $("form[name='rocketseller_twopickbundle_liquidation']").validate({
+            rules: {
+                "rocketseller_twopickbundle_liquidation[liquidationReason]": "required"
+            },
+            messages: {
+                "rocketseller_twopickbundle_liquidation[liquidationReason]": "Por favor selecciona una opción"
+            }
+        });
+    });
+
+    $("a#liquidation-step1").click(function(e) {
+        e.preventDefault();
+
+        var form = $("form");
+
+        var href = $(this).attr('href');
+
+        if (!form.valid()) {
+            return;
+        }
+
+        $("#liquidationStep1").hide();
+        $("#liquidationStep2").show();
+
+        $.ajax({
+            url: href,
+            type: 'POST',
+            data: {
+            }
+        }).done(function (data) {
+            alert(data);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+        });
+    });
 }
+jQuery(document).ready(function(){
+    validateLiqForm();
+
+    $("#agregarNovedad").load("/novelty/select/{{ payroll.idPayroll }}");
+});
 //-->
 </script>
 {% endblock %}

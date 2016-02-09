@@ -63,7 +63,10 @@ class AppKernel extends Kernel
             //Integration with Mandrill - MandrillSwiftMailerBundle
             new Accord\MandrillSwiftMailerBundle\AccordMandrillSwiftMailerBundle(),
             //twilio
-            new Vresh\TwilioBundle\VreshTwilioBundle()
+            new Vresh\TwilioBundle\VreshTwilioBundle(),
+            
+            //KnpSnappyBundle create PDF/image form url/html
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle()
 
         );
 

@@ -1,229 +1,127 @@
-{% extends "::base.html.twig" %}
+{% extends "::base_pdf.html.twig" %}
 
-{% block title %}Comprobante Pago{% endblock %}
+{% block title %}Comprobante Nómina{% endblock %}
 
-{% block fos_user_content %}
-    <div class="payroll voucher">
-        <h2>Comprobante de pago</h2>
-        <div class="row employer col-xs-12">
-            <div class="col-xs-4">
-
-            </div>
-            <div class="col-xs-4">
-
-            </div>
-            <div class="col-xs-4">
-
-            </div>
-        </div>
-
-        <div class="row details col-xs-12">            
-            <div class="col-xs-1">
-
-            </div>
-            <div class="col-xs-4">
-                <div class="media">
-                    <div class="media-left">
-                        <i class="fa fa-refresh fa-2x"></i>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Fecha Pago</h4>
-                        {{ "now"|localizeddate('long', 'short', "es") }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="media">
-                    <div class="media-left">
-                        <i class="fa fa-credit-card fa-2x"></i>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Total por pagar</h4>
-                        <span id="totalPay">${{total|number_format}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="media">
-                    <div class="media-left">
-                        <i class="fa fa-users fa-2x"></i>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Total Personas</h4>
-                        <span id="totalEmployees">{{employees|length}}</span>
-                    </div>
-                </div>
-            </div>        
-            <div class="col-xs-1">
-
-            </div>
-        </div>
-        <form method="post" id="formPay" action="{{ path('payroll_confirm') }}" id="form_calculate">
-
-            <div class="row">
-                {% for employee in employees %}
-                    <div class="col-xs-12">
-                        <div class="row-fluid clearfix employee">
-                            <div class="col-xs-1">
-                                <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
-                            </div>
-                            <div class="col-xs-11">
-                                <div class="col-xs-9">
-                                    <span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
-                                </div>
-                                <div class="col-xs-2">
-                                    <span class="pull-right">
-                                        Pagar <input type="checkbox" class="pay" name="employee[]" value="{{employee.idEmployerHasEmployee}}" checked="checked">
-                                    </span>
-                                </div>
-                                <div class="row info col-xs-11">
-                                    <!--<div class="col-md-3">
-                                        <h4>Salario:</h4>
-                                        $ {{salaries[employee.idEmployerHasEmployee]|number_format}}
-                                        <h4>Novedades:</h4>
-                                        $0
-                                    </div>-->
-                                    <div class="col-md-4">
-                                        <h4>Pago a empleado:</h4>
-                                        $ {{salaries[employee.idEmployerHasEmployee]|number_format}}
-                                        <h5>Forma de pago:</h5>                                        
-                                        <span>{{ payMethod[employee.idEmployerHasEmployee].payTypePayType.name }}</span>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h4>Pago aportes Seguridad Social:</h4>
-                                        $ {{ aportes[employee.idEmployerHasEmployee]|number_format }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h3>Pago final:</h3>
-                                        <span>$ {{ (salaries[employee.idEmployerHasEmployee] + aportes[employee.idEmployerHasEmployee] )|number_format}}</span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-11">
-                                    {% if payMethod[employee.idEmployerHasEmployee].payTypePayType.name|lower == 'en efectivo' %}
-                                        <strong>Medio de pago por defecto: </strong>En Efectivo <a class="notAjax" href="{{ path('register_employee',{'id':employee.employeeEmployee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
-                                    {% else %}  
-                                        <strong>Medio de pago por defecto: </strong> Tarjeta de crédito terminada en 3751 <a class="notAjax" href="{{ path('register_employee',{'id':employee.employeeEmployee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="row buttons center">
-                <div class="col-xs-12 center">
-                    <input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" /> <input type="button" id="btnPay" class="btn btn-default btn-orange" value="Pagar ${{total|number_format}}" />
-                </div>
-            </div>
-        </form>
-    </div>
-{% endblock %}
-
-{% block stylesheet %}
+{% block stylesheet %}    
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/payroll.css') }}">
     <style type="text/css">
         .row{
-            display: inline-block;
+            display: inline-flex;
         }
-        .reminder{
-            margin: 10px;
+        .employer{
+            border-bottom: 1px black solid;
             padding: 10px;
-            border-top: 1px #000 dotted;
-            border-bottom: 1px #000 dotted;
         }
-        .media-body{
-            width: 100%;
+        .employee{
+            border-bottom: 1px black dotted;
+            padding: 10px;
+            margin-top: 10px;
         }
-        .row .buttons{            
+        .employer .name{
+            display: inherit;
+        }
+        .buttons{            
             display: inline;
-        }
-        #lbl_chkAccept{
-            font-weight: normal;
-            margin-top: 30px;
+        } 
+        .h2{
+            font-family: 'Arial Bold', 'Arial';
+            font-weight: 700;
+            font-style: normal;
+            font-size: 32px;
+            color: #333333;
+            text-align: left;
+            line-height: normal;
         }
     </style>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-    <script>
-        $(document).ready(function () {
+{% block body %}
+    <div class="payroll voucher">
+        <h2>Comprobante de pago</h2>
+        <div class="row employer col-xs-12">
+            <div class="col-xs-4 name">
+                <div class="col-xs-1">
+                    <img class="{{ employeer.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employeer.personPerson.gender == 'FEM'? (asset('img/female.png', absolute = true)) : (asset('img/male.png', absolute = true)) }}" alt="Icono" height="42" width="42">
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Empleador</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ employeer.personPerson.names ~ ' ' ~ employeer.personPerson.lastName1 }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 date">
+                <div class="col-xs-1">
+                    <img src="{{ asset('img/date_pay.png', absolute = true) }}" alt="Icono" height="42" width="42">
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Fecha pago</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ "now"|localizeddate('long', 'short', "es") }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 periodo">
+                <div class="col-xs-1">
+                    <img src="{{ (asset('img/calendar.png', absolute = true)) }}" alt="Icono" height="42" width="42">                    
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Periodo</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ periodo }}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            updateValues();
+        <div class="row employee col-xs-12">
+            <div class="col-xs-4 name">
+                <div class="col-xs-1">
+                    <img class="{{ employee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.personPerson.gender == 'FEM'? (asset('img/female.png', absolute = true)) : (asset('img/male.png', absolute = true)) }}" alt="Icono" height="42" width="42">
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Empleado</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ employee.personPerson.names ~ ' ' ~ employee.personPerson.lastName1 }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 date">
+                <div class="col-xs-1">
+                    <img src="{{ (asset('img/date_pay.png', absolute = true)) }}" alt="Icono" height="42" width="42">
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Fecha pago</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ "now"|localizeddate('long', 'short', "es") }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 periodo">
+                <div class="col-xs-1">
+                    <img src="{{ (asset('img/calendar.png', absolute = true)) }}" alt="Icono" height="42" width="42">                    
+                </div>
+                <div class="col-xs-11">
+                    <div class="col-xs-12">
+                        <b>Periodo</b>
+                    </div>
+                    <div class="col-xs-12">
+                        {{ periodo }}
+                    </div>
+                </div>
+            </div>
+        </div> 
 
-            $('#btnPay').click(function () {
-                var total = 0;
-                $('.employee .pay').each(function (index, element) {
-                    if ($(element)[0].checked) {
-                        total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-
-                    }
-                });
-                var dialog = bootbox.dialog({
-                    title: "Confirmación de pago",
-                    message: '<div class="row">  ' +
-                            '<div class="col-md-12 text-center"> ' +
-                            'La suma total para pago corresponde a <h2>' + numeral(total).format('$ 0,0') + '</h2>' +
-                            '</div>' +
-                            '<div class="col-md-12"> ' +
-                            ' <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>' +
-                            '</div>  </div>',
-                    buttons: {
-                        cancel: {
-                            label: "Cancelar",
-                            className: "btn-default",
-                            callback: function () {
-                                console.log("Prueba");
-                            }
-                        },
-                        success: {
-                            label: "Pagar",
-                            className: "btn-default btn-orange btn-pay",
-                            callback: function () {
-                                $('#formPay').submit();
-                            }
-                        }
-                    }
-                });
-
-                $(dialog.find('.btn-pay')[0]).prop('disabled', true);
-                $(dialog.find('.chkAccept')).change(function (e) {
-                    $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
-                });
-            });
-
-            $('#btnBack').click(function () {
-                console.log("click");
-                document.location = "{{ path('payroll') }}";
-            });
-        });
-        var salaries = [];
-        var aportes = [];
-        {% for employee in employees %}
-            salaries[{{employee.idEmployerHasEmployee}}] = {{salaries[employee.idEmployerHasEmployee]}};
-                    aportes[{{employee.idEmployerHasEmployee}}] = {{aportes[employee.idEmployerHasEmployee]}};
-        {% endfor %}
-                    $('.employee .pay').on('change', updateValues);
-
-            function updateValues() {
-                var i = 0;
-                var total = 0;
-                $('.employee .pay').each(function (index, element) {
-                    if ($(element)[0].checked) {
-                        i++;
-                        total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-
-                    }
-                });
-
-                $('#totalPay').html(numeral(total).format('$ 0,0'));
-                $('#totalEmployees').html(i);
-
-                $('#btnPay').val("Pagar " + numeral(total).format('$ 0,0'));
-                $('#btnPay').prop('disabled', i == 0 || total == 0);
-            }
-    </script>
+    </div>
 {% endblock %}
+

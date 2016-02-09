@@ -63,7 +63,6 @@ class LiquidationType extends AbstractType
                 'attr'   =>  array(
                     'class'   => 'btn btn-primary btnNext btn-orange')
             ));
-        ;
     }
 
     /**
