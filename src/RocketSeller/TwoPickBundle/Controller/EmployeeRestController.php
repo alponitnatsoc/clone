@@ -30,7 +30,9 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Frequency;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -1225,6 +1227,42 @@ class EmployeeRestController extends FOSRestController
         $view = View::create();
         $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
         return $view;
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idContract", nullable=false, strict=true, description="the id of the contract")
+     * @return View
+     */
+    public function getVacationsDaysTaken(ParamFetcher $paramFetcher){
+        $contractRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
+        /** @var Contract $contract */
+        $contract=$contractRepo->find($paramFetcher->get("idContract"));
+        $payRolls=$contract->getPayrolls();
+        /** @var Payroll $payRoll */
+        foreach ($payRolls as $payRoll) {
+            $novelties=$payRoll->getNovelties();
+            /** @var Novelty $novelty */
+            foreach ($novelties as $novelty) {
+                if($novelty->getNoveltyTypeNoveltyType()->getGrupo()=="Vacaciones"){
+                    //TODO Necesitamos los festivos y eso es super gg
+                }
+            }
+
+        }
+
     }
 
     /**

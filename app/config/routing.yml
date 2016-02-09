@@ -165,6 +165,9 @@ show_form_entity:
 edit_profile:
     path:      /register/edit/{step}
     defaults:  { _controller: RocketSellerTwoPickBundle:Person:editPerson, step: 0 }
+edit_employer:
+    path:      /employer/edit/{step}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employer:editEmployer, step: 0 }
 show_dashboard:
     path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }

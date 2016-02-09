@@ -309,6 +309,7 @@
                             }
                         }
                     }).done(function (data) {
+                        window.scrollTo(0, 0);
                         if (data["url"] != null) {
                             console.log(data["url"]);
                             sendAjax(data["url"]);
@@ -354,6 +355,12 @@
                         } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
                             $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
                                 startEmployee();
+                            });
+
+                            return true;
+                        }  else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/editEmployer.js') }}").done(function () {
+                                startEmployerEdit();
                             });
 
                             return true;

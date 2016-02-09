@@ -33,7 +33,7 @@ class PersonRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="youAre", nullable=false, strict=true, description="you Are.")
+     * @RequestParam(name="youAre", nullable=true, strict=true, description="you Are.")
      * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
      * @RequestParam(name="document", nullable=false, strict=true, description="document.")
      * @RequestParam(name="names", nullable=false,  strict=true, description="names.")
@@ -62,7 +62,9 @@ class PersonRestController extends FOSRestController
             $people->setLastName2($paramFetcher->get('lastName2'));
             $people->setDocument($paramFetcher->get('document'));
             $people->setDocumentType($paramFetcher->get('documentType'));
-            $employer->setEmployerType($paramFetcher->get('youAre'));
+            if($paramFetcher->get('youAre')!=null){
+                $employer->setEmployerType($paramFetcher->get('youAre'));
+            }
             $datetime = new DateTime();
             $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
             // TODO validate Date
@@ -214,7 +216,7 @@ class PersonRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="sameWorkHouse", nullable=false, strict=true, description="work is the same as the file.")
+     * @RequestParam(name="sameWorkHouse", nullable=true, strict=true, description="work is the same as the file.")
      * @RequestParam(array=true, name="workId", nullable=false, strict=true, description="id if exist else -1.")
      * @RequestParam(array=true, name="workName", nullable=false, strict=true, description="workplace name.")
      * @RequestParam(array=true, name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
@@ -242,7 +244,9 @@ class PersonRestController extends FOSRestController
             $workRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
 
             $em = $this->getDoctrine()->getManager();
-            $employer->setSameWorkHouse($paramFetcher->get("sameWorkHouse"));
+            if($paramFetcher->get("sameWorkHouse")!=null){
+                $employer->setSameWorkHouse($paramFetcher->get("sameWorkHouse"));
+            }
             $actualWorkplacesId=$paramFetcher->get('workId');
             $actualWorkplacesName = $paramFetcher->get('workName');
             $actualWorkplacesAdd=$paramFetcher->get('workMainAddress');

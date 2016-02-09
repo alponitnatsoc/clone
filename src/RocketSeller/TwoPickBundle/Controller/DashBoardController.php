@@ -42,7 +42,7 @@ class DashBoardController extends Controller
             //minima de un 100%
             //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees > 0) {
-                $minUnit = 67 / ($numEmployees +1);
+                $minUnit = 100 / ($numEmployees +1);
                 /** @var EmployerHasEmployee $value */
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
