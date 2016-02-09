@@ -19,7 +19,10 @@
                         <div class="row-fluid clearfix employee">
                             <div class="col-xs-12">
                                 <div class="row">
-                                    <div class="col-xs-8">
+                                    <div class="col-xs-2">
+                                        <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
+                                    </div>
+                                    <div class="col-xs-6">
                                         <span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
                                     </div>
                                     <div class="col-xs-4 text-right">

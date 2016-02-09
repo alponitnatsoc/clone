@@ -317,3 +317,28 @@ services:
         class: Twig_Extensions_Extension_Intl
         tags:
             - { name: twig.extension }
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        #binary:     /usr/local/bin/wkhtmltopdf #for linux
+        binary:     D:\wkhtmltopdf\bin\wkhtmltopdf.exe
+        options:    
+            lowquality: false
+            dpi: 300
+            orientation: portrait
+            grayscale: true
+            page-size: Letter
+            #javascript-delay: 2000
+    image:
+        enabled:    false
+        #binary:     /usr/local/bin/wkhtmltopdf #for linux
+        #binary:     "\"D:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\"" #for Windows users
+        binary:     D:\wkhtmltopdf\bin\wkhtmltoimage.exe
+        options:    
+            lowquality: false
+            dpi: 300
+            orientation: portrait
+            grayscale: true
+            page-size: Letter
+            #javascript-delay: 2000

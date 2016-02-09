@@ -6,6 +6,8 @@ use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Process;
 
 class PayrollController extends Controller
 {
@@ -245,11 +247,45 @@ class PayrollController extends Controller
 
     public function voucherAction($idPayroll, Request $request)
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException();
-        }
+        $payrollRepo = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Payroll');
+        $payroll = $payrollRepo->findBy(array('idPayroll' => $idPayroll))[0];
 
-        return $this->render('RocketSellerTwoPickBundle:Payroll:comprobante.html.twig', array());
+        $contract = $payroll->getContractContract();
+        $employerEmployee = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+        $employee = $employerEmployee->getEmployeeEmployee();
+        $documentNumber = $employerEmployee->getEmployeeEmployee()->getPersonPerson()->getDocument();
+        $employeer = $employerEmployee->getEmployerEmployer();
+
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+            'employeeId' => $documentNumber,
+            'period' => null,
+            'month' => null,
+            'year' => null
+                ), array('_format' => 'json')
+        );
+        $generalPayroll = json_decode($generalPayroll->getContent(), true);
+
+        return $this->render('RocketSellerTwoPickBundle:Payroll:comprobante.html.twig', array(
+                    'employeer' => $employeer,
+                    'employee' => $employee,
+                    'contract' => $contract,
+                    'generalPayroll' => $generalPayroll,
+                    'payroll' => $payroll,
+                    'periodo' => 'Octubre 1 al 15  de 2015'
+        ));
+    }
+
+    public function getPdfAction($idPayroll, Request $request)
+    {
+        $pageUrl = $this->generateUrl('payroll_voucher', array('idPayroll' => $idPayroll), true); // use absolute path!
+
+        return new Response(
+                $this->get('knp_snappy.pdf')->getOutput($pageUrl), 200, array(
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="file.pdf"'
+                )
+        );
     }
 
 }
