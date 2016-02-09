@@ -136,14 +136,13 @@ send_email_test_send:
 contact:
     path: /contact
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
+      
 payroll:
     path: /payroll
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
-
 payroll_calculate:
     path: /payroll/calculate
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:calculate}
-
 payroll_confirm:
     path: /payroll/confirm
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:confirm}
@@ -153,9 +152,9 @@ payroll_detail:
 payroll_voucher:
     path: /payroll/voucher/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}    
-get_pdf_payroll_voucher:
-    path: /payroll/get_pdf/{idPayroll}
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:getPdf}
+payroll_voucher_to_pdf:
+    path: /payroll/voucher/to_pdf/{idPayroll}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucherToPdf}
     
 show_form_entity:
     path:      /register/entity/{id}
