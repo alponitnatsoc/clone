@@ -306,6 +306,14 @@ employee_dashboard:
     path:     /employee/dashboard/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:dashboard }
 
+employee_profile:
+    path:     /employee/profile/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employee:Profile }
+    
+employee_profile_edit:
+    path:     /employee/edit/{idPerson}
+    defaults: { _controller: RocketSellerTwoPickBundle:Employee:editProfile }
+
 show_certificates:
     path:     /employee/certificate/generate
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }
