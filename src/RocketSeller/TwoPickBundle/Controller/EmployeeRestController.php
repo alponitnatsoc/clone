@@ -629,7 +629,7 @@ class EmployeeRestController extends FOSRestController
                 //Create the contract
                 $contract = new Contract();
                 $contract->setSalary($paramFetcher->get('salary'));
-                $contract->setState("Active");
+                $contract->setState(1);
                 $employerEmployee->addContract($contract);
             }
             if ($user->getPersonPerson()->getEmployer()->getIdEmployer() != $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getIdEmployer()) {
@@ -792,7 +792,7 @@ class EmployeeRestController extends FOSRestController
             $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions'));
             $contract->setTransportAid($paramFetcher->get('transportAid'));
             //turn on current contract
-            $contract->setState("Active");
+            $contract->setState(1);
 
             $errors = $this->get('validator')->validate($contract, array('Update'));
             $view = View::create();
