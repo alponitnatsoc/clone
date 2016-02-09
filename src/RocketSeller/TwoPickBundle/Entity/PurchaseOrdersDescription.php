@@ -7,7 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PurchaseOrdersDescription
  *
- * @ORM\Table(name="purchase_orders_description", indexes={@ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}), @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"})})
+ * @ORM\Table(name="purchase_orders_description", indexes={
+ *      @ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), 
+ *      @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}), 
+ *      @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"}), 
+ *      @ORM\Index(name="fk_purchase_orders_description_id_dispercion_novo", columns={"id_dispercion_novo"})
+ *  })
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescriptionRepository")
  */
 class PurchaseOrdersDescription
@@ -21,6 +26,11 @@ class PurchaseOrdersDescription
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrdersDescription;
+
+    /**
+     * @ORM\Column(name="id_dispercion_novo", type="integer", nullable=true)
+     */
+    private $idDispercionNovo;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
