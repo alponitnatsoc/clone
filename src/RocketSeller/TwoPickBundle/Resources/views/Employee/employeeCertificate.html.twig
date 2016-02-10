@@ -1,0 +1,77 @@
+{% extends "::base.html.twig" %}
+{% block header %}
+<div class="row-fluid up-Help-Phone">
+    <div class="container">
+        <div class="txthelp">
+            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
+        </div>
+    </div>
+</div>
+{% endblock header %}
+{% block body %}
+    <div class="container body-container navbar">
+        <div class="row mainContentRow">
+            <div id="sidebar" class="col-sm-3">
+                {% block sidebar %}
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand sidebar visible-xs" href="#">
+                            <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
+                        </a>
+                    </div>
+                    <div id="navbarSidebar" class="section about navbar-collapse collapse">
+                        <div class="well well-lg leftColumnLogo">
+                            <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
+                        </div>
+                        <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                            <a href="{{ path('employee_dashboard',{'id':employee.idEmployee}) }}">Inicio</a>
+                        </div>
+                        <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                            <a href="{{ path('employee_profile_edit',{'idPerson':employee.personPerson.idPerson}) }}">Mis Datos</a>                                        
+                        </div> 
+                        <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                            <a href="{{ path('show_dashboard') }}">Certificados</a>
+                        </div> 
+                        <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                            <a href="{{ path('show_dashboard') }}">Compartir perfil</a>
+                        </div>                                      
+                    </div>
+                {% endblock %}
+            </div>
+            <div id="main" class="col-sm-9">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+            <footer>
+                <div class="container">
+                    <div class="col-sm-2 logo">
+                        <img src="{{ asset('img/logo-oscuro.png') }}" alt="Sympifica" class="hidden-sm img-responsive"/>
+                        <img src="{{ asset('img/logo-oscuro-responsive.png') }}" alt="Sympifica" class="visible-sm img-responsive"/>
+                    </div>
+                    <div class="col-sm-5 links">
+                        <div class="col-sm-4"><a href="#">Inicio</a></div>
+                        <div class="col-sm-4"><a href="#">Mis Datos</a></div>
+                        <div class="col-sm-4"><a href="{{ path('_nosotros') }}">Certificados</a></div>
+                        <div class="col-sm-4"><a href="{{ path('show_help') }}">Compartir Perfil</a></div>                        
+
+                    </div>
+                    <div class="col-sm-5 social">
+                        <div class="red facebook"><a href="#" target="_blank"></a></div>
+                        <div class="red linkedin"><a href="#" target="_blank"></a></div>
+                        <div class="red twitter"><a href="#" target="_blank"></a></div>
+                        <div class="terminos">
+                            <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a><br />
+                            Copyright© Todos los derechos reservados Symplifica
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+{% endblock %}

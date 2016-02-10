@@ -22,6 +22,7 @@ use RocketSeller\TwoPickBundle\Form\AfiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
 use RocketSeller\TwoPickBundle\Form\PayMethod;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
+use RocketSeller\TwoPickBundle\Form\EmployeeProfileEdit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -460,6 +461,9 @@ class EmployeeController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $person = $this->loadClassByArray(array('document' => $document, 'lastName1' => $lastName1), "Person");
+            if (!$person) {
+               throw $this->createNotFoundException('Unable to find Person.'); 
+            }
             $phones = $person->getPhones();
             foreach ($phones as $phone) {
                 if ($phone->getPhoneNumber() == $cellphone) {
@@ -486,14 +490,98 @@ class EmployeeController extends Controller
             return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee.html.twig');
         }
     }
-
     public function dashboardAction($id)
+    {    
+        $employee = $this->loadClassById($id, "Employee");
+
+        return $this->render('RocketSellerTwoPickBundle:Employee:dashboardEmployee.html.twig', array('employee' => $employee));    
+    }
+    public function ProfileAction($id)
     {
         $employee = $this->loadClassById($id, "Employee");
 
-        return $this->render('RocketSellerTwoPickBundle:Employee:dashboardEmployee.html.twig', array('employee' => $employee));
+        return $this->render('RocketSellerTwoPickBundle:Employee:profile.html.twig', array('employee' => $employee));    
     }
+    public function editProfileAction($idPerson, Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($idPerson);
+        $employee =$this->loadClassByArray(array("personPerson"=>$person),"Employee");
+        if (!$person) {
+          throw $this->createNotFoundException(
+                  'No news found for id ' . $id
+          );
+        }
+        $form = $this->createForm(new EmployeeProfileEdit(),$person);
+        $form->handleRequest($request);
 
+        if ($form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('employee_dashboard', array('id' => $employee->getIdEmployee()));
+        }
+        return $this->render(
+            'RocketSellerTwoPickBundle:Employee:editProfile.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+    public function shareProfileAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
+
+        if ($request->getMethod() == 'POST') {
+            $invitationEmail = $this->get('request')->request->get('email');
+
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
+            
+        }else{
+            return $this->render(
+                'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig',
+                array('employee'=>$employee));
+        }
+    }
+    public function generateCertificateAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
+        if($request->getMethod()== 'POST'){
+            $idEmployer = $this->get('request')->request->get('employer');
+            $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->find($idEmployer);
+            $employerHasEmployee = $this->loadClassByArray(array(
+                'employeeEmployee'=>$employee,
+                'employerEmployer'=>$employer
+                ),'employerHasEmployee');
+            $contratos = $employerHasEmployee->getContracts();
+            if ($contratos) {
+                foreach ($contratos as $contrato) {
+                    if ($contrato->getState()) {
+                        $contract = $contrato;
+                        $html = $this->renderView('RocketSellerTwoPickBundle:Certificates:laboralCertificate.html.twig', array(
+                        'employee'  => $employee,
+                        'employer' => $employer,
+                        'contract' => $contract
+                        ));
+                        return new Response(
+                            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+                            200,
+                            array(
+                                'Content-Type'          => 'application/pdf',
+                                'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
+                            )
+                        );
+                    }                    
+                }
+                throw $this->createNotFoundException('Unable to find contract active.');
+                            
+            }else{
+                throw $this->createNotFoundException('Unable to find contract.');
+            }            
+        }else{
+            return $this->render(
+                'RocketSellerTwoPickBundle:Employee:certificate.html.twig',
+                array('employee'=>$employee));
+        }
+    }
     public function twoFactorLoginAction($id, Request $request)
     {
         $employee = $this->loadClassById($id, "Employee");
@@ -501,10 +589,9 @@ class EmployeeController extends Controller
             $code = $this->get('request')->request->get('codigoTwo');
             $id = $request->query->get('id');
             if ($code == $employee->getTwoFactorCode()) {
-                return $this->redirectToRoute('employee_dashboard', array('id' => $employee->getIdEmployee()));
+                return $this->redirectToRoute('employee_dashboard',array('id'=>$employee->getIdEmployee()));                
             } else {
-                var_dump($id);
-                throw $this->createNotFoundException('Unable to find.');
+                throw $this->createNotFoundException('Unable to find employee code.');
             }
         }
     }
@@ -588,7 +675,7 @@ class EmployeeController extends Controller
                 }
             }
             array_push($nonRepeated, $beneficiaryDoc);
-            $beneficiaryDoc = array();
+            $beneficiaryDocs = array();
         }
 
         return $nonRepeated;

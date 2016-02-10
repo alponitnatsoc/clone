@@ -321,8 +321,8 @@ services:
 knp_snappy:
     pdf:
         enabled:    true
-        #binary:     /usr/local/bin/wkhtmltopdf #for linux
-        binary:     D:\wkhtmltopdf\bin\wkhtmltopdf.exe
+        binary:     /usr/local/bin/wkhtmltopdf #for linux
+        #binary:     D:\wkhtmltopdf\bin\wkhtmltopdf.exe
         options:    
             lowquality: false
             dpi: 300

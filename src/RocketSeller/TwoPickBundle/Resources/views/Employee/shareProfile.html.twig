@@ -13,7 +13,7 @@
                     <div class="row mainContentRow">
                         <div id="sidebar" class="col-sm-3">
                             {% block sidebar %}
-                                <div class="navbar-header">
+                                                                <div class="navbar-header">
                                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">
                                         <span class="sr-only">Toggle navigation</span>
                                         <span class="icon-bar"></span>
@@ -44,61 +44,23 @@
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
-                            {% block main %}
-                                <div class="span12">
-                                	<h4>Inicio</h4>
-                                	<h2>Tu Información laboral</h2>                                        
-                                	{% set employeeHasEmployers = employee.employeeHasEmployers %}
-                                    {% for employeeHasEmployer in employeeHasEmployers %}
-                                    	{% set contracts = employeeHasEmployer.contracts %}
-                                    	<div class="panel-employer col-md-12">
-                                    		<h3>Empleador: {{ employeeHasEmployer.employerEmployer.personPerson.names}}</h3>
-                                    		<div class="col-md-3">
-	                                			{% for contract in contracts %}
-	                                				{% if contract.state %}
-	                                    					<div class="col-md-12">
-	                                    						<strong><p>Salario:</p></strong>
-	                                    					</div>
-	                                    					<div class="col-md-12">
-	                                    						<p>${{ contract.salary }}</p>	
-	                                    					</div>                                    					 
-	                                    				{% endif %}
-                                    			{% endfor %}
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			{% for contract in contracts %}
-	                                				{% if contract.state %}
-	                                    					<div class="col-md-12">
-	                                    						<strong><p>Contrato:</p></strong>
-	                                    					</div>
-	                                    					<div class="col-md-12">
-	                                    						<p>Inició el {{ contract.startDate|date('Y/M/d') }}</p>
-	                                    						<p>Tipo: {{ contract.contractTypeContractType.name }}</p>
-	                                    						<p>Finaliza el {{ contract.endDate|date('Y/M/d') }}</p>	
-	                                    					</div>                                    					 
-	                                    				{% endif %}
-                                    			{% endfor %}
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			<div class="col-md-12">
-	                        						<strong><p>Vacaciones:</p></strong>
-	                        					</div>
-	                        					<div class="col-md-12">
-	                        						<p>De alguna manera</p>	                        							
-	                        					</div>  
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			<div class="col-md-12">
-	                        						<strong><p>Último pago:</p></strong>
-	                        					</div>
-	                        					<div class="col-md-12">
-	                        						<p></p>	                        							
-	                        					</div> 
-                                    		</div>
-                                    	</div>
-                                    {% endfor %}
-                                </div>
-                            {% endblock %}
+                        	<div class="col-md-12" >
+                        		<h2>Compartir mi perfil</h2>                        		
+                        		<p>Comparte tu perfil para que más empleadores conozcan de ti.</p>
+                        	</div>
+                            <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('employee_share_profile',{'id': employee.idEmployee})}}">		
+						        <div class="col-md-2"></div>
+						        <div class="form-black form-group col-md-12">
+						            <label class="col-md-12" for="sel1">Correo electronico</label>
+                                    <input class="col-md-8" type="email" name="email" id="email">
+						            		  	
+						        </div>
+						        <div class="col-md-2"></div>
+						        <div class="col-md-12" style="text-align:center;">						            
+                                    <button type="button" class="btn btn-default submit-button loading" onclick="javascript:shareProfile($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>	
+						        </div>
+
+						    </form>
                         </div>
                     </div>
                 </div>
@@ -129,4 +91,73 @@
                 </div>
             </div>
         </footer>
+     <div class="modal fade" id="myModalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/cruz.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Algo salió mal.</h4>
+             <div style="clear: both"></div>
+           </div>
+
+           <div class="modal-body">
+               No pudimos inscribirte, ingresa tu correo nuevamente.
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+     <!-- Modal Success-->
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/bien.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Gracias!</h4>
+             <div style="clear: both"></div>
+           </div>
+
+           <div class="modal-body">
+             Pronto te contaremos cuando estemos al aire.
+           </div>
+         </div>
+       </div>
+     </div>
+        <script>
+        function shareProfile(event) {
+                 var $btn = event;
+                 $btn.button('loading');
+
+                 var email = $("#email").val();
+
+                 $.post( "/api/public/v1/suscribes/users", { email: email })
+                 .done(function( data ) {
+                     $btn.button("reset");
+                     $('#myModal').modal({
+                         keyboard: false
+                     });
+                     var a = {
+                         email : email,
+                         name : email
+                     };
+                     $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
+                     .done();
+                 }).fail(function(data){
+                     console.log('He fallado')
+                     $btn.button('reset');
+                     $('#myModalError').modal({
+                         keyboard: false
+                     })
+                 });
+            }
+            $('#myModalError').on('hidden.bs.modal', function () {
+                  $('#email').val('');
+              });
+              $('#myModal').on('hidden.bs.modal', function () {
+                  $('#email').val('');
+              });
+        </script>
     {% endblock %}

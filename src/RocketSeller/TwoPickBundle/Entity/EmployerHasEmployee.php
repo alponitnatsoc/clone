@@ -52,9 +52,9 @@ class EmployerHasEmployee
     private $liquidations;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     * @ORM\Column(type="boolean", length=100, nullable=TRUE)
      */
-    private $state = 'Active';
+    private $state = 1;
 
     /**
      * Set idEmployerHasEmployee
@@ -168,7 +168,6 @@ class EmployerHasEmployee
     public function getContracts()
     {
         return $this->contracts;
-
     }
 
     /**

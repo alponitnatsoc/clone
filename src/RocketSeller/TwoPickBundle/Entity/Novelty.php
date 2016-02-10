@@ -62,11 +62,6 @@ class Novelty
     private $documents;
 
     /**
-     * @ORM\Column(type="date", nullable=TRUE, name="pay_date")
-     */
-    private $payDate;
-
-    /**
      * @ORM\Column(type="date", nullable=TRUE, name="date_start")
      */
     private $dateStart;
@@ -75,10 +70,16 @@ class Novelty
      * @ORM\Column(type="date", nullable=TRUE, name="date_end")
      */
     private $dateEnd;
+
     /**
-     * @ORM\Column(type="float", length=20, nullable=TRUE, name="ammount_borrowed")
+     * @ORM\Column(type="string", nullable=TRUE, name="units", length=100)
      */
-    private $ammountBorrowed;
+    private $units;
+
+    /**
+     * @ORM\Column(type="string", nullable=TRUE, name="amount", length=100)
+     */
+    private $amount;
 
 
 
@@ -208,58 +209,6 @@ class Novelty
         return $this->documents;
     }
 
-
-
-
-
-    /**
-     * Set payDate
-     *
-     * @param \DateTime $payDate
-     *
-     * @return Novelty
-     */
-    public function setPayDate($payDate)
-    {
-        $this->payDate = $payDate;
-
-        return $this;
-    }
-
-    /**
-     * Get payDate
-     *
-     * @return \DateTime
-     */
-    public function getPayDate()
-    {
-        return $this->payDate;
-    }
-
-    /**
-     * Set ammountBorrowed
-     *
-     * @param float $ammountBorrowed
-     *
-     * @return Novelty
-     */
-    public function setAmmountBorrowed($ammountBorrowed)
-    {
-        $this->ammountBorrowed = $ammountBorrowed;
-
-        return $this;
-    }
-
-    /**
-     * Get ammountBorrowed
-     *
-     * @return float
-     */
-    public function getAmmountBorrowed()
-    {
-        return $this->ammountBorrowed;
-    }
-
     /**
      * Set dateStart
      *
@@ -307,6 +256,55 @@ class Novelty
     {
         return $this->dateEnd;
     }
+
+    /**
+     * Set units
+     *
+     * @param string $units
+     *
+     * @return Novelty
+     */
+    public function setUnits($units)
+    {
+        $this->units = $units;
+
+        return $this;
+    }
+
+    /**
+     * Get units
+     *
+     * @return string
+     */
+    public function getUnits()
+    {
+        return $this->units;
+    }
+
+    /**
+     * Set amount
+     *
+     * @param string $amount
+     *
+     * @return Novelty
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Get amount
+     *
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
 
     /**
      * Set payrollPayroll

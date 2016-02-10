@@ -5,7 +5,7 @@
         <span>Genera los certificados que quieres para ti y tus empleados registrados.</span>
     </div>
     <br></br>
-    <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates')}}">		
+    <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates',{'id': employee.idEmployee})}}">		
         <div class="col-md-2"></div>
         <div class="form-group col-md-4">
             <label for="sel1">Nombre del solicitante</label>

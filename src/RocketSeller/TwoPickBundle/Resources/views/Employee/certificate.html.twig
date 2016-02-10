@@ -44,61 +44,34 @@
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
-                            {% block main %}
-                                <div class="span12">
-                                	<h4>Inicio</h4>
-                                	<h2>Tu Información laboral</h2>                                        
-                                	{% set employeeHasEmployers = employee.employeeHasEmployers %}
-                                    {% for employeeHasEmployer in employeeHasEmployers %}
-                                    	{% set contracts = employeeHasEmployer.contracts %}
-                                    	<div class="panel-employer col-md-12">
-                                    		<h3>Empleador: {{ employeeHasEmployer.employerEmployer.personPerson.names}}</h3>
-                                    		<div class="col-md-3">
-	                                			{% for contract in contracts %}
-	                                				{% if contract.state %}
-	                                    					<div class="col-md-12">
-	                                    						<strong><p>Salario:</p></strong>
-	                                    					</div>
-	                                    					<div class="col-md-12">
-	                                    						<p>${{ contract.salary }}</p>	
-	                                    					</div>                                    					 
-	                                    				{% endif %}
-                                    			{% endfor %}
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			{% for contract in contracts %}
-	                                				{% if contract.state %}
-	                                    					<div class="col-md-12">
-	                                    						<strong><p>Contrato:</p></strong>
-	                                    					</div>
-	                                    					<div class="col-md-12">
-	                                    						<p>Inició el {{ contract.startDate|date('Y/M/d') }}</p>
-	                                    						<p>Tipo: {{ contract.contractTypeContractType.name }}</p>
-	                                    						<p>Finaliza el {{ contract.endDate|date('Y/M/d') }}</p>	
-	                                    					</div>                                    					 
-	                                    				{% endif %}
-                                    			{% endfor %}
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			<div class="col-md-12">
-	                        						<strong><p>Vacaciones:</p></strong>
-	                        					</div>
-	                        					<div class="col-md-12">
-	                        						<p>De alguna manera</p>	                        							
-	                        					</div>  
-                                    		</div>
-                                    		<div class="col-md-3">
-                                    			<div class="col-md-12">
-	                        						<strong><p>Último pago:</p></strong>
-	                        					</div>
-	                        					<div class="col-md-12">
-	                        						<p></p>	                        							
-	                        					</div> 
-                                    		</div>
-                                    	</div>
-                                    {% endfor %}
-                                </div>
-                            {% endblock %}
+                        	<div class="col-md-12" >
+                        		<h2>Certificados</h2>                        		
+                        		<p>Desde esta herramienta podrás generar el certificado laboral y el certificado de aportes</p>
+                        	</div>
+                            <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('employee_certificate',{'id': employee.idEmployee})}}">		
+						        <div class="col-md-2"></div>
+						        <div class="form-group col-md-4">
+						            <label for="sel1">Nombre del empleador</label>
+						            <select class="form-control" name="employer">
+						            	{% set employeeHasEmployers = employee.employeeHasEmployers %}
+						                {% for employeeHasEmployer in employeeHasEmployers %}
+						                    <option value="{{ employeeHasEmployer.employerEmployer.idEmployer }}">{{ employeeHasEmployer.employerEmployer.personPerson.names }}</option>
+						                {% endfor %}
+						            </select>		  	
+						        </div>
+						        <div class="form-group col-md-4">
+						            <label for="sel1">Tipo de certificado</label>
+						            <select class="form-control" name="certificate">
+						                <option value="1">Certificado laboral</option>
+						                <option value="2">Certificado de aportes</option>
+						                <option value="3">Certificado de ingresos y retenciones</option>
+						            </select>		  	
+						        </div>
+						        <div class="col-md-2"></div>
+						        <div class="col-md-12" style="text-align:center;">
+						            <button class="btn btn-default" type="submit">Generar certificado</button>	
+						        </div>		
+						    </form>
                         </div>
                     </div>
                 </div>
