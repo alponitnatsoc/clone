@@ -313,6 +313,14 @@ employee_profile_edit:
     path:     /employee/edit/{idPerson}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:editProfile }
 
+employee_certificate:
+    path: /employee/certificate/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:generateCertificate }
+
+employee_share_profile:
+    path: /employee/share/profile/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:shareProfile }
+
 show_certificates:
     path:     /employee/certificate/generate
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }

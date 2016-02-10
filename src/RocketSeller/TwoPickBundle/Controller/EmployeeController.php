@@ -523,9 +523,47 @@ class EmployeeController extends Controller
             array('form' => $form->createView())
         );
     }
-    public function generateCertificate()
+    public function shareProfileAction($id, Request $request)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
+
+        if ($request->getMethod() == 'POST') {
+            $invitationEmail = $this->get('request')->request->get('email');
+
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
+            
+        }else{
+            return $this->render(
+                'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig',
+                array('employee'=>$employee));
+        }
+    }
+    public function generateCertificateAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
+        if($request->getMethod()== 'POST'){
+            $idEmployee = $this->get('request')->request->get('employer');
+            
+            /*$html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
+                'some'  => $vars
+            ));
+            return new Response(
+                $this->get('knp_snappy.image')->getOutputFromHtml($html),
+                200,
+                array(
+                    'Content-Type'          => 'image/jpg',
+                    'Content-Disposition'   => 'filename="image.jpg"'
+                )
+            );*/
+
+        }else{
+            return $this->render(
+                'RocketSellerTwoPickBundle:Employee:certificate.html.twig',
+                array('employee'=>$employee));
+        }
     }
     public function twoFactorLoginAction($id, Request $request)
     {
