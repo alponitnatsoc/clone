@@ -545,19 +545,26 @@ class EmployeeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
         if($request->getMethod()== 'POST'){
-            $idEmployee = $this->get('request')->request->get('employer');
-            
-            /*$html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
-                'some'  => $vars
+            $idEmployer = $this->get('request')->request->get('employer');
+            $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->find($idEmployer);
+            $employerHasEmployee = $this->loadClassByArray(array(
+                'employeeEmployee'=>$employee,
+                'employerEmployer'=>$employer
+                ),'employerHasEmployee');
+            $contrato = $employerHasEmployee->getContracts();
+            $html = $this->renderView('RocketSellerTwoPickBundle:Certificates:laboralCertificate.html.twig', array(
+                'employee'  => $employee,
+                'employer' => $employer,
+                'contrato' => $contrato
             ));
             return new Response(
-                $this->get('knp_snappy.image')->getOutputFromHtml($html),
+                $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
                 200,
                 array(
-                    'Content-Type'          => 'image/jpg',
-                    'Content-Disposition'   => 'filename="image.jpg"'
+                    'Content-Type'          => 'application/pdf',
+                    'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
                 )
-            );*/
+            );
 
         }else{
             return $this->render(

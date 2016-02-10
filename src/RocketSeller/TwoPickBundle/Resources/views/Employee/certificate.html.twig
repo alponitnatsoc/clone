@@ -51,7 +51,7 @@
                             <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('employee_certificate',{'id': employee.idEmployee})}}">		
 						        <div class="col-md-2"></div>
 						        <div class="form-group col-md-4">
-						            <label for="sel1">Nombre del solicitante</label>
+						            <label for="sel1">Nombre del empleador</label>
 						            <select class="form-control" name="employer">
 						            	{% set employeeHasEmployers = employee.employeeHasEmployers %}
 						                {% for employeeHasEmployer in employeeHasEmployers %}
