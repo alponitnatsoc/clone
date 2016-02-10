@@ -35,10 +35,10 @@
                                         <a href="{{ path('employee_profile',{'id':employee.idEmployee}) }}">Mis Datos</a>                                        
                                     </div> 
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                        <a href="{{ path('show_dashboard') }}">Certificados</a>
+                                        <a href="{{ path('employee_certificate',{'id':employee.idEmployee}) }}">Certificados</a>
                                     </div> 
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                        <a href="{{ path('show_dashboard') }}">Compartir perfil</a>
+                                        <a href="{{ path('employee_share_profile',{'id':employee.idEmployee}) }}">Compartir perfil</a>
                                     </div>                                      
                                 </div>
                             {% endblock %}

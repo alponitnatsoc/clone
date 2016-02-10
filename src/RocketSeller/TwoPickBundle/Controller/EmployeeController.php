@@ -551,21 +551,31 @@ class EmployeeController extends Controller
                 'employeeEmployee'=>$employee,
                 'employerEmployer'=>$employer
                 ),'employerHasEmployee');
-            $contrato = $employerHasEmployee->getContracts();
-            $html = $this->renderView('RocketSellerTwoPickBundle:Certificates:laboralCertificate.html.twig', array(
-                'employee'  => $employee,
-                'employer' => $employer,
-                'contrato' => $contrato
-            ));
-            return new Response(
-                $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
-                200,
-                array(
-                    'Content-Type'          => 'application/pdf',
-                    'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
-                )
-            );
-
+            $contratos = $employerHasEmployee->getContracts();
+            if ($contratos) {
+                foreach ($contratos as $contrato) {
+                    if ($contrato->getState()) {
+                        $contract = $contrato;
+                        $html = $this->renderView('RocketSellerTwoPickBundle:Certificates:laboralCertificate.html.twig', array(
+                        'employee'  => $employee,
+                        'employer' => $employer,
+                        'contract' => $contract
+                        ));
+                        return new Response(
+                            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+                            200,
+                            array(
+                                'Content-Type'          => 'application/pdf',
+                                'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
+                            )
+                        );
+                    }                    
+                }
+                throw $this->createNotFoundException('Unable to find contract active.');
+                            
+            }else{
+                throw $this->createNotFoundException('Unable to find contract.');
+            }            
         }else{
             return $this->render(
                 'RocketSellerTwoPickBundle:Employee:certificate.html.twig',

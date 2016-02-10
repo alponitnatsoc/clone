@@ -55,7 +55,7 @@
                                     		<h3>Empleador: {{ employeeHasEmployer.employerEmployer.personPerson.names}}</h3>
                                     		<div class="col-md-3">
 	                                			{% for contract in contracts %}
-	                                				{% if contract.state|lower == "active" %}
+	                                				{% if contract.state %}
 	                                    					<div class="col-md-12">
 	                                    						<strong><p>Salario:</p></strong>
 	                                    					</div>
@@ -67,7 +67,7 @@
                                     		</div>
                                     		<div class="col-md-3">
                                     			{% for contract in contracts %}
-	                                				{% if contract.state|lower == "active" %}
+	                                				{% if contract.state %}
 	                                    					<div class="col-md-12">
 	                                    						<strong><p>Contrato:</p></strong>
 	                                    					</div>

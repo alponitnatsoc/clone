@@ -17,27 +17,7 @@ class EmployeeProfileEdit extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('documentType', 'choice', array(
-			    'choices' => array(
-			        'CC'   => 'Cedula Ciudadania',
-			        'CE' => 'Cedula Extranjeria',
-                    'TI' => 'Tarjeta de identidad'
-			    ),
-			    'multiple' => false,
-			    'expanded' => false,
-			    'property_path' => 'documentType',
-                'label' => 'Tipo de documento*',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
-		    ))
-            ->add('document', 'text', array(
-                'constraints' => array(
-                    new NotBlank()
-                ),
-                'property_path' => 'document',
-                'label' => 'Número de documento*'
-            ))
+        $builder            
             ->add('names', 'text', array(
                 'constraints' => array(
                     new NotBlank()
