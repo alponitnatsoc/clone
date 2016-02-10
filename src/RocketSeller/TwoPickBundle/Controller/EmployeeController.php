@@ -591,8 +591,7 @@ class EmployeeController extends Controller
             if ($code == $employee->getTwoFactorCode()) {
                 return $this->redirectToRoute('employee_dashboard',array('id'=>$employee->getIdEmployee()));                
             } else {
-                var_dump($id);
-                throw $this->createNotFoundException('Unable to find.');
+                throw $this->createNotFoundException('Unable to find employee code.');
             }
         }
     }

@@ -56,9 +56,10 @@
 						            		  	
 						        </div>
 						        <div class="col-md-2"></div>
-						        <div class="col-md-12" style="text-align:center;">
-						            <button class="btn btn-default" type="submit">Enviar</button>	
-						        </div>		
+						        <div class="col-md-12" style="text-align:center;">						            
+                                    <button type="button" class="btn btn-default submit-button loading" onclick="javascript:shareProfile($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>	
+						        </div>
+
 						    </form>
                         </div>
                     </div>
@@ -90,4 +91,73 @@
                 </div>
             </div>
         </footer>
+     <div class="modal fade" id="myModalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/cruz.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Algo salió mal.</h4>
+             <div style="clear: both"></div>
+           </div>
+
+           <div class="modal-body">
+               No pudimos inscribirte, ingresa tu correo nuevamente.
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+     <!-- Modal Success-->
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <img id = "cruz" src="{{ asset('public/img/bien.png') }}">
+             <h4 class="modal-title" id="myModalLabel">Gracias!</h4>
+             <div style="clear: both"></div>
+           </div>
+
+           <div class="modal-body">
+             Pronto te contaremos cuando estemos al aire.
+           </div>
+         </div>
+       </div>
+     </div>
+        <script>
+        function shareProfile(event) {
+                 var $btn = event;
+                 $btn.button('loading');
+
+                 var email = $("#email").val();
+
+                 $.post( "/api/public/v1/suscribes/users", { email: email })
+                 .done(function( data ) {
+                     $btn.button("reset");
+                     $('#myModal').modal({
+                         keyboard: false
+                     });
+                     var a = {
+                         email : email,
+                         name : email
+                     };
+                     $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
+                     .done();
+                 }).fail(function(data){
+                     console.log('He fallado')
+                     $btn.button('reset');
+                     $('#myModalError').modal({
+                         keyboard: false
+                     })
+                 });
+            }
+            $('#myModalError').on('hidden.bs.modal', function () {
+                  $('#email').val('');
+              });
+              $('#myModal').on('hidden.bs.modal', function () {
+                  $('#email').val('');
+              });
+        </script>
     {% endblock %}
