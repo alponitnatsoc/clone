@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PurchaseOrders
  *
- * @ORM\Table(name="purchase_orders", indexes={@ORM\Index(name="fk_purchase_orders_payroll1", columns={"payroll_id_payroll"})})
+ * @ORM\Table(name="purchase_orders", indexes={})
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersRepository")
  */
 class PurchaseOrders
@@ -21,15 +21,6 @@ class PurchaseOrders
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrders;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
-     * })
-     */
-    private $payrollPayroll;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
@@ -84,17 +75,11 @@ class PurchaseOrders
     private $value;
 
     /**
-     * Set idPurchaseOrders
-     *
-     * @param integer $idPurchaseOrders
-     *
-     * @return PurchaseOrders
+     * Constructor
      */
-    public function setIdPurchaseOrders($idPurchaseOrders)
+    public function __construct()
     {
-        $this->idPurchaseOrders = $idPurchaseOrders;
-
-        return $this;
+        $this->purchaseOrderDescriptions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -105,144 +90,6 @@ class PurchaseOrders
     public function getIdPurchaseOrders()
     {
         return $this->idPurchaseOrders;
-    }
-
-    /**
-     * Set purchaseOrdersTypePurchaseOrdersType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType
-     *
-     * @return PurchaseOrders
-     */
-    public function setPurchaseOrdersTypePurchaseOrdersType(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType $purchaseOrdersTypePurchaseOrdersType)
-    {
-        $this->purchaseOrdersTypePurchaseOrdersType = $purchaseOrdersTypePurchaseOrdersType;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseOrdersTypePurchaseOrdersType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersType
-     */
-    public function getPurchaseOrdersTypePurchaseOrdersType()
-    {
-        return $this->purchaseOrdersTypePurchaseOrdersType;
-    }
-
-    /**
-     * Set payrollPayroll
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
-     *
-     * @return PurchaseOrders
-     */
-    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
-    {
-        $this->payrollPayroll = $payrollPayroll;
-
-        return $this;
-    }
-
-    /**
-     * Get payrollPayroll
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
-     */
-    public function getPayrollPayroll()
-    {
-        return $this->payrollPayroll;
-    }
-
-    /**
-     * Set purchaseOrdersStatusPurchaseOrdersStatus
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
-     *
-     * @return PurchaseOrders
-     */
-    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
-    {
-        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseOrdersStatusPurchaseOrdersStatus
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
-     */
-    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
-    {
-        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->purchaseOrderDescriptions = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add purchaseOrderDescription
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription
-     *
-     * @return PurchaseOrders
-     */
-    public function addPurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
-    {
-        $this->purchaseOrderDescriptions[] = $purchaseOrderDescription;
-
-        return $this;
-    }
-
-    /**
-     * Remove purchaseOrderDescription
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription
-     */
-    public function removePurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
-    {
-        $this->purchaseOrderDescriptions->removeElement($purchaseOrderDescription);
-    }
-
-    /**
-     * Get purchaseOrderDescriptions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPurchaseOrderDescriptions()
-    {
-        return $this->purchaseOrderDescriptions;
-    }
-
-    /**
-     * Set idUser
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\User $idUser
-     *
-     * @return PurchaseOrders
-     */
-    public function setIdUser(\RocketSeller\TwoPickBundle\Entity\User $idUser = null)
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
-
-    /**
-     * Get idUser
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\User
-     */
-    public function getIdUser()
-    {
-        return $this->idUser;
     }
 
     /**
@@ -363,6 +210,88 @@ class PurchaseOrders
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return PurchaseOrders
+     */
+    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
+     */
+    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    {
+        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
+    }
+
+    /**
+     * Add purchaseOrderDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription
+     *
+     * @return PurchaseOrders
+     */
+    public function addPurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
+    {
+        $this->purchaseOrderDescriptions[] = $purchaseOrderDescription;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrderDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription
+     */
+    public function removePurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
+    {
+        $this->purchaseOrderDescriptions->removeElement($purchaseOrderDescription);
+    }
+
+    /**
+     * Get purchaseOrderDescriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchaseOrderDescriptions()
+    {
+        return $this->purchaseOrderDescriptions;
+    }
+
+    /**
+     * Set idUser
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\User $idUser
+     *
+     * @return PurchaseOrders
+     */
+    public function setIdUser(\RocketSeller\TwoPickBundle\Entity\User $idUser = null)
+    {
+        $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    /**
+     * Get idUser
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\User
+     */
+    public function getIdUser()
+    {
+        return $this->idUser;
     }
 
 }
