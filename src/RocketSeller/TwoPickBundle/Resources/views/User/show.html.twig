@@ -1,52 +1,42 @@
-{% extends '::base.html.twig' %}
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+    <h1>Mi cuenta</h1>
+    <h3>Datos de registro</h3>
+    <div class="row-fluid" id='registrationFormContainer'>
 
-{% block body -%}
-    <h1>User</h1>
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a class="notAjax" data-toggle="tab" data-target="#basicDataTap">Datos básicos</a></li>
+            <li><a class="notAjax" data-toggle="tab" data-target="#passwordTab">Contraseña</a></li>
+        </ul>
 
+        <div class="tab-content">
+            <div id="basicDataTab" class="tab-pane fade in active">
+                Nombre:
+
+                Email:
+            </div>
+            <div id="passwordTab" class="tab-pane fade in active">
+            </div>
+        </div>
+    </div>
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <th>Fecha de pago</th>
+                <th>Número factura</th>
+                <th>Concepto</th>
+                <th>Valor</th>
             </tr>
-            <tr>
-                <th>Facebook_id</th>
-                <td>{{ entity.facebookid }}</td>
-            </tr>
-            <tr>
-                <th>Google_id</th>
-                <td>{{ entity.googleid }}</td>
-            </tr>
-            <tr>
-                <th>Twitter_id</th>
-                <td>{{ entity.twitterid }}</td>
-            </tr>
-            <tr>
-                <th>Facebook_access_token</th>
-                <td>{{ entity.facebookaccesstoken }}</td>
-            </tr>
-            <tr>
-                <th>Google_access_token</th>
-                <td>{{ entity.googleaccesstoken }}</td>
-            </tr>
-            <tr>
-                <th>Twitter_access_token</th>
-                <td>{{ entity.twitteraccesstoken }}</td>
-            </tr>
+            {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.purchaseOrdersPurchaseOrders.date_created|date('Y-m-d') }}</td>
+                    <td>{{ invoice.purchaseOrdersPurchaseOrders.invoice_number }}</td>
+                    <td>{{ invoice.productProduct.name }}</td>
+                    <td>{{ invoice.value }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('user') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('user_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+
+{% endblock fos_user_content%}

@@ -129,32 +129,38 @@
                                     <div class="well well-lg leftColumnLogo">
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
+                                    {% if app.user.status >= 2 %}
+                                        <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                                            <a href="{{ path('show_dashboard_employer') }}">Inicio</a>
+                                        </div>
+                                    {% elseif  app.user.status == 1 %}
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
                                     </div>
-                                    <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg">
-                                        <a href="{{ path('show_dashboard_employer') }}">Empleador</a>
+                                    {% endif %}
+                                    <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                        <a href="{{ path('manage_employees') }}">Empleados</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a href="{{ path('payroll') }}">Pago a empleados</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                        <a href="{{ path('show_certificates') }}">Certificados</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'reports' %}activeMenu{% endif %} well well-lg separador">
-                                        <a href="">Reportes</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href=""{% endif %}>Reportes</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_calculator_form' %}activeMenu{% endif %} well well-lg">
-                                        <a href="{{ path('show_calculator_form') }}">Calculadora salarial</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'setup' %}activeMenu{% endif %} well well-lg">
-                                        <a href="">Configuración</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href=""{% endif %}>Configuración</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                        <a href="{{ path('show_help') }}">Ayuda</a>
+                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
                                     </div>
 
                                 </div>

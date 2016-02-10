@@ -27,6 +27,11 @@ class Product
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=3)
+     */
+    private $simpleName;
+
+    /**
      * @ORM\Column(type="decimal", scale=2, nullable=TRUE)
      */
     private $price;
@@ -145,5 +150,29 @@ class Product
     public function getValidity()
     {
         return $this->validity;
+    }
+
+    /**
+     * Set simpleName
+     *
+     * @param string $simpleName
+     *
+     * @return Product
+     */
+    public function setSimpleName($simpleName)
+    {
+        $this->simpleName = $simpleName;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleName
+     *
+     * @return string
+     */
+    public function getSimpleName()
+    {
+        return $this->simpleName;
     }
 }

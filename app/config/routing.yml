@@ -156,7 +156,6 @@ payroll_voucher:
 get_pdf_payroll_voucher:
     path: /payroll/get_pdf/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:getPdf}
-    
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
@@ -168,6 +167,12 @@ edit_profile:
 edit_employer:
     path:      /employer/edit/{step}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employer:editEmployer, step: 0 }
+show_employer:
+    path:      /employer/show
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employer:showData}
+show_user:
+    path:      /user/show
+    defaults:  { _controller: RocketSellerTwoPickBundle:User:myAccountShow}
 show_dashboard:
     path:      /dashboard
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:showDashBoard }

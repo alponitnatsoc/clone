@@ -303,7 +303,7 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                if($employer->getRegisterState()==66){
+                if($employer->getRegisterState()==66){/*
                     $nowDate=new DateTime();
                     if(($user->getDateCreated()->diff($nowDate)->h)<48){
                         $response = $this->forward('RocketSellerTwoPickBundle:UserRest:postUpdateUserStatusTest', array('id'=>$user->getId(),'status'=>3));
@@ -311,7 +311,7 @@ class PersonRestController extends FOSRestController
                             $view->setStatusCode(400);
                             return $view;
                         }
-                    }
+                    }*/
                     $employer->setRegisterState(100);
                 }
                 $em->persist($user);

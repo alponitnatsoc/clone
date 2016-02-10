@@ -231,4 +231,28 @@ class Pay
         return $this->purchaseOrdersStatusPurchaseOrdersStatus;
     }
 
+
+    /**
+     * Set purchaseOrdersDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription
+     *
+     * @return Pay
+     */
+    public function setPurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription = null)
+    {
+        $this->purchaseOrdersDescription = $purchaseOrdersDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersDescription
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
+     */
+    public function getPurchaseOrdersDescription()
+    {
+        return $this->purchaseOrdersDescription;
+    }
 }

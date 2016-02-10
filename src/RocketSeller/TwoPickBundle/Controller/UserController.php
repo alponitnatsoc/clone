@@ -2,6 +2,9 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -19,6 +22,32 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController extends Controller
 {
+    public function myAccountShowAction()
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        $person=$user->getPersonPerson();
+        $employer=$person->getEmployer();
+        $invoicesEmited=new ArrayCollection();
+        $purchaseOrders=$user->getPurchaseOrders();
+        /** @var PurchaseOrders $purchaseOrder */
+        foreach ($purchaseOrders as $purchaseOrder) {
+            $id=$purchaseOrder->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdNovoPay();
+            if($id==0||$id==8){//this ids for novo mean aproved
+                $purchaseOrdersDetails=$purchaseOrder->getPurchaseOrderDescriptions();
+                /** @var PurchaseOrdersDescription  $pOD */
+                foreach ($purchaseOrdersDetails as $pOD) {
+                    $simpleName=$pOD->getProductProduct()->getSimpleName();
+                    if($simpleName!="PN"&&$simpleName!="PA"){//PA pago aportes PN pago nomina
+                        $invoicesEmited->add($pOD);
+                    }
+                }
+
+            }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array('invoices'=>$invoicesEmited));
+    }
 
     /**
      * Lists all User entities.

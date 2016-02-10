@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Form\EmployerEdit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,6 +23,15 @@ class EmployerController extends Controller
     public function indexAction()
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
+    }
+    public function showDataAction()
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        $person=$user->getPersonPerson();
+        $employer=$person->getEmployer();
+
+        return $this->render('RocketSellerTwoPickBundle:Employer:showPerson.html.twig', array('employer'=>$employer));
     }
     public function editEmployerAction()
     {

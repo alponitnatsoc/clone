@@ -77,6 +77,10 @@ class PurchaseOrdersDescription
      * @ORM\Column(type="text", nullable=TRUE)
      */
     private $description;
+    /**
+     * @ORM\Column(type="float",  nullable=TRUE)
+     */
+    private $value;
 
     /**
      * Set idPurchaseOrdersDescription
@@ -288,4 +292,28 @@ class PurchaseOrdersDescription
         return $this->payrollPayroll;
     }
 
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }
