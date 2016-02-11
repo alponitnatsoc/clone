@@ -9,10 +9,11 @@ use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 
 class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
+
     public function load(ObjectManager $manager)
     {
 
-      /* All the entries with type absenteeism */
+        /* All the entries with type absenteeism */
         $NoveltyMaternity = new NoveltyType();
         $NoveltyMaternity->setName('Licencia de maternidad');
         $NoveltyMaternity->setPayrollCode('25');
@@ -85,7 +86,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyPaternityLeave->setNaturaleza('DEV');
         $manager->persist($NoveltyPaternityLeave);
 
-       /* All the entries with type Novelty */
+        /* All the entries with type Novelty */
         $NoveltySalaryAdjust = new NoveltyType();
         $NoveltySalaryAdjust->setName('Ajuste sueldo');
         $NoveltySalaryAdjust->setPayrollCode('2');
@@ -232,12 +233,12 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $manager->persist($NoveltySeverance);
 
         $NoveltySeveranceInterests = new NoveltyType();
-        $NoveltyDiscountLoan->setName('Intereses sobre cesantias');
-        $NoveltyDiscountLoan->setPayrollCode('190');
-        $NoveltyDiscountLoan->setPeriod('dia');
-        $NoveltyDiscountLoan->setGrupo('no_show');
-        $NoveltyDiscountLoan->setNaturaleza('DEV');
-        $manager->persist($NoveltyDiscountLoan);
+        $NoveltySeveranceInterests->setName('Intereses sobre cesantias');
+        $NoveltySeveranceInterests->setPayrollCode('190');
+        $NoveltySeveranceInterests->setPeriod('dia');
+        $NoveltySeveranceInterests->setGrupo('no_show');
+        $NoveltySeveranceInterests->setNaturaleza('DEV');
+        $manager->persist($NoveltySeveranceInterests);
 
         $NoveltyCompensation = new NoveltyType();
         $NoveltyCompensation->setName('Indemnizacion');
@@ -282,12 +283,13 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novelty-severance', $NoveltySeverance);
         $this->addReference('novelty-severance-interests', $NoveltySeveranceInterests);
         $this->addReference('novelty-compensation', $NoveltyCompensation);
-
     }
+
     public function getOrder()
     {
         // the order in which fixtures will be loaded
         // the lower the number, the sooner that this fixture is loaded
         return 9;
     }
+
 }
