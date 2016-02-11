@@ -23,33 +23,20 @@ class PayrollController extends Controller
      * Crear Payroll para el contrato
      * 
      * @param String $idContract
-     * @param Boolean $deleteOldPayroll para indicar que se eliminan los payroll asociados al contrato
+     * @param Boolean $deleteActivePayroll para indicar que se actualiza el payroll activo en lugar de crear uno nuevo
      * @param String $period
      * @param String $month
      * @param String $year
      * @return Payroll
      * 
      */
-    public function createPayrollToContract($idContract, $deleteOldPayroll = false, $period = null, $month = null, $year = null)
+    public function createPayrollToContract($idContract, $deleteActivePayroll = false, $period = null, $month = null, $year = null)
     {
         $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
         /* @var $contract Contract */
         $contract = $contractRepo->findOneBy(array('idContract' => $idContract));
         if ($contract && !empty($contract) && $contract !== null && $contract->getState() == 1) {
             $em = $this->getDoctrine()->getManager();
-            if ($deleteOldPayroll) {
-                $payrolls = $contract->getPayrolls();
-                $contract->setActivePayroll(null);
-                if (count($payrolls) > 0) {
-                    foreach ($payrolls as $key => $payroll) {
-                        $payroll->setContractContract(null);
-                        $em->persist($payroll);
-                        $em->remove($payroll);
-                        $payrolls->removeElement($payroll);
-                        $em->flush();
-                    }
-                }
-            }
 
             if ($period == null && $month == null && $year == null) {
                 $frequencyPay = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
@@ -79,30 +66,72 @@ class PayrollController extends Controller
                 }
             }
 
+            $updateActivePayroll = true;
+            /* @var $payrollActive Payroll */
+            $payrollActive = $contract->getActivePayroll();
+
             $payrollRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
-            if (!$deleteOldPayroll) {
-                $payroll = $payrollRepo->findOneBy(array(
-                    'contractContract' => $contract->getIdContract(),
-                    'period' => $period,
-                    'month' => $month,
-                    'year' => $year
-                ));
+            /* @var $payrollRep Payroll */
+            $payrollRep = $payrollRepo->findOneBy(array(
+                'contractContract' => $contract->getIdContract(),
+                'period' => $period,
+                'month' => $month,
+                'year' => $year
+            ));
+
+            if (!$payrollActive || empty($payrollActive) || $payrollActive === null) {
+                if (!$payrollRep || empty($payrollRep) || $payrollRep === null) {
+                    $payroll = new Payroll();
+                    $payroll->setContractContract($contract);
+                    $payroll->setPeriod($period);
+                    $payroll->setMonth($month);
+                    $payroll->setYear($year);
+                    $em->persist($payroll);
+                    $em->flush();
+                } else {
+                    $payroll = $payrollRep;
+                }
+            } else {
+                if (!$payrollRep || empty($payrollRep) || $payrollRep === null) {
+                    if ($deleteActivePayroll) {
+                        $payroll = $payrollActive;
+                        $payroll->setPeriod($period);
+                        $payroll->setMonth($month);
+                        $payroll->setYear($year);
+                        $em->persist($payroll);
+                        $em->flush();
+                    } else {
+                        if ($payrollActive->getMonth() == $month && $payrollActive->getYear() == $year && $payrollActive->getPeriod() == $period) {
+                            $updateActivePayroll = false;
+                        } else {
+                            $payroll = new Payroll();
+                            $payroll->setContractContract($contract);
+                            $payroll->setPeriod($period);
+                            $payroll->setMonth($month);
+                            $payroll->setYear($year);
+                            $em->persist($payroll);
+                            $em->flush();
+                        }
+                    }
+                } else {
+                    if ($deleteActivePayroll) {
+                        if ($payrollActive->getMonth() == $month && $payrollActive->getYear() == $year && $payrollActive->getPeriod() == $period) {
+                            $updateActivePayroll = false;
+                        } else {
+                            $payroll = $payrollRep;
+                            $payrollActive->setContractContract(null);
+                            $contract->setActivePayroll(null);
+                            $em->persist($payrollActive);
+                            $em->remove($payrollActive);
+                            $em->flush();
+                        }
+                    } else {
+                        $payroll = $payrollRep;
+                    }
+                }
             }
 
-            if (!$deleteOldPayroll && $payroll && !empty($payroll) && $payroll !== null) {
-                $contract->setActivePayroll($payroll);
-                $em->persist($contract);
-                $em->flush();
-            } else {
-                $payroll = new Payroll();
-                $payroll->setContractContract($contract);
-                $payroll->setMonth($month);
-                $payroll->setYear($year);
-                $payroll->setPeriod($period);
-
-                $em->persist($payroll);
-                $em->flush();
-
+            if ($updateActivePayroll) {
                 $contract->setActivePayroll($payroll);
                 $em->persist($contract);
                 $em->flush();
