@@ -64,6 +64,8 @@ class PayrollRestController extends FOSRestController
 
       foreach ($array as $value) {
           if (is_array($value)) {
+              if(empty($value))
+                continue;
               $depth = $this->array_depth($value) + 1;
 
               if ($depth > $max_depth) {
@@ -136,7 +138,8 @@ class PayrollRestController extends FOSRestController
                 }
               }
             }
-            $result[] = $temp;
+            if(!empty($temp))
+              $result[] = $temp;
             $conta++;
           }
         }else
@@ -145,6 +148,27 @@ class PayrollRestController extends FOSRestController
         }
     }
   }
+
+  public function getNoveltyDetail($payroll_code)
+   {
+       $NoveltyTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
+       /** @var $NoveltyType NoveltyType  */
+       $NoveltyType = $NoveltyTypeRepo->findOneBy(array('payroll_code' => $payroll_code));
+
+       if ($NoveltyType && !empty($NoveltyType) && $NoveltyType !== null) {
+           $serializer = $this->get('jms_serializer');
+           $data = $serializer->serialize($NoveltyType, 'json');
+           //die("__" . print_r(json_decode($data, true), true));
+           //$data = $serializer->deserialize($data, 'RocketSeller\TwoPickBundle\Entity\NoveltyType', 'xml');
+           $arreglo = json_decode($data, true);
+           if(isset($arreglo['required_documents']))
+              unset($arreglo['required_documents']);
+           if(isset($arreglo['required_fields']))
+              unset($arreglo['required_fields']);
+           return $arreglo;
+       }
+       return false;
+   }
 
   /**
    * Calls the payments api, it receives the headers and the parameters and
@@ -186,6 +210,10 @@ class PayrollRestController extends FOSRestController
     // php parser.
     $plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
     $plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
+
+    // This line is to put every piece into a different unico, because end_reg
+    // doesn'e match the xml standard.
+    $plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
 
     // TODO(daniel.serrano): Remove this debug lines.
     libxml_use_internal_errors(true);
@@ -423,7 +451,8 @@ class PayrollRestController extends FOSRestController
     $unico['EMP_FORMA_PAGO'] =  isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
     $unico['EMP_TIPOLIQ'] =  isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
     $unico['EMP_TIPO_SALARIO'] =  isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
-    $unico['EMP_TIPO_CONTRATO'] =  isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
+    if(isset($info['EMP_TIPO_CONTRATO']))
+      $unico['EMP_TIPO_CONTRATO'] =  isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
     $content[] = $unico;
     $parameters = array();
     $parameters['inInexCod'] = '601';
@@ -1524,12 +1553,10 @@ class PayrollRestController extends FOSRestController
       $unico = array();
 
       $unico['EMPCODIGO'] = $employeeId;
-      if($period)
-        $unico['NOMI_PERIODO'] = $period;
-      if($month)
-        $unico['NOMI_MES'] = $month;
-      if($year)
-        $unico['NOMI_ANO'] = $year;
+      if($period == 'NULL' || $period == "null") $period = null;
+      $unico['NOMI_PERIODO'] = $period ?: "";
+      $unico['NOMI_MES'] = $month ?: "";
+      $unico['NOMI_ANO'] = $year ?: "";
 
       $content[] = $unico;
       $parameters = array();
@@ -1540,7 +1567,23 @@ class PayrollRestController extends FOSRestController
       /** @var View $res */
       $responseView = $this->callApi($parameters);
 
-      return $responseView;
+      $temp = $this->handleView($responseView);
+      $data = json_decode($temp->getContent(), true);
+      $code = json_decode($temp->getStatusCode(), true);
+      $nuevo = array();
+      foreach($data as &$i) {
+        // Go thorug each novelty.
+        foreach($i as $key => $val) {
+          if($key == 'CON_CODIGO') {
+            $i['CON_CODIGO_DETAIL'] = $this->getNoveltyDetail($val);
+          }
+        }
+      }
+      $view = View::create();
+      $view->setStatusCode($code);
+      $view->setData($data);
+
+      return $view;
     }
 
     /**
