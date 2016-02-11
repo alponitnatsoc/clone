@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}Symplifica - Detalle liquidación final del empleado{% endblock %}
+{% block fos_user_content %}
+{# {{ dump(data) }}#}
+<div>
+<ul class="list-group">
+    {% for liquidation in data %}
+        <li class="list-group-item">
+            <strong>{{ loop.index }} - </strong>
+            {{ liquidation.CON_CODIGO }} -
+            {{ liquidation.NOMI_VALOR_LOCAL }}
+        </li>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}

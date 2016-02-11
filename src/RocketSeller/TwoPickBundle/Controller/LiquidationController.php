@@ -12,6 +12,7 @@ use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Form\LiquidationType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Liquidation controller.
@@ -133,6 +134,31 @@ class LiquidationController extends Controller
             "form" => $form->createView(),
             "payroll" => $payroll,
             "novelties" => $novelties
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function finalLiquidationDetailAction($employee_id, $period)
+    {
+        $format = array('_format' => 'json');
+//             $employee_id = $request->request->get("employee_id");
+//             $period = $request->request->get("period");
+        /**
+         * Obtener datos de la preliquidacion antes de consolidarla
+         */
+        $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+                'employeeId' => $employee_id,
+                'period' => $period
+            ),
+            $format
+        );
+        $data = json_decode($response->getContent(), true);
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
+            'data' => $data
         ));
     }
 }

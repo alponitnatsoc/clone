@@ -32,7 +32,11 @@ function validateLiqForm() {
                 liquidation_reason: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
             }
         }).done(function (data) {
-            alert(data);
+            if (data["liquidation_reason"] == 2) { //justa causa
+                $("#liqSinJustaCausa").hide();
+            } else {
+                $("#liqJustaCausa").hide();
+            }
             $("#liquidationStep1").hide();
             $("#liquidationStep2").show();
             /*
