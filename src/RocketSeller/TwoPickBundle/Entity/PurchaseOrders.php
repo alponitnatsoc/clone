@@ -29,10 +29,10 @@ class PurchaseOrders
      *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_status", referencedColumnName="id_purchase_orders_status")
      * })
      */
-    private $purchaseOrdersStatusPurchaseOrdersStatus;
+    private $purchaseOrdersStatus;
 
     /**
-     * @ORM\OneToMany(targetEntity="PurchaseOrdersDescription", mappedBy="purchaseOrdersPurchaseOrders", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="PurchaseOrdersDescription", mappedBy="purchaseOrders", cascade={"persist"})
      */
     private $purchaseOrderDescriptions;
 
@@ -70,7 +70,7 @@ class PurchaseOrders
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=100, nullable=TRUE)
+     * @ORM\Column(type="float", length=100, nullable=TRUE)
      */
     private $value;
 
@@ -191,7 +191,7 @@ class PurchaseOrders
     /**
      * Set value
      *
-     * @param integer $value
+     * @param float $value
      *
      * @return PurchaseOrders
      */
@@ -205,7 +205,7 @@ class PurchaseOrders
     /**
      * Get value
      *
-     * @return integer
+     * @return float
      */
     public function getValue()
     {
@@ -213,27 +213,27 @@ class PurchaseOrders
     }
 
     /**
-     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     * Set purchaseOrdersStatus
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatus
      *
      * @return PurchaseOrders
      */
-    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    public function setPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatus = null)
     {
-        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+        $this->purchaseOrdersStatus = $purchaseOrdersStatus;
 
         return $this;
     }
 
     /**
-     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     * Get purchaseOrdersStatus
      *
      * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
      */
-    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    public function getPurchaseOrdersStatus()
     {
-        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
+        return $this->purchaseOrdersStatus;
     }
 
     /**
@@ -293,5 +293,4 @@ class PurchaseOrders
     {
         return $this->idUser;
     }
-
 }

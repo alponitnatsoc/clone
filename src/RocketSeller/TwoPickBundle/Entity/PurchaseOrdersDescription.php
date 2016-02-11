@@ -63,7 +63,7 @@ class PurchaseOrdersDescription
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })
      */
-    private $purchaseOrdersPurchaseOrders;
+    private $purchaseOrders;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
@@ -72,7 +72,7 @@ class PurchaseOrdersDescription
      *   @ORM\JoinColumn(name="purchase_orders_status_id_purchase_orders_status", referencedColumnName="id_purchase_orders_status")
      * })
      */
-    private $purchaseOrdersStatusPurchaseOrdersStatus;
+    private $purchaseOrdersStatus;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Product
@@ -87,23 +87,18 @@ class PurchaseOrdersDescription
      * @ORM\Column(type="text", nullable=TRUE)
      */
     private $description;
+
     /**
      * @ORM\Column(type="float",  nullable=TRUE)
      */
     private $value;
 
     /**
-     * Set idPurchaseOrdersDescription
-     *
-     * @param integer $idPurchaseOrdersDescription
-     *
-     * @return PurchaseOrdersDescription
+     * Constructor
      */
-    public function setIdPurchaseOrdersDescription($idPurchaseOrdersDescription)
+    public function __construct()
     {
-        $this->idPurchaseOrdersDescription = $idPurchaseOrdersDescription;
-
-        return $this;
+        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -117,75 +112,27 @@ class PurchaseOrdersDescription
     }
 
     /**
-     * Set taxTax
+     * Set idDispercionNovo
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
+     * @param integer $idDispercionNovo
      *
      * @return PurchaseOrdersDescription
      */
-    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax)
+    public function setIdDispercionNovo($idDispercionNovo)
     {
-        $this->taxTax = $taxTax;
+        $this->idDispercionNovo = $idDispercionNovo;
 
         return $this;
     }
 
     /**
-     * Get taxTax
+     * Get idDispercionNovo
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\Tax
+     * @return integer
      */
-    public function getTaxTax()
+    public function getIdDispercionNovo()
     {
-        return $this->taxTax;
-    }
-
-    /**
-     * Set purchaseOrdersPurchaseOrders
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setPurchaseOrdersPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
-    {
-        $this->purchaseOrdersPurchaseOrders = $purchaseOrdersPurchaseOrders;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseOrdersPurchaseOrders
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     */
-    public function getPurchaseOrdersPurchaseOrders()
-    {
-        return $this->purchaseOrdersPurchaseOrders;
-    }
-
-    /**
-     * Set productProduct
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Product $productProduct
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setProductProduct(\RocketSeller\TwoPickBundle\Entity\Product $productProduct)
-    {
-        $this->productProduct = $productProduct;
-
-        return $this;
-    }
-
-    /**
-     * Get productProduct
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Product
-     */
-    public function getProductProduct()
-    {
-        return $this->productProduct;
+        return $this->idDispercionNovo;
     }
 
     /**
@@ -213,11 +160,75 @@ class PurchaseOrdersDescription
     }
 
     /**
-     * Constructor
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return PurchaseOrdersDescription
      */
-    public function __construct()
+    public function setValue($value)
     {
-        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    {
+        $this->payrollPayroll = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getPayrollPayroll()
+    {
+        return $this->payrollPayroll;
+    }
+
+    /**
+     * Set taxTax
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax = null)
+    {
+        $this->taxTax = $taxTax;
+
+        return $this;
+    }
+
+    /**
+     * Get taxTax
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Tax
+     */
+    public function getTaxTax()
+    {
+        return $this->taxTax;
     }
 
     /**
@@ -255,99 +266,74 @@ class PurchaseOrdersDescription
     }
 
     /**
-     * Set purchaseOrdersStatusPurchaseOrdersStatus
+     * Set purchaseOrders
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders
      *
      * @return PurchaseOrdersDescription
      */
-    public function setPurchaseOrdersStatusPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatusPurchaseOrdersStatus = null)
+    public function setPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders = null)
     {
-        $this->purchaseOrdersStatusPurchaseOrdersStatus = $purchaseOrdersStatusPurchaseOrdersStatus;
+        $this->purchaseOrders = $purchaseOrders;
 
         return $this;
     }
 
     /**
-     * Get purchaseOrdersStatusPurchaseOrdersStatus
+     * Get purchaseOrders
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchaseOrders;
+    }
+
+    /**
+     * Set purchaseOrdersStatus
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatus
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPurchaseOrdersStatus(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus $purchaseOrdersStatus = null)
+    {
+        $this->purchaseOrdersStatus = $purchaseOrdersStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get purchaseOrdersStatus
      *
      * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
      */
-    public function getPurchaseOrdersStatusPurchaseOrdersStatus()
+    public function getPurchaseOrdersStatus()
     {
-        return $this->purchaseOrdersStatusPurchaseOrdersStatus;
+        return $this->purchaseOrdersStatus;
     }
 
     /**
-     * Set payrollPayroll
+     * Set productProduct
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     * @param \RocketSeller\TwoPickBundle\Entity\Product $productProduct
      *
      * @return PurchaseOrdersDescription
      */
-    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    public function setProductProduct(\RocketSeller\TwoPickBundle\Entity\Product $productProduct = null)
     {
-        $this->payrollPayroll = $payrollPayroll;
+        $this->productProduct = $productProduct;
 
         return $this;
     }
 
     /**
-     * Get payrollPayroll
+     * Get productProduct
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @return \RocketSeller\TwoPickBundle\Entity\Product
      */
-    public function getPayrollPayroll()
+    public function getProductProduct()
     {
-        return $this->payrollPayroll;
-    }
-
-
-    /**
-     * Set value
-     *
-     * @param float $value
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Set idDispercionNovo
-     *
-     * @param integer $idDispercionNovo
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setIdDispercionNovo($idDispercionNovo)
-    {
-        $this->idDispercionNovo = $idDispercionNovo;
-
-        return $this;
-    }
-
-    /**
-     * Get idDispercionNovo
-     *
-     * @return integer
-     */
-    public function getIdDispercionNovo()
-    {
-        return $this->idDispercionNovo;
+        return $this->productProduct;
     }
 }
