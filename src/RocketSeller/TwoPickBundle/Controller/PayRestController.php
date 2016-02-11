@@ -72,8 +72,26 @@ use PayMethodsTrait;
      */
     public function postPayMembresiaAction(Request $request)
     {
+
+        $user = $this->getUser();
+        $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        $salaries = array();
+        $payrolls = array();
+        $novelties = array();
+        $aportes = array();
+        foreach ($employeesData as $employerHasEmployee) {
+            if ($employerHasEmployee->getState() == 1) {
+                $contracts = $employerHasEmployee->getContracts();
+                foreach ($contracts as $contract) {
+                    if ($contract->getState() == 1) {
+                        $activePayroll = $contract->getActivePayroll();
+                        $payrolls = $contract->getPayrolls();
+                    }
+                }
+            }
+        }
         return $this->redirectToRoute('show_dashboard_employer');
-        
+
         $parameters = $request->request->all();
         //$documentType = $parameters['documentType'];
 

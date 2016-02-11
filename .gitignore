@@ -19,5 +19,6 @@
 .buildpath
 .project
 .gitignore
+.phpintel/*
 nbproject/*
 *.pdf

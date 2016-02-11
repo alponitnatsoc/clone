@@ -112,15 +112,15 @@ class EmployeeRestController extends FOSRestController
         $accountTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
         $payTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
         $frequencyRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
-        $payMethod=$contract->getPayMethodPayMethod();
-        if($payMethod!=null){
+        $payMethod = $contract->getPayMethodPayMethod();
+        if ($payMethod != null) {
             $payMethod->setCellPhone("");
             $payMethod->setAccountNumber("");
             $payMethod->setBankBank(null);
             $payMethod->setAccountTypeAccountType(null);
             $payMethod->setFrequencyFrequency(null);
             $payMethod->setPayTypePayType(null);
-        }else{
+        } else {
             $payMethod = new PayMethod();
         }
         //Now for the payType and Pay Method
@@ -200,8 +200,8 @@ class EmployeeRestController extends FOSRestController
 //        //finally add the pay method to the contract and add the contract to the EmployerHasEmployee
         // relation that is been created
         //if the CC data is null then add notification to add it
-        if($paramFetcher->get("creditCard")==null){
-            $notification=new Notification();
+        if ($paramFetcher->get("creditCard") == null) {
+            $notification = new Notification();
             $notification->setPersonPerson($user->getPersonPerson());
             $notification->setAccion("Tarjeta de Crédito");
             $notification->setDescription("Agregar la información de la tarjeta de crédito");
@@ -209,9 +209,9 @@ class EmployeeRestController extends FOSRestController
             $notification->setType("alert");
             $em->persist($notification);
             $em->flush();
-            $notification->setRelatedLink($this->generateUrl("payments_method",array("idNotification"=>$notification->getId())));
+            $notification->setRelatedLink($this->generateUrl("payments_method", array("idNotification" => $notification->getId())));
             $em->persist($notification);
-        }else{
+        } else {
             //NovoPaymentcall
         }
 
@@ -225,8 +225,8 @@ class EmployeeRestController extends FOSRestController
 
 
         if (count($errors) == 0) {
-            $employee=$contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
-            if($employee->getRegisterState()==75){
+            $employee = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
+            if ($employee->getRegisterState() == 75) {
                 $employee->setRegisterState(100);
             }
             $em->persist($contract);
@@ -304,9 +304,9 @@ class EmployeeRestController extends FOSRestController
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
                 $employee = $repository->find($id);
                 //verify if the Id exists or it belongs to the logged user
-                if ($employee == null){
+                if ($employee == null) {
                     $view->setStatusCode(404)->setHeader("error", "The Employee ID " . $paramFetcher->get('employeeId') . " is invalid");
-                    $view->setData(array('url'=>'/dashboard'));
+                    $view->setData(array('url' => '/dashboard'));
                     return $view;
                 }
                 $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
@@ -321,8 +321,8 @@ class EmployeeRestController extends FOSRestController
                 }
 //              @todo Gabriel revisar porque está generando entradas duplicadas en la BD en employer_has_employee
 
-                if(!$flag&&($employee->getPersonPerson()->getDocumentType()==$paramFetcher->get('documentType')&&$employee->getPersonPerson()->getDocument()==$paramFetcher->get('document'))){
-                    $flag=true;
+                if (!$flag && ($employee->getPersonPerson()->getDocumentType() == $paramFetcher->get('documentType') && $employee->getPersonPerson()->getDocument() == $paramFetcher->get('document'))) {
+                    $flag = true;
                     $employerEmployee = new EmployerHasEmployee();
                     $employerEmployee->setEmployeeEmployee($employee);
                     $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
@@ -330,7 +330,7 @@ class EmployeeRestController extends FOSRestController
                 }
                 if (!$flag) {
                     $view->setStatusCode(403)->setHeader("error", "Not your Employee");
-                    $view->setData(array('url'=>'/dashboard'));
+                    $view->setData(array('url' => '/dashboard'));
                     return $view;
                 }
             }
@@ -381,7 +381,7 @@ class EmployeeRestController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $errors = $this->get('validator')->validate($employee, array('Update'));
             if (count($errors) == 0) {
-                if($employee->getRegisterState()==0){
+                if ($employee->getRegisterState() == 0) {
                     $employee->setRegisterState(25);
                 }
                 $em->persist($employee);
@@ -528,7 +528,7 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                if($employee->getRegisterState()==25){
+                if ($employee->getRegisterState() == 25) {
                     $employee->setRegisterState(50);
                 }
                 $em->persist($employee);
@@ -620,7 +620,7 @@ class EmployeeRestController extends FOSRestController
                                 'employees' => $employeesData));
                 }
             }
-            $idContract=$paramFetcher->get("contractId");
+            $idContract = $paramFetcher->get("contractId");
             //search the contract
             $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
             /** @var Contract $contract */
@@ -707,26 +707,25 @@ class EmployeeRestController extends FOSRestController
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
-                $workableDays=$contract->getWeekWorkableDays();
+                $workableDays = $contract->getWeekWorkableDays();
                 foreach ($workableDays as $workableDay) {
 
-                    $flagActualRemove=true;
-                    $ifFound=null;
+                    $flagActualRemove = true;
+                    $ifFound = null;
                     /** @var WeekWorkableDays $workableDay */
                     foreach ($actualWeekWorkableDays as $key => $value) {
-                        if($workableDay->getDayName()==$value){
-                            $flagActualRemove=false;
-                            $ifFound=$key;
+                        if ($workableDay->getDayName() == $value) {
+                            $flagActualRemove = false;
+                            $ifFound = $key;
                             break;
                         }
                     }
-                    if($flagActualRemove){
+                    if ($flagActualRemove) {
                         $contract->removeWeekWorkableDay($workableDay);
                         $em->remove($workableDay);
                         continue;
-                    }else{
+                    } else {
                         unset($actualWeekWorkableDays[$ifFound]);
-
                     }
                 }
                 foreach ($actualWeekWorkableDays as $key => $value) {
@@ -754,19 +753,19 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $contract->setWorkplaceWorkplace($realWorkplace);
-            $contractHasBenefits=$contract->getBenefits();
-            $idsCHB=array();
+            $contractHasBenefits = $contract->getBenefits();
+            $idsCHB = array();
             /** @var ContractHasBenefits $contractHasBenefit */
             foreach ($contractHasBenefits as $contractHasBenefit) {
-                $idsCHB[$contractHasBenefit->getIdContractHasBenefits()]=$contractHasBenefit->getIdContractHasBenefits();
+                $idsCHB[$contractHasBenefit->getIdContractHasBenefits()] = $contractHasBenefit->getIdContractHasBenefits();
             }
             for ($i = 0; $i < count($benefitsType); $i++) {
-                $realContractHasBenefit=null;
-                $flagExist=false;
-                if($benefits[$i]!=null){
-                    $flagExist=true;
+                $realContractHasBenefit = null;
+                $flagExist = false;
+                if ($benefits[$i] != null) {
+                    $flagExist = true;
                     /** @var ContractHasBenefits $realContractHasBenefit */
-                    $realContractHasBenefit=$contracHasBenefitRepo->find($benefits[$i]);
+                    $realContractHasBenefit = $contracHasBenefitRepo->find($benefits[$i]);
                     unset($idsCHB[$realContractHasBenefit->getIdContractHasBenefits()]);
                 }
                 /** @var Benefits $realBenefit */
@@ -775,18 +774,18 @@ class EmployeeRestController extends FOSRestController
                     $view->setStatusCode(404)->setHeader("error", "The Benefit ID " . $benefitsType[$i] . " is invalid");
                     return $view;
                 }
-                if(!$flagExist){
+                if (!$flagExist) {
                     $realContractHasBenefit = new ContractHasBenefits();
                 }
                 $realContractHasBenefit->setAmount($benefitsAmount[$i]);
                 $realContractHasBenefit->setBenefitsBenefits($realBenefit);
                 $realContractHasBenefit->setPeriodicity($benefitsPeriod[$i]);
-                if(!$flagExist){
+                if (!$flagExist) {
                     $contract->addBenefit($realContractHasBenefit);
                 }
             }
             foreach ($idsCHB as $key => $value) {
-                $toRemove=$contracHasBenefitRepo->find($value);
+                $toRemove = $contracHasBenefitRepo->find($value);
                 $em->remove($toRemove);
             }
             $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions'));
@@ -797,14 +796,22 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($contract, array('Update'));
             $view = View::create();
             if (count($errors) == 0) {
-                if($employee->getRegisterState()==50){
+                if ($employee->getRegisterState() == 50) {
                     $employee->setRegisterState(75);
                 }
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
+                //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
+                \RocketSeller\TwoPickBundle\Controller\PayrollController::createPayrollToContract($contract->getIdContract(), true);
+                $this->addFlash(
+                        'notice', 'Your changes were saved!'
+                );
                 return $view;
             } else {
+                $this->addFlash(
+                        'error', 'Your changes were NO saved!'
+                );
                 $view = $this->getErrorsView($errors);
                 return $view;
             }
@@ -1228,6 +1235,7 @@ class EmployeeRestController extends FOSRestController
         $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
         return $view;
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -1246,23 +1254,22 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="idContract", nullable=false, strict=true, description="the id of the contract")
      * @return View
      */
-    public function getVacationsDaysTaken(ParamFetcher $paramFetcher){
-        $contractRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
+    public function getVacationsDaysTaken(ParamFetcher $paramFetcher)
+    {
+        $contractRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
         /** @var Contract $contract */
-        $contract=$contractRepo->find($paramFetcher->get("idContract"));
-        $payRolls=$contract->getPayrolls();
+        $contract = $contractRepo->find($paramFetcher->get("idContract"));
+        $payRolls = $contract->getPayrolls();
         /** @var Payroll $payRoll */
         foreach ($payRolls as $payRoll) {
-            $novelties=$payRoll->getNovelties();
+            $novelties = $payRoll->getNovelties();
             /** @var Novelty $novelty */
             foreach ($novelties as $novelty) {
-                if($novelty->getNoveltyTypeNoveltyType()->getGrupo()=="Vacaciones"){
+                if ($novelty->getNoveltyTypeNoveltyType()->getGrupo() == "Vacaciones") {
                     //TODO Necesitamos los festivos y eso es super gg
                 }
             }
-
         }
-
     }
 
     /**

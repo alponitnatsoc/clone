@@ -4,7 +4,7 @@
 
 {% block fos_user_content %}
     <div class="payroll pay">
-        <form method="post" action="/payroll/calculate" id="form_calculate">
+        <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
             <h1>Pagar a empleados</h1>
             {% if "now"|date('j') <= 15%}
                 {% set quincena = 'I (1ª Quincena)' %}
@@ -109,6 +109,10 @@
 
 
     <!-- Modal add novelty-->
+
+    <div id="modal_add_novelty_test">
+
+    </div>
     <div class="modal fade"  role="dialog" id="modal_add_novelty">
         <div class="modal-dialog">
             <div class="modal-content">

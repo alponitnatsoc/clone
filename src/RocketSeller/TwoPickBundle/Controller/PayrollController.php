@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +13,133 @@ use Symfony\Component\Process\Process;
 class PayrollController extends Controller
 {
 
+    public function payTestAction($idContract)
+    {
+        $this->createPayrollToContract($idContract);
+        exit;
+    }
+
+    /**
+     * Crear Payroll para el contrato
+     * 
+     * @param String $idContract
+     * @param Boolean $deleteOldPayroll para indicar que se eliminan los payroll asociados al contrato
+     * @param String $period
+     * @param String $month
+     * @param String $year
+     * @return Payroll
+     * 
+     */
+    public function createPayrollToContract($idContract, $deleteOldPayroll = false, $period = null, $month = null, $year = null)
+    {
+        $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
+        /* @var $contract Contract */
+        $contract = $contractRepo->findOneBy(array('idContract' => $idContract));
+        if ($contract && !empty($contract) && $contract !== null && $contract->getState() == 1) {
+            $em = $this->getDoctrine()->getManager();
+            if ($deleteOldPayroll) {
+                $payrolls = $contract->getPayrolls();
+                $contract->setActivePayroll(null);
+                if (count($payrolls) > 0) {
+                    foreach ($payrolls as $key => $payroll) {
+                        $payroll->setContractContract(null);
+                        $em->persist($payroll);
+                        $em->remove($payroll);
+                        $payrolls->removeElement($payroll);
+                        $em->flush();
+                    }
+                }
+            }
+
+            if ($period == null && $month == null && $year == null) {
+                $frequencyPay = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
+                /* @var $startDate date */
+                $startDate = $contract->getStartDate();
+                $day = $startDate->format('d');
+                $month = $startDate->format('m');
+                $year = $startDate->format('Y');
+                if ($month < date('m')) { //si el mes de inicio del contrato es menor al mes actual
+                    if ($year <= date('Y')) {//y el año de inicio del contrato es menor al año actual
+                        $month = date('m'); //el mes del payroll es el actual para no general payroll de periodos anteriores
+                    }
+                }
+                if ($year < date('Y')) {
+                    $year = date('Y');
+                }
+                if ($frequencyPay == 'J') {
+                    $period = '4';
+                } elseif ($frequencyPay == 'Q') {
+                    if ((int) $day <= 15) {
+                        $period = '2';
+                    } else {
+                        $period = '4';
+                    }
+                } elseif ($frequencyPay == 'M') {
+                    $period = '4';
+                }
+            }
+
+            $payrollRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+            if (!$deleteOldPayroll) {
+                $payroll = $payrollRepo->findOneBy(array(
+                    'contractContract' => $contract->getIdContract(),
+                    'period' => $period,
+                    'month' => $month,
+                    'year' => $year
+                ));
+            }
+
+            if (!$deleteOldPayroll && $payroll && !empty($payroll) && $payroll !== null) {
+                $contract->setActivePayroll($payroll);
+                $em->persist($contract);
+                $em->flush();
+            } else {
+                $payroll = new Payroll();
+                $payroll->setContractContract($contract);
+                $payroll->setMonth($month);
+                $payroll->setYear($year);
+                $payroll->setPeriod($period);
+
+                $em->persist($payroll);
+                $em->flush();
+
+                $contract->setActivePayroll($payroll);
+                $em->persist($contract);
+                $em->flush();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Trae la informacion del empleado desde el ws de nomina
+     * @param type $employerHasEmployee
+     */
+    private function getInfoNominaSQL($employerHasEmployee)
+    {
+        $employeeId = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocument(); //parametro para el mock
+        //$employeeId = $employerHasEmployee->getIdEmployerHasEmployee(); //parametro para el ws real
+
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+            'employeeId' => $employeeId,
+            'period' => null,
+            'month' => null,
+            'year' => null
+                ), array('_format' => 'json')
+        );
+
+        $generalPayroll = json_decode($generalPayroll->getContent(), true);
+        dump($generalPayroll);
+        exit;
+    }
+
     public function payAction()
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        //if($this->isGranted('PAYROLL', $this->getUser())) {
         $user = $this->getUser();
         $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
         $salaries = array();
@@ -25,50 +147,8 @@ class PayrollController extends Controller
         $novelties = array();
         $aportes = array();
         foreach ($employeesData as $employerHasEmployee) {
-            if ($employerHasEmployee->getState() == 'Active') {
-                $contracts = $employerHasEmployee->getContracts();
-                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
-                foreach ($contracts as $contract) {
-                    if ($contract->getState() == 'Active') {
-                        $repository = $this->getDoctrine()
-                                ->getRepository('RocketSellerTwoPickBundle:Payroll');
-                        $query = $repository->createQueryBuilder('p');
-                        $query->andWhere('p.contractContract = :contract')
-                                ->setParameter('contract', $contract->getIdContract());
-                        $payroll = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
-
-                        $novelties[$employerHasEmployee->getIdEmployerHasEmployee()] = array();
-
-                        if (!$payroll) {
-                            $payroll = new Payroll();
-                            $payroll->setContractContract($contract);
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($payroll);
-                            $em->flush();
-                        } else {
-                            foreach ($payroll->getPayrollDetails() as $detail) {
-                                $repository = $this->getDoctrine()
-                                        ->getRepository('RocketSellerTwoPickBundle:Novelty');
-                                $query = $repository->createQueryBuilder('n');
-                                $query->andWhere('n.payrollDetailPayrollDetail = :payroll')
-                                        ->setParameter('payroll', $detail->getIdPayrollDetail());
-                                $novelties[$employerHasEmployee->getIdEmployerHasEmployee()][] = $query->getQuery()->getResult()[0];
-                            }
-                        }
-                        $frecuecia = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
-                        if ($frecuecia == 'J') {
-                            $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 30;
-                        } elseif ($frecuecia == 'M') {
-                            $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 1;
-                        } elseif ($frecuecia == 'Q') {
-                            $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 2;
-                        } else {
-                            $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
-                        }
-                        $payrolls[$employerHasEmployee->getIdEmployerHasEmployee()] = $payroll;
-                        $aportes[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() * 0.04;
-                    }
-                }
+            if ($employerHasEmployee->getState() == 1) {
+                $dataNomina = $this->getInfoNominaSQL($employerHasEmployee);
             }
         }
 
@@ -79,9 +159,6 @@ class PayrollController extends Controller
                     "payrolls" => $payrolls,
                     "novelties" => $novelties
         ));
-        //} else {
-        //    throw $this->createAccessDeniedException("No tiene suficientes permisos");
-        // }
     }
 
     public function calculateAction(Request $request)
@@ -105,11 +182,11 @@ class PayrollController extends Controller
             $salaries = $aportes = $payMethod = array();
             $total = 0;
             foreach ($employeesData as $employerHasEmployee) {
-                if ($employerHasEmployee->getState() == 'Active') {
+                if ($employerHasEmployee->getState() == 1) {
                     $contracts = $employerHasEmployee->getContracts();
                     $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
                     foreach ($contracts as $contract) {
-                        if ($contract->getState() == 'Active') {
+                        if ($contract->getState() == 1) {
                             $aportes[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() * 0.04;
                             $payMethod[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getPayMethodPayMethod();
                             $frecuecia = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
@@ -161,11 +238,11 @@ class PayrollController extends Controller
             $salaries = $aportes = $payMethod = array();
             $total = 0;
             foreach ($employeesData as $employerHasEmployee) {
-                if ($employerHasEmployee->getState() == 'Active') {
+                if ($employerHasEmployee->getState() == 1) {
                     $contracts = $employerHasEmployee->getContracts();
                     $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
                     foreach ($contracts as $contract) {
-                        if ($contract->getState() == 'Active') {
+                        if ($contract->getState() == 1) {
                             $aportes[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() * 0.04;
                             $payMethod[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getPayMethodPayMethod();
                             $frecuecia = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
@@ -276,7 +353,7 @@ class PayrollController extends Controller
         ));
     }
 
-    public function getPdfAction($idPayroll, Request $request)
+    public function voucherToPdfAction($idPayroll, Request $request)
     {
         $pageUrl = $this->generateUrl('payroll_voucher', array('idPayroll' => $idPayroll), true); // use absolute path!
 

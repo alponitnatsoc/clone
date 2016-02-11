@@ -142,16 +142,17 @@ use ContractMethodsTrait;
      */
     public function stateContractAction($id)
     {
-        $user = $this->getUser();
-        /** @var Contract $contract */
-        $contract = $this->contractDetail($id);
+        $repoContract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
+        $contract = $repoContract->find($id);
         $state = '';
-        if ($contract->getState() == 'Active') {
+        if ($contract->getState() == 1) {
             $state = 'Inactive';
-            $contract->setState('Inactive');
-        } else if ($contract->getState() == 'Inactive') {
+            $contract->setState(0);
+        } else if ($contract->getState() == 0) {
             $state = 'Active';
-            $contract->setState('Active');
+            $contract->setState(1);
+        } else {
+            return false;
         }
         $em = $this->getDoctrine()->getManager();
         $em->persist($contract);

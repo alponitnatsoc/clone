@@ -92,7 +92,7 @@ class Payroll
      *
      * @return Payroll
      */
-    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract)
+    public function setContractContract(\RocketSeller\TwoPickBundle\Entity\Contract $contractContract = null)
     {
         $this->contractContract = $contractContract;
 
