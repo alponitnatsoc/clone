@@ -38,7 +38,7 @@
         }
     </style>
 {% endblock %}
-<form action="" method="post"{{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
+<form action="{{ path('api_public_post_final_pre_liquidation_submit') }}" method="post" {{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
 {{ form_errors(form) }}
 
     <h2>Liquidación final de empleado</h2>
@@ -117,7 +117,7 @@
 
             </div>
         </div>
-        <div class="liq-container">
+        <div class="liq-container" id="liqSinJustaCausa">
             <div class="col-sm-12">
                 <h3>2. Descagar el documento para ser firmado por el empleado</h3>
             </div>
@@ -134,7 +134,7 @@
                 </div>
             </div>
         </div>
-        <div class="liq-container">
+        <div class="liq-container" id="liqJustaCausa">
             <div class="col-sm-12">
                 <h3>2. Razones para liquidación con justa causa</h3>
             </div>
@@ -215,11 +215,65 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
         }
     }).done(function (data) {
-        $("#liquidationValue").html(data);
+        $("#liquidationValue").html(data["totalLiq"]);
         formatMoney($("#liquidationValue"));
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
+});
+
+$("form").on("submit", function (e) {
+    e.preventDefault();
+
+    $('#createdModal').modal('toggle');
+
+    var form = $("form");
+    var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
+    var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
+    var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
+
+    var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
+
+    var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
+    var username = "{{ employeeInfo.usernameEmployer }}";
+
+    var url = form.attr('action');
+
+    var frequency = "{{ contractInfo.frequency }}";
+
+    $.ajax({
+        url: url,
+        type: form.attr('method'),
+        data: {
+            employee_id: employer_has_employee_id,
+            username: username,
+            year: year,
+            month: month,
+            day: day,
+            frequency: frequency,
+            cutDate: processDate,
+            processDate: processDate,
+            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
+        }
+    }).done(function (data) {
+        if (data["url"] != null) {
+            console.log(data["url"]);
+            redirUri = data["url"];
+
+            sendAjax(redirUri);
+        } else {
+            $('#main').replaceWith(
+                    // ... with the returned one from the AJAX response.
+                    $(data).find('#main'));
+            addClick();
+            if (!jsLoader(url)) {
+                addSumbit();
+            }
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+
 });
 </script>
 {% endblock %}

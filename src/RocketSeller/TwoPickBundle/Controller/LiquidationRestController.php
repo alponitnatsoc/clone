@@ -213,9 +213,9 @@ class LiquidationRestController extends FOSRestController
             ),
             $format
         );
-        $data = json_decode($response->getContent(), true);
+        $data["detail"] = json_decode($response->getContent(), true);
 
-        $data = $this->totalLiquidation($data);
+        $data["totalLiq"] = $this->totalLiquidation($data["detail"]);
 
 //         @todo enviar parametros a sql
 //         $.ajax({
@@ -261,6 +261,130 @@ class LiquidationRestController extends FOSRestController
 //                 }).fail(function (jqXHR, textStatus, errorThrown) {
 //                     alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
 //                 });
+
+        $view->setData($data)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * submit preliquidacion.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener datos preliquidacion.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="username", nullable=false, requirements="(.*)", strict=true, description="Username of employer.")
+     *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year of end of the contract(format: YYYY)")
+     *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month of end of the contract(format: MM)")
+     *    (name="day", nullable=false, requirements="([0-9])+", strict=true, description="Day of end of the contract(format: DD)")
+     *    (name="frequency", nullable=false, requirements="([0-9])+", strict=true, description="Pago de nominca (diario, quincena, mensual)")
+     *    (name="cutDate", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date of end of the contract(format: DD-MM-YYYY).")
+     *    (name="processDate", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Date of the end of contract(format: DD-MM-YYYY)")
+     *    (name="retirementCause", nullable=false, requirements="([0-9])+", strict=true, description="ID of the retirement cause.")
+     *
+     * @return View
+     */
+    public function postFinalPreLiquidationSubmitAction(Request $request)
+    {
+
+        $data = array();
+        $view = View::create();
+
+        $parameters = $request->request->all();
+
+        $employee_id = $parameters["employee_id"] . "9"; //@todo el 9 es para los mocks
+        $username = $parameters["username"];
+        $year = $parameters["year"];
+        $month = $parameters["month"];
+        $day = $parameters["day"];
+        $frequency = $parameters["frequency"];
+        $cutDate = $parameters["cutDate"];
+        $processDate = $parameters["processDate"];
+        $retirementCause = $parameters["retirementCause"];
+
+        /**
+         * Dato que se envia a SQL dependiendo de como se le paga la nomina al empleado (quincenal o mensual)
+         * period = 4 si la nomina se paga mensual o diaria, y cuando el empleado termina contrato despues del 15 del mes
+         * period = 2 si la nomina se paga quincenal y termina contrato antes del 15 del mes
+         * @var integer $period
+         */
+        $period = 4;
+        /**
+         * $frequency frecuencia de pago de la nomina (diario = 1, mensual = 2 o quincenal = 3) con base en la entidad frequency
+         */
+        if ($frequency == 3 && $day <= 15) {
+            $period = 2;
+        }
+
+        $format = array('_format' => 'json');
+        /**
+         * Enviar a SQL los parametros para calcular la liquidacion
+         */
+        $req = new Request();
+        $req->request->set("employee_id", $employee_id);
+        $req->request->set("username", $username);
+        $req->request->set("year", $year);
+        $req->request->set("month", $month);
+        $req->request->set("period", $period);
+        $req->request->set("cutDate", $cutDate);
+        $req->request->set("processDate", $processDate);
+        $req->request->set("retirementCause", $retirementCause);
+
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postAddFinalLiquidationParameters", array("request" => $req), $format);
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+            $data = $response->getContent();
+            $view->setData("1 - " . $employee_id . " - " . $response->getStatusCode());
+            $view->setStatusCode(410);
+            return $view;
+        }
+
+        /**
+         * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
+         */
+        $req = new Request();
+        $req->request->set("employee_id", $employee_id);
+        $req->request->set("execution_type", "P");
+
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+            $data = $response->getContent();
+            $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
+            $view->setStatusCode(410);
+            return $view;
+        }
+//         $data = $response->getContent();
+
+        /**
+         * Obtener datos de la preliquidacion antes de consolidarla
+         */
+//         $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+//                 'employeeId' => $employee_id,
+//                 'period' => $period
+//             ),
+//             $format
+//         );
+//         $data["detail"] = json_decode($response->getContent(), true);
+
+//         $data["totalLiq"] = $this->totalLiquidation($data["detail"]);
+
+        $data = array(
+            "employee_id" => $employee_id,
+            "period" => $period,
+            "url" => $this->generateUrl("final_liquidation_detail", array(
+                "employee_id" => $employee_id,
+                "period" => $period
+            ))
+        );
 
         $view->setData($data)->setStatusCode(200);
         return $view;
