@@ -60,6 +60,13 @@ class BackOfficeController extends Controller
     	}
     	
     }
+    public function registerExpressAction()
+    {   
+        $em = $this->getDoctrine()->getManager();
+        $employers = $em->getRepository('RocketSellerTwoPickBundle:Employer')
+                ->findByRegisterExpress(1);               
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('employers'=>$employers));    
+    }
     /**
      * hace un query de la clase para instanciarla
      * @param  [type] $parameter id que desea pasar

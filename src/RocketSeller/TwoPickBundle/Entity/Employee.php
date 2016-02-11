@@ -25,6 +25,11 @@ class Employee
      */
     private $registerState;
     /**
+     * @ORM\Column(type="smallint")
+     */
+    private $registerExpress;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
      *
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Person", inversedBy="employee", cascade={"persist", "remove"})
@@ -346,5 +351,29 @@ class Employee
     public function getRegisterState()
     {
         return $this->registerState;
+    }
+
+    /**
+     * Set registerExpress
+     *
+     * @param integer $registerExpress
+     *
+     * @return Employee
+     */
+    public function setRegisterExpress($registerExpress)
+    {
+        $this->registerExpress = $registerExpress;
+
+        return $this;
+    }
+
+    /**
+     * Get registerExpress
+     *
+     * @return integer
+     */
+    public function getRegisterExpress()
+    {
+        return $this->registerExpress;
     }
 }

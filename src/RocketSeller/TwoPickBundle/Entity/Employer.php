@@ -33,6 +33,10 @@ class Employer
      * @ORM\Column(type="smallint")
      */
     private $registerState;
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $registerExpress;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Person
@@ -358,5 +362,29 @@ class Employer
     public function getEconomicalActivity()
     {
         return $this->economicalActivity;
+    }
+
+    /**
+     * Set registerExpress
+     *
+     * @param integer $registerExpress
+     *
+     * @return Employer
+     */
+    public function setRegisterExpress($registerExpress)
+    {
+        $this->registerExpress = $registerExpress;
+
+        return $this;
+    }
+
+    /**
+     * Get registerExpress
+     *
+     * @return integer
+     */
+    public function getRegisterExpress()
+    {
+        return $this->registerExpress;
     }
 }
