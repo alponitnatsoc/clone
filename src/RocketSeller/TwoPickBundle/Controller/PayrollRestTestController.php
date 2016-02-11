@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -295,25 +296,22 @@ class PayrollRestTestController extends FOSRestController
 
     public function getSalary($document)
     {
-        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
-        /** @var Person $person */
-        $person = $personRepo->findOneByDocument($document);
-        if($person == null)
-          return 689455;
-        $ehE = $person->getEmployee()->getEmployeeHasEmployers();
+        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var $ehEs EmployerHasEmployee */
+        $ehEs = $personRepo->findOneBy(array('idEmployerHasEmployee' => $document));
+        if ($ehEs == null)
+            return 689455;
 
-        /** @var EmployerHasEmployee $ehEs */
-        foreach ($ehE as $ehEs) {
-            if ($ehEs->getState() == 'Active') {
-                $contracts = $ehEs->getContracts();
-                /** @var Contract    $contract */
-                foreach ($contracts as $contract) {
-                    if ($contract->getState() == 'Active') {
-                        return $contract->getSalary();
-                    }
+        if ($ehEs->getState() == 1) {
+            $contracts = $ehEs->getContracts();
+            /** @var $contract Contract */
+            foreach ($contracts as $contract) {
+                if ($contract->getState() == 1) {
+                    return $contract->getSalary();
                 }
             }
         }
+
         return 689455;
     }
 
@@ -428,7 +426,7 @@ class PayrollRestTestController extends FOSRestController
           </Interfaz616Resp>';
 
 
-          $xmlModelLiquidation = '<Interfaz616Resp>
+        $xmlModelLiquidation = '<Interfaz616Resp>
             <UNICO>
               <EMP_CODIGO>' . $components['EMPCODIGO'] . '</EMP_CODIGO>
               <NOMI_PERIODO>4</NOMI_PERIODO>
@@ -574,19 +572,19 @@ class PayrollRestTestController extends FOSRestController
 
 
         if (substr($components['EMPCODIGO'], -1) == "9") {
-          $response = new Response(
-                  $xmlModelLiquidation, Response::HTTP_OK, array(
-              'Content-Type' => 'application/xml',
-                  )
-          );
-          return $response;
+            $response = new Response(
+                    $xmlModelLiquidation, Response::HTTP_OK, array(
+                'Content-Type' => 'application/xml',
+                    )
+            );
+            return $response;
         } else {
-          $response = new Response(
-                  $xmlModelCorrect2, Response::HTTP_OK, array(
-              'Content-Type' => 'application/xml',
-                  )
-          );
-          return $response;
+            $response = new Response(
+                    $xmlModelCorrect2, Response::HTTP_OK, array(
+                'Content-Type' => 'application/xml',
+                    )
+            );
+            return $response;
         }
     }
 
@@ -612,8 +610,8 @@ class PayrollRestTestController extends FOSRestController
                 $xmlModelCorrect, Response::HTTP_OK, array(
             'Content-Type' => 'application/xml',
                 )
-        );return $response;
-
+        );
+        return $response;
     }
 
     public function ProcessFinalLiquidation($xml)
@@ -638,8 +636,8 @@ class PayrollRestTestController extends FOSRestController
                 $xmlModelCorrect, Response::HTTP_OK, array(
             'Content-Type' => 'application/xml',
                 )
-        );return $response;
-
+        );
+        return $response;
     }
 
 }
