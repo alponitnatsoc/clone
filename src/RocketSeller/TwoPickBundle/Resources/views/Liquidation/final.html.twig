@@ -86,12 +86,13 @@
                 <p>¿Cuál es la razón para finalizar el contrato?</p>
                 {{ form_widget(form.liquidationReason) }}
                 <p>El valor de la liquidación es:</p>
+                <span class="txthelp" id="liquidationValue"></span>
                 <span class="txthelp"><p>* Basado en la información que actualmente registra el sistema. Puede variar si debe reportar novedades.</p></span>
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 center">
             <div class="col-sm-6 col-sm-push-3">
-                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
+                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="notAjax">Continuar el proceso de liquidación</a>
                 <br /><br />
             </div>
         </div>
@@ -167,7 +168,7 @@
         </div>
     </div>
 
-    {{ form_rest(form) }}
+{#     {{ form_rest(form) }}#}
 <input type="submit" />
 </form>
 
@@ -178,51 +179,47 @@
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
-<!--
-function validateLiqForm() {
-    var validator;
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-        validator = $("form[name='rocketseller_twopickbundle_liquidation']").validate({
-            rules: {
-                "rocketseller_twopickbundle_liquidation[liquidationReason]": "required"
-            },
-            messages: {
-                "rocketseller_twopickbundle_liquidation[liquidationReason]": "Por favor selecciona una opción"
-            }
-        });
-    });
-
-    $("a#liquidation-step1").click(function(e) {
-        e.preventDefault();
-
-        var form = $("form");
-
-        var href = $(this).attr('href');
-
-        if (!form.valid()) {
-            return;
-        }
-
-        $("#liquidationStep1").hide();
-        $("#liquidationStep2").show();
-
-        $.ajax({
-            url: href,
-            type: 'POST',
-            data: {
-            }
-        }).done(function (data) {
-            alert(data);
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-        });
-    });
-}
-jQuery(document).ready(function(){
+$.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
     validateLiqForm();
-
-    $("#agregarNovedad").load("/novelty/select/{{ payroll.idPayroll }}");
 });
-//-->
+
+$('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio').on("change", function(){
+
+    var form = $("form");
+    var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
+    var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
+    var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
+
+    var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
+
+    var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
+    var username = "{{ employeeInfo.usernameEmployer }}";
+
+//    var url = "{{ path('api_plublic_post_add_final_liquidation_parameters') }}";
+    var url = "{{ path('api_public_post_pre_liquidation') }}";
+
+    var frequency = "{{ contractInfo.frequency }}";
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            employee_id: employer_has_employee_id,
+            username: username,
+            year: year,
+            month: month,
+            day: day,
+            frequency: frequency,
+            cutDate: processDate,
+            processDate: processDate,
+            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
+        }
+    }).done(function (data) {
+        $("#liquidationValue").html(data);
+        formatMoney($("#liquidationValue"));
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+});
 </script>
 {% endblock %}

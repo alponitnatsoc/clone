@@ -11,6 +11,7 @@ use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Form\LiquidationType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 
 /**
  * Liquidation controller.
@@ -83,25 +84,37 @@ class LiquidationController extends Controller
         $employee = $this->getEmployee($id);
         /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
         $person = $employee->getPersonPerson();
+        /** @var Employer $employer */
+        $employer = $this->getEmployer($id);
+        $usernameEmployer = $employer->getPersonPerson()->getNames();
+
         $employeeInfo = array(
             'name' => $person->getNames(),
+            'id' => $employee->getIdEmployee(),
+            'idEmperHasEmpee' => $id,
             'lastName1' => $person->getLastName1(),
             'lastName2' => $person->getLastName2(),
             'document' => $person->getDocument(),
             'documentType' => $person->getDocumentType(),
-            'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace(),
+            'usernameEmployer' => $usernameEmployer
         );
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
+
+        $frequency = $contract[0]->getPayMethodPayMethod()->getFrequencyFrequency()->getIdFrequency();
+
         $contractInfo = array(
             'contractType' => $contract[0]->getContractTypeContractType()->getName(),
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
             'salary' => $contract[0]->getSalary(),
             'vacationDays' => "",
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
-            'startDate' => $startDate
+            'startDate' => $startDate,
+            'idEmperHasEmpee' => $contract[0]->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+            'frequency' => $frequency
         );
 
         $form = $this->createForm(new LiquidationType());
@@ -109,9 +122,9 @@ class LiquidationController extends Controller
         /** @var Payroll $payroll */
         $payroll = $contract[0]->getActivePayroll();
         $novelties = $payroll->getNovelties();
-        echo count($novelties);
-        echo $payroll->getIdPayroll();
-        echo $contract[0]->getIdContract();
+//         echo count($novelties);
+//         echo $payroll->getIdPayroll();
+//         echo $contract[0]->getIdContract();
 
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(

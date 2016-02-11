@@ -37,7 +37,7 @@ trait EmployerHasEmployeeMethodsTrait
         $contracts = $this->showContracts($id);
         /** @var Contract $contract */
         foreach($contracts as $contract) {
-            if ($contract->getState() == "Active") {
+            if ($contract->getState() == 1) {
                 $payrolls = $contract->getPayrolls()->getValues();
                 break;
             }
@@ -79,6 +79,20 @@ trait EmployerHasEmployeeMethodsTrait
         return $employee;
     }
 
+    protected function getEmployer($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $repository->find($id);
+        $employer = $employerHasEmployee->getEmployerEmployer();
+
+        return $employer;
+    }
+
+    /**
+     * @param integer $id - ID del empleado
+     * @return \Doctrine\Common\Collections\Collection
+     */
     protected function getActiveContract($id)
     {
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');

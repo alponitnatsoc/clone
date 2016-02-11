@@ -326,4 +326,28 @@ class PurchaseOrdersDescription
     {
         return $this->value;
     }
+
+    /**
+     * Set idDispercionNovo
+     *
+     * @param integer $idDispercionNovo
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setIdDispercionNovo($idDispercionNovo)
+    {
+        $this->idDispercionNovo = $idDispercionNovo;
+
+        return $this;
+    }
+
+    /**
+     * Get idDispercionNovo
+     *
+     * @return integer
+     */
+    public function getIdDispercionNovo()
+    {
+        return $this->idDispercionNovo;
+    }
 }
