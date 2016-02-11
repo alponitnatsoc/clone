@@ -72,3 +72,6 @@ make_afiliation:
 routes:
     path:     /routes
     defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }
+register_express:
+    path:     /backoffice/register
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:registerExpress }

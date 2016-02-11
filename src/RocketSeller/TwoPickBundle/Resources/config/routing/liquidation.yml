@@ -12,5 +12,5 @@ final_liquidation:
     path: /final/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidation }
 final_liquidation_detail:
-    path: /final/detail/{employee_id}/{period}
+    path: /final/detail/{id}/{employee_id}/{period}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidationDetail }

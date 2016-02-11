@@ -302,7 +302,8 @@ class LiquidationRestController extends FOSRestController
 
         $parameters = $request->request->all();
 
-        $employee_id = $parameters["employee_id"] . "9"; //@todo el 9 es para los mocks
+        $idEmperHasEmpee = $parameters["employee_id"];
+        $employee_id = $idEmperHasEmpee . "9"; //@todo el 9 es para los mocks
         $username = $parameters["username"];
         $year = $parameters["year"];
         $month = $parameters["month"];
@@ -362,55 +363,18 @@ class LiquidationRestController extends FOSRestController
             $view->setStatusCode(410);
             return $view;
         }
-//         $data = $response->getContent();
-
-        /**
-         * Obtener datos de la preliquidacion antes de consolidarla
-         */
-//         $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
-//                 'employeeId' => $employee_id,
-//                 'period' => $period
-//             ),
-//             $format
-//         );
-//         $data["detail"] = json_decode($response->getContent(), true);
-
-//         $data["totalLiq"] = $this->totalLiquidation($data["detail"]);
 
         $data = array(
             "employee_id" => $employee_id,
             "period" => $period,
             "url" => $this->generateUrl("final_liquidation_detail", array(
                 "employee_id" => $employee_id,
-                "period" => $period
+                "period" => $period,
+                "id" => $idEmperHasEmpee
             ))
         );
 
         $view->setData($data)->setStatusCode(200);
         return $view;
-    }
-
-    private function totalLiquidation($data)
-    {
-        $total = 0;
-        foreach ($data as $key => $info) {
-            $payroll_code = $info["CON_CODIGO"];
-            /** @var \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyType */
-            $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
-            if ($noveltyType) {
-//                 var_dump($info["NOMI_VALOR"] . " - " . $noveltyType->getNaturaleza());
-                switch ($noveltyType->getNaturaleza()):
-                    case "DED":
-                        $total -= $info["NOMI_VALOR"];
-                        break;
-                    case "DEV":
-                        $total += $info["NOMI_VALOR"];
-                        break;
-                    default:
-                        break;
-                endswitch;
-            }
-        }
-        return $total;
     }
 }

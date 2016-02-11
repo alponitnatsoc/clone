@@ -32,7 +32,7 @@
                                         <a href="{{ path('back_office')}}">Inicio</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                        <a href="">Registro express</a>
+                                        <a href="{{ path('register_express')}}">Registro express</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_procedures')}}">Tramites</a>
