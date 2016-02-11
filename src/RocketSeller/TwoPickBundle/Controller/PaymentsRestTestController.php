@@ -143,20 +143,14 @@ class PaymentsRestTestController extends FOSRestController
    * @RequestParam(name="document-number", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    * @return View
    */
-  public function postMockAddPaymentMethodAction(ParamFetcher $paramFetcher)
+  public function postMockAddPaymentMethodAction(ParamFetcher $paramFetcher, $id)
   {
-    $document = $paramFetcher->get('document-number');
+    $document = $id;
     $view = View::create();
-    if ($document == 123456789)
-    {
-      $view->setStatusCode(201);
-      $view->setData((array('method-id' => 101)));
-    }
-    else
-    {
-      $view->setStatusCode(400);
-      $view->setData((array('method-id' => 102)));
-    }
+
+    $view->setStatusCode(201);
+    $view->setData((array('method-id' => 101)));
+
 
     return $view;
   }
@@ -245,14 +239,9 @@ class PaymentsRestTestController extends FOSRestController
   {
     $document = $paramFetcher->get('document-number');
     $view = View::create();
-    if ($document == 123456789)
-    {
-      $view->setStatusCode(201);
-    }
-    else
-    {
-      $view->setStatusCode(400);
-    }
+
+    $view->setStatusCode(201);
+
     return $view;
   }
 
@@ -293,7 +282,7 @@ class PaymentsRestTestController extends FOSRestController
   }
 
   /**
-   * @Post("mock/customer/{id}/beneficiary/transfer")
+   * @Post("mock/customer/{id}/transfer")
    * Mocks the payment transfer method request<br/>
    * If the document is 123456789 it will return success, otherwise it returns
    * a bad request. It returns a transfer id: 34567

@@ -13,6 +13,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use DateTime;
 use GuzzleHttp\Client;
@@ -188,8 +189,8 @@ class PaymentsRestController extends FOSRestController
     $header = $this->setHeaders($parameters);
 
     // Create the birth date in the right format.
-    $birth = $parameters['day'] . '/' . $parameters['month'] .
-             '/' . $parameters['year'];
+    $birth = $parameters['year'] . '-' . $parameters['month'] .
+             '-' . $parameters['day'];
 
     $parameters_fixed = array();
     $parameters_fixed['document-type'] = $parameters['documentType'];
@@ -258,8 +259,9 @@ class PaymentsRestController extends FOSRestController
    * @param Request $request.
    * Rest Parameters:
    *
-   * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
-   * (name="documentNumber", nullable=true, requirements="([0-9])+", strict=false, description="document.")
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=false, description="document.")
+   *
+   * (name="documentType", nullable=true, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
    * (name="name", nullable=true, requirements="([a-z|A-Z| ])+", strict=false, description="first name.")
    * (name="lastName", nullable=true, requirements="([a-z|A-Z| ])+", strict=false, description="last name.")
    * (name="year", nullable=true, requirements="([0-9]){4}", strict=false, description="year of birth.")
@@ -294,19 +296,27 @@ class PaymentsRestController extends FOSRestController
     $header = $this->setHeaders($parameters);
 
     // Create the birth date in the right format.
-    $birth = $parameters['day'] . '/' . $parameters['month'] .
-             '/' . $parameters['year'];
+    if(isset($parameters['year']))
+      $birth = $parameters['year'] . '-' . $parameters['month'] .
+               '-' . $parameters['day'];
 
     $path = "/customer/" . $parameters['documentNumber'];
 
     $parameters_fixed = array();
-    $parameters_fixed['document-type'] = $parameters['documentType'];
-    $parameters_fixed['document-number'] = $parameters['documentNumber'];
-    $parameters_fixed['name'] = $parameters['name'];
-    $parameters_fixed['last-name'] = $parameters['lastName'];
-    $parameters_fixed['birth-date'] = $birth;
-    $parameters_fixed['phone-number'] = $parameters['phone'];
-    $parameters_fixed['email'] = $parameters['email'];
+    if(isset($parameters['documentType']))
+      $parameters_fixed['document-type'] = $parameters['documentType'];
+    if(isset($parameters['documentNumber']))
+      $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    if(isset($parameters['name']))
+      $parameters_fixed['name'] = $parameters['name'];
+    if(isset($parameters['lastName']))
+      $parameters_fixed['last-name'] = $parameters['lastName'];
+    if(isset($parameters['year']))
+      $parameters_fixed['birth-date'] = $birth;
+    if(isset($parameters['phone']))
+      $parameters_fixed['phone-number'] = $parameters['phone'];
+    if(isset($parameters['email']))
+      $parameters_fixed['email'] = $parameters['email'];
 
     /** @var View $res */
     $responseView = $this->callApi($header, $parameters_fixed, $path, "put");
@@ -315,39 +325,83 @@ class PaymentsRestController extends FOSRestController
   }
 
   /**
-   * Get the clients 10 last movements.(3.4)<br/>
+   * Aproval for a clients payment.(3.4)<br/>
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Get the clients 10 last movements.",
+   *   description = "Aproval for a clients payment.",
    *   statusCodes = {
-   *     200 = "OK",
+   *     201 = "Created",
    *     400 = "Bad Request",
-   *     401 = "Unauthorized",
-   *     404 = "Not Found"
+   *     401 = "Unauthorized"
    *   }
    * )
    *
-   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   *
+   * (name="MethodId", nullable=false, requirements="([0-9])+", strict=true, description="Method id, it is returned when a payment method is created.")
+   * (name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Total amount.")
+   * (name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Tax amount.")
+   * (name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Tax base.")
+   * (name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Commission amount.")
+   * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
+   * (name="chargeMode", nullable=false, requirements="(1|2|3)", strict=true, description="This is to indicate where the money is going, 1 for validation, 2 for pament and 3 for fee.")
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="Id of the transaction created by us.")
    *
    * @return View
    */
-  public function getClientLast5MovementsAction($documentNumber)
+  public function postPaymentAprovalAction(Request $request)
   {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+';
+    $mandatory['documentNumber'] = true;
+    $regex['MethodId'] = '([0-9])+';$mandatory['MethodId'] = true;
+    $regex['totalAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['totalAmount'] = true;
+    $regex['taxAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['taxAmount'] = true;
+    $regex['taxBase'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['taxBase'] = true;
+    $regex['commissionAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['commissionAmount'] = true;
+    $regex['commissionBase'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['commissionBase'] = true;
+    $regex['chargeMode'] = '(1|2|3)';
+    $mandatory['chargeMode'] = true;
+    $regex['chargeId'] = '([a-zA-Z1-9])+';
+    $mandatory['chargeId'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
     // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $documentNumber . "/movement";
+    $path = "/customer/" . $parameters['documentNumber'] . "/charge";
 
-    // We set up the default headers, so the client doesn't have to provide
-    // anything in the get call.
-    $header = $this->setHeaders();
+    // Set up the headers to default if none is provided.
+    $header = $this->setHeaders($parameters);
 
-    $parameters = array();
+    $parameters_fixed = array();
+    $parameters_fixed['method-id'] = $parameters['MethodId'];
+    $parameters_fixed['total-amount'] = $parameters['totalAmount'];
+    $parameters_fixed['tax-amount'] = $parameters['taxAmount'];
+    $parameters_fixed['tax-base'] = $parameters['taxBase'];
+    $parameters_fixed['commission-amount'] = $parameters['commissionAmount'];
+    $parameters_fixed['commission-base'] = $parameters['commissionBase'];
+    $parameters_fixed['charge-mode'] = $parameters['chargeMode'];
+    $parameters_fixed['charge-third-id'] = $parameters['chargeId'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
 
     return $responseView;
   }
+
 
   /**
    * Get a maximum number of transactions from a client in a day range.(3.5)<br/>
@@ -374,7 +428,7 @@ class PaymentsRestController extends FOSRestController
                                                 $limit)
   {
     // This is the asigned path by NovoPayment to this action.
-    $path = "/account/" . $documentNumber . "/movement?from=" . $start .
+    $path = "/account/" . $documentNumber . "/charge?from=" . $start .
             '&to=' . $end . '&q=' . $limit;
 
     // We set up the default headers, so the client doesn't have to provide
@@ -388,6 +442,162 @@ class PaymentsRestController extends FOSRestController
 
     return $responseView;
   }
+
+  /**
+   * Get a specific charge by client.(3.6)<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Get a specific charge by client.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Int $documentNumber The id of the client in the payments system.
+   * @param Int $chargeId The id of the charge to be queried, provided by us.
+   *
+   * @return View
+   */
+  public function getClientSpecificChargeAction($documentNumber, $chargeId)
+  {
+    // This is the asigned path by NovoPayment to this action.
+    $path = "/customer/" . $documentNumber .
+            "/charge/" . $chargeId;
+
+    // We set up the default headers, so the client doesn't have to provide
+    // anything in the get call.
+    $header = $this->setHeaders();
+
+    $parameters = array();
+
+    /** @var View $responseView */
+    $responseView = $this->callApi($header, $parameters, $path, "get");
+
+    return $responseView;
+  }
+
+  /**
+   * Dispersion of beneficiary payment by client.(3.7)<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Dispersion of beneficiary payment by client.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     201 = "Accepted",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   *
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="Id of the charge, it was provided by us.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
+   * (name="beneficiaryAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Amount of the beneficiary")
+   * (name="dispersionType", nullable=false, requirements="(1|2|3)", strict=true, description="Type of dispersion, it is 1 for payroll, 2 for pila and 3 for fee.")
+   *
+   * @return View
+   */
+  public function postClientPaymentAction(Request $request)
+  {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['chargeId'] = '([0-9]| )+'; $mandatory['chargeId'] = true;
+    $regex['beneficiaryId'] = '([0-9]| )+'; $mandatory['beneficiaryId'] = true;
+    $regex['beneficiaryAmount'] = '[0-9]+(\.)?[0-9]*,?([0-9]+)?';
+    $mandatory['beneficiaryAmount'] = true;
+    $regex['dispersionType'] = '(1|2|3)';
+    $mandatory['dispersionType'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    // This is the asigned path by NovoPayment to this action.
+    $path = "/customer/" . $parameters['documentNumber'] .
+            "/transfer";
+
+    // Set up the headers to default if none is provided.
+    $header = $this->setHeaders($parameters);
+
+    $parameters_fixed = array();
+    // Adding another layer because, NovoPayment needs it like this.
+    $layer = array();
+    $parameters_fixed['charge-third-id'] = $parameters['chargeId'];
+
+    $layer['document-number'] = $parameters['beneficiaryId'];
+    $layer['amount'] = $parameters['beneficiaryAmount'];
+    $layer['dispersion-type'] = $parameters['dispersionType'];
+
+    $parameters_fixed['beneficiaries'] = $layer;
+
+    /** @var View $responseView */
+    $responseView = $this->callApi($header, $parameters_fixed, $path);
+
+    return $responseView;
+  }
+
+  /**
+   * Reverse a payment(3.7)<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Reverse a payment.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="id of the payment method.")
+   *
+   * @return View
+   */
+  public function deleteReversePaymentmethodAction(Request $request)
+  {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['chargeId'] = '([a-zA-Z1-9])+';
+    $mandatory['chargeId'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+
+    // This is the asigned path by NovoPayment to this action.
+    $path = "/customer/" . $parameters['documentNumber'] .
+            "/charge/" . $parameters['paymentMethodId'];
+
+    // Set up the headers to default if none is provided.
+    $header = $this->setHeaders($parameters);
+
+    $parameters_fixed = array();
+
+    /** @var View $responseView */
+    $responseView = $this->callApi($header, $parameters_fixed, $path, 'delete');
+
+    return $responseView;
+  }
+
 
   /**
    * Set a payment method for a client.(4.1)<br/>
@@ -410,9 +620,9 @@ class PaymentsRestController extends FOSRestController
    * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="document type.")
    * (name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type, 2 MasterCard, 3 Visa.")
    * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
-   * (name="expirationYear", nullable=true, requirements="([0-9]){4}", strict=true, description="expiration year.")
-   * (name="expirationMonth", nullable=true, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * (name="codeCheck", nullable=true, requirements="([0-9]){3}", strict=true, description="code check.")
+   * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
+   * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
+   * (name="codeCheck", nullable=false, requirements="([0-9]){3}", strict=true, description="code check.")
    *
    * @return View
    */
@@ -448,11 +658,10 @@ class PaymentsRestController extends FOSRestController
 
     $parameters_fixed = array();
     $parameters_fixed['document-type'] = $parameters['documentType'];
-    $parameters_fixed['document-number'] = $parameters['documentNumber'];
     $parameters_fixed['payment-type'] = $parameters['paymentType'];
-    $parameters_fixed['account-number'] = $parameters['accountNumber'];
-    $parameters_fixed['expiration-date'] = $expiration;
-    $parameters_fixed['code-check'] = $parameters['codeCheck'];
+    $parameters_fixed['account'] = $parameters['accountNumber'];
+    $parameters_fixed['exp-date'] = $expiration;
+    $parameters_fixed['check-code'] = $parameters['codeCheck'];
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
@@ -528,6 +737,8 @@ class PaymentsRestController extends FOSRestController
     $view->setData($data);
     return $view;
   }
+
+
 
   /**
    * Get payment method by client(4.3).<br/>
@@ -635,8 +846,10 @@ class PaymentsRestController extends FOSRestController
    * @param Request $request.
    * Rest Parameters:
    *
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document of the client.")
+   *
    * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
-   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document of the beneficiary.")
    * (name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
    * (name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
    * (name="yearBirth", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
@@ -645,8 +858,9 @@ class PaymentsRestController extends FOSRestController
    * (name="phone", nullable=false, requirements="([0-9])+", strict=true, description="phone.")
    * (name="email", nullable=false, strict=true, description="email.")
    * (name="companyId", nullable=false, strict=true, description="id of the company(NIT)")
-   * (name="companyBranch", nullable=true, description="Company branch id")
-   * (name="paymentMethodId", nullable=false, requirements="([0-9])+", description="payment method id(1-cash, 2-SVA, 3-account)")
+   * (name="companyBranch", nullable=false, description="Company branch id, 0 by default.")
+   * (name="paymentMethodId", nullable=false, requirements="([0-9])+", description="payment method id
+   *                                                                     (1-cash, 4 savings account, 5 checking ccount, 6-SVA)")
    * (name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
    * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
    * (name="PaymentType", nullable=true, description="Ahorros or Corriente")
@@ -662,6 +876,7 @@ class PaymentsRestController extends FOSRestController
     // Set all the parameters info.
     $regex['documentType'] = '([A-Z|a-z]){2}'; $mandatory['documentType'] = true;
     $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+    $regex['beneficiaryId'] = '([0-9])+'; $mandatory['beneficiaryId'] = true;
     $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = true;
     $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = true;
     $regex['yearBirth'] = '([0-9]){4}'; $mandatory['yearBirth'] = true;
@@ -702,11 +917,14 @@ class PaymentsRestController extends FOSRestController
     $parameters_fixed['email'] = $parameters['email'];
     $parameters_fixed['company-id'] = $parameters['companyId'];
     $parameters_fixed['company-branch'] = $parameters['companyBranch'];
-    $parameters_fixed['payment-mode-id'] = $parameters['paymentMethodId'];
-    $parameters_fixed['payment-mode-account'] =
-         $parameters['PaymentAccountNumber'];
-    $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
-    $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
+    $parameters_fixed['payment-type'] = $parameters['paymentMethodId'];
+    if(isset($parameters['PaymentAccountNumber']))
+      $parameters_fixed['payment-mode-account'] =
+           $parameters['PaymentAccountNumber'];
+    if(isset($parameters['PaymentBankNumber']))
+      $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
+    if(isset($parameters['PaymentType']))
+      $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
@@ -837,15 +1055,16 @@ class PaymentsRestController extends FOSRestController
 
 
   /**
-   * Aproval for a clients payment.(5.5)<br/>
+   * Modifies a beneficiary in the payments system(5.5).<br/>
    *
    * @ApiDoc(
    *   resource = true,
-   *   description = "Aproval for a clients payment.",
+   *   description = "Modifies a beneficiary in the payments system.",
    *   statusCodes = {
    *     201 = "Created",
    *     400 = "Bad Request",
-   *     401 = "Unauthorized"
+   *     401 = "Unauthorized",
+   *     404 = "Not Found"
    *   }
    * )
    *
@@ -853,100 +1072,27 @@ class PaymentsRestController extends FOSRestController
    * Rest Parameters:
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * (name="MethodId", nullable=false, requirements="([0-9])+", strict=true, description="Method id, it is returned when a payment method is created.")
-   * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
-   * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
-   * (name="codeCheck", nullable=false, requirements="([0-9]){3}", strict=true, description="code check.")
-   * (name="totalAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Total amount.")
-   * (name="taxAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax amount.")
-   * (name="taxBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Tax base.")
-   * (name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission amount.")
-   * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
-   *
-   * @return View
-   */
-  public function postPaymentAprovalAction(Request $request)
-  {
-    $parameters = $request->request->all();
-    $regex = array();
-    $mandatory = array();
-
-    // Set all the parameters info.
-    $regex['documentNumber'] = '([0-9])+';
-    $mandatory['documentNumber'] = true;
-    $regex['MethodId'] = '([0-9])+';$mandatory['MethodId'] = true;
-    $regex['expirationYear'] = '([0-9]){4}';
-    $mandatory['expirationYear'] = true;
-    $regex['expirationMonth'] = '([0-9]){2}';
-    $mandatory['expirationMonth'] = true;
-    $regex['codeCheck'] = '([0-9]){3}'; $mandatory['codeCheck'] = true;
-    $regex['totalAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
-    $mandatory['totalAmount'] = false;
-    $regex['taxAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
-    $mandatory['taxAmount'] = false;
-    $regex['taxBase'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
-    $mandatory['taxBase'] = false;
-    $regex['commissionAmount'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
-    $mandatory['commissionAmount'] = false;
-    $regex['commissionBase'] = '[0-9]+(\.)?[0-9]*(,?[0-9]+)?';
-    $mandatory['commissionBase'] = false;
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-
-    // Adjust the format of the expiration date.
-    $expiration = $parameters['expirationYear'] . '-' .
-                  $parameters['expirationMonth'] . '-01';
-
-    // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $parameters['documentNumber'] . "/charge";
-
-    // Set up the headers to default if none is provided.
-    $header = $this->setHeaders($parameters);
-
-    $parameters_fixed = array();
-    $parameters_fixed['expiration-date'] = $expiration;
-    $parameters_fixed['method-id'] = $parameters['MethodId'];
-    $parameters_fixed['code-check'] = $parameters['codeCheck'];
-    $parameters_fixed['total-amount'] = $parameters['totalAmount'];
-    $parameters_fixed['tax-amount'] = $parameters['taxAmount'];
-    $parameters_fixed['tax-base'] = $parameters['taxBase'];
-    $parameters_fixed['commission-amount'] = $parameters['commissionAmount'];
-    $parameters_fixed['commission-base'] = $parameters['commissionBase'];
-
-    /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters_fixed, $path);
-
-    return $responseView;
-  }
-
-  /**
-   * Dispersion of beneficiary payment by client.(5.6)<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Dispersion of beneficiary payment by client.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     201 = "Accepted",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized"
-   *   }
-   * )
-   *
-   * @param Request $request.
-   * Rest Parameters:
-   *
-   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * (name="chargeId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the charge.")
-   * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
-   * (name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
-   * (name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
+   * (name="documentType", nullable=true, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
+   * (name="name", nullable=true, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
+   * (name="lastName", nullable=true, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
+   * (name="yearBirth", nullable=true, requirements="([0-9]){4}", strict=true, description="year of birth.")
+   * (name="monthBirth", nullable=true, requirements="([0-9]){2}", strict=true, description="month of birth.")
+   * (name="dayBirth", nullable=true, requirements="([0-9]){2}", strict=true, description="day of birth.")
+   * (name="phone", nullable=true, requirements="([0-9])+", strict=true, description="phone.")
+   * (name="email", nullable=true, strict=true, description="email.")
+   * (name="companyId", nullable=true, strict=true, description="id of the company(NIT)")
+   * (name="companyBranch", nullable=true, description="Company branch id, 0 by default.")
+   * (name="paymentMethodId", nullable=true, requirements="([0-9])+", description="payment method id
+   *                                                                     (1-cash, 4 savings account, 5 checking ccount, 6-SVA)")
+   * (name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
+   * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
+   * (name="PaymentType", nullable=true, description="Ahorros or Corriente")
    *
    * @return View
    */
-  public function postClientPaymentAction(Request $request)
+  public function postModifyBeneficiaryAction(Request $request)
   {
     $parameters = $request->request->all();
     $regex = array();
@@ -954,34 +1100,75 @@ class PaymentsRestController extends FOSRestController
 
     // Set all the parameters info.
     $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
-    $regex['chargeId'] = '([0-9]| )+'; $mandatory['chargeId'] = true;
-    $regex['beneficiaryId'] = '([0-9]| )+'; $mandatory['beneficiaryId'] = true;
-    $regex['beneficiaryAmount'] = '([0-9]| )+';
-    $mandatory['beneficiaryAmount'] = true;
-    $regex['beneficiaryPhone'] = '([0-9]| )+';
-    $mandatory['beneficiaryPhone'] = false;
+    $regex['beneficiaryId'] = '([0-9])+'; $mandatory['documentNumber'] = true;
+
+    $regex['documentType'] = '([A-Z|a-z]){2}'; $mandatory['documentType'] = false;
+    $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = false;
+    $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = false;
+    $regex['yearBirth'] = '([0-9]){4}'; $mandatory['yearBirth'] = false;
+    $regex['monthBirth'] = '([0-9]){2}'; $mandatory['monthBirth'] = false;
+    $regex['dayBirth'] = '([0-9]){2}'; $mandatory['dayBirth'] = false;
+    $regex['phone'] = '([0-9])+'; $mandatory['phone'] = false;
+    $mandatory['email'] = false;
+    $mandatory['companyId'] = false;
+    $mandatory['companyBranch'] = false;
+    $regex['paymentMethodId'] = '([0-9])+';
+    $mandatory['paymentMethodId'] = false;
+    $regex['PaymentAccountNumber'] = '([0-9])+';
+    $mandatory['PaymentAccountNumber'] = false;
+    $regex['PaymentBankNumber'] = '([0-9])+';
+    $mandatory['PaymentBankNumber'] = false;
+    $mandatory['PaymentType'] = false;
 
     $this->validateParamters($parameters, $regex, $mandatory);
 
+    // Create the birth date in the right format.
+    if(isset($parameters['yearBirth']))
+      $birth = $parameters['dayBirth'] . '/' .
+               $parameters['monthBirth'] . '/' .
+               $parameters['yearBirth'];
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $parameters['documentNumber'] .
-            "/beneficiary/transfer";
+            "/beneficiary/" . $parameters['beneficiaryId'];
 
     // Set up the headers to default if none is provided.
     $header = $this->setHeaders($parameters);
 
     $parameters_fixed = array();
-    $parameters_fixed['charge-id'] = $parameters['chargeId'];
-    $parameters_fixed['beneficiary-id'] = $parameters['beneficiaryId'];
-    $parameters_fixed['beneficiary-amount'] = $parameters['beneficiaryAmount'];
-    $parameters_fixed['beneficiary-phone-number'] =
-        $parameters['beneficiaryPhone'];
+    if(isset($parameters['documentType']))
+      $parameters_fixed['document-type'] = $parameters['documentType'];
+    if(isset($parameters['documentNumber']))
+      $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    if(isset($parameters['name']))
+      $parameters_fixed['name'] = $parameters['name'];
+    if(isset($parameters['lastName']))
+      $parameters_fixed['last-name'] = $parameters['lastName'];
+    if(isset($parameters['yearBirth']))
+      $parameters_fixed['birth-date'] = $birth;
+    if(isset($parameters['phone']))
+      $parameters_fixed['phone-number'] = $parameters['phone'];
+    if(isset($parameters['email']))
+      $parameters_fixed['email'] = $parameters['email'];
+    if(isset($parameters['companyId']))
+      $parameters_fixed['company-id'] = $parameters['companyId'];
+    if(isset($parameters['companyBranch']))
+      $parameters_fixed['company-branch'] = $parameters['companyBranch'];
+    if(isset($parameters['paymentMethodId']))
+      $parameters_fixed['payment-type'] = $parameters['paymentMethodId'];
+    if(isset($parameters['PaymentAccountNumber']))
+      $parameters_fixed['payment-mode-account'] =
+         $parameters['PaymentAccountNumber'];
+    if(isset($parameters['PaymentBankNumber']))
+      $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
+    if(isset($parameters['PaymentType']))
+      $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
 
     /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters_fixed, $path);
+    $responseView = $this->callApi($header, $parameters_fixed, $path, 'put');
 
     return $responseView;
   }
+
 
   /**
    * Get all charges by client.(5.7)<br/>
@@ -1005,80 +1192,6 @@ class PaymentsRestController extends FOSRestController
   {
     // This is the asigned path by NovoPayment to this action.
     $path = "/customer/" . $documentNumber . "/charge/";
-
-    // We set up the default headers, so the client doesn't have to provide
-    // anything in the get call.
-    $header = $this->setHeaders();
-
-    $parameters = array();
-
-    /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path, "get");
-
-    return $responseView;
-  }
-
-  /**
-   * Get a specific charge by client.(5.8)<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Get a specific charge by client.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized",
-   *     404 = "Not Found"
-   *   }
-   * )
-   *
-   * @param Int $documentNumber The id of the client in the payments system.
-   * @param Int $chargeId The id of the charge to be queried.
-   *
-   * @return View
-   */
-  public function getClientSpecificChargeAction($documentNumber, $chargeId)
-  {
-    // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $documentNumber .
-            "/charge/" . $chargeId;
-
-    // We set up the default headers, so the client doesn't have to provide
-    // anything in the get call.
-    $header = $this->setHeaders();
-
-    $parameters = array();
-
-    /** @var View $responseView */
-    $responseView = $this->callApi($header, $parameters, $path, "get");
-
-    return $responseView;
-  }
-
-  /**
-   * Get dispersion of transfer by client.(5.9)<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Get dispersion of transfer by client.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized",
-   *     404 = "Not Found"
-   *   }
-   * )
-   *
-   * @param Int $documentNumber The id of the client in the payments system.
-   * @param Int $transferId The id of the tranfer to be queried.
-   *
-   * @return View
-   */
-  public function getClientTransferAction($documentNumber, $transferId)
-  {
-    // This is the asigned path by NovoPayment to this action.
-    $path = "/customer/" . $documentNumber .
-            "/beneficiary/transfer/" . $transferId;
 
     // We set up the default headers, so the client doesn't have to provide
     // anything in the get call.
@@ -1127,6 +1240,60 @@ class PaymentsRestController extends FOSRestController
     $responseView = $this->callApi($header, $parameters, $path, "get");
 
     return $responseView;
+  }
+
+
+  // This next web services will be exposed to novopayment, to confirm the
+  // state of some operations, it should be moved to another controller later.
+
+  /**
+   * @PUT("dispersion/{id}")
+   * Dispersion of beneficiary payment by client.(5.6)<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Dispersion of beneficiary payment by client.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     201 = "Accepted",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+   *
+   * (name="chargeId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the charge.")
+   * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
+   * (name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
+   * (name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
+   *
+   * @return View
+   */
+  public function putApprovalDispersionAction(Request $request, $id)
+  {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['status'] = '(1|2)'; $mandatory['documentNumber'] = true;
+    $regex['message'] = '(.)*'; $mandatory['chargeId'] = false;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    $status = $parameters['status'];
+    $message = isset($parameters['message']) ? $parameters['message'] : '';
+    if($status == 1) {
+      // Succesfull.
+      // Update field in the DB.
+    } else if($status == 2) {
+      // Problem.
+      // Report problem to user.
+    }
   }
 }
 ?>
