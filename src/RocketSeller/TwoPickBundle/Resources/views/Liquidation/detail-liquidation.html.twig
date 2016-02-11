@@ -2,15 +2,91 @@
 {% block title %}Symplifica - Detalle liquidación final del empleado{% endblock %}
 {% block fos_user_content %}
 {# {{ dump(data) }}#}
+    <h2 class="center">La liquidación fue calculada exitosamente</h2>
+    <div class="employee_head_liquidation">
+        <div class="col-sm-12 employee_data">
+            <div class="col-sm-3 employee_data_info">
+                <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+                <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
+                <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
+            </div>
+            <div class="col-sm-3 employee_data_info">
+                <p><strong>Tipo contrato</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
+            </div>
+            <div class="col-sm-3 employee_data_info">
+                <p><strong>Duración contrato</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
+            </div>
+            <div class="col-sm-3 employee_data_info">
+                <p><strong>Salario</strong></p>
+                <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
+            </div>
+{#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
+{#                 <p><strong>Días tomados de vacaciones</strong></p>#}
+{#                 <span class="txthelp"><p></p></span>#}
+{#             </div>#}
+        </div>
+    </div>
 <div>
-<ul class="list-group">
-    {% for liquidation in data %}
-        <li class="list-group-item">
-            <strong>{{ loop.index }} - </strong>
-            {{ liquidation.CON_CODIGO }} -
-            {{ liquidation.NOMI_VALOR_LOCAL }}
-        </li>
-    {% endfor %}
-</ul>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <thead>
+                <tr>
+                    <th>Deducciones</th>
+                    <th></th>
+                </tr>
+            </thead>
+{#             {% set totalLiq = 0 %}#}
+            {% for ded in deducciones %}
+                <tr>
+                    <td>{{ ded.novelty.name }}</td>
+                    <td>{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                </tr>
+{#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Devengos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for dev in devengos %}
+                <tr>
+                    <td>{{ dev.novelty.name }}</td>
+                    <td>{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                </tr>
+{#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+            {% endfor %}
+            <thead>
+                <tr class="info">
+                    <td>Valor de la liquidación</td>
+                    <td id="totLiq">{{ totalLiq }}</td>
+                </tr>
+            </thead>
+        </tbody>
+    </table>
 </div>
+<button type="button" class="btn btn-default">Volver atrás</button>
+<button type="button" class="btn btn-primary">Continuar</button>
+
+<script type="text/javascript">
+<!--
+jQuery( document ).ready(function() {
+    formatMoney($("td[id='totLiq']"));
+});
+//-->
+</script>
+
 {% endblock %}
+
+{# {% block javascripts %}#}
+{# {{ parent() }}#}
+
+{# {% endblock %}#}

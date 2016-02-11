@@ -61,7 +61,9 @@ class LiquidationType extends AbstractType
             ))
             ->add('save', 'submit', array(
                 'attr'   =>  array(
-                    'class'   => 'btn btn-primary btnNext btn-orange')
+                    'class'   => 'btn btn-primary',
+                    'disabled' => true
+                )
             ));
     }
 

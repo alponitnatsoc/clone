@@ -41,7 +41,7 @@
 <form action="{{ path('api_public_post_final_pre_liquidation_submit') }}" method="post" {{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
 {{ form_errors(form) }}
 
-    <h2>Liquidación final de empleado</h2>
+    <h2 class="center">Liquidación final de empleado</h2>
     <div class="employee_head_liquidation">
         <div class="col-sm-12 employee_data">
             <div class="col-sm-3 employee_data_info">
@@ -86,13 +86,14 @@
                 <p>¿Cuál es la razón para finalizar el contrato?</p>
                 {{ form_widget(form.liquidationReason) }}
                 <p>El valor de la liquidación es:</p>
-                <span class="txthelp" id="liquidationValue"></span>
+                <p><span class="txthelp" id="liquidationValue"></span>*</p>
                 <span class="txthelp"><p>* Basado en la información que actualmente registra el sistema. Puede variar si debe reportar novedades.</p></span>
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 center">
             <div class="col-sm-6 col-sm-push-3">
-                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="notAjax">Continuar el proceso de liquidación</a>
+                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>
+{#                 <button type="button" class="btn btn-info btn-lg">Continuar el proceso de liquidación</button>#}
                 <br /><br />
             </div>
         </div>
@@ -112,8 +113,7 @@
                     {% endfor %}
                 </ul>
 {#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
-
-                <div id="agregarNovedad"></div>
+                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
 
             </div>
         </div>
@@ -129,7 +129,24 @@
             <br />
             <div class="col-sm-12 col-xs-12 center">
                 <div class="col-sm-6 col-sm-push-3">
-                    <a id="btn-1" href="" class="btn btn-primary btnNext btn-orange">Continuar el proceso de liquidación</a>
+                    <button type="button" id="btn-4" class="btn btn-primary btnNext btn-orange" onclick="$('#infoDocs').show();$('#contLiq').show();">Descargar documento</a>
+                    <br /><br />
+                </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 center" id="infoDocs" style="display: none">
+                <div class="col-sm-8">
+                    <h4 class="txthelp">El documento fue descargado exitosamente.</h4>
+                    <span class="txthelp">Recuerde que <strong>ES MUY IMPORTANTE</strong> que lo haga firmar,
+                    <strong>le tome foto o escanee y posteriormente lo suba a Symplifica</strong> para mantener
+                    registro del manejo del empleado y así evitar futuros inconvenientes legales.
+                    </span>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="txthlep">¿Cómo tomar foto o escanear un documento?</h4>
+                    <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a id="btn-5" href="" class="btn btn-primary btnNext btn-orange">Subir documento</a>
                     <br /><br />
                 </div>
             </div>
@@ -146,12 +163,17 @@
                 atención así como también sus correspondientes descargos.</span>
             </div>
         </div>
-        <div class="col-sm-12 col-xs-12 center">
+
+        <div class="col-sm-12 col-xs-12 center" id="contLiq" style="display:none">
             <div class="col-sm-6 col-sm-push-3">
-                <a id="btn-1" href="" class="btn btn-primary btnNext btn-orange">Continuar</a>
+
+                <button type="button" class="btn btn-info btn-lg" onclick="$('#liquidationStep2').hide();$('#liquidationStep1').show()">Anterior</button>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
+
                 <br /><br />
             </div>
         </div>
+
         <div class="liq-container">
             <div class="col-sm-6">
                 <strong>Le puede interesar este contenido de nuestro blog:</strong>
@@ -168,12 +190,34 @@
         </div>
     </div>
 
-{#     {{ form_rest(form) }}#}
-<input type="submit" />
-</form>
+    <!-- Modal -->
+    <div class="modal fade" id="confirmLiq" tabindex="-1" role="dialog" aria-labelledby="Confirmar Liquidacion" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmar datos para liquidación</h4>
+                </div>
+                <div class="modal-body">
+                    <p>La liquidación será calculada de acuerdo a la información suministrada por el empleador
+                    así como también asumiendo que cuenta con la documentación requerida por la ley para hacerlo.</p>
+                    <span class="txthelp">
+                        <input type="checkbox" name="checkConfirmLiq" value="1" />
+                        Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.
+                    </span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+{#                     <button type="button" class="btn btn-primary" disabled="disabled">Continuar</button>#}
+                    {{ form_widget(form.save, { 'label': 'Continuar' }) }}
+                </div>
+            </div>
+        </div>
+    </div>
 
-{# {{ form_start(form) }}#}
-{# {{ form_end(form) }}#}
+    <div id="agregarNovedad"></div>
+
+</form>
 
 {% endblock %}
 {% block javascripts %}
@@ -182,6 +226,31 @@
 $.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
     validateLiqForm();
 });
+
+$('input[type="checkbox"][name="checkConfirmLiq"]').change(function() {
+    if(this.checked) {
+        $("#rocketseller_twopickbundle_liquidation_save").prop("disabled", false);
+    }
+});
+
+function loadNovelty(url) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+        }
+    }).done(function (data) {
+        $("#agregarNovedad").html(data);
+        $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
+            startNovelty();
+        });
+
+        $('#noveltyModal').modal('show');
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
 
 $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio').on("change", function(){
 
@@ -195,7 +264,6 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
     var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
     var username = "{{ employeeInfo.usernameEmployer }}";
 
-//    var url = "{{ path('api_plublic_post_add_final_liquidation_parameters') }}";
     var url = "{{ path('api_public_post_pre_liquidation') }}";
 
     var frequency = "{{ contractInfo.frequency }}";
@@ -215,14 +283,14 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
         }
     }).done(function (data) {
-        $("#liquidationValue").html(data["totalLiq"]);
+        $("#liquidationValue").prepend(data["totalLiq"]);
         formatMoney($("#liquidationValue"));
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
 });
 
-$("form").on("submit", function (e) {
+$("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (e) {
     e.preventDefault();
 
     $('#createdModal').modal('toggle');

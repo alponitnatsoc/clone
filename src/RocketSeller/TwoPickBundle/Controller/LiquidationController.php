@@ -12,7 +12,7 @@ use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Form\LiquidationType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Employer;
-use Symfony\Component\HttpFoundation\Request;
+use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 
 /**
  * Liquidation controller.
@@ -23,6 +23,7 @@ class LiquidationController extends Controller
 
     use EmployerHasEmployeeMethodsTrait;
     use LiquidationMethodsTrait;
+    use NoveltyTypeMethodsTrait;
 
     /**
      * Lists all Liquidation entities.
@@ -138,14 +139,42 @@ class LiquidationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param string $employee_id - Id del empleado en SQL
+     * @param integer $period - periodo de pago de nomina
+     * @param integer $id - Id de la relacion employer_has_employee
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function finalLiquidationDetailAction($employee_id, $period)
+    public function finalLiquidationDetailAction($employee_id, $period, $id)
     {
         $format = array('_format' => 'json');
-//             $employee_id = $request->request->get("employee_id");
-//             $period = $request->request->get("period");
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $this->getEmployee($id);
+        /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
+        $person = $employee->getPersonPerson();
+
+        $employeeInfo = array(
+            'name' => $person->getNames(),
+            'lastName1' => $person->getLastName1(),
+            'lastName2' => $person->getLastName2(),
+            'documentType' => $person->getDocumentType(),
+            'document' => $person->getDocument(),
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
+        );
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
+        $contract = $this->getActiveContract($id);
+        $startDate = $contract[0]->getStartDate();
+
+        $contractInfo = array(
+            'contractType' => $contract[0]->getContractTypeContractType()->getName(),
+            'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
+            'salary' => $contract[0]->getSalary(),
+            'vacationDays' => "",
+            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDate' => $startDate
+        );
+
         /**
          * Obtener datos de la preliquidacion antes de consolidarla
          */
@@ -157,8 +186,36 @@ class LiquidationController extends Controller
         );
         $data = json_decode($response->getContent(), true);
 
+        $totalLiq = $this->totalLiquidation($data);
+
+        foreach ($data as $key => $liq) {
+            $payroll_code = $liq["CON_CODIGO"];
+            $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
+
+            if ($noveltyType) {
+                $tmp[$key]["novelty"] = $noveltyType;
+                $tmp[$key]["liq"] = $liq;
+                switch ($noveltyType->getNaturaleza()):
+                    case "DED":
+                        $deducciones[] = $tmp[$key];
+                        break;
+                    case "DEV":
+                        $devengos[] = $tmp[$key];
+                        break;
+                    default:
+                        break;
+                endswitch;
+            }
+        }
+
         return $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
-            'data' => $data
+            'data' => $data,
+            'employeeInfo' => $employeeInfo,
+            'contractInfo' => $contractInfo,
+            'totalLiq' => $totalLiq,
+            'tmp' => $tmp,
+            'devengos' => $devengos,
+            'deducciones' => $deducciones
         ));
     }
 }
