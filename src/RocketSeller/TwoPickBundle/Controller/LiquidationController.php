@@ -162,6 +162,16 @@ class LiquidationController extends Controller
             'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
         );
 
+        $employer = $this->getEmployer($id);
+        $personEmployer = $employer->getPersonPerson();
+        $employerInfo = array(
+            'name' => $personEmployer->getNames(),
+            'lastName1' => $personEmployer->getLastName1(),
+            'lastName2' => $personEmployer->getLastName2(),
+            'documentType' => $personEmployer->getDocumentType(),
+            'document' => $personEmployer->getDocument()
+        );
+
         /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
@@ -221,7 +231,8 @@ class LiquidationController extends Controller
             'employee_id' => $employee_id,
             'period' => $period,
             'totalDeducciones' => $totalLiq["totalDed"],
-            'totalDevengos' => $totalLiq["totalDev"]
+            'totalDevengos' => $totalLiq["totalDev"],
+            'employer' => $employerInfo
         ));
     }
 }

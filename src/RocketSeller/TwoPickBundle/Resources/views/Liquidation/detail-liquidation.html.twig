@@ -119,6 +119,35 @@
         </table>
     </div>
 
+    <div class="col-sm-12">
+        <h4><strong>Se hace constar:</strong></h4>
+        <span class="txthelp"><strong>1.</strong> Que el empleador ha incorporado en la presente liquidación los importes
+        correspondientes a salarios, horas extras, descansos compensatorios, cesantías, vacaciones,
+        prima de servicios, auxilio de transporte, y en sí, todo concepto relacionado con salarios,
+        prestaciones o indemnizaciones causadas al quedar extinguido el contrato de trabajo.</span>
+        <span class="txthelp"><strong>2.</strong> Que con el pago del dinero anotado en la presente liquidación, queda
+        transada cualquier diferencia relativa al contrato de trabajo extinguido, o a cualquier diferencia
+        anterior. Por lo tanto, esta transacción tiene como efecto la terminación de las obligaciones
+        provenientes de la relación laboral que existió entre {{ employer.name }} {{ employer.lastName1 }} {{ employer.lastName2 }}.
+        y el empleado, quienes declaran estar a paz y salvo por todo concepto.</span>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="col-sm-4">
+            <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+            <span>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</span>
+            <span>Empleado</span>
+        </div>
+        <div class="col-sm-4">
+            <h4><strong>{{ employer.name }} {{ employer.lastName1 }} {{ employer.lastName2 }}</strong></h4>
+            <span>{{ employer.documentType }} {{ employer.document }}</span>
+            <span>Empleador</span>
+        </div>
+        <div class="col-sm-4">
+            Powered by Logo Symplifica
+        </div>
+    </div>
+
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group">
             <button type="button" class="btn btn-default">Volver atrás</button>
@@ -129,7 +158,7 @@
             <button type="button" class="btn btn-default">Guardar PDF</button>
             <button type="button" class="btn btn-default">Enviar Email</button>
         </div>
-     </div>
+    </div>
 
 <script type="text/javascript">
 <!--
