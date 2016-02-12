@@ -97,7 +97,7 @@
         </ul>
 
         <div class="tab-content">
-            <div id="basicData" class="tab-pane fade in active">
+            <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
@@ -238,7 +238,7 @@
                 </div>
             </div>
 
-            <div id="contactData" class="tab-pane fade in">
+            <div id="contactData" class="tab-pane fade in {%   if tab==2 %} active {% endif %}">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
@@ -304,7 +304,7 @@
                 </div>
             </div>
 
-            <div id="contractData" class="tab-pane fade">
+            <div id="contractData" class="tab-pane fade in {%   if tab==3 %} active {% endif %}">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios<a href="{{ path('show_help') }}" class="helpTxt">> ayuda</a></span>
                 </div>
@@ -482,7 +482,7 @@
                     </div>
                 </div>
             </div>
-            <div id="paymentMethod" class="tab-pane fade">
+            <div id="paymentMethod" class="tab-pane fade in {%   if tab==4 %} active {% endif %}">
                 <h3 class="blueFormTitle">Destino del pago *</h3>
                 Escoja el mecanismo de pago para del salario:<br />
                 {% for child in form.employeeHasEmployers.payMethod %}
