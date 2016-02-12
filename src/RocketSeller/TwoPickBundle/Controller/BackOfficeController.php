@@ -63,9 +63,11 @@ class BackOfficeController extends Controller
     public function registerExpressAction()
     {   
         $em = $this->getDoctrine()->getManager();
-        $employers = $em->getRepository('RocketSellerTwoPickBundle:Employer')
-                ->findByRegisterExpress(1);               
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('employers'=>$employers));    
+        $role = $em->getRepository('RocketSellerTwoPickBundle:Role')
+                ->findByName("ROLE_BACK_OFFICE");
+        $notifications = $em->getRepository('RocketSellerTwoPickBundle:Notification')
+                ->findByRoleRole($role[0]);                     
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('notifications'=>$notifications));    
     }
     /**
      * hace un query de la clase para instanciarla

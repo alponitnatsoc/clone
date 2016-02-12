@@ -44,16 +44,16 @@
 	            <table class="col-md-12">
 					<thead>
 					<tr>
-						<th>Empleador</th>						
-						<th>estado</th>
+						<th>Usuario</th>						
+						<th>Telefono</th>
 						<th>Accion</th>
 					</tr>
 					</thead>
 					<tbody>
-					{% for employer in employers %}
+					{% for notification in notifications %}
 						<tr>
-							<td>{{ employer.personPerson.names }} {{ employer.personPerson.lastName1 }}</td>
-							<td>{{ employer.registerExpress }}</td>												
+							<td>{{ notification.personPerson.names }} {{ notification.personPerson.lastName1 }}</td>
+							<td>{{ notification.personPerson.phones[0].phoneNumber }}</td>												
 							<td><a href="">Ver</a></td>
 						</tr>
 					{% endfor %}
