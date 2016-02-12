@@ -360,3 +360,15 @@ activate_subscription:
 inactive_user:
     path: /suscripcion-inactiva
     defaults:  { _controller: RocketSellerTwoPickBundle:Default:suscripcionInactiva }
+express_info:
+    path: /express-info
+    defaults:  { _controller: RocketSellerTwoPickBundle:Home:registerExpressInfo }
+express_start:
+    path: /express-start
+    defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerExpress }
+express_payment:
+    path: /express-payment/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:expressPayment }    
+express_success:
+    path: /express-success/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:successExpress }

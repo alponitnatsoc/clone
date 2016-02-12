@@ -1,7 +1,8 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+<form action="{{ path('express_start') }}" {{ form_enctype(form) }} method="POST" class="express_start">
     {{ form_widget(form) }}
+    <input type="text" name="phone">
     <div class="form-group txt-A1-terms">
         <input type="checkbox" id="chkTOS"/> Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a>
     </div>

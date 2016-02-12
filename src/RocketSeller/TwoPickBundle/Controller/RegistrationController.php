@@ -9,6 +9,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -192,4 +193,45 @@ class RegistrationController extends BaseController
     //         return $this->get('session')->get($key);
     //     }
     // }
+    public function registerExpressAction(Request $request)
+    {
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->get('fos_user.registration.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+        $user->setUsername("atemporel_tempo_tmp");
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+            $person = new Person();
+            $phone = new Phone();
+            $phone->setPhoneNumber($request->get("phone"));
+            $person->addPhone($phone);
+            $person->setNames($form->get("name")->getData());
+            $user->setPersonPerson($person);
+            $user->setUsername($user->getEmail());
+            $userManager->updateUser($user);
+            return $this->redirectToRoute('express_payment',array('id'=>$user->getId()));
+        }
+        return $this->render('FOSUserBundle:Registration:expressRegistration.html.twig', array(
+                    'form' => $form->createView()
+        ));
+    }
 }

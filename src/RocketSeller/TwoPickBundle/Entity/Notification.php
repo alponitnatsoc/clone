@@ -43,6 +43,14 @@ class Notification {
      * })
      */
     private $personPerson;
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Role
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Role", inversedBy="roleHasTask")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="role_id_role", referencedColumnName="id_role")
+     * })
+     */
+    private $roleRole;
 
     /**
      * @var \DateTime
@@ -297,4 +305,28 @@ class Notification {
         return $this->personPerson;
     }
 
+
+    /**
+     * Set roleRole
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Role $roleRole
+     *
+     * @return Notification
+     */
+    public function setRoleRole(\RocketSeller\TwoPickBundle\Entity\Role $roleRole = null)
+    {
+        $this->roleRole = $roleRole;
+
+        return $this;
+    }
+
+    /**
+     * Get roleRole
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Role
+     */
+    public function getRoleRole()
+    {
+        return $this->roleRole;
+    }
 }
