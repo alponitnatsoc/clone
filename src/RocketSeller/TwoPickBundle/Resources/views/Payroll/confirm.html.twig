@@ -42,7 +42,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Total pagado</h4>
-                        <span id="totalPay">${{total|number_format}}</span>
+                        <span id="totalPay">${{ total|number_format }}</span>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Total Personas</h4>
-                        {{employees|length}}
+                        {{ payrolls|length }}
                     </div>
                 </div>
             </div>        
@@ -62,15 +62,21 @@
             </div>
         </div>
         <div class="row">
-            {% for employee in employees %}
+
+            {% for payroll in payrolls %}
+                {% set employerHasEmployee = employerHasEmployees[payroll.idPayroll] %}  
+                {% set employee = employerHasEmployee.employeeEmployee %}   
+                {% set employer = employerHasEmployee.employerEmployer %}   
+                {% set personEmployee = employee.personPerson %}  
+                {% set personEmployer = employer.personPerson %} 
                 <div class="col-sm-6">
                     <div class="row-fluid clearfix employee">
                         <div class="col-xs-12">
                             <div class="col-xs-2">
-                                <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
+                                <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
                             </div>
                             <div class="col-xs-10 vertical-align-center">
-                                <span class="name">{{employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastName1}}</span>
+                                <span class="name">{{ personEmployee.names }} {{ personEmployee.lastName1 }}</span>
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -78,21 +84,21 @@
                                 <div class="col-md-6">
                                     <div class="col-xs-12">
                                         <h4>Pago a empleado</h4>
-                                        $ {{salaries[employee.idEmployerHasEmployee]|number_format}}
+                                        $ {{ salaries[payroll.idPayroll]|number_format }}
                                     </div>
                                     <div class="col-xs-12">
-                                        <strong>Medio de pago: </strong><br>{{ payMethod[employee.idEmployerHasEmployee].payTypePayType.name }}
+                                        <strong>Medio de pago: </strong><br>{{ payMethod[payroll.idPayroll].payTypePayType.name }}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <h4>Aportes Seguridad Social</h4>
-                                    $ {{ aportes[employee.idEmployerHasEmployee]|number_format }}
+                                    $ {{ (aportes[payroll.idPayroll]['aporteSalud'] + aportes[payroll.idPayroll]['aportePension'])|number_format }}   
                                 </div>
                             </div>
                             <div class="total row-fluid clearfix">
                                 <div class="col-xs-12 text-center">
                                     <h4>Pago final</h4>
-                                    $ {{ (salaries[employee.idEmployerHasEmployee] + aportes[employee.idEmployerHasEmployee])|number_format}}
+                                    $ {{ (salaries[payroll.idPayroll] + (aportes[payroll.idPayroll]['aporteSalud'] + aportes[payroll.idPayroll]['aportePension']))|number_format}}
                                 </div>
                             </div>
                             <div class="row novedades">
@@ -100,19 +106,19 @@
                                     <h4>Comprobante de pago</h4>
                                 </div>
                                 <div class="col-xs-12 text-center botones">
-                                    <a class="btn btn-default btn-vouher notAjax" target="_blank" href="{{ path('payroll_voucher',{'idPayroll':payrolls[employee.idEmployerHasEmployee]}) }}" value="Ver/Imprimir">Ver/Imprimir</a> <input type="button" class="btn btn-default" value="Enviar" />
+                                    <a class="btn btn-default btn-vouher notAjax" target="_blank" href="{{ path('payroll_voucher',{'idPayroll':payroll.idPayroll}) }}" value="Ver/Imprimir">Ver/Imprimir</a> <input type="button" class="btn btn-default" value="Enviar" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
             {% endfor %}
         </div>
-        <div class="row buttons center">
+        <!--<div class="row buttons center">
             <div class="col-xs-12 center">
-                <input type="button" class="btn btn-default glyphicon glyphicon-print" value="Imprimir" /> <!--<input type="button" class="btn btn-default" value="Volver Atrás" />-->
+                <input type="button" class="btn btn-default glyphicon glyphicon-print" value="Imprimir" /> <input type="button" class="btn btn-default" value="Volver Atrás" />
             </div>
-        </div>
+        </div>-->
     </div>
 {% endblock %}
 

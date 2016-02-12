@@ -5,6 +5,8 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,17 +15,11 @@ use Symfony\Component\Process\Process;
 class PayrollController extends Controller
 {
 
-    public function payTestAction($idContract)
-    {
-        $this->createPayrollToContract($idContract);
-        exit;
-    }
-
     /**
      * Crear Payroll para el contrato
      * 
      * @param String $idContract
-     * @param Boolean $deleteActivePayroll para indicar que se actualiza el payroll activo en lugar de crear uno nuevo
+     * @param Boolean $deleteActivePayroll para indicar que se elimina el payroll activo
      * @param String $period
      * @param String $month
      * @param String $year
@@ -143,13 +139,12 @@ class PayrollController extends Controller
     }
 
     /**
-     * Trae la informacion del empleado desde el ws de nomina
+     * Trae la informacion del empleado desde el ws de nomina de SQL
      * @param type $employerHasEmployee
      */
     private function getInfoNominaSQL($employerHasEmployee)
     {
-        $employeeId = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocument(); //parametro para el mock
-        //$employeeId = $employerHasEmployee->getIdEmployerHasEmployee(); //parametro para el ws real
+        $employeeId = $employerHasEmployee->getIdEmployerHasEmployee();
 
         $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
             'employeeId' => $employeeId,
@@ -158,10 +153,113 @@ class PayrollController extends Controller
             'year' => null
                 ), array('_format' => 'json')
         );
+        return json_decode($generalPayroll->getContent(), true);
+    }
 
-        $generalPayroll = json_decode($generalPayroll->getContent(), true);
-        dump($generalPayroll);
-        exit;
+    private function getSalary($dataNomina)
+    {
+        if ($dataNomina && !empty($dataNomina)) {
+            foreach ($dataNomina as $key => $value) {
+                if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '1') {
+                    unset($dataNomina[$key]);
+                    return array(
+                        'dataNomina' => $dataNomina,
+                        'salary' => $value['NOMI_VALOR_LOCAL']
+                    );
+                }
+            }
+        }
+        return false;
+    }
+
+    private function getAportes($dataNomina)
+    {
+        if ($dataNomina && !empty($dataNomina)) {
+            $aporteSalud = $aportePension = 0;
+            foreach ($dataNomina as $key => $value) {
+                if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '3010') {
+                    unset($dataNomina[$key]);
+                    $aporteSalud = $value['NOMI_VALOR_LOCAL'];
+                } elseif (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '3020') {
+                    unset($dataNomina[$key]);
+                    $aportePension = $value["NOMI_VALOR_LOCAL"];
+                }
+            }
+            return array(
+                'dataNomina' => $dataNomina,
+                'aporteSalud' => $aporteSalud,
+                'aportePension' => $aportePension
+            );
+        }
+        return false;
+    }
+
+    private function getData($payrollToPay = false)
+    {
+        $user = $this->getUser();
+        $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        $salaries = array();
+        $payrolls = array();
+        $aportes = array();
+        $dataNomina = array();
+        $novelties = array();
+        $employeesData = array();
+        $payMethod = array();
+
+        /* @var $employerHasEmployee EmployerHasEmployee */
+        foreach ($employerHasEmployees as $employerHasEmployee) {
+            if ($employerHasEmployee->getState() > 0) {
+                $contracts = $employerHasEmployee->getContracts();
+                /* @var $contract Contract */
+                foreach ($contracts as $contract) {
+                    if ($contract->getState() > 0) {
+                        /* @var $payroll Payroll */
+                        $payroll = $contract->getActivePayroll();
+                        if ($payrollToPay === false) {
+                            $payrollToPay2 = array($payroll->getIdPayroll());
+                        } else {
+                            $payrollToPay2 = $payrollToPay;
+                        }
+                        if (in_array($payroll->getIdPayroll(), $payrollToPay2)) {
+                            $employeesData[$payroll->getIdPayroll()] = $employerHasEmployee;
+                            $payMethod[$payroll->getIdPayroll()] = $contract->getPayMethodPayMethod();
+                            $purchaseOrdersDescription = $payroll->getPurchaseOrdersDescription();
+                            $purchaseOrdersStatus = false;
+                            if ($purchaseOrdersDescription) {
+                                $purchaseOrdersStatus = $purchaseOrdersDescription->getPurchaseOrdersStatus();
+                            }
+                            if ((!$purchaseOrdersDescription || empty($purchaseOrdersDescription) || $purchaseOrdersDescription === null)) {
+                                if ((!$purchaseOrdersStatus || empty($purchaseOrdersStatus) || $purchaseOrdersStatus === null)) {
+                                    $payrolls[$payroll->getIdPayroll()] = $payroll;
+                                    $dataNomina[$payroll->getIdPayroll()] = $this->getInfoNominaSQL($employerHasEmployee);
+                                    $salary = $this->getSalary($dataNomina[$payroll->getIdPayroll()]);
+                                    $salaries[$payroll->getIdPayroll()] = 0;
+                                    if ($salary) {
+                                        $salaries[$payroll->getIdPayroll()] = $salary['salary'];
+                                        $dataNomina[$payroll->getIdPayroll()] = $salary['dataNomina'];
+                                    }
+                                    $aporte = $this->getAportes($dataNomina[$payroll->getIdPayroll()]);
+                                    $aportes[$payroll->getIdPayroll()] = array();
+                                    if ($aporte) {
+                                        $aportes[$payroll->getIdPayroll()]['aporteSalud'] = $aporte['aporteSalud'];
+                                        $aportes[$payroll->getIdPayroll()]['aportePension'] = $aporte['aportePension'];
+                                        $novelties[$payroll->getIdPayroll()] = $aporte['dataNomina'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return array(
+            "employerHasEmployees" => $employeesData,
+            "salaries" => $salaries,
+            "aportes" => $aportes,
+            "payrolls" => $payrolls,
+            "novelties" => $novelties,
+            "payMethod" => $payMethod
+        );
     }
 
     public function payAction()
@@ -169,24 +267,14 @@ class PayrollController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        $user = $this->getUser();
-        $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        $salaries = array();
-        $payrolls = array();
-        $novelties = array();
-        $aportes = array();
-        foreach ($employeesData as $employerHasEmployee) {
-            if ($employerHasEmployee->getState() == 1) {
-                $dataNomina = $this->getInfoNominaSQL($employerHasEmployee);
-            }
-        }
+        $data = $this->getData();
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
-                    "employees" => $employeesData,
-                    "salaries" => $salaries,
-                    "aportes" => $aportes,
-                    "payrolls" => $payrolls,
-                    "novelties" => $novelties
+                    "employerHasEmployees" => $data['employerHasEmployees'],
+                    "salaries" => $data['salaries'],
+                    "aportes" => $data['aportes'],
+                    "payrolls" => $data['payrolls'],
+                    "novelties" => $data['novelties']
         ));
     }
 
@@ -196,50 +284,16 @@ class PayrollController extends Controller
             throw $this->createAccessDeniedException();
         }
         if ($request->isMethod('POST')) {
-            $employees = $request->request->get('employee');
-            $payrolls = $request->request->get('payroll');
-            $user = $this->getUser();
-            $employer = $user->getPersonPerson()->getEmployer();
-            $repository = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-            $query = $repository->createQueryBuilder('e');
-            $query->andWhere('e.idEmployerHasEmployee IN (:ids)')
-                    ->setParameter('ids', $employees)
-                    ->andWhere('e.employerEmployer = :employer')
-                    ->setParameter('employer', $employer->getIdEmployer());
-            $employeesData = $query->getQuery()->getResult();
-            $salaries = $aportes = $payMethod = array();
-            $total = 0;
-            foreach ($employeesData as $employerHasEmployee) {
-                if ($employerHasEmployee->getState() == 1) {
-                    $contracts = $employerHasEmployee->getContracts();
-                    $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
-                    foreach ($contracts as $contract) {
-                        if ($contract->getState() == 1) {
-                            $aportes[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() * 0.04;
-                            $payMethod[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getPayMethodPayMethod();
-                            $frecuecia = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
-                            if ($frecuecia == 'J') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 30;
-                            } elseif ($frecuecia == 'M') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 1;
-                            } elseif ($frecuecia == 'Q') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 2;
-                            } else {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
-                            }
-                        }
-                        $total += $salaries[$employerHasEmployee->getIdEmployerHasEmployee()];
-                    }
-                }
-            }
+
+            $payrollToPay = $request->request->get('payrollToPay');
+            $data = $this->getData($payrollToPay);
+
             return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', array(
-                        "employees" => $employeesData,
-                        "salaries" => $salaries,
-                        "aportes" => $aportes,
-                        "payMethod" => $payMethod,
-                        "payrolls" => $payrolls,
-                        "total" => $total
+                        "employerHasEmployees" => $data['employerHasEmployees'],
+                        "salaries" => $data['salaries'],
+                        "aportes" => $data['aportes'],
+                        "payrolls" => $data['payrolls'],
+                        "payMethod" => $data['payMethod'],
             ));
         } else {
             return $this->redirectToRoute("payroll");
@@ -252,51 +306,23 @@ class PayrollController extends Controller
             throw $this->createAccessDeniedException();
         }
         if ($request->isMethod('POST')) {
-            $employees = $request->request->get('employee');
-            $payrolls = $request->request->get('payroll');
-            $user = $this->getUser();
-            $employer = $user->getPersonPerson()->getEmployer();
-            $repository = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
-            $query = $repository->createQueryBuilder('e');
-            $query->andWhere('e.idEmployerHasEmployee IN (:ids)')
-                    ->setParameter('ids', $employees)
-                    ->andWhere('e.employerEmployer = :employer')
-                    ->setParameter('employer', $employer->getIdEmployer());
-            $employeesData = $query->getQuery()->getResult();
-            $salaries = $aportes = $payMethod = array();
+
+            $payrollToPay = $request->request->get('payrollToPay');
+            $data = $this->getData($payrollToPay);
+
             $total = 0;
-            foreach ($employeesData as $employerHasEmployee) {
-                if ($employerHasEmployee->getState() == 1) {
-                    $contracts = $employerHasEmployee->getContracts();
-                    $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = 0;
-                    foreach ($contracts as $contract) {
-                        if ($contract->getState() == 1) {
-                            $aportes[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() * 0.04;
-                            $payMethod[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getPayMethodPayMethod();
-                            $frecuecia = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
-                            if ($frecuecia == 'J') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 30;
-                            } elseif ($frecuecia == 'M') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 1;
-                            } elseif ($frecuecia == 'Q') {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary() / 2;
-                            } else {
-                                $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] = $contract->getSalary();
-                            }
-                            $subTotal = $salaries[$employerHasEmployee->getIdEmployerHasEmployee()] + $aportes[$employerHasEmployee->getIdEmployerHasEmployee()];
-                            $total += $subTotal;
-                            $this->createPurchaseOrder($employerHasEmployee, $contract, $subTotal);
-                        }
-                    }
-                }
+            foreach ($data['salaries'] as $key => $salario) {
+                $total += (int) $salario;
+                $total += ($data['aportes'][$key]['aporteSalud'] + $data['aportes'][$key]['aportePension']);
             }
+            //$this->createPurchaseOrder($data['payrolls'], $total);
+
             return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                        "employees" => $employeesData,
-                        "salaries" => $salaries,
-                        "aportes" => $aportes,
-                        "payMethod" => $payMethod,
-                        "payrolls" => $payrolls,
+                        "employerHasEmployees" => $data['employerHasEmployees'],
+                        "salaries" => $data['salaries'],
+                        "aportes" => $data['aportes'],
+                        "payrolls" => $data['payrolls'],
+                        "payMethod" => $data['payMethod'],
                         "total" => $total
             ));
         } else {
@@ -304,7 +330,7 @@ class PayrollController extends Controller
         }
     }
 
-    public function createPurchaseOrder($employerHasEmployee, $contract, $subTotal)
+    private function createPurchaseOrder($payrolls, $total)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -313,7 +339,7 @@ class PayrollController extends Controller
 
         $purchaseOrdersType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersType');
-        $purchaseOrdersType = $purchaseOrdersType->findBy(array('name' => 'Pago nomina'))[0];
+        $purchaseOrdersType = $purchaseOrdersType->findOneBy(array('name' => 'Pago nomina'));
         $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersType);
 
         $payroll = $this->getDoctrine()
