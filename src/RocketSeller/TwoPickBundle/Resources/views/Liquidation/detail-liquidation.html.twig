@@ -87,8 +87,8 @@
     {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
-                    <td>Total deducciones</td>
-                    <td>{{ totalDeducciones }}</td>
+                    <td><strong>Total deducciones</strong></td>
+                    <td><strong>{{ totalDeducciones }}</strong></td>
                 </tr>
                     <tr>
                         <th><strong>Devengos</strong></th>
@@ -102,18 +102,18 @@
     {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
-                    <td>Total devengos</td>
-                    <td>{{ totalDevengos }}</td>
+                    <td><strong>Total devengos</strong></td>
+                    <td><strong>{{ totalDevengos }}</strong></td>
                 </tr>
                 <tr class="info">
-                    <td>Valor de la liquidación</td>
-                    <td id="totLiq">{{ totalLiq }}</td>
+                    <td><strong>Valor de la liquidación</strong></td>
+                    <td id="totLiq"><strong>{{ totalLiq }}</strong></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr class="warning">
-                    <td class="text-center">Valor a pagar</td>
-                    <td> {{ totalLiq }} </td>
+                    <td class="text-center"><strong>Valor a pagar</strong></td>
+                    <td><strong>{{ totalLiq }}</strong></td>
                 </tr>
             </tfoot>
         </table>
