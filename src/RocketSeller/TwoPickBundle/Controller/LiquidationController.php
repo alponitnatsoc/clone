@@ -198,9 +198,11 @@ class LiquidationController extends Controller
                 switch ($noveltyType->getNaturaleza()):
                     case "DED":
                         $deducciones[] = $tmp[$key];
+//                         $totalDeducciones += $this->totalLiquidation($tmp[$key]["liq"]);
                         break;
                     case "DEV":
                         $devengos[] = $tmp[$key];
+//                         $totalDevengos += $this->totalLiquidation($tmp[$key]["liq"]);
                         break;
                     default:
                         break;
@@ -212,10 +214,14 @@ class LiquidationController extends Controller
             'data' => $data,
             'employeeInfo' => $employeeInfo,
             'contractInfo' => $contractInfo,
-            'totalLiq' => $totalLiq,
+            'totalLiq' => $totalLiq["total"],
             'tmp' => $tmp,
             'devengos' => $devengos,
-            'deducciones' => $deducciones
+            'deducciones' => $deducciones,
+            'employee_id' => $employee_id,
+            'period' => $period,
+            'totalDeducciones' => $totalLiq["totalDed"],
+            'totalDevengos' => $totalLiq["totalDev"]
         ));
     }
 }

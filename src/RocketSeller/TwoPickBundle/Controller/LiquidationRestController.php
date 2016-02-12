@@ -377,4 +377,61 @@ class LiquidationRestController extends FOSRestController
         $view->setData($data)->setStatusCode(200);
         return $view;
     }
+
+    /**
+     * submit final liquidacion.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "submit final liquidacion.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period.")
+     *
+     * @return View
+     */
+    public function postFinalLiquidationSubmitAction(Request $request)
+    {
+
+        $data = array();
+        $view = View::create();
+
+        $parameters = $request->request->all();
+
+        $employee_id = $parameters["employee_id"] . "9"; //@todo el 9 es para los mocks
+        $period = $parameters["period"];
+
+        $format = array('_format' => 'json');
+
+        /**
+         * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
+         */
+        $req = new Request();
+        $req->request->set("employee_id", $employee_id);
+        $req->request->set("execution_type", "C");
+
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+            $data = $response->getContent();
+            $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
+            $view->setStatusCode(410);
+            return $view;
+        }
+
+        $data = array(
+            "data" => $response->getContent()
+        );
+
+        $view->setData($data)->setStatusCode(200);
+        return $view;
+    }
 }

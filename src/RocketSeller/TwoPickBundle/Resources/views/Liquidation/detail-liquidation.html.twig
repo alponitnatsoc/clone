@@ -1,6 +1,43 @@
 {% extends '::base.html.twig' %}
 {% block title %}Symplifica - Detalle liquidación final del empleado{% endblock %}
 {% block fos_user_content %}
+{% block stylesheets %}
+    <style>
+        .glyphicon-th-large{
+            color:#00CDCC;
+        }
+        .glyphicon-th-large:hover{
+            color:#00CDCC;
+            cursor: pointer;
+        }
+        .glyphicon-th-list{
+            color:#00CDCC;
+        }
+        .employee_data_info{
+            padding: 5px 30px 5px 30px;
+            display: inline-block;
+            text-align: center;
+        }
+        .employee_head_liquidation{
+            padding: 10px;
+            display: -webkit-inline-box;
+            border-bottom: solid #efefef;
+            border-top: solid #efefef;
+            border-width: 2px;
+        }
+        .contador_logo{
+            height: 50px;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+        .liq-container {
+            border-bottom: solid #efefef;
+            padding: 10px;
+            display: -webkit-inline-box;
+        }
+    </style>
+{% endblock %}
 {# {{ dump(data) }}#}
     <h2 class="center">La liquidación fue calculada exitosamente</h2>
     <div class="employee_head_liquidation">
@@ -28,59 +65,94 @@
 {#             </div>#}
         </div>
     </div>
-<div>
-    <table class="table table-condensed">
-        <thead>
-            <tr>
-                <th>Concepto</th>
-                <th>Valor</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="table-responsive">
+        <table class="table">
             <thead>
                 <tr>
-                    <th>Deducciones</th>
-                    <th></th>
+                    <th>Concepto</th>
+                    <th>Valor</th>
                 </tr>
             </thead>
-{#             {% set totalLiq = 0 %}#}
-            {% for ded in deducciones %}
+            <tbody>
                 <tr>
-                    <td>{{ ded.novelty.name }}</td>
-                    <td>{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
-                </tr>
-{#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
-            {% endfor %}
-            <thead>
-                <tr>
-                    <th>Devengos</th>
+                    <th><strong>Deducciones</strong></th>
                     <th></th>
                 </tr>
-            </thead>
-            {% for dev in devengos %}
-                <tr>
-                    <td>{{ dev.novelty.name }}</td>
-                    <td>{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+    {#             {% set totalLiq = 0 %}#}
+                {% for ded in deducciones %}
+                    <tr>
+                        <td>{{ ded.novelty.name }}</td>
+                        <td>{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                    </tr>
+    {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+                {% endfor %}
+                <tr class="info">
+                    <td>Total deducciones</td>
+                    <td>{{ totalDeducciones }}</td>
                 </tr>
-{#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
-            {% endfor %}
-            <thead>
+                    <tr>
+                        <th><strong>Devengos</strong></th>
+                        <th></th>
+                    </tr>
+                {% for dev in devengos %}
+                    <tr>
+                        <td>{{ dev.novelty.name }}</td>
+                        <td>{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                    </tr>
+    {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+                {% endfor %}
+                <tr class="info">
+                    <td>Total devengos</td>
+                    <td>{{ totalDevengos }}</td>
+                </tr>
                 <tr class="info">
                     <td>Valor de la liquidación</td>
                     <td id="totLiq">{{ totalLiq }}</td>
                 </tr>
-            </thead>
-        </tbody>
-    </table>
-</div>
-<button type="button" class="btn btn-default">Volver atrás</button>
-<button type="button" class="btn btn-primary">Continuar</button>
+            </tbody>
+            <tfoot>
+                <tr class="warning">
+                    <td class="text-center">Valor a pagar</td>
+                    <td> {{ totalLiq }} </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default">Volver atrás</button>
+            <button type="button" class="btn btn-default" onclick="consolidateLiq($(this))">Continuar</button>
+        </div>
+        <div id="postLiq" class="btn-group" style="display: none">
+            <button type="button" class="btn btn-default">Imprimir</button>
+            <button type="button" class="btn btn-default">Guardar PDF</button>
+            <button type="button" class="btn btn-default">Enviar Email</button>
+        </div>
+     </div>
 
 <script type="text/javascript">
 <!--
 jQuery( document ).ready(function() {
     formatMoney($("td[id='totLiq']"));
 });
+
+function consolidateLiq(element) {
+    var btn = $(element);
+
+    $.ajax({
+        url: "{{ path('api_public_post_final_liquidation_submit') }}",
+        type: 'POST',
+        data: {
+            employee_id: "{{ employee_id }}",
+            period: "{{ period }}"
+        }
+    }).done(function (data) {
+        $("#postLiq").show();
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
 //-->
 </script>
 

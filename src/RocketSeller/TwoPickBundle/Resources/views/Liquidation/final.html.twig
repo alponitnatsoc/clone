@@ -86,13 +86,13 @@
                 <p>¿Cuál es la razón para finalizar el contrato?</p>
                 {{ form_widget(form.liquidationReason) }}
                 <p>El valor de la liquidación es:</p>
-                <p><span class="txthelp" id="liquidationValue"></span>*</p>
+                <span class="txthelp" id="liquidationValue">*</span>
                 <span class="txthelp"><p>* Basado en la información que actualmente registra el sistema. Puede variar si debe reportar novedades.</p></span>
             </div>
         </div>
         <div class="col-sm-12 col-xs-12 center">
             <div class="col-sm-6 col-sm-push-3">
-                <a id="liquidation-step1" href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>
+                <a id="liquidation-step1" disabled=true href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>
 {#                 <button type="button" class="btn btn-info btn-lg">Continuar el proceso de liquidación</button>#}
                 <br /><br />
             </div>
@@ -108,7 +108,9 @@
                     {% for novelty in novelties %}
                         <li class="list-group-item">
                             {{ novelty.name }}
-                            {{ novelty.dateStart.date }}
+                            {% if novelty.dateStart %}
+                                {{ novelty.dateStart.date }}
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -189,7 +191,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="confirmLiq" tabindex="-1" role="dialog" aria-labelledby="Confirmar Liquidacion" aria-hidden="true">
         <div class="modal-dialog">
@@ -214,10 +215,9 @@
             </div>
         </div>
     </div>
-
-    <div id="agregarNovedad"></div>
-
 </form>
+
+<div id="agregarNovedad"></div>
 
 {% endblock %}
 {% block javascripts %}
@@ -268,6 +268,8 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
 
     var frequency = "{{ contractInfo.frequency }}";
 
+    $("#liquidationValue").html("*")
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -285,6 +287,7 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
     }).done(function (data) {
         $("#liquidationValue").prepend(data["totalLiq"]);
         formatMoney($("#liquidationValue"));
+        $("#liquidation-step1").removeAttr("disabled");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
@@ -295,7 +298,7 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
 
     $('#createdModal').modal('toggle');
 
-    var form = $("form");
+    var form = $("form[name='rocketseller_twopickbundle_liquidation']");
     var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
     var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
     var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
@@ -341,7 +344,6 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
-
 });
 </script>
 {% endblock %}

@@ -23,15 +23,21 @@ trait LiquidationMethodsTrait
                 switch ($noveltyType->getNaturaleza()):
                     case "DED":
                         $total -= $info["NOMI_VALOR"];
+                        $totalDed += $info["NOMI_VALOR"];
                         break;
                     case "DEV":
                         $total += $info["NOMI_VALOR"];
+                        $totalDev += $info["NOMI_VALOR"];
                         break;
                     default:
                         break;
                 endswitch;
             }
         }
-        return $total;
+        return array(
+            "total" => $total,
+            "totalDed" => $totalDed,
+            "totalDev" => $totalDev
+        );
     }
 }
