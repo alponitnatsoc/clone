@@ -13,7 +13,8 @@ trait LiquidationMethodsTrait
 
     protected function totalLiquidation($data)
     {
-        $total = 0;
+        $total = $totalDed = $totalDev = 0;
+
         foreach ($data as $key => $info) {
             $payroll_code = $info["CON_CODIGO"];
             /** @var \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyType */
