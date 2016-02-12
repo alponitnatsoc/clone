@@ -151,7 +151,7 @@
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group">
             <button type="button" class="btn btn-default">Volver atrás</button>
-            <button type="button" class="btn btn-default" onclick="consolidateLiq($(this))">Continuar</button>
+            <button type="button" class="btn btn-default" id="bntCont" onclick="consolidateLiq($(this))">Continuar</button>
         </div>
         <div id="postLiq" class="btn-group" style="display: none">
             <button type="button" class="btn btn-default">Imprimir</button>
@@ -177,6 +177,7 @@ function consolidateLiq(element) {
             period: "{{ period }}"
         }
     }).done(function (data) {
+        $("#bntCont").html("Pagar");
         $("#postLiq").show();
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);

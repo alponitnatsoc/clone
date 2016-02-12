@@ -285,7 +285,7 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
         }
     }).done(function (data) {
-        $("#liquidationValue").prepend(data["totalLiq"]);
+        $("#liquidationValue").prepend(data["totalLiq"]["total"]);
         formatMoney($("#liquidationValue"));
         $("#liquidation-step1").removeAttr("disabled");
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -331,7 +331,8 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
             console.log(data["url"]);
             redirUri = data["url"];
 
-            sendAjax(redirUri);
+//             sendAjax(redirUri);
+            window.location.href = redirUri;
         } else {
             $('#main').replaceWith(
                     // ... with the returned one from the AJAX response.
