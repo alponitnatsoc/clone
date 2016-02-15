@@ -129,38 +129,43 @@
                                     <div class="well well-lg leftColumnLogo">
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
-                                    {% if app.user.status >= 2 %}
+                                    {% if app.user.status is defined%}
+                                    {% set status = app.user.status %}
+                                    {% else %}
+                                    {% set status = 0 %}
+                                    {% endif %}
+                                    {% if status >= 2 %}
                                         <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                             <a href="{{ path('show_dashboard_employer') }}">Inicio</a>
                                         </div>
-                                    {% elseif  app.user.status == 1 %}
+                                    {% elseif  status == 1 %}
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
                                     </div>
                                     {% endif %}
                                     <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'reports' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href=""{% endif %}>Reportes</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href=""{% endif %}>Reportes</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_calculator_form' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'setup' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href=""{% endif %}>Configuración</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href=""{% endif %}>Configuración</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if app.user.status < 2 %} class="" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
+                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
                                     </div>
 
                                 </div>
@@ -175,7 +180,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="profile" style="display: inline"> <a class="notAjax" href=" {{ path('fos_user_profile_show') }}">Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                        <span id="profile" style="display: inline"> <a class="notAjax" href=" {{ path('show_user') }}">Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -391,6 +396,12 @@
                         }else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
                             $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
                                 startNovelty();
+                            });
+
+                            return true;
+                        }else if (url.indexOf("{{ path('show_user') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/myAccount.js') }}").done(function () {
+                                startMyAccount();
                             });
 
                             return true;

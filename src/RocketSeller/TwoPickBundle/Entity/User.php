@@ -96,11 +96,29 @@ class User extends BaseUser
      * 2 Free
      * 3 Free3
      *
-     * @var \SmallIntType
+     * @var SmallIntType
      *
      * @ORM\Column(type="smallint")
      */
     private $status = 2;
+
+    /**
+     * Columna utilizada para conocer el estado de la suscripcion del usuario
+     * 0 Actualmente Sin pagar Symplifica
+     * 1 Pagando Symplifica
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $paymentState = 0;
+    /**
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $dayToPay;
 
     /**
      * @var \DateTime
@@ -583,5 +601,53 @@ class User extends BaseUser
     public function getReferrals()
     {
         return $this->referrals;
+    }
+
+    /**
+     * Set dayToPay
+     *
+     * @param integer $dayToPay
+     *
+     * @return User
+     */
+    public function setDayToPay($dayToPay)
+    {
+        $this->dayToPay = $dayToPay;
+
+        return $this;
+    }
+
+    /**
+     * Get dayToPay
+     *
+     * @return integer
+     */
+    public function getDayToPay()
+    {
+        return $this->dayToPay;
+    }
+
+    /**
+     * Set paymentState
+     *
+     * @param integer $paymentState
+     *
+     * @return User
+     */
+    public function setPaymentState($paymentState)
+    {
+        $this->paymentState = $paymentState;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentState
+     *
+     * @return integer
+     */
+    public function getPaymentState()
+    {
+        return $this->paymentState;
     }
 }
