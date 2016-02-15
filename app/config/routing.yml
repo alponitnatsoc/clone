@@ -281,7 +281,7 @@ home_products:
 
 home_landing:
     path:     /
-    defaults: { _controller: RocketSellerTwoPickBundle:Home:landing }
+    defaults: { _controller: RocketSellerTwoPickBundle:Home:home }
 
 home_landing_new:
     path:     /landing

@@ -1,0 +1,548 @@
+
+/* ==========================================================================
+   Symplifica CSS + FTW
+   ========================================================================== */
+@blue: #00CDCC;
+@dark_blue: #3b4b5a;
+@light_blue: #99ebeb;
+@dark_purple: #3c4b5a;
+@gray: #919191;
+@dark_gray: #3C4B5A;
+@light_gray: #4B4B4B;
+@lightGrayText: #CCCCCC;
+@dark_green: #3b4b5a;
+@error_color: #f00;
+@open: "Open Sans","Roboto",Helvetica,Arial;
+@roboto: "Roboto";
+@robotoCondensed: "Open Sans Condensed";
+@lato: "Lato";
+@color_boton: #fd9626;
+@btnShadow: 1px 1px 1px #333;
+@color_boton_disabled: #df8728;
+@fondo: #f8f8f8;
+@lightGrayBars: #efefef;
+@darkerButtonText: #ffffff;
+@lightBLue: #1fcecb;
+@selectedMenuColor: #FD5C5C;
+
+@screen-xs-max: 480px;
+@screen-sm-max: 768px;
+@screen-sm-min: 768px;
+@screen-md-min: 992px;
+@screen-lg-min: 1200px;
+
+/* archive less symplifica */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,800,700);
+// @import (css) "../bower_components/jquery-simple-slider/css/simple-slider.css";
+/* All colors */
+// main colors
+@lightBlue: #1FCFCB;
+@darkBlue: #3B4B5A;
+@white: #fff;
+@darkGray: #4B4B4B;
+@secondDarkGray: #919191;
+@lightGray: #EFEFEF;
+@allColors: lightBlue, darkBlue, darkGray, lightGray, white, secondDarkGray;
+@directions: top, left, right, bottom;
+@defaultBorder: 1px;
+@default: 10px;
+@percent: 100%;
+// images
+@images: "../img";
+@sprite: "../img/sprite.png";
+@mainBanner: "../img/main-banner.png";
+// html 
+body {
+    background: #fff;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Open Sans', sans-serif;
+    color: @darkGray;
+    max-width: 100%;
+}
+.setTextRules(@color, @aling, @weight){
+    color: @color;
+    text-align: @aling;
+    font-weight: @weight;
+}
+.setBtnRules(@color){
+    color:@color;
+    &:hover {
+        .linkHover(75, none);
+    }    
+}
+.linkHover(@opacity, @textDecoration) {
+  opacity: @opacity / 100;
+  filter: ~"alpha(opacity=@{opacity})";
+  text-decoration: @textDecoration;
+}
+/* icons */
+[class^="ico-"] {
+    background: url("@{sprite}") no-repeat;
+    display: inline-block;
+    line-height: 1em;
+    vertical-align: text-top;
+}
+.ico-contact-phone {
+    background-position: -2px -59px;
+    width: 12px;
+    height: 16px;
+}
+.ico-symplifica {
+    background-position: -365px -161px;
+    width: 154px;
+    height: 28px;
+}
+.ico-colon-left {
+    background-position: -9px -217px;
+    width: 26px;
+    height: 16px; 
+}
+.ico-colon-right {
+    background-position: -47px -218px;
+    width: 26px;
+    height: 16px;
+}
+.ico-btn-play {
+    background-position: -504px -189px;
+    width: 104px;
+    height: 104px;
+}
+.ico-thumb-up {
+    background-position: -3px -1px;
+    width: 61px;
+    height: 55px;
+}
+.ico-guide {
+    background-position: -5px -253px;
+    width: 93px;
+    height: 89px;
+}
+.ico-afiliation {
+    background-position: -113px -252px;
+    width: 93px;
+    height: 89px;
+}
+.ico-payment {
+    background-position: -430px 14px;
+    width: 93px;
+    height: 89px;
+}
+.ico-contributions {
+    background-position: -223px -252px;
+    width: 93px;
+    height: 89px;
+}
+.ico-documentation {
+    background-position: -325px -252px;
+    width: 93px;
+    height: 89px;
+}
+/* general clases */
+// helper functions
+.helperRules(@n: length(@allColors), @i: 1) when (@i =< @n) {
+    @name: extract(@allColors, @i);
+    .bg-@{name} {
+        background: @@name;
+    }
+    .btn.bg-@{name}  {
+        .setBtnRules(@white);
+    }
+    .text-@{name} {
+        .setTextRules(@@name, inherit, bold);
+    }
+    a.text-@{name} {
+        &:hover {
+           .linkHover(70, underline); 
+        }  
+    }
+    .border-all-@{name} {
+        border: @defaultBorder solid @@name;
+    }
+    .border-left-@{name} {
+        border-left: @defaultBorder solid @@name;
+    }
+    .border-right-@{name} {
+        border-right: @defaultBorder solid @@name;
+    }
+    .border-botton-@{name} {
+        border-bottom: @defaultBorder solid @@name;
+    }
+    .border-top-@{name} {
+        border-top: @defaultBorder solid @@name;
+    }
+    .helperRules(@n, (@i + 1));
+}
+.direction-rules(@n: length(@directions), @i:1) when (@i =< @n) {
+    @d: extract(@directions, @i);
+    .margin-@{d} {
+        margin-@{d}: @default;
+    }
+    .padding-@{d} {
+        padding-@{d}: @default;
+    }
+    .direction-rules(@n, (@i + 1));
+}
+.helperRules();
+.direction-rules();
+.border-none {
+    border: 0 none;
+}
+.margin-none {
+    margin: 0;
+}
+.margin-all {
+    margin: @default;
+}
+.padding-none {
+    padding: 0;
+}
+.padding-all {
+    padding: @default;
+}
+.display-none {
+    display: none;
+}
+/*======= Elements  =======*/
+/*header*/
+.header {
+    .navbar {
+        margin-bottom: @default - 5;
+    }
+    .separator {
+        height: @defaultBorder;
+        width: 100%;
+    }
+} 
+.header {
+    .navbar-nav  {
+        font-size: 12px;
+        li {
+           padding: @default 0; 
+        }
+        a {
+            padding: 5px 15px;
+            color: @darkGray;
+        }
+    }
+    .login-btn {
+        padding: 8.5px 27.9px;
+        margin-top: @default / 2;
+    } 
+}
+/*main banner*/
+@internalBlockWidth: 450px;
+@internaBlockMargin: 37px;
+.internal-block-banner {
+    @img: "@{mainBanner}";
+    background: url(@img) no-repeat;
+    display: inline-block;
+    height: @internalBlockWidth - 22;
+    padding-top: @internaBlockMargin + 20;
+    padding-bottom: @internaBlockMargin + 20;
+}
+.internal-block-box {
+    padding-left: 3.5%;
+}
+.internal-block-width {
+    width: @internalBlockWidth;
+}
+.internal-block-comment {
+    display: inline-block;
+    position: relative;
+    margin-bottom: @internaBlockMargin;
+    & > span {
+        display: block;
+        float: left;
+    }
+    & > span:first-child + span {
+        width: 90%;
+        padding-left: 10px;
+        & + span {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+    }
+}
+.internal-block-name {
+    padding-left: @internaBlockMargin + 10;
+    margin-bottom: @internaBlockMargin;
+}
+.internal-block-btn {
+    padding: 0 35px;
+    .btn {
+        width: 380px;
+    }
+}
+.internal-block-play-btn {
+    position: absolute;
+    left: -50px;
+    top: 100px;
+    &:hover {
+        .linkHover(80, underline); 
+    }
+}
+/*tour block*/
+@tourBlockMargin: 17px;
+.tour-block {
+    padding-top: @tourBlockMargin;
+    padding-bottom: @tourBlockMargin;
+    .tour-block-icon{
+        span {
+            margin-left: @tourBlockMargin; 
+        }
+    }
+    .tour-block-content {
+        p {
+            margin: 9px 0 0 0;
+        }
+    }
+    .tour-block-btn {
+        .btn {
+            margin: 9px 0 0 0;
+            width: 193px;
+        }
+    }
+}
+/*funtionality block*/
+.functionality-block {
+    margin: 47px 0;
+    .functionality-block-item {
+        float: left;
+        width: 20%;
+        padding: 0 58px;
+        position: relative;
+        & div:first-child {
+            padding: 10px;
+            width: 117px;
+            border-width: 3px;
+            & + div {
+                width: 117px;
+            }
+        }
+    }
+}
+/*multiple comments block*/
+.multiple-comments-block {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+/*services block*/
+.services-bar-container {
+    .services-bar-item {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        a {
+            margin-right: 12.99%;
+        }
+        .slider {
+            position: relative;
+            width: 523px!important;
+            .track {
+                height: 2px;
+                background: @lightBlue;
+                top: 0!important;
+            }
+            .dragger {
+                background: url("@{sprite}") no-repeat;
+                display: inline-block;
+                line-height: 1em;
+                vertical-align: text-top;
+                background-position: -8px -348px;
+                width: 33px;
+                height: 18px;
+            }
+        }  
+    }
+}
+
+.body {
+    padding-bottom: 100px;
+}
+
+footer {
+    background-color:@lightGrayBars;
+    @media (min-width: @screen-md-min) {
+        height:60px;
+        padding-top: 3px;
+    }
+    width:100%;
+    > .container {
+        margin-top:11px;
+        > div {
+            @media (min-width: @screen-md-min) {
+                height:37px;
+                border-right:1px solid #919191;
+            }
+        }
+        > div.logo img {
+            margin-top:5px;
+        }
+        > div.links {
+            > div {
+                padding-left: 0;
+                > a {
+                    color:#333333;
+                    font-size:12px;
+                    font-family: @open;
+                    text-transform:uppercase;
+                }   
+            }
+        }
+        > div.social {
+            padding-top:4px;
+            > div {
+                float:left;
+            }
+            .red {
+                width:32px;
+                height:32px;
+                margin-right:9px;
+                background-image:url(../img/redes.png);
+                > a {
+                    display:block;
+                    width:100%;
+                    height:100%;
+                }
+            }
+            .red.facebook {
+                background-position:0;
+            }
+            .red.linkedin {
+                background-position:-41px;
+            }
+            .red.twitter {
+                background-position:-82px;
+            }
+            .terminos {
+                color:#333333;
+                font-size:12px;
+                font-family: @open;
+            }
+        }
+        > div:last-child {
+            border:none;
+        }
+    }
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+    border-radius: 11px;
+    .close {
+        position: absolute; 
+        right: 15px; 
+        top: 15px;
+        z-index: 100; 
+        color: #fff;
+        span {
+            font-size: 34px;
+        }
+        @media (max-width: @screen-md-min) {
+            right: 5px;
+            top: 5px;
+            span {
+                font-size: 20px;
+            }   
+        }
+        opacity: 0.8!important;
+    }
+    .block-Intro-green {
+        height: auto;
+        padding: 20px 0;
+        margin: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        min-height: 0;
+        .boxIntro-Heading {
+            top: 0;
+            left: 0;
+            position: relative;
+            padding: 10px 0;
+            height: auto;
+        }
+    }
+}
+
+.block-Intro-blue {
+    font-family: @open;
+    background:@blue;
+    text-align:center;
+    display:block;
+    padding:30px 0px;
+    margin:10px 0px;
+    .up-Intro {
+        color:#ffffff;
+        font-size:48px;
+        font-weight:100;
+    }
+    .down-Intro {
+        color:#ffffff;
+        font-size:48px;
+        text-transform:uppercase;
+        font-weight:bold;
+        letter-spacing:-2px;
+    }
+}
+.block-Intro-green {
+    background:@dark_green;
+    display:block;
+    padding:30px 0px;
+    margin:10px 0px 25px 0px;
+    position: relative;
+    min-height: 160px;
+    width: 100%;
+    .up-Intro {
+        font-family: @open;
+        color:#ffffff;
+        font-size:32px;
+        font-weight:bold;
+        > img {
+            margin-top: -4px;
+        }
+    }
+    .boxIntro-Heading {
+        position: absolute;
+        background: @blue;
+        left: 13%;
+        top: 30%;
+        text-align: center;
+        width: 150px;
+        height: 150px;
+        padding: 28px 0px;
+        img {
+        }
+    }
+}
+
+.btn-facebook, .btn-linkedin, .btn-google {
+    font-family: @open;
+    background:#00cdcc;
+    font-size:16px;
+    padding-top:10px;
+    padding-bottom:10px;
+    font-weight:bold;
+    margin-bottom:16px;
+}
