@@ -34,6 +34,7 @@ function validateLiqForm() {
         }).done(function (data) {
             if (data["liquidation_reason"] == 2) { //justa causa
                 $("#liqSinJustaCausa").hide();
+                $('#contLiq').show();
             } else {
                 $("#liqJustaCausa").hide();
             }
