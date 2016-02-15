@@ -25,7 +25,7 @@ class Employee
      */
     private $registerState;
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint",nullable=true)
      */
     private $registerExpress;
 

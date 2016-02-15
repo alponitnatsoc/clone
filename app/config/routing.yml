@@ -38,6 +38,10 @@ documentos_contract:
     path:      /contractLayout/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadContract}
 
+documentos_auth:
+    path:      /download/cartaAutSymplifica
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadAuth }
+
 show_calculator_form:
     path:      /calculator/calculate
     defaults:  { _controller: RocketSellerTwoPickBundle:Calculator:showCalculator}
@@ -372,3 +376,6 @@ express_payment:
 express_success:
     path: /express-success/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:successExpress }
+express_registration:
+    path: /express-registration/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:registration }

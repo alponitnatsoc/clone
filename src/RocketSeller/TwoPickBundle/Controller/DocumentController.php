@@ -56,6 +56,22 @@ class DocumentController extends Controller
 	    $response->setContent($content);
 	    return $response;
 	}
+	public function downloadAuthAction()
+	{		
+
+		$filename = "cartaAuth.pdf";	 	
+	    $path = $this->get('kernel')->getRootDir(). "/../web/public/";
+	    $content = file_get_contents($path.$filename);
+
+	    $response = new Response();
+
+	    //set headers
+	    $response->headers->set('Content-Type', 'mime/type');
+	    $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+	    $response->setContent($content);
+	    return $response;
+	}
 	public function addDocumentAction($id,Request $request){
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\Type\ContactType;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 
 class ExpressRegistrationController extends Controller
 {
@@ -36,6 +37,28 @@ class ExpressRegistrationController extends Controller
         $em->flush();
 
         return $this->render('RocketSellerTwoPickBundle:Registration:expressSuccess.html.twig');
-    }    
+    }
+    public function registrationAction($id)
+    {   
+        $person = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
+        $user  = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
+
+        if (!$person) {
+          throw $this->createNotFoundException(
+                  'No news found for id ' . $id
+          );
+        }
+        $form = $this->createForm(new EmployerRegistration(),$person);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('express_info');
+        }
+        return $this->render(
+            'RocketSellerTwoPickBundle:Employee:startExpressRegister.html.twig',
+            array('form' => $form->createView())
+        );
+    }
 
 }
