@@ -17,10 +17,12 @@
 @roboto: "Roboto";
 @robotoCondensed: "Open Sans Condensed";
 @lato: "Lato";
-@color_boton: #ffa13f;
+@color_boton: #fd9626;
+@btnShadow: 1px 1px 1px #333;
+@color_boton_disabled: #df8728;
 @fondo: #f8f8f8;
 @lightGrayBars: #efefef;
-@darkerButtonText: white;
+@darkerButtonText: #ffffff;
 @lightBLue: #1fcecb;
 @selectedMenuColor: #FD5C5C;
 
@@ -93,6 +95,7 @@ span {
         text-transform:none;
         font-weight:bold;
         font-size:16px;
+        text-shadow: @btnShadow;
         .glyphicon {
             font-size:11px;
         }
@@ -111,7 +114,7 @@ span {
         padding-top: 75px;
     }
 }
-.btn.btnNext, .btnPrevious, .btn-default, .btn.pull-right {
+.btn.btnNext, .btn-default, .btn.pull-right {
     font-family: @open;
     border:2px solid @dark_purple;
     background:@dark_purple;
@@ -125,19 +128,12 @@ span {
     box-shadow: none;
 }
 
-.btn-orange {
-    color: @darkerButtonText !important;
-    background-color: @color_boton !important;
-    border-color: @color_boton !important;
+.btnPrevious {
+    background-color: #fff!important;
+    color: #fd9626;
+    border: 1px solid #fd9626;
+    margin-top: 0;
 }
-
-.btn-orange:hover, .btn-orange:focus, .btn-orange:active   {
-    color: @darkerButtonText !important;
-    background-color: @color_boton !important;
-    border-color: @color_boton !important;
-    opacity:0.8;
-}
-
 
 .btn:hover {
     opacity:0.8;
@@ -191,14 +187,26 @@ span {
     pointer-events: all;
     border-radius: 11px;
     .close {
+        position: absolute; 
+        right: 15px; 
+        top: 15px;
+        z-index: 100; 
+        color: #fff;
         span {
             font-size: 34px;
+        }
+        @media (max-width: @screen-md-min) {
+            right: 5px;
+            top: 5px;
+            span {
+                font-size: 20px;
+            }   
         }
         opacity: 0.8!important;
     }
     .block-Intro-green {
         height: auto;
-        padding: 10px 0;
+        padding: 20px 0;
         margin: 0;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
@@ -313,7 +321,9 @@ footer {
         color:#ffffff;
         font-size:32px;
         font-weight:bold;
-        text-transform: uppercase;
+        > img {
+            margin-top: -4px;
+        }
     }
     .boxIntro-Heading {
         position: absolute;
@@ -581,10 +591,11 @@ a.helpTxt {
     font-weight:bold;
 }
 .left-headline img, .right-headline img {
-    border:2px solid #919191;
+    margin-left: -10px;
     margin-right:10px;
     float:left;
 }
+
 .btn-facebook, .btn-linkedin, .btn-google {
     font-family: @open;
     background:#00cdcc;
@@ -606,7 +617,6 @@ a.helpTxt {
     color:#ffffff;
     border:none;
     border-radius:4px;
-    float: right;
 }
 .btn-facebook:hover, .btn-linkedin:hover, .btn-google:hover {
     background:#00cdcc;
@@ -614,6 +624,9 @@ a.helpTxt {
 .register-AS1:hover {
     background:#00cdcc;
     color:#ffffff;
+}
+.btn-social {
+    text-shadow: @btnShadow;
 }
 .btn-social > :first-child {
     line-height:44px;
@@ -682,8 +695,8 @@ a.helpTxt {
     }
 
     .well {
-        font-family:Lato, sans-serif;
-        font-size: 16px;
+        font-family:@open;
+        font-size: 14px;
         text-transform: initial; 
         text-align: left;
         background-image: none;
@@ -722,6 +735,7 @@ a.helpTxt {
         font-weight: bold;
         color: @blue;
         margin-bottom: 25px;
+        letter-spacing: -1px;
     }
     span {
         margin-bottom: 25px;
@@ -816,22 +830,23 @@ a.helpTxt {
 
     }
     .txt-AD1 {
-        font-family: @robotoCondensed;
+        font-family: @open;
         font-size: 24px;
         font-weight: 700;
         text-transform: initial;
         color: @dark_gray;
         white-space: normal;
         margin-top: 15px;
+        letter-spacing: -1px;
         p {
             font-size: 14px;
-            font-family: @lato;
+            font-family: @open;
             font-weight: 100;
             margin-bottom: 0px;
         }
     }
     .txt-AD2 {
-        font-family: @roboto;
+        font-family: @open;
         color: @blue;
         font-size: 45px;
         font-weight: bold;
@@ -840,7 +855,7 @@ a.helpTxt {
     .txt-AD2 min {
         font-size: 14px;
         color: @dark_gray;
-        font-family: @lato;
+        font-family: @open;
         font-weight: 100;
         display: block;
         float: right;
@@ -870,12 +885,13 @@ a.helpTxt {
         color: #fff;
         opacity: 0.8;
         .txt-AD1 {
-            font-family: @robotoCondensed;
+            font-family: @open;
             font-size: 24px;
             text-transform: initial;
             color: #fff;
             white-space: normal;
             p {
+                letter-spacing: 0;
                 font-size: 14px;
                 font-family: @lato;
                 font-weight: 100;
@@ -943,7 +959,7 @@ a.helpTxt {
     border-radius: 0;
 }
 .nav-tabs.nav-justified > li > a {
-    color: @lightGrayText;
+    color: #999;
     border-width: 2px 0px 0px 0px;
     border-color: @lightGrayText;
     margin: 0 15px 0 0;
@@ -967,6 +983,7 @@ a.helpTxt {
     }
 }
 #registrationFormContainer {
+    margin-top: 30px;
     .form-group input, .form-group select, .form-group textarea {
         color: @gray;
     }
@@ -1029,12 +1046,11 @@ label {
     &.error {
         width: 100%;
         padding: 5px;
-        background-color: @error_color;
         margin-top: 5px;
         font-weight: normal!important;
         font-size: 12px!important;
         min-height: 0;
-        color: #fff!important;
+        color: @error_color!important;
     }
 }
 
@@ -1191,7 +1207,7 @@ ul.phones {
     .well.well-lg{
         text-align: left;
         font-size: 12px;
-        font-family: @lato;
+        font-family: @open;
         font-weight: 300;
         padding: 5px 0px 5px 0px;
         img {
@@ -1309,9 +1325,11 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
 .btn-symplifica {
     text-transform: capitalize;
     background-color: @color_boton;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     outline: none;
     color: @darkerButtonText;
+    text-shadow: @btnShadow;
+    font-weight: 700;
     &:active {
         opacity: 0.7;
         box-shadow: 0 8px rgba(0,0,0,0.2);
@@ -1327,6 +1345,11 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
     &:focus {
         color: @darkerButtonText;
         outline: none!important;
+    }
+    &.disabled {
+        opacity: 1;
+        background-color: @color_boton_disabled;
+        color: #efc394;
     }
 }
 
@@ -1401,6 +1424,7 @@ select {
             margin: 0 -15px;
             padding: 15px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            letter-spacing: -1px;
         }
         margin-top: 40px;
         border: 1px solid #ccc;
@@ -1428,6 +1452,37 @@ select {
         &:hover {
             box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         }
+    }
+}
+
+.btn-orange {
+    text-transform: capitalize;
+    background-color: @color_boton;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: @darkerButtonText;
+    text-shadow: @btnShadow;
+    font-weight: 700;
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: @darkerButtonText;
+    }
+    &:hover {
+        color: @darkerButtonText;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    &:focus {
+        color: @darkerButtonText;
+        outline: none!important;
+    }
+    &.disabled {
+        opacity: 1;
+        background-color: @color_boton_disabled;
+        color: #efc394;
     }
 }
 

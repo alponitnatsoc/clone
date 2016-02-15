@@ -54,7 +54,7 @@
 						<tr>
 							<td>{{ notification.personPerson.names }} {{ notification.personPerson.lastName1 }}</td>
 							<td>{{ notification.personPerson.phones[0].phoneNumber }}</td>												
-							<td><a href="">Ver</a></td>
+							<td><a href="{{ path('express_registration',{'id':notification.personPerson.idPerson})}}">Ver</a></td>
 						</tr>
 					{% endfor %}
 					</tbody>
