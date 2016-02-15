@@ -1,15 +1,15 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <form action="{{ path('api_public_post_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
-    <div>
+    <div class="form-group">
         {% if invalid_username is defined %}
             <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
         {% endif %}
-        <input type="email" id="username" name="username" required="required" placeholder="Email" style="width: 100%;"/>
+        <input type="email" class="form-control" id="username" name="username" required="required" placeholder="Email" style="width: 100%;"/>
         <div class="alert alert-danger" role="alert" style="display: none">No fue posible enviar el correo con el link para resetear la contraseña</div>
     </div>
-    <div>
-        <button id="_submit" name="_submit" type="submit" class="btn btn-info btn-sm pull-right" data-loading-text="Enviando..." data-complete-text="Enviado">Recuperar contraseña</button>
+    <div style="text-align: center">
+        <button id="_submit" name="_submit" type="submit" class="btn btn-symplifica" style="margin-top: 20px;" data-loading-text="Enviando..." data-complete-text="Enviado">Recuperar contraseña</button>
     </div>
 </form>
 <script>

@@ -228,6 +228,13 @@
         <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script>
         <script src="{{ asset('public/js/accounting.min.js') }}"></script>
         <script type="text/javascript">
+            $(document).ready(function() {
+                $('#forgotBtn').click(function(e) {
+                    e.preventDefault();
+                    $('#loginModal').modal('hide');
+                    $('#forgotModal').modal('show');
+                })
+            })
             function formatMoney(element) {
                 $(element).priceFormat({
                     prefix: '',
@@ -470,9 +477,9 @@
             <div class="modal-dialog modal-md vertical-align-center" role="document">
                 <div class="modal-content">
                     <div class="modal-body" style="padding: 0">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style=""><span aria-hidden="true">&times;</span></button>
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                            <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <br /><img src="/img/logo-claro.png" /></div>
+                            <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <img src="/img/logo-claro.png" /></div>
                         </div>
                         <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                             <div class="col-xs-12">
@@ -486,18 +493,15 @@
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="forgotModal">
         <div class="vertical-alignment-helper">
-            <div class="modal-dialog vertical-align-center" role="document">
+            <div class="modal-dialog modal-md vertical-align-center" role="document">
                 <div class="modal-content"><div class="modal-body" style="padding: 0">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                            <div class="col-sm-12 col-xs-12 up-Intro" style="margin:0 0 0 190px">¿Olvidaste<br>tu contraseña?</div>
+                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¿Olvidaste tu contraseña?</div>
                         </div>
 
                         <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                            <div class="col-md-4 " style="">
-                                <p><img src="/img/key.png" style="width: 152px; margin: -105px 0 0 -15px;"></p>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 col-md-push-2">
                                 <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te permita resetear la contraseña</p>
                                 {% include "RocketSellerTwoPickBundle:Resetting:request_content.html.twig" %}
                             </div>
