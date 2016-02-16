@@ -283,10 +283,6 @@ home_products:
     path:     /productos
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }
 
-home_landing:
-    path:     /
-    defaults: { _controller: RocketSellerTwoPickBundle:Home:home }
-
 home_landing_new:
     path:     /landing
     defaults: { _controller: RocketSellerTwoPickBundle:Home:newLanding }
@@ -379,3 +375,38 @@ express_success:
 express_registration:
     path: /express-registration/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:registration }
+
+
+#Zona Pública
+
+home_landing:
+    path:     /
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:home }
+
+beneficios:
+    path:     /beneficios
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:beneficios }
+
+calculadora:
+    path:     /calculadora
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:calculadora }
+
+precios:
+    path:     /precios
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:precios }
+
+nosotros:
+    path:     /nosotros
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:nosotros }
+
+ayuda:
+    path:     /ayuda
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:ayuda }
+
+blog:
+    path:     /blog
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:blog }
+
+contactenos:
+    path:     /contactenos
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:contactenos }

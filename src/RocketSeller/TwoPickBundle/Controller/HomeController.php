@@ -41,8 +41,4 @@ class HomeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:General:infoExpressRegister.html.twig');
     }
 
-    public function homeAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');   
-    }
-
 }

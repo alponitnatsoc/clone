@@ -157,7 +157,8 @@ body {
         }  
     }
     .border-all-@{name} {
-        border: @defaultBorder solid @@name;
+        //border: @defaultBorder solid @@name;
+        border: none;
     }
     .border-left-@{name} {
         border-left: @defaultBorder solid @@name;
@@ -601,5 +602,106 @@ footer {
     border-bottom: 1px solid #ccc;
     img {
         margin-right: 20px;
+    }
+}
+
+#breadcrumb {
+    padding-top: 30px;
+    .breadcrumb {
+        background-color: transparent;
+        li {
+            a {
+                color: #000;
+                text-decoration: underline;
+            }
+            &+li:before {
+                content: '>';
+                font-family: @open;
+            }
+        }
+    }
+}
+
+.entradilla {
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: @dark_green;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    .container {
+        > div {
+            &:first-child {
+                border-right: 1px solid #ccc;
+            }
+        }
+
+        .boton {
+            margin-top: 50px;
+        }
+    }
+}
+
+.marca {
+    color: @blue;
+}
+
+#beneficios {
+    margin-top: 40px;
+    .titulo {
+        .imagen {
+            width: 100%;
+            padding-top: 39%;
+            background-size: cover;
+            background-position: center;
+        }
+        .tipo {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            background-color: @dark_green;
+            color: @blue;
+            font-size: 30px;
+            padding: 10px;
+            padding-right: 20%;
+        }
+    }
+
+    .contenido {
+        padding-top: 40px;
+        ul {
+            padding-left: 100px;
+            li {
+                min-height: 100px;
+                position: relative;
+                list-style: none;
+                &:before {
+                    width: 62px;
+                    height: 62px;
+                    display: block;
+                    content: ' ';
+                    background-image: url(/img/bullets/money.png);
+                    position: absolute;
+                    top: 0;
+                    left: -100px;
+                }
+            }
+        }
+    }
+}
+
+#precios {
+    > div {
+        padding: 20px 10%;
+        img {
+            margin-bottom: 10px;
+        }
+        &:not(:last-child) {
+            border-right: 1px solid #ccc;
+        }
+
+        .big {
+            font-size: 40px;
+        }
     }
 }
