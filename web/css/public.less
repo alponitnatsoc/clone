@@ -333,15 +333,31 @@ body {
     .services-bar-item {
         margin-top: 40px;
         margin-bottom: 40px;
+        .dragger {
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .pasos {
+            width: 539.5px!important
+        }
         a {
-            margin-right: 12.99%;
+            width: 19.3%;
+            display: block;
+            float: left;
+            &:first-child {
+                margin-left: 16.5px;
+            }
+            &:last-child {
+                width: 0;
+            }
         }
         .slider {
             position: relative;
             width: 523px!important;
             .track {
                 height: 2px;
-                background: @lightBlue;
+                border: 1px solid @lightBlue;
                 top: 0!important;
             }
             .dragger {

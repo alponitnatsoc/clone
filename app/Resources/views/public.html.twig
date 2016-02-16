@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.10.1/bootstrap-social.css" />
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous" />
 	<link rel="stylesheet" type="text/css" href="/css/public.css">
+    <link href="bower_components/jquery-simple-slider/css/simple-slider.css" rel="stylesheet" type="text/css" />
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
             <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
             <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
@@ -388,16 +389,20 @@
         <script src="/bower_components/jquery-simple-slider/js/simple-slider.js"></script>
 		<script type="text/javascript">
 			$(function() {
-				$("[data-slider]").simpleSlider();
+				$('.ez-slider').simpleSlider({
+                    allowedValues:[0,1,2,3,4,5],
+                    step:1,
+                    snap:true,
+                    equalSteps: true
+                })
 				$(".services-bar-item a").on("click", function (e) {
 					e.preventDefault();
 
-					var $this = $(this)
-						value = $this.attr("value") * 104.6
-						$bar = $(this).parent().find("input")
-						$dragger = $(this).parent().find(".dragger");
-
-					$dragger.css("left", value);
+					var $this = $(this),
+						value = $this.attr("value"),
+						$bar = $(this).parent().parent().find(".ez-slider");
+                    $bar.simpleSlider("setValue", value);
+					//$dragger.css("left", value);
 				});
 
 			});
