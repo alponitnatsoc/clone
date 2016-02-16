@@ -53,7 +53,7 @@
 									<span class="bg-lightBlue icon-bar"></span>
 									<span class="bg-lightBlue icon-bar"></span>
 								</button>
-								<a class="navbar-brand padding-top padding-bottom" href="#">
+								<a class="navbar-brand padding-top padding-bottom" href="/">
 									<span class="ico-symplifica"></span>
 								</a>
 							</div>
@@ -62,28 +62,28 @@
 								<div class="row">
 									<ul class="nav navbar-nav">
 										<li class="active">
-											<a class="border-right-lightBlue" href="#">BENEFICIOS</a>
+											<a class="border-right-lightBlue" href="/beneficios">BENEFICIOS</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">CALCULADORA SALARIAL</a>
+											<a class="border-right-lightBlue" href="/calculadora">CALCULADORA SALARIAL</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">PRECIOS</a>
+											<a class="border-right-lightBlue" href="/precios">PRECIOS</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">NOSOTROS</a>
+											<a class="border-right-lightBlue" href="/nosotros">NOSOTROS</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">AYUDA</a>
+											<a class="border-right-lightBlue" href="/ayuda">AYUDA</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">BLOG</a>
+											<a class="border-right-lightBlue" href="/blog">BLOG</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">CONTÁCTENOS</a>
+											<a class="border-right-lightBlue" href="/contactenos">CONTÁCTENOS</a>
 										</li>
 										<li>
-											<a class="border-right-lightBlue" href="#">REGISTRARSE</a>
+											<a class="border-right-lightBlue" href="/registrarse">REGISTRARSE</a>
 										</li>
 									</ul>
 									<div class="pull-right">
@@ -102,6 +102,9 @@
 	</div>
 	<!-- Main container -->
 	<div class="body">
+        <div class="container">
+            {% include "RocketSellerTwoPickBundle:Components:breadcrumb.html.twig" %}
+        </div>  
 		{% block body %}{% endblock %}
 	</div>
 	{% block footer %}
