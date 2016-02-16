@@ -27,7 +27,9 @@ class PublicController extends Controller
     }
 
     public function nosotrosAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:nosotros.html.twig');   
+        return $this->render('RocketSellerTwoPickBundle:Public:nosotros.html.twig', array(
+            "breadcrumbs" => array("Inicio" => "/", "Nosotros" => "")
+        ));   
     }
 
     public function ayudaAction() {
@@ -39,6 +41,8 @@ class PublicController extends Controller
     }
 
     public function contactenosAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:contactenos.html.twig');   
+        return $this->render('RocketSellerTwoPickBundle:Public:contactenos.html.twig', array(
+            "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
+        ));   
     }
 }
