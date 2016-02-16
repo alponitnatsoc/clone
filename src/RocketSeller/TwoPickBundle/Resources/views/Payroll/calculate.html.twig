@@ -50,7 +50,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Total Personas</h4>
-                        <span id="totalEmployees">{{ employerHasEmployees|length }}</span>
+                        <span id="totalEmployees">{{ dataNomina|length }}</span>
                     </div>
                 </div>
             </div>        
@@ -60,13 +60,14 @@
         </div>
         <form method="post" action="{{ path('payroll_confirm') }}" id="formPay">
             <div class="row">
-                {% for payroll in payrolls %}
-                    {% set employerHasEmployee = employerHasEmployees[payroll.idPayroll] %}  
+                {% for key,data in dataNomina %}
+                    {% set employerHasEmployee = data['employerHasEmployee'] %}  
                     {% set employee = employerHasEmployee.employeeEmployee %}   
                     {% set employer = employerHasEmployee.employerEmployer %}   
                     {% set personEmployee = employee.personPerson %}  
                     {% set personEmployer = employer.personPerson %}  
-                    <input type="hidden"  name="payroll[{{ payroll.idPayroll }}]" value="{{ payroll.idPayroll }}" >
+                    {% set idPayroll = data['idPayroll'] %} 
+
                     <div class="col-xs-12">
                         <div class="row-fluid clearfix employee">
                             <div class="col-xs-1">
@@ -78,7 +79,7 @@
                                 </div>
                                 <div class="col-xs-2">
                                     <span class="pull-right">
-                                        Pagar <input type="checkbox" class="pay" name="payrollToPay[]" value="{{ payroll.idPayroll }}" checked="checked">
+                                        Pagar <input type="checkbox" class="pay" name="payrollToPay[]" value="{{ idPayroll }}" checked="checked">
                                     </span>
                                 </div>
                                 <div class="row info col-xs-11">
@@ -90,21 +91,29 @@
                                     </div>-->
                                     <div class="col-md-4">
                                         <h4>Pago a empleado:</h4>
-                                        $ {{ salaries[payroll.idPayroll]|number_format }}
+                                        $ {{ data['totalLiquidation']['total']|number_format }}
                                         <h5>Forma de pago:</h5>                                        
-                                        <span>{{ payMethod[payroll.idPayroll].payTypePayType.name }}</span>
+                                        <span>{{ data['payMethod'].payTypePayType.name }}</span>
                                     </div>
                                     <div class="col-md-4">
                                         <h4>Pago aportes Seguridad Social:</h4>
-                                        $ {{ (aportes[payroll.idPayroll]['aporteSalud'] + aportes[payroll.idPayroll]['aportePension'])|number_format }}   
+                                        {% if data['PILA']['total'] is defined %}
+                                            $ {{ data['PILA']['total']|number_format }}  
+                                        {% else %}  
+                                            $ 0
+                                        {% endif %}                                             
                                     </div>
                                     <div class="col-md-4">
                                         <h3>Pago final:</h3>
-                                        <span>$ {{ (salaries[payroll.idPayroll] + (aportes[payroll.idPayroll]['aporteSalud'] + aportes[payroll.idPayroll]['aportePension']) )|number_format}}</span>
+                                        {% if data['PILA']['total'] is defined %}
+                                            <span>$ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format}}</span>
+                                        {% else %}  
+                                            <span>$ {{ (data['totalLiquidation']['total'])|number_format}}</span>
+                                        {% endif %} 
                                     </div>
                                 </div>
                                 <div class="col-xs-11">
-                                    {% if payMethod[payroll.idPayroll].payTypePayType.name|lower == 'en efectivo' %}
+                                    {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
                                         <strong>Medio de pago por defecto: </strong>En Efectivo <a class="notAjax" href="{{ path('register_employee',{'id':employee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
                                     {% else %}  
                                         <strong>Medio de pago por defecto: </strong> Tarjeta de crédito terminada en 3751 <a class="notAjax" href="{{ path('register_employee',{'id':employee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
@@ -212,9 +221,14 @@
         });
         var salaries = [];
         var aportes = [];
-        {% for payroll in payrolls %}
-            salaries[{{payroll.idPayroll}}] = {{ salaries[payroll.idPayroll] }};
-                    aportes[{{payroll.idPayroll}}] = {{ (aportes[payroll.idPayroll]['aporteSalud'] + aportes[payroll.idPayroll]['aportePension']) }};
+
+        {% for key,data in dataNomina %}
+            salaries[{{data['idPayroll']}}] = {{ data['totalLiquidation']['total'] }};
+            {% if data['PILA']['total'] is defined %}
+                        aportes[{{data['idPayroll']}}] = {{ data['PILA']['total'] }};
+            {% else %}  
+                        aportes[{{data['idPayroll']}}] = 0;
+            {% endif %} 
         {% endfor %}
                     $('.employee .pay').on('change', updateValues);
 

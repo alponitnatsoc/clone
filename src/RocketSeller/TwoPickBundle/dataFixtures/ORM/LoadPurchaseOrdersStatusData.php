@@ -7,10 +7,35 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 
-class PurchaseOrdersStatusData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFixtureInterface
 {
+
     public function load(ObjectManager $manager)
     {
+        $PurchaseOrdersStatus = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatus->setName('Pendiente');
+        $PurchaseOrdersStatus->setDescription('Pendiente');
+        $PurchaseOrdersStatus->setIdNovoPay('S1');
+        $manager->persist($PurchaseOrdersStatus);
+
+        $PurchaseOrdersStatus = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatus->setName('Procesando');
+        $PurchaseOrdersStatus->setDescription('Procesando');
+        $PurchaseOrdersStatus->setIdNovoPay('S2');
+        $manager->persist($PurchaseOrdersStatus);
+
+        $PurchaseOrdersStatus = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatus->setName('Candelada');
+        $PurchaseOrdersStatus->setDescription('Candelada');
+        $PurchaseOrdersStatus->setIdNovoPay('S3');
+        $manager->persist($PurchaseOrdersStatus);
+
+        $PurchaseOrdersStatus = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatus->setName('Aprobando');
+        $PurchaseOrdersStatus->setDescription('Aprobando');
+        $PurchaseOrdersStatus->setIdNovoPay('S4');
+        $manager->persist($PurchaseOrdersStatus);
+
         $PurchaseOrdersStatusAprobado = new PurchaseOrdersStatus();
         $PurchaseOrdersStatusAprobado->setName('Aprobado');
         $PurchaseOrdersStatusAprobado->setDescription('Aprobado');
@@ -114,29 +139,13 @@ class PurchaseOrdersStatusData extends AbstractFixture implements OrderedFixture
         $manager->persist($PurchaseOrdersStatusRechazadoB7);
 
         $manager->flush();
-
-        $this->addReference('purchaseOrdersStatus-aprobado', $PurchaseOrdersStatusAprobado);
-        $this->addReference('purchaseOrdersStatus-aprobado08', $PurchaseOrdersStatusAprobado08);
-        $this->addReference('purchaseOrdersStatus-rechazado12', $PurchaseOrdersStatusRechazado12);
-        $this->addReference('purchaseOrdersStatus-rechazado13', $PurchaseOrdersStatusRechazado13);
-        $this->addReference('purchaseOrdersStatus-rechazado14', $PurchaseOrdersStatusRechazado14);
-        $this->addReference('purchaseOrdersStatus-rechazado31', $PurchaseOrdersStatusRechazado31);
-        $this->addReference('purchaseOrdersStatus-rechazado51', $PurchaseOrdersStatusRechazado51);
-        $this->addReference('purchaseOrdersStatus-rechazado54', $PurchaseOrdersStatusRechazado54);
-        $this->addReference('purchaseOrdersStatus-rechazado57', $PurchaseOrdersStatusRechazado57);
-        $this->addReference('purchaseOrdersStatus-rechazado61', $PurchaseOrdersStatusRechazado61);
-        $this->addReference('purchaseOrdersStatus-rechazado65', $PurchaseOrdersStatusRechazado65);
-        $this->addReference('purchaseOrdersStatus-rechazado86', $PurchaseOrdersStatusRechazado86);
-        $this->addReference('purchaseOrdersStatus-rechazado87', $PurchaseOrdersStatusRechazado87);
-        $this->addReference('purchaseOrdersStatus-rechazado94', $PurchaseOrdersStatusRechazado94);
-        $this->addReference('purchaseOrdersStatus-rechazado96', $PurchaseOrdersStatusRechazado96);
-        $this->addReference('purchaseOrdersStatus-rechazadoB6', $PurchaseOrdersStatusRechazadoB6);
-        $this->addReference('purchaseOrdersStatus-rechazadoB7', $PurchaseOrdersStatusRechazadoB7);
     }
+
     public function getOrder()
     {
         // the order in which fixtures will be loaded
         // the lower the number, the sooner that this fixture is loaded
         return 10;
     }
+
 }
