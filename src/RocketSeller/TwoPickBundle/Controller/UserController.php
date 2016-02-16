@@ -2,7 +2,11 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController extends Controller
 {
-    public function myAccountShowAction()
+    public function myAccountShowAction(Request $request)
     {
         /** @var User $user */
         $user=$this->getUser();
@@ -32,7 +36,7 @@ class UserController extends Controller
         $purchaseOrders=$user->getPurchaseOrders();
         /** @var PurchaseOrders $purchaseOrder */
         foreach ($purchaseOrders as $purchaseOrder) {
-            $id=$purchaseOrder->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdNovoPay();
+            $id=$purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay();
             if($id==0||$id==8){//this ids for novo mean aproved
                 $purchaseOrdersDetails=$purchaseOrder->getPurchaseOrderDescriptions();
                 /** @var PurchaseOrdersDescription  $pOD */
@@ -45,8 +49,96 @@ class UserController extends Controller
 
             }
         }
+        //Get pay Methods from Novo
+        //TODO ASK FOR DANIEL SERVICE
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $person->getDocument()), array('_format' => 'json'));
+        $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+        //get the remaining days of service
+        $dEnd  = new DateTime();
+        $dStart = new DateTime();
+        $dStart->setDate($dEnd->format("Y"),$dEnd->format("m")+1,$user->getDayToPay());
+        $dDiff = $dStart->diff($dEnd);
+        //amount to pay and each active employee
+        $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+        /** @var Product $productSymp1 */
+        /** @var Product $productSymp2 */
+        /** @var Product $productSymp3 */
+        $productSymp1=$productRepo->findOneBy(array("simpleName"=>"PS1"));
+        $productSymp2=$productRepo->findOneBy(array("simpleName"=>"PS2"));
+        $productSymp3=$productRepo->findOneBy(array("simpleName"=>"PS3"));
+        //get the price for one employee
+        $eHEToSend=new ArrayCollection();
+        $amountToPay=0;
+        $employerHasEmployees=$employer->getEmployerHasEmployees();
+        $fullTime=0;$atemporel=0;
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($employerHasEmployees as $eHE) {
+            if($eHE->getState()!=0){
+                $eHEToSend->add($eHE);
+                if($eHE->getState()==2){
+                    continue;
+                }
+                $contracts=$eHE->getContracts();
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if($contract->getState()==1){
+                        $wdm=$contract->getWorkableDaysMonth();
+                        $amountToPay+= $wdm<=10 ? $productSymp1->getPrice():$wdm<=19 ? $productSymp2->getPrice():$productSymp3->getPrice();
+                        if(!$wdm<=19)
+                            $fullTime++;
+                        else
+                            $atemporel++;
+                        break;
+                    }
+                }
+            }
+        }
+        $form = $this->createFormBuilder()
+            ->setAction("/user/show")
+            ->setMethod('POST')
+            ->add('name', 'hidden')
+            ->add('email', 'text', array(
+                'label' => 'Email',))
+            ->add('save', 'submit', array(
+                'label' => 'Actualizar Datos',
+            ))
+            ->add('modify', 'button', array(
+                'label' => 'Cambiar datos',
+            ))
+            ->getForm();
+        $flag=!($user->getFacebookId()!=null||$user->getGoogleId()!=null||$user->getLinkedinId()!=null);
 
-        return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array('invoices'=>$invoicesEmited));
+
+        $form->get("name")->setData($user->getPersonPerson()->getNames());
+        $form->get("email")->setData($user->getEmail());
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $nEmail=$form->get("email")->getData();
+            $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+            $doesExist=$userRepo->findOneBy(array("email"=>$nEmail));
+            if($doesExist==null){
+                $user->setEmail($nEmail);
+                $user->setUsername($nEmail);
+                $user->setEmailCanonical(strtolower($nEmail));
+                $user->setUsernameCanonical(strtolower($nEmail));
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+
+
+        return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
+            'form' => $form->createView(),
+            'flag' => $flag,
+            'invoices'=>$invoicesEmited,
+            'payMethods'=>$responsePaymentsMethods["payments"],
+            'dayService'=>$dDiff->days,
+            'eHEToSend'=>array('fullTime'=>$fullTime,'partialTime'=>$atemporel),
+            'amountToPay'=>$amountToPay,
+            'factDate'=>$dStart));
+
+
     }
 
     /**

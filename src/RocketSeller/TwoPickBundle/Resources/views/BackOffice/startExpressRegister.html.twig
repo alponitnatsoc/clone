@@ -41,27 +41,10 @@
 	            {% endblock %}
 	        </div>
 			<div id="main" class="col-sm-9">
-	            <table class="col-md-12">
-					<thead>
-					<tr>
-						<th>Usuario</th>						
-						<th>Telefono</th>
-						<th>Accion</th>
-					</tr>
-					</thead>
-					<tbody>
-					{% for notification in notifications %}
-						<tr>
-							<td>{{ notification.personPerson.names }} {{ notification.personPerson.lastName1 }}</td>
-							<td>{{ notification.personPerson.phones[0].phoneNumber }}</td>												
-							<td><a href="{{ path('express_registration',{'id':notification.personPerson.idPerson})}}">Ver</a></td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>          	
+				{{ form_start(form) }}
+				{{ form_widget(form) }}
+				{{ form_end(form) }}
 	        </div>
 	    </div>
-	</div>
-				
-	
+	</div>				
 {% endblock %}

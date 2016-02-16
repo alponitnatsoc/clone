@@ -5,20 +5,86 @@
     <div class="row-fluid" id='registrationFormContainer'>
 
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a class="notAjax" data-toggle="tab" data-target="#basicDataTap">Datos básicos</a></li>
+            <li class="active"><a class="notAjax" data-toggle="tab" data-target="#basicDataTab">Datos básicos</a></li>
             <li><a class="notAjax" data-toggle="tab" data-target="#passwordTab">Contraseña</a></li>
         </ul>
 
         <div class="tab-content">
             <div id="basicDataTab" class="tab-pane fade in active">
+                {{ form_start(form) }}
+
+                <div id="dataSuccessEmail">
+                    Los datos fueron actualizados exitosamente.
+                </div>
+                <div id="dataFailEmail">
+                    Hubo un problema guardando los datos intenta más tarde
+                </div>
                 Nombre:
 
+                {{ form.name.vars.value }}
+                <br/>
                 Email:
+                <div id="emailValue">
+                    {{ form.email.vars.value }}
+                </div>
+
+                {{ form_widget(form.email) }}
+                {{ form_widget(form.modify) }}
+                {{ form_widget(form.save) }}
+
+                {{ form_end(form) }}
             </div>
-            <div id="passwordTab" class="tab-pane fade in active">
+            <div id="passwordTab" class="tab-pane fade in">
+                {% if flag ==true %}
+                    <a class="notAjax button btn-default" href="/profile/change-password">Cambiar contraseña</a>
+                {% else %}
+                    <h2>Tu te acedes con una red social</h2>
+                {% endif %}
             </div>
         </div>
     </div>
+    <br/>
+    <br/>
+    <h3>Facturación</h3>
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {{ dayService }} días de servicio de symplifica
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            {% if app.user.paymentState==0 %}
+            <div class="NoPay">
+                ¡No espere a que se agote el tiempo!
+                <a class="button btn-default" href="{{ path("activate_subscription") }}">Activar suscripción a Symplifica</a>
+            </div>
+            {% else %}
+            <div class="DoPay">
+                <p>Fecha de la proxima facturación</p>
+                <h4>{{ factDate|date('Y-m-d') }} | ${{ amountToPay }} | </h4>{{ eHEToSend.fullTime }} Empleados de tiempo completo {{ eHEToSend.partialTime }} Empleados de tiempo parcial
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <h4>Medio de pago</h4>
+    <table class="payMethods">
+        <tbody>
+        {% for payM in payMethods %}
+            <tr>
+                <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>
+                <td>{{ payM["account-number"] }}</td>
+                <td><a id="DeleteCC" href="/delete/paym/{{ payM['method-id'] }}">Eliminar</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h4>Facturas emitidas</h4>
+
     <table class="record_properties">
         <tbody>
             <tr>
@@ -29,14 +95,16 @@
             </tr>
             {% for invoice in invoices %}
                 <tr>
-                    <td>{{ invoice.purchaseOrdersPurchaseOrders.date_created|date('Y-m-d') }}</td>
-                    <td>{{ invoice.purchaseOrdersPurchaseOrders.invoice_number }}</td>
-                    <td>{{ invoice.productProduct.name }}</td>
+                    <td>{{ invoice.purchaseOrders.DateCreated|date('Y-m-d') }}</td>
+                    <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
+                    <td>{{ invoice.description }}</td>
                     <td>{{ invoice.value }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-
+    <br/>
+    <br/>
+    <a class="button btn-default" href="{{ path("register_employee") }}">Agregar empleado</a>
 
 {% endblock fos_user_content%}

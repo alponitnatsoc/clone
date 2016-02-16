@@ -183,7 +183,7 @@ class Contract
     /**
      * Set state
      *
-     * @param string $state
+     * @param boolean $state
      *
      * @return Contract
      */
@@ -197,7 +197,7 @@ class Contract
     /**
      * Get state
      *
-     * @return string
+     * @return boolean
      */
     public function getState()
     {

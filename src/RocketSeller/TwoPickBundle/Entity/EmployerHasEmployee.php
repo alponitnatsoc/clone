@@ -52,9 +52,9 @@ class EmployerHasEmployee
     private $liquidations;
 
     /**
-     * @ORM\Column(type="boolean", length=100, nullable=TRUE)
+     * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
-    private $state = 1;
+    private $state=1;
 
     /**
      * Set idEmployerHasEmployee
@@ -207,7 +207,7 @@ class EmployerHasEmployee
     /**
      * Set state
      *
-     * @param string $state
+     * @param integer $state
      *
      * @return EmployerHasEmployee
      */
@@ -221,7 +221,7 @@ class EmployerHasEmployee
     /**
      * Get state
      *
-     * @return string
+     * @return integer
      */
     public function getState()
     {
