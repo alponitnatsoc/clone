@@ -104,11 +104,19 @@
                             <div class="total row-fluid clearfix">
                                 <div class="col-xs-12 text-center">
                                     <h4>Pago final</h4>
-                                    {% if data['PILA']['total'] is defined %}
-                                        $ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format}}
+                                    {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
+                                        {% if data['PILA']['total'] is defined %}
+                                            $ {{ data['PILA']['total']|number_format }}
+                                        {% else %}  
+                                            $ 0
+                                        {% endif %}
                                     {% else %}  
-                                        $ {{ (data['totalLiquidation']['total'])|number_format}}
-                                    {% endif %}                                     
+                                        {% if data['PILA']['total'] is defined %}
+                                            $ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format }}
+                                        {% else %}  
+                                            $ {{ (data['totalLiquidation']['total'])|number_format }}
+                                        {% endif %}
+                                    {% endif %}                                                                             
                                 </div>
                             </div>
                             <div class="row novedades">

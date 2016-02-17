@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col-xs-2">
                                     <span class="pull-right">
-                                        Pagar <input type="checkbox" class="pay" name="payrollToPay[]" value="{{ idPayroll }}" checked="checked">
+                                        Pagar <input type="checkbox" class="pay" name="payrollToPay[{{ idPayroll }}]" value="{{ idPayroll }}" checked="checked">
                                     </span>
                                 </div>
                                 <div class="row info col-xs-11">
@@ -97,27 +97,34 @@
                                     </div>
                                     <div class="col-md-4">
                                         <h4>Pago aportes Seguridad Social:</h4>
-                                        {% if data['PILA']['total'] is defined %}
-                                            $ {{ data['PILA']['total']|number_format }}  
-                                        {% else %}  
-                                            $ 0
-                                        {% endif %}                                             
+                                        $ {{ data['PILA']['total']|number_format }}                                             
                                     </div>
                                     <div class="col-md-4">
                                         <h3>Pago final:</h3>
-                                        {% if data['PILA']['total'] is defined %}
-                                            <span>$ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format}}</span>
+                                        {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
+                                            <span>$ {{ data['PILA']['total']|number_format }}</span>
                                         {% else %}  
-                                            <span>$ {{ (data['totalLiquidation']['total'])|number_format}}</span>
-                                        {% endif %} 
+                                            <span>$ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format }}</span>
+                                        {% endif %}  
                                     </div>
                                 </div>
                                 <div class="col-xs-11">
-                                    {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
-                                        <strong>Medio de pago por defecto: </strong>En Efectivo <a class="notAjax" href="{{ path('register_employee',{'id':employee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
-                                    {% else %}  
-                                        <strong>Medio de pago por defecto: </strong> Tarjeta de crédito terminada en 3751 <a class="notAjax" href="{{ path('register_employee',{'id':employee.idEmployee,'tab':4}) }}">&gt; Cambiar</a>
-                                    {% endif %}
+                                    {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}
+
+                                        <div style="display: -webkit-inline-box;">
+                                            <strong>Medio de pago: </strong>
+                                        </div>
+                                        <div style="display: -webkit-inline-box;vertical-align: middle;">  
+                                            <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">
+                                                {% for paymentMethod in paymentMethods %}
+                                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
+                                                {% endfor  %}
+                                            </select>
+                                            <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>                                            
+                                        </div>
+
+                                    {% endif %} 
+
                                 </div>
                             </div>
                         </div>
@@ -223,7 +230,12 @@
         var aportes = [];
 
         {% for key,data in dataNomina %}
-            salaries[{{data['idPayroll']}}] = {{ data['totalLiquidation']['total'] }};
+            {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
+                salaries[{{data['idPayroll']}}] = 0;
+            {% else %}  
+                        salaries[{{data['idPayroll']}}] = {{ data['totalLiquidation']['total'] }};
+            {% endif %} 
+
             {% if data['PILA']['total'] is defined %}
                         aportes[{{data['idPayroll']}}] = {{ data['PILA']['total'] }};
             {% else %}  
