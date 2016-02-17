@@ -31,13 +31,6 @@ class Liquidation
     private $idPurchaseOrder;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="days_to_liquidate", type="integer")
-     */
-    private $daysToLiquidate;
-
-    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Contract
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Contract", inversedBy="liquidations")
      * @ORM\JoinColumns({
@@ -78,6 +71,13 @@ class Liquidation
      * @ORM\Column(type="float", nullable=TRUE)
      */
     private $cost;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="days_to_liquidate", type="integer", nullable=TRUE)
+     */
+    private $daysToLiquidate;
 
     /**
      * Get id
@@ -138,27 +138,27 @@ class Liquidation
     }
 
     /**
-     * Set idContract
+     * Set contract
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Contract $idContract
+     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
      *
      * @return Liquidation
      */
-    public function setIdContract(\RocketSeller\TwoPickBundle\Entity\Contract $idContract = null)
+    public function setContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract = null)
     {
-        $this->idContract = $idContract;
+        $this->contract = $contract;
 
         return $this;
     }
 
     /**
-     * Get idContract
+     * Get contract
      *
      * @return \RocketSeller\TwoPickBundle\Entity\Contract
      */
-    public function getIdContract()
+    public function getContract()
     {
-        return $this->idContract;
+        return $this->contract;
     }
 
     /**
@@ -183,30 +183,6 @@ class Liquidation
     public function getLiquidationType()
     {
         return $this->liquidationType;
-    }
-
-    /**
-     * Set contract
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Contract $contract
-     *
-     * @return Liquidation
-     */
-    public function setContract(\RocketSeller\TwoPickBundle\Entity\Contract $contract = null)
-    {
-        $this->contract = $contract;
-
-        return $this;
-    }
-
-    /**
-     * Get contract
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Contract
-     */
-    public function getContract()
-    {
-        return $this->contract;
     }
 
     /**

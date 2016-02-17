@@ -114,6 +114,8 @@ class LiquidationController extends Controller
 
         $frequency = $contract[0]->getPayMethodPayMethod()->getFrequencyFrequency()->getIdFrequency();
 
+        $employerHasEmployee = $contract[0]->getEmployerHasEmployeeEmployerHasEmployee();
+
         $contractInfo = array(
             'contractType' => $contract[0]->getContractTypeContractType()->getName(),
             'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
@@ -121,7 +123,7 @@ class LiquidationController extends Controller
             'vacationDays' => "",
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
             'startDate' => $startDate,
-            'idEmperHasEmpee' => $contract[0]->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+            'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
             'frequency' => $frequency
         );
 
@@ -135,7 +137,94 @@ class LiquidationController extends Controller
 //         echo $contract[0]->getIdContract();
         $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
 
+        if ( !($liquidation = $this->liquidationByTypeAndEmHEmAndContract($id, 1, $contract[0]->getIdContract())) ) {
+            $liquidation = new Liquidation();
+            $liquidation->setContract($contract[0]);
+    //         $liquidation->setCost($cost);
+    //         $liquidation->setDaysToLiquidate($daysToLiquidate);
+            $liquidation->setEmployerHasEmployee($employerHasEmployee);
+    //         $liquidation->setIdPurchaseOrder($idPurchaseOrder);
+    //         $liquidation->setLastWorkDay($lastWorkDay);
+            $liquidationType = $em->getRepository('RocketSellerTwoPickBundle:LiquidationType')->findOneBy(array(
+                "name" => "Definitiva"
+            ));
+            $liquidation->setLiquidationType($liquidationType);
+
+            $em->persist($liquidation);
+            $em->flush();
+        }
+
+        $id_liq = $liquidation->getId();
+
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
+            "employeeInfo" => $employeeInfo,
+            "contractInfo" => $contractInfo,
+            "form" => $form->createView(),
+            "payroll" => $payroll,
+            "novelties" => $novelties,
+            "llamadosAtencion" => $llamadosAtencion,
+            "id_liq" => $id_liq
+        ));
+    }
+
+    public function finalLiquidationStepsAction($id, $step, $id_liq)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $this->getEmployee($id);
+        /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
+        $person = $employee->getPersonPerson();
+        /** @var Employer $employer */
+        $employer = $this->getEmployer($id);
+        $usernameEmployer = $employer->getPersonPerson()->getNames();
+
+        $employeeInfo = array(
+            'name' => $person->getNames(),
+            'id' => $employee->getIdEmployee(),
+            'idEmperHasEmpee' => $id,
+            'lastName1' => $person->getLastName1(),
+            'lastName2' => $person->getLastName2(),
+            'document' => $person->getDocument(),
+            'documentType' => $person->getDocumentType(),
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace(),
+            'usernameEmployer' => $usernameEmployer,
+            'idPerson' => $person->getIdPerson()
+        );
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
+        $contract = $this->getActiveContract($id);
+        $startDate = $contract[0]->getStartDate();
+
+        $frequency = $contract[0]->getPayMethodPayMethod()->getFrequencyFrequency()->getIdFrequency();
+
+        $employerHasEmployee = $contract[0]->getEmployerHasEmployeeEmployerHasEmployee();
+
+        $contractInfo = array(
+            'contractType' => $contract[0]->getContractTypeContractType()->getName(),
+            'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
+            'salary' => $contract[0]->getSalary(),
+            'vacationDays' => "",
+            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDate' => $startDate,
+            'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
+            'frequency' => $frequency
+        );
+
+        $form = $this->createForm(new LiquidationType());
+
+        /** @var Payroll $payroll */
+        $payroll = $contract[0]->getActivePayroll();
+        $novelties = $payroll->getNovelties();
+        //         echo count($novelties);
+        //         echo $payroll->getIdPayroll();
+        //         echo $contract[0]->getIdContract();
+        $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
+
+        $liquidation = $this->liquidationDetail($id_liq);
+
+        $liquidation->getId();
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:final-steps.html.twig", array(
             "employeeInfo" => $employeeInfo,
             "contractInfo" => $contractInfo,
             "form" => $form->createView(),
