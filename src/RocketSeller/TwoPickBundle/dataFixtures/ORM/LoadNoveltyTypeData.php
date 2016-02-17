@@ -256,6 +256,16 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltySalary->setNaturaleza('DEV');
         $manager->persist($NoveltySalary);
 
+        $llegadaTarde = new NoveltyType();
+        $llegadaTarde->setName('LLegada tarde');
+        $llegadaTarde->setGrupo('llamado_atencion');
+        $manager->persist($llegadaTarde);
+
+        $abandonoPuesto = new NoveltyType();
+        $abandonoPuesto->setName('Abandono puesto de trabajo');
+        $abandonoPuesto->setGrupo('llamado_atencion');
+        $manager->persist($abandonoPuesto);
+
         $manager->flush();
 
         // Abstenteeisms.
@@ -292,6 +302,10 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novelty-severance-interests', $NoveltySeveranceInterests);
         $this->addReference('novelty-compensation', $NoveltyCompensation);
         $this->addReference('novelty-salary', $NoveltySalary);
+
+        //llamado_atencion
+        $this->addReference('novelty-llegada-tarde', $llegadaTarde);
+        $this->addReference('novelty-abandono-puesto', $abandonoPuesto);
     }
 
     public function getOrder()

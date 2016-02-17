@@ -179,6 +179,18 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $NoveltyPrestamoSoporte->setPersonType('employee');
         $manager->persist($NoveltyPrestamoSoporte);
 
+        $NoveltyLlegadaTarde = new NoveltyTypeHasDocumentType();
+        $NoveltyLlegadaTarde->setNoveltyTypeNoveltyType($this->getReference('novlety-llegada-tarde'));
+        $NoveltyLlegadaTarde->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyLlegadaTarde->setPersonType('employee');
+        $manager->persist($NoveltyLlegadaTarde);
+
+        $NoveltyAbandonoPuesto = new NoveltyTypeHasDocumentType();
+        $NoveltyAbandonoPuesto->setNoveltyTypeNoveltyType($this->getReference('novlety-abandono-puesto'));
+        $NoveltyAbandonoPuesto->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyAbandonoPuesto->setPersonType('employee');
+        $manager->persist($NoveltyAbandonoPuesto);
+
         $manager->flush();
     }
     public function getOrder()

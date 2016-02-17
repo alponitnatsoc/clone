@@ -131,8 +131,8 @@
             <br />
             <div class="col-sm-12 col-xs-12 center">
                 <div class="col-sm-6 col-sm-push-3">
-                    <button type="button" id="btn-4" class="btn btn-primary btnNext btn-orange" onclick="$('#infoDocs').show();$('#contLiq').show();">Descargar documento</a>
-                    <br /><br />
+                    <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia <br />
+                    <button type="button" id="btnDownloadRenuncia" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaRenuncia(this);"><i class="fa fa-cloud-download"></i>Descargar documento</a>
                 </div>
             </div>
             <div class="col-sm-12 col-xs-12 center" id="infoDocs" style="display: none">
@@ -148,8 +148,10 @@
                     <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a id="btn-5" href="" class="btn btn-primary btnNext btn-orange">Subir documento</a>
-                    <br /><br />
+                    <a id="btn-5" href="{{ path('documentos_employee', {'id': employeeInfo.idPerson , 'idDocumentType': 39 } ) }}" class="btn btn-primary btnNext btn-orange"><i class="fa fa-upload"></i>Subir carta de renuncia</a>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <button type="button" id="btnDownloadAceptacion" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</a>
                 </div>
             </div>
         </div>
@@ -164,6 +166,23 @@
                 empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
                 atención</strong> así como también sus correspondientes <strong>descargos</strong>.</span>
             </div>
+            {% if llamadosAtencion %}
+            <div class="col-sm-12">
+                <ul class="list-group">
+                    {% for llamado in llamadosAtencion %}
+                        <li class="list-group-item">
+                            {{ llamado.name }}
+                            {% if llamado.dateStart %}
+                                {{ llamado.dateStart.date }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+{#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
+                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
+
+            </div>
+            {% endif %}
         </div>
 
         <div class="col-sm-12 col-xs-12 center" id="contLiq" style="display:none">
@@ -232,6 +251,25 @@ $('input[type="checkbox"][name="checkConfirmLiq"]').change(function() {
         $("#rocketseller_twopickbundle_liquidation_save").prop("disabled", false);
     }
 });
+
+function cartaRenunciaOK() {
+    $("#btnDownloadRenuncia").hide();
+    $('#infoDocs .col-sm-8').hide();
+    $('#infoDocs .col-sm-4').hide();
+    $('#infoDocs').show();
+    $('#contLiq').show();
+}
+
+function downloadCartaRenuncia() {
+    window.open('/download/renuncia');
+
+    $('#infoDocs').show();
+    $('#contLiq').show();
+}
+
+function downloadCartaAceptacion() {
+    window.open('/download/aceptacion');
+}
 
 function loadNovelty(url) {
     $.ajax({
