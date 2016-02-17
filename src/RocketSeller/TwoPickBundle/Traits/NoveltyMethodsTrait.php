@@ -16,7 +16,7 @@ trait NoveltyMethodsTrait
         $novelties = array();
         /** @var \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyType */
         foreach($noveltyTypes as $noveltyType) {
-            $novelty = $repository->findOneBy(
+            $novelty = $repository->findBy(
                 array(
                     'noveltyTypeNoveltyType' => $noveltyType->getIdNoveltyType()
                 )
