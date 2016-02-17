@@ -23,7 +23,7 @@ trait NoveltyMethodsTrait
             );
 
             if ($novelty) {
-                $novelties[] = $novelty;
+                $novelties = array_merge($novelties, $novelty);
             }
         }
 
