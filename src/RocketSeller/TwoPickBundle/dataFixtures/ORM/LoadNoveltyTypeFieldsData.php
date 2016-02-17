@@ -325,7 +325,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $bandonoPuesto->setName('Día de inicio');
         $bandonoPuesto->setColumnName('date_start');
         $bandonoPuesto->setDataType('date');
-        $bandonoPuesto->setNoveltyTypeNoveltyType($this->getReference('novelty-abandono-puesto-start'));
+        $bandonoPuesto->setNoveltyTypeNoveltyType($this->getReference('novelty-abandono-puesto'));
         $manager->persist($bandonoPuesto);
 
         $manager->flush();
