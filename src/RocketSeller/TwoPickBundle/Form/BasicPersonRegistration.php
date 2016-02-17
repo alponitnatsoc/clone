@@ -36,7 +36,13 @@ class BasicPersonRegistration extends AbstractType
                     new NotBlank()
                 ),
                 'property_path' => 'document',
-                'label' => 'Número de documento*'
+                'label' => 'Número de documento*',
+                "attr" => array(
+                    "data-toggle" => "tooltip", 
+                    "data-placement" => "right",
+                    "data-container" => "body",
+                    "title" => "Texto de ayuda"
+                )
             ))
             ->add('names', 'text', array(
                 'constraints' => array(

@@ -7,7 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class PublicController extends Controller
 {
 	public function homeAction() {
-        return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');   
+        $user=$this->getUser();
+        if (empty($user)) {
+            return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');
+        } else {
+            return $this->redirectToRoute('show_dashboard');
+        }
+        
     }
 
     public function beneficiosAction() {
