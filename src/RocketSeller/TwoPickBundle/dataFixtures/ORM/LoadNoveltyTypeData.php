@@ -269,30 +269,30 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $manager->flush();
 
         // Abstenteeisms.
-        $this->addReference('novlety-maternity', $NoveltyMaternity);
-        $this->addReference('novlety-unpaid', $NoveltyUnpaid);
-        $this->addReference('novlety-paid', $NoveltyPaid);
-        $this->addReference('novlety-suspension', $NoveltySuspension);
-        $this->addReference('novlety-general-illness', $NoveltyGeneralIllness);
-        $this->addReference('novlety-work-accident', $NoveltyWorkAccident);
-        $this->addReference('novlety-professional-illness', $NoveltyProfessionalIllness);
-        $this->addReference('novlety-paternity-leave', $NoveltyPaternityLeave);
+        $this->addReference('novelty-maternity', $NoveltyMaternity);
+        $this->addReference('novelty-unpaid', $NoveltyUnpaid);
+        $this->addReference('novelty-paid', $NoveltyPaid);
+        $this->addReference('novelty-suspension', $NoveltySuspension);
+        $this->addReference('novelty-general-illness', $NoveltyGeneralIllness);
+        $this->addReference('novelty-work-accident', $NoveltyWorkAccident);
+        $this->addReference('novelty-professional-illness', $NoveltyProfessionalIllness);
+        $this->addReference('novelty-paternity-leave', $NoveltyPaternityLeave);
 
         // Nolvelty.
-        $this->addReference('novlety-salary-adjust', $NoveltySalaryAdjust);
-        $this->addReference('novlety-bonus', $NoveltyBonus);
-        $this->addReference('novlety-night-charge', $NoveltyNightCharge);
-        $this->addReference('novlety-night-holiday-charge', $NoveltyNightHolidayCharge);
-        $this->addReference('novlety-extra-hour', $NoveltyExtraHour);
-        $this->addReference('novlety-extra-hour-night', $NoveltyExtraHourNight);
-        $this->addReference('novlety-extra-hour-holiday', $NoveltyExtraHourHoliday);
-        $this->addReference('novlety-holiday', $NoveltyHoliday);
-        $this->addReference('novlety-holiday-night-extra-hour', $NoveltyHolidayNightExtraHour);
-        $this->addReference('novlety-transport', $NoveltyTransport);
-        $this->addReference('novlety-vacation', $NoveltyVacation);
-        $this->addReference('novlety-vacation-money', $NoveltyVacationMoney);
-        $this->addReference('novlety-liberty-bonus', $NoveltyLibertyBonus);
-        $this->addReference('novlety-discount-loan', $NoveltyDiscountLoan);
+        $this->addReference('novelty-salary-adjust', $NoveltySalaryAdjust);
+        $this->addReference('novelty-bonus', $NoveltyBonus);
+        $this->addReference('novelty-night-charge', $NoveltyNightCharge);
+        $this->addReference('novelty-night-holiday-charge', $NoveltyNightHolidayCharge);
+        $this->addReference('novelty-extra-hour', $NoveltyExtraHour);
+        $this->addReference('novelty-extra-hour-night', $NoveltyExtraHourNight);
+        $this->addReference('novelty-extra-hour-holiday', $NoveltyExtraHourHoliday);
+        $this->addReference('novelty-holiday', $NoveltyHoliday);
+        $this->addReference('novelty-holiday-night-extra-hour', $NoveltyHolidayNightExtraHour);
+        $this->addReference('novelty-transport', $NoveltyTransport);
+        $this->addReference('novelty-vacation', $NoveltyVacation);
+        $this->addReference('novelty-vacation-money', $NoveltyVacationMoney);
+        $this->addReference('novelty-liberty-bonus', $NoveltyLibertyBonus);
+        $this->addReference('novelty-discount-loan', $NoveltyDiscountLoan);
 
         // No show.
         $this->addReference('novelty-health', $NoveltyHealth);
