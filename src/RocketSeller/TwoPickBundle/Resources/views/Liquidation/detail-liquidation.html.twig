@@ -154,8 +154,8 @@
             <button type="button" class="btn btn-default" id="bntCont" onclick="consolidateLiq($(this))">Continuar</button>
         </div>
         <div id="postLiq" class="btn-group" style="display: none">
-            <button type="button" class="btn btn-default">Imprimir</button>
-            <button type="button" class="btn btn-default">Guardar PDF</button>
+            <button type="button" onclick="window.print()" class="btn btn-default">Imprimir</button>
+            <button type="button" onclick="downloadPDF()" class="btn btn-default">Guardar PDF</button>
             <button type="button" class="btn btn-default">Enviar Email</button>
         </div>
     </div>
@@ -165,6 +165,20 @@
 jQuery( document ).ready(function() {
     formatMoney($("td[id='totLiq']"));
 });
+
+function downloadPDF() {
+    $.ajax({
+        url: "{{ path('api_public_post_generate_pdf') }}",
+        type: 'POST',
+        data: {
+            url: window.location.href
+        }
+    }).done(function (data) {
+        alert(data);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
 
 function consolidateLiq(element) {
     var btn = $(element);

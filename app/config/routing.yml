@@ -41,6 +41,9 @@ documentos_contract:
 documentos_auth:
     path:      /download/cartaAutSymplifica
     defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadAuth }
+download_pdf_documents:
+    path:      /download/{document}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Document:downloadDocumentPDF }
 
 show_calculator_form:
     path:      /calculator/calculate

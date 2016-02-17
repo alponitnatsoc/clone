@@ -13,6 +13,10 @@ use RocketSeller\TwoPickBundle\Form\LiquidationType;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Traits\NoveltyMethodsTrait;
 
 /**
  * Liquidation controller.
@@ -24,6 +28,7 @@ class LiquidationController extends Controller
     use EmployerHasEmployeeMethodsTrait;
     use LiquidationMethodsTrait;
     use NoveltyTypeMethodsTrait;
+    use NoveltyMethodsTrait;
 
     /**
      * Lists all Liquidation entities.
@@ -99,7 +104,8 @@ class LiquidationController extends Controller
             'document' => $person->getDocument(),
             'documentType' => $person->getDocumentType(),
             'docExpeditionPlace' => $person->getDocumentExpeditionPlace(),
-            'usernameEmployer' => $usernameEmployer
+            'usernameEmployer' => $usernameEmployer,
+            'idPerson' => $person->getIdPerson()
         );
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
@@ -127,14 +133,15 @@ class LiquidationController extends Controller
 //         echo count($novelties);
 //         echo $payroll->getIdPayroll();
 //         echo $contract[0]->getIdContract();
-
+        $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
             "employeeInfo" => $employeeInfo,
             "contractInfo" => $contractInfo,
             "form" => $form->createView(),
             "payroll" => $payroll,
-            "novelties" => $novelties
+            "novelties" => $novelties,
+            "llamadosAtencion" => $llamadosAtencion
         ));
     }
 
@@ -182,7 +189,8 @@ class LiquidationController extends Controller
             'salary' => $contract[0]->getSalary(),
             'vacationDays' => "",
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
-            'startDate' => $startDate
+            'startDate' => $startDate,
+            'id' => $contract[0]->getIdContract()
         );
 
         /**
@@ -220,7 +228,9 @@ class LiquidationController extends Controller
             }
         }
 
-        return $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
+//         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
+
+        $html = $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
             'data' => $data,
             'employeeInfo' => $employeeInfo,
             'contractInfo' => $contractInfo,
@@ -234,5 +244,21 @@ class LiquidationController extends Controller
             'totalDevengos' => $totalLiq["totalDev"],
             'employer' => $employerInfo
         ));
+
+        return $html;
+    }
+
+    public function generatePdfAction(Request $request)
+    {
+        $parameters = $request->request->all();
+
+        $url = $parameters["url"];
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutput($url), 200, array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="file.pdf"'
+            )
+        );
     }
 }

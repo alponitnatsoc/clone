@@ -20,10 +20,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DocumentController extends Controller
 {
-	public function showDocumentsAction($id){		
+	public function showDocumentsAction($id){
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
-		->find($id);		
+		->find($id);
 		$documents = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Document')
 		->findByPersonPerson($person);
@@ -35,15 +35,15 @@ class DocumentController extends Controller
 				));
 	}
 	public function downloadContractAction($id)
-	{		
+	{
 		switch ($id) {
 			case 1:
-				$filename = "terminoFijo.pdf";			
+				$filename = "terminoFijo.pdf";
 				break;
 			case 2:
 				$filename = "terminoIndefinido.pdf";
-				break;			
-		}	 	
+				break;
+		}
 	    $path = $this->get('kernel')->getRootDir(). "/../web/public/";
 	    $content = file_get_contents($path.$filename);
 
@@ -57,9 +57,9 @@ class DocumentController extends Controller
 	    return $response;
 	}
 	public function downloadAuthAction()
-	{		
+	{
 
-		$filename = "cartaAuth.pdf";	 	
+		$filename = "cartaAuth.pdf";
 	    $path = $this->get('kernel')->getRootDir(). "/../web/public/";
 	    $content = file_get_contents($path.$filename);
 
@@ -91,7 +91,7 @@ class DocumentController extends Controller
 				$media->setBinaryContent($media);
 				$media->setName('documento');
 				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());				
+				$media->setProviderReference($media->getBinaryContent());
 				$em->persist($media);
 				$em->flush();
 			}
@@ -102,8 +102,12 @@ class DocumentController extends Controller
 			return $this->redirect('/pages?redirector=/matrix/choose');
 		}
 		return $this->render(
-			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
-				array('form' => $form->createView()));
+			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array(
+			    'form' => $form->createView(),
+			    'id' => $id,
+			    'idDocumentType' => 39,
+			    'idNotification' => 0
+			));
 	}
 
 	public function addDocAction($id,$idDocumentType,$idNotification,Request $request){
@@ -131,7 +135,7 @@ class DocumentController extends Controller
 				$media->setBinaryContent($media);
 				$media->setName($document->getName());
 				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());				
+				$media->setProviderReference($media->getBinaryContent());
 				$em->persist($media);
 				$em->flush();
 			}
@@ -139,7 +143,7 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 			//$view = View::createView();
-			
+
 			//return new Response('guwegwei');
 			if ($idNotification!=0) {
 				$em = $this->getDoctrine()->getManager();
@@ -154,7 +158,7 @@ class DocumentController extends Controller
 			}
 			//return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 			//return $this->redirect('/pages?redirector=/matrix/choose');
-		 	
+
 		}
 		return $this->render(
 			'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig',
@@ -186,10 +190,10 @@ class DocumentController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$OldDocument = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Document')
-		->find($idDocument);		
+		->find($idDocument);
 		$OldDocument->setStatus(0);
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
 		->find($id);
@@ -208,7 +212,7 @@ class DocumentController extends Controller
 				$media->setBinaryContent($media);
 				$media->setName($document->getName());
 				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());				
+				$media->setProviderReference($media->getBinaryContent());
 				$em->persist($media);
 				$em->flush();
 			}
@@ -231,5 +235,33 @@ class DocumentController extends Controller
 		->getRepository('RocketSellerTwoPickBundle:Document')
 		->find($idDocument);
 		return $this->redirect('/media/download/'.$document->getMediaMedia()->getId());
+	}
+
+	public function downloadDocumentPDFAction($document)
+	{
+
+        switch ($document):
+    	    case "renuncia":
+                $filename = "carta-renuncia.pdf";
+                break;
+    	    case "aceptacion":
+    	        $filename = "carta-aceptacion.pdf";
+    	        break;
+    	    default:
+    	        $filename = "cartaAuth.pdf";
+    	        break;
+        endswitch;
+
+	    $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/";
+	    $content = file_get_contents($path . $filename);
+
+	    $response = new Response();
+
+	    //set headers
+	    $response->headers->set('Content-Type', 'mime/type');
+	    $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename);
+
+	    $response->setContent($content);
+	    return $response;
 	}
 }

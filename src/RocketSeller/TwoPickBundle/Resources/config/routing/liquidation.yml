@@ -14,3 +14,6 @@ final_liquidation:
 final_liquidation_detail:
     path: /final/detail/{id}/{employee_id}/{period}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidationDetail }
+generate_pdf:
+    path: /generate/pdf
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:generatePdf }
