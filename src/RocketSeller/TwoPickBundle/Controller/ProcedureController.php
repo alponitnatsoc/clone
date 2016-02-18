@@ -216,6 +216,22 @@ class ProcedureController extends Controller
     	$em->flush();
     	return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
     }
+    public function changeErrorStatusAction($procedureId,$actionError,$status)
+    {	
+    	
+    	$em = $this->getDoctrine()->getManager();	
+    	$actionError = $this->loadClassById($actionError,"ActionError");
+    	$actionError->setStatus($status);
+    	$em->persist($actionError);
+    	$em->flush();
+    	if ($status == "Corregido") {
+    		$action = $this->loadClassByArray(array('actionErrorActionError'=> $actionError),'Action');
+    		$action->setStatus("Completado");
+    		$em->persist($action);
+    		$em->flush();	    		
+    	}
+    	return $this->redirectToRoute('show_procedure', array('procedureId'=>$procedureId), 301);
+    }
     /**
      * hace un query de la clase para instanciarla
      * @param  [type] $parameter id que desea pasar

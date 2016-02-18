@@ -51,6 +51,9 @@ show_procedure:
 change_action_status:
     path:     /backoffice/procedure/{procedureId}/{actionId}/{status}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
+change_action_error_status:
+    path:     /backoffice/procedure/action/error/{procedureId}/{actionError}/{status}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeErrorStatus }
 check_register:
     path:     /backoffice/check/register/{idPerson}/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
