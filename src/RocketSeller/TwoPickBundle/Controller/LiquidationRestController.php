@@ -14,6 +14,9 @@ use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use Symfony\Component\Validator\Constraints\Date;
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 
 class LiquidationRestController extends FOSRestController
 {
@@ -535,5 +538,135 @@ class LiquidationRestController extends FOSRestController
 //             //                 'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
 //             //             )
 //             );
+    }
+
+    /**
+     * Pagar liquidacion<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Pagar liquidacion.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *    (name="payment_method_liq", nullable=false, strict=true, description="paymentMethodLiq")
+     *    (name="id_liq", description="id liquidation")
+     *
+     * @return Response
+     */
+    public function postPayLiquidationAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $format = array('_format' => 'json');
+
+        $params = $request->request->all();
+        $id_liq = $params["id_liq"];
+
+        /** @var Liquidation $liquidation */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $employerPerson = $liquidation->getEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+        $employerDocument = $employerPerson->getDocument();
+
+        $employee = $liquidation->getEmployerHasEmployee()->getEmployeeEmployee();
+        $employeePerson = $employee->getPersonPerson();
+        $employeeDocument = $employeePerson->getDocument();
+
+        $contract = $liquidation->getContract();
+        $employeePayMethod = $contract->getPayMethodPayMethod();
+        $employeePayType = $employeePayMethod->getPayTypePayType();
+
+        $total = $liquidation->getCost();
+
+        $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
+        /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
+        $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
+
+        $purchaseOrder = new PurchaseOrders();
+        $purchaseOrder->setIdUser($this->getUser());
+        $purchaseOrder->setName('Liquidacion definitiva');
+        $purchaseOrder->setValue((floatval($total)));
+        $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
+        $dateCreated = date("Y-m-d H:i:s");
+        $purchaseOrder->setDateCreated(new \DateTime($dateCreated));
+        $dateModified = date("Y-m-d H:i:s");
+        $purchaseOrder->setDateModified(new \DateTime($dateModified));
+
+        $em->persist($purchaseOrder);
+
+        $purchaseOrderDescription = new PurchaseOrdersDescription();
+        $purchaseOrderDescription->setDescription("Pago liquidacion definitiva");
+        $purchaseOrderDescription->setPurchaseOrders($purchaseOrder);
+        $purchaseOrderDescription->setPurchaseOrdersStatus($purchaseOrdersStatus);
+        $purchaseOrderDescription->setValue($total);
+
+        $em->persist($purchaseOrderDescription);
+        $em->flush();
+
+        $req = new Request();
+        $req->setMethod("POST");
+        $req->request->set("documentNumber", $employerDocument);
+        $req->request->set("MethodId", $params["payment_method_liq"]);
+        $req->request->set("totalAmount", $total);
+        $req->request->set("chargeMode", 2);
+        $req->request->set("chargeId", $purchaseOrder->getIdPurchaseOrders());
+        $req->request->set("taxAmount", 0);
+        $req->request->set("taxBase", 0);
+        $req->request->set("commissionAmount", 0);
+        $req->request->set("commissionBase", 0);
+
+        $responsePA = $this->forward("RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval", array("request" => $req), $format);
+
+        $dataResPA = json_decode($responsePA->getContent(), true);
+        var_dump($dataResPA);
+
+        $req = new Request();
+        $req->setMethod("POST");
+        $req->request->set("documentNumber", $employerDocument);
+        $req->request->set("beneficiaryId", $employeeDocument);
+        $req->request->set("beneficiaryAmount", $total);
+        $req->request->set("dispersionType", 1);
+        $req->request->set("chargeId", $purchaseOrder->getIdPurchaseOrders());
+
+        $responseCP = $this->forward("RocketSellerTwoPickBundle:PaymentsRest:postClientPayment", array("request" => $req), $format);
+
+        $dataResCP = json_decode($responseCP->getContent(), true);
+        var_dump($dataResCP);
+
+        $pay = new Pay();
+//         $pay->setPayMethodPayMethod($employeePayMethod);
+//         $pay->setPayTypePayType($employeePayType);
+        $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
+        $pay->setUserIdUser($this->getUser());
+//         $pay->setIdDispercionNovo($idDispersionNovo);
+        $em->persist($pay);
+        $em->flush();
+
+//         postPaymentAprovalAction
+//         postClientPaymentAction
+
+//         getClientSpecificChargeAction
+
+        $view = View::create();
+
+        $data = array(
+            "params" => array(
+                "RES-C-P" => $dataResCP,
+                "RES-P-A" => $dataResPA
+            ),
+            "url" => $this->generateUrl("pay_liquidation", array(
+                "id" => $id_liq
+            ))
+        );
+
+        $view->setData($data)->setStatusCode(200);
+        return $view;
     }
 }

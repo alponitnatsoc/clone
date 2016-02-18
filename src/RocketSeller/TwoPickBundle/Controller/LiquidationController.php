@@ -371,7 +371,7 @@ class LiquidationController extends Controller
         );
     }
 
-    public function payLiquidationAction($id)
+    public function payLiquidationAction($id, Request $request)
     {
         /** @var Liquidation $liquidation */
         $liquidation = $this->liquidationDetail($id);
@@ -440,7 +440,7 @@ class LiquidationController extends Controller
                     break;
                 default:
                     break;
-                    endswitch;
+                endswitch;
             }
         }
 
