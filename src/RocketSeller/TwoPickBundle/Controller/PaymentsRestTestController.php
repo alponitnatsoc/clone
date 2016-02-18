@@ -264,11 +264,13 @@ class PaymentsRestTestController extends FOSRestController
    * )
    *
    * @param ParamFetcher $paramFetcher Paramfetcher
+   * @RequestParam(name="charge-third-id", nullable=false, requirements="(.)*", strict=false, description="id.")
    * @return View
    */
   public function postMockPaymentApprovalAction(ParamFetcher $paramFetcher, $id)
   {
     $view = View::create();
+    $a = $paramFetcher->get('charge-third-id');
     if ($id == 987654321)
     {
       $view->setStatusCode(400);
@@ -276,7 +278,8 @@ class PaymentsRestTestController extends FOSRestController
     else
     {
       $view->setStatusCode(201);
-      $view->setData((array('charge-id' => 23456)));
+
+      $view->setData((array('charge-third-id' => $a, 'charge-rc'=>'00')));
     }
     return $view;
   }

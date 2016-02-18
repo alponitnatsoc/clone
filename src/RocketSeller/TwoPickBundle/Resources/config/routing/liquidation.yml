@@ -5,6 +5,8 @@ liquidation:
 liquidations_by_ehe:
     path: /{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:listByEhE }
+    requirements:
+        id: \d+
 liquidation_show:
     path: /show/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:show }
@@ -36,3 +38,8 @@ pay_liquidation:
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:payLiquidation }
     requirements:
         id: \d+
+cartas_liquidacion:
+    path: /cartas/{ref}
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:cartasLiquidacion }
+    requirements:
+        ref: (renuncia|aceptacion)

@@ -1,0 +1,461 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {margin: 0; padding: 0}
+a {text-decoration: none}
+ul {list-style-type: none}
+
+
+.blue {color: #00CCCB}
+
+/*-----------------------------------------------empieza header-----------------------------------------------------------------*/
+
+#zona-logo {
+	width: 100%;
+	height: 70px;
+	background: #424C5A;
+	}
+
+#logo {width: 50%;float: left; padding-top: 15px; text-align: left}
+#redes {
+	color: #fff;
+    font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+    float: right;
+    width: 45%;
+    text-align: right;
+    padding: 20px 20px 0 0px;}
+
+.redes {font-size:25px}
+
+#redes li {display: inline;}
+
+h1 { font-family: 'Open Sans', sans-serif;
+	font-weight: 300; font-size: 40px; color: #fff}
+h3 {font-family: 'Open Sans', sans-serif;
+	font-weight: 300; color: #fff; font-size: 20px}
+
+header {
+	background-image: url(/public/img/landing/banner.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #f0e9e7;
+   	height: 895px;
+    text-align: center;
+	position: relative}
+
+	#texto-banner {
+	display:none;
+	width: 50%;
+	margin: 0 auto;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	padding-top: 260px}
+
+	.calltoaction {width: 545px;
+	height: 45px; background: #FF9523;
+	margin: 25px auto; border-radius: 5px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 700; color: #fff;
+	padding-top: 10px; font-size: 20px}
+
+#bull-cont {background: rgba(0,0,0,0.2);
+	height: 120px; position: absolute; width: 100%; bottom: 0}
+
+#bullets {width: 980px;
+margin: 0 auto;
+color: #E4E4E4;
+padding-top: 30px;
+overflow: hidden;
+height: auto}
+
+.bull-text {width: 220px;
+float: left;
+font-family: 'Open Sans', sans-serif;
+font-weight: 700; padding: 0 50px}
+
+.bull-text p { font-family: 'Open Sans', sans-serif; font-weight: 300}
+
+
+/*-----------------------------------------------empieza beneficios-----------------------------------------------------------------*/
+.espacio {margin: 30px 0; color: #5D5D5D;}
+#beneficios {width: 980px; margin: 0 auto; height: auto; overflow: hidden}
+.cuadros-beneficios p {padding-top: 10px}
+h2 {font-family: 'Open Sans', sans-serif; font-weight: 300; text-align: center; font-size: 25px}
+.cuadros-beneficios {width: 224px;
+    height: 145px;
+    border: 1px solid #B8B8BE;
+    border-radius: 5px;
+    float: left;
+    margin: 10px 15px;
+    text-align: center;
+    padding: 25px 35px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300}
+
+/*-----------------------------------------------empieza precio-----------------------------------------------------------------*/
+
+#precio {background-image: url(/public/img/landing/precio.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #f0e9e7;
+	background-attachment: fixed;
+   	height: 285px;
+	color: #fff;
+	text-align: center;
+	padding-top: 45px;
+	margin-top: 45px}
+
+	#precio span {font-family: 'Open Sans', sans-serif;
+	font-weight: 800;
+	font-size: 45px;
+	color:#00CCCB}
+
+h4 {font-family: 'Open Sans', sans-serif;
+	font-weight: 800;
+	font-size: 22px}
+
+.cuadro-precio {display: block;
+	background: #fff;
+	width: 545px;
+	height: 70px;
+	margin: 0 auto;
+	color: #3B4B5A;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	font-size: 25px}
+
+	/*-----------------------------------------------empieza seccion señor-----------------------------------------------------------------*/
+	.aparece {display: none}
+
+	.imghombre {
+		width: 100%}
+
+	.cont-gris {text-align: center;
+    background: #ECECEC;
+    height: 100px;
+    padding-top: 20px;
+    color: #424C5A;}
+
+	#foto-hombre {background-image: url(/public/img/landing/back-man.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   	height: 775px;}
+
+#contenedor-info {width: 1140px;
+	padding-left: 50px;
+    height: auto;
+    overflow: hidden;
+    margin: 0 auto;}
+
+.seccion-hombre {float: left; margin-top: 30px; text-align: center}
+
+.info-hombre {
+	width: 270px;
+    height: 95px;
+    margin: 100px 0;
+    background: #3B4B5A;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    color: #fff;
+    text-align: center;
+    padding: 20px 20px 0 20px;}
+
+.callto {text-align: center;
+	position: relative;
+	margin: -90px 0 0 60px;
+	width: 300px;
+	height: 45px; background: #FF9523;
+	border-radius: 5px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 700; color: #fff;
+	padding-top: 10px; font-size: 20px}
+
+/*-----------------------------------------------empieza seccion computador-----------------------------------------------------------------*/
+
+#info-facil {width: 1020px;
+	height: auto;
+	overflow: hidden;
+	margin: 200px auto}
+
+.cont-facil li {font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    width: 430px;
+    font-size: 22px;
+	color: #5D5D5D;
+	padding: 10px 0}
+
+.cont-facil span {font-family: 'Open Sans', sans-serif;
+	font-weight: 700;}
+
+.img {float: left;
+	padding: 20px 15px 0 0}
+
+.cont-facil {float: left; width: 50%}
+
+/*-----------------------------------------------empieza seccion formulario-----------------------------------------------------------------*/
+
+.titulo {text-align: center; color:#FFFFFF}
+.titulo span {font-family: 'Open Sans', sans-serif;
+	font-weight: 700;}
+
+#formulario {
+	background-image: url(/public/img/landing/formulrio.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #f0e9e7;
+   	height: 560px;
+	width: 100%;
+	margin: 0 auto;
+	padding-top: 75px}
+
+	form {
+		width: 420px;
+		margin: 25px auto;
+
+	}
+.radio {
+	    display: inline-block;
+			margin-left: 10px;
+}
+
+.campos {
+	width: 385px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    margin: 0 0 25px 0;
+	padding-left: 20px;
+	font-family: 'Open Sans', sans-serif; font-weight: 300;
+	font-size: 15px;}
+
+	.radios {
+		width: 385px;
+	  height: 50px;
+	  border: none;
+		font-family: 'Open Sans', sans-serif; font-weight: 700;
+		font-size: 15px;
+	}
+
+.form-group span {font-family: 'Open Sans', sans-serif; font-weight: 700; color:#FFFFFF}
+
+#company {display: none}
+
+
+   button {background: #FF9523; width:405px; height:50px; border-radius: 5px; border: none; font-family: 'Open Sans', sans-serif; color:#fff; font-size: 20px; font-weight: 700;}
+
+	 /*modal----------------------------------------------*/
+
+
+	 .modal {
+	 	position: fixed;
+	 	overflow: scroll;
+	 	font-family: Arial, Helvetica, sans-serif;
+	 	top: 0;
+	 	right: 0;
+	 	bottom: 0;
+	 	left: 0;
+	 	background: rgba(0,0,0,0.9);
+	 	z-index: 1;
+	 	opacity:1;
+	 	display: none;
+	 }
+
+	 #done {width: 550px; height:240px; background: #FFFFFF; margin: 0 auto; display: none; margin-top: 20px}
+	 #done1 {height: 135px; width: 100%; background-color: #424C5A; color: #FFFFFF}
+	 #done1-check {float: left; margin: 30px 30px 0 30px;}
+	 #done1-text {width: 340px; float: left; font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 1.7em; padding-top: 40px;}
+	 #done2 {font-family: 'Open Sans', sans-serif;font-weight: 300;font-size: 1.1em;width: 60%;margin-left: 35%; color: #5D5D5D}
+
+
+	 /*-----------------------------------------------empieza seccion footer-----------------------------------------------------------------*/
+
+	  footer {width: 100%; height: 195px; background: #3B4B5A; color: #C4C9CC; padding-top: 65px}
+	 #footer-content {width: 980px; margin: 0 auto}
+	 footer .text {width: 365px; font-size: 10px; float: left; padding: 0 40px; font-family: 'Open Sans', sans-serif; font-weight: 300;}
+	 .img-footer {float:left}
+
+	 /*-----------------------------------------------responsive-----------------------------------------------------------------*/
+
+	 @media screen and (max-width: 1490px) {#texto-banner {width:65%}}
+
+	 @media screen and (max-width: 1280px) {
+	 	header {height: 800px}
+	 	#texto-banner {width: 70%; padding-top: 200px}
+	 	.espacio {margin: 20px 0}
+	 	#precio {padding-top: 30px; margin-top: 20px}
+	 	#foto-hombre {height: 695px}
+	 	.seccion-hombre {padding-left: 15px}
+	 	#contenedor-info {width: 1145px; padding-left: 0}
+	 	.info-hombre {margin: 80px 0}
+	 	.imghombre {width: 90%}
+	 	.callto {margin: -110px 0 0 60px}
+	 	#info-facil {margin: 150px auto}
+	 	}
+
+	 	@media screen and (max-width: 1024px) {
+	 	header {height: 770px}
+	 	#texto-banner {width: 90%; padding-top: 185px}
+	 	#foto-hombre {height: 650px}
+	 	#contenedor-info {width: 1000px; height: 100%}
+	 	.seccion-hombre {padding-left: 0px}
+	 	.info-hombre {margin: 60px 0; width: 230px; padding: 20px 15px 0 15px}
+	 	.callto {margin: -140px 0 0 60px}
+	 	#info-facil {padding-left:23px; width: 1000px}
+	 	}
+
+	 	@media screen and (max-width: 980px) {
+	 		header {height: 865px}
+	 		#texto-banner {padding-top: 215px}
+	 		#foto-hombre {height: 568px}
+	 		#contenedor-info {width: 945px; height: 100%}
+	 		.cuadros-beneficios {width: 22%}
+	 		#beneficios {width: 100%}
+	 		#bullets {width: 100%;}
+	 		.bull-text {width: 22%; padding: 0 5%}
+	 		.seccion-hombre {padding-left: 5px}
+	 		.info-hombre {margin: 15px 0; width:185px; height: 130px}
+	 		.imghombre {width: 72%}
+	 		.pc-width {width: 60%}
+	 		#info-facil {padding-left:0px; width: 900px; text-align: center; margin: 30px auto}
+	 		.cont-facil {float: none; width: 100%}
+	 		.cont-facil li {width: 585px; text-align: left}
+	 		.cont-facil ul {padding-left: 150px;}
+	 		.img {padding: 9px 15px 0 0;}}
+
+	 @media screen and (max-width: 800px) {
+	 	#texto-banner {width:80%}
+	 	h1 {padding-bottom:25px}
+	 	#bullets {width: 100%}
+	 	.bull-text {width: 28%; padding: 0 20px}
+	 	#beneficios {width: 750px}
+	 	.cuadros-beneficios {width: 270px}
+	 	.seccion-hombre {float: none}
+	 	#foto-hombre {height: auto}
+	 	.imghombre {display: none}
+	 	#contenedor-info {width: 100%}
+	 	.seccion-hombre {padding-left: 0px;}
+	 	.info-hombre {width: 35%; padding: 20px 40px 0px; font-size: 20px; height: 160px; float:left; margin-left: 25px}
+	 	.desaparece {display: none}
+	 	#info-facil {width: 750px}
+	 	.cont-facil ul {padding-left: 90px;}
+	 	.aparece {display: block; margin-bottom: 40px; clear: both}
+	 	.callto {margin: 0 auto}
+	 	#footer-content {width: 750px}
+	 	footer .text {width: 295px; font-size: 12px; padding: 0 20px}
+	 	}
+
+	 	@media screen and (max-width: 768px) {
+	 		#texto-banner {width: 85%}
+	 		.bull-text {padding: 0 15px; width: 28%}
+	 		#beneficios {width: 100%}
+	 		.cuadros-beneficios {width: 36%;}
+	 		h1 {font-size: 1.8em}
+	 		#info-facil {width: 100%}
+	 		.cont-facil ul {padding-left: 150px;}
+	 		.cont-facil li {width: 455px; font-size: 1.2em}
+	 		.info-hombre {width: 35%; height: 100px; float: left; margin-left: 20px; font-size: 100%}
+	 		.aparece {clear: both}}
+
+	 	@media screen and (max-width: 690px) {
+	 		.bull-text {padding: 0 0px}
+	 		#beneficios {width: 100%}
+	 		.cuadros-beneficios {width: 243px}
+	 		.info-hombre {margin-left: 15px}
+	 		#info-facil {width: 100%}
+	 		h2 {font-size: 1.4em}}
+
+	 	@media screen and (max-width: 667px) {
+	 		#texto-banner {width: 80%; padding-top: 100px}
+	 		#bull-cont {background: rgba(0,0,0,0.7); height: 255px; width: 100%;}
+	 		#bullets {padding-top: 10px; width: 100%}
+	 		.bull-text {float: none; padding: 15px 0; font-size: 100%; width: 95%; margin: 0 auto}
+	 		.calltoaction {width: 95%; font-size: 1em}
+	 		.cuadros-beneficios {width: 39%; height: 155px; padding: 25px 15px;}
+	 		.info-hombre {width: 40%; height: 90px; float: left; margin-left: 15px; padding: 20px 20px 0px; font-size: 90%}
+	 		.aparece {clear: both}
+	 		.cont-facil ul {padding-left: 16%;}
+	 		.pc-width {width: 70%}
+	 		h4,h2 {font-size: 1.4em}
+	 		.cont-gris {height: 80px}
+	 		.cuadro-precio {width: 90%}
+	 		footer {height: 325px; padding-top: 25px}
+	 		#footer-content {width: 100%}
+	 		footer .text {width: 470px; font-size:12px; text-align: center !important;     border-right: none !important; padding: 20px 40px}
+	 		.img-footer {float: none}
+	 		#done {width: 80%; height:215px;}
+	 		#done1 {height: 115px;}
+	 		#done1-check {margin: 30px 30px 0 10px;}
+	 		#done1-text {width: 50%; font-size: 1.2em;}
+	 		}
+
+	 		@media screen and (max-width: 568px) {
+	 			.cuadros-beneficios {width: 80%; height: 125px; padding: 25px 40px;}
+	 			.info-hombre {width: 90%; float: none; margin-left: 10px; height: 60px}
+	 			footer .text {padding: 20px 30px}
+	 			h4,h2 {font-size: 1.2em}
+	 			#done1 {height: 105px;}
+	 			#done1-check {margin: 45px 15px}
+	 			#done1-text {width: 50%; font-size: 1.2em;}}
+
+	 		@media screen and (max-width: 480px) {
+	 			.cuadros-beneficios {float: none; margin: 10px auto; width: 75%}
+	 			#precio {height: 250px}
+	 			#precio span {font-size: 35px}
+	 			.cuadro-precio {height: 55px; font-size: 20px}
+	 			.info-hombre {width: 85%; height: 70px; float: none;}
+	 			#info-facil {width: 100%}
+	 			.cont-facil {width: 90%; margin: 0 auto;}
+	 			.cont-facil ul {padding-left: 25px;}
+	 			.cont-facil li {width: 100%;}
+	 			footer .text {width: 90%; padding: 20px 20px}
+	 			#done {height: 420}
+	 			#done1 {height: 90px;}
+	 			#done1-check {margin: 0 15px; width: 25%}
+	 			#done1-text {padding-top: 20px; font-size: 1em}
+	 			#done2 {clear: both; width: 80%; margin-left: 5%}
+	 			}
+
+	 			@media screen and (max-width: 414px) {
+	 				#logo {width: 49%}
+	 				h4,h2 {font-size: 1em}
+	 				header {height: 830px}
+	 				form {width: 300px !important}
+	 				.campos {width: 90%}
+	 				button {width: 95%}
+	 				.cont-facil li {font-size: 1em;}}
+
+	 @media screen and (max-width: 375px) {
+	 				.cuadros-beneficios {width: 70%; height: 100%}
+	 				h1 {font-size: 1.1em}
+	 				header {height: 700px}
+	 				.logo-size {width: 100%}
+	 				#logo {width: 48%}
+	 				#bull-cont {height: 270px}
+	 				#texto-banner {padding-top: 55px}
+	 				.calltoaction {height: 55px}
+	 				.info-hombre {margin-left: 8px}
+	 				.cuadro-precio {font-size: 20px; line-height: 30px; padding-top: 10px; height: 70px}
+	 	.cuadro-precio span {font-size: 30px}
+	 				footer .text {padding: 15px 15px}
+	 				.img {padding: 23px 15px 0 0}
+	 				}
+
+	 				@media screen and (max-width: 375px) {#precio {height: 290px}}
+
+	 @media screen and (max-width: 320px) {
+	 	h4,h2 {font-size: 0.9em}
+	 	header {height: 735px}
+	 	#bull-cont {height: 285px}
+	 	.calltoaction {font-size: 1em}
+	 	#precio {height: 315px; padding: 20px 10px 0 10px;}
+	 	.cuadro-precio {font-size: 20px; line-height: 30px; padding-top: 10px; height: 70px}
+	 	.cuadro-precio span {font-size: 30px}
+	 	.info-hombre {width: 82%}
+	 	form {width: 265px !important}
+	 	.cont-facil ul {padding-left: 10px;}
+	 	.img {padding: 23px 15px 0 0;}}
