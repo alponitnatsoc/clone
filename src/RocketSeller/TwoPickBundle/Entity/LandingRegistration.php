@@ -89,4 +89,14 @@ class LandingRegistration
         $this->phone = $phone;
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

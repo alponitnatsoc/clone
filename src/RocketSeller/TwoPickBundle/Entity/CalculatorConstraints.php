@@ -31,13 +31,13 @@ class CalculatorConstraints
      */
     private $value;
     /**
-     * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType", inversedBy="constraints")
+     * @var \RocketSeller\TwoPickBundle\Entity\Position
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Position", inversedBy="constraints")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="employee_contract_type_id_employee_contract_type", referencedColumnName="id_employee_contract_type")
+     *   @ORM\JoinColumn(name="position_id_position", referencedColumnName="id_position")
      * })
      */
-    private $employeeContractTypeEmployeeContractType;
+    private $positionPosition;
 
 
 
@@ -101,26 +101,26 @@ class CalculatorConstraints
     }
 
     /**
-     * Set employeeContractTypeEmployeeContractType
+     * Set positionPosition
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType
+     * @param \RocketSeller\TwoPickBundle\Entity\Position $positionPosition
      *
      * @return CalculatorConstraints
      */
-    public function setEmployeeContractTypeEmployeeContractType(\RocketSeller\TwoPickBundle\Entity\EmployeeContractType $employeeContractTypeEmployeeContractType = null)
+    public function setPositionPosition(\RocketSeller\TwoPickBundle\Entity\Position $positionPosition = null)
     {
-        $this->employeeContractTypeEmployeeContractType = $employeeContractTypeEmployeeContractType;
+        $this->positionPosition = $positionPosition;
 
         return $this;
     }
 
     /**
-     * Get employeeContractTypeEmployeeContractType
+     * Get positionPosition
      *
-     * @return \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
+     * @return \RocketSeller\TwoPickBundle\Entity\Position
      */
-    public function getEmployeeContractTypeEmployeeContractType()
+    public function getPositionPosition()
     {
-        return $this->employeeContractTypeEmployeeContractType;
+        return $this->positionPosition;
     }
 }

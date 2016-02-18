@@ -8,6 +8,8 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Entity\Position;
+
 class CalculatorRestController extends FOSRestController
 {
     /**
@@ -212,9 +214,11 @@ class CalculatorRestController extends FOSRestController
      * @return View
      */
     public function getCalculatorConstraintsAction(){
-        $calcRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        $positionRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Position');
+        /** @var Position $position */
+        $position=$positionRepo->findOneBy(array("name"=>"Empleada(o) domestico"));
         /** @var ArrayCollection $calculatorConstrains */
-        $calculatorConstrains=$calcRepo->findBy(array('employeeContractTypeEmployeeContractType'=>'1'));
+        $calculatorConstrains=$position->getConstraints();
         $constraints=array();
         /** @var CalculatorConstraints $cal */
         foreach($calculatorConstrains as $cal){
