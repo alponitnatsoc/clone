@@ -321,6 +321,8 @@ class EmployeeController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
+        $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+
         $employee = null;
         $employerHasEmployee = null;
         if ($id == -1) {
@@ -331,7 +333,6 @@ class EmployeeController extends Controller
             /** @var Employee $employee */
             $employee = $repository->find($id);
             /** @var EmployerHasEmployee $ee */
-            $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
             $flag = false;
             foreach ($employee->getEmployeeHasEmployers() as $ee) {
                 if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {

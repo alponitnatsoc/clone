@@ -448,7 +448,7 @@ function startEmployee() {
 
         //var employeeType = $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']");
         var contractType = $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']");
-        var timeCommitment = $(form).find("select[name='register_employee[employeeHasEmployers][timeCommitment]']");
+        var timeCommitment = $(form).find("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
         var position = $(form).find("select[name='register_employee[employeeHasEmployers][position]']");
         var idWorkplace = $(form).find("select[name='register_employee[employeeHasEmployers][workplaces]']");
         if (!form.valid()) {
