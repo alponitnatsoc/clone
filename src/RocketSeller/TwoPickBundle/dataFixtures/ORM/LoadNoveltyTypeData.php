@@ -304,8 +304,8 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novelty-salary', $NoveltySalary);
 
         //llamado_atencion
-        $this->addReference('novelty-llegada-tarde', $llegadaTarde);
-        $this->addReference('novelty-abandono-puesto', $abandonoPuesto);
+        $this->addReference('novlety-llegada-tarde', $llegadaTarde);
+        $this->addReference('novlety-abandono-puesto', $abandonoPuesto);
     }
 
     public function getOrder()

@@ -69,7 +69,7 @@ class BasicPersonRegistration extends AbstractType
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Dirección Principal*'))
+                ),'label' => 'Dirección principal de trabajo*'))
             ->add('phones', 'collection', array(
                 'type' => new PhoneRegistration(),
                 'allow_add'    => true,
