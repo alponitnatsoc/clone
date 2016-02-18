@@ -625,7 +625,11 @@ class LiquidationRestController extends FOSRestController
         $responsePA = $this->forward("RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval", array("request" => $req), $format);
 
         $dataResPA = json_decode($responsePA->getContent(), true);
-        var_dump($dataResPA);
+        $dataResPA["charge-id"];
+
+        $desc = $purchaseOrderDescription->getDescription();
+        $purchaseOrderDescription->setDescription($desc . " - " . $dataResPA["charge-id"]);
+        $em->persist($purchaseOrderDescription);
 
         $req = new Request();
         $req->setMethod("POST");
@@ -638,14 +642,14 @@ class LiquidationRestController extends FOSRestController
         $responseCP = $this->forward("RocketSellerTwoPickBundle:PaymentsRest:postClientPayment", array("request" => $req), $format);
 
         $dataResCP = json_decode($responseCP->getContent(), true);
-        var_dump($dataResCP);
+        $idDispersionNovo = $dataResCP["transfer-id"];
 
         $pay = new Pay();
 //         $pay->setPayMethodPayMethod($employeePayMethod);
 //         $pay->setPayTypePayType($employeePayType);
         $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
         $pay->setUserIdUser($this->getUser());
-//         $pay->setIdDispercionNovo($idDispersionNovo);
+        $pay->setIdDispercionNovo($idDispersionNovo);
         $em->persist($pay);
         $em->flush();
 
