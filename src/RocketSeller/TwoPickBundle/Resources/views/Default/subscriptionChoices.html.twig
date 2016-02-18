@@ -86,19 +86,19 @@
 
     {% for employee in employerHasEmployee %}
 
-        <div class="col-md-3 {{ employee.state == 'Active'?'activo':'inactivo' }}" style="text-align: center">
+        <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
             <div> 
                 <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
             </div>
             <div class="employee_name">
                 {{ employee.employeeEmployee.personPerson.names }}
             </div>
-            {% set tipo_tiempo_contrato = contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name|split(' ') %}
+            {% set tipo_tiempo_contrato = contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name|lower|split(' ') %}
             <div class="{{ tipo_tiempo_contrato|join("_") }}">
                 {{ contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name }}
             </div>
             <div>
-                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ employee.state == 'Active'?'Inactivar':'Activar' }}</button>
+                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
             </div>
         </div>
 
@@ -223,7 +223,7 @@
             tiempo_parcialSlider.noUiSlider.on('change', function () {
                 calculatePrice("_calc");
             });
-            tiempo_parcialSlider.noUiSlider.set($(".activo > .Trabajo_por_días").length);
+            tiempo_parcialSlider.noUiSlider.set($(".activo > .trabajo_por_días").length);
 
             medio_tiempoSlider = document.getElementById('medio_tiempo');
             noUiSlider.create(medio_tiempoSlider, {
@@ -245,7 +245,7 @@
             medio_tiempoSlider.noUiSlider.on('change', function () {
                 calculatePrice("_calc");
             });
-            medio_tiempoSlider.noUiSlider.set($(".activo > .Medio_tiempo").length);
+            medio_tiempoSlider.noUiSlider.set($(".activo > .medio_tiempo").length);
 
             tiempo_completoSlider = document.getElementById('tiempo_completo');
             noUiSlider.create(tiempo_completoSlider, {
@@ -267,7 +267,7 @@
             tiempo_completoSlider.noUiSlider.on('change', function () {
                 calculatePrice("_calc");
             });
-            tiempo_completoSlider.noUiSlider.set($(".activo > .Tiempo_completo").length);
+            tiempo_completoSlider.noUiSlider.set($(".activo > .tiempo_completo").length);
 
             calculatePrice('');
         });
@@ -305,7 +305,7 @@
                 female = parent.find(".female").length;
                 male = parent.find(".male").length;
                 state = '';
-                if (data.state == 'UnActive') {
+                if (data.state == 'Inactivo') {
                     $(obj).html("Activar");
                     if (female > 0) {
                         state = "inactivada";
@@ -315,7 +315,7 @@
                     parent.removeClass("activo");
                     parent.addClass("inactivo");
                 }
-                if (data.state == 'Active') {
+                if (data.state == 'Activo') {
                     $(obj).html("Inactivar");
                     if (female > 0) {
                         state = "activada";
@@ -349,9 +349,9 @@
                 Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
                 Trabajo_por_días = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
             } else {
-                Tiempo_Completo = $(".activo > .Tiempo_completo").length;
+                Tiempo_Completo = $(".activo > .tiempo_completo").length;
                 Medio_tiempo = $(".activo > .Medio_tiempo").length;
-                Trabajo_por_días = $(".activo > .Trabajo_por_días").length;
+                Trabajo_por_días = $(".activo > .trabajo_por_días").length;
             }
             if (Tiempo_Completo > 0) {
                 total = total + (Tiempo_Completo * 25000);
