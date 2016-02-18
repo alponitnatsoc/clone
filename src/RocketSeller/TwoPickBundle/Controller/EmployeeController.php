@@ -321,8 +321,6 @@ class EmployeeController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
-        $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
-
         $employee = null;
         $employerHasEmployee = null;
         if ($id == -1) {
@@ -333,6 +331,7 @@ class EmployeeController extends Controller
             /** @var Employee $employee */
             $employee = $repository->find($id);
             /** @var EmployerHasEmployee $ee */
+            $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
             $flag = false;
             foreach ($employee->getEmployeeHasEmployers() as $ee) {
                 if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
@@ -357,7 +356,7 @@ class EmployeeController extends Controller
         if ($tempPerson->getPhones()->count() == 0) {
             $tempPerson->addPhone(new Phone());
         }
-        $form = $this->createForm(new PersonEmployeeRegistration($idEmployer, $userWorkplaces), $employee, array(
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
