@@ -47,6 +47,7 @@ class BackOfficeController extends Controller
     		$description = $request->request->get('description');    		
     		$actionError = new ActionError();
     		$actionError->setDescription($description);
+            $actionError->setStatus('Sin contactar');
     		$action->setActionErrorActionError($actionError);
     		$action->setStatus("Error");
 		   	$em = $this->getDoctrine()->getManager();	
