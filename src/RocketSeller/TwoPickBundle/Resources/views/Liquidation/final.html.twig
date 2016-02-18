@@ -105,6 +105,7 @@
             </div><br />
             <div class="col-sm-12">
                 <ul class="list-group">
+                    {% if novelties %}
                     {% for novelty in novelties %}
                     {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
                         <li class="list-group-item">
@@ -118,6 +119,7 @@
                         </li>
                         {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </ul>
 {#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
             {% if not llamadosAtencion %}
