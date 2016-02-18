@@ -23,15 +23,45 @@ class ContractRegistration extends AbstractType
     {
 
         $builder
-            ->add('employeeType', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:EmployeeContractType',
-                'property' => 'name',
+            ->add('new', 'button', array(
+                'label' => 'Nuevo',
+            ))
+            ->add('existent', 'button', array(
+                'label' => 'Ya trabaja conmigo',
+            ))
+            ->add('yesExistent', 'button', array(
+                'label' => 'Si',
+            ))
+            ->add('noExistent', 'button', array(
+                'label' => 'No',
+            ))
+            ->add('finite', 'button', array(
+                'label' => 'Seleccionar',
+            ))
+            ->add('indefinite', 'button', array(
+                'label' => 'Seleccionar',
+            ))
+            ->add('sisben', 'choice', array(
+                'choices' => array(
+                     1=> 'Si',
+                     0=> 'No',
+                ),
                 'multiple' => false,
-                'expanded' => false,
-                'property_path' => 'employeeContractTypeEmployeeContractType',
-                'label'=>'Tipo de empleado*',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'expanded' => true,
+                'label'=>'¿El empleado pertenece al SISBÉN?*',
+                'required' => false,
+                'mapped' => false
+            ))
+            ->add('transportAid', 'choice', array(
+                'choices' => array(
+                    1=> 'Si',
+                    0=> 'No',
+                ),
+                'multiple' => false,
+                'expanded' => true,
+                'label'=>'¿Residirá en el lugar de trabajo?',
+                'required' => false,
+                'mapped' => false
             ))
             ->add('contractType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:ContractType',
@@ -40,17 +70,15 @@ class ContractRegistration extends AbstractType
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
                 'label'=>'Tipo de contrato*',
-                'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
             ->add('timeCommitment', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:TimeCommitment',
                 'property' => 'name',
                 'multiple' => false,
-                'expanded' => false,
+                'expanded' => true,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'Dedicación de tiempo*',
-                'placeholder' => 'Seleccionar una opción',
+                'label'=>'¿Cuál será la modalidad de trabajo?',
                 'required' => true
             ))
             ->add('position', 'entity', array(
@@ -59,20 +87,26 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Cargo*',
+                'label'=>'Defina el cargo que asignará a su empleado:',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
             ->add('salary', 'money', array(
-                'constraints' => array(
-                    new NotBlank()
-                ),
-                'currency' => 'COP',
-                'property_path' => 'salary',
+                'currency'=>'COP',
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
-                "attr" => array(
+                'required'=>false,
+                'attr' => array(
                     'onclick' => 'formatMoney($(this))'
                 )
+            ))
+            ->add('salaryD', 'money', array(
+                'currency'=>'COP',
+                'label'=>'Salario Diario',
+                'required'=>false,
+                'attr' => array(
+                    'onclick' => 'formatMoney($(this))'
+                ),
+                'mapped'=>false,
             ))
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),
@@ -86,7 +120,7 @@ class ContractRegistration extends AbstractType
                 'required' => false
             ))
             ->add('documentDocument', new DocumentPick())
-            ->add('workTimeStart', 'time', array(
+            /*->add('workTimeStart', 'time', array(
                 'input'  => 'datetime',
                 'widget' => 'choice',
                 'label'=>'Hora inicio*:'
@@ -95,7 +129,7 @@ class ContractRegistration extends AbstractType
                 'input'  => 'datetime',
                 'widget' => 'choice',
                 'label'=>'Hora fin:'
-            ))
+            ))*/
             ->add('startDate', 'date', array(
                 'years' => range(2010,2020),
                 'label' => 'Fecha inicio de contrato*:'
@@ -104,37 +138,17 @@ class ContractRegistration extends AbstractType
                 'years' => range(2016,2020),
                 'label' => 'Fecha fin de contrato*:'
             ))
-            ->add('transportAid', 'choice', array(
-                'choices' => array(
-                    'auxilio' => 'Recibe auxilio de transporte',
-                    'empleador' => 'Transporte brindado por el empleador',
-                    'reside' => 'Reside en el lugar de trabajo',
-                ),
-                'multiple' => false,
-                'expanded' => false,
-                'label'=>'Desplazamiento al lugar de trabajo*',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
-            ))
-            ->add('workableDaysMonth', 'choice', array(
-                'choices' => range(1,30),
-                'multiple' => false,
-                'expanded' => false,
-                'label'=>'Días laborales al mes*'
-            ))
             ->add('weekWorkableDays', 'choice', array(
                 'choices' => array(
-                    'lunes'=> 'Lunes',
-                    'martes' => 'Martes',
-                    'miercoles' => 'Miercoles',
-                    'jueves' => 'Jueves',
-                    'viernes' => 'Viernes',
-                    'sabado' => 'Sabado',
-                    'domingo' => 'Domingo',
+                    '1'=> '1',
+                    '2' => '2',
+                    '3' => '3',
+                    '4' => '4',
+                    '5' => '5',
+                    '6' => '6',
                 ),
-                'multiple' => true,
-                'expanded' => true,
-                'mapped' =>false,
+                'multiple' => false,
+                'expanded' => false,
                 'mapped' =>false,
                 'label'=>'Días laborales de la semana*:'
             ))
@@ -145,7 +159,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'Lugar de trabajo*',
+                'label'=>'¿Cuál será su lugar de trabajo?',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))

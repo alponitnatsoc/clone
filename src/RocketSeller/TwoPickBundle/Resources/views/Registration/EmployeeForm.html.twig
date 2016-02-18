@@ -88,7 +88,7 @@
         {{ form_errors(form) }}
         {{ form_start(form) }}
 
-        <ul class="nav nav-tabs nav-justified">            
+        <ul id="formNav" class="nav nav-tabs nav-justified">
             <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
             <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
             <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
@@ -242,7 +242,7 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
-                <br></br>
+                <br/>
                 <div class="col-sm-10 col-xs-12 content-input">
                     <div class="col-sm-12">
                         <div class="col-sm-6 label-group">
@@ -295,7 +295,7 @@
                 <br/><br/>
                 <div class="col-sm-12 col-xs-12 center">
 
-                    <a class="btn btn-primary btnPrevious">Anterior</a>
+                    <a class="btn btn-primary btnPrevious-form btnPrevious">Anterior</a>
 
 
                     <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
@@ -308,68 +308,193 @@
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios<a href="{{ path('show_help') }}" class="helpTxt">> ayuda</a></span>
                 </div>
-                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-xs-12 label-group">
-                            <h3>Datos básicos del contrato</h3>
+                <div id="contractDataWiz">
+                    <ul id="contractNav" class="nav nav-tabs nav-justified">
+                        <li class="active" ><a data-toggle="tab" data-target="#newOrOldTab"></a></li>
+                        <li><a data-toggle="tab" data-target="#contractTypeTab"></a></li>
+                        <li><a data-toggle="tab" data-target="#employeeContractTypeTab"></a></li>
+                        <li><a data-toggle="tab" data-target="#contractSalaryTab"></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="newOrOldTab" class="tab-pane fade in active">
+                            <div>
+                                <h2>
+                                    <p> Bienvenido a nuestro</p>
+                                    <p>asistente de contratación de empleado</p>
+                                </h2>
+                                <p>Por favor responda las siguientes preguntas y nosotros nos encargaremos de orientar
+                                    la información al modelo de contrato más conveniente para cada caso:</p>
+                                <p>¿Su empleado es nuevo o ya se encuentra trabajando con usted?</p>
+
+                                {{ form_row(form.employeeHasEmployers.new) }}
+                                {{ form_row(form.employeeHasEmployers.existent) }}
+                                <div id="existentDataToShow">
+                                    Si el empleado es antiguo, nuestra recomendación es generar un nuevo contrato donde
+                                    se especificará que reemplaza al actual sin generar inconvenientes al empleado ni al empleador.
+                                    ¿Confirma hacerlo de esa manera?
+                                    En caso negativo las herramientas elaboradas por Symplifica no podrán satisfacer sus necesidades.
+                                    {{ form_row(form.employeeHasEmployers.yesExistent) }}
+                                    {{ form_row(form.employeeHasEmployers.noExistent) }}
+
+                                    <a class="btn btn-primary btnPrevious-form btnPrevious" >Anterior</a>
+                                    <buttton id="existentNext" class="btn btn-primary btnNext-contract btnNext btn-orange" disabled >Siguiente</buttton>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="contractTypeTab" class="tab-pane fade in">
+                            Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones
+                            laborales que le va a ofrecer:
+                            <div id="contractBenefitsTable">
+                                <table>
+                                    <tr>
+                                        <th> </th>
+                                        <th>Beneficios</th>
+                                        <th>Puntos críticos</th>
+                                        <th> </th>
+                                    </tr>
+                                    <tr>
+                                        <td>Término fijo</td>
+                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</td>
+                                        <td>Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</td>
+                                        <td>{{ form_row(form.employeeHasEmployers.finite) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Término indefinido</td>
+                                        <td>Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</td>
+                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</td>
+                                        <td>{{ form_row(form.employeeHasEmployers.indefinite) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.startDate) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.startDate) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xs-12 definite">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.endDate) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.endDate) }}
+                                </div>
+                            </div>
+                            <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
+                            <a class="btn btn-primary btnNext-contract btnNext btn-orange" >Siguiente</a>
+
+                        </div>
+
+
+                        <div id="employeeContractTypeTab" class="tab-pane fade in">
+
+
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.position) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.position) }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.timeCommitment) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.timeCommitment) }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12 days">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.sisben) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.sisben) }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.workplaces) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.workplaces) }}
+                                </div>
+                            </div>
+
+                            <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
+                            <a class="btn btn-primary btnNext-contract btnNext btn-orange" >Siguiente</a>
+
+                        </div>
+
+
+                        <div id="contractSalaryTab" class="tab-pane fade in">
+
+                            <div class="col-sm-12 col-xs-12 complete">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.transportAid) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.transportAid) }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12 days">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.weekWorkableDays) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.weekWorkableDays) }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-xs-12 days">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.salaryD) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <input id="ex6" type="text" data-slider-min="0" data-slider-max="200000" data-slider-step="1000" data-slider-value="{{ form.employeeHasEmployers.salaryD.vars.value }}"/>
+                                    {{ form_widget(form.employeeHasEmployers.salaryD) }}
+                                    <div style="text-align: right">
+                                        <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 label-group">
+                                    El costo mensual de este empleado es:
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <div id="totalExpensesVal"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xs-12 complete">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.salary) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.salary) }}
+                                    <div style="text-align: right">
+                                        <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xs-12 center">
+
+                                <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
+                                <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.employeeType) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.employeeType) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.contractType) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.contractType) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.timeCommitment) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.timeCommitment) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.startDate) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.startDate) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 definite">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.endDate) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.endDate) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 days">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.workableDaysMonth) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.workableDaysMonth) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 days">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.weekWorkableDays) }}      
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.weekWorkableDays) }}
-                        </div>
-                    </div>
+                </div>
+
                     <!--
                     <div class="col-sm-12 col-xs-12 worktime">
                         <div class="col-sm-6 label-group">
@@ -389,41 +514,7 @@
                 </div>
             </div>
                     -->
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.position) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.position) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.workplaces) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.workplaces) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.transportAid) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.transportAid) }}    
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.salary) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.salary) }}
-                            <div style="text-align: right">
-                                <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
-                            </div>
-                        </div>
-                    </div>
+
                     <!--
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-xs-12 label-group">
@@ -476,11 +567,7 @@
             </div>
                     -->
 
-                    <div class="col-sm-12 col-xs-12 center">
-                        <a class="btn btn-primary btnPrevious" >Anterior</a>
-                        <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
-                    </div>
-                </div>
+
             </div>
             <div id="paymentMethod" class="tab-pane fade in {%   if tab==4 %} active {% endif %}">
                 <h3 class="blueFormTitle">Destino del pago *</h3>
@@ -545,12 +632,20 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious" >< Anterior</a>
-                    <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-primary btnNext btn-orange">Salvar</a>
+                    <a class="btn btn-primary btnPrevious-form btnPrevious" >< Anterior</a>
+                    <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-primary btnNext btn-orange">Salvar</button>
                     <!--<div class="saveControl">{{ form_row(form.save) }}</div>-->
                 </div>
                 <div id="toHide">
 
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.contractType) }}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.employeeHasEmployers.contractType) }}
+                        </div>
+                    </div>
                     {{ form_widget(form) }}
 
                 </div>

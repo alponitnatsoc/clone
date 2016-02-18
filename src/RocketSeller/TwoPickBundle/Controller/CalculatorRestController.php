@@ -97,7 +97,6 @@ class CalculatorRestController extends FOSRestController
             //if it overpass the SMMLV calculates as a full time job  or
             //if does not belongs to SISBEN
             if((($salaryD+$transportAidDaily+$aidD)*$numberOfDays)>$smmlv||$sisben==0){
-
                 if((($salaryD+$transportAidDaily+$aidD)*$numberOfDays)>$smmlv){
                     $base=($salaryD+$aidD)*$numberOfDays;
                 }else{$base=$smmlv;}
@@ -140,7 +139,7 @@ class CalculatorRestController extends FOSRestController
                     $cajaCal=$caja*$base;
                 }
                 //then calculate arl ces and the rest
-                $totalExpenses=(($salaryD+$aidD+$transportAidDaily+$dotationDaily)*$numberOfDays)+(($EPSEmployer+$arl+$sena+$icbf)*$base)+($vacations30D*$numberOfDays*$salaryD)+(($taxCes+$ces)*((($salaryD+$aidD)*$numberOfDays*30/28)+$transportAid))+$PensEmployeeCal+$cajaCal;
+                $totalExpenses=(($salaryD+$aidD+$transportAidDaily+$dotationDaily)*$numberOfDays)+(($EPSEmployer+$arl+$sena+$icbf)*$base)+($vacations30D*$numberOfDays*$salaryD)+(($taxCes+$ces)*((($salaryD+$aidD)*$numberOfDays*30/28)+$transportAid))+$PensEmployeeCal+$cajaCal+$PensEmployerCal;
                 $EPSEmployerCal=$EPSEmployer*$base;
                 $EPSEmployeeCal=$EPSEmployee*$base;
                 $arlCal=$arl*$base;
@@ -151,7 +150,7 @@ class CalculatorRestController extends FOSRestController
                 $dotationCal=$dotationDaily*$numberOfDays;
                 $senaCal=$sena*$base;
                 $icbfCal=$icbf*$base;
-                $totalIncome=(($salaryD+$transportAidDaily)*$numberOfDays)-$EPSEmployerCal-$PensEmployerCal;
+                $totalIncome=(($salaryD+$transportAidDaily)*$numberOfDays)-$PensEmployeeCal;
             }
 
         }else{
@@ -198,6 +197,32 @@ class CalculatorRestController extends FOSRestController
         return $view;
 
 
+    }
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getCalculatorConstraintsAction(){
+        $calcRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:CalculatorConstraints');
+        /** @var ArrayCollection $calculatorConstrains */
+        $calculatorConstrains=$calcRepo->findBy(array('employeeContractTypeEmployeeContractType'=>'1'));
+        $constraints=array();
+        /** @var CalculatorConstraints $cal */
+        foreach($calculatorConstrains as $cal){
+            $constraints[$cal->getName()]=$cal->getValue();
+        }
+        $view = View::create();
+        $view->setData(array("response"=>$constraints))->setStatusCode(200);
+       return $view;
     }
 }
  ?>

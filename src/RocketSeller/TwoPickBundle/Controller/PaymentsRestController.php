@@ -77,8 +77,8 @@ class PaymentsRestController extends FOSRestController
     // $url_request = $this->container->getParameter('novo_payments_url') ;
 
     // URL used for test porpouses, the line above should be used in production.
-    //$url_request = "http://localhost:8001/api/public/v1/mock" . $path;
-    $url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
+    $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
+    //$url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
 
     $response = null;
     $options = array(
