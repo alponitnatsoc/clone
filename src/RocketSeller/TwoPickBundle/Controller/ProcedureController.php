@@ -33,7 +33,7 @@ class ProcedureController extends Controller
 
     }
 
-    public function procedure($employerId,$idProcedureType)
+    public function procedureAction($employerId,$idProcedureType)
     {
     	$em = $this->getDoctrine()->getManager();
     	$em2 = $this->getDoctrine()->getManager();
