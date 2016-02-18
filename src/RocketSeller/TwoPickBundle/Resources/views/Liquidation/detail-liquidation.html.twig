@@ -147,7 +147,8 @@
             Powered by Logo Symplifica
         </div>
     </div>
-<form method="post" action="{{ path('pay_liquidation', { 'id': id_liq }) }}" id="formPay">
+{# <form method="post" action="{{ path('pay_liquidation', { 'id': id_liq }) }}" id="formPay">#}
+<form method="post" action="{{ path('api_public_post_pay_liquidation') }}" id="formPay">
     <div class="col-sm-12 center" role="toolbar">
         <div class="col-xs-12 center">
             <button type="button" class="btn btn-default">Volver atrás</button>
@@ -159,40 +160,43 @@
 {#             <button type="button" class="btn btn-default">Enviar Email</button>#}
 {#         </div>#}
     </div>
-</form>
+{# </form>#}
 
-<div class="modalPayLiquidation" style="display: none">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            La suma total para pago corresponde a <h2 class="formatValue">{{ totalLiq }}</h2>
-        </div>
-        <div class="col-xs-11">
-{#             {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}#}
+    <div class="modalPayLiquidation" style="display: none">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                La suma total para pago corresponde a <h2 class="formatValue">{{ totalLiq }}</h2>
+            </div>
+            <div class="col-xs-11">
+    {#             {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}#}
 
 
-                <div style="display: -webkit-inline-box;vertical-align: middle;">
-{#                     <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">#}
-{{ dump(paymentMethods) }}
-                    {% for key,paymentMethod in paymentMethods %}
-                        <div style="display: -webkit-inline-box;">
-                            <strong>Medio de pago {{ key }}: </strong>
-                        </div>
-                        <div>
-                            {{ paymentMethod }}
-                        </div>
-{#                             <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>#}
-                    {% endfor  %}
-{#                     </select>#}
-                    <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
-                </div>
-{#             {% endif %}#}
-        </div>
-        <div class="col-md-12">
-            <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+                    <div style="display: -webkit-inline-box;vertical-align: middle;">
+    {#                     <select name="paymentMethod" class="form-control" required="required">#}
+{#     {{ dump(paymentMethods) }}#}
+                        {% for key,paymentMethod in paymentMethods %}
+                            <div style="display: -webkit-inline-box;">
+                                <strong>Medio de pago {{ key }}: </strong>
+                            </div>
+                            <div>
+    {#                             {{ paymentMethod }}#}
+                                {{ paymentMethod['method-id'] }}
+    {#                             <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>#}
+                                <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}"> {{ paymentMethod['account-number'] }}<br>
+                            </div>
+                        {% endfor  %}
+    {#                     </select>#}
+                        <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
+                    </div>
+    {#             {% endif %}#}
+            </div>
+            <div class="col-md-12">
+                <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+            </div>
         </div>
     </div>
-</div>
-
+    <input type="hidden" value="{{ id_liq }}" />
+</form>
 <script type="text/javascript">
 <!--
 // jQuery( document ).ready(function() {
@@ -269,6 +273,44 @@
                 console.log("click");
                 //document.location = "{{ path('payroll') }}";
             });
+        });
+
+        $('#formPay').on("submit", function(e) {
+            e.preventDefault();
+//             alert($('#formPay').serialize());
+            var form = $('#formPay');
+
+            var url = form.attr('action');
+
+
+            $.ajax({
+                url: url,
+                type: form.attr('method'),
+                data: {
+                    id_liq: "{{ id_liq }}",
+                    payment_method_liq: 2
+                }
+            }).done(function (data) {
+                if (data["url"] != null) {
+                    console.log(data["url"]);
+                    console.log(data);
+//                     redirUri = data["url"];
+
+//                     sendAjax(redirUri);
+                    window.location.href = redirUri;
+                } else {
+                    $('#main').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(data).find('#main'));
+                    addClick();
+                    if (!jsLoader(url)) {
+                        addSumbit();
+                    }
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            });
+
         });
 
         function updateValues() {
