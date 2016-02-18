@@ -463,4 +463,19 @@ class LiquidationController extends Controller
             'id_liq' => $id
         ));
     }
+
+    public function cartasLiquidacionAction($ref)
+    {
+        $html = $this->renderView('RocketSellerTwoPickBundle:Liquidation:carta-' . $ref . '.html.twig', array(
+        ));
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+            )
+        );
+    }
 }
