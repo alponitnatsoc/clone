@@ -147,7 +147,7 @@
             Powered by Logo Symplifica
         </div>
     </div>
-
+<form method="post" action="{{ path('pay_liquidation', { 'id': id_liq }) }}" id="formPay">
     <div class="col-sm-12 center" role="toolbar">
         <div class="col-xs-12 center">
             <button type="button" class="btn btn-default">Volver atrás</button>
@@ -159,26 +159,45 @@
 {#             <button type="button" class="btn btn-default">Enviar Email</button>#}
 {#         </div>#}
     </div>
+</form>
+
+<div class="modalPayLiquidation" style="display: none">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            La suma total para pago corresponde a <h2 class="formatValue">{{ totalLiq }}</h2>
+        </div>
+        <div class="col-xs-11">
+{#             {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}#}
+
+
+                <div style="display: -webkit-inline-box;vertical-align: middle;">
+{#                     <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">#}
+{{ dump(paymentMethods) }}
+                    {% for key,paymentMethod in paymentMethods %}
+                        <div style="display: -webkit-inline-box;">
+                            <strong>Medio de pago {{ key }}: </strong>
+                        </div>
+                        <div>
+                            {{ paymentMethod }}
+                        </div>
+{#                             <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>#}
+                    {% endfor  %}
+{#                     </select>#}
+                    <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
+                </div>
+{#             {% endif %}#}
+        </div>
+        <div class="col-md-12">
+            <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
 <!--
-jQuery( document ).ready(function() {
-    formatMoney($("td[id='totLiq']"));
-});
-
-function downloadPDF() {
-    $.ajax({
-        url: "{{ path('api_public_post_generate_pdf') }}",
-        type: 'POST',
-        data: {
-            url: window.location.href
-        }
-    }).done(function (data) {
-        alert(data);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-    });
-}
+// jQuery( document ).ready(function() {
+//     formatMoney($("td[id='totLiq']"));
+// });
 
 // function consolidateLiq(element) {
 //     var btn = $(element);
@@ -212,17 +231,12 @@ function downloadPDF() {
             updateValues();
 
             $('#btnCont').click(function () {
-                total = {{ totalLiq }};
+                total = "{{ totalLiq }}";
+                message = $(".modalPayLiquidation");
                 var dialog = bootbox.dialog({
                     title: "Confirmación de pago",
                     closeButton: false,
-                    message: '<div class="row">  ' +
-                            '<div class="col-md-12 text-center"> ' +
-                            'La suma total para pago corresponde a <h2>' + numeral(total).format('$ 0,0') + '</h2>' +
-                            '</div>' +
-                            '<div class="col-md-12"> ' +
-                            ' <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>' +
-                            '</div>  </div>',
+                    message: message,
                     buttons: {
                         cancel: {
                             label: "Cancelar",
@@ -237,12 +251,12 @@ function downloadPDF() {
                             className: "btn-default btn-orange btn-pay",
                             callback: function () {
                                 $('#formPay').submit();
-                                $("#btnPay").prop('disabled', true);
+                                $("#btnCont").prop('disabled', true);
                             }
                         }
                     }
                 });
-
+                $(message).show();
                 $(dialog.find('.btn-pay')[0]).prop('disabled', true);
                 $(dialog.find('.chkAccept')).change(function (e) {
                     $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
@@ -253,7 +267,7 @@ function downloadPDF() {
 
             $('#btnBack').click(function () {
                 console.log("click");
-                document.location = "{{ path('payroll') }}";
+                //document.location = "{{ path('payroll') }}";
             });
         });
 

@@ -21,8 +21,18 @@ final_liquidation_steps:
         step: \d+
         id_liq: \d+
 final_liquidation_detail:
-    path: /final/detail/{id}/{employee_id}/{period}
+    path: /final/detail/{id}/{employee_id}/{period}/{id_liq}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidationDetail }
+    requirements:
+        id: \d+
+        employee_id: \d+
+        period: \d+
+        id_liq: \d+
 generate_pdf:
     path: /generate/pdf
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:generatePdf }
+pay_liquidation:
+    path: /final/pay/{id}
+    defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:payLiquidation }
+    requirements:
+        id: \d+

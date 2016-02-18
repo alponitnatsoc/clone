@@ -336,6 +336,7 @@ class LiquidationRestController extends FOSRestController
         $cutDate = $parameters["cutDate"];
         $processDate = $parameters["processDate"];
         $retirementCause = $parameters["retirementCause"];
+        $id_liq = $parameters["id_liq"];
 
         /**
          * Dato que se envia a SQL dependiendo de como se le paga la nomina al empleado (quincenal o mensual)
@@ -394,7 +395,8 @@ class LiquidationRestController extends FOSRestController
             "url" => $this->generateUrl("final_liquidation_detail", array(
                 "employee_id" => $employee_id,
                 "period" => $period,
-                "id" => $idEmperHasEmpee
+                "id" => $idEmperHasEmpee,
+                "id_liq" => $id_liq
             ))
         );
 

@@ -238,9 +238,11 @@ class LiquidationController extends Controller
      * @param string $employee_id - Id del empleado en SQL
      * @param integer $period - periodo de pago de nomina
      * @param integer $id - Id de la relacion employer_has_employee
+     * @param integer $id_liq - Id de la liquidacion
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function finalLiquidationDetailAction($employee_id, $period, $id)
+    public function finalLiquidationDetailAction($employee_id, $period, $id, $id_liq)
     {
         $format = array('_format' => 'json');
 
@@ -318,6 +320,9 @@ class LiquidationController extends Controller
         }
 
 //         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
+        $documentNumber = $employerInfo["document"];
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+        $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
         $html = $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
             'data' => $data,
@@ -331,7 +336,9 @@ class LiquidationController extends Controller
             'period' => $period,
             'totalDeducciones' => $totalLiq["totalDed"],
             'totalDevengos' => $totalLiq["totalDev"],
-            'employer' => $employerInfo
+            'employer' => $employerInfo,
+            'paymentMethods' => isset($responcePaymentsMethods["payments"]) ? $responcePaymentsMethods["payments"] : false,
+            'id_liq' => $id_liq
         ));
 
         return $html;
@@ -349,5 +356,15 @@ class LiquidationController extends Controller
                 'Content-Disposition' => 'attachment; filename="file.pdf"'
             )
         );
+    }
+
+    public function payLiquidationAction($id)
+    {
+//         $parameters = $request->request->all();
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig", array(
+            "total" => 23333
+        ));
+
     }
 }
