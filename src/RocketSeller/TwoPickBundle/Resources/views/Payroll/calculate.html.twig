@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="row details col-xs-12">            
+        <div class="row details col-xs-12">
             <div class="col-xs-1">
 
             </div>
@@ -53,7 +53,7 @@
                         <span id="totalEmployees">{{ dataNomina|length }}</span>
                     </div>
                 </div>
-            </div>        
+            </div>
             <div class="col-xs-1">
 
             </div>
@@ -61,12 +61,12 @@
         <form method="post" action="{{ path('payroll_confirm') }}" id="formPay">
             <div class="row">
                 {% for key,data in dataNomina %}
-                    {% set employerHasEmployee = data['employerHasEmployee'] %}  
-                    {% set employee = employerHasEmployee.employeeEmployee %}   
-                    {% set employer = employerHasEmployee.employerEmployer %}   
-                    {% set personEmployee = employee.personPerson %}  
-                    {% set personEmployer = employer.personPerson %}  
-                    {% set idPayroll = data['idPayroll'] %} 
+                    {% set employerHasEmployee = data['employerHasEmployee'] %}
+                    {% set employee = employerHasEmployee.employeeEmployee %}
+                    {% set employer = employerHasEmployee.employerEmployer %}
+                    {% set personEmployee = employee.personPerson %}
+                    {% set personEmployer = employer.personPerson %}
+                    {% set idPayroll = data['idPayroll'] %}
 
                     <div class="col-xs-12">
                         <div class="row-fluid clearfix employee">
@@ -92,20 +92,20 @@
                                     <div class="col-md-4">
                                         <h4>Pago a empleado:</h4>
                                         $ {{ data['totalLiquidation']['total']|number_format }}
-                                        <h5>Forma de pago:</h5>                                        
+                                        <h5>Forma de pago:</h5>
                                         <span>{{ data['payMethod'].payTypePayType.name }}</span>
                                     </div>
                                     <div class="col-md-4">
                                         <h4>Pago aportes Seguridad Social:</h4>
-                                        $ {{ data['PILA']['total']|number_format }}                                             
+                                        $ {{ data['PILA']['total']|number_format }}
                                     </div>
                                     <div class="col-md-4">
                                         <h3>Pago final:</h3>
                                         {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
                                             <span>$ {{ data['PILA']['total']|number_format }}</span>
-                                        {% else %}  
+                                        {% else %}
                                             <span>$ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format }}</span>
-                                        {% endif %}  
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-xs-11">
@@ -114,16 +114,16 @@
                                         <div style="display: -webkit-inline-box;">
                                             <strong>Medio de pago: </strong>
                                         </div>
-                                        <div style="display: -webkit-inline-box;vertical-align: middle;">  
+                                        <div style="display: -webkit-inline-box;vertical-align: middle;">
                                             <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">
                                                 {% for paymentMethod in paymentMethods %}
                                                     <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
                                                 {% endfor  %}
                                             </select>
-                                            <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>                                            
+                                            <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
                                         </div>
 
-                                    {% endif %} 
+                                    {% endif %}
 
                                 </div>
                             </div>
@@ -156,7 +156,7 @@
         .media-body{
             width: 100%;
         }
-        .row .buttons{            
+        .row .buttons{
             display: inline;
         }
         #lbl_chkAccept{
@@ -232,15 +232,15 @@
         {% for key,data in dataNomina %}
             {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
                 salaries[{{data['idPayroll']}}] = 0;
-            {% else %}  
+            {% else %}
                         salaries[{{data['idPayroll']}}] = {{ data['totalLiquidation']['total'] }};
-            {% endif %} 
+            {% endif %}
 
             {% if data['PILA']['total'] is defined %}
                         aportes[{{data['idPayroll']}}] = {{ data['PILA']['total'] }};
-            {% else %}  
+            {% else %}
                         aportes[{{data['idPayroll']}}] = 0;
-            {% endif %} 
+            {% endif %}
         {% endfor %}
                     $('.employee .pay').on('change', updateValues);
 
