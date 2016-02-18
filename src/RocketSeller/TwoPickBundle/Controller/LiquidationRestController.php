@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use Symfony\Component\Validator\Constraints\Date;
+use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 class LiquidationRestController extends FOSRestController
 {
@@ -388,6 +389,18 @@ class LiquidationRestController extends FOSRestController
             $view->setStatusCode(410);
             return $view;
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $date = $year . "-" . $month . "-" . $day;
+        $lastWorkDay = new \DateTime($date);
+        /**
+         * Actualizar datos de liquidacion en DB
+         * @var Liquidation $liquidation
+         */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $liquidation->setLastWorkDay($lastWorkDay);
+        $em->persist($liquidation);
+        $em->flush();
 
         $data = array(
             "employee_id" => $employee_id,

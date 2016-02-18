@@ -29,7 +29,8 @@ function validateLiqForm() {
                 last_work_day: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val(),
                 last_work_month: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val(),
                 last_work_year: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val(),
-                liquidation_reason: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
+                liquidation_reason: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
+                id_liq: form.find("input[name='rocketseller_twopickbundle_liquidation[id_liq]']").val()
             }
         }).done(function (data) {
 //            alert(data);

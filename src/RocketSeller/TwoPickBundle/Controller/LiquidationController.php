@@ -319,9 +319,22 @@ class LiquidationController extends Controller
             }
         }
 
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * Actualizar datos de liquidacion en DB
+         * @var Liquidation $liquidation
+         */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $liquidation->setCost($totalLiq["total"]);
+        $liquidation->setDetailLiquidation(json_encode($data));
+        $liquidation->setPeriod($period);
+        $em->persist($liquidation);
+        $em->flush();
+
 //         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
         $documentNumber = $employerInfo["document"];
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+//         var_dump($clientListPaymentmethods);
         $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
         $html = $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
@@ -360,11 +373,94 @@ class LiquidationController extends Controller
 
     public function payLiquidationAction($id)
     {
-//         $parameters = $request->request->all();
+        /** @var Liquidation $liquidation */
+        $liquidation = $this->liquidationDetail($id);
+        $total = $liquidation->getCost();
+
+        $id_ehe = $liquidation->getEmployerHasEmployee()->getIdEmployerHasEmployee();
+        $employee_id = $id_ehe . "9"; //@todo el 9 es para los mocks
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $this->getEmployee($id_ehe);
+        /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
+        $person = $employee->getPersonPerson();
+
+        $employeeInfo = array(
+            'name' => $person->getNames(),
+            'lastName1' => $person->getLastName1(),
+            'lastName2' => $person->getLastName2(),
+            'documentType' => $person->getDocumentType(),
+            'document' => $person->getDocument(),
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
+        );
+
+        $employer = $this->getEmployer($id_ehe);
+        $personEmployer = $employer->getPersonPerson();
+        $employerInfo = array(
+            'name' => $personEmployer->getNames(),
+            'lastName1' => $personEmployer->getLastName1(),
+            'lastName2' => $personEmployer->getLastName2(),
+            'documentType' => $personEmployer->getDocumentType(),
+            'document' => $personEmployer->getDocument()
+        );
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
+        $contract = $this->getActiveContract($id_ehe);
+        $startDate = $contract[0]->getStartDate();
+
+        $contractInfo = array(
+            'contractType' => $contract[0]->getContractTypeContractType()->getName(),
+            'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
+            'salary' => $contract[0]->getSalary(),
+            'vacationDays' => "",
+            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDate' => $startDate,
+            'id' => $contract[0]->getIdContract()
+        );
+
+        $data = json_decode($liquidation->getDetailLiquidation(), true);
+
+        $totalLiq = $this->totalLiquidation($data);
+
+        foreach ($data as $key => $liq) {
+            $payroll_code = $liq["CON_CODIGO"];
+            $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
+
+            if ($noveltyType) {
+                $tmp[$key]["novelty"] = $noveltyType;
+                $tmp[$key]["liq"] = $liq;
+                switch ($noveltyType->getNaturaleza()):
+                case "DED":
+                    $deducciones[] = $tmp[$key];
+                    //                         $totalDeducciones += $this->totalLiquidation($tmp[$key]["liq"]);
+                    break;
+                case "DEV":
+                    $devengos[] = $tmp[$key];
+                    //                         $totalDevengos += $this->totalLiquidation($tmp[$key]["liq"]);
+                    break;
+                default:
+                    break;
+                    endswitch;
+            }
+        }
+
+        $period = $liquidation->getPeriod();
+
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig", array(
-            "total" => 23333
+            "total" => $total,
+            'employeeInfo' => $employeeInfo,
+            'contractInfo' => $contractInfo,
+            'totalLiq' => $totalLiq["total"],
+            'tmp' => $tmp,
+            'devengos' => $devengos,
+            'deducciones' => $deducciones,
+            'employee_id' => $employee_id,
+            'period' => $period,
+            'totalDeducciones' => $totalLiq["totalDed"],
+            'totalDevengos' => $totalLiq["totalDev"],
+            'employer' => $employerInfo,
+            'id_liq' => $id
         ));
-
     }
 }

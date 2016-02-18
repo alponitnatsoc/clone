@@ -80,6 +80,17 @@ class Liquidation
     private $daysToLiquidate;
 
     /**
+     * @ORM\Column(name="detail_liquidation", type="text", nullable=TRUE)
+     */
+    private $detailLiquidation;
+
+    /**
+     * @var integer
+     * @ORM\Column(name="period", type="integer", nullable=TRUE, length=100)
+     */
+    private $period;
+
+    /**
      * Get id
      *
      * @return integer
@@ -296,5 +307,53 @@ class Liquidation
     public function getCost()
     {
         return $this->cost;
+    }
+
+    /**
+     * Set detailLiquidation
+     *
+     * @param string $detailLiquidation
+     *
+     * @return Liquidation
+     */
+    public function setDetailLiquidation($detailLiquidation)
+    {
+        $this->detailLiquidation = $detailLiquidation;
+
+        return $this;
+    }
+
+    /**
+     * Get detailLiquidation
+     *
+     * @return string
+     */
+    public function getDetailLiquidation()
+    {
+        return $this->detailLiquidation;
+    }
+
+    /**
+     * Set period
+     *
+     * @param integer $period
+     *
+     * @return Liquidation
+     */
+    public function setPeriod($period)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return integer
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }
