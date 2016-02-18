@@ -38,8 +38,12 @@ function validateLiqForm() {
             if (data["liquidation_reason"] == 2) { //justa causa
                 $("#liqSinJustaCausa").hide();
                 $('#contLiq').show();
+            } else if (data["liquidation_reason"] == 10 || data["liquidation_reason"] == 7)  {
+                $("#liqJustaCausa").hide();
             } else {
                 $("#liqJustaCausa").hide();
+                $("#liqSinJustaCausa").hide();
+                $('#contLiq').show();
             }
             $("#liquidationStep1").hide();
             $("#liquidationStep2").show();
