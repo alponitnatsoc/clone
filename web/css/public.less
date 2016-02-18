@@ -729,3 +729,34 @@ footer {
         }
     }
 }
+
+.btn-symplifica {
+    text-transform: capitalize;
+    background-color: @color_boton;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: @darkerButtonText;
+    text-shadow: @btnShadow;
+    font-weight: 700;
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: @darkerButtonText;
+    }
+    &:hover {
+        color: @darkerButtonText;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    &:focus {
+        color: @darkerButtonText;
+        outline: none!important;
+    }
+    &.disabled {
+        opacity: 1;
+        background-color: @color_boton_disabled;
+        color: #efc394;
+    }
+}
