@@ -42,7 +42,7 @@ class UserController extends Controller
                 /** @var PurchaseOrdersDescription  $pOD */
                 foreach ($purchaseOrdersDetails as $pOD) {
                     $simpleName=$pOD->getProductProduct()->getSimpleName();
-                    if($simpleName!="PN"&&$simpleName!="PA"){//PA pago aportes PN pago nomina
+                    if($simpleName!="PN"&&$simpleName!="PP"){//PA pago Pila PN pago nomina
                         $invoicesEmited->add($pOD);
                     }
                 }

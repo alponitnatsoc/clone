@@ -80,8 +80,8 @@ class PaymentsRestController extends FOSRestController
     // $url_request = $this->container->getParameter('novo_payments_url') ;
 
     // URL used for test porpouses, the line above should be used in production.
-    //$url_request = "http://localhost:8001/api/public/v1/mock" . $path;
-    $url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
+    $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
+    //$url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
 
     $response = null;
     $options = array(
@@ -354,7 +354,7 @@ class PaymentsRestController extends FOSRestController
    * (name="commissionAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Commission amount.")
    * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
    * (name="chargeMode", nullable=false, requirements="(1|2|3)", strict=true, description="This is to indicate where the money is going, 1 for validation, 2 for pament and 3 for fee.")
-   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="Id of the transaction created by us.")
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z0-9])+", strict=true, description="Id of the transaction created by us.")
    *
    * @return View
    */
@@ -380,7 +380,7 @@ class PaymentsRestController extends FOSRestController
     $mandatory['commissionBase'] = true;
     $regex['chargeMode'] = '(1|2|3)';
     $mandatory['chargeMode'] = true;
-    $regex['chargeId'] = '([a-zA-Z1-9])+';
+    $regex['chargeId'] = '([a-zA-Z0-9])+';
     $mandatory['chargeId'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);
@@ -504,7 +504,7 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
-   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="Id of the charge, it was provided by us.")
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z0-9])+", strict=true, description="Id of the charge, it was provided by us.")
    * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
    * (name="beneficiaryAmount", nullable=false, requirements="[0-9]+(\.)?[0-9]*,?([0-9]+)?", strict=true, description="Amount of the beneficiary")
    * (name="dispersionType", nullable=false, requirements="(1|2|3)", strict=true, description="Type of dispersion, it is 1 for payroll, 2 for pila and 3 for fee.")
@@ -570,7 +570,7 @@ class PaymentsRestController extends FOSRestController
    * Rest Parameters:
    *
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   * (name="chargeId", nullable=false, requirements="([a-zA-Z1-9])+", strict=true, description="id of the payment method.")
+   * (name="chargeId", nullable=false, requirements="([a-zA-Z0-9])+", strict=true, description="id of the payment method.")
    *
    * @return View
    */
@@ -582,7 +582,7 @@ class PaymentsRestController extends FOSRestController
 
     // Set all the parameters info.
     $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
-    $regex['chargeId'] = '([a-zA-Z1-9])+';
+    $regex['chargeId'] = '([a-zA-Z0-9])+';
     $mandatory['chargeId'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);

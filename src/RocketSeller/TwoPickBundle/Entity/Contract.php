@@ -69,10 +69,6 @@ class Contract
      */
     private $benefits;
 
-    /**
-     * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
-     */
-    private $weekWorkableDays;
 
     /**
      * @ORM\Column(type="boolean", nullable=TRUE)
@@ -691,51 +687,7 @@ class Contract
         return $this->workableDaysMonth;
     }
 
-    /**
-     * Add weekWorkableDay
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
-     *
-     * @return Contract
-     */
-    public function addWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
-    {
-        $this->weekWorkableDays[] = $weekWorkableDay;
 
-        return $this;
-    }
-
-    /**
-     * Remove weekWorkableDay
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
-     */
-    public function removeWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
-    {
-        $weekWorkableDay->setContractContract(null);
-        $this->weekWorkableDays->removeElement($weekWorkableDay);
-    }
-
-    /**
-     * Get weekWorkableDays
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getWeekWorkableDays()
-    {
-        return $this->weekWorkableDays;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set activePayroll
