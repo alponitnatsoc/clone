@@ -664,12 +664,12 @@ class EmployeeRestController extends FOSRestController
             }
             $contract->setContractTypeContractType($tempContractType);
 
-            /*$tempEmployeeContractType = $employeeContractTypeRepo->find($paramFetcher->get('employeeType'));
-            if ($tempEmployeeContractType == null) {
-                $view->setStatusCode(404)->setHeader("error", "The employeeType ID " . $paramFetcher->get('employeeType') . " is invalid");
-                return $view;
-            }
-            $contract->setEmployeeContractTypeEmployeeContractType($tempEmployeeContractType);*/
+            /* $tempEmployeeContractType = $employeeContractTypeRepo->find($paramFetcher->get('employeeType'));
+              if ($tempEmployeeContractType == null) {
+              $view->setStatusCode(404)->setHeader("error", "The employeeType ID " . $paramFetcher->get('employeeType') . " is invalid");
+              return $view;
+              }
+              $contract->setEmployeeContractTypeEmployeeContractType($tempEmployeeContractType); */
 
             $tempPosition = $positionRepo->find($paramFetcher->get('position'));
             if ($tempPosition == null) {
@@ -690,15 +690,15 @@ class EmployeeRestController extends FOSRestController
             $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
             $contract->setStartDate($datetime);
 
-            /*$workTimeStart = $paramFetcher->get('workTimeStart');
-            $datetime = new DateTime();
-            $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);
-            $contract->setWorkTimeStart($datetime);
+            /* $workTimeStart = $paramFetcher->get('workTimeStart');
+              $datetime = new DateTime();
+              $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);
+              $contract->setWorkTimeStart($datetime);
 
-            $workTimeEnd = $paramFetcher->get('workTimeEnd');
-            $datetime = new DateTime();
-            $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
-            $contract->setWorkTimeEnd($datetime);*/
+              $workTimeEnd = $paramFetcher->get('workTimeEnd');
+              $datetime = new DateTime();
+              $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
+              $contract->setWorkTimeEnd($datetime); */
 
             if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
                 $endDate = $paramFetcher->get('endDate');
@@ -708,37 +708,37 @@ class EmployeeRestController extends FOSRestController
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
-                $contract->setWorkableDaysMonth($actualWeekWorkableDays==null?30:$actualWeekWorkableDays*4);
-                /*$workableDays = $contract->getWeekWorkableDays();
-                foreach ($workableDays as $workableDay) {
+                $contract->setWorkableDaysMonth($actualWeekWorkableDays == null ? 30 : $actualWeekWorkableDays * 4);
+                /* $workableDays = $contract->getWeekWorkableDays();
+                  foreach ($workableDays as $workableDay) {
 
-                    $flagActualRemove = true;
-                    $ifFound = null;
-                    /** @var WeekWorkableDays $workableDay
-                    foreach ($actualWeekWorkableDays as $key => $value) {
-                        if ($workableDay->getDayName() == $value) {
-                            $flagActualRemove = false;
-                            $ifFound = $key;
-                            break;
-                        }
-                    }
-                    if ($flagActualRemove) {
-                        $contract->removeWeekWorkableDay($workableDay);
-                        $em->remove($workableDay);
-                        continue;
-                    } else {
-                        unset($actualWeekWorkableDays[$ifFound]);
-                    }
-                }
-                foreach ($actualWeekWorkableDays as $key => $value) {
-                    $weekWorkableDay = new WeekWorkableDays();
-                    $weekWorkableDay->setContractContract($contract);
-                    $weekWorkableDay->setDayName($value);
-                    $contract->addWeekWorkableDay($weekWorkableDay);
-                }
+                  $flagActualRemove = true;
+                  $ifFound = null;
+                  /** @var WeekWorkableDays $workableDay
+                  foreach ($actualWeekWorkableDays as $key => $value) {
+                  if ($workableDay->getDayName() == $value) {
+                  $flagActualRemove = false;
+                  $ifFound = $key;
+                  break;
+                  }
+                  }
+                  if ($flagActualRemove) {
+                  $contract->removeWeekWorkableDay($workableDay);
+                  $em->remove($workableDay);
+                  continue;
+                  } else {
+                  unset($actualWeekWorkableDays[$ifFound]);
+                  }
+                  }
+                  foreach ($actualWeekWorkableDays as $key => $value) {
+                  $weekWorkableDay = new WeekWorkableDays();
+                  $weekWorkableDay->setContractContract($contract);
+                  $weekWorkableDay->setDayName($value);
+                  $contract->addWeekWorkableDay($weekWorkableDay);
+                  }
 
-                $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
-                $contract->setWorkableDaysMonth($workableDaysMonth);*/
+                  $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
+                  $contract->setWorkableDaysMonth($workableDaysMonth); */
             }
 
             //Workplaces and Benefits
@@ -755,42 +755,42 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $contract->setWorkplaceWorkplace($realWorkplace);
-            /*$contractHasBenefits = $contract->getBenefits();
-            $idsCHB = array();
-            /** @var ContractHasBenefits $contractHasBenefit
-            foreach ($contractHasBenefits as $contractHasBenefit) {
-                $idsCHB[$contractHasBenefit->getIdContractHasBenefits()] = $contractHasBenefit->getIdContractHasBenefits();
-            }
-            for ($i = 0; $i < count($benefitsType); $i++) {
-                $realContractHasBenefit = null;
-                $flagExist = false;
-                if ($benefits[$i] != null) {
-                    $flagExist = true;
-                    /** @var ContractHasBenefits $realContractHasBenefit
-                    $realContractHasBenefit = $contracHasBenefitRepo->find($benefits[$i]);
-                    unset($idsCHB[$realContractHasBenefit->getIdContractHasBenefits()]);
-                }
-                /** @var Benefits $realBenefit
-                $realBenefit = $benefitRepo->find($benefitsType[$i]);
-                if ($realBenefit == null) {
-                    $view->setStatusCode(404)->setHeader("error", "The Benefit ID " . $benefitsType[$i] . " is invalid");
-                    return $view;
-                }
-                if (!$flagExist) {
-                    $realContractHasBenefit = new ContractHasBenefits();
-                }
-                $realContractHasBenefit->setAmount($benefitsAmount[$i]);
-                $realContractHasBenefit->setBenefitsBenefits($realBenefit);
-                $realContractHasBenefit->setPeriodicity($benefitsPeriod[$i]);
-                if (!$flagExist) {
-                    $contract->addBenefit($realContractHasBenefit);
-                }
-            }
-            foreach ($idsCHB as $key => $value) {
-                $toRemove = $contracHasBenefitRepo->find($value);
-                $em->remove($toRemove);
-            }
-            $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions'));*/
+            /* $contractHasBenefits = $contract->getBenefits();
+              $idsCHB = array();
+              /** @var ContractHasBenefits $contractHasBenefit
+              foreach ($contractHasBenefits as $contractHasBenefit) {
+              $idsCHB[$contractHasBenefit->getIdContractHasBenefits()] = $contractHasBenefit->getIdContractHasBenefits();
+              }
+              for ($i = 0; $i < count($benefitsType); $i++) {
+              $realContractHasBenefit = null;
+              $flagExist = false;
+              if ($benefits[$i] != null) {
+              $flagExist = true;
+              /** @var ContractHasBenefits $realContractHasBenefit
+              $realContractHasBenefit = $contracHasBenefitRepo->find($benefits[$i]);
+              unset($idsCHB[$realContractHasBenefit->getIdContractHasBenefits()]);
+              }
+              /** @var Benefits $realBenefit
+              $realBenefit = $benefitRepo->find($benefitsType[$i]);
+              if ($realBenefit == null) {
+              $view->setStatusCode(404)->setHeader("error", "The Benefit ID " . $benefitsType[$i] . " is invalid");
+              return $view;
+              }
+              if (!$flagExist) {
+              $realContractHasBenefit = new ContractHasBenefits();
+              }
+              $realContractHasBenefit->setAmount($benefitsAmount[$i]);
+              $realContractHasBenefit->setBenefitsBenefits($realBenefit);
+              $realContractHasBenefit->setPeriodicity($benefitsPeriod[$i]);
+              if (!$flagExist) {
+              $contract->addBenefit($realContractHasBenefit);
+              }
+              }
+              foreach ($idsCHB as $key => $value) {
+              $toRemove = $contracHasBenefitRepo->find($value);
+              $em->remove($toRemove);
+              }
+              $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions')); */
             $contract->setTransportAid($paramFetcher->get('transportAid'));
             //turn on current contract
             $contract->setState(1);
@@ -805,7 +805,13 @@ class EmployeeRestController extends FOSRestController
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
                 //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
-                \RocketSeller\TwoPickBundle\Controller\PayrollController::createPayrollToContract($contract->getIdContract(), true);
+                $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
+                    'idContract' => $contract->getIdContract(),
+                    'deleteActivePayroll' => true,
+                    'period' => null,
+                    'month' => null,
+                    'year' => null
+                ));
                 $this->addFlash(
                         'notice', 'Your changes were saved!'
                 );
