@@ -690,7 +690,7 @@ class EmployeeRestController extends FOSRestController
             $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
             $contract->setStartDate($datetime);
 
-            $workTimeStart = $paramFetcher->get('workTimeStart');
+            /*$workTimeStart = $paramFetcher->get('workTimeStart');
             $datetime = new DateTime();
             $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);
             $contract->setWorkTimeStart($datetime);
@@ -698,7 +698,7 @@ class EmployeeRestController extends FOSRestController
             $workTimeEnd = $paramFetcher->get('workTimeEnd');
             $datetime = new DateTime();
             $datetime->setTime($workTimeEnd['hour'], $workTimeEnd['minute']);
-            $contract->setWorkTimeEnd($datetime);
+            $contract->setWorkTimeEnd($datetime);*/
 
             if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
                 $endDate = $paramFetcher->get('endDate');
