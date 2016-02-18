@@ -260,14 +260,14 @@ function cartaRenunciaOK() {
 }
 
 function downloadCartaRenuncia() {
-    window.open('/download/renuncia');
+    window.open("{{ path('cartas_liquidacion', { 'ref': 'renuncia'  }) }}");
 
     $('#infoDocs').show();
     $('#contLiq').show();
 }
 
 function downloadCartaAceptacion() {
-    window.open('/download/aceptacion');
+    window.open("{{ path('cartas_liquidacion', { 'ref': 'aceptacion'  }) }}");
 }
 
 function loadNovelty(url) {

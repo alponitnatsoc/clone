@@ -1,48 +1,45 @@
-{% extends "::base.html.twig" %}
-{% set body_color = "#3c4b5a" %}
+{% extends "::public.html.twig" %}
 
-{% block stylesheet %}
-    {{ parent() }}
+{% block body %}
+<div class="row-fluid clearfix" style="background-color: #3c4b5a; padding-bottom: 30px;">
+    <div class="container">
+        <div class="container">
+            <div class="col-sm-12 txt-A1-register">
+                <span>Estamos listos para facilitarte la gestión de tus empleados</span>
+                <m>¿Empezamos?</m>
+                <span>Regístrate gratis, puedes hacerlo de dos formas:</span>
+            </div>
+            <div id='' class='col-sm-12 col-md-7'>
+                <div class="left-headline">
+                    <img src="/img/arrow.png">
+                    <span>Regístrate con tus datos personales</span>
+                </div>
+                {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+            </div>
+            <div id='' class='col-sm-12 col-md-1'>
+            </div>
+            <div id='' class='col-sm-12 col-md-4'>
+                <div class="right-headline">
+                    <img src="/img/heart.png">
+                    <span>Regístrate con tu red social favorita</span>
+                </div>
+                {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
+                    
+                        <a class="btn btn-symplifica" href="{{ path('express_info')}}">Registro express</a>
+                    
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock body %}
+{% block styles %}
     <style type="text/css">
         .btn.disabled{
             cursor: not-allowed;
         }
-    </style>    
+    </style>
 {% endblock %}
-
-{% block body %}
-    <div class="row-fluid block-Intro-blue hidden">
-        <div class="up-Intro">Estás a un paso de poder gestionar</div>
-        <div class="down-Intro">con un solo clic a tus empleados</div>
-    </div>
-    <div class="container">
-        <div class="col-sm-12 txt-A1-register">
-            <span>Estamos listos para facilitarte la gestión de tus empleados</span>
-            <m>¿Empezamos?</m>
-            <span>Regístrate gratis, puedes hacerlo de dos formas:</span>
-        </div>
-        <div id='' class='col-sm-12 col-md-7'>
-            <div class="left-headline">
-                <img src="/img/arrow.png">
-                <span>Regístrate con tus datos personales</span>
-            </div>
-            {% include "FOSUserBundle:Registration:register_content.html.twig" %}
-        </div>
-        <div id='' class='col-sm-12 col-md-1'>
-        </div>
-        <div id='' class='col-sm-12 col-md-4'>
-            <div class="right-headline">
-                <img src="/img/heart.png">
-                <span>Regístrate con tu red social favorita</span>
-            </div>
-            {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
-                
-                    <a class="btn register-AS1 btn-symplifica" href="{{ path('express_info')}}">Registro express</a>
-                
-        </div>
-
-    </div>
-{% endblock body %}
 
 {% block javascripts %}
     {{ parent() }}
