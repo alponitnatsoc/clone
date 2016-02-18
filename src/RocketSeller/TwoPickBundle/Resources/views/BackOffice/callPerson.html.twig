@@ -8,6 +8,8 @@
 		{% for phone in phones %}
 			<p>{{ phone.phoneNumber }}</p>
 		{% endfor %}
+		<button type="button" class="btn btn-success"><a href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
+		<button type="button" class="btn btn-danger">No</button>
 		
 	</div>
 	{{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}

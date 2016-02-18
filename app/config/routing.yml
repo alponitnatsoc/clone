@@ -379,7 +379,7 @@ express_registration:
     path: /express-registration/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:registration }
 express_registration_employee:
-    path: /express-registration/{id}/employee-create
+    path: /express-registration/{id}/employee-create/{idEmployee}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:employeeCreate }    
 back_employer_menu:
     path: /back-menu-employer/{id}

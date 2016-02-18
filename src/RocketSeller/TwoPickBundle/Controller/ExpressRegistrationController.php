@@ -8,11 +8,15 @@ use RocketSeller\TwoPickBundle\Form\Type\ContactType;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 use RocketSeller\TwoPickBundle\Form\EmployerEdit;
+use RocketSeller\TwoPickBundle\Form\BasicEmployeePersonRegistration;
 
 class ExpressRegistrationController extends Controller
 {
@@ -45,14 +49,16 @@ class ExpressRegistrationController extends Controller
     }
     public function menuEmployerAction($id)
     {
+        $suma = 0;
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
         $user  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
         $employer  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
         if (sizeof($employer[0]->getEmployerHasEmployees())>0) {
             foreach ($employer[0]->getEmployerHasEmployees() as $employerHasEmployee) {
-                $suma = $suma + $employerHasEmployee->getemployeeEmployee()->getRegisterState();                
+                $suma += $employerHasEmployee->getEmployeeEmployee()->getRegisterState();                
             }
+            
             $promedio = $suma/sizeof($employer[0]->getEmployerHasEmployees());
         }else{
             $promedio = -1;
@@ -87,30 +93,43 @@ class ExpressRegistrationController extends Controller
             array('form' => $form->createView())
         );
     }
-    public function employeeCreateAction($id, Request $request)
+    public function employeeCreateAction($id,$idEmployee, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
-        $user  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
-        $employer  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
-        $employee = new Employee();
-        if (!$person) {
-          throw $this->createNotFoundException(
-                  'No news found for id ' . $id
-          );
+        $personEmployer = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
+        $user[0]  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($personEmployer);
+        $employerSearch  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($personEmployer);
+        $employer = $employerSearch[0];        
+        $workplaces = $employer->getWorkplaces();
+        if ($idEmployee == -1) {
+            $employerHasEmployee = new EmployerHasEmployee();
+            $employee = new Employee();                    
+            $person = new Person();                        
+            $phone = new Phone();            
+            $person->addPhone($phone);
+            $employee->setPersonPerson($person);            
         }
-        $workplaces = $employer[0]->getWorkplaces();
-        $form = $this->createForm(new PersonEmployeeRegistration($employee->getIdEmployee(),$workplaces),$employee);
+        $form = $this->createForm(new BasicEmployeePersonRegistration(),$person);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {                            
+        if ($form->isValid()) {
+            $employee->setRegisterState(20);            
+            $em->persist($employee);                                                        
             $em->flush();
-            return $this->redirectToRoute('express_info');
+            $employerHasEmployee->setEmployerEmployer($employer);
+            $employerHasEmployee->setEmployeeEmployee($employee);
+            $em->persist($employerHasEmployee);
+            $em->flush();
+
+            return $this->redirectToRoute('back_employer_menu',array('id'=>$employer->getPersonPerson()->getIdPerson()));
         }
         return $this->render(
             'RocketSellerTwoPickBundle:BackOffice:ExpressEmployeeRegister.html.twig',
             array('form' => $form->createView())
         );
+
+        
+
     }
 
 }

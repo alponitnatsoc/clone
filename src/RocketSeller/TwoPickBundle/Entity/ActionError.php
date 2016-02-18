@@ -27,6 +27,12 @@ class ActionError
      * @ORM\Column(name="description", type="string", length=500)
      */
     private $description;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=100)
+     */
+    private $status;
 
 
     /**
@@ -61,5 +67,29 @@ class ActionError
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return ActionError
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

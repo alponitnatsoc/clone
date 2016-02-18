@@ -356,7 +356,7 @@ class EmployeeController extends Controller
         if ($tempPerson->getPhones()->count() == 0) {
             $tempPerson->addPhone(new Phone());
         }
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces), $employee, array(
+        $form = $this->createForm(new PersonEmployeeRegistration($idEmployer, $userWorkplaces), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));

@@ -46,9 +46,11 @@
                         	</div>
                         	<div>                        		
                     			{% if employeesState == -1 %}
-                    				<a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson})}}">0% ingresar empleados</a>
-                        		{% else %}                        			
-                        			<p>{{employeesState}}%</p>
+                    				<a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson , 'idEmployee':-1})}}">0% ingresar empleados</a>
+                        		{% elseif employeesState == 20 %}                        			
+                        			<p>funcionó</p>
+                                {% else %}
+                                    <p>{{ employeesState }}</p>
                         		{% endif %}
                         	</div>
                         	<div>
