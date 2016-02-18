@@ -116,7 +116,7 @@ class User extends BaseUser
      *
      * @var SmallIntType
      *
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint",nullable=true)
      */
     private $dayToPay;
 

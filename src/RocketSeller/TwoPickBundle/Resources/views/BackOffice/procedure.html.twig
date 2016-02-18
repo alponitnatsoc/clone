@@ -1,6 +1,47 @@
 {% extends "::base.html.twig" %}
-{% block content %}
-	<p>Tramite No: {{ procedure.idProcedure }}</p>
+{% block header %}
+<div class="row-fluid up-Help-Phone">
+    <div class="container">
+        <div class="txthelp">
+            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
+        </div>
+    </div>
+</div>
+{% endblock header %}
+{% block body %}
+	<div class="container body-container navbar">
+        <div class="row mainContentRow">
+			<div id="sidebar" class="col-sm-3">
+	            {% block sidebar %}
+	                <div class="navbar-header">
+	                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">
+	                        <span class="sr-only">Toggle navigation</span>
+	                        <span class="icon-bar"></span>
+	                        <span class="icon-bar"></span>
+	                        <span class="icon-bar"></span>
+	                    </button>
+	                    <a class="navbar-brand sidebar visible-xs" href="#">
+	                        <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
+	                    </a>
+	                </div>
+	                <div id="navbarSidebar" class="section about navbar-collapse collapse">
+	                    <div class="well well-lg leftColumnLogo">
+	                        <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
+	                    </div>
+	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+	                        <a href="{{ path('back_office')}}">Inicio</a>
+	                    </div>
+	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+	                        <a href="{{ path('register_express')}}">Registro express</a>
+	                    </div>
+	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+	                        <a href="{{ path('show_procedures')}}">Tramites</a>
+	                    </div>                                      
+	                </div>
+	            {% endblock %}
+	        </div>
+			<div id="main" class="col-sm-9">
+	            <p>Tramite No: {{ procedure.idProcedure }}</p>
 	<p>Person in charge: 
 		{% if procedure.userUser %}
 			{{ procedure.userUser.username }}
@@ -8,54 +49,106 @@
 			Nadie 
 		{% endif %}
 		</p>
-	<table style="width:100%">
-	  <tr>
-	    <td>Vuelta</td> 
-	    <td>persona</td>
-	    <td>entidad</td>
-	    <td>Estado</td>
-	    <td>Acción</td>
-	    <td>Reportar</td>
-	  </tr>	  
-  		{% for action in procedure.action %}
-  			{% if action.actionErrorActionError %}
-				<tr style="background-color:#FF5555;">
-			{% elseif  action.status|lower == "nuevo" %}
-				<tr>
-			{% elseif  action.status|lower == "completado" %}
-				<tr style="background-color:#A2E383;">
-			{% elseif action.status|lower == "iniciado" %}
-				<tr>
-  			{% endif %}  			
-				<td>{{ action.ActionTypeActionType.name }}</td>
-				<td>{{ action.personPerson.names }}</td>
-				<td>
-					{% if action.entityEntity %}
-						{{ action.entityEntity.name }}
-					{% else %}
-						-
-					{% endif %}					
-				</td>
-				<td>{% if action.actionErrorActionError %}
-						Ver error
-					{% else %}
-						{{ action.status}}
-					{% endif %}
-				</td>				
-				{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
-					<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
-				{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-					<td>Validar documentos</td>
-				{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-					<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
-				{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-					<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
-				{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
-					<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
-				{% endif %}
-				<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a></td>
+		<div class="procedure-container">
+			<table style="width:100%">
+				  <tr>
+				    <td>Vuelta</td> 
+				    <td>persona</td>
+				    <td>entidad</td>
+				    <td>Estado</td>
+				    <td>Acción</td>
+				    <!--td>Reportar</td-->
+				  </tr>	  
+			  		{% for action in procedure.action %}
+			  			{% if action.actionErrorActionError %}
+			  				{% if action.status|lower == "completado" %}
+								<tr style="background-color:#A2E383;">
+			  				{% else %}
+			  					<tr style="background-color:#FF5555;">
+			  				{% endif %}							
+						{% elseif  action.status|lower == "nuevo" %}
+							<tr>
+						{% elseif  action.status|lower == "completado" %}
+							<tr style="background-color:#A2E383;">
+						{% elseif action.status|lower == "iniciado" %}
+							<tr>
+			  			{% endif %}  			
+							<td>{{ action.ActionTypeActionType.name }}</td>
+							<td>{{ action.personPerson.names }}</td>
+							<td>
+								{% if action.entityEntity %}
+									{{ action.entityEntity.name }}
+								{% else %}
+									-
+								{% endif %}					
+							</td>
+							<td>{% if action.actionErrorActionError %}
+									{% if action.status|lower == "completado" %}
+										{{ action.status }}
+									{% else %}
+										Error
+									{% endif %}									
+								{% else %}
+									{{ action.status}}
+								{% endif %}
+							</td>
+							{% if action.status|lower != "completado" %}
+								{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
+								<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+									<td>Validar documentos</td>
+								{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+									<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
+									<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
+									<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								{% endif %}
+							{% else %}
+								<td>Terminaste</td>
+							{% endif %}				
+							{#
+							<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a></td>#}
 
-		  	</tr>
-		{% endfor %}
-	</table>
+					  	</tr>
+					{% endfor %}
+				</table>  
+			</div>
+				<h3>Errores</h3>
+				<div class="procedure-container">
+					<table style="width:100%">
+					    <tr>
+					    <td>Vuelta</td> 
+					    <td>Persona</td>
+					    <td>Telefono</td>
+					    <td>Entidad</td>
+					    <td>Estado</td>
+					    <td>Reportar</td>					    
+					  </tr>	  
+						{% for action in procedure.action %}
+							{% if action.actionErrorActionError %}
+								<tr>
+									<td>{{action.actionErrorActionError.id}}</td>
+									<td>{{ action.personPerson.names}} {{action.personPerson.lastName1}}</td>
+									<td>{{ action.realProcedureRealProcedure.employerEmployer.personPerson.phones[0].phoneNumber}}</td>
+									<td>{{action.actionErrorActionError.description}}</td>
+									<td>{{action.actionErrorActionError.status}}</td>
+									{% if action.actionErrorActionError.status|lower == "sin contactar" %}
+										<td><a href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Contactado"})}}">Contactado</a></td>
+									{% elseif action.actionErrorActionError.status|lower =="contactado" %}
+										<td><a href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Corregido"})}}">Corregido</a></td>
+									{% elseif action.actionErrorActionError.status|lower == "corregido" %}
+										<td>-</td>
+									{% endif %}
+									
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</table>
+				</div>				       	
+	        </div>
+	    </div>
+	</div>
+				
+	
 {% endblock %}

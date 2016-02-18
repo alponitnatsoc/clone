@@ -172,7 +172,7 @@
                                 </div>
                             {% endblock %}
                         </div>
-                        <div id="main" class="col-sm-9">
+                        <div id="main"  class="col-sm-9">
                             {% block main %}
                                 <div class="span12">
                                     {% if is_granted("IS_AUTHENTICATED_FULLY") %}
@@ -501,6 +501,11 @@
             olark.identify('2239-144-10-4926');/*]]>*/</script><noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contáctanos" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
         <script type="text/javascript">
             olark.configure("locale.unavailable_title", "Contáctanos");
+        </script>
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
         </script>
         <!-- end olark code -->
     {% endblock %}

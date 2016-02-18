@@ -1,0 +1,15 @@
+{% if breadcrumbs is defined %}
+	<div class="row" id="breadcrumb">
+		<ol class="breadcrumb">
+			{% for breadcrumb_section, breadcrumb_url in breadcrumbs %}
+		  		<li>
+		  			{% if breadcrumb_url!="" %}
+		  				<a href="/">{{breadcrumb_section}}</a>
+		  			{% else %}
+		  				{{breadcrumb_section}}
+		  			{% endif %}
+		  		</li>
+		  	{% endfor %}
+		</ol>
+	</div>
+{% endif %}

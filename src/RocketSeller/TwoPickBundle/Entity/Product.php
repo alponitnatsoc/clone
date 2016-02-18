@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+
     /**
      * @var integer
      *
@@ -32,7 +33,7 @@ class Product
     private $simpleName;
 
     /**
-     * @ORM\Column(type="decimal", scale=2, nullable=TRUE)
+     * @ORM\Column(type="float", nullable=TRUE)
      */
     private $price;
 
@@ -175,4 +176,5 @@ class Product
     {
         return $this->simpleName;
     }
+
 }

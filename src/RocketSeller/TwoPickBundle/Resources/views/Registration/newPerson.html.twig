@@ -55,9 +55,11 @@
             <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0 statusBarIcon">
                 <img src="/img/employ_white.png">                    
             </div>
-            <div class="col-md-6 col-xs-12 txt-AD1">
-                <div class="text-left" id="">
+            <div class="col-md-10 col-xs-12 txt-AD1">
+                <div class="col-xs-12 text-right" style:"font-size: 12px;">
                     <p>Paso <strong>1</strong> de 3</p>
+                </div>
+                <div class="text-left" id="">
                     Mis datos como empleador
                 </div>
             </div>
@@ -282,7 +284,7 @@
                     {% endfor %}                    
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
+                    <a class="btn btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
                     <br /><br />
                 </div>
             </div>
@@ -317,5 +319,4 @@
             </div>
         </div>
     </div>
-
 {% endblock fos_user_content%}

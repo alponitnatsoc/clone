@@ -14,6 +14,7 @@ var __slice = [].slice,
   SimpleSlider = (function() {
 
     function SimpleSlider(input, options) {
+      console.log(options);
       var ratio,
         _this = this;
       this.input = input;

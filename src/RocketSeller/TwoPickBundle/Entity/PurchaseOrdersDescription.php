@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="purchase_orders_description", indexes={
  *      @ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), 
  *      @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}), 
- *      @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"}), 
- *      @ORM\Index(name="fk_purchase_orders_description_id_dispercion_novo", columns={"id_dispercion_novo"})
+ *      @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"})      
  *  })
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescriptionRepository")
  */
@@ -26,11 +25,6 @@ class PurchaseOrdersDescription
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrdersDescription;
-
-    /**
-     * @ORM\Column(name="id_dispercion_novo", type="integer", nullable=true)
-     */
-    private $idDispercionNovo;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
@@ -109,30 +103,6 @@ class PurchaseOrdersDescription
     public function getIdPurchaseOrdersDescription()
     {
         return $this->idPurchaseOrdersDescription;
-    }
-
-    /**
-     * Set idDispercionNovo
-     *
-     * @param integer $idDispercionNovo
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setIdDispercionNovo($idDispercionNovo)
-    {
-        $this->idDispercionNovo = $idDispercionNovo;
-
-        return $this;
-    }
-
-    /**
-     * Get idDispercionNovo
-     *
-     * @return integer
-     */
-    public function getIdDispercionNovo()
-    {
-        return $this->idDispercionNovo;
     }
 
     /**
@@ -336,4 +306,5 @@ class PurchaseOrdersDescription
     {
         return $this->productProduct;
     }
+
 }

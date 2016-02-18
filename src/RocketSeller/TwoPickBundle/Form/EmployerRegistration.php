@@ -56,7 +56,7 @@ class EmployerRegistration extends AbstractType
             ->add('save', 'submit', array(
                 'label' => 'Salvar',
                 'attr'   =>  array(
-                'class'   => 'btn btn-primary btnNext btn-orange')
+                'class'   => 'btn btn-orange')
             ));
     }
 

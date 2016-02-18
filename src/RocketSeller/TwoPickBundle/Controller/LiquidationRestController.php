@@ -9,6 +9,11 @@ use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
+use Symfony\Component\HttpFoundation\Response;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use Symfony\Component\Validator\Constraints\Date;
+use RocketSeller\TwoPickBundle\Entity\Liquidation;
 
 class LiquidationRestController extends FOSRestController
 {
@@ -93,6 +98,7 @@ class LiquidationRestController extends FOSRestController
      */
     public function postFinalLiquidationStep1Action(Request $request)
     {
+//         $em = $this->getDoctrine()->getManager();
 
         $data = array(
             "username" => $this->getUser()->getUsername(),
@@ -101,6 +107,25 @@ class LiquidationRestController extends FOSRestController
             "last_work_year" => $request->get("last_work_year", null),
             "liquidation_reason" => $request->get("liquidation_reason", null)
         );
+
+        $parameters = $request->request->all();
+        $day = $parameters["last_work_day"];
+        $month = $parameters["last_work_month"];
+        $year = $parameters["last_work_year"];
+
+//         $dateStart = new \DateTime($year . "-" . $month . "-" . $day);
+//         $payroll = $parameters["idPayroll"];
+
+//         $noveltyType = $this->noveltyTypeByGroup("retiro");
+
+//         $retiro = new Novelty();
+//         $retiro->setDateStart($dateStart);
+//         $retiro->setName("Retiro");
+//         $retiro->setNoveltyTypeNoveltyType($noveltyType[0]);
+
+//         $em->persist($retiro);
+//         $em->flush();
+
         $view = View::create();
         $view->setData($data)->setStatusCode(200);
 
@@ -312,6 +337,7 @@ class LiquidationRestController extends FOSRestController
         $cutDate = $parameters["cutDate"];
         $processDate = $parameters["processDate"];
         $retirementCause = $parameters["retirementCause"];
+        $id_liq = $parameters["id_liq"];
 
         /**
          * Dato que se envia a SQL dependiendo de como se le paga la nomina al empleado (quincenal o mensual)
@@ -364,13 +390,26 @@ class LiquidationRestController extends FOSRestController
             return $view;
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $date = $year . "-" . $month . "-" . $day;
+        $lastWorkDay = new \DateTime($date);
+        /**
+         * Actualizar datos de liquidacion en DB
+         * @var Liquidation $liquidation
+         */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $liquidation->setLastWorkDay($lastWorkDay);
+        $em->persist($liquidation);
+        $em->flush();
+
         $data = array(
             "employee_id" => $employee_id,
             "period" => $period,
             "url" => $this->generateUrl("final_liquidation_detail", array(
                 "employee_id" => $employee_id,
                 "period" => $period,
-                "id" => $idEmperHasEmpee
+                "id" => $idEmperHasEmpee,
+                "id_liq" => $id_liq
             ))
         );
 
@@ -433,5 +472,68 @@ class LiquidationRestController extends FOSRestController
 
         $view->setData($data)->setStatusCode(200);
         return $view;
+    }
+
+    /**
+     * Generar PDF liquidacion.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Generar PDF liquidacion.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *    (name="employer_name", nullable=false, strict=true, description="Employer name")
+     *    (name="employee_name", nullable=false, strict=true, description="Employee name")
+     *    (name="contract_id", nullable=false, requirements="([0-9])+", strict=true, description="contract id")
+     *    (name="url", nullable=false, strict=true, description="url")
+     *
+     * @return Response
+     */
+    public function postGeneratePdfAction(Request $request)
+    {
+        $parameters = $request->request->all();
+
+        $employerName = $parameters["employer_name"];
+        $employeeName = $parameters["employee_name"];
+        $idContract = $parameters["contract_id"];
+        $url = $parameters["url"];
+
+//         $filename = $employerName . "-" . $employeeName . "-" . $idContract;
+//         $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename;
+//         if (!file_exists($path)) {
+//             $pdf = $this->get('knp_snappy.pdf')->generate($url, $path);
+//         }
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutput($url), 200, array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="file.pdf"'
+            )
+        );
+
+//         $view = View::create();
+//         $view->setData($pdf)->setStatusCode(200);
+//         return $view;
+
+//         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
+//         $pdf = new Response(
+//             $this->get('knp_snappy.pdf')->generateFromHtml(
+//                 $html,
+//                 $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename
+//                 )
+//             //             200,
+//             //             array(
+//             //                 'Content-Type'          => 'application/pdf',
+//             //                 'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
+//             //             )
+//             );
     }
 }

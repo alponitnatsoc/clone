@@ -2,18 +2,28 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Product;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\Contract;
-use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Process;
+use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 
 class PayrollController extends Controller
 {
+
+    use NoveltyTypeMethodsTrait;
+
+use LiquidationMethodsTrait;
 
     /**
      * Crear Payroll para el contrato
@@ -161,50 +171,49 @@ class PayrollController extends Controller
         if ($dataNomina && !empty($dataNomina)) {
             foreach ($dataNomina as $key => $value) {
                 if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '1') {
-                    unset($dataNomina[$key]);
-                    return array(
-                        'dataNomina' => $dataNomina,
-                        'salary' => $value['NOMI_VALOR_LOCAL']
-                    );
+                    return ceil($value['NOMI_VALOR_LOCAL']);
                 }
             }
         }
         return false;
     }
 
-    private function getAportes($dataNomina)
+    private function getTotalAportes($dataNomina)
     {
         if ($dataNomina && !empty($dataNomina)) {
             $aporteSalud = $aportePension = 0;
             foreach ($dataNomina as $key => $value) {
                 if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '3010') {
-                    unset($dataNomina[$key]);
                     $aporteSalud = $value['NOMI_VALOR_LOCAL'];
                 } elseif (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '3020') {
-                    unset($dataNomina[$key]);
                     $aportePension = $value["NOMI_VALOR_LOCAL"];
                 }
             }
             return array(
-                'dataNomina' => $dataNomina,
-                'aporteSalud' => $aporteSalud,
-                'aportePension' => $aportePension
+                'total' => ceil($aporteSalud + $aportePension),
+                'salud' => ceil($aporteSalud),
+                'pension' => ceil($aportePension)
             );
         }
         return false;
+    }
+
+    private function getTotalPILA($salary)
+    {
+        return array(
+            'total' => (int) ceil(($salary * 0.12) + ceil($salary * 0.085) + ceil($salary * 0.00348) + ceil($salary * 0.09)),
+            'pension' => (int) ceil($salary * 0.12),
+            'salud' => (int) ceil($salary * 0.085),
+            'arl' => (int) ceil($salary * 0.00348),
+            'parafiscales' => (int) ceil($salary * 0.09)
+        );
     }
 
     private function getData($payrollToPay = false)
     {
         $user = $this->getUser();
         $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        $salaries = array();
-        $payrolls = array();
-        $aportes = array();
-        $dataNomina = array();
-        $novelties = array();
         $employeesData = array();
-        $payMethod = array();
 
         /* @var $employerHasEmployee EmployerHasEmployee */
         foreach ($employerHasEmployees as $employerHasEmployee) {
@@ -221,8 +230,6 @@ class PayrollController extends Controller
                             $payrollToPay2 = $payrollToPay;
                         }
                         if (in_array($payroll->getIdPayroll(), $payrollToPay2)) {
-                            $employeesData[$payroll->getIdPayroll()] = $employerHasEmployee;
-                            $payMethod[$payroll->getIdPayroll()] = $contract->getPayMethodPayMethod();
                             $purchaseOrdersDescription = $payroll->getPurchaseOrdersDescription();
                             $purchaseOrdersStatus = false;
                             if ($purchaseOrdersDescription) {
@@ -230,20 +237,28 @@ class PayrollController extends Controller
                             }
                             if ((!$purchaseOrdersDescription || empty($purchaseOrdersDescription) || $purchaseOrdersDescription === null)) {
                                 if ((!$purchaseOrdersStatus || empty($purchaseOrdersStatus) || $purchaseOrdersStatus === null)) {
-                                    $payrolls[$payroll->getIdPayroll()] = $payroll;
-                                    $dataNomina[$payroll->getIdPayroll()] = $this->getInfoNominaSQL($employerHasEmployee);
-                                    $salary = $this->getSalary($dataNomina[$payroll->getIdPayroll()]);
-                                    $salaries[$payroll->getIdPayroll()] = 0;
-                                    if ($salary) {
-                                        $salaries[$payroll->getIdPayroll()] = $salary['salary'];
-                                        $dataNomina[$payroll->getIdPayroll()] = $salary['dataNomina'];
-                                    }
-                                    $aporte = $this->getAportes($dataNomina[$payroll->getIdPayroll()]);
-                                    $aportes[$payroll->getIdPayroll()] = array();
-                                    if ($aporte) {
-                                        $aportes[$payroll->getIdPayroll()]['aporteSalud'] = $aporte['aporteSalud'];
-                                        $aportes[$payroll->getIdPayroll()]['aportePension'] = $aporte['aportePension'];
-                                        $novelties[$payroll->getIdPayroll()] = $aporte['dataNomina'];
+                                    $employeesData[$payroll->getIdPayroll()] = array();
+                                    $employeesData[$payroll->getIdPayroll()]['idPayroll'] = $payroll->getIdPayroll();
+                                    $employeesData[$payroll->getIdPayroll()]['payroll'] = $payroll;
+                                    $employeesData[$payroll->getIdPayroll()]['employerHasEmployee'] = $employerHasEmployee;
+                                    $employeesData[$payroll->getIdPayroll()]['payMethod'] = $contract->getPayMethodPayMethod();
+
+                                    $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
+                                    $employeesData[$payroll->getIdPayroll()]['detailNomina'] = $detailNomina;
+
+                                    $totalLiquidation = $this->totalLiquidation($detailNomina);
+                                    $employeesData[$payroll->getIdPayroll()]['totalLiquidation'] = $totalLiquidation;
+
+                                    $salary = $this->getSalary($detailNomina);
+                                    $employeesData[$payroll->getIdPayroll()]['salary'] = $salary;
+
+                                    $totalAportes = $this->getTotalAportes($detailNomina);
+                                    $employeesData[$payroll->getIdPayroll()]['totalAportes'] = $totalAportes;
+
+                                    if ($payroll->getPeriod() == 4) {
+                                        $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($salary);
+                                    } else {
+                                        $employeesData[$payroll->getIdPayroll()]['PILA'] = 0;
                                     }
                                 }
                             }
@@ -252,14 +267,7 @@ class PayrollController extends Controller
                 }
             }
         }
-        return array(
-            "employerHasEmployees" => $employeesData,
-            "salaries" => $salaries,
-            "aportes" => $aportes,
-            "payrolls" => $payrolls,
-            "novelties" => $novelties,
-            "payMethod" => $payMethod
-        );
+        return $employeesData;
     }
 
     public function payAction()
@@ -268,13 +276,22 @@ class PayrollController extends Controller
             throw $this->createAccessDeniedException();
         }
         $data = $this->getData();
+        $novelties = array();
+        foreach ($data as $key => $value) {
+            foreach ($value["detailNomina"] as $key2 => $value2) {
+                $grupo = isset($value2["CON_CODIGO_DETAIL"]["grupo"]) ? $value2["CON_CODIGO_DETAIL"]["grupo"] : false;
+                if ($grupo && $grupo != "no_show") {
+                    if (!isset($novelties[$key])) {
+                        $novelties[$key] = array();
+                    }
+                    array_push($novelties[$key], $value2);
+                }
+            }
+        }
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
-                    "employerHasEmployees" => $data['employerHasEmployees'],
-                    "salaries" => $data['salaries'],
-                    "aportes" => $data['aportes'],
-                    "payrolls" => $data['payrolls'],
-                    "novelties" => $data['novelties']
+                    'dataNomina' => $data,
+                    'novelties' => $novelties
         ));
     }
 
@@ -288,12 +305,13 @@ class PayrollController extends Controller
             $payrollToPay = $request->request->get('payrollToPay');
             $data = $this->getData($payrollToPay);
 
+            $documentNumber = $this->getUser()->getPersonPerson()->getDocument();
+            $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+            $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
             return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', array(
-                        "employerHasEmployees" => $data['employerHasEmployees'],
-                        "salaries" => $data['salaries'],
-                        "aportes" => $data['aportes'],
-                        "payrolls" => $data['payrolls'],
-                        "payMethod" => $data['payMethod'],
+                        'dataNomina' => $data,
+                        'paymentMethods' => isset($responcePaymentsMethods["payments"]) ? $responcePaymentsMethods["payments"] : false
             ));
         } else {
             return $this->redirectToRoute("payroll");
@@ -309,63 +327,151 @@ class PayrollController extends Controller
 
             $payrollToPay = $request->request->get('payrollToPay');
             $data = $this->getData($payrollToPay);
-
             $total = 0;
-            foreach ($data['salaries'] as $key => $salario) {
-                $total += (int) $salario;
-                $total += ($data['aportes'][$key]['aporteSalud'] + $data['aportes'][$key]['aportePension']);
+            foreach ($data as $key => $value) {
+                /* @var $payMethod PayMethod */
+                $payMethod = $value['payMethod'];
+                if (isset($value['PILA']['total'])) {
+                    if (strtolower($payMethod->getPayTypePayType()->getName()) == 'en efectivo') {
+                        $total += ($value['PILA']['total']);
+                    } else {
+                        $total += ($value['totalLiquidation']['total'] + $value['PILA']['total']);
+                    }
+                } else {
+                    if (strtolower($payMethod->getPayTypePayType()->getName()) == 'en efectivo') {
+                        $total += 0;
+                    } else {
+                        $total += ($value['totalLiquidation']['total']);
+                    }
+                }
             }
-            //$this->createPurchaseOrder($data['payrolls'], $total);
+
+            $paymentMethod = $request->request->get('paymentMethod');
+
+            foreach ($paymentMethod as $key => $value) {
+                $data[$key]['paymentMethod'] = $value;
+            }
+
+            //$this->pagarNomina($data, $total);
 
             return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                        "employerHasEmployees" => $data['employerHasEmployees'],
-                        "salaries" => $data['salaries'],
-                        "aportes" => $data['aportes'],
-                        "payrolls" => $data['payrolls'],
-                        "payMethod" => $data['payMethod'],
-                        "total" => $total
+                        'dataNomina' => $data,
+                        'total' => $total
             ));
         } else {
             return $this->redirectToRoute("payroll");
         }
     }
 
-    private function createPurchaseOrder($payrolls, $total)
+    private function dataByPaymethod($dataNomina)
     {
+        $responce = array();
+        foreach ($dataNomina as $idPayroll => $data) {
+            $responce[$data['paymentMethod']][$idPayroll]['idPayroll'] = $idPayroll;
+            $responce[$data['paymentMethod']][$idPayroll]['nomina'] = $data['totalLiquidation']['total'];
+            $responce[$data['paymentMethod']][$idPayroll]['PILA'] = $data['PILA']['total'];
+            $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['totalLiquidation']['total'] + $data['PILA']['total'];
+        }
+        foreach ($responce as $paymentMethodId => $data) {
+            $total = 0;
+            foreach ($data as $idPayroll => $value) {
+                $total += $value['total'];
+            }
+            $responce[$paymentMethodId]['total'] = $total;
+        }
+        return $responce;
+    }
+
+    private function pagarNomina($dataNomina, $total)
+    {
+
 
         $em = $this->getDoctrine()->getManager();
 
+        $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
+        /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
+        $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
+
+        $byPaymethod = $this->dataByPaymethod($dataNomina);
+
+        foreach ($byPaymethod as $paymentMethodId => $data) {
+            /* @var $purchaseOrder PurchaseOrders */
+            $purchaseOrder = $this->createPurchaseOrder($data['total']);
+            $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
+
+            foreach ($dataNomina as $key => $data) {
+                $purchaseOrderDetail = $this->createPurchaseOrderDetail($purchaseOrder, $data);
+                $purchaseOrderDetail->setPurchaseOrdersStatus($purchaseOrdersStatus);
+            }
+        }
+
+        //$em->persist($purchaseOrder);
+        //$em->flush();
+    }
+
+    /**
+     * 
+     * @param type $total
+     * @return PurchaseOrders
+     */
+    private function createPurchaseOrder($total)
+    {
+
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postPaymentAproval', array(
+            'employeeId' => $employeeId,
+            'period' => null,
+            'month' => null,
+            'year' => null
+                ), array('_format' => 'json')
+        );
+        json_decode($generalPayroll->getContent(), true);
+
         $purchaseOrder = new PurchaseOrders();
-
-        $purchaseOrdersType = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersType');
-        $purchaseOrdersType = $purchaseOrdersType->findOneBy(array('name' => 'Pago nomina'));
-        $purchaseOrder->setPurchaseOrdersTypePurchaseOrdersType($purchaseOrdersType);
-
-        $payroll = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Payroll');
-        $payroll = $payroll->findBy(array('contractContract' => $contract->getIdContract()))[0];
-        $purchaseOrder->setPayrollPayroll($payroll);
-
-        $purchaseOrdersStatus = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-        $purchaseOrdersStatus = $purchaseOrdersStatus->findBy(array('name' => 'Pagada'))[0];
-        $purchaseOrder->setPurchaseOrdersStatusPurchaseOrdersStatus($purchaseOrdersStatus);
-
-
-        $dateCreated = date("Y-m-d H:i:s");
-        $purchaseOrder->setDateCreated(new \DateTime($dateCreated));
-        $dateModified = date("Y-m-d H:i:s");
-        $purchaseOrder->setDateModified(new \DateTime($dateModified));
-        $idUser = $this->getUser();
-        $purchaseOrder->setIdUser($idUser);
+        $purchaseOrder->setIdUser($this->getUser());
         $purchaseOrder->setName('Pago Nomina');
-        $purchaseOrder->setValue($subTotal);
+        $purchaseOrder->setValue((floatval($total)));
+        return $purchaseOrder;
+    }
 
-        $em->persist($purchaseOrder);
-        $em->flush();
+    /**
+     * 
+     * @param Payroll $payroll
+     * @param PurchaseOrders $purchaseOrder
+     * @return PurchaseOrdersDescription
+     */
+    private function createPurchaseOrderDetail(PurchaseOrders $purchaseOrder, Payroll $payroll)
+    {
+        $purchaseOrderDescription = new PurchaseOrdersDescription();
+        $purchaseOrderDescription->setPurchaseOrders($purchaseOrder);
+        $purchaseOrderDescription->setPayrollPayroll($payroll);
+        $purchaseOrderDescription->setDescription('Pago Empleado');
 
-        return true;
+        $productRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Product');
+        /* @var $product Product */
+        $product = $productRepo->findOneBy(array('simpleName' => 'PN'));
+        $purchaseOrderDescription->setProductProduct($product);
+
+        $purchaseOrderDescription->setValue((floatval($total)));
+
+        return $purchaseOrderDescription;
+    }
+
+    /**
+     * Trae la informacion del empleado desde el ws de nomina de SQL
+     * @param type $employerHasEmployee
+     */
+    private function paymentAproval($employerHasEmployee)
+    {
+        $employeeId = $employerHasEmployee->getIdEmployerHasEmployee();
+
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+            'employeeId' => $employeeId,
+            'period' => null,
+            'month' => null,
+            'year' => null
+                ), array('_format' => 'json')
+        );
+        return json_decode($generalPayroll->getContent(), true);
     }
 
     public function detailAction($idPayroll, Request $request)
@@ -418,6 +524,16 @@ class PayrollController extends Controller
             'Content-Disposition' => 'attachment; filename="file.pdf"'
                 )
         );
+
+        $this->get('knp_snappy.pdf')->getOutput($pageUrl, 'file.pdf');
+
+        $file = 'file.pdf';
+        $filename = 'filename.pdf';
+        header('Content-type: application/pdf');
+        header('Content-Disposition: inline; filename="' . $filename . '"');
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: bytes');
+        @readfile($file);
     }
 
 }

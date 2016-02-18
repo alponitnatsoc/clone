@@ -14,4 +14,16 @@ trait NoveltyTypeMethodsTrait
 
         return $noveltyType;
     }
+
+    protected function noveltyTypeByGroup($group)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:NoveltyType');
+        $noveltyType = $repository->findBy(
+            array(
+                'grupo' => $group
+            )
+        );
+
+        return $noveltyType;
+    }
 }

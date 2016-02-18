@@ -157,7 +157,8 @@ body {
         }  
     }
     .border-all-@{name} {
-        border: @defaultBorder solid @@name;
+        //border: @defaultBorder solid @@name;
+        border: none;
     }
     .border-left-@{name} {
         border-left: @defaultBorder solid @@name;
@@ -309,9 +310,6 @@ body {
 .functionality-block {
     margin: 47px 0;
     .functionality-block-item {
-        float: left;
-        width: 20%;
-        padding: 0 58px;
         position: relative;
         & div:first-child {
             padding: 10px;
@@ -333,15 +331,30 @@ body {
     .services-bar-item {
         margin-top: 40px;
         margin-bottom: 40px;
+        .dragger {
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .pasos {
+            width: 100%;
+        }
         a {
-            margin-right: 12.99%;
+            width: 20%;
+            display: block;
+            float: left;
+            &:last-child {
+                width: 0;
+            }
         }
         .slider {
             position: relative;
-            width: 523px!important;
+            width: 100%;
+            margin-left: 0!important;
+            margin-right: 0!important;
             .track {
                 height: 2px;
-                background: @lightBlue;
+                border: 1px solid @lightBlue;
                 top: 0!important;
             }
             .dragger {
@@ -357,12 +370,7 @@ body {
     }
 }
 
-.body {
-    padding-bottom: 100px;
-}
-
 footer {
-    background-color:@lightGrayBars;
     @media (min-width: @screen-md-min) {
         height:60px;
         padding-top: 3px;
@@ -545,4 +553,179 @@ footer {
     padding-bottom:10px;
     font-weight:bold;
     margin-bottom:16px;
+}
+
+#valor-mensual {
+    background-color: #3b4b5a;
+    color: #fff;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    .titulo {
+        font-family: @open;
+        font-size: 22px;
+        border-right: 1px solid #fff;
+        .fa {
+            color: @blue;
+            vertical-align: middle;
+            margin-right: 30px;
+        }
+    }
+    .valor {
+        font-family: @open;
+        font-size: 40px;
+    }
+
+}
+
+#noticias {
+    .noticia {
+        span {
+            display: block;
+            margin-bottom: 15px;
+        }
+        margin-top: 40px;
+        &:first-child {
+            border-right: 1px solid #ccc;
+        }
+    }
+}
+
+#pata-min {
+    margin-top: 40px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    img {
+        margin-right: 20px;
+    }
+}
+
+#breadcrumb {
+    padding-top: 30px;
+    .breadcrumb {
+        background-color: transparent;
+        li {
+            a {
+                color: #000;
+                text-decoration: underline;
+            }
+            &+li:before {
+                content: '>';
+                font-family: @open;
+            }
+        }
+    }
+}
+
+.entradilla {
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: @dark_green;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    .container {
+        > div {
+            &:first-child {
+                border-right: 1px solid #ccc;
+            }
+        }
+
+        .boton {
+            margin-top: 50px;
+        }
+    }
+}
+
+.marca {
+    color: @blue;
+}
+
+#beneficios {
+    margin-top: 40px;
+    .titulo {
+        .imagen {
+            width: 100%;
+            padding-top: 39%;
+            background-size: cover;
+            background-position: center;
+        }
+        .tipo {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            background-color: @dark_green;
+            color: @blue;
+            font-size: 30px;
+            padding: 10px;
+            padding-right: 20%;
+        }
+    }
+
+    .contenido {
+        padding-top: 40px;
+        ul {
+            padding-left: 100px;
+            li {
+                min-height: 100px;
+                position: relative;
+                list-style: none;
+                &:before {
+                    width: 62px;
+                    height: 62px;
+                    display: block;
+                    content: ' ';
+                    background-image: url(/img/bullets/money.png);
+                    position: absolute;
+                    top: 0;
+                    left: -100px;
+                }
+            }
+        }
+    }
+}
+
+#precios {
+    > div {
+        padding: 20px 10%;
+        img {
+            margin-bottom: 10px;
+        }
+        &:not(:last-child) {
+            border-right: 1px solid #ccc;
+        }
+
+        .big {
+            font-size: 40px;
+        }
+    }
+}
+
+.imagen-encabezado {
+    background-image: url(/img/encabezado-nosotros.jpg);
+    background-size: cover;
+    background-position: center;
+    padding-bottom: 38%;
+}
+
+#equipo {
+    .persona {
+        margin-top: 40px;
+        min-height: 300px;
+        .imagen-persona {
+            padding-top: 38%;
+            background-position: center;
+            background-size: cover;
+        }
+        span {
+            display: block;
+            &.nombre {
+                margin-top: 20px;
+            }
+            &.descripcion {
+                margin-top: 30px;
+            }
+        }
+    }
 }

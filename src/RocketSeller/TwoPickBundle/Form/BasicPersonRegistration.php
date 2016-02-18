@@ -36,7 +36,13 @@ class BasicPersonRegistration extends AbstractType
                     new NotBlank()
                 ),
                 'property_path' => 'document',
-                'label' => 'Número de documento*'
+                'label' => 'Número de documento*',
+                "attr" => array(
+                    "data-toggle" => "tooltip", 
+                    "data-placement" => "right",
+                    "data-container" => "body",
+                    "title" => "Texto de ayuda"
+                )
             ))
             ->add('names', 'text', array(
                 'constraints' => array(
@@ -63,7 +69,7 @@ class BasicPersonRegistration extends AbstractType
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Dirección Principal*'))
+                ),'label' => 'Dirección principal de trabajo*'))
             ->add('phones', 'collection', array(
                 'type' => new PhoneRegistration(),
                 'allow_add'    => true,

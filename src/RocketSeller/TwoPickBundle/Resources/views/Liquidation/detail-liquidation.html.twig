@@ -82,13 +82,13 @@
                 {% for ded in deducciones %}
                     <tr>
                         <td>{{ ded.novelty.name }}</td>
-                        <td>{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                        <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
                     </tr>
     {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
                     <td><strong>Total deducciones</strong></td>
-                    <td><strong>{{ totalDeducciones }}</strong></td>
+                    <td><strong class="formatValue">{{ totalDeducciones }}</strong></td>
                 </tr>
                     <tr>
                         <th><strong>Devengos</strong></th>
@@ -97,23 +97,23 @@
                 {% for dev in devengos %}
                     <tr>
                         <td>{{ dev.novelty.name }}</td>
-                        <td>{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                        <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
                     </tr>
     {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
                     <td><strong>Total devengos</strong></td>
-                    <td><strong>{{ totalDevengos }}</strong></td>
+                    <td><strong class="formatValue">{{ totalDevengos }}</strong></td>
                 </tr>
                 <tr class="info">
                     <td><strong>Valor de la liquidación</strong></td>
-                    <td id="totLiq"><strong>{{ totalLiq }}</strong></td>
+                    <td id="totLiq"><strong class="formatValue">{{ totalLiq }}</strong></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr class="warning">
                     <td class="text-center"><strong>Valor a pagar</strong></td>
-                    <td><strong>{{ totalLiq }}</strong></td>
+                    <td><strong class="formatValue">{{ totalLiq }}</strong></td>
                 </tr>
             </tfoot>
         </table>
@@ -147,48 +147,139 @@
             Powered by Logo Symplifica
         </div>
     </div>
-
-    <div class="btn-toolbar" role="toolbar">
-        <div class="btn-group">
+<form method="post" action="{{ path('pay_liquidation', { 'id': id_liq }) }}" id="formPay">
+    <div class="col-sm-12 center" role="toolbar">
+        <div class="col-xs-12 center">
             <button type="button" class="btn btn-default">Volver atrás</button>
-            <button type="button" class="btn btn-default" id="bntCont" onclick="consolidateLiq($(this))">Continuar</button>
+            <button type="button" class="btn btn-default btn-orange formatValueTotal" id="btnCont" total="{{ totalLiq }}" >Pagar {{ totalLiq }}</button>
         </div>
-        <div id="postLiq" class="btn-group" style="display: none">
-            <button type="button" class="btn btn-default">Imprimir</button>
-            <button type="button" class="btn btn-default">Guardar PDF</button>
-            <button type="button" class="btn btn-default">Enviar Email</button>
+{#         <div id="postLiq" class="btn-group" style="display: none">#}
+{#             <button type="button" onclick="window.print()" class="btn btn-default">Imprimir</button>#}
+{#             <button type="button" onclick="downloadPDF()" class="btn btn-default">Guardar PDF</button>#}
+{#             <button type="button" class="btn btn-default">Enviar Email</button>#}
+{#         </div>#}
+    </div>
+</form>
+
+<div class="modalPayLiquidation" style="display: none">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            La suma total para pago corresponde a <h2 class="formatValue">{{ totalLiq }}</h2>
+        </div>
+        <div class="col-xs-11">
+{#             {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}#}
+
+
+                <div style="display: -webkit-inline-box;vertical-align: middle;">
+{#                     <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">#}
+{{ dump(paymentMethods) }}
+                    {% for key,paymentMethod in paymentMethods %}
+                        <div style="display: -webkit-inline-box;">
+                            <strong>Medio de pago {{ key }}: </strong>
+                        </div>
+                        <div>
+                            {{ paymentMethod }}
+                        </div>
+{#                             <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>#}
+                    {% endfor  %}
+{#                     </select>#}
+                    <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
+                </div>
+{#             {% endif %}#}
+        </div>
+        <div class="col-md-12">
+            <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
         </div>
     </div>
+</div>
 
 <script type="text/javascript">
 <!--
-jQuery( document ).ready(function() {
-    formatMoney($("td[id='totLiq']"));
-});
+// jQuery( document ).ready(function() {
+//     formatMoney($("td[id='totLiq']"));
+// });
 
-function consolidateLiq(element) {
-    var btn = $(element);
+// function consolidateLiq(element) {
+//     var btn = $(element);
 
-    $.ajax({
-        url: "{{ path('api_public_post_final_liquidation_submit') }}",
-        type: 'POST',
-        data: {
-            employee_id: "{{ employee_id }}",
-            period: "{{ period }}"
-        }
-    }).done(function (data) {
-        $("#bntCont").html("Pagar");
-        $("#postLiq").show();
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-    });
-}
+//     $.ajax({
+//        url: "{{ path('api_public_post_final_liquidation_submit') }}",
+//         type: 'POST',
+//         data: {
+//            employee_id: "{{ employee_id }}",
+//            period: "{{ period }}"
+//         }
+//     }).done(function (data) {
+//         $("#bntCont").html("Pagar");
+//         $("#postLiq").show();
+//     }).fail(function (jqXHR, textStatus, errorThrown) {
+//         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+//     });
+// }
 //-->
 </script>
 
 {% endblock %}
 
-{# {% block javascripts %}#}
-{# {{ parent() }}#}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
 
-{# {% endblock %}#}
+            updateValues();
+
+            $('#btnCont').click(function () {
+                total = "{{ totalLiq }}";
+                message = $(".modalPayLiquidation");
+                var dialog = bootbox.dialog({
+                    title: "Confirmación de pago",
+                    closeButton: false,
+                    message: message,
+                    buttons: {
+                        cancel: {
+                            label: "Cancelar",
+                            className: "btn-default",
+                            callback: function () {
+                                $("#btnPay").prop('disabled', false);
+                                console.log("Prueba");
+                            }
+                        },
+                        success: {
+                            label: "Pagar",
+                            className: "btn-default btn-orange btn-pay",
+                            callback: function () {
+                                $('#formPay').submit();
+                                $("#btnCont").prop('disabled', true);
+                            }
+                        }
+                    }
+                });
+                $(message).show();
+                $(dialog.find('.btn-pay')[0]).prop('disabled', true);
+                $(dialog.find('.chkAccept')).change(function (e) {
+                    $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
+                });
+                $("#btnPay").prop('disabled', true);
+
+            });
+
+            $('#btnBack').click(function () {
+                console.log("click");
+                //document.location = "{{ path('payroll') }}";
+            });
+        });
+
+        function updateValues() {
+            var total = 0;
+            $('.formatValue').each(function (index, element) {
+                val = $(element).html();
+                $(element).html( numeral(val).format("$ 0,0.00") );
+            });
+
+            total = $('.formatValueTotal').attr("total");
+            $('.formatValueTotal').html("Pagar " + numeral(total).format('$ 0,0.00'));
+        }
+    </script>
+{% endblock %}
