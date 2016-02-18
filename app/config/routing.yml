@@ -59,11 +59,11 @@ edit_contract:
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:editContract }
 view_contract:
     path: /view/contract/{id}
-    defaults: { _controller: RocketSellerTwoPickBundle:Contract:viewContract}      
+    defaults: { _controller: RocketSellerTwoPickBundle:Contract:viewContract}
 change_state_contract:
     path:   /edit/contract/state/{id}
-    defaults: {_controller: RocketSellerTwoPickBundle:Contract:stateContract} 
-    
+    defaults: {_controller: RocketSellerTwoPickBundle:Contract:stateContract}
+
 change_state_employer_employee:
     path:   /manage/employee/change/state/{id}
     defaults: {_controller: RocketSellerTwoPickBundle:Employee:changeStateEmployee}
@@ -125,7 +125,7 @@ novelty_fields:
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:noveltyTypeFields}
     requirements:
         noveltyId:     \d+
-    
+
 register_employee:
     path:      /register/employee/{id}/{tab}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1, tab: 1}
@@ -143,7 +143,7 @@ send_email_test_send:
 contact:
     path: /contact
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
-      
+
 payroll:
     path: /payroll
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
@@ -158,11 +158,11 @@ payroll_detail:
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:detail}
 payroll_voucher:
     path: /payroll/voucher/{idPayroll}
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}    
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucher}
 payroll_voucher_to_pdf:
     path: /payroll/voucher/to_pdf/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucherToPdf}
-    
+
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
@@ -290,6 +290,10 @@ home_landing_new:
     path:     /landing
     defaults: { _controller: RocketSellerTwoPickBundle:Home:newLanding }
 
+home_landing_form:
+    path:     /prueba
+    defaults: { _controller: RocketSellerTwoPickBundle:LandingRegistration:register }
+
 show_logs:
     path:     /logs
     defaults: { _controller: RocketSellerTwoPickBundle:Log:index }
@@ -317,7 +321,7 @@ employee_dashboard:
 employee_profile:
     path:     /employee/profile/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:Profile }
-    
+
 employee_profile_edit:
     path:     /employee/edit/{idPerson}
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:editProfile }
@@ -341,7 +345,7 @@ generate_certificate:
 download_certificate_get:
     path:     /employee/certificate/download/{idEmployee}/{idCertificate}
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdfGet }
-    
+
 download_certificate_post:
     path:     /employee/certificate/download
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
@@ -371,7 +375,7 @@ express_start:
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerExpress }
 express_payment:
     path: /express-payment/{id}
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:expressPayment }    
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:expressPayment }
 express_success:
     path: /express-success/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:successExpress }
@@ -380,7 +384,7 @@ express_registration:
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:registration }
 express_registration_employee:
     path: /express-registration/{id}/employee-create/{idEmployee}
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:employeeCreate }    
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:employeeCreate }
 back_employer_menu:
     path: /back-menu-employer/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
