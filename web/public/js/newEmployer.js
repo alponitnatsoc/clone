@@ -338,6 +338,7 @@ function startEmployer() {
                 200: function (data) {
                     if (data["url"] != null) {
                         console.log(data["url"]);
+                        history.pushState("","",data["url"]);
                         redirUri = data["url"];
                     } else {
                         $('#main').replaceWith(

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\PayMethodsTrait;
+use RocketSeller\TwoPickBundle\Controller\ProcedureController;
 
 class PayRestController extends FOSRestController
 {
@@ -75,6 +76,7 @@ use PayMethodsTrait;
 
         $user = $this->getUser();
         $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        $employer = $user->getPersonPerson()->getEmployer();
         $salaries = array();
         $payrolls = array();
         $novelties = array();
@@ -98,6 +100,12 @@ use PayMethodsTrait;
         $view = View::create();
         $view->setData(true);
         $view->setStatusCode(200);
+
+        $procedureType = $this->getdoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:ProcedureType')
+        ->findByName("Registro empleador y empleados");
+        $client = new ProcedureController();        
+        $client->procedure($employer->getIdEmployer(),$procedureType->getIdProcedureType());        
 
         return $view;
     }
