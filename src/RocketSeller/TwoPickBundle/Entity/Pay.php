@@ -72,6 +72,11 @@ class Pay
     private $status;
 
     /**
+     * @ORM\Column(type="string", length=200, nullable=TRUE)
+     */
+    private $message;
+
+    /**
      * Set idPay
      *
      * @param integer $idPay
@@ -93,6 +98,30 @@ class Pay
     public function getIdPay()
     {
         return $this->idPay;
+    }
+
+    /**
+     * Set message
+     *
+     * @param string $message
+     *
+     * @return Pay
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     /**

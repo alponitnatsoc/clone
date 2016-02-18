@@ -40,23 +40,26 @@ class PaymentsRestController extends FOSRestController
    * @param Array $regex, contains the key as parameter and a regex.
    * @param Array $mandatory, contains a bool indicating if it is mandatory.
    */
-  public function validateParamters($parameters, $regex, $mandatory) {
+   public function validateParamters($parameters, $regex, $mandatory)
+   {
 
-     foreach($mandatory as $key => $value)
-     {
-       if(array_key_exists($key, $mandatory) &&
-          $mandatory[$key] &&
-          (!array_key_exists($key, $parameters) || $parameters[$key] == null ||
-          ($parameters[$key] !== "0" && empty($parameters[$key]))))
-            throw new HttpException(400, "The parameter " . $key . " is empty");
+       foreach ($mandatory as $key => $value) {
+           if (array_key_exists($key, $mandatory) &&
+                   $mandatory[$key] &&
+                   (!array_key_exists($key, $parameters)))
+               throw new HttpException(400, "The parameter " . $key . " is empty");
 
-       if(array_key_exists($key, $regex) &&
-          !preg_match('/^' . $regex[$key] . '$/', $parameters[$key]))
-         throw new HttpException(400, "The format of the parameter " .
-                                      $key . " is invalid, it doesn't match" .
-                                      $regex[$key]);
-     }
-  }
+           if (array_key_exists($key, $regex) &&
+                   array_key_exists($key, $parameters) &&
+                   !preg_match('/^' . $regex[$key] . '$/', $parameters[$key]))
+               throw new HttpException(400, "The format of the parameter " .
+               $key . " is invalid, it doesn't match" .
+               $regex[$key]);
+
+           if (!$mandatory[$key] && (!array_key_exists($key, $parameters)))
+               $parameters[$key] = '';
+       }
+   }
 
   /**
    * Calls the payments api, it receives the headers and the parameters and
@@ -1242,60 +1245,6 @@ class PaymentsRestController extends FOSRestController
     $responseView = $this->callApi($header, $parameters, $path, "get");
 
     return $responseView;
-  }
-
-
-  // This next web services will be exposed to novopayment, to confirm the
-  // state of some operations, it should be moved to another controller later.
-
-  /**
-   * @PUT("dispersion/{id}")
-   * Dispersion of beneficiary payment by client.(5.6)<br/>
-   *
-   * @ApiDoc(
-   *   resource = true,
-   *   description = "Dispersion of beneficiary payment by client.",
-   *   statusCodes = {
-   *     200 = "OK",
-   *     201 = "Accepted",
-   *     400 = "Bad Request",
-   *     401 = "Unauthorized"
-   *   }
-   * )
-   *
-   * @param Request $request.
-   * Rest Parameters:
-   *
-   * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-   *
-   * (name="chargeId", nullable=false, requirements="([0-9]| )+", strict=true, description="Id of the charge.")
-   * (name="beneficiaryId", nullable=false, requirements="([0-9]| )+", strict=true, description="expiration year.")
-   * (name="beneficiaryAmount", nullable=false, requirements="([0-9]| )+", strict=true, description="Amount of the beneficiary")
-   * (name="beneficiaryPhone", nullable=true, requirements="([0-9]| )+", strict=true, description="Phone number of the beneficiary.")
-   *
-   * @return View
-   */
-  public function putApprovalDispersionAction(Request $request, $id)
-  {
-    $parameters = $request->request->all();
-    $regex = array();
-    $mandatory = array();
-
-    // Set all the parameters info.
-    $regex['status'] = '(1|2)'; $mandatory['documentNumber'] = true;
-    $regex['message'] = '(.)*'; $mandatory['chargeId'] = false;
-
-    $this->validateParamters($parameters, $regex, $mandatory);
-
-    $status = $parameters['status'];
-    $message = isset($parameters['message']) ? $parameters['message'] : '';
-    if($status == 1) {
-      // Succesfull.
-      // Update field in the DB.
-    } else if($status == 2) {
-      // Problem.
-      // Report problem to user.
-    }
   }
 }
 ?>
