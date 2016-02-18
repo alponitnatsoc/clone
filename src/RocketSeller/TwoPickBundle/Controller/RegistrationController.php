@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
@@ -205,6 +206,7 @@ class RegistrationController extends BaseController
         $user = $userManager->createUser();
         $user->setEnabled(true);
         $user->setUsername("atemporel_tempo_tmp");
+        $em = $this->getDoctrine()->getManager();
 
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
@@ -221,10 +223,17 @@ class RegistrationController extends BaseController
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
             $person = new Person();
+            $employer = new Employer();            
             $phone = new Phone();
             $phone->setPhoneNumber($request->get("phone"));
             $person->addPhone($phone);
             $person->setNames($form->get("name")->getData());
+            $employer->setPersonPerson($person);
+            $employer->setEmployerType("Persona");
+            $employer->setRegisterState(10);
+            $employer->setRegisterExpress(1);
+            $em->persist($employer);
+            $em->flush();
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
             $userManager->updateUser($user);

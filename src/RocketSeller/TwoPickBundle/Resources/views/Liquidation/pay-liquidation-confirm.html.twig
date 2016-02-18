@@ -1,0 +1,155 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Confirmación Pago de liquidación definitiva{% endblock %}
+
+{% block fos_user_content %}
+    <div class="payroll confirm">
+        <h2>Resultado a pago de liquidación definitiva</h2>
+        <div class="col-sm-12">
+            <div class="media">
+                <div class="media-left">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">La liquidación fue pagada exitosamente</h4>
+                </div>
+            </div>
+        </div>
+        <div class="employee_head_liquidation">
+            <div class="col-sm-12 employee_data">
+                <div class="col-sm-3 employee_data_info">
+                    <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+                    <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
+                    <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
+                </div>
+                <div class="col-sm-3 employee_data_info">
+                    <p><strong>Tipo contrato</strong></p>
+                    <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
+                </div>
+                <div class="col-sm-3 employee_data_info">
+                    <p><strong>Duración contrato</strong></p>
+                    <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
+                </div>
+                <div class="col-sm-3 employee_data_info">
+                    <p><strong>Salario</strong></p>
+                    <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
+                </div>
+    {#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
+    {#                 <p><strong>Días tomados de vacaciones</strong></p>#}
+    {#                 <span class="txthelp"><p></p></span>#}
+    {#             </div>#}
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th><strong>Deducciones</strong></th>
+                            <th></th>
+                        </tr>
+            {#             {% set totalLiq = 0 %}#}
+                        {% for ded in deducciones %}
+                            <tr>
+                                <td>{{ ded.novelty.name }}</td>
+                                <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                            </tr>
+            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+                        {% endfor %}
+                        <tr class="info">
+                            <td><strong>Total deducciones</strong></td>
+                            <td><strong class="formatValue">{{ totalDeducciones }}</strong></td>
+                        </tr>
+                            <tr>
+                                <th><strong>Devengos</strong></th>
+                                <th></th>
+                            </tr>
+                        {% for dev in devengos %}
+                            <tr>
+                                <td>{{ dev.novelty.name }}</td>
+                                <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                            </tr>
+            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
+                        {% endfor %}
+                        <tr class="info">
+                            <td><strong>Total devengos</strong></td>
+                            <td><strong class="formatValue">{{ totalDevengos }}</strong></td>
+                        </tr>
+                        <tr class="info">
+                            <td><strong>Valor de la liquidación</strong></td>
+                            <td id="totLiq"><strong class="formatValue">{{ totalLiq }}</strong></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="warning">
+                            <td class="text-center"><strong>Valor a pagar</strong></td>
+                            <td><strong class="formatValue">{{ totalLiq }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="postLiq" class="col-sm-12 center">
+        <button type="button" onclick="window.print()" class="btn btn-default">Imprimir</button>
+        <button type="button" onclick="downloadPDF()" class="btn btn-default">Guardar PDF</button>
+        <button type="button" class="btn btn-default">Enviar Email</button>
+    </div>
+    <div class="col-sm-12">
+    <strong>Importante:</strong><br/>
+    Recuerde que este formato deber ser firmado por su empleado lo cual constatará su aceptación del valor
+    y las condiciones de liquidación. <strong>Una vez firmado deberá escanearlo o fotografiarlo</strong> y
+    cargarlo dentro de la ficha del empleado.
+    </div>
+{% endblock %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css">
+        .payType span{
+            font-size: 12px;
+        }
+        .row{
+            display: inline-block;
+        }
+        .reminder{
+            margin: 10px;
+            padding: 10px;
+            border-top: 1px #000 dotted;
+            border-bottom: 1px #000 dotted;
+        }
+        .row .buttons{
+            display: inline;
+        }
+        .payroll.confirm .details{
+            padding-top: 10px;
+        }
+        .payroll.confirm .employee h4{
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+function downloadPDF() {
+    $.ajax({
+        url: "{{ path('api_public_post_generate_pdf') }}",
+        type: 'POST',
+        data: {
+            url: window.location.href
+        }
+    }).done(function (data) {
+        alert(data);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+    });
+}
+</script>
+{% endblock %}

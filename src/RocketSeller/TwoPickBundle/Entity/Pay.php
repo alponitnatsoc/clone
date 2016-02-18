@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pay
  *
- * @ORM\Table(name="pay", indexes={@ORM\Index(name="fk_pay_pay_method1", columns={"pay_method_id_pay_method"})})
+ * @ORM\Table(name="pay", indexes={
+ *  @ORM\Index(name="fk_pay_pay_method1", columns={"pay_method_id_pay_method"}),
+ *  @ORM\Index(name="fk_purchase_orders_description_id_dispercion_novo", columns={"id_dispercion_novo"})
+ * })
  * @ORM\Entity
  */
 class Pay
@@ -21,6 +24,11 @@ class Pay
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPay;
+
+    /**
+     * @ORM\Column(name="id_dispercion_novo", type="integer", nullable=true)
+     */
+    private $idDispercionNovo;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
@@ -231,7 +239,6 @@ class Pay
         return $this->purchaseOrdersStatusPurchaseOrdersStatus;
     }
 
-
     /**
      * Set purchaseOrdersDescription
      *
@@ -255,4 +262,29 @@ class Pay
     {
         return $this->purchaseOrdersDescription;
     }
+
+    /**
+     * Set idDispercionNovo
+     *
+     * @param integer $idDispercionNovo
+     *
+     * @return Pay
+     */
+    public function setIdDispercionNovo($idDispercionNovo)
+    {
+        $this->idDispercionNovo = $idDispercionNovo;
+
+        return $this;
+    }
+
+    /**
+     * Get idDispercionNovo
+     *
+     * @return integer
+     */
+    public function getIdDispercionNovo()
+    {
+        return $this->idDispercionNovo;
+    }
+
 }

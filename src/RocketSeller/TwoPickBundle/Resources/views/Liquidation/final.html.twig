@@ -178,8 +178,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-{#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
-                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
+                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar llamado de atención</button>
 
             </div>
             {% endif %}
@@ -362,7 +361,8 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
             frequency: frequency,
             cutDate: processDate,
             processDate: processDate,
-            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
+            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
+            id_liq: "{{ id_liq }}"
         }
     }).done(function (data) {
         if (data["url"] != null) {

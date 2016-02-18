@@ -19,8 +19,8 @@ class LiquidationType extends AbstractType
         $builder
             ->add('daysToLiquidate')
             ->add('lastWorkDay', 'date', array(
-                'data' => new DateTime('1975-01-01'),
-                'years' => range(1900, 2015),
+                'data' => new DateTime('now'),
+                'years' => range(date('Y'), date('Y') + 10),
                 'constraints' => array(
                     new NotBlank()
                 ),

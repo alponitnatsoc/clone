@@ -44,4 +44,22 @@ trait LiquidationMethodsTrait
         );
     }
 
+    /**
+     * Obtener las liquidaciones de una relacion employer has employee y que sea de determinado tipo
+     *
+     * @param integer $id - Id de la relacion employer_has_employee
+     * @param integer $liquidationType
+     * @param integer $contract - Id del contrato
+     */
+    protected function liquidationByTypeAndEmHEmAndContract($id, $liquidationType, $contract)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Liquidation');
+        $liquidation = $repository->findOneBy(array(
+            'employerHasEmployee' => $id,
+            'liquidationType' => $liquidationType,
+            'contract' => $contract
+        ));
+
+        return $liquidation;
+    }
 }

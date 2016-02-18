@@ -378,6 +378,12 @@ express_success:
 express_registration:
     path: /express-registration/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:registration }
+express_registration_employee:
+    path: /express-registration/{id}/employee-create
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:employeeCreate }    
+back_employer_menu:
+    path: /back-menu-employer/{id}
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
 
 
 #Zona Pública

@@ -44,6 +44,16 @@ class Phone
     {
         return $this->idPhone;
     }
+    /**
+     * Get idPhone
+     *
+     * @return integer
+     */
+    public function setIdPhone($idPhone)
+    {
+        $this->idPhone = $idPhone;
+        return $this;
+    }
 
     /**
      * Set phoneNumber
