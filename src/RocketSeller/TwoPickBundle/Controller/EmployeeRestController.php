@@ -232,7 +232,16 @@ class EmployeeRestController extends FOSRestController
             $em->persist($contract);
             $em->flush();
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
-            return $view;
+            
+//$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
+                $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
+                    'idContract' => $contract->getIdContract(),
+                    'deleteActivePayroll' => true,
+                    'period' => null,
+                    'month' => null,
+                    'year' => null
+                ));
+		return $view;
         } else {
             $view = $this->getErrorsView($errors);
             return $view;
@@ -804,14 +813,6 @@ class EmployeeRestController extends FOSRestController
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
-                //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
-                $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
-                    'idContract' => $contract->getIdContract(),
-                    'deleteActivePayroll' => true,
-                    'period' => null,
-                    'month' => null,
-                    'year' => null
-                ));
                 $this->addFlash(
                         'notice', 'Your changes were saved!'
                 );
