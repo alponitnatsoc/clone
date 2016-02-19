@@ -35,9 +35,11 @@ class NoveltyController extends Controller {
         $noveltyTypeToShow=new ArrayCollection();
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
-            if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show"){
-                $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
+            if($NT->getGrupo()!="no_show"){
                 $noveltyTypeToShow->add($NT);
+            }
+            if(!isset($noveltyTypesGroups[$NT->getGrupo()])){
+                $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
         }
 
