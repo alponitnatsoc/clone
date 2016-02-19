@@ -57,7 +57,10 @@ class Payroll
     private $novelties;
 
     /**
-     * @ORM\OneToOne(targetEntity="PurchaseOrdersDescription", mappedBy="payrollPayroll", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="PurchaseOrdersDescription", inversedBy="payrollPayroll", cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="payrollPayroll", referencedColumnName="id_purchase_orders_description")
+     * })
      */
     private $purchaseOrdersDescription;
 

@@ -584,6 +584,33 @@ function jsonToHTML(data) {
     }
     return htmls;
 }
+function jsonCalcToHTML(data) {
+    var htmls="<h2 class='text-center'>Si su empleado tiene estas características debe pagar:</h2>" +
+        "<ul class='list-group'>";
+    htmls+="<li class='list-group-item'>Costo total para el empleador: "+data.totalExpenses+"</li>";
+    htmls+="<li class='list-group-item'>Ingreso neto para el empleado: "+data.totalIncome+"</li>";
+    htmls+="<li class='list-group-item'>Diario Gastos: "+data.dailyExpenses+"</li>";
+    htmls+="<li class='list-group-item'>Diario Ingreso: "+data.dailyIncome+"</li>";
+    htmls+="</ul>";
+    htmls+="<h2 class='text-center'>Detalles:</h2>" +
+        "<ul class='list-group'>";
+    htmls+="<li class='list-group-item'>Gastos Empleador EPS: "+data.EPSEmployerCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleador Pensión: "+data.PensEmployerCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado ARL: "+data.arlCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado Cesantias: "+data.cesCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado Intereses/cesantias: "+data.taxCesCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado Caja Comp: "+data.cajaCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado Vacaciones: "+data.vacationsCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Auxilio de Trasnporte: "+data.transportCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Dotacion/150000 pesos trimestre: "+data.dotationCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos SENA: "+data.senaCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos ICBF: "+data.icbfCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado EPS: "+data.EPSEmployeeCal+"</li>";
+    htmls+="<li class='list-group-item'>Gastos Empleado Pensión: "+data.PensEmployeeCal+"</li>";
+    htmls+="</ul>";
+    return htmls;
+}
+
 function addListeners() {
     $("#ex6").slider();
     $("#ex6").on("slide", function(slideEvt) {
@@ -634,6 +661,10 @@ function addListeners() {
     $("#register_employee_employeeHasEmployers_salaryD").on("input", function(){
         calculator();
         formatMoney($("#totalExpensesVal"));
+    });
+    $("#link_calculator").on("click", function (e) {
+        e.preventDefault();
+        $("#calculatorResultsModal").modal('toggle');
     });
     $('select').filter(function () {
         return this.id.match(/department/);
@@ -725,31 +756,55 @@ function calculator(){
         type="days";
     }else{type="complete";}
     transport=0;
-   var totalExpenses=0;
-   var PensEmployeeCal=0;
-   var cajaCal=0;
+    var totalExpenses=0;
+    var totalIncome=0;
+    var EPSEmployerCal=0;
+    var EPSEmployeeCal=0;
+    var PensEmployeeCal=0;
     var PensEmployerCal=0;
+    var transportCal=0;
+    var cesCal=0;
+    var taxCesCal=0;
+    var dotationCal=0;
+    var vacationsCal=0;
+    var arlCal=0;
+    var cajaCal=0;
+    var senaCal=0;
+    var icbfCal=0;
+    var base=0;
     if(aid==0){
-       aidD=0;
+        aidD=0;
     }
     if(type=="days"){
         if(transport==1){
-           salaryD-=transportAidDaily;
+            salaryD-=transportAidDaily;
         }
         //if it overpass the SMMLV calculates as a full time job  or
         //if does not belongs to SISBEN
         if(((salaryD+transportAidDaily+aidD)*numberOfDays)>smmlv||sisben==0){
-            var base=0;
             if(((salaryD+transportAidDaily+aidD)*numberOfDays)>smmlv){
-               base=(salaryD+aidD)*numberOfDays;
+                base=(salaryD+aidD)*numberOfDays;
             }else{base=smmlv;}
 
-           totalExpenses=((salaryD+aidD+transportAidDaily+dotationDaily)*numberOfDays)+((EPSEmployer+PensEmployer+arl+caja+sena+icbf)*base)+(vacations30D*numberOfDays*salaryD)+((taxCes+ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-
+            totalExpenses=((salaryD+aidD+transportAidDaily+dotationDaily)*numberOfDays)+((EPSEmployer+PensEmployer+arl+caja+sena+icbf)*base)+(vacations30D*numberOfDays*salaryD)+((taxCes+ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
+            EPSEmployerCal=EPSEmployer*base;
+            EPSEmployeeCal=EPSEmployee*base;
+            PensEmployerCal=PensEmployer*base;
+            PensEmployeeCal=PensEmployee*base;
+            arlCal=arl*base;
+            cesCal=((ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
+            taxCesCal=((taxCes)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
+            cajaCal=caja*base;
+            vacationsCal=vacations30D*numberOfDays*salaryD;
+            transportCal=transportAidDaily*numberOfDays;
+            dotationCal=dotationDaily*numberOfDays;
+            senaCal=sena*base;
+            icbfCal=icbf*base;
+            totalIncome=(salaryD*numberOfDays)-EPSEmployerCal-PensEmployerCal;
         }else{
-           EPSEmployee=0;
-           EPSEmployer=0;
-           var base=smmlv;
+            EPSEmployee=0;
+            EPSEmployer=0;
+            base=smmlv;
             //calculate the caja and pens in base of worked days
             if(numberOfDays<=7){
                 PensEmployerCal=PensEmployer*base/4;
@@ -770,19 +825,64 @@ function calculator(){
             }
             //then calculate arl ces and the rest
             totalExpenses=((salaryD+aidD+transportAidDaily+dotationDaily)*numberOfDays)+((EPSEmployer+arl+sena+icbf)*base)+(vacations30D*numberOfDays*salaryD)+((taxCes+ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid))+PensEmployeeCal+cajaCal+PensEmployerCal;
-
+            EPSEmployerCal=EPSEmployer*base;
+            EPSEmployeeCal=EPSEmployee*base;
+            arlCal=arl*base;
+            cesCal=((ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
+            taxCesCal=((taxCes)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
+            vacationsCal=vacations30D*numberOfDays*salaryD;
+            transportCal=transportAidDaily*numberOfDays;
+            dotationCal=dotationDaily*numberOfDays;
+            senaCal=sena*base;
+            icbfCal=icbf*base;
+            totalIncome=((salaryD+transportAidDaily)*numberOfDays)-PensEmployeeCal;
         }
 
     }else{
         if(transport==1){
-           salaryM-=transportAid;
+            salaryM-=transportAid;
         }else if(salaryM+aidD>smmlv*2){
-           transportAid=0;
+            transportAid=0;
         }
 
-       totalExpenses=salaryM+aidD+transportAid+dotation+((EPSEmployer+PensEmployer+arl+caja+vacations30D+sena+icbf)*(salaryM+aidD))+((taxCes+ces)*(salaryM+aidD+transportAid));
+        totalExpenses=salaryM+aidD+transportAid+dotation+((EPSEmployer+PensEmployer+arl+caja+vacations30D+sena+icbf)*(salaryM+aidD))+((taxCes+ces)*(salaryM+aidD+transportAid));
+        EPSEmployerCal=EPSEmployer*(salaryM+aidD);
+        EPSEmployeeCal=EPSEmployee*(salaryM+aidD);
+        PensEmployerCal=PensEmployer*(salaryM+aidD);
+        PensEmployeeCal=PensEmployee*(salaryM+aidD);
+        arlCal=arl*(salaryM+aidD);
+        cesCal=ces*(salaryM+aidD+transportAid);
+        taxCesCal=taxCes*(salaryM+aidD+transportAid);
+        cajaCal=caja*(salaryM+aidD);
+        vacationsCal=vacations30D*(salaryM+aidD);
+        transportCal=transportAid;
+        dotationCal=dotation;
+        senaCal=sena*(salaryM+aidD);
+        icbfCal=icbf*(salaryM+aidD);
+        totalIncome=(salaryM+transportCal-EPSEmployerCal-PensEmployerCal);
 
     }
+    var resposne=[];
+    resposne['totalExpenses']=totalExpenses;
+    resposne['dailyExpenses']=totalExpenses/numberOfDays;
+    resposne['dailyIncome']=totalIncome/numberOfDays;
+    resposne['EPSEmployerCal']=EPSEmployerCal;
+    resposne['EPSEmployeeCal']=EPSEmployeeCal;
+    resposne['PensEmployerCal']=PensEmployerCal;
+    resposne['PensEmployeeCal']=PensEmployeeCal;
+    resposne['arlCal']=arlCal;
+    resposne['cesCal']=cesCal;
+    resposne['taxCesCal']=taxCesCal;
+    resposne['cajaCal']=cajaCal;
+    resposne['vacationsCal']=vacationsCal;
+    resposne['transportCal']=transportCal;
+    resposne['dotationCal']=dotationCal;
+    resposne['senaCal']=senaCal;
+    resposne['icbfCal']=icbfCal;
+    resposne['totalIncome']=totalIncome;
+    var htmlRes=jsonCalcToHTML(resposne);
+    $("#calculatorResultsModal").find(".modal-body").html(htmlRes);
+
     $("#totalExpensesVal").text(totalExpenses.toFixed(0));
 
 }

@@ -28,7 +28,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrdersDescription")
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", mappedBy="purchaseOrdersDescription")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
@@ -307,4 +307,28 @@ class PurchaseOrdersDescription
         return $this->productProduct;
     }
 
+
+    /**
+     * Add payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function addPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
+    {
+        $this->payrollPayroll[] = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Remove payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     */
+    public function removePayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
+    {
+        $this->payrollPayroll->removeElement($payrollPayroll);
+    }
 }

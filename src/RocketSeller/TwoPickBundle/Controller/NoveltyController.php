@@ -32,8 +32,12 @@ class NoveltyController extends Controller {
         $noveltyTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:NoveltyType");
         $noveltyTypes=$noveltyTypeRepo->findAll();
         $noveltyTypesGroups=array();
+        $noveltyTypeToShow=new ArrayCollection();
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
+            if($NT->getGrupo()!="no_show"){
+                $noveltyTypeToShow->add($NT);
+            }
             if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show"){
                 $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
@@ -51,6 +55,7 @@ class NoveltyController extends Controller {
                     'property_path' => 'noveltyTypeNoveltyType'))
                 ->add('noveltyType', 'entity', array(
                     'class' => 'RocketSellerTwoPickBundle:NoveltyType',
+                    'choices' =>$noveltyTypeToShow,
                     'property' => 'name',
                     'multiple' => false,
                     'expanded' => true,

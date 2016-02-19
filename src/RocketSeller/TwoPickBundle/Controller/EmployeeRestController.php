@@ -221,9 +221,6 @@ class EmployeeRestController extends FOSRestController
         //Final Entity Validation
         $errors = $this->get('validator')->validate($contract, array('Update'));
 
-
-
-
         if (count($errors) == 0) {
             $employee = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
             if ($employee->getRegisterState() == 75) {
@@ -231,17 +228,24 @@ class EmployeeRestController extends FOSRestController
             }
             $em->persist($contract);
             $em->flush();
+            //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
+            $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
+                'idContract' => $contract->getIdContract(),
+                'deleteActivePayroll' => true,
+                'period' => null,
+                'month' => null,
+                'year' => null
+            ));
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
-            
-//$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
-                $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
-                    'idContract' => $contract->getIdContract(),
-                    'deleteActivePayroll' => true,
-                    'period' => null,
-                    'month' => null,
-                    'year' => null
-                ));
-		return $view;
+            //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
+            $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
+                'idContract' => $contract->getIdContract(),
+                'deleteActivePayroll' => true,
+                'period' => null,
+                'month' => null,
+                'year' => null
+            ));
+            return $view;
         } else {
             $view = $this->getErrorsView($errors);
             return $view;
@@ -813,6 +817,7 @@ class EmployeeRestController extends FOSRestController
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
+
                 $this->addFlash(
                         'notice', 'Your changes were saved!'
                 );

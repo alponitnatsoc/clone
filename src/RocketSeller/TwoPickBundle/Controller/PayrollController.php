@@ -425,8 +425,15 @@ use LiquidationMethodsTrait;
 
                     /* @var $payroll Payroll */
                     //$payroll = $dataNomina[$idPayroll]['payroll'];
+                    //setDescription
+                    //setPayrollPayroll
+                    //setProductProduct
+                    //setPurchaseOrders
+                    //setPurchaseOrdersStatus
+                    //setTaxTax
+                    //setValue
                     //$purchaseOrderDetail = $this->createPurchaseOrderDetail($purchaseOrder, $data);
-                    //    $purchaseOrderDetail->setPurchaseOrdersStatus($purchaseOrdersStatus);
+                    //$purchaseOrderDetail->setPurchaseOrdersStatus($purchaseOrdersStatus);
                 }
                 $response = true;
             } else {

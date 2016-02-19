@@ -24,7 +24,7 @@ class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInt
         $payMethodFields=new PayMethodFields();
         $payMethodFields->setColumnName("accountTypeAccountType");
         $payMethodFields->setDataType("AccountType");
-        $payMethodFields->setLabel('Número de Cuenta');
+        $payMethodFields->setLabel('Tipo de Cuenta');
         $payMethodFields->setPayTypePayType($PayTypeTransferencia);
         $manager->persist($payMethodFields);
         $payMethodFields=new PayMethodFields();
