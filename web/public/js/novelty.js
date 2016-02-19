@@ -2,7 +2,7 @@
  * Created by gabrielsamoma on 2/8/16.
  */
 function addNoveltySelectListener() {
-    var modBody=$(".modal-body");
+    var modBody=$("#noveltyModal").find(".modal-body");
     var form=modBody.find("form");
     form.submit(function (e) {
         e.preventDefault();

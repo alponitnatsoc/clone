@@ -34,7 +34,7 @@ class NoveltyController extends Controller {
         $noveltyTypesGroups=array();
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
-            if(!isset($noveltyTypesGroups[$NT->getGrupo()])){
+            if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show"){
                 $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
         }

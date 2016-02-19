@@ -107,14 +107,14 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltySalaryAdjustAmount = new NoveltyTypeFields();
         $NoveltySalaryAdjustAmount->setName('Valor');
         $NoveltySalaryAdjustAmount->setColumnName('amount');
-        $NoveltySalaryAdjustAmount->setDataType('varchar');
+        $NoveltySalaryAdjustAmount->setDataType('text');
         $NoveltySalaryAdjustAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-salary-adjust'));
         $manager->persist($NoveltySalaryAdjustAmount);
 
         $NoveltyBonusAmount = new NoveltyTypeFields();
         $NoveltyBonusAmount->setName('Valor');
         $NoveltyBonusAmount->setColumnName('amount');
-        $NoveltyBonusAmount->setDataType('varchar');
+        $NoveltyBonusAmount->setDataType('text');
         $NoveltyBonusAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-bonus'));
         $manager->persist($NoveltyBonusAmount);
 
@@ -135,7 +135,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyNightChargeUnits = new NoveltyTypeFields();
         $NoveltyNightChargeUnits->setName('Número horas');
         $NoveltyNightChargeUnits->setColumnName('units');
-        $NoveltyNightChargeUnits->setDataType('varchar');
+        $NoveltyNightChargeUnits->setDataType('text');
         $NoveltyNightChargeUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-night-charge'));
         $manager->persist($NoveltyNightChargeUnits);
 
@@ -156,7 +156,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyNightHolidayChargeUnits = new NoveltyTypeFields();
         $NoveltyNightHolidayChargeUnits->setName('Número horas');
         $NoveltyNightHolidayChargeUnits->setColumnName('units');
-        $NoveltyNightHolidayChargeUnits->setDataType('varchar');
+        $NoveltyNightHolidayChargeUnits->setDataType('text');
         $NoveltyNightHolidayChargeUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-night-holiday-charge'));
         $manager->persist($NoveltyNightHolidayChargeUnits);
 
@@ -177,7 +177,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyExtraHourUnits = new NoveltyTypeFields();
         $NoveltyExtraHourUnits->setName('Número horas');
         $NoveltyExtraHourUnits->setColumnName('units');
-        $NoveltyExtraHourUnits->setDataType('varchar');
+        $NoveltyExtraHourUnits->setDataType('text');
         $NoveltyExtraHourUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-extra-hour'));
         $manager->persist($NoveltyExtraHourUnits);
 
@@ -198,7 +198,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyExtraHourNightUnits = new NoveltyTypeFields();
         $NoveltyExtraHourNightUnits->setName('Número horas');
         $NoveltyExtraHourNightUnits->setColumnName('units');
-        $NoveltyExtraHourNightUnits->setDataType('varchar');
+        $NoveltyExtraHourNightUnits->setDataType('text');
         $NoveltyExtraHourNightUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-extra-hour-night'));
         $manager->persist($NoveltyExtraHourNightUnits);
 
@@ -219,7 +219,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyExtraHourHolidayUnits = new NoveltyTypeFields();
         $NoveltyExtraHourHolidayUnits->setName('Número horas');
         $NoveltyExtraHourHolidayUnits->setColumnName('units');
-        $NoveltyExtraHourHolidayUnits->setDataType('varchar');
+        $NoveltyExtraHourHolidayUnits->setDataType('text');
         $NoveltyExtraHourHolidayUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-extra-hour-holiday'));
         $manager->persist($NoveltyExtraHourHolidayUnits);
 
@@ -240,7 +240,7 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyHolidayUnits = new NoveltyTypeFields();
         $NoveltyHolidayUnits->setName('Número horas');
         $NoveltyHolidayUnits->setColumnName('units');
-        $NoveltyHolidayUnits->setDataType('varchar');
+        $NoveltyHolidayUnits->setDataType('text');
         $NoveltyHolidayUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-holiday'));
         $manager->persist($NoveltyHolidayUnits);
 
@@ -261,14 +261,14 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyHolidayNightExtraHourUnits = new NoveltyTypeFields();
         $NoveltyHolidayNightExtraHourUnits->setName('Número horas');
         $NoveltyHolidayNightExtraHourUnits->setColumnName('units');
-        $NoveltyHolidayNightExtraHourUnits->setDataType('varchar');
+        $NoveltyHolidayNightExtraHourUnits->setDataType('text');
         $NoveltyHolidayNightExtraHourUnits->setNoveltyTypeNoveltyType($this->getReference('novelty-holiday-night-extra-hour'));
         $manager->persist($NoveltyHolidayNightExtraHourUnits);
 
         $NoveltyTransportAmount = new NoveltyTypeFields();
         $NoveltyTransportAmount->setName('Valor');
         $NoveltyTransportAmount->setColumnName('amount');
-        $NoveltyTransportAmount->setDataType('varchar');
+        $NoveltyTransportAmount->setDataType('text');
         $NoveltyTransportAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-transport'));
         $manager->persist($NoveltyTransportAmount);
 
@@ -303,14 +303,14 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyLibertyBonusAmount = new NoveltyTypeFields();
         $NoveltyLibertyBonusAmount->setName('Valor');
         $NoveltyLibertyBonusAmount->setColumnName('amount');
-        $NoveltyLibertyBonusAmount->setDataType('varchar');
+        $NoveltyLibertyBonusAmount->setDataType('text');
         $NoveltyLibertyBonusAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-liberty-bonus'));
         $manager->persist($NoveltyLibertyBonusAmount);
 
         $NoveltyDiscountLoanAmount = new NoveltyTypeFields();
         $NoveltyDiscountLoanAmount->setName('Valor');
         $NoveltyDiscountLoanAmount->setColumnName('amount');
-        $NoveltyDiscountLoanAmount->setDataType('varchar');
+        $NoveltyDiscountLoanAmount->setDataType('text');
         $NoveltyDiscountLoanAmount->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
         $manager->persist($NoveltyDiscountLoanAmount);
 

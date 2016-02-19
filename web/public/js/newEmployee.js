@@ -602,6 +602,11 @@ function addListeners() {
             }
         });
     });
+    $("#register_employee_employeeHasEmployers_weekWorkableDays").on("change",function(){
+       calculator();
+        formatMoney($("#totalExpensesVal"));
+
+    });
     $("#register_employee_employeeHasEmployers_indefinite").on("click", function(){
         $("#register_employee_employeeHasEmployers_contractType option").each(function() {
             if($(this).text() == "Término indefinido") {
