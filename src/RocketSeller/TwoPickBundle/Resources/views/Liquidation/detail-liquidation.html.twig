@@ -171,7 +171,7 @@
     {#             {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}#}
 
 
-                    <div style="display: -webkit-inline-box;vertical-align: middle;">
+                    <div class="col-sm-12">
     {#                     <select name="paymentMethod" class="form-control" required="required">#}
 {#     {{ dump(paymentMethods) }}#}
                         {% for key,paymentMethod in paymentMethods %}

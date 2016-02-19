@@ -93,14 +93,13 @@ use PayMethodsTrait;
             }
         }
         $procedureType = $this->getdoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:ProcedureType')
-        ->findByName("Registro empleador y empleados");        
+                ->getRepository('RocketSellerTwoPickBundle:ProcedureType')
+                ->findByName("Registro empleador y empleados");
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-        'employerId'  => $employer->getIdEmployer(),
-        'idProcedureType' => $procedureType[0]->getIdProcedureType()
-        )); 
-        dump($procedure);
-        exit();
+            'employerId' => $employer->getIdEmployer(),
+            'idProcedureType' => $procedureType[0]->getIdProcedureType()
+        ));
+
         return $this->redirectToRoute('show_dashboard_employer');
 
         $parameters = $request->request->all();
@@ -110,7 +109,7 @@ use PayMethodsTrait;
         $view->setData(true);
         $view->setStatusCode(200);
 
-              
+
 
         return $view;
     }

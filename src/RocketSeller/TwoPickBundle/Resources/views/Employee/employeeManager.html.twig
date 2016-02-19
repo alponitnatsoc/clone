@@ -12,7 +12,11 @@
                         <div class="col-xs-7">
                             {{employee.getEmployeeEmployee.getPersonPerson.getFullName()}}
                         </div>
-                        <div class="col-xs-4 text-right"><a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a></div>
+                        <div class="col-xs-4 text-right">
+                            <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
+                            /
+                            <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
