@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use RocketSeller\TwoPickBundle\Entity\AccountType;
+use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\CalculatorConstraints;
+use RocketSeller\TwoPickBundle\Entity\Frequency;
 use RocketSeller\TwoPickBundle\Entity\PayMethodFields;
 
 class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInterface
@@ -63,7 +66,6 @@ class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInt
         $payMethodFields->setLabel('Celular');
         $payMethodFields->setPayTypePayType($PayTypeRetiro);
         $manager->persist($payMethodFields);
-
 
         $manager->flush();
     }
