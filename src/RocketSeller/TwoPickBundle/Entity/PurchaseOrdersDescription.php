@@ -307,4 +307,28 @@ class PurchaseOrdersDescription
         return $this->productProduct;
     }
 
+
+    /**
+     * Add payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function addPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
+    {
+        $this->payrollPayroll[] = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Remove payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     */
+    public function removePayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
+    {
+        $this->payrollPayroll->removeElement($payrollPayroll);
+    }
 }
