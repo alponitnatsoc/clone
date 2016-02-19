@@ -80,6 +80,8 @@ class PurchaseOrders
     public function __construct()
     {
         $this->purchaseOrderDescriptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->date_created = new \DateTime();
+        $this->date_modified = new \DateTime();
     }
 
     /**
@@ -293,4 +295,5 @@ class PurchaseOrders
     {
         return $this->idUser;
     }
+
 }
