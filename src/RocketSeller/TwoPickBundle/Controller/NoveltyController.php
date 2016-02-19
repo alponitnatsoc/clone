@@ -38,7 +38,7 @@ class NoveltyController extends Controller {
             if($NT->getGrupo()!="no_show"){
                 $noveltyTypeToShow->add($NT);
             }
-            if(!isset($noveltyTypesGroups[$NT->getGrupo()])){
+            if(!isset($noveltyTypesGroups[$NT->getGrupo()])&&$NT->getGrupo()!="no_show"){
                 $noveltyTypesGroups[$NT->getGrupo()]=$NT->getGrupo();
             }
         }
