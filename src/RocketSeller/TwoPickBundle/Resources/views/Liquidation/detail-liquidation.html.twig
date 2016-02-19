@@ -183,7 +183,7 @@
                                 {{ paymentMethod['method-id'] }}
     {#                             <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>#}
                                 <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}"> {{ paymentMethod['account-number'] }}<br>
-                            </div>
+                            </div><br />
                         {% endfor  %}
     {#                     </select>#}
                         <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>

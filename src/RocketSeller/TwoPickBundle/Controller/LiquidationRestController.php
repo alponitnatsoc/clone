@@ -625,10 +625,11 @@ class LiquidationRestController extends FOSRestController
         $responsePA = $this->forward("RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval", array("request" => $req), $format);
 
         $dataResPA = json_decode($responsePA->getContent(), true);
-        $dataResPA["charge-id"];
+//         $dataResPA["charge-id"];
+// var_dump($dataResPA);
 
         $desc = $purchaseOrderDescription->getDescription();
-        $purchaseOrderDescription->setDescription($desc . " - " . $dataResPA["charge-id"]);
+        $purchaseOrderDescription->setDescription($desc . " - charge-third-id: " . $dataResPA["charge-third-id"] . " - charge-rc: " . $dataResPA["charge-rc"]);
         $em->persist($purchaseOrderDescription);
 
         $req = new Request();

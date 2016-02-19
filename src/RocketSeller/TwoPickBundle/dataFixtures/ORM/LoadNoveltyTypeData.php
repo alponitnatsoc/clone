@@ -257,7 +257,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $manager->persist($NoveltySalary);
 
         $llegadaTarde = new NoveltyType();
-        $llegadaTarde->setName('LLegada tarde');
+        $llegadaTarde->setName('Llegada tarde');
         $llegadaTarde->setGrupo('llamado_atencion');
         $manager->persist($llegadaTarde);
 
@@ -304,8 +304,8 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novelty-salary', $NoveltySalary);
 
         //llamado_atencion
-        $this->addReference('novlety-llegada-tarde', $llegadaTarde);
-        $this->addReference('novlety-abandono-puesto', $abandonoPuesto);
+        $this->addReference('novelty-llegada-tarde', $llegadaTarde);
+        $this->addReference('novelty-abandono-puesto', $abandonoPuesto);
     }
 
     public function getOrder()

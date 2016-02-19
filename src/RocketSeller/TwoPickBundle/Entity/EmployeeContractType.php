@@ -25,10 +25,6 @@ class EmployeeContractType
      * @ORM\Column(type="string", length=100)
      */
     private $name;
-    /**
-     * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="employeeContractTypeEmployeeContractType")
-     */
-    private $constraints;
 
 
     /**

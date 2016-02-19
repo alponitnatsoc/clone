@@ -105,18 +105,26 @@
             </div><br />
             <div class="col-sm-12">
                 <ul class="list-group">
+                    {% if novelties %}
                     {% for novelty in novelties %}
+                    {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
                         <li class="list-group-item">
-                            {{ novelty.name }}
-                            {% if novelty.dateStart %}
-                                {{ novelty.dateStart.date }}
-                            {% endif %}
+{#                             {{ dump(novelty) }}#}
+
+                                {{ novelty.name }}
+                                {% if novelty.dateStart %}
+                                    {{ novelty.dateStart.date }}
+                                {% endif %}
+
                         </li>
+                        {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </ul>
 {#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
+            {% if not llamadosAtencion %}
                 <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
-
+            {% endif %}
             </div>
         </div>
         <div class="liq-container" id="liqSinJustaCausa">
@@ -178,8 +186,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar llamado de atención</button>
-
+                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
             </div>
             {% endif %}
         </div>

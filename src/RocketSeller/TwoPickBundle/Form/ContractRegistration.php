@@ -60,7 +60,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label'=>'¿Residirá en el lugar de trabajo?',
-                'required' => false,
+                'required' => true,
                 'mapped' => false
             ))
             ->add('contractType', 'entity', array(
