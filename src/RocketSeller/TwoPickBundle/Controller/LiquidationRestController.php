@@ -608,6 +608,11 @@ class LiquidationRestController extends FOSRestController
         $purchaseOrderDescription->setPurchaseOrdersStatus($purchaseOrdersStatus);
         $purchaseOrderDescription->setValue($total);
 
+        $productRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Product');
+        /** Product $product */
+        $product = $productRepo->findOneBy(array('simpleName' => 'PN'));
+        $purchaseOrderDescription->setProductProduct($product);
+
         $em->persist($purchaseOrderDescription);
         $em->flush();
 
@@ -631,11 +636,6 @@ class LiquidationRestController extends FOSRestController
 
         $desc = $purchaseOrderDescription->getDescription();
         $purchaseOrderDescription->setDescription($desc . " - charge-third-id: " . $dataResPA["charge-third-id"] . " - charge-rc: " . $dataResPA["charge-rc"]);
-
-        $productRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Product');
-        /** Product $product */
-        $product = $productRepo->findOneBy(array('simple_name' => 'PN'));
-        $purchaseOrderDescription->setProductProduct($product);
 
         $em->persist($purchaseOrderDescription);
 

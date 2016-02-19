@@ -112,7 +112,11 @@ class LiquidationController extends Controller
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
 
-        $frequency = $contract[0]->getPayMethodPayMethod()->getFrequencyFrequency()->getIdFrequency();
+        $frec = $contract[0]->getPayMethodPayMethod()->getFrequencyFrequency();
+        $frequency = null;
+        if ($frec){
+            $frequency = $frec->getIdFrequency();
+        }
 
         $employerHasEmployee = $contract[0]->getEmployerHasEmployeeEmployerHasEmployee();
 
