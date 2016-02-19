@@ -17,6 +17,7 @@ use RocketSeller\TwoPickBundle\Entity\Liquidation;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Pay;
+use RocketSeller\TwoPickBundle\Entity\Product;
 
 class LiquidationRestController extends FOSRestController
 {
@@ -630,6 +631,12 @@ class LiquidationRestController extends FOSRestController
 
         $desc = $purchaseOrderDescription->getDescription();
         $purchaseOrderDescription->setDescription($desc . " - charge-third-id: " . $dataResPA["charge-third-id"] . " - charge-rc: " . $dataResPA["charge-rc"]);
+
+        $productRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Product');
+        /** Product $product */
+        $product = $productRepo->findOneBy(array('simple_name' => 'PN'));
+        $purchaseOrderDescription->setProductProduct($product);
+
         $em->persist($purchaseOrderDescription);
 
         $req = new Request();
