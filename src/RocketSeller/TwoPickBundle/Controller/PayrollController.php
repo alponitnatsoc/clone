@@ -10,11 +10,12 @@ use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
-use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Client;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 
@@ -36,7 +37,7 @@ use LiquidationMethodsTrait;
      * @return Payroll
      * 
      */
-    public function createPayrollToContract($idContract, $deleteActivePayroll = false, $period = null, $month = null, $year = null)
+    public function createPayrollToContractAction($idContract, $deleteActivePayroll = false, $period = null, $month = null, $year = null)
     {
         $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
         /* @var $contract Contract */
@@ -163,6 +164,7 @@ use LiquidationMethodsTrait;
             'year' => null
                 ), array('_format' => 'json')
         );
+
         return json_decode($generalPayroll->getContent(), true);
     }
 
@@ -171,7 +173,7 @@ use LiquidationMethodsTrait;
         if ($dataNomina && !empty($dataNomina)) {
             foreach ($dataNomina as $key => $value) {
                 if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '1') {
-                    return ceil($value['NOMI_VALOR_LOCAL']);
+                    return (int) ceil($value['NOMI_VALOR_LOCAL']);
                 }
             }
         }
@@ -244,6 +246,7 @@ use LiquidationMethodsTrait;
                                     $employeesData[$payroll->getIdPayroll()]['payMethod'] = $contract->getPayMethodPayMethod();
 
                                     $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
+
                                     $employeesData[$payroll->getIdPayroll()]['detailNomina'] = $detailNomina;
 
                                     $totalLiquidation = $this->totalLiquidation($detailNomina);
@@ -258,7 +261,8 @@ use LiquidationMethodsTrait;
                                     if ($payroll->getPeriod() == 4) {
                                         $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($salary);
                                     } else {
-                                        $employeesData[$payroll->getIdPayroll()]['PILA'] = 0;
+                                        $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA(0);
+                                        ;
                                     }
                                 }
                             }
@@ -352,12 +356,17 @@ use LiquidationMethodsTrait;
                 $data[$key]['paymentMethod'] = $value;
             }
 
-            //$this->pagarNomina($data, $total);
-
-            return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                        'dataNomina' => $data,
-                        'total' => $total
-            ));
+            if ($this->pagarNomina($data, $total)) {
+                return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
+                            'dataNomina' => $data,
+                            'total' => $total
+                ));
+            } else {
+                $this->addFlash(
+                        'error', 'No se pudo realizar el pago!'
+                );
+                return $this->redirectToRoute('payroll');
+            }
         } else {
             return $this->redirectToRoute("payroll");
         }
@@ -368,9 +377,18 @@ use LiquidationMethodsTrait;
         $responce = array();
         foreach ($dataNomina as $idPayroll => $data) {
             $responce[$data['paymentMethod']][$idPayroll]['idPayroll'] = $idPayroll;
-            $responce[$data['paymentMethod']][$idPayroll]['nomina'] = $data['totalLiquidation']['total'];
+
             $responce[$data['paymentMethod']][$idPayroll]['PILA'] = $data['PILA']['total'];
-            $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['totalLiquidation']['total'] + $data['PILA']['total'];
+
+            /* @var $payMethod PayMethod */
+            $payMethod = $data['payMethod'];
+            if (strtolower($payMethod->getPayTypePayType()->getName()) == 'en efectivo') {
+                $responce[$data['paymentMethod']][$idPayroll]['nomina'] = 0;
+                $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['PILA']['total'];
+            } else {
+                $responce[$data['paymentMethod']][$idPayroll]['nomina'] = $data['totalLiquidation']['total'];
+                $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['totalLiquidation']['total'] + $data['PILA']['total'];
+            }
         }
         foreach ($responce as $paymentMethodId => $data) {
             $total = 0;
@@ -384,29 +402,45 @@ use LiquidationMethodsTrait;
 
     private function pagarNomina($dataNomina, $total)
     {
-
-
+        $response = false;
         $em = $this->getDoctrine()->getManager();
-
         $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-        /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
-        $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
-
+        /* @var $purchaseOrdersStatusPendiente PurchaseOrdersStatus */
+        $purchaseOrdersStatusPendiente = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => 'S1'));
         $byPaymethod = $this->dataByPaymethod($dataNomina);
-
-        foreach ($byPaymethod as $paymentMethodId => $data) {
+        //dump($dataNomina);
+        foreach ($byPaymethod as $paymentMethodId => $dataPayroll) {
+            //dump($dataPayroll);
             /* @var $purchaseOrder PurchaseOrders */
-            $purchaseOrder = $this->createPurchaseOrder($data['total']);
-            $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
+            $purchaseOrderResponse = $this->createPurchaseOrder($paymentMethodId, $dataPayroll['total']);
+            /* @var $purchaseOrder PurchaseOrders */
+            $purchaseOrder = $purchaseOrderResponse['purchaseOrder'];
+            $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatusPendiente);
+            if ($purchaseOrderResponse['response']) {
+                /* @var $purchaseOrdersStatusAprobando PurchaseOrdersStatus */
+                $purchaseOrdersStatusProcesando = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => 'S2'));
+                $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatusProcesando);
+                foreach ($dataPayroll as $idPayroll => $dataTotales) {
+                    //dump($dataTotales);
 
-            foreach ($dataNomina as $key => $data) {
-                $purchaseOrderDetail = $this->createPurchaseOrderDetail($purchaseOrder, $data);
-                $purchaseOrderDetail->setPurchaseOrdersStatus($purchaseOrdersStatus);
+                    /* @var $payroll Payroll */
+                    //$payroll = $dataNomina[$idPayroll]['payroll'];
+                    //$purchaseOrderDetail = $this->createPurchaseOrderDetail($purchaseOrder, $data);
+                    //    $purchaseOrderDetail->setPurchaseOrdersStatus($purchaseOrdersStatus);
+                }
+                $response = true;
+            } else {
+                /* @var $purchaseOrdersStatusPendiente PurchaseOrdersStatus */
+                $purchaseOrdersStatusCancelada = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => 'S3'));
+                $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatusCancelada);
+                $response = false;
             }
+            $em->persist($purchaseOrder);
         }
 
-        //$em->persist($purchaseOrder);
-        //$em->flush();
+        $em->flush();
+
+        return $response;
     }
 
     /**
@@ -414,23 +448,38 @@ use LiquidationMethodsTrait;
      * @param type $total
      * @return PurchaseOrders
      */
-    private function createPurchaseOrder($total)
+    private function createPurchaseOrder($methodId, $totalAmount)
     {
-
-        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postPaymentAproval', array(
-            'employeeId' => $employeeId,
-            'period' => null,
-            'month' => null,
-            'year' => null
-                ), array('_format' => 'json')
-        );
-        json_decode($generalPayroll->getContent(), true);
+        $em = $this->getDoctrine()->getManager();
 
         $purchaseOrder = new PurchaseOrders();
         $purchaseOrder->setIdUser($this->getUser());
         $purchaseOrder->setName('Pago Nomina');
-        $purchaseOrder->setValue((floatval($total)));
-        return $purchaseOrder;
+        $purchaseOrder->setValue((floatval($totalAmount)));
+
+        $em->persist($purchaseOrder);
+        $em->flush();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->request->set('documentNumber', $this->getUser()->getPersonPerson()->getDocument());
+        $request->request->set('MethodId', $methodId);
+        $request->request->set('totalAmount', $totalAmount);
+        $request->request->set('taxAmount', 0);
+        $request->request->set('taxBase', 0);
+        $request->request->set('commissionAmount', 0);
+        $request->request->set('commissionBase', 0);
+        $request->request->set('chargeMode', 2);
+        $request->request->set('chargeId', $purchaseOrder->getIdPurchaseOrders());
+        //$this->getRequest()->request->set('chargeId', 103);
+
+        $paymentAproval = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('request' => $request), array('_format' => 'json'));
+
+        if ($paymentAproval->getStatusCode() == Response::HTTP_CREATED) {
+            return array('response' => true, 'purchaseOrder' => $purchaseOrder, 'paymentAproval' => $paymentAproval);
+        } else {
+            return array('response' => false, 'purchaseOrder' => $purchaseOrder, 'paymentAproval' => $paymentAproval);
+        }
     }
 
     /**
