@@ -464,7 +464,7 @@
                                     <input id="ex6" type="text" data-slider-min="0" data-slider-max="200000" data-slider-step="1000" data-slider-value="{{ form.employeeHasEmployers.salaryD.vars.value }}"/>
                                     {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     <div style="text-align: right">
-                                        <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
+                                        <a id="link_calculator" href="" class="nav-link">Mostrar detalles</a>
                                     </div>
                                 </div>
 
@@ -490,6 +490,26 @@
 
                                 <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
                                 <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                            </div>
+                            <!-- Modal -->
+                            <div id="calculatorResultsModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Detalles Calculadora</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
