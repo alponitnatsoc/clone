@@ -228,6 +228,14 @@ class EmployeeRestController extends FOSRestController
             }
             $em->persist($contract);
             $em->flush();
+            //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
+            $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
+                'idContract' => $contract->getIdContract(),
+                'deleteActivePayroll' => true,
+                'period' => null,
+                'month' => null,
+                'year' => null
+            ));
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
             //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
             $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
