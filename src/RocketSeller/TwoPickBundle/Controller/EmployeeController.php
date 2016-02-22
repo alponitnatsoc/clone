@@ -370,7 +370,8 @@ class EmployeeController extends Controller
                     $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
                 }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($contract->getWorkableDaysMonth() / 4);
-                //$form->get('employeeHasEmployers')->get("salaryD")->setData($contract->getSalary()/$contract->getWorkableDaysMonth());
+                if($contract->getWorkableDaysMonth()!=null)
+                    $form->get('employeeHasEmployers')->get("salaryD")->setData($contract->getSalary()/$contract->getWorkableDaysMonth());
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }

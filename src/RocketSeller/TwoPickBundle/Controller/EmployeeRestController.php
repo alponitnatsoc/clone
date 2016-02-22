@@ -637,7 +637,6 @@ class EmployeeRestController extends FOSRestController
             if ($contract == null) {
                 //Create the contract
                 $contract = new Contract();
-                $contract->setSalary($paramFetcher->get('salary'));
                 $contract->setState(1);
                 $employerEmployee->addContract($contract);
             }
@@ -713,10 +712,15 @@ class EmployeeRestController extends FOSRestController
                 $datetime = new DateTime();
                 $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
                 $contract->setEndDate($datetime);
+
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
-                $contract->setWorkableDaysMonth($actualWeekWorkableDays == null ? 30 : $actualWeekWorkableDays * 4);
+                $sisben = $paramFetcher->get('sisben');
+                $contract->setWorkableDaysMonth($actualWeekWorkableDays * 4);
+                $contract->setSisben($sisben);
+                $contract->setSalary($paramFetcher->get('salaryD')*$actualWeekWorkableDays * 4);
+
                 /* $workableDays = $contract->getWeekWorkableDays();
                   foreach ($workableDays as $workableDay) {
 
@@ -747,6 +751,10 @@ class EmployeeRestController extends FOSRestController
 
                   $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
                   $contract->setWorkableDaysMonth($workableDaysMonth); */
+            }else{
+                $contract->setSalary($paramFetcher->get('salary'));
+                $contract->setWorkableDaysMonth(30);
+                $contract->setTransportAid($paramFetcher->get('transportAid'));
             }
 
             //Workplaces and Benefits
@@ -799,7 +807,6 @@ class EmployeeRestController extends FOSRestController
               $em->remove($toRemove);
               }
               $contract->setBenefitsConditions($paramFetcher->get('benefitsConditions')); */
-            $contract->setTransportAid($paramFetcher->get('transportAid'));
             //turn on current contract
             $contract->setState(1);
 

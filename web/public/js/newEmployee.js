@@ -521,7 +521,7 @@ function startEmployee() {
                 amountBenefits: amountBenef,
                 periodicityBenefits: periodicityBenef,
                 idWorkplace: idWorkplace.val(),
-                transportAid: $(form).find("select[name='register_employee[employeeHasEmployers][transportAid]']").val(),
+                transportAid: $(form).find("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val(),
                 sisben: $(form).find("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val(),
                 //benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
                 employeeId: $(form).find("input[name='register_employee[idEmployee]']").val(),

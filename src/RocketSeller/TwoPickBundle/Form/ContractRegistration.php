@@ -50,7 +50,6 @@ class ContractRegistration extends AbstractType
                 'expanded' => true,
                 'label'=>'¿El empleado pertenece al SISBÉN?*',
                 'required' => true,
-                'mapped' => false
             ))
             ->add('transportAid', 'choice', array(
                 'choices' => array(
@@ -61,7 +60,6 @@ class ContractRegistration extends AbstractType
                 'expanded' => true,
                 'label'=>'¿Residirá en el lugar de trabajo?',
                 'required' => true,
-                'mapped' => false
             ))
             ->add('contractType', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:ContractType',

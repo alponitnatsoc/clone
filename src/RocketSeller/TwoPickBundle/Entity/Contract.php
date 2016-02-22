@@ -76,7 +76,12 @@ class Contract
     private $state = 1;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="boolean", nullable=TRUE)
+     */
+    private $sisben = 1;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=TRUE)
      */
     private $transportAid;
 
@@ -543,30 +548,7 @@ class Contract
         return $this->liquidations;
     }
 
-    /**
-     * Set transportAid
-     *
-     * @param string $transportAid
-     *
-     * @return Contract
-     */
-    public function setTransportAid($transportAid)
-    {
-        $this->transportAid = $transportAid;
-
-        return $this;
-    }
-
-    /**
-     * Get transportAid
-     *
-     * @return string
-     */
-    public function getTransportAid()
-    {
-        return $this->transportAid;
-    }
-
+    
     /**
      * Set startDate
      *
@@ -723,4 +705,52 @@ class Contract
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Set sisben
+     *
+     * @param boolean $sisben
+     *
+     * @return Contract
+     */
+    public function setSisben($sisben)
+    {
+        $this->sisben = $sisben;
+
+        return $this;
+    }
+
+    /**
+     * Get sisben
+     *
+     * @return boolean
+     */
+    public function getSisben()
+    {
+        return $this->sisben;
+    }
+
+    /**
+     * Set transportAid
+     *
+     * @param boolean $transportAid
+     *
+     * @return Contract
+     */
+    public function setTransportAid($transportAid)
+    {
+        $this->transportAid = $transportAid;
+
+        return $this;
+    }
+
+    /**
+     * Get transportAid
+     *
+     * @return boolean
+     */
+    public function getTransportAid()
+    {
+        return $this->transportAid;
+    }
 }
