@@ -231,4 +231,56 @@ class ExportController extends Controller
 		ignore_user_abort(true);
 		unlink($tmp_file);
 	}
+	public function generateCsvByPersonAction($idPerson){
+		/** @var User $user */
+		//$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+        $person = $em->getRepository('RocketSellerTwoPickBundle:Person')
+                ->find($idPerson);
+
+		$tmp_file=$person->getNames()."_fields.csv";
+		$handle = fopen($tmp_file, 'w+');
+
+
+		// Add the header of the CSV file
+		fputcsv($handle, array('sep=;'));
+		fputcsv($handle, array('Campo', 'Dato'),';');
+		fputcsv($handle, array('Persona', 'Empleador'),';');
+		//first the user info
+		/** @var User $user */
+		
+		$em2 = $this->getDoctrine()->getEntityManager();
+		$connection = $em2->getConnection();
+		$statement = $connection->prepare("SELECT * FROM person WHERE id_person = :id");
+		$statement->bindValue('id', $person->getIdPerson());
+		$statement->execute();
+		// Add the data queried from database
+		while( $row = $statement->fetch() )
+		{
+			foreach ($row as $key => $value) {
+				fputcsv(
+					$handle, // The file pointer
+					array($key, $value), // The fields
+					';' // The delimiter
+				);
+			}
+		}		
+		
+
+
+
+		fclose($handle);
+
+		header("Content-disposition: attachment; filename=$tmp_file");
+		header('Content-type: text/csv');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: '.filesize($tmp_file));
+		ob_clean();
+		flush();
+		readfile($tmp_file);
+		ignore_user_abort(true);
+		unlink($tmp_file);
+	}
 }

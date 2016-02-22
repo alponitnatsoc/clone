@@ -389,6 +389,10 @@ back_employer_menu:
     path: /back-menu-employer/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
 
+back_person_cvs_export:
+    path: /back-person-cvs-export/{idPerson}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByPerson }
+
 
 #Zona Pública
 

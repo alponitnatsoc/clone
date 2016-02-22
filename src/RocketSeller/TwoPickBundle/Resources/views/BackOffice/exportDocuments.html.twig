@@ -49,9 +49,11 @@
 								{% for phone in phones %}
 									<p>{{ phone.phoneNumber }}</p>
 								{% endfor %}
-								<p>Descargar archivos</p>
+								<p>Descargar documentos</p>
 								<button type="button" class="btn btn-info"><a class="notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Si</a></button>
-
+								<p>Generar archivo Excel</p>
+								<button type="button" class="btn btn-info"><a class="notAjax" href="{{ path('back_person_cvs_export',{'idPerson':action.personPerson.idPerson})}}">Si</a></button>
+								
 								<p>la person:{{ action.personPerson.names }} esta en la entidad?</p>
 								<button type="button" class="btn btn-success"><a  href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
 								<button type="button" class="btn btn-danger">No</button>

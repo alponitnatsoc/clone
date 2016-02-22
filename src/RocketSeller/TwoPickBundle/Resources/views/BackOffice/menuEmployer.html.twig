@@ -48,7 +48,7 @@
                     			{% if employeesState == -1 %}
                     				<a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson , 'idEmployee':-1})}}">0% ingresar empleados</a>
                         		{% elseif employeesState == 20 %}                        			
-                        			<p>funcionó</p>
+                        			<p>{{ employeesState}}% agregar información del contrato</p>
                                 {% else %}
                                     <p>{{ employeesState }}</p>
                         		{% endif %}
