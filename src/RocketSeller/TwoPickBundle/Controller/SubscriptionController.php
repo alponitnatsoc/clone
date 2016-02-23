@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\BillingAddress;
+use Symfony\Component\HttpFoundation\Request;
 
 class SubscriptionController extends Controller
 {
@@ -81,30 +82,34 @@ class SubscriptionController extends Controller
         ));
     }
 
-    public function activarSuscripcionAction()
+    public function activarSuscripcionAction(Request $request)
     {
-        $user = $this->getUser();
-        $person = $user->getPersonPerson();
-        $billingAdress = $person->getBillingAddress();
-        $documentNumber = $person->getDocument();
-        $employees = $this->getEmployerHasEmployee($user->getPersonPerson());
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
 
-        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
-        $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+        if ($request->isMethod('POST')) {
 
-        $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
-            'action' => $this->generateUrl('api_public_post_pay_membresia', array('format' => 'json')),
-            'method' => 'POST',
-        ));
+            $user = $this->getUser();
+            $person = $user->getPersonPerson();
+            $billingAdress = $person->getBillingAddress();
+            $documentNumber = $person->getDocument();
+            $employees = $this->getEmployees($user->getPersonPerson()->getEmployer());
 
-        return $this->render('RocketSellerTwoPickBundle:Subscription:active.html.twig', array(
-                    'form' => $form->createView(),
-                    'employer' => $person,
-                    'employerHasEmployee' => $employees[0],
-                    'contratos' => $employees[1],
-                    'paymentMethods' => isset($responcePaymentsMethods['payments']) ? $responcePaymentsMethods['payments'] : false,
-                    'billingAdress' => (count($billingAdress) > 0) ? $billingAdress : false
-        ));
+            $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
+                'action' => $this->generateUrl('api_public_post_pay_membresia', array('format' => 'json')),
+                'method' => 'POST',
+            ));
+
+            return $this->render('RocketSellerTwoPickBundle:Subscription:active.html.twig', array(
+                        'form' => $form->createView(),
+                        'employer' => $person,
+                        'employees' => $employees,
+                        'billingAdress' => (count($billingAdress) > 0) ? $billingAdress : false
+            ));
+        } else {
+            return $this->redirectToRoute("subscription_choices");
+        }
     }
 
     public function suscripcionInactivaAction()

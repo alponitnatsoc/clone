@@ -18,52 +18,55 @@
             Has registrado los siguientes empleados:
         </p> 
     </div>
-    {% for key, price in productos %}
-        <input type="hidden" id="{{ key }}" value="{{ price }}"/>
-    {% endfor %}
+    <form action="{{ path('activate_subscription') }}" method="POST">
 
-    {% for employeeData in employees %}
+        {% for key, price in productos %}
+            <input type="hidden" id="{{ key }}" value="{{ price }}"/>
+        {% endfor %}
 
-        {% set employee = employeeData['employee'] %}
-        {% set contrato = employeeData['contrato'] %}
-        {% set producto = employeeData['product'] %}
+        {% for employeeData in employees %}
 
-        <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
-            <div> 
-                <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+            {% set employee = employeeData['employee'] %}
+            {% set contrato = employeeData['contrato'] %}
+            {% set producto = employeeData['product'] %}
+
+            <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
+                <div> 
+                    <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                </div>
+                <div class="employee_name">
+                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                </div>
+                {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                <div class="{{ ((contrato.workableDaysMonth* 4.34524) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth*4.34524) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                    Labora {{ (contrato.workableDaysMonth * 4.34524)|number_format }} días al mes
+                </div>
+                <div>
+                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+                </div>
             </div>
-            <div class="employee_name">
-                <b>{{ employee.employeeEmployee.personPerson.names }}</b>
-            </div>
-            {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-            <div class="{{ ((contrato.workableDaysMonth* 4.34524) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth*4.34524) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
-                Labora {{ (contrato.workableDaysMonth * 4.34524)|number_format }} días al mes
-            </div>
-            <div>
-                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+
+
+        {% endfor %}
+
+        <div class="col-lg-1 result_ajax"></div>
+        <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
+            Este servicio tendrá el siguiente valor:
+            <div class="div_price">     
+                <div id="result_price"></div>      
+                <div id="result_discount"></div>    
             </div>
         </div>
-
-
-    {% endfor %}
-
-    <div class="col-lg-1 result_ajax"></div>
-    <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
-        Este servicio tendrá el siguiente valor:
-        <div class="div_price">     
-            <div id="result_price"></div>      
-            <div id="result_discount"></div>    
+        <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
+        <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
+        <div style="text-align: center; margin-top: 20px;">
+            <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
         </div>
-    </div>
-    <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
-    <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
-    <div style="text-align: center; margin-top: 20px;">
-        <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
-    </div>
-    <div style="text-align: center; margin-top: 20px;">
-        <a class="btn btn-default notAjax"  href="{{ path('activate_subscription') }}">Continuación del pago</a>
-    </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <input type="submit" class="btn btn-default" value="Continuación del pago"/>
+        </div>
 
+    </form>
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">
         <div class="modal-dialog">
