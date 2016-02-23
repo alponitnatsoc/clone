@@ -14,16 +14,34 @@ class PaymentMethodController extends Controller
 
         $form = $this->createFormBuilder()
             ->add('credit_card', 'text')
-            ->add('expiry_date', 'text')
+            ->add('expiry_date_year', 'text')
+            ->add('expiry_date_month', 'text')
             ->add('cvv', 'text')
             ->add('name_on_card', 'text')
             ->add('save', 'submit', array('label' => 'Submit'))
             ->getForm();
 
         $form->handleRequest($request);
-        if ($form->isValid()) {     
-            $data = $form->getData();
+        if ($form->isValid()) {
+            $user = $this->getUser();
+            /** @var Person $person */
+            $person=$user->getPersonPerson();
+            $data = $request->request;
+
             //TODO NovoPayment
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "documentType"=>$person->getDocumentType(),
+                "documentNumber"=>$person->getDocument(),
+                "accountNumber"=>$form->get("credit_card"),
+                "expirationYear"=>$form->get("expiry_date_year"),
+                "expirationMonth"=>$form->get("expiry_date_month"),
+                "cvv"=>$form->get("cvv"),
+            ));
+
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
+            echo "Status Code Employee PayMethod: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
+
             if($idNotification!=-1){
                 $notificationRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
                 /** @var Notification $realNotif */
