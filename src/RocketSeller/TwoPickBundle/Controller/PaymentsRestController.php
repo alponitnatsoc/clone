@@ -930,7 +930,7 @@ class PaymentsRestController extends FOSRestController
       $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
     if(isset($parameters['PaymentType']))
       $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
-    die(print_r($parameters_fixed, true));
+    //die(print_r($parameters_fixed, true));
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
