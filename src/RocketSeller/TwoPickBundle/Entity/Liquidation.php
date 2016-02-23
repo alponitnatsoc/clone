@@ -58,9 +58,18 @@ class Liquidation
     private $employerHasEmployee;
 
     /**
-     * @ORM\OneToMany(targetEntity="LiquidationHasLiquidationReason", mappedBy="liquidation", cascade={"persist"})
+     * @var \RocketSeller\TwoPickBundle\Entity\LiquidationReason
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\LiquidationReason")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_liquidation_reason", referencedColumnName="id")
+     * })
      */
-    private $liquidationReasons;
+    private $liquidationReason;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="liquidation", cascade={"persist"})
+     */
+    private $notificactions;
 
     /**
      * @ORM\Column(type="date", length=20, nullable=TRUE, name="last_work_day")
@@ -219,47 +228,7 @@ class Liquidation
     {
         return $this->employerHasEmployee;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->liquidationReasons = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
-    /**
-     * Add liquidationReason
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason
-     *
-     * @return Liquidation
-     */
-    public function addLiquidationReason(\RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason)
-    {
-        $this->liquidationReasons[] = $liquidationReason;
-
-        return $this;
-    }
-
-    /**
-     * Remove liquidationReason
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason
-     */
-    public function removeLiquidationReason(\RocketSeller\TwoPickBundle\Entity\LiquidationHasLiquidationReason $liquidationReason)
-    {
-        $this->liquidationReasons->removeElement($liquidationReason);
-    }
-
-    /**
-     * Get liquidationReasons
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLiquidationReasons()
-    {
-        return $this->liquidationReasons;
-    }
 
     /**
      * Set lastWorkDay
@@ -355,5 +324,70 @@ class Liquidation
     public function getPeriod()
     {
         return $this->period;
+    }
+
+    /**
+     * Set liquidationReason
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\LiquidationReason $liquidationReason
+     *
+     * @return Liquidation
+     */
+    public function setLiquidationReason(\RocketSeller\TwoPickBundle\Entity\LiquidationReason $liquidationReason = null)
+    {
+        $this->liquidationReason = $liquidationReason;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidationReason
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\LiquidationReason
+     */
+    public function getLiquidationReason()
+    {
+        return $this->liquidationReason;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->notificactions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add notificaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Notification $notificaction
+     *
+     * @return Liquidation
+     */
+    public function addNotificaction(\RocketSeller\TwoPickBundle\Entity\Notification $notificaction)
+    {
+        $this->notificactions[] = $notificaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove notificaction
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Notification $notificaction
+     */
+    public function removeNotificaction(\RocketSeller\TwoPickBundle\Entity\Notification $notificaction)
+    {
+        $this->notificactions->removeElement($notificaction);
+    }
+
+    /**
+     * Get notificactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotificactions()
+    {
+        return $this->notificactions;
     }
 }

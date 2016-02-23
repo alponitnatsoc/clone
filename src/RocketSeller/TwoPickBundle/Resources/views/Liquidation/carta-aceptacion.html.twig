@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+<title>Carta de aceptaci&oacute;n de renuncia</title>
+<meta charset="utf-8" />
 <style>
 body {
     height: 842px;
@@ -14,24 +16,24 @@ body {
 <body>
 <hr />
 <p>&nbsp;</p>
-<p><strong>Bogotá, 03 de Noviembre del 2015</strong><br />
+{% set local = "now"|date("d-m-y") %}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />
 <em>Se&ntilde;or(a)</em><br />
-<em> -- NOMBRE DE TRABAJOR -- </em><br />
-<em>C.C 53098973</em><br />
+<em>{{ data.employee.name }}</em><br />
+<em>{{ data.employee.documentType }} {{ data.employee.document }}</em><br />
 <em>REF: ACEPTACION DE RENUNCIA</em><br />
 <em>Asunto: Renuncia irrevocable</em><br />
 <p style="text-align: justify;">
 <em>Apreciado Trabajador</em>
 Cordialmente me permito comunicarle que su carta de renuncia ha sido aceptada, por lo
-tanto, su contrato de trabajo finaliza el día XX de XXXXXXX del XXXX (la misma fecha de
-retiro de la carta de renuncia del trabajador)
-Adicional queremos informarle que usted cuenta con 5 días hábiles para realizarse el
-examen médico de egreso, dicha autorización deberá ser solicitada a su jefe directo.
+tanto, su contrato de trabajo finaliza el día {{ data.endDate }} Adicional queremos
+informarle que usted cuenta con 5 días hábiles para realizarse el examen médico de egreso,
+dicha autorización deberá ser solicitada a su jefe directo.
 Agradecemos los servicios prestados y le deseamos éxitos en sus actividades futuras.</p>
 <p>Atentamente,</p>
-<p><em>FIRMA</em></p>
-<p><em>-- NOMBRE DEL EMPLEADOR --</em><br />
-<strong>-- CEDULA --</strong></p>
+{# <p><em>FIRMA</em></p>#}
+<p><em>{{ data.employer.name }}</em><br />
+<strong>{{ data.employer.documentType }} {{ data.employer.document }}</strong></p>
 <hr />
 </body>
 </html>
