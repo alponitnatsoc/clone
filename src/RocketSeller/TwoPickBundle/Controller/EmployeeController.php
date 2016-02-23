@@ -217,7 +217,46 @@ class EmployeeController extends Controller
             "email"=>$user->getEmail()
             ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        echo "StatusCode :".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
+        if($insertionAnswer->getStatusCode()==406||$insertionAnswer->getStatusCode()==201){
+            $eHEes=$employer->getEmployerHasEmployees();
+            /** @var EmployerHasEmployee $employeeC */
+            foreach ($eHEes as $employeeC ) {
+                $contracts=$employeeC->getContracts();
+                /** @var Contract $cont */
+                $contract=null;
+                foreach ($contracts as $cont) {
+                    if($cont->getState()==1)
+                        $contract=$cont;
+                }
+                $payMC=$contract->getPayMethodPayMethod();
+                $paymentMethodId=$payMC->getAccountTypeAccountType()->getName()=="Ahorros"?4:
+                    $payMC->getAccountTypeAccountType()->getName()=="Corriente"?5:6;
+                $paymentMethodAN=$payMC->getAccountNumber()==null?$payMC->getCellPhone():$payMC->getAccountNumber();
+                $employeePerson=$employeeC->getEmployeeEmployee()->getPersonPerson();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentType"=>$employeePerson->getDocumentType(),
+                    "beneficiaryId"=>$employeePerson->getDocument(),
+                    "documentNumber"=>$person->getDocument(),
+                    "name"=>$employeePerson->getNames(),
+                    "lastName"=>$employeePerson->getLastName1()." ".$employeePerson->getLastName2(),
+                    "yearBirth"=>$employeePerson->getBirthDate()->format("Y"),
+                    "monthBirth"=>$employeePerson->getBirthDate()->format("m"),
+                    "dayBirth"=>$employeePerson->getBirthDate()->format("d"),
+                    "phone"=>$employeePerson->getPhones()->get(0)->getPhoneNumber(),
+                    "email"=>$employeePerson->getEmail(),
+                    "companyId"=>$person->getDocument(),//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                    "companyBranch"=>"0",//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                    "paymentMethodId"=>$paymentMethodId,
+                    "paymentAccountNumber"=>$paymentMethodAN,
+                    "paymentBankNumber"=>0,//THIS SHOULD HAVE THE NOVO ID BANK TABLE
+                    "paymentType"=>$payMC->getAccountTypeAccountType()->getName(),
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
+                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode()==201;
+            }
+
+        }
 
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
