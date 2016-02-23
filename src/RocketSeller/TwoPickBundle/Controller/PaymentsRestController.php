@@ -914,7 +914,7 @@ class PaymentsRestController extends FOSRestController
 
     $parameters_fixed = array();
     $parameters_fixed['document-type'] = $parameters['documentType'];
-    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['document-number'] = $parameters['beneficiaryId'];
     $parameters_fixed['name'] = $parameters['name'];
     $parameters_fixed['last-name'] = $parameters['lastName'];
     $parameters_fixed['birth-date'] = $birth;
