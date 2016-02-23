@@ -213,11 +213,11 @@ class EmployeeController extends Controller
             "year"=>$person->getBirthDate()->format("Y"),
             "month"=>$person->getBirthDate()->format("m"),
             "day"=>$person->getBirthDate()->format("d"),
-            "phone"=>$person->getPhones()->get(0),
+            "phone"=>$person->getPhones()->get(0)->getPhoneNumber(),
             "email"=>$user->getEmail()
             ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        echo $insertionAnswer->getStatusCode()==201 ?  "alert('allgood')" : "alert('ALLBAD')";
+        echo "StatusCode :".$insertionAnswer->getStatusCode() ;
 
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
