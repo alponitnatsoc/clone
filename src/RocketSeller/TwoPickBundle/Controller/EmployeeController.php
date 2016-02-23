@@ -255,7 +255,7 @@ class EmployeeController extends Controller
                     "paymentType"=>$payMC->getAccountTypeAccountType()->getName(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode() ;
+                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
             }
 
         }
