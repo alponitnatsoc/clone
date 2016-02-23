@@ -33,9 +33,9 @@ class PaymentMethodController extends Controller
             $request->request->add(array(
                 "documentType"=>$person->getDocumentType(),
                 "documentNumber"=>$person->getDocument(),
-                "accountNumber"=>$form->get("credit_card"),
-                "expirationYear"=>$form->get("expiry_date_year"),
-                "expirationMonth"=>$form->get("expiry_date_month"),
+                "accountNumber"=>$form->get("credit_card")->getData(),
+                "expirationYear"=>$form->get("expiry_date_year")->getData(),
+                "expirationMonth"=>$form->get("expiry_date_month")->getData(),
                 "cvv"=>$form->get("cvv"),
             ));
 
