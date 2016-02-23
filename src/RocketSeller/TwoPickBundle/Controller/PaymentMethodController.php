@@ -26,7 +26,7 @@ class PaymentMethodController extends Controller
             $user = $this->getUser();
             /** @var Person $person */
             $person=$user->getPersonPerson();
-            $data = $request->request;
+            $data = $form->getData();
 
             //TODO NovoPayment
             $request->setMethod("POST");
