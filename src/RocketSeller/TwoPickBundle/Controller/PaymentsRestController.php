@@ -205,7 +205,6 @@ class PaymentsRestController extends FOSRestController
     $parameters_fixed['birth-date'] = $birth;
     $parameters_fixed['phone-number'] = $parameters['phone'];
     $parameters_fixed['email'] = $parameters['email'];
-    //die(print_r($parameters_fixed, true));
 
     /** @var View $res */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
@@ -931,6 +930,7 @@ class PaymentsRestController extends FOSRestController
       $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
     if(isset($parameters['PaymentType']))
       $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
+    die(print_r($parameters_fixed, true));
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
