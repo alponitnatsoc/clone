@@ -855,8 +855,8 @@ class PaymentsRestController extends FOSRestController
    *
    * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
    * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document of the beneficiary.")
-   * (name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
-   * (name="lastName", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="last name.")
+   * (name="name", nullable=false, requirements="(.)*", strict=true, description="first name.")
+   * (name="lastName", nullable=false, requirements="(.)*", strict=true, description="last name.")
    * (name="yearBirth", nullable=false, requirements="([0-9]){4}", strict=true, description="year of birth.")
    * (name="monthBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="month of birth.")
    * (name="dayBirth", nullable=false, requirements="([0-9]){2}", strict=true, description="day of birth.")
@@ -882,8 +882,8 @@ class PaymentsRestController extends FOSRestController
     $regex['documentType'] = '([A-Z|a-z]){2}'; $mandatory['documentType'] = true;
     $regex['documentNumber'] = '([0-9])+'; $mandatory['documentNumber'] = true;
     $regex['beneficiaryId'] = '([0-9])+'; $mandatory['beneficiaryId'] = true;
-    $regex['name'] = '([a-z|A-Z| ])+'; $mandatory['name'] = true;
-    $regex['lastName'] = '([a-z|A-Z| ])+'; $mandatory['lastName'] = true;
+    $regex['name'] = '(.)*'; $mandatory['name'] = true;
+    $regex['lastName'] = '(.)*'; $mandatory['lastName'] = true;
     $regex['yearBirth'] = '([0-9]){4}'; $mandatory['yearBirth'] = true;
     $regex['monthBirth'] = '([0-9]){2}'; $mandatory['monthBirth'] = true;
     $regex['dayBirth'] = '([0-9]){2}'; $mandatory['dayBirth'] = true;
@@ -914,7 +914,7 @@ class PaymentsRestController extends FOSRestController
 
     $parameters_fixed = array();
     $parameters_fixed['document-type'] = $parameters['documentType'];
-    $parameters_fixed['document-number'] = $parameters['documentNumber'];
+    $parameters_fixed['document-number'] = $parameters['beneficiaryId'];
     $parameters_fixed['name'] = $parameters['name'];
     $parameters_fixed['last-name'] = $parameters['lastName'];
     $parameters_fixed['birth-date'] = $birth;
@@ -930,7 +930,7 @@ class PaymentsRestController extends FOSRestController
       $parameters_fixed['payment-mode-bank'] = $parameters['PaymentBankNumber'];
     if(isset($parameters['PaymentType']))
       $parameters_fixed['payment-mode-type'] = $parameters['PaymentType'];
-    die(print_r($parameters_fixed, true));
+    //die(print_r($parameters_fixed, true));
 
     /** @var View $responseView */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
