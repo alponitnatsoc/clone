@@ -205,6 +205,7 @@ class PaymentsRestController extends FOSRestController
     $parameters_fixed['birth-date'] = $birth;
     $parameters_fixed['phone-number'] = $parameters['phone'];
     $parameters_fixed['email'] = $parameters['email'];
+    die(print_r($parameters_fixed, true));
 
     /** @var View $res */
     $responseView = $this->callApi($header, $parameters_fixed, $path);
