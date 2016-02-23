@@ -36,7 +36,7 @@ class PaymentMethodController extends Controller
                 "accountNumber"=>$form->get("credit_card")->getData(),
                 "expirationYear"=>$form->get("expiry_date_year")->getData(),
                 "expirationMonth"=>$form->get("expiry_date_month")->getData(),
-                "cvv"=>$form->get("cvv"),
+                "codeCheck"=>$form->get("cvv"),
             ));
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
