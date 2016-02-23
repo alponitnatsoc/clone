@@ -623,7 +623,7 @@ class PaymentsRestController extends FOSRestController
    * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
    *
    * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="document type.")
-   * (name="paymentType", nullable=false, requirements="([A-Z|a-z]| )+", strict=true, description="payment type, 2 MasterCard, 3 Visa.")
+   * (name="paymentType", nullable=true, requirements="([A-Z|a-z]| )+", strict=false, description="payment type, 2 MasterCard, 3 Visa.")
    * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
    * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
    * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
@@ -631,7 +631,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function postClientPaymentmethodAction(Request $request)
+  public function postClientPaymentMethodAction(Request $request)
   {
     // Adjust the format of the expiration date.
     $expiration = null;
@@ -641,7 +641,7 @@ class PaymentsRestController extends FOSRestController
 
     // Set all the parameters info.
     $regex['documentType'] = '([A-Z|a-z]){2}';$mandatory['documentType'] = true;
-    $regex['paymentType'] = '([A-Z|a-z]| )+'; $mandatory['paymentType'] = true;
+    //$regex['paymentType'] = '([A-Z|a-z]| )+'; $mandatory['paymentType'] = true;
     $regex['accountNumber'] = '([0-9])+'; $mandatory['accountNumber'] = true;
     $regex['expirationYear'] = '([0-9]){4}'; $mandatory['expirationYear'] = true;
     $regex['expirationMonth'] = '([0-9]){2}'; $mandatory['expirationMonth'] = true;
@@ -650,6 +650,22 @@ class PaymentsRestController extends FOSRestController
     $this->validateParamters($parameters, $regex, $mandatory);
 
 
+    /****************** chack if is visa or mastercard *************/
+    $card = $parameters['accountNumber'];
+    $card = substr($card, 0, 4);
+    if(substr($card, 0, 1) == '4')
+    {
+      //Visa.
+      $parameters['paymentType'] = 3;
+    } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
+    substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
+    substr($card, 0, 2) == '55')
+    {
+      // Master card.
+      $parameters['paymentType'] = 2;
+    }
+
+    // Set expiration card.
     if (isset($parameters['expirationYear']))
       $expiration = $parameters['expirationYear'] . '-' .
                $parameters['expirationMonth'] . '-01';
