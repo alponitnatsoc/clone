@@ -189,10 +189,11 @@ class EmployeeController extends Controller
         return $configData;
     }
 
-    public function matrixChooseAction($tab)
+    public function matrixChooseAction($tab, Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
+        $person=$user->getPersonPerson();
         $employer = $user->getPersonPerson()->getEmployer();
         $employerHasEmployees = $employer->getEmployerHasEmployees();
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
@@ -202,6 +203,22 @@ class EmployeeController extends Controller
         $eps = null;
         $severances = null;
         $arls = null;
+        //TODO note remove this to diego step
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "documentType"=>$person->getDocumentType(),
+            "documentNumber"=>$person->getDocument(),
+            "name"=>$person->getNames(),
+            "lastName"=>$person->getLastName1()." ".$person->getLastName2(),
+            "year"=>$person->getBirthDate()->format("Y"),
+            "month"=>$person->getBirthDate()->format("m"),
+            "day"=>$person->getBirthDate()->format("d"),
+            "phone"=>$person->getPhones()->get(0),
+            "email"=>$user->getEmail()
+            ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
+        echo $insertionAnswer->getStatusCode()==201 ?  "alert('allgood')" : "alert('ALLBAD')";
+
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
             if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
