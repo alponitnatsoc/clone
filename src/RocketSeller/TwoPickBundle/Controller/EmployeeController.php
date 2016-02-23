@@ -217,7 +217,7 @@ class EmployeeController extends Controller
             "email"=>$user->getEmail()
             ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        echo "StatusCode :".$insertionAnswer->getStatusCode() ;
+        echo "StatusCode :".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
 
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
