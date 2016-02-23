@@ -12,9 +12,14 @@
 			{{ form_widget(form.credit_card) }}
 		</div>
 		<div class="col-md-6">
-			{{ form_label(form.expiry_date) }}
-			{{ form_errors(form.expiry_date) }}
-			{{ form_widget(form.expiry_date) }}
+			{{ form_label(form.expiry_date_year) }}
+			{{ form_errors(form.expiry_date_year) }}
+			{{ form_widget(form.expiry_date_year) }}
+		</div>
+		<div class="col-md-6">
+			{{ form_label(form.expiry_date_month) }}
+			{{ form_errors(form.expiry_date_month) }}
+			{{ form_widget(form.expiry_date_month) }}
 		</div>
 		<div class="col-md-6">
 			{{ form_label(form.cvv) }}
