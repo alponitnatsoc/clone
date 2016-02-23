@@ -217,7 +217,7 @@ class EmployeeController extends Controller
             "email"=>$user->getEmail()
             ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        echo "Status Code Employer: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()==201;
+        echo "Status Code Employer: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode();
 
         if($insertionAnswer->getStatusCode()==406||$insertionAnswer->getStatusCode()==201){
             $eHEes=$employer->getEmployerHasEmployees();
@@ -255,7 +255,7 @@ class EmployeeController extends Controller
                     "paymentType"=>$payMC->getAccountTypeAccountType()->getName(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode()==201;
+                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode() ;
             }
 
         }
