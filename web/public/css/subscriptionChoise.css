@@ -1,0 +1,57 @@
+
+.result_ajax{
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+.div_price{
+    padding: 10px;
+    border: 1px solid lightgrey;
+    margin-top: 10px;
+}
+#result_price, #result_price_calc{
+    font-weight: bold;
+    font-size: 30px;
+}
+#open_pricing_calc{
+    font-weight: bold;
+    cursor: pointer; 
+}
+.divSlider{
+    margin: 0px 10px 40px 10px;
+}
+.type_time{
+    font-weight: bold;
+}
+.type_time_desc{
+    font-size: 10px;
+}
+.type_employee{
+    display: inline-block;
+    width: 30%;
+    /*float: left;*/
+}
+.slider_employee{
+    display: inline-block;
+    width: 60%;
+    float: right;
+}
+.modal {
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) { 
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}

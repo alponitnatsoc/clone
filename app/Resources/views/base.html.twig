@@ -22,6 +22,7 @@
             <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
             <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('public/css/subscriptionChoise.css') }}">
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         <script src="{{ asset('js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
@@ -131,18 +132,18 @@
                                         <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
                                     </div>
                                     {% if app.user.status is defined%}
-                                    {% set status = app.user.status %}
+                                        {% set status = app.user.status %}
                                     {% else %}
-                                    {% set status = 0 %}
+                                        {% set status = 0 %}
                                     {% endif %}
                                     {% if status >= 2 %}
                                         <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                             <a href="{{ path('show_dashboard_employer') }}">Inicio</a>
                                         </div>
                                     {% elseif  status == 1 %}
-                                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                        <a href="{{ path('show_dashboard') }}">Inicio</a>
-                                    </div>
+                                        <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                                            <a href="{{ path('show_dashboard') }}">Inicio</a>
+                                        </div>
                                     {% endif %}
                                     <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
                                         <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
@@ -240,8 +241,8 @@
         <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script>
         <script src="{{ asset('public/js/accounting.min.js') }}"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
-                $('#forgotBtn').click(function(e) {
+            $(document).ready(function () {
+                $('#forgotBtn').click(function (e) {
                     e.preventDefault();
                     $('#loginModal').modal('hide');
                     $('#forgotModal').modal('show');
@@ -378,7 +379,7 @@
                             });
 
                             return true;
-                        }  else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
+                        } else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
                             $.getScript("{{ asset('public/js/editEmployer.js') }}").done(function () {
                                 startEmployerEdit();
                             });
@@ -402,15 +403,27 @@
                             });
 
                             return true;
-                        }else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
+                        } else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
                             $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
                                 startNovelty();
                             });
 
                             return true;
-                        }else if (url.indexOf("{{ path('show_user') }}") !== -1) {
+                        } else if (url.indexOf("{{ path('show_user') }}") !== -1) {
                             $.getScript("{{ asset('public/js/myAccount.js') }}").done(function () {
                                 startMyAccount();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('subscription_choices') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/subscriptionChoise.js') }}").done(function () {
+                                startSubscriptionChoise();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('activate_subscription') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/subscriptionActivate.js') }}").done(function () {
+                                startSubscriptionActivate();
                             });
 
                             return true;
