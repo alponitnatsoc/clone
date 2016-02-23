@@ -9,23 +9,48 @@ use RocketSeller\TwoPickBundle\Entity\BillingAddress;
 class SubscriptionController extends Controller
 {
 
-    public function getEmployerHasEmployee($person)
+    private function findPriceByNumDays($productos, $days)
+    {
+        if ($days > 0 && $days <= 10) {
+            $key = 'PS1';
+        } elseif ($days >= 11 && $days <= 19) {
+            $key = 'PS2';
+        } elseif ($days >= 20) {
+            $key = 'PS3';
+        } else {
+            $key = 'PS3';
+        }
+        foreach ($productos as $value) {
+            if ($value->getSimpleName() == $key) {
+                return $value;
+            }
+        }
+    }
+
+    public function getEmployees($person)
     {
         try {
             $employerHasEmployee = $this->getdoctrine()
                     ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                    ->findByEmployerEmployer($this->getEmployer($person));
-            $contratos = array();
-            foreach ($employerHasEmployee as $key => $employee) {
+                    ->findByEmployerEmployer($person);
+
+            $productos = $this->getdoctrine()
+                    ->getRepository('RocketSellerTwoPickBundle:Product')
+                    ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+
+            $employees = array();
+            foreach ($employerHasEmployee as $keyEmployee => $employee) {
                 $contracts = $employee->getContracts();
-                foreach ($contracts as $key => $contract) {
-                    if ($contract->getState() == 'Active') {
-                        $contratos[$employee->getIdEmployerHasEmployee()] = $contract;
+                foreach ($contracts as $keyContract => $contract) {
+                    if ($contract->getState() > 0) {
+                        $employees[$keyEmployee]['contrato'] = $contract;
+                        $employees[$keyEmployee]['employee'] = $employee;
+                        $employees[$keyEmployee]['product'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth() * 4.34524));
                         break;
                     }
                 }
             }
-            return array($employerHasEmployee, $contratos);
+            return array('employees' => $employees, 'productos' => $productos);
         } catch (Exception $ex) {
             $logger = $this->get('logger');
             $logger->error(json_encode($ex));
@@ -33,27 +58,25 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function getEmployer($person)
+    private function orderProducts($productos)
     {
-        try {
-            $employer = $this->getdoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:Employer')
-                    ->findByPersonPerson($person);
-            return $employer;
-        } catch (Exception $ex) {
-            $logger = $this->get('logger');
-            $logger->error(json_encode($ex));
-            return false;
+        $products = array();
+        foreach ($productos as $key => $value) {
+            $products[$value->getSimpleName()] = $value->getPrice();
         }
+        return $products;
     }
 
     public function subscriptionChoicesAction()
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
         $user = $this->getUser();
-        $employees = $this->getEmployerHasEmployee($user->getPersonPerson());
+        $employees = $this->getEmployees($user->getPersonPerson()->getEmployer());
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
-                    'employerHasEmployee' => $employees[0],
-                    'contratos' => $employees[1],
+                    'employees' => $employees['employees'],
+                    'productos' => $this->orderProducts($employees['productos']),
                     'user' => $user
         ));
     }

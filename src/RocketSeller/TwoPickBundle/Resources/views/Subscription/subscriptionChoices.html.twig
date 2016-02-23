@@ -3,17 +3,14 @@
 
 {% block fos_user_content %}
     <h3>Activación de la suscripción</h3>
-    <div style="margin: 10px;padding: 10px; text-align: center; display: inline-block;">
+    <div style="margin: 10px;padding: 10px; text-align: center; display: block;">
         {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
         {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
         {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
         {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
         {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
         {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
-        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}        
-        <p>
-            A partir de este momento y hasta el próximo {{ day }} de {{ month }} de {{ year }} tienes GRATIS los servicios de Symplifica.
-        </p>
+        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}   
         <p>
             A continuación podrás activar tu suscripción.
         </p>
@@ -21,22 +18,29 @@
             Has registrado los siguientes empleados:
         </p> 
     </div>
+    {% for key, price in productos %}
+        <input type="hidden" id="{{ key }}" value="{{ price }}"/>
+    {% endfor %}
 
-    {% for employee in employerHasEmployee %}
+    {% for employeeData in employees %}
+
+        {% set employee = employeeData['employee'] %}
+        {% set contrato = employeeData['contrato'] %}
+        {% set producto = employeeData['product'] %}
 
         <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
             <div> 
                 <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
             </div>
             <div class="employee_name">
-                {{ employee.employeeEmployee.personPerson.names }}
+                <b>{{ employee.employeeEmployee.personPerson.names }}</b>
             </div>
-            {% set tipo_tiempo_contrato = contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name|lower|split(' ') %}
-            <div class="{{ tipo_tiempo_contrato|join("_") }}">
-                {{ contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name }}
+            {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+            <div class="{{ ((contrato.workableDaysMonth* 4.34524) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth*4.34524) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                Labora {{ (contrato.workableDaysMonth * 4.34524)|number_format }} días al mes
             </div>
             <div>
-                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+                <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
             </div>
         </div>
 
@@ -48,7 +52,6 @@
         Este servicio tendrá el siguiente valor:
         <div class="div_price">     
             <div id="result_price"></div>      
-            A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}.
             <div id="result_discount"></div>    
         </div>
     </div>
@@ -111,7 +114,7 @@
                     <div class="divSlider">                          
                         <div class="type_employee">
                             <span class="type_time">Tiempo Completo</span>
-                            <span class="type_time_desc">Trabaja(n) más de días al mes</span>
+                            <span class="type_time_desc">Trabaja(n) más de 20 días al mes</span>
                         </div>        
                         <div class="slider_employee" id="tiempo_completo"></div>
                     </div>
@@ -119,7 +122,6 @@
                         Valor suscripción mensual
                         <div class="div_price">     
                             <div id="result_price_calc"></div>      
-                            A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}.
                             <div id="result_discount_calc"></div>    
                         </div>
                     </div>

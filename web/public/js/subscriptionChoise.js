@@ -22,7 +22,7 @@ function startSubscriptionChoise() {
         tiempo_parcialSlider.noUiSlider.on('change', function () {
             calculatePrice("_calc");
         });
-        tiempo_parcialSlider.noUiSlider.set($(".activo > .trabajo_por_días").length);
+        tiempo_parcialSlider.noUiSlider.set($(".activo > .trabajo_por_dias").length);
 
         medio_tiempoSlider = document.getElementById('medio_tiempo');
         noUiSlider.create(medio_tiempoSlider, {
@@ -98,7 +98,10 @@ function startSubscriptionChoise() {
     function ajax(obj, url) {
         $.ajax({
             url: url,
-            type: 'GET'
+            type: 'GET',
+            beforeSend: function (xhr) {
+                $(".btn-change-state-contract-confirm").attr('disabled', true);
+            }
         }).done(function (data) {
             parent = $(obj).parent().parent();
             female = parent.find(".female").length;
@@ -131,6 +134,7 @@ function startSubscriptionChoise() {
                 $('.result_ajax').html("").hide(1000);
             }, 2000);
             calculatePrice('');
+            $(".btn-change-state-contract-confirm").attr('disabled', false);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
@@ -149,17 +153,17 @@ function startSubscriptionChoise() {
             Trabajo_por_días = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
         } else {
             Tiempo_Completo = $(".activo > .tiempo_completo").length;
-            Medio_tiempo = $(".activo > .Medio_tiempo").length;
-            Trabajo_por_días = $(".activo > .trabajo_por_días").length;
+            Medio_tiempo = $(".activo > .medio_tiempo").length;
+            Trabajo_por_días = $(".activo > .trabajo_por_dias").length;
         }
         if (Tiempo_Completo > 0) {
-            total = total + (Tiempo_Completo * 25000);
+            total = total + (Tiempo_Completo * $("#PS3").val());
         }
         if (Medio_tiempo > 0) {
-            total = total + (Medio_tiempo * 20000);
+            total = total + (Medio_tiempo * $("#PS2").val());
         }
         if (Trabajo_por_días > 0) {
-            total = total + (Trabajo_por_días * 15000);
+            total = total + (Trabajo_por_días * $("#PS1").val());
         }
 
         if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_días) >= 3) {
