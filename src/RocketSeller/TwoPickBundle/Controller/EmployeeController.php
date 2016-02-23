@@ -246,7 +246,8 @@ class EmployeeController extends Controller
                     "monthBirth"=>$employeePerson->getBirthDate()->format("m"),
                     "dayBirth"=>$employeePerson->getBirthDate()->format("d"),
                     "phone"=>$employeePerson->getPhones()->get(0)->getPhoneNumber(),
-                    "email"=>$employeePerson->getEmail(),
+                    "email"=>$employeePerson->getEmail()==null?$employeePerson->getDocumentType().$person->getDocument().
+                        "@".$employeePerson->getNames().".com":$employeePerson->getEmail(),
                     "companyId"=>$person->getDocument(),//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
                     "companyBranch"=>"0",//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
                     "paymentMethodId"=>$paymentMethodId,
