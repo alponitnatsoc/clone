@@ -360,13 +360,13 @@ help_detail:
 
 subscription_choices:
     path:     /subscription
-    defaults: { _controller: RocketSellerTwoPickBundle:Default:subscriptionChoices }
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:subscriptionChoices }
 activate_subscription:
     path: /activar-suscripcion
-    defaults:  { _controller: RocketSellerTwoPickBundle:Default:activarSuscripcion }
+    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:activarSuscripcion }
 inactive_user:
     path: /suscripcion-inactiva
-    defaults:  { _controller: RocketSellerTwoPickBundle:Default:suscripcionInactiva }
+    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionInactiva }
 express_info:
     path: /express-info
     defaults:  { _controller: RocketSellerTwoPickBundle:Home:registerExpressInfo }
