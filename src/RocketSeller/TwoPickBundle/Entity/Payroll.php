@@ -57,7 +57,7 @@ class Payroll
     private $novelties;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PurchaseOrdersDescription", inversedBy="payrollPayroll", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="PurchaseOrdersDescription", mappedBy="payrollPayroll", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payrollPayroll", referencedColumnName="id_purchase_orders_description")
      * })
@@ -273,4 +273,28 @@ class Payroll
         return $this->purchaseOrdersDescription;
     }
 
+
+    /**
+     * Add purchaseOrdersDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription
+     *
+     * @return Payroll
+     */
+    public function addPurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription)
+    {
+        $this->purchaseOrdersDescription[] = $purchaseOrdersDescription;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrdersDescription
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription
+     */
+    public function removePurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription)
+    {
+        $this->purchaseOrdersDescription->removeElement($purchaseOrdersDescription);
+    }
 }

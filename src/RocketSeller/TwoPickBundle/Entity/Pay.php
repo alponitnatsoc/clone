@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Pay
  *
  * @ORM\Table(name="pay", indexes={
- *  @ORM\Index(name="fk_pay_pay_method1", columns={"pay_method_id_pay_method"}),
- *  @ORM\Index(name="fk_purchase_orders_description_id_dispercion_novo", columns={"id_dispercion_novo"})
+ *  @ORM\Index(name="fk_pay_id_dispercion_novo", columns={"id_dispercion_novo"})
  * })
  * @ORM\Entity
  */
@@ -32,7 +31,7 @@ class Pay
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PayMethod
-     * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PayMethod")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
      * })
@@ -50,7 +49,7 @@ class Pay
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", inversedBy="payPay")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", cascade={"persist"}, inversedBy="payPay")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_id_purchase_orders_description", referencedColumnName="id_purchase_orders_description")
      * })
