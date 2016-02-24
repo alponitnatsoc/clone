@@ -358,13 +358,14 @@
                                         <td>Término fijo</td>
                                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</td>
                                         <td>Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</td>
-                                        <td>{{ form_row(form.employeeHasEmployers.finite) }}</td>
+
+                                        <td>{{ form_widget(form.employeeHasEmployers.existentNew.children[0]) }}</td>
                                     </tr>
                                     <tr>
                                         <td>Término indefinido</td>
                                         <td>Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</td>
                                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.</td>
-                                        <td>{{ form_row(form.employeeHasEmployers.indefinite) }}</td>
+                                        <td>{{ form_widget(form.employeeHasEmployers.existentNew.children[1]) }}</td>
                                     </tr>
                                 </table>
                             </div>

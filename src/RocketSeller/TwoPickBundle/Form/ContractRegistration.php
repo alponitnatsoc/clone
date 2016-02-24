@@ -35,11 +35,16 @@ class ContractRegistration extends AbstractType
             ->add('noExistent', 'button', array(
                 'label' => 'No',
             ))
-            ->add('finite', 'button', array(
-                'label' => 'Seleccionar',
-            ))
-            ->add('indefinite', 'button', array(
-                'label' => 'Seleccionar',
+            ->add('existentNew', 'choice', array(
+                'choices' => array(
+                     1=> 'Seleccionar',
+                     0=> 'Seleccionar',
+                ),
+                'multiple' => false,
+                'mapped' => false,
+                'expanded' => true,
+                'label'=>'¿El empleado pertenece al SISBÉN?*',
+                'required' => true,
             ))
             ->add('sisben', 'choice', array(
                 'choices' => array(

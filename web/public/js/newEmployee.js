@@ -619,15 +619,27 @@ function addListeners() {
         formatMoney($("#totalExpensesVal"));
         formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
     });
-    $("#register_employee_employeeHasEmployers_finite").on("click", function(){
-        $("#register_employee_employeeHasEmployers_contractType option").each(function() {
-            if($(this).text() == "Término fijo") {
-                $(this).attr('selected', 'selected');
+    $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function(){
+        if($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val()=="1") {
+            $("#register_employee_employeeHasEmployers_contractType").find("option").each(function () {
+                if ($(this).text() == "Término fijo") {
+                    $(this).attr('selected', 'selected');
                     $(".definite").each(function () {
                         $(this).show();
                     });
-            }
-        });
+                }
+            });
+        }
+        else {
+            $("#register_employee_employeeHasEmployers_contractType option").each(function () {
+                if ($(this).text() == "Término indefinido") {
+                    $(this).attr('selected', 'selected');
+                    $(".definite").each(function () {
+                        $(this).hide();
+                    });
+                }
+            });
+        }
     });
     $("#register_employee_employeeHasEmployers_weekWorkableDays").on("change",function(){
        calculator();
