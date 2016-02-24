@@ -750,6 +750,7 @@ class PaymentsRestController extends FOSRestController
         $method_id =  $data['payment-methods']['method-id'];
         $terminar = true;
       }
+      $cardFinal = $card;
       $card = substr($card, 0, 4);
       $type = '';
       if(substr($card, 0, 1) == '4')
@@ -764,7 +765,7 @@ class PaymentsRestController extends FOSRestController
         $paymentType = '2' ;
       }
       $unidad['payment-type'] = $paymentType;
-      $unidad['account'] = "" . $card;
+      $unidad['account'] = "" . $cardFinal;
       $unidad['method-id'] = $method_id;
       $retorno['payment-methods'][] = $unidad;
       if($terminar)break;
