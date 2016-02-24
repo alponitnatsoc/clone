@@ -742,11 +742,11 @@ class PaymentsRestController extends FOSRestController
     foreach($data['payment-methods'] as &$i) {
       $unidad = array();
       if(isset($i['account'])) {
-        $card = $i['account'];
+        $card = "" . $i['account'];
         $method_id =  $i['method-id'];
       }
       else {
-        $card = $data['payment-methods']['account'];
+        $card = "" . $data['payment-methods']['account'];
         $method_id =  $data['payment-methods']['method-id'];
         $terminar = true;
       }
@@ -764,7 +764,7 @@ class PaymentsRestController extends FOSRestController
         $paymentType = '2' ;
       }
       $unidad['payment-type'] = $paymentType;
-      $unidad['account'] = $card;
+      $unidad['account'] = "" . $card;
       $unidad['method-id'] = $method_id;
       $retorno['payment-methods'][] = $unidad;
       if($terminar)break;
