@@ -5,7 +5,7 @@
 	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
 {% endblock stylesheets %}
 	<div class="col-md-4">
-		{% if error is defined %}
+		{% if errno is defined %}
 			Not a valid Credit Card check the data again
 		{% endif %}
 	  	{{ form_start(form) }}
