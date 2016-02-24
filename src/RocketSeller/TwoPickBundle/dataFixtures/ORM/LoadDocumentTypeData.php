@@ -74,6 +74,10 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentTypeDocumentoIdent->setName('DOCUMENTO DE IDENTIDAD DE BENEFICIARIO');
         $manager->persist($documentTypeDocumentoIdent);
 
+        $cartaRenuncia = new DocumentType();
+        $cartaRenuncia->setName('Carta de renuncia');
+        $manager->persist($cartaRenuncia);
+
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
@@ -92,6 +96,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-certificado-defuncion', $documentTypeCertificadoDefuncion);
         $this->addReference('document-registro-civil', $documentTypeRegistroCivil);
         $this->addReference('document-documento-identidad', $documentTypeDocumentoIdent);
+        $this->addReference('document-carta-renuncia', $cartaRenuncia);
     }
     public function getOrder()
     {
