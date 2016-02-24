@@ -107,9 +107,12 @@ span {
   color: #fd9626;
   border: 1px solid #fd9626;
   margin-top: 0;
+  background-image: none !important;
+  text-shadow: none !important;
 }
 .btnPrevious:hover {
   color: #fd9626;
+  border: 1px solid #fd9626;
 }
 .btn:hover {
   opacity: 0.8;
@@ -713,7 +716,8 @@ a.helpTxt {
   color: #3C4B5A;
 }
 #sidebar .well.activeMenu a {
-  color: #FD5C5C !important;
+  /*color: @selectedMenuColor !important;*/
+  color: #00CDCC !important;
 }
 #sidebar .well img {
   margin-top: 20px;
@@ -978,6 +982,9 @@ a.helpTxt {
 #registrationFormContainer .form-inline select {
   margin-right: 10px;
 }
+#registrationFormContainer .fa.fa-info-circle {
+  color: #00CDCC;
+}
 #basicData h2,
 #contractData h2 {
   font-family: "Lato";
@@ -1124,7 +1131,7 @@ ul.phones li {
   display: inline-block;
 }
 .blueFormTitle {
-  color: #99ebeb;
+  color: #00CDCC;
   font-family: Lato;
   font-size: 20px;
   font-weight: 200;
@@ -1323,7 +1330,7 @@ select.error {
 .label-group h3 {
   font-weight: 200;
   font-size: 20px;
-  color: #99ebeb;
+  color: #00CDCC;
   font-family: "Lato";
 }
 .upload-link {
@@ -1374,6 +1381,9 @@ select.error {
   padding: 15px;
   /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)!important;*/
   letter-spacing: -1px;
+}
+.employees > .block-Data .fa.fa-user {
+  color: #00CDCC;
 }
 .employees .titulos {
   border-bottom: 1px solid #ccc;
