@@ -291,7 +291,7 @@ home_landing_new:
     defaults: { _controller: RocketSellerTwoPickBundle:Home:newLanding }
 
 home_landing_form:
-    path:     /prueba
+    path:     /
     defaults: { _controller: RocketSellerTwoPickBundle:LandingRegistration:register }
 
 show_logs:
@@ -397,7 +397,7 @@ back_person_cvs_export:
 #Zona Pública
 
 home_landing:
-    path:     /
+    path:     /landing-antiguo
     defaults: { _controller: RocketSellerTwoPickBundle:Public:home }
 
 beneficios:
