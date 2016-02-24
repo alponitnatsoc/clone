@@ -822,7 +822,7 @@ class PaymentsRestController extends FOSRestController
    *
    * @return View
    */
-  public function deleteClientPaymentmethodAction(Request $request)
+  public function deleteClientPaymentMethodAction(Request $request)
   {
     $parameters = $request->request->all();
     $regex = array();
