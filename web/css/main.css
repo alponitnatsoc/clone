@@ -799,6 +799,18 @@ a.helpTxt {
   color: #00cdcc;
   font-size: 20px;
 }
+.pay-Data h4 {
+  margin-top: 15px;
+  margin-bottom: 25px;
+  float: left;
+  width: 100%;
+}
+table.payMethods tr td {
+  padding: 8px 10px;
+}
+table.record_properties th {
+  padding: 8px 10px;
+}
 .blockStep {
   background-image: none;
   background-color: #fff;
