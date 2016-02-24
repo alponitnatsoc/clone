@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
@@ -123,6 +124,43 @@ class EmployerRestController extends FOSRestController
         }
         $view = View::create($msgs);
         $view->setStatusCode(400);
+
+        return $view;
+    }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getDeletePayMethodAction($idPayM,$idUser)
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        if($user->getPersonPerson()->getDocument()!=$idUser){
+            $view = View::create();
+            $view->setStatusCode(403);
+            return $view;
+        }
+        $request = Request::createFromGlobals();
+        $request->setMethod("DELETE");
+        $request->request->add(array(
+            "documentNumber"=>$idUser,
+            "paymentMethodId"=>$idPayM,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
+
+        $view = View::create();
+        $view->setStatusCode($insertionAnswer->getStatusCode());
 
         return $view;
     }
