@@ -76,7 +76,7 @@
             <tr>
                 <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>
                 <td>{{ payM["account"] }}</td>
-                <td><a id="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>
+                <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>
             </tr>
         {% endfor %}
         </tbody>

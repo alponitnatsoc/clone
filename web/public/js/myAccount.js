@@ -22,6 +22,22 @@ function addListeners(){
         $("#dataFailEmail").hide();
         $(this).hide();
     });
+    //TODO BORRADA EXITOSAMENTE
+    $(".DeleteCC").each(function () {
+        $(this).on("click", function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                type: "GET",
+            }).done(function (data) {
+                alert("tarjeta borrada exitosamente");
+                $(this).parent().parent().remove();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert("No se pudo Borrar la tarjeta");
+            });
+        })
+    });
     $("#form_save").on("click", function(e){
         e.preventDefault();
         $.ajax({
