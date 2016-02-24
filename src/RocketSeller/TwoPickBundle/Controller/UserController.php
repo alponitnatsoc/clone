@@ -132,7 +132,7 @@ class UserController extends Controller
             'form' => $form->createView(),
             'flag' => $flag,
             'invoices'=>$invoicesEmited,
-            'payMethods'=>$responsePaymentsMethods["payments"],
+            'payMethods'=>$responsePaymentsMethods["payment-methods"],
             'dayService'=>$dDiff->days,
             'eHEToSend'=>array('fullTime'=>$fullTime,'partialTime'=>$atemporel),
             'amountToPay'=>$amountToPay,

@@ -151,14 +151,14 @@ class EmployerRestController extends FOSRestController
             $view->setStatusCode(403);
             return $view;
         }
-        $request = Request::createFromGlobals();
+        $request = $this->container->get('request');
         $request->setMethod("DELETE");
         $request->request->add(array(
             "documentNumber"=>$idUser,
             "paymentMethodId"=>$idPayM,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
-
+        echo "Request Data".$insertionAnswer->getContent()." code ".$insertionAnswer->getStatusCode();
         $view = View::create();
         $view->setStatusCode($insertionAnswer->getStatusCode());
 

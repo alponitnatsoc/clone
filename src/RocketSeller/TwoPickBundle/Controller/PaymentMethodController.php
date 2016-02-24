@@ -44,7 +44,7 @@ class PaymentMethodController extends Controller
             if($insertionAnswer->getStatusCode()!=201){
                 return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig', array(
                     'form' => $form->createView(),
-                    'error' => "Not a valid Credit Card check the data again"
+                    'errno' => "Not a valid Credit Card check the data again"
                 ));
             }
             if($idNotification!=-1){
