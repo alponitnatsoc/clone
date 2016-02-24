@@ -6,7 +6,7 @@
 {% endblock stylesheets %}
 	<div class="col-md-4">
 		{% if error is defined %}
-			{{ error }}
+			{{ error| raw }}
 		{% endif %}
 	  	{{ form_start(form) }}
 		<div class="col-md-12">
