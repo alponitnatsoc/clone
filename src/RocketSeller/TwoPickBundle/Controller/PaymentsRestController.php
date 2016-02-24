@@ -738,7 +738,7 @@ class PaymentsRestController extends FOSRestController
     $code = json_decode($temp->getStatusCode(), true);
     //die(print_r($data, true));
     foreach($data['payment-methods'] as &$i) {
-      $card = $i['account-number'];
+      $card = $i['account'];
       $card = substr($card, 0, 4);
       $type = '';
       if(substr($card, 0, 1) == '4')
