@@ -737,25 +737,41 @@ class PaymentsRestController extends FOSRestController
     $data = json_decode($temp->getContent(), true);
     $code = json_decode($temp->getStatusCode(), true);
     //die(print_r($data, true));
+    $retorno = array();
+    $terminar = false;
     foreach($data['payment-methods'] as &$i) {
-      $card = $i['account'];
+      $unidad = array();
+      if(isset($i['account'])) {
+        $card = "" . $i['account'];
+        $method_id =  $i['method-id'];
+      }
+      else {
+        $card = "" . $data['payment-methods']['account'];
+        $method_id =  $data['payment-methods']['method-id'];
+        $terminar = true;
+      }
       $card = substr($card, 0, 4);
       $type = '';
       if(substr($card, 0, 1) == '4')
       {
         // Visa.
-        $i['payment-type'] = '3' ;
+        $paymentType = '3' ;
       } else if(substr($card, 0, 2) == '51' || substr($card, 0, 2) == '52'||
       substr($card, 0, 2) == '53'|| substr($card, 0, 2) == '54'||
       substr($card, 0, 2) == '55')
       {
         // Master card.
-        $i['payment-type'] = '2' ;
+        $paymentType = '2' ;
       }
+      $unidad['payment-type'] = $paymentType;
+      $unidad['account'] = "" . $card;
+      $unidad['method-id'] = $method_id;
+      $retorno['payment-methods'][] = $unidad;
+      if($terminar)break;
     }
     $view = View::create();
     $view->setStatusCode($code);
-    $view->setData($data);
+    $view->setData($retorno);
     return $view;
   }
 

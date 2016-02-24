@@ -151,7 +151,7 @@ class EmployerRestController extends FOSRestController
             $view->setStatusCode(403);
             return $view;
         }
-        $request = Request::createFromGlobals();
+        $request = $this->container->get('request');
         $request->setMethod("DELETE");
         $request->request->add(array(
             "documentNumber"=>$idUser,
