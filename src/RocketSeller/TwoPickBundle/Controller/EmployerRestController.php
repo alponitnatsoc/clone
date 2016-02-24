@@ -158,7 +158,7 @@ class EmployerRestController extends FOSRestController
             "paymentMethodId"=>$idPayM,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
-
+        echo "Request Data".$insertionAnswer->getContent()." code ".$insertionAnswer->getStatusCode();
         $view = View::create();
         $view->setStatusCode($insertionAnswer->getStatusCode());
 
