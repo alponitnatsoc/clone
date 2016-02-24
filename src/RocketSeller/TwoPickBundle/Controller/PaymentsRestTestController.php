@@ -184,30 +184,30 @@ class PaymentsRestTestController extends FOSRestController
     {
       $view->setStatusCode(200);
       $response = array();
-      $response["payments"] = array();
+      $response["payment-methods"] = array();
       $temp = array();
       $temp["method-id"] = 101;
-      $temp["account-number"] = "5161********0012";
-      $response["payments"][] = $temp;
+      $temp["account"] = "5161********0012";
+      $response["payment-methods"][] = $temp;
       $temp = array();
       $temp["method-id"] = 102;
-      $temp["account-number"] = "4561********0023";
-      $response["payments"][] = $temp;
+      $temp["account"] = "4561********0023";
+      $response["payment-methods"][] = $temp;
       $view->setData($response);
     }
     else
     {
       $view->setStatusCode(200);
       $response = array();
-      $response["payments"] = array();
+      $response["payment-methods"] = array();
       $temp = array();
       $temp["method-id"] = 103;
-      $temp["account-number"] = "4012********1881";
-      $response["payments"][] = $temp;
+      $temp["account"] = "4012********1881";
+      $response["payment-methods"][] = $temp;
       $temp = array();
       $temp["method-id"] = 104;
-      $temp["account-number"] = "5105********5100";
-      $response["payments"][] = $temp;
+      $temp["account"] = "5105********5100";
+      $response["payment-methods"][] = $temp;
       $view->setData($response);
     }
     return $view;
