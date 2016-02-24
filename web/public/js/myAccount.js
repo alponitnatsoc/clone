@@ -24,15 +24,16 @@ function addListeners(){
     });
     //TODO BORRADA EXITOSAMENTE
     $(".DeleteCC").each(function () {
+        var $deleteLink = $(this);
         $(this).on("click", function (e) {
             e.preventDefault();
 
             $.ajax({
                 url: $(this).attr("href"),
-                type: "GET",
+                type: "GET"
             }).done(function (data) {
                 alert("tarjeta borrada exitosamente");
-                $(this).parent().parent().remove();
+                $deleteLink.parent().parent().remove();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert("No se pudo Borrar la tarjeta");
             });
