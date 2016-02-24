@@ -5,6 +5,9 @@
 	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
 {% endblock stylesheets %}
 	<div class="col-md-4">
+		{% if error is defined %}
+			{{ error }}
+		{% endif %}
 	  	{{ form_start(form) }}
 		<div class="col-md-12">
 			{{ form_label(form.credit_card) }}

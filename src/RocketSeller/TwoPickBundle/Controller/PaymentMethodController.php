@@ -41,7 +41,12 @@ class PaymentMethodController extends Controller
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
             echo "Status Code Employee PayMethod: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
-
+            if($insertionAnswer->getStatusCode()!=201){
+                return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig', array(
+                    'form' => $form->createView(),
+                    'error' => "Not a valid Credit Card check the data again"
+                ));
+            }
             if($idNotification!=-1){
                 $notificationRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
                 /** @var Notification $realNotif */
