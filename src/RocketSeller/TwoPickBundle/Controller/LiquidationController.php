@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Traits\NoveltyMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
+use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
 
 /**
  * Liquidation controller.
@@ -29,6 +32,7 @@ class LiquidationController extends Controller
     use LiquidationMethodsTrait;
     use NoveltyTypeMethodsTrait;
     use NoveltyMethodsTrait;
+    use NotificationMethodsTrait;
 
     /**
      * Lists all Liquidation entities.
@@ -93,7 +97,8 @@ class LiquidationController extends Controller
         $person = $employee->getPersonPerson();
         /** @var Employer $employer */
         $employer = $this->getEmployer($id);
-        $usernameEmployer = $employer->getPersonPerson()->getNames();
+        $employerPerson = $employer->getPersonPerson();
+        $usernameEmployer = $employerPerson->getNames();
 
         $employeeInfo = array(
             'name' => $person->getNames(),
@@ -135,20 +140,16 @@ class LiquidationController extends Controller
 
         /** @var Payroll $payroll */
         $payroll = $contract[0]->getActivePayroll();
-        $novelties = $payroll->getNovelties();
-//         echo count($novelties);
-//         echo $payroll->getIdPayroll();
-//         echo $contract[0]->getIdContract();
+        $novelties = null;
+        if ($payroll) {
+            $novelties = $payroll->getNovelties();
+        }
         $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
 
         if ( !($liquidation = $this->liquidationByTypeAndEmHEmAndContract($id, 1, $contract[0]->getIdContract())) ) {
             $liquidation = new Liquidation();
             $liquidation->setContract($contract[0]);
-    //         $liquidation->setCost($cost);
-    //         $liquidation->setDaysToLiquidate($daysToLiquidate);
             $liquidation->setEmployerHasEmployee($employerHasEmployee);
-    //         $liquidation->setIdPurchaseOrder($idPurchaseOrder);
-    //         $liquidation->setLastWorkDay($lastWorkDay);
             $liquidationType = $em->getRepository('RocketSellerTwoPickBundle:LiquidationType')->findOneBy(array(
                 "name" => "Definitiva"
             ));
@@ -160,6 +161,33 @@ class LiquidationController extends Controller
 
         $id_liq = $liquidation->getId();
 
+//         $notification = new Notification();
+//         $notification->setAccion("Subir carta de renuncia");
+//         $notification->setDescription("Subir carta de renuncia firmada por " . $employeeInfo["name"]);
+//         $notification->setPersonPerson($employerPerson);
+//         $notification->setStatus(0);
+//         $notification->setType("renuncia");
+//         $notification->setTitle("Subir carta de renuncia");
+//         $em->persist($notification);
+//         $em->flush();
+
+        $repoDocType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType");
+        /** @var DocumentType $docType */
+        $docType = $repoDocType->findOneBy(array(
+            "name" => "Carta de renuncia"
+        ));
+
+//         $relatedLink = $this->generateUrl("documentos_employee", array(
+//             "idNotification" => $notification->getId(),
+//             "id" => $employerPerson->getIdPerson(),
+//             "idDocumentType" => $docType->getIdDocumentType()
+//             )
+//         );
+//         $notification->setRelatedLink($relatedLink);
+//         $em->persist($notification);
+        $em->flush();
+
+
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
             "employeeInfo" => $employeeInfo,
             "contractInfo" => $contractInfo,
@@ -167,7 +195,8 @@ class LiquidationController extends Controller
             "payroll" => $payroll,
             "novelties" => $novelties,
             "llamadosAtencion" => $llamadosAtencion,
-            "id_liq" => $id_liq
+            "id_liq" => $id_liq,
+//             "relatedLink" => $relatedLink
         ));
     }
 
@@ -180,7 +209,8 @@ class LiquidationController extends Controller
         $person = $employee->getPersonPerson();
         /** @var Employer $employer */
         $employer = $this->getEmployer($id);
-        $usernameEmployer = $employer->getPersonPerson()->getNames();
+        $employerPerson = $employer->getPersonPerson();
+        $usernameEmployer = $employerPerson->getNames();
 
         $employeeInfo = array(
             'name' => $person->getNames(),
@@ -214,19 +244,55 @@ class LiquidationController extends Controller
             'frequency' => $frequency
         );
 
-        $form = $this->createForm(new LiquidationType());
-
         /** @var Payroll $payroll */
         $payroll = $contract[0]->getActivePayroll();
         $novelties = $payroll->getNovelties();
-        //         echo count($novelties);
-        //         echo $payroll->getIdPayroll();
-        //         echo $contract[0]->getIdContract();
         $llamadosAtencion = $this->noveltiesByGroup("llamado_atencion");
 
+        /** @var Liquidation $liquidation */
         $liquidation = $this->liquidationDetail($id_liq);
 
-        $liquidation->getId();
+//         $liquidation->getId();
+
+//         $liquidation_reason = $liquidation->getLiquidationReason()->getPayrollCode();
+//         if ($liquidation_reason == 7 || $liquidation_reason == 10 ) {
+//             $notification = new Notification();
+//             $notification->setAccion("Subir carta de renuncia");
+//             $notification->setDescription("Subir carta de renuncia firmada por " . $employeeInfo["name"]);
+//             $notification->setPersonPerson($employerPerson);
+//             $notification->setStatus(1);
+//             $notification->setType("alert");
+//             $notification->setTitle("Subir carta de renuncia");
+//             $em->persist($notification);
+//             $em->flush();
+
+//             $repoDocType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType");
+//             /** @var DocumentType $docType */
+//             $docType = $repoDocType->findOneBy(array(
+//                 "name" => "Carta de renuncia"
+//             ));
+
+//             $relatedLink = $this->generateUrl("documentos_employee", array(
+//                     "idNotification" => $notification->getId(),
+//                     "id" => $employerPerson->getIdPerson(),
+//                     "idDocumentType" => $docType->getIdDocumentType()
+//                 )
+//             );
+
+//             $notification->setRelatedLink($relatedLink);
+//             $em->persist($notification);
+//             $em->flush();
+//         }
+
+        /** @var Notification $notification */
+        $notification = $this->notificationByPersonLiquidation($id_liq, $employerPerson->getIdPerson());
+        $relatedLink = null;
+        if ($notification) {
+            $relatedLink = $notification->getRelatedLink();
+        }
+
+
+        $form = $this->createForm(new LiquidationType());
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final-steps.html.twig", array(
             "employeeInfo" => $employeeInfo,
@@ -234,7 +300,10 @@ class LiquidationController extends Controller
             "form" => $form->createView(),
             "payroll" => $payroll,
             "novelties" => $novelties,
-            "llamadosAtencion" => $llamadosAtencion
+            "llamadosAtencion" => $llamadosAtencion,
+            "id_liq" => $id_liq,
+            "relatedLink" => $relatedLink,
+            "liquidationReason" => $liquidation->getLiquidationReason()->getPayrollCode()
         ));
     }
 
@@ -450,8 +519,7 @@ class LiquidationController extends Controller
 
         $period = $liquidation->getPeriod();
 
-
-        return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig", array(
+        $viewData = array(
             "total" => $total,
             'employeeInfo' => $employeeInfo,
             'contractInfo' => $contractInfo,
@@ -465,12 +533,53 @@ class LiquidationController extends Controller
             'totalDevengos' => $totalLiq["totalDev"],
             'employer' => $employerInfo,
             'id_liq' => $id
-        ));
+        );
+
+        $filename = "liquidation-empleado-" . $employeeInfo["document"] . ".pdf";
+        $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/" . $filename;
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
+                $viewData
+            ),
+            $path
+        );
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig",
+            $viewData
+        );
     }
 
-    public function cartasLiquidacionAction($ref)
+    public function cartasLiquidacionAction($ref, $id)
     {
+        /** @var Liquidation $liquidation */
+        $liquidation = $this->liquidationDetail($id);
+        $fechaFin = $liquidation->getLastWorkDay();
+        $empHasEmpe = $liquidation->getEmployerHasEmployee();
+        $empleador = $empHasEmpe->getEmployerEmployer();
+        $empleado = $empHasEmpe->getEmployeeEmployee();
+        $contacto = $liquidation->getContract();
+
+        $data = array(
+            'endDate' => strftime("%d de %B de %Y", $fechaFin->getTimestamp()) ,
+            'employer' => array(
+                'name' => utf8_encode($empleador->getPersonPerson()->getNames()),
+                'document' => $empleador->getPersonPerson()->getDocument(),
+                'documentType' => utf8_encode($empleador->getPersonPerson()->getDocumentType())
+            ),
+            'employee' => array(
+                'name' => utf8_encode($empleado->getPersonPerson()->getNames()),
+                'document' => $empleado->getPersonPerson()->getDocument(),
+                'documentType' => utf8_encode($empleado->getPersonPerson()->getDocumentType())
+            ),
+            'contract' => array(
+                'position' => utf8_encode($contacto->getPositionPosition()->getName()),
+                'startDate' => strftime("%d de %B de %Y", $contacto->getStartDate()->getTimestamp()),
+                'city' => ($contacto->getWorkplaceWorkplace()->getCity()->getName())
+            )
+        );
+
         $html = $this->renderView('RocketSellerTwoPickBundle:Liquidation:carta-' . $ref . '.html.twig', array(
+            'data' => $data
         ));
 
         return new Response(
@@ -478,7 +587,7 @@ class LiquidationController extends Controller
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                'Content-Disposition' => 'attachment; filename="' . $ref .'-' . $data["employee"]["document"] . '.pdf"'
             )
         );
     }

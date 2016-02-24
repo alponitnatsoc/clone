@@ -57,4 +57,33 @@ function validateLiqForm() {
             alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
         });
     });
+
+    $("#liquidation-newstep1").click(function(e) {
+        e.preventDefault();
+
+        var form = $("form");
+
+        if (!form.valid()) {
+            return;
+        }
+
+        var href = $(this).attr('href');
+
+        $.ajax({
+            url: href,
+            type: 'POST',
+            data: {
+                last_work_day: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val(),
+                last_work_month: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val(),
+                last_work_year: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val(),
+                liquidation_reason: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
+                id_liq: form.find("input[name='rocketseller_twopickbundle_liquidation[id_liq]']").val()
+            }
+        }).done(function (data) {
+            redirUri = data["url"];
+            window.location.href = redirUri;
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+        });
+    });
 }

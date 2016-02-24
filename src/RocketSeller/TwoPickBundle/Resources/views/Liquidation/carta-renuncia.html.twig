@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+<title>Carta de renuncia</title>
+<meta charset="utf-8" />
 <style>
 body {
     height: 842px;
@@ -14,20 +16,21 @@ body {
 <body>
 <hr />
 <p>&nbsp;</p>
-<p><strong>Bogot&aacute; D&iacute;a – mes – a&ntilde;o</strong><br />
+{% set local = "now"|date("d-m-y") %}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />
 <em>Se&ntilde;or(a)</em><br />
-<em> -- NOMBRE DE LA EMPRESA -- </em><br />
+<em>{{ data.employer.name }}</em><br />
 <em>Asunto: Renuncia irrevocable</em><br />
 <p style="text-align: justify;">
-Por medio de la presente yo -- NOMBRE DEL TRABAJADOR -- identificado con documento de identidad n&uacute;mero
-XXXXXXXXX, manifiesto mi deseo de renuncia irrevocable al cargo de
-XXXXXXXXXXXX el cual ven&iacute;a realizando en la empresa (persona Natural XXXXXXXXX) con
-NIT/CC XXXXXXXXXX. Cumpliendo as&iacute; mis labores hasta el d&iacute;a XX mes XX año XXXX.
+Por medio de la presente yo {{ data.employee.name }} identificado con documento de identidad n&uacute;mero
+{{ data.employee.document }}, manifiesto mi deseo de renuncia irrevocable al cargo de
+{{ data.contract.position }} el cual ven&iacute;a realizando para {{ data.employer.name }} con
+NIT/CC {{ data.employer.document }}. Cumpliendo as&iacute; mis labores hasta el d&iacute;a {{ data.endDate }}.
 Agradezco la oportunidad brindada.</p>
 <p>Cordialmente,</p>
-<p><em>FIRMA</em></p>
-<p><em>-- NOMBRE DEL TRABAJADOR --</em><br />
-<strong>-- CEDULA --</strong></p>
+{# <p><em>FIRMA</em></p>#}
+<p><em>{{ data.employee.name }}</em><br />
+<strong>{{ data.employee.documentType }} {{data.employee.document  }}</strong></p>
 <hr />
 </body>
 </html>

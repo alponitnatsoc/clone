@@ -61,48 +61,9 @@
                 <p><strong>Salario</strong></p>
                 <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
             </div>
-{#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
-{#                 <p><strong>Días tomados de vacaciones</strong></p>#}
-{#                 <span class="txthelp"><p></p></span>#}
-{#             </div>#}
         </div>
     </div>
-    <div id="liquidationStep1">
-        <div class="liq-container">
-            <h3>Diligencie los siguientes datos y calcularemos el valor de la liquidación</h3>
-        </div>
-        <div class="liq-container">
-            <div class="col-sm-6">
-                ¿Cuál es el último día de trabajo de su empleado?
-                {{ form_widget(form.lastWorkDay) }}
-            </div>
-            <div class="col-sm-6">
-                <span class="txthelp"><strong>Fecha inicio del contrato</strong></span>
-                <span class="txthelp" id="startDate" startdate="{{ contractInfo.startDate|date("Y-m-d") }}">{{ contractInfo.startDay }}</span>
-            </div>
-        </div>
-        <div class="liq-container">
-            <div class="col-sm-12">
-                <p>¿Cuál es la razón para finalizar el contrato?</p>
-                {{ form_widget(form.liquidationReason) }}
-                <p>El valor de la liquidación es:</p>
-                <span class="txthelp" id="liquidationValue">*</span>
-                <span class="txthelp"><p>* Basado en la información que actualmente registra el sistema. Puede variar si debe reportar novedades.</p></span>
-            </div>
-        </div>
-        <div class="col-sm-12 col-xs-12 center">
-            <div class="col-sm-6 col-sm-push-3">
-{#                 <a id="liquidation-step1" disabled=true href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>#}
-
-{#                 <a id="liquidation-newstep1" disabled=true href="{{ path("final_liquidation_steps", {"id": employeeInfo.idEmperHasEmpee, "id_liq": id_liq, "step": 2} ) }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>#}
-                <a id="liquidation-newstep1" disabled=true href="{{ path("api_public_post_final_liquidation_step1" ) }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>
-                <input name="rocketseller_twopickbundle_liquidation[id_liq]" value="{{ id_liq }}" type="hidden" />
-{#                 <button type="button" class="btn btn-info btn-lg">Continuar el proceso de liquidación</button>#}
-                <br /><br />
-            </div>
-        </div>
-    </div>
-    <div id="liquidationStep2" style="display:none">
+    <div id="liquidationStep2">
         <div class="liq-container">
             <div class="col-sm-12">
                 <h3>1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} ¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h3>
@@ -126,79 +87,83 @@
                     {% endif %}
                 </ul>
 {#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
-            {% if not llamadosAtencion %}
+            {% if liquidationReason != 2 %}
                 <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
             {% endif %}
             </div>
         </div>
-        <div class="liq-container" id="liqSinJustaCausa">
-            <div class="col-sm-12">
-                <h3>2. Descagar el documento para ser firmado por el empleado</h3>
-            </div>
-            <br />
-            <div class="col-sm-12">
-                <span class="txthelp">Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
-                Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</span>
-            </div>
-            <br />
-            <div class="col-sm-12 col-xs-12 center">
-                <div class="col-sm-6 col-sm-push-3">
-                    <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia <br />
-                    <button type="button" id="btnDownloadRenuncia" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaRenuncia(this);"><i class="fa fa-cloud-download"></i>Descargar documento</a>
-                </div>
-            </div>
-            <div class="col-sm-12 col-xs-12 center" id="infoDocs" style="display: none">
-                <div class="col-sm-8">
-                    <h4 class="txthelp">El documento fue descargado exitosamente.</h4>
-                    <span class="txthelp">Recuerde que <strong>ES MUY IMPORTANTE</strong> que lo haga firmar,
-                    <strong>le tome foto o escanee y posteriormente lo suba a Symplifica</strong> para mantener
-                    registro del manejo del empleado y así evitar futuros inconvenientes legales.
-                    </span>
-                </div>
-                <div class="col-sm-4">
-                    <h4 class="txthlep">¿Cómo tomar foto o escanear un documento?</h4>
-                    <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-{#                     <span id="uploadLinkRenuncia" href="{{ relatedLink }}" class="btn btn-primary btnNext btn-orange download-link"><i class="fa fa-upload"></i>Subir carta de renuncia</span>#}
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <button type="button" id="btnDownloadAceptacion" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</button>
-                </div>
-            </div>
-        </div>
-        <div class="liq-container" id="liqJustaCausa">
-            <div class="col-sm-12">
-                <h3>2. Razones para liquidación con justa causa</h3>
-            </div>
-            <br/>
-            <div class="col-sm-12">
-                <span class="txthelp">Para finalizar el contrato con un empleado de forma unilateral
-                debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
-                empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
-                atención</strong> así como también sus correspondientes <strong>descargos</strong>.</span>
-            </div>
-            {% if llamadosAtencion %}
-            <div class="col-sm-12">
-                <ul class="list-group">
-                    {% for llamado in llamadosAtencion %}
-                        <li class="list-group-item">
-                            {{ llamado.name }}
-                            {% if llamado.dateStart %}
-                                {{ llamado.dateStart.date }}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
-            </div>
-            {% endif %}
-        </div>
 
-        <div class="col-sm-12 col-xs-12 center" id="contLiq" style="display:none">
+        {% if liquidationReason == 2 %}
+            <div class="liq-container" id="liqJustaCausa">
+                <div class="col-sm-12">
+                    <h3>2. Razones para liquidación con justa causa</h3>
+                </div>
+                <br/>
+                <div class="col-sm-12">
+                    <span class="txthelp">Para finalizar el contrato con un empleado de forma unilateral
+                    debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
+                    empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
+                    atención</strong> así como también sus correspondientes <strong>descargos</strong>.</span>
+                </div>
+                {% if llamadosAtencion %}
+                <div class="col-sm-12">
+                    <ul class="list-group">
+                        {% for llamado in llamadosAtencion %}
+                            <li class="list-group-item">
+                                {{ llamado.name }}
+                                {% if llamado.dateStart %}
+                                    {{ llamado.dateStart.date }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
+                </div>
+                {% endif %}
+            </div>
+        {% elseif liquidationReason in [7,10] %}
+            <div class="liq-container" id="liqSinJustaCausa">
+                <div class="col-sm-12">
+                    <h3>2. Descagar el documento para ser firmado por el empleado</h3>
+                </div>
+                <br />
+                <div class="col-sm-12">
+                    <span class="txthelp">Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
+                    Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</span>
+                </div>
+                <br />
+                <div class="col-sm-12 col-xs-12 center">
+                    <div class="col-sm-6 col-sm-push-3">
+                        <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia <br />
+                        <button type="button" id="btnDownloadRenuncia" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaRenuncia(this);"><i class="fa fa-cloud-download"></i>Descargar documento</a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center" id="infoDocs" style="display: none">
+                    <div class="col-sm-8">
+                        <h4 class="txthelp">El documento fue descargado exitosamente.</h4>
+                        <span class="txthelp">Recuerde que <strong>ES MUY IMPORTANTE</strong> que lo haga firmar,
+                        <strong>le tome foto o escanee y posteriormente lo suba a Symplifica</strong> para mantener
+                        registro del manejo del empleado y así evitar futuros inconvenientes legales.
+                        </span>
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 class="txthlep">¿Cómo tomar foto o escanear un documento?</h4>
+                        <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 center">
+                        <span id="uploadLinkRenuncia" href="{{ relatedLink }}" class="btn btn-primary btnNext btn-orange download-link"><i class="fa fa-upload"></i>Subir carta de renuncia</span>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 center">
+                        <button type="button" id="btnDownloadAceptacion" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="col-sm-12 col-xs-12 center" id="contLiq">
             <div class="col-sm-6 col-sm-push-3">
 
-                <button type="button" class="btn btn-info btn-lg" onclick="$('#liquidationStep2').hide();$('#liquidationStep1').show()">Anterior</button>
+                <button type="button" class="btn btn-info btn-lg" onclick="history.go(-1)">Anterior</button>
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
 
                 <br /><br />
@@ -271,7 +236,6 @@ $("#uploadLinkRenuncia").on('click',function(event){
     event.preventDefault();
     var uri = $(this).attr("href");
 
-    alert(uri);
     $.ajax({
          //method: "POST",
          url: uri,
@@ -382,7 +346,7 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
     }).done(function (data) {
         $("#liquidationValue").prepend(data["totalLiq"]["total"]);
         formatMoney($("#liquidationValue"));
-        $("#liquidation-newstep1").removeAttr("disabled");
+        $("#liquidation-step1").removeAttr("disabled");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
@@ -394,11 +358,11 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
     $('#createdModal').modal('toggle');
 
     var form = $("form[name='rocketseller_twopickbundle_liquidation']");
-    var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
-    var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
-    var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
+//     var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
+//     var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
+//     var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
 
-    var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
+//     var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
 
     var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
     var username = "{{ employeeInfo.usernameEmployer }}";
@@ -413,13 +377,14 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
         data: {
             employee_id: employer_has_employee_id,
             username: username,
-            year: year,
-            month: month,
-            day: day,
+//             year: year,
+//             month: month,
+//             day: day,
             frequency: frequency,
-            cutDate: processDate,
-            processDate: processDate,
-            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
+//             cutDate: processDate,
+//             processDate: processDate,
+//             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
+            retirementCause: "{{ liquidationReason }}",
             id_liq: "{{ id_liq }}"
         }
     }).done(function (data) {

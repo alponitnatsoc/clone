@@ -16,7 +16,7 @@ final_liquidation:
     requirements:
         id: \d+
 final_liquidation_steps:
-    path: /final/{id}/{step}/{id_liq}
+    path: /final/{id}/{id_liq}/{step}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:finalLiquidationSteps }    
     requirements:
         id: \d+
@@ -39,7 +39,8 @@ pay_liquidation:
     requirements:
         id: \d+
 cartas_liquidacion:
-    path: /cartas/{ref}
+    path: /cartas/{ref}/{id}
     defaults: { _controller: RocketSellerTwoPickBundle:Liquidation:cartasLiquidacion }
     requirements:
         ref: (renuncia|aceptacion)
+        id: \d+

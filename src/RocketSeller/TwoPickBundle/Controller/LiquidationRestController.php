@@ -10,20 +10,24 @@ use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 use Symfony\Component\HttpFoundation\Response;
-use RocketSeller\TwoPickBundle\Entity\Novelty;
-use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 use Symfony\Component\Validator\Constraints\Date;
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Product;
+use RocketSeller\TwoPickBundle\Traits\LiquidationReasonMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\LiquidationReason;
+use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
 
 class LiquidationRestController extends FOSRestController
 {
     use EmployerHasEmployeeMethodsTrait;
     use LiquidationMethodsTrait;
     use NoveltyTypeMethodsTrait;
+    use LiquidationReasonMethodsTrait;
+    use NotificationMethodsTrait;
 
     /**
      * Obtener las liquidaciones de un empleado relacionado con un empleador employerhasemployee.<br/>
@@ -97,38 +101,90 @@ class LiquidationRestController extends FOSRestController
      * (name="last_work_month", nullable=false, requirements="([0-9])+", strict=true, description="")
      * (name="last_work_year", nullable=false, requirements="([0-9])+", strict=true, description="")
      * (name="liquidation_reason", nullable=false, requirements="([0-9])+", strict=true, description="")
+     * (name="id_liq")
      *
      * @return View
      */
     public function postFinalLiquidationStep1Action(Request $request)
     {
-//         $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         $data = array(
             "username" => $this->getUser()->getUsername(),
             "last_work_day" => $request->get("last_work_day", null),
             "last_work_month" => $request->get("last_work_month", null),
             "last_work_year" => $request->get("last_work_year", null),
-            "liquidation_reason" => $request->get("liquidation_reason", null)
+            "liquidation_reason" => $request->get("liquidation_reason", null),
+            "id_liq" => $request->get("id_liq", null)
         );
 
         $parameters = $request->request->all();
         $day = $parameters["last_work_day"];
         $month = $parameters["last_work_month"];
         $year = $parameters["last_work_year"];
+        $liquidation_reason = $parameters["liquidation_reason"];
+        $id_liq = $parameters["id_liq"];
 
-//         $dateStart = new \DateTime($year . "-" . $month . "-" . $day);
-//         $payroll = $parameters["idPayroll"];
+        /** @var Liquidation $liquidation */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $date = $year . "-" . $month . "-" . $day;
+        $lastWorkDay = new \DateTime($date);
+        $liquidation->setLastWorkDay($lastWorkDay);
 
-//         $noveltyType = $this->noveltyTypeByGroup("retiro");
+        /** @var LiquidationReason $liquidation_reason */
+        $liquidation_reason = $this->liquidationReasonByPayrollCode($liquidation_reason);
 
-//         $retiro = new Novelty();
-//         $retiro->setDateStart($dateStart);
-//         $retiro->setName("Retiro");
-//         $retiro->setNoveltyTypeNoveltyType($noveltyType[0]);
+        $liquidation->setLiquidationReason($liquidation_reason);
+        $employerHasEmployee = $liquidation->getEmployerHasEmployee();
+        $idEmperHasEmpee = $employerHasEmployee->getIdEmployerHasEmployee();
 
-//         $em->persist($retiro);
-//         $em->flush();
+        $em->persist($liquidation);
+        $em->flush();
+
+        $employeeName = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames();
+        $employerPerson = $employerHasEmployee->getEmployerEmployer()->getPersonPerson();
+
+        $liquidationReason = $liquidation_reason->getPayrollCode();
+        $notification = $this->notificationByPersonLiquidation($id_liq, $employerPerson->getIdPerson());
+
+        if ( ($liquidationReason == 7 || $liquidationReason == 10) && !$notification) {
+            $notification = new Notification();
+            $notification->setAccion("Subir carta de renuncia");
+            $notification->setDescription("Subir carta de renuncia firmada por " . $employeeName);
+            $notification->setPersonPerson($employerPerson);
+            $notification->setStatus(1);
+            $notification->setType("alert");
+            $notification->setTitle("Subir carta de renuncia");
+            $notification->setLiquidation($liquidation);
+            $em->persist($notification);
+            $em->flush();
+
+            $repoDocType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType");
+            /** @var DocumentType $docType */
+            $docType = $repoDocType->findOneBy(array(
+                "name" => "Carta de renuncia"
+            ));
+
+            $relatedLink = $this->generateUrl("documentos_employee", array(
+                    "idNotification" => $notification->getId(),
+                    "id" => $employerPerson->getIdPerson(),
+                    "idDocumentType" => $docType->getIdDocumentType()
+                )
+            );
+
+            $notification->setRelatedLink($relatedLink);
+            $em->persist($notification);
+            $em->flush();
+        }
+
+
+        $data = array(
+            "url" => $this->generateUrl("final_liquidation_steps", array(
+                "id" => $idEmperHasEmpee,
+                "id_liq" => $id_liq,
+                "step" => 2
+            ))
+        );
 
         $view = View::create();
         $view->setData($data)->setStatusCode(200);
@@ -246,51 +302,6 @@ class LiquidationRestController extends FOSRestController
 
         $data["totalLiq"] = $this->totalLiquidation($data["detail"]);
 
-//         @todo enviar parametros a sql
-//         $.ajax({
-//             url: "/api/public/v1/adds/finals/liquidations/parameters",
-//             type: 'POST',
-//             data: {
-//                 employee_id: "123123123",
-//                 username: "nanana",
-//                 year: 2016,
-//                 month: 2,
-//                 period: 2,
-//                 cutDate: "08-02-2016",
-//                 processDate: "08-02-2016",
-//                 retirementCause: 6,
-//                 //             last_work_day: form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val(),
-//             }
-//         }).done(function (data) {
-//             alert(data);
-//         }).fail(function (jqXHR, textStatus, errorThrown) {
-//             alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-//         });
-//         @todo preconsolidar liquidacion en sql
-//             $.ajax({
-//                 url: "/api/public/v1/executes/finals/liquidations",
-//                 type: 'POST',
-//                 data: {
-//                     employee_id: "123123123",
-//                     execution_type: "P"
-//                 }
-//             }).done(function (data) {
-//                 alert(data);
-//             }).fail(function (jqXHR, textStatus, errorThrown) {
-//                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-//             });
-//         @todo obtener informacion preliquidacion
-//                 $.ajax({
-//                     url: "/api/public/v1/generals/1231231239/payrolls/2",
-//                     type: 'GET',
-//                     data: {
-//                     }
-//                 }).done(function (data) {
-//                     alert(data);
-//                 }).fail(function (jqXHR, textStatus, errorThrown) {
-//                     alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-//                 });
-
         $view->setData($data)->setStatusCode(200);
         return $view;
     }
@@ -334,14 +345,24 @@ class LiquidationRestController extends FOSRestController
         $idEmperHasEmpee = $parameters["employee_id"];
         $employee_id = $idEmperHasEmpee . "9"; //@todo el 9 es para los mocks
         $username = $parameters["username"];
-        $year = $parameters["year"];
-        $month = $parameters["month"];
-        $day = $parameters["day"];
+//         $year = $parameters["year"];
+//         $month = $parameters["month"];
+//         $day = $parameters["day"];
         $frequency = $parameters["frequency"];
-        $cutDate = $parameters["cutDate"];
-        $processDate = $parameters["processDate"];
+//         $cutDate = $parameters["cutDate"];
+//         $processDate = $parameters["processDate"];
         $retirementCause = $parameters["retirementCause"];
         $id_liq = $parameters["id_liq"];
+
+        /**
+         * @var Liquidation $liquidation
+         */
+        $liquidation = $this->liquidationDetail($id_liq);
+        $lastDayWork = $liquidation->getLastWorkDay();
+        $day = $lastDayWork->format("d");
+        $month = $lastDayWork->format("m");
+        $year = $lastDayWork->format("Y");
+        $cutDate = $processDate = $lastDayWork->format("d-m-Y");
 
         /**
          * Dato que se envia a SQL dependiendo de como se le paga la nomina al empleado (quincenal o mensual)
@@ -394,17 +415,17 @@ class LiquidationRestController extends FOSRestController
             return $view;
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $date = $year . "-" . $month . "-" . $day;
-        $lastWorkDay = new \DateTime($date);
+//         $em = $this->getDoctrine()->getManager();
+//         $date = $year . "-" . $month . "-" . $day;
+//         $lastWorkDay = new \DateTime($date);
         /**
          * Actualizar datos de liquidacion en DB
          * @var Liquidation $liquidation
          */
-        $liquidation = $this->liquidationDetail($id_liq);
-        $liquidation->setLastWorkDay($lastWorkDay);
-        $em->persist($liquidation);
-        $em->flush();
+//         $liquidation = $this->liquidationDetail($id_liq);
+//         $liquidation->setLastWorkDay($lastWorkDay);
+//         $em->persist($liquidation);
+//         $em->flush();
 
         $data = array(
             "employee_id" => $employee_id,
@@ -612,6 +633,9 @@ class LiquidationRestController extends FOSRestController
         /** Product $product */
         $product = $productRepo->findOneBy(array('simpleName' => 'PN'));
         $purchaseOrderDescription->setProductProduct($product);
+
+        $liquidation->setIdPurchaseOrder($purchaseOrder);
+        $em->persist($liquidation);
 
         $em->persist($purchaseOrderDescription);
         $em->flush();

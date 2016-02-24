@@ -7,11 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PayMethod
  *
- * @ORM\Table(name="pay_method", indexes={@ORM\Index(name="fk_pay_method_user1", columns={"user_id_user"}), @ORM\Index(name="fk_pay_method_pay_type1", columns={"pay_type_id_pay_type"}), @ORM\Index(name="fk_pay_method_account_type1", columns={"account_type_id_account_type"}), @ORM\Index(name="fk_pay_method_bank1", columns={"bank_id_bank"})})
+ * @ORM\Table(name="pay_method", indexes={
+ *  @ORM\Index(name="fk_pay_method_user1", columns={"user_id_user"}), 
+ *  @ORM\Index(name="fk_pay_method_pay_type1", columns={"pay_type_id_pay_type"}), 
+ *  @ORM\Index(name="fk_pay_method_account_type1", columns={"account_type_id_account_type"}), 
+ *  @ORM\Index(name="fk_pay_method_bank1", columns={"bank_id_bank"})})
  * @ORM\Entity
  */
 class PayMethod
 {
+
     /**
      * @var integer
      *
@@ -75,10 +80,6 @@ class PayMethod
      * @ORM\Column(type="integer", nullable=true)
      */
     private $cellPhone;
-
-
-
-
 
     /**
      * Set idPayMethod
@@ -199,6 +200,7 @@ class PayMethod
     {
         return $this->accountTypeAccountType;
     }
+
     /**
      * Constructor
      */
@@ -206,7 +208,6 @@ class PayMethod
     {
         $this->payMethodFields = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Set accountNumber
@@ -256,9 +257,6 @@ class PayMethod
         return $this->cellPhone;
     }
 
-    
-
-
     /**
      * Set frequencyFrequency
      *
@@ -282,4 +280,5 @@ class PayMethod
     {
         return $this->frequencyFrequency;
     }
+
 }

@@ -17,7 +17,7 @@ class LandingRegistrationForm extends AbstractType
         $builder
             ->add('entity_type', 'choice',  array('label' => false,
                   'choices'=>array('persona'=>'Persona', 'empresa'=>'Empresa'),
-                  'attr'=>array('class'=>'radios'),
+                  'attr'=>array('class'=>'radios', 'required'=>'required'),
                   'multiple' => false,
                   'expanded' => true,
                   'required' => true))

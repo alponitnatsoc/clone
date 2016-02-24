@@ -28,7 +28,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
-     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", mappedBy="purchaseOrdersDescription")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrdersDescription")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="payroll_id_payroll", referencedColumnName="id_payroll")
      * })
@@ -307,7 +307,6 @@ class PurchaseOrdersDescription
         return $this->productProduct;
     }
 
-
     /**
      * Add payrollPayroll
      *
@@ -331,4 +330,5 @@ class PurchaseOrdersDescription
     {
         $this->payrollPayroll->removeElement($payrollPayroll);
     }
+
 }

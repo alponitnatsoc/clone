@@ -11,6 +11,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+<style type="text/css">
+html,body{
+  margin:0px;
+  height:100%;
+}
+</style>
 
     <header>
     	<div id="zona-logo">
@@ -206,15 +212,17 @@
     <footer>
         	<div id="footer-content">
             	<div class="text" style="text-align:right; border-right: 1px solid #71CBC9">
-                	<img src="{{ asset('public/img/landing/logo.png') }}"><br><br>
-                	Copyright © 2016 symplifica.com | Aviso de Privacidad<br>
-                    Prohibida su reproducción total o parcial, así como su traducción a cualquier
-                    idioma sin autorización escrita de su titular.
+                 <img src="{{ asset('public/img/landing/logo-foot.png') }}"><br><br>
                 </div>
                 <div class="text">
-                	<h4>¿Tienes preguntas?<br>escríbenos a<br> esta dirección:</h4>
+                	<h4>¿Tienes preguntas?<br>escríbenos</h4>
                     <h3>contacto@symplifica.com</h3>
                 </div>
+            </div>
+            <div id="derechos"> <!--añadi este div, es nuevo-->
+            	Copyright © 2016 symplifica.com | Aviso de Privacidad<br>
+                    Prohibida su reproducción total o parcial, así como su traducción a cualquier
+                    idioma sin autorización escrita de su titular.
             </div>
         </footer>
 
@@ -232,12 +240,12 @@
     	$(document).ready(function(){
 
     		$("#texto-banner").fadeIn(1500);
-
+        /*
     		$("button").click(function(){
     			$("#gracias").fadeIn("slow");
     			$("#done").delay(300).slideDown("slow");
     		});
-
+        */
     		$("#close").click(function(){
     			$("#done").slideUp("slow");
     			$("#gracias").delay(200).fadeOut("slow");

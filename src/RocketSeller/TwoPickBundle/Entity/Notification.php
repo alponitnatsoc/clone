@@ -94,6 +94,15 @@ class Notification {
      */
     private $deadline;
 
+    /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Liquidation
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Liquidation", inversedBy="notifications")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="liquidation", referencedColumnName="id")
+     * })
+     */
+    private $liquidation;
+
     public function _construct() {
         $this->sawDate = new \DateTime();
     }
@@ -328,5 +337,29 @@ class Notification {
     public function getRoleRole()
     {
         return $this->roleRole;
+    }
+
+    /**
+     * Set liquidation
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation
+     *
+     * @return Notification
+     */
+    public function setLiquidation(\RocketSeller\TwoPickBundle\Entity\Liquidation $liquidation = null)
+    {
+        $this->liquidation = $liquidation;
+
+        return $this;
+    }
+
+    /**
+     * Get liquidation
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Liquidation
+     */
+    public function getLiquidation()
+    {
+        return $this->liquidation;
     }
 }

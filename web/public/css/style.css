@@ -35,15 +35,16 @@ h1 { font-family: 'Open Sans', sans-serif;
 h3 {font-family: 'Open Sans', sans-serif;
 	font-weight: 300; color: #fff; font-size: 20px}
 
-header {
-	background-image: url(/public/img/landing/banner.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: #f0e9e7;
-   	height: 895px;
-    text-align: center;
-	position: relative}
+	header {
+		  background-image: url(/public/img/landing/banner.png);
+	    background-position: center center;
+	    background-repeat: no-repeat;
+	    background-size: cover;
+	    background-color: #f0e9e7;
+	   	height: 100%; /*modifique el valor original de 895px a 100%*/
+	    text-align: center;
+		  position: relative
+	}
 
 	#texto-banner {
 	display:none;
@@ -234,11 +235,12 @@ h4 {font-family: 'Open Sans', sans-serif;
 	font-size: 15px;}
 
 	.radios {
-		width: 385px;
+		width: 100%;
 	  height: 50px;
 	  border: none;
 		font-family: 'Open Sans', sans-serif; font-weight: 700;
 		font-size: 15px;
+		color: #FFF;
 	}
 
 .form-group span {font-family: 'Open Sans', sans-serif; font-weight: 700; color:#FFFFFF}
@@ -274,29 +276,31 @@ h4 {font-family: 'Open Sans', sans-serif;
 
 	 /*-----------------------------------------------empieza seccion footer-----------------------------------------------------------------*/
 
-	  footer {width: 100%; height: 195px; background: #3B4B5A; color: #C4C9CC; padding-top: 65px}
+	 footer {width: 100%; height: 195px; background: #3B4B5A; color: #FFFFFF; padding-top: 65px; font-family: 'Open Sans', sans-serif; font-weight: 300;}
 	 #footer-content {width: 980px; margin: 0 auto}
-	 footer .text {width: 365px; font-size: 10px; float: left; padding: 0 40px; font-family: 'Open Sans', sans-serif; font-weight: 300;}
+	 footer .text {width: 365px; font-size: 10px; float: left; padding: 0 40px}
 	 .img-footer {float:left}
+	 #derechos {clear:both; text-align: center; padding-top: 30px}
 
 	 /*-----------------------------------------------responsive-----------------------------------------------------------------*/
+
+	 @media screen and (max-width: 1600px) {#texto-banner {width: 70%; padding-top: 10%} /*modifique el pading de 200ps a 10% y añadi este nuevo breakpoint*/}
 
 	 @media screen and (max-width: 1490px) {#texto-banner {width:65%}}
 
 	 @media screen and (max-width: 1280px) {
-	 	header {height: 800px}
-	 	#texto-banner {width: 70%; padding-top: 200px}
-	 	.espacio {margin: 20px 0}
-	 	#precio {padding-top: 30px; margin-top: 20px}
-	 	#foto-hombre {height: 695px}
-	 	.seccion-hombre {padding-left: 15px}
-	 	#contenedor-info {width: 1145px; padding-left: 0}
-	 	.info-hombre {margin: 80px 0}
-	 	.imghombre {width: 90%}
-	 	.callto {margin: -110px 0 0 60px}
-	 	#info-facil {margin: 150px auto}
+		 	header {height: 100%} /*modifique el valor original de 800px a 100%*/
+		 	#texto-banner {width: 70%; padding-top: 15%} /*modifique el valor de 10% a 15%*/
+		 	.espacio {margin: 20px 0}
+		 	#precio {padding-top: 30px; margin-top: 20px}
+		 	#foto-hombre {height: 695px}
+		 	.seccion-hombre {padding-left: 15px}
+		 	#contenedor-info {width: 1145px; padding-left: 0}
+		 	.info-hombre {margin: 80px 0}
+		 	.imghombre {width: 90%}
+		 	.callto {margin: -110px 0 0 60px}
+		 	#info-facil {margin: 150px auto}
 	 	}
-
 	 	@media screen and (max-width: 1024px) {
 	 	header {height: 770px}
 	 	#texto-banner {width: 90%; padding-top: 185px}

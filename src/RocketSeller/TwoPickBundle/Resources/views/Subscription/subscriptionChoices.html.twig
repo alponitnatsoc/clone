@@ -1,0 +1,140 @@
+{% extends "::base.html.twig" %}
+{% block title %}Symplifica - Activar Suscripción{% endblock %}
+
+{% block fos_user_content %}
+    <h3>Activación de la suscripción</h3>
+    <div style="margin: 10px;padding: 10px; text-align: center; display: block;">
+        {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
+        {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
+        {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
+        {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
+        {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
+        {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
+        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}   
+        <p>
+            A continuación podrás activar tu suscripción.
+        </p>
+        <p>
+            Has registrado los siguientes empleados:
+        </p> 
+    </div>
+    <form action="{{ path('activate_subscription') }}" method="POST">
+
+        {% for key, price in productos %}
+            <input type="hidden" id="{{ key }}" value="{{ price }}"/>
+        {% endfor %}
+
+        {% for employeeData in employees %}
+
+            {% set employee = employeeData['employee'] %}
+            {% set contrato = employeeData['contrato'] %}
+            {% set producto = employeeData['product'] %}
+
+            <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
+                <div> 
+                    <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                </div>
+                <div class="employee_name">
+                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                </div>
+                {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                <div class="{{ ((contrato.workableDaysMonth* 4.34524) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth*4.34524) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                    Labora {{ (contrato.workableDaysMonth * 4.34524)|number_format }} días al mes
+                </div>
+                <div>
+                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+                </div>
+            </div>
+
+
+        {% endfor %}
+
+        <div class="col-lg-1 result_ajax"></div>
+        <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
+            Este servicio tendrá el siguiente valor:
+            <div class="div_price">     
+                <div id="result_price"></div>      
+                <div id="result_discount"></div>    
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
+        <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
+        <div style="text-align: center; margin-top: 20px;">
+            <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <input type="submit" class="btn btn-default" value="Continuación del pago"/>
+        </div>
+
+    </form>
+    <!-- Modal Confirm-->
+    <div class="modal fade"  role="dialog" id="modal_confirm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Confirmación de inactivación de empleado</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de sueldo ni aportes a seguridad social así como tampoco se gestionará la información relacionada con él.
+                    </p>
+                    <p>
+                        Tenga en cuenta que debe tener como mínimo un (1) empleado activo.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Modal Pricing Calculator-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal_price_calculator">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Cálculo del valor de la suscripción a Symplifica</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="divSlider">                        
+                        <div class="type_employee">
+                            <span class="type_time">Tiempo Parcial</span>
+                            <span class="type_time_desc">Trabaja(n) 1 a 10 días al mes</span>
+                        </div>           
+                        <div class="slider_employee" id="tiempo_parcial"></div>
+                    </div>
+                    <div class="divSlider">                        
+                        <div class="type_employee">
+                            <span class="type_time">Medio Tiempo</span>
+                            <span class="type_time_desc">Trabaja(n) 11 a 19 días al mes</span>
+                        </div>              
+                        <div class="slider_employee" id="medio_tiempo"></div>
+                    </div>
+                    <div class="divSlider">                          
+                        <div class="type_employee">
+                            <span class="type_time">Tiempo Completo</span>
+                            <span class="type_time_desc">Trabaja(n) más de 20 días al mes</span>
+                        </div>        
+                        <div class="slider_employee" id="tiempo_completo"></div>
+                    </div>
+                    <div class="" style="display: inline-block; text-align: center; width: 100%;">
+                        Valor suscripción mensual
+                        <div class="div_price">     
+                            <div id="result_price_calc"></div>      
+                            <div id="result_discount_calc"></div>    
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+                    <a type="button" class="btn btn-default btn-add-employee notAjax" href="{{ path('register_employee') }}">Agregar un empleado</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
