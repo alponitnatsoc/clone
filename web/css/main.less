@@ -133,10 +133,13 @@ span {
     color: #fd9626;
     border: 1px solid #fd9626;
     margin-top: 0;
+    background-image: none !important;
+    text-shadow: none !important;
 }
 
 .btnPrevious:hover {
     color: #fd9626;
+    border: 1px solid #fd9626;
 }
 
 .btn:hover {
@@ -731,7 +734,8 @@ a.helpTxt {
             color: @dark_gray;
         }
         &.activeMenu a {
-            color: @selectedMenuColor !important;
+            /*color: @selectedMenuColor !important;*/
+            color: @blue !important;
         }
         img {
             margin-top: 20px;
@@ -1011,6 +1015,9 @@ a.helpTxt {
     .form-inline select {
         margin-right: 10px;
     }
+    .fa.fa-info-circle {
+        color: @blue;
+    }
 }
 #basicData, #contractData {
     h2 {
@@ -1163,7 +1170,7 @@ ul.phones {
 
 }
 .blueFormTitle {
-    color: #99ebeb;
+    color: @blue;
     font-family: Lato;
     font-size: 20px;
     font-weight: 200;        
@@ -1392,7 +1399,7 @@ select {
     h3 {
         font-weight: 200;
         font-size: 20px;
-        color: @light_blue;
+        color: @blue;
         font-family: @lato;
     }
 }
@@ -1444,6 +1451,9 @@ select {
         border: 0px solid #ccc;
         border-radius: 2px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        .fa.fa-user {
+            color: @blue;
+        }
     }
     .titulos {
         border-bottom: 1px solid #ccc;
