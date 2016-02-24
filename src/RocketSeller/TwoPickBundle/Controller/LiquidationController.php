@@ -519,8 +519,7 @@ class LiquidationController extends Controller
 
         $period = $liquidation->getPeriod();
 
-
-        return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig", array(
+        $viewData = array(
             "total" => $total,
             'employeeInfo' => $employeeInfo,
             'contractInfo' => $contractInfo,
@@ -534,7 +533,20 @@ class LiquidationController extends Controller
             'totalDevengos' => $totalLiq["totalDev"],
             'employer' => $employerInfo,
             'id_liq' => $id
-        ));
+        );
+
+        $filename = "liquidation-empleado-" . $employeeInfo["document"] . ".pdf";
+        $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/" . $filename;
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
+                $viewData
+            ),
+            $path
+        );
+
+        return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig",
+            $viewData
+        );
     }
 
     public function cartasLiquidacionAction($ref, $id)
