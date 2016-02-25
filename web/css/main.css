@@ -812,6 +812,9 @@ table.payMethods tr td {
   padding: 8px 10px;
   text-align: center;
 }
+table.payMethods tr td a {
+  color: #00CDCC;
+}
 table.record_properties {
   width: 100%;
   margin-bottom: 40px;

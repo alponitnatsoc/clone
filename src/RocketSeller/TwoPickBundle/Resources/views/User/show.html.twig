@@ -21,9 +21,9 @@
                 <div id="dataFailEmail">
                     Hubo un problema guardando los datos intenta más tarde
                 </div>
-                Nombre: {{ form.name.vars.value }}
+                <strong>Nombre:</strong> {{ form.name.vars.value }}
                 <br/>
-                <div id="emailValue">Email: {{ form.email.vars.value }}
+                <div id="emailValue"><strong>Email:</strong> {{ form.email.vars.value }}
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                 {{ form_widget(form.email) }}
@@ -48,7 +48,7 @@
     <div class="col-sm-12 col-xs-12">
         <h3>Facturación</h3>
     </div>
-    <div class="col-sm-12 col-xs-12">
+    <div class="col-sm-12 col-xs-12 center">
         <div class="col-xs-4">
             <div class="panel panel-default">
                 <div class="panel-body">
