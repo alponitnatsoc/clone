@@ -17,7 +17,7 @@ function startPayment(){
 function addListenersPayM(){
     $("#form_save").on("click", function (e) {
         e.preventDefault();
-        var url="/api/public/v1/adds/"+$("#form_idNotification").val()+"/credits/cards";
+        var url="/api/public/v1/adds/credits/cards";
         $.ajax({
             url: url,
             type: "POST",
