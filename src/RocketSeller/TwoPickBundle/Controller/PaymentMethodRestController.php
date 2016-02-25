@@ -18,9 +18,10 @@ class PaymentMethodRestController extends Controller
      *   resource = true,
      *   description = "Finds the cities of a department.",
      *   statusCodes = {
-     *     200 = "Returned when successful",
+     *     201 = "Created",
      *     400 = "Bad Request",
-     *     404 = "Returned when the Novelty Type id doesn't exists "
+     *     401 = "Unauthorized",
+     *     406 = "Not Acceptable"
      *   }
      * )
      *
@@ -28,10 +29,11 @@ class PaymentMethodRestController extends Controller
      *
      * @return View
      * @RequestParam(name="credit_card", nullable=false,  requirements="\d+", strict=true, description="CC Number")
-     * @RequestParam(name="expiry_date_year", nullable=false,  requirements="\d+", strict=true, description="YEAR in YYYY format.")
-     * @RequestParam(name="expiry_date_month", nullable=false,  requirements="\d+", strict=true, description="Month in MM format.")
+     * @RequestParam(name="expiry_date_year", nullable=false,  requirements="[0-9]{4}", strict=true, description="YEAR in YYYY format.")
+     * @RequestParam(name="expiry_date_month", nullable=false,  requirements="[0-9]{2}", strict=true, description="Month in MM format.")
      * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
-     * @RequestParam(name="name_on_card", nullable=false,  requirements="\d+", strict=true, description="The name on card")
+     * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
+     * @RequestParam(name="name_on_card", nullable=false, strict=true, description="The name on card")
      */
     public function postAddCreditCardAction(ParamFetcher $paramFetcher)
     {
