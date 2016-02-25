@@ -41,26 +41,45 @@
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
-                        	<div class="employer-regiser">
-                        		<a href="{{ path('express_registration', {'id':employer.personPerson.idPerson})}}">{{ employer.registerState}}%</a>
-                        	</div>
-                        	<div>                        		
-                    			{% if employeesState == -1 %}
-
-                    				<a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson , 'idEmployee':-1})}}">0% ingresar empleados</a>
-                        		{% else %}                      			                        		
-                                    {% set employerHasEmployees = employer.employerHasEmployees %}
-                                    {% for employerHasEmployee in employerHasEmployees %}
-                                        <p>{{ employerHasEmployee.employeeEmployee.personPerson.names}}</p>
-                                        <button>
-                                            <a href="{{ path('express_registration_contract_employee',{'id':employer.personPerson.idPerson , 'idEmployee':employerHasEmployee.employeeEmployee.idEmployee})}}">contrato</a>    
-                                        </button>
-                                                                            
-                                    {% endfor %}
-                        		{% endif %}
-                        	</div>
-                        	<div>
-                        		<p>aca se suben los archivos</p>
+                        	<div class="col-md-12">
+                        		{{ form_start(form) }}
+                        		{{ form_label(form.sisben)}}
+								{{ form_widget(form.sisben) }}
+								{{ form_label(form.transportAid) }}                    		
+								{{ form_widget(form.transportAid) }}
+								{{ form_label(form.contractType) }}
+								{{ form_widget(form.contractType) }}
+								
+								{{ form_widget(form.contractType) }}
+								{{ form_widget(form.contractType) }}
+								
+								{{ form_label(form.timeCommitment) }}
+								{{ form_widget(form.timeCommitment) }}
+								
+								{{ form_label(form.position) }}
+								{{ form_widget(form.position) }}
+								
+								{{ form_label(form.salary) }}
+								{{ form_widget(form.salary) }}
+								
+								{{ form_label(form.salaryD) }}
+								{{ form_widget(form.salaryD) }}
+								
+								{{ form_label(form.startDate) }}
+								{{ form_widget(form.startDate) }}
+								
+								{{ form_label(form.endDate) }}
+								{{ form_widget(form.endDate) }}
+								
+								{{ form_label(form.weekWorkableDays) }}
+								{{ form_widget(form.weekWorkableDays) }}
+								
+								{{ form_label(form.workplaces) }}
+								{{ form_widget(form.workplaces) }}
+								
+								{{ form_label(form.payMethod) }}	
+								{{ form_widget(form.payMethod) }}
+								{{ form_end(form) }}
                         	</div>
                         </div>
                     </div>
