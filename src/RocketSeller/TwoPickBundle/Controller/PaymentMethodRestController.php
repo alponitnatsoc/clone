@@ -60,6 +60,7 @@ class PaymentMethodRestController extends Controller
             return $view;
         }
         $chargeValue=200;
+        die(var_dump($insertionAnswer->getContent()));
         $idPayM=$insertionAnswer->getContent()["method-id"];
         $purchaseOrder=new PurchaseOrders();
         $purchaseOrder->setValue($chargeValue);
