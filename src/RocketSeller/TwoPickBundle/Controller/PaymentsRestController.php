@@ -104,9 +104,9 @@ class PaymentsRestController extends FOSRestController
             } else if ($action == "put") {
                 $response = $client->put($url_request, $options);
             }
-        } catch (Guzzle\Http\Exception\BadResponseException $e) {
-            // It menas it returned error code.
-        }
+          } catch (Exception $e) {
+
+          }
         $view = View::create();
         $view->setStatusCode($response->getStatusCode());
 
@@ -345,6 +345,36 @@ class PaymentsRestController extends FOSRestController
     }
 
     /**
+     * This is a proxy method, when is likely to get a time out.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Aproval for a clients payment.",
+     *   statusCodes = {
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+     *
+     * (name="header", nullable=false,  strict=true, description="Method id, it is returned when a payment method is created.")
+     * (name="parameters_fixed", nullable=false,  strict=true, description="Total amount.")
+     * (name="path", nullable=false,  strict=true, description="Tax amount.")
+     *
+     * @return View
+     */
+    public function postCallApprovalAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        return $this->callApi($parameters['header'], $parameters['parameters_fixed'],$parameters['path']);
+    }
+
+    /**
      * Aproval for a clients payment.(3.4)<br/>
      *
      * @ApiDoc(
@@ -418,9 +448,31 @@ class PaymentsRestController extends FOSRestController
         $parameters_fixed['charge-third-id'] = $parameters['chargeId'];
 
         /** @var View $responseView */
-        $responseView = $this->callApi($header, $parameters_fixed, $path);
 
-        return $responseView;
+        //$responseView = $this->callApi($header, $parameters_fixed, $path);
+
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "header"=>$header,
+            "parameters_fixed"=>$parameters_fixed,
+            "path"=>$path
+        ));
+        $view = View::create();
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postCallApproval', array('_format' => 'json'));
+
+        // I check that the problem was not a time out or connection error.
+        // IF it was, we have to undo the transaction and return error.
+        if($insertionAnswer->getStatusCode() == 500)
+        {
+          // We have a problem here.
+          $request =  new Request();
+          $request->request->set("documentNumber", $parameters['documentNumber']);
+          $request->request->set("chargeId", $parameters['chargeId']);
+          $this->deleteReversePaymentMethodAction($request);
+        }
+
+        return $insertionAnswer;
     }
 
     /**
@@ -608,7 +660,7 @@ class PaymentsRestController extends FOSRestController
 
         // This is the asigned path by NovoPayment to this action.
         $path = "/customer/" . $parameters['documentNumber'] .
-                "/charge/" . $parameters['paymentMethodId'];
+                "/charge/" . $parameters['chargeId'];
 
         // Set up the headers to default if none is provided.
         $header = $this->setHeaders($parameters);
