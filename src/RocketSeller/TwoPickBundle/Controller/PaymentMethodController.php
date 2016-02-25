@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentMethodController extends Controller
 {	
 
-    public function indexAction(Request $request, $idNotification)
+    public function indexAction(Request $request)
     {
 
         $form = $this->createFormBuilder()
@@ -46,19 +46,6 @@ class PaymentMethodController extends Controller
                     'form' => $form->createView(),
                     'errno' => "Not a valid Credit Card check the data again"
                 ));
-            }
-            if($idNotification!=-1){
-                $notificationRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
-                /** @var Notification $realNotif */
-                $realNotif=$notificationRepo->find($idNotification);
-                if($realNotif!=null){
-                    $realNotif->setStatus(-1);
-                    $realNotif->setSawDate(new DateTime());
-                    $realNotif->setRelatedLink(null);
-                    $em=$this->getDoctrine()->getManager();
-                    $em->persist($realNotif);
-                    $em->flush();
-                }
             }
 
             return $this->render('RocketSellerTwoPickBundle:Registration:cardSuccess.html.twig', array(

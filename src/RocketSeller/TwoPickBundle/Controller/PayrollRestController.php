@@ -175,9 +175,16 @@ class PayrollRestController extends FOSRestController
 
         $client = new Client();
         // TODO(daniel.serrano): Make the user and password into variables.
-        // URL used for test porpouses, the line below should be used in production.
-        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
-        $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
+        // URL used for test porpouses, the line below should be used in production
+        if (isset($_SERVER['SERVER_NAME']) && in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1'))) {
+            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '80') {
+                $url_request = "http://localhost/api/public/v1/mock/sql/default";
+            } else {
+                $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
+            }
+        } else {
+            $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
+        }
         //TODO(daniel.serrano): Remove the mock URL.
         // This URL is only for testing porpouses and should be removed.
 
@@ -2362,6 +2369,7 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
+
 }
 
 ?>

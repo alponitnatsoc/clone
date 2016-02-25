@@ -4,10 +4,10 @@ use DateTime;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Notification;
-use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
 
 class PaymentMethodRestController extends Controller
 {
@@ -18,22 +18,24 @@ class PaymentMethodRestController extends Controller
      *   resource = true,
      *   description = "Finds the cities of a department.",
      *   statusCodes = {
-     *     200 = "Returned when successful",
+     *     201 = "Created",
      *     400 = "Bad Request",
-     *     404 = "Returned when the Novelty Type id doesn't exists "
+     *     401 = "Unauthorized",
+     *     406 = "Not Acceptable"
      *   }
      * )
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="credit_card", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
-     * @RequestParam(name="expiry_date_year", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
-     * @RequestParam(name="expiry_date_month", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
-     * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
-     * @RequestParam(name="name_on_card", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
      * @return View
+     * @RequestParam(name="credit_card", nullable=false,  requirements="\d+", strict=true, description="CC Number")
+     * @RequestParam(name="expiry_date_year", nullable=false,  requirements="[0-9]{4}", strict=true, description="YEAR in YYYY format.")
+     * @RequestParam(name="expiry_date_month", nullable=false,  requirements="[0-9]{2}", strict=true, description="Month in MM format.")
+     * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
+     * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
+     * @RequestParam(name="name_on_card", nullable=false, strict=true, description="The name on card")
      */
-    public function postAddCreditCardAction(ParamFetcher $paramFetcher, $idNotification)
+    public function postAddCreditCardAction(ParamFetcher $paramFetcher)
     {
         /** @var User $user */
         $user=$this->getUser();
@@ -50,20 +52,6 @@ class PaymentMethodRestController extends Controller
         ));
         $view = View::create();
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
-        echo "Status Code Employee PayMethod: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
-        if($idNotification!=-1&&$insertionAnswer->getStatusCode()==201){
-            $notificationRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");
-            /** @var Notification $realNotif */
-            $realNotif=$notificationRepo->find($idNotification);
-            if($realNotif!=null){
-                $realNotif->setStatus(-1);
-                $realNotif->setSawDate(new DateTime());
-                $realNotif->setRelatedLink(null);
-                $em=$this->getDoctrine()->getManager();
-                $em->persist($realNotif);
-                $em->flush();
-            }
-        }
         $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
         return $view;
 

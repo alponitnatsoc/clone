@@ -86,3 +86,7 @@ document_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:DocumentRest"
     name_prefix: api_public_
+payment_method:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PaymentMethodRest"
+    name_prefix: api_public_
