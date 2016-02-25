@@ -8,12 +8,15 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\ContractRegistration;
+use RocketSeller\TwoPickBundle\Form\expressContractRegistration;
 use Doctrine\Common\Collections\ArrayCollection;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Client;
 use FOS\RestBundle\Routing\Loader\Reader\RestActionReader;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\ContractMethodsTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,7 +53,7 @@ use ContractMethodsTrait;
 
         if ($form->isValid()) {
             $contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();            
             $em->persist($contract);
             $em->flush();
 
@@ -159,5 +162,73 @@ use ContractMethodsTrait;
         $em->flush();
         return new JsonResponse(array('state' => $state));
     }
+    public function addContractExpressAction(Request $request, $id,$idEmployee)
+    {        
+        //$employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($idEmployee);
+        $employee = $this->loadClassById($idEmployee,"Employee");
+        
+        $person = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
+        $employer = $this->loadClassByArray(array("personPerson"=>$person),"Employer");
+        
+        $employerHasEmployee = $this->loadClassByArray(array(
+            "employerEmployer"=>$employer,
+            "employeeEmployee"=>$employee
+            ),"EmployerHasEmployee");
+
+        /*$em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $userWorkplaces = $user->getPersonPerson()->getEmployer()->getWorkplaces();
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $employerHasEmployee = $repository->find($id);
+        */
+        $employerWorkplaces = $employer->getWorkplaces();
+        $contracts = $employerHasEmployee->getContracts();
+        foreach ($contracts as $cont) {
+            if ($cont->getState()==1) {
+                $contract = $cont;
+            }
+        }
+        if (!$contract) {
+            $contract = new Contract();
+        }        
+
+        //$contract->addWorkplace(new ContractHasWorkplace($contract, null));
+        //$contract->addBenefit(new ContractHasBenefits($contract, null));
+
+
+        //modificar los workplaces
+        $form = $this->createForm(new expressContractRegistration($employerWorkplaces), $contract);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $contract->setEmployerHasEmployeeEmployerHasEmployee($employerHasEmployee);            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($contract);
+            $em->flush();
+            $employee = $employerHasEmployee->getEmployeeEmployee();
+            $employee->setRegisterState(60);
+            $em->persist($employee);
+            $em->flush();
+
+            return $this->redirectToRoute('back_employer_menu',array('id'=>$employerHasEmployee->getEmployerEmployer()->getPersonPerson()->getIdPerson()));
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:contractRegister.html.twig', array('form' => $form->createView())
+        );
+    }
+    public function loadClassByArray($array, $entity)
+    {
+        $loadedClass = $this->getdoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:'.$entity)
+        ->findOneBy($array);
+        return $loadedClass;
+    }
+    public function loadClassById($parameter, $entity)
+    {
+        $loadedClass = $this->getdoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:'.$entity)
+        ->find($parameter);
+        return $loadedClass;
+    }   
 
 }
