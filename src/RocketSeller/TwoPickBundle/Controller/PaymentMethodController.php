@@ -18,6 +18,7 @@ class PaymentMethodController extends Controller
             ->add('expiry_date_month', 'text')
             ->add('cvv', 'text')
             ->add('name_on_card', 'text')
+            ->add('idNotification','hidden',array('data'=>$idNotification))
             ->add('save', 'submit', array('label' => 'Submit'))
             ->getForm();
 

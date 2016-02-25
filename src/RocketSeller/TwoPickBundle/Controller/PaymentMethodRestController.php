@@ -4,10 +4,10 @@ use DateTime;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Notification;
-use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
 
 class PaymentMethodRestController extends Controller
 {
@@ -26,14 +26,15 @@ class PaymentMethodRestController extends Controller
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
+     * @param int $idNotification
+     * @return View
      * @RequestParam(name="credit_card", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
      * @RequestParam(name="expiry_date_year", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
      * @RequestParam(name="expiry_date_month", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
      * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
      * @RequestParam(name="name_on_card", nullable=false,  requirements="\d+", strict=true, description="the novelty type id.")
-     * @return View
      */
-    public function postAddCreditCardAction(ParamFetcher $paramFetcher, $idNotification)
+    public function postAddCreditCardAction(ParamFetcher $paramFetcher, $idNotification=-1)
     {
         /** @var User $user */
         $user=$this->getUser();
