@@ -805,11 +805,23 @@ a.helpTxt {
   float: left;
   width: 100%;
 }
+table.payMethods {
+  width: 100%;
+}
 table.payMethods tr td {
   padding: 8px 10px;
+  text-align: center;
+}
+table.record_properties {
+  width: 100%;
+  margin-bottom: 40px;
 }
 table.record_properties th {
   padding: 8px 10px;
+  text-align: center;
+}
+table.record_properties tr td {
+  text-align: center;
 }
 .blockStep {
   background-image: none;

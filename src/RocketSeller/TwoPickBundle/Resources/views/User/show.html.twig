@@ -33,11 +33,13 @@
                 {{ form_end(form) }}
             </div>
             <div id="passwordTab" class="tab-pane fade in">
-                {% if flag ==true %}
-                    <a class="notAjax button btn-default" href="/profile/change-password">Cambiar contraseña</a>
-                {% else %}
-                    <h2>Tu te acedes con una red social</h2>
-                {% endif %}
+                <div class="col-sm-12 col-xs-12 center">
+                    {% if flag ==true %}
+                        <a class="notAjax button btn btn-default" href="/profile/change-password">Cambiar contraseña</a>
+                    {% else %}
+                        <h2>Tu te acedes con una red social</h2>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -58,7 +60,7 @@
             {% if app.user.paymentState==0 %}
             <div class="NoPay">
                 ¡No espere a que se agote el tiempo!
-                <a class="button btn-default" href="{{ path("activate_subscription") }}">Activar suscripción a Symplifica</a>
+                <a class="button btn btn-default" href="{{ path("activate_subscription") }}">Activar suscripción a Symplifica</a>
             </div>
             {% else %}
             <div class="DoPay">
@@ -104,9 +106,9 @@
                 </tbody>
             </table>
         </div>
+    
+        <div class="col-sm-12 col-xs-12 center">
+            <a class="button btn btn-default" href="{{ path("register_employee") }}">Agregar empleado</a>
+        </div>
     </div>
-    <div class="col-sm-12 col-xs-12 center">
-        <a class="button btn-default" href="{{ path("register_employee") }}">Agregar empleado</a>
-    </div>
-
 {% endblock fos_user_content%}
