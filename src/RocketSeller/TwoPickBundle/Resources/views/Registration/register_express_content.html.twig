@@ -1,14 +1,37 @@
+{% extends "::base.html.twig" %}
+
 {% trans_default_domain 'FOSUserBundle' %}
 
-<form action="{{ path('express_start') }}" {{ form_enctype(form) }} method="POST" class="express_start">
-    {{ form_widget(form) }}
-    <input type="text" name="phone">
-    <div class="form-group txt-A1-terms">
-        <input type="checkbox" id="chkTOS"/> Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a>
-    </div>
-    <div class="col-xs-12">
-		   	    		    	
-    		<input type="submit" id="btnSubmit" value="{{ 'registration.submit'|trans }}" class="btn register-AS1 btn-symplifica disabled"/>            
-    </div>
+{% block body %}
+	<div class="container">
+		<div class="content">
+			<form action="{{ path('express_start') }}" {{ form_enctype(form) }} method="POST" class="col-md-12 express_start">
+			    {{ form_widget(form) }}			    	   
+			    <div class="form-black form-group">
+			    	<label class="control-label required" for="app_user_registration_form_plainPassword">Telefono</label>
+			    	<input type="text" name="phone" required="required" placeholder="Telefono" class="form-control">	    	
+			    </div>
+			    <div class="form-black form-group">
+			    	<label class="control-label required" for="app_user_registration_form_plainPassword">Tipo de documento</label>
+			    	<select class="form-control" name="documentType">
+					  <option value="CC">Cedula de ciudadania</option>
+					  <option value="CE">Cedula de extranjeria</option>
+					  <option value="TI">Tarjeta de identidad</option>
+					</select>	    	
+			    </div>
+			    <div class="form-black form-group">
+			    	<label class="control-label required" for="app_user_registration_form_plainPassword">Documento</label>
+			    	<input type="text" name="document" required="required" placeholder="Documento" class="form-control">	    	
+			    </div>
+			    <div class="form-black form-group txt-A1-terms">
+			        <p style="color:black;"> <input type="checkbox" id="chkTOS" checked/>Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a></p>
+			    </div>
+			    <div class="col-xs-12">
+					   	    		    	
+			    		<input type="submit" id="btnSubmit" value="{{ 'registration.submit'|trans }}" class="btn register-AS1 btn-symplifica"/>            
+			    </div>
 
-</form>
+			</form>
+		</div>		
+	</div>	
+{% endblock body %}
