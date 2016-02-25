@@ -591,7 +591,7 @@ class PaymentsRestController extends FOSRestController
      *
      * @return View
      */
-    public function deleteReversePaymentmethodAction(Request $request)
+    public function deleteReversePaymentMethodAction(Request $request)
     {
         $parameters = $request->request->all();
         $regex = array();

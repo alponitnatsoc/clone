@@ -1000,6 +1000,9 @@ table.record_properties tr td {
 #registrationFormContainer .form-group textarea {
   color: #919191;
 }
+#registrationFormContainer .radio {
+  padding-left: 20px;
+}
 #registrationFormContainer label {
   font-family: "Lato";
   font-size: 16px;
@@ -1138,6 +1141,11 @@ ul.phones li {
 }
 .blockLeftBefore.lineDivider {
   border-right: 1px solid #e8e5e5;
+}
+#main h2.cal-titleExtra {
+  text-align: left;
+  font-size: 24px;
+  margin: 20px 0px;
 }
 #register_employer_youAre .radio,
 #register_employer_sameWorkHouse .radio {
