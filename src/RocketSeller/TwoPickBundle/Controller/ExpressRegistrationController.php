@@ -11,6 +11,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use RocketSeller\TwoPickBundle\Form\EmployerRegistration;
@@ -103,6 +104,8 @@ class ExpressRegistrationController extends Controller
         $workplaces = $employer->getWorkplaces();
         if ($idEmployee == -1) {
             $employerHasEmployee = new EmployerHasEmployee();
+            $contract = new Contract();
+            $employerHasEmployee->addContract($contract);
             $employee = new Employee();                    
             $person = new Person();                        
             $phone = new Phone();            

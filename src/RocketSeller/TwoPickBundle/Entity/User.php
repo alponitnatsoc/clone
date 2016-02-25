@@ -101,6 +101,16 @@ class User extends BaseUser
      * @ORM\Column(type="smallint")
      */
     private $status = 2;
+    /**
+     * Columna utilizada para saber si el usuario requiere registro express
+     * 0 false
+     * 1 true     
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $express = 0;
 
     /**
      * Columna utilizada para conocer el estado de la suscripcion del usuario
@@ -649,5 +659,29 @@ class User extends BaseUser
     public function getPaymentState()
     {
         return $this->paymentState;
+    }
+
+    /**
+     * Set express
+     *
+     * @param integer $express
+     *
+     * @return User
+     */
+    public function setExpress($express)
+    {
+        $this->express = $express;
+
+        return $this;
+    }
+
+    /**
+     * Get express
+     *
+     * @return integer
+     */
+    public function getExpress()
+    {
+        return $this->express;
     }
 }

@@ -4,6 +4,7 @@ use DateTime;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -12,7 +13,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 class PaymentMethodRestController extends Controller
 {
     /**
-     * Add the novelty<br/>
+     * Add the credit card<br/>
      *
      * @ApiDoc(
      *   resource = true,
@@ -21,7 +22,9 @@ class PaymentMethodRestController extends Controller
      *     201 = "Created",
      *     400 = "Bad Request",
      *     401 = "Unauthorized",
-     *     406 = "Not Acceptable"
+     *     406 = "Not Acceptable",
+     *     409 = "Conflict",
+     *     500 = "Novo TimeOut"
      *   }
      * )
      *
@@ -40,6 +43,7 @@ class PaymentMethodRestController extends Controller
         /** @var User $user */
         $user=$this->getUser();
         $person=$user->getPersonPerson();
+        $view = View::create();
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
@@ -52,9 +56,88 @@ class PaymentMethodRestController extends Controller
         ));
         $view = View::create();
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
-        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+        if($insertionAnswer->getStatusCode()!=201){
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+            return $view;
+        }
+        $chargeValue=200;
+        $idPayM=json_decode($insertionAnswer->getContent(),true)["method-id"];
+        $purchaseOrder=new PurchaseOrders();
+        $purchaseOrder->setValue($chargeValue);
+        $purchaseOrder->setName("Cargo prueba CC");
+        $em=$this->getDoctrine()->getEntityManager();
+        $em->persist($purchaseOrder);
+        $em->flush();
+        $purchaseOrderId=$purchaseOrder->getIdPurchaseOrders();
+        $em->remove($purchaseOrder);
+        $em->flush();
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "documentNumber"=>$person->getDocument(),
+            "MethodId"=>$idPayM,
+            "totalAmount"=>$chargeValue,
+            "taxAmount"=>0,
+            "taxBase"=>0,
+            "commissionAmount"=>0,
+            "commissionBase"=>0,
+            "chargeMode"=>1,
+            "chargeId"=>$purchaseOrderId,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
+        if(!($insertionAnswer->getStatusCode()==200&&($insertionAnswer->getContent()["charge-rc"]=="00"||$insertionAnswer->getContent()["charge-rc"]=="08"))){
+            $this->getDeletePayMethodAction($idPayM,$person->getDocument());
+            $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
+            return $view;
+        }
+        $request->setMethod("DELETE");
+        $request->request->add(array(
+            "documentNumber"=>$person->getDocument(),
+            "chargeId"=>$purchaseOrderId,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteReversePaymentMethod', array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=200){
+            $view->setStatusCode(200)->setData(array('error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
+        }else{
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+        }
         return $view;
 
+    }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getDeletePayMethodAction($idPayM,$idUser)
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        if($user->getPersonPerson()->getDocument()!=$idUser){
+            $view = View::create();
+            $view->setStatusCode(403);
+            return $view;
+        }
+        $request = $this->container->get('request');
+        $request->setMethod("DELETE");
+        $request->request->add(array(
+            "documentNumber"=>$idUser,
+            "paymentMethodId"=>$idPayM,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
+        $view = View::create();
+        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+
+        return $view;
     }
 }
 ?>

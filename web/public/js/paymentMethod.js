@@ -29,6 +29,7 @@ function addListenersPayM(){
                 name_on_card:$("#form_name_on_card").val()
             }
         }).done(function (data) {
+            console.log(data);
             alert("tarjeta agregada exitosamente");
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert("No se pudo agregar la tarjeta");
