@@ -23,7 +23,8 @@ class PaymentMethodRestController extends Controller
      *     400 = "Bad Request",
      *     401 = "Unauthorized",
      *     406 = "Not Acceptable",
-     *     409 = "Conflict"
+     *     409 = "Conflict",
+     *     500 = "Novo TimeOut"
      *   }
      * )
      *
