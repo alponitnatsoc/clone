@@ -66,14 +66,14 @@ function addListenersCalc(){
 }
 
 function jsonToHTML(data) {
-    var htmls="<h2 class='text-center'>Si su empleado tiene estas características debe pagar:</h2>" +
+    var htmls="<h2 class='cal-titleExtra'>Si su empleado tiene estas características debe pagar:</h2>" +
         "<ul class='list-group'>";
     htmls+="<li class='list-group-item'>Costo total para el empleador: "+data.totalExpenses+"</li>";
     htmls+="<li class='list-group-item'>Ingreso neto para el empleado: "+data.totalIncome+"</li>";
     htmls+="<li class='list-group-item'>Diario Gastos: "+data.totalExpenses/30+"</li>";
     htmls+="<li class='list-group-item'>Diario Ingreso: "+data.totalIncome/30+"</li>";
     htmls+="</ul>";
-    htmls+="<h2 class='text-center'>Detalles:</h2>" +
+    htmls+="<h2 class='cal-titleExtra'>Detalles:</h2>" +
         "<ul class='list-group'>";
     htmls+="<li class='list-group-item'>Gastos Empleador EPS: "+data.EPSEmployerCal+"</li>";
     htmls+="<li class='list-group-item'>Gastos Empleador Pensión: "+data.PensEmployerCal+"</li>";
