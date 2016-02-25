@@ -127,41 +127,6 @@ class EmployerRestController extends FOSRestController
 
         return $view;
     }
-    /**
-     * Return the overall user list.
-     *
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Return the overall User List",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     404 = "Returned when the user is not found"
-     *   }
-     * )
-     *
-     * @return View
-     */
-    public function getDeletePayMethodAction($idPayM,$idUser)
-    {
-        /** @var User $user */
-        $user=$this->getUser();
-        if($user->getPersonPerson()->getDocument()!=$idUser){
-            $view = View::create();
-            $view->setStatusCode(403);
-            return $view;
-        }
-        $request = $this->container->get('request');
-        $request->setMethod("DELETE");
-        $request->request->add(array(
-            "documentNumber"=>$idUser,
-            "paymentMethodId"=>$idPayM,
-        ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
-        $view = View::create();
-        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
 
-        return $view;
-    }
 
 }
