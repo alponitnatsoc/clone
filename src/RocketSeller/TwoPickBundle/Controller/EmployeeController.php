@@ -189,7 +189,7 @@ class EmployeeController extends Controller
         return $configData;
     }
 
-    public function matrixChooseAction($tab, Request $request)
+    public function matrixChooseAction($tab)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -204,6 +204,7 @@ class EmployeeController extends Controller
         $severances = null;
         $arls = null;
         //TODO note remove this to diego step
+        $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
             "documentType"=>$person->getDocumentType(),
