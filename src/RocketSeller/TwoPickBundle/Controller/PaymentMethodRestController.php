@@ -169,7 +169,7 @@ class PaymentMethodRestController extends Controller
         $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId=$params["idPurchaseOrder"];
-        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrder")->find($purchaseOrderId);
+        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
@@ -252,10 +252,9 @@ class PaymentMethodRestController extends Controller
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;
                 }
-                $transferId=json_decode($insertionAnswer->getContent(),true)["transfer-id"];
                 $pay=new Pay();
                 $pay->setUserIdUser($user);
-                $pay->setIdDispercionNovo($transferId);
+                $pay->setIdDispercionNovo("none");
                 $pay->setPurchaseOrdersDescription($description);
                 $em->persist($pay);
                 $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
