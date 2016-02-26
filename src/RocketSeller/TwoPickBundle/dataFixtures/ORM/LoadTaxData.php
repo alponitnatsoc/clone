@@ -1,4 +1,5 @@
 <?php
+
 // src/AppBundle/DataFixtures/ORM/LoadUserData.php
 
 namespace RocketSeller\TwoPickBundle\DataFixtures\ORM;
@@ -8,12 +9,12 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use RocketSeller\TwoPickBundle\Entity\Task;
+use RocketSeller\TwoPickBundle\Entity\Tax;
 
-
-class LoadTaskData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadTaxData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-	    /**
+
+    /**
      * @var ContainerInterface
      */
     private $container;
@@ -22,19 +23,24 @@ class LoadTaskData extends AbstractFixture implements OrderedFixtureInterface, C
     {
         $this->container = $container;
     }
+
     public function load(ObjectManager $manager)
     {
-        $taskExportDocs = new Task();
-        $taskExportDocs->setName('EXPORT_DOCUMENTS_PERSON');
-        $manager->persist($taskExportDocs);
+        $tax = new Tax();
+        $tax->setName('IVA');
+        $tax->setValue(16 / 100);
+        $tax->setDescription("IVA");
+        $manager->persist($tax);
         $manager->flush();
 
-        $this->addReference('export-docs-task', $taskExportDocs);
+        //$this->addReference('tax-iva', $tax);
     }
+
     public function getOrder()
     {
         // the order in which fixtures will be loaded
         // the lower the number, the sooner that this fixture is loaded
         return 1;
     }
+
 }
