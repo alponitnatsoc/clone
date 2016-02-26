@@ -57,6 +57,7 @@
             {#             {% set totalLiq = 0 %}#}
                         {% for ded in deducciones %}
                             <tr>
+                            {{ dump(ded.novelty) }}
                                 <td>{{ ded.novelty.name }}</td>
                                 <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
                             </tr>
@@ -107,10 +108,28 @@
     y las condiciones de liquidación. <strong>Una vez firmado deberá escanearlo o fotografiarlo</strong> y
     cargarlo dentro de la ficha del empleado.
     </div>
+
+    <script>
+    function PrintElem(elem)
+    {
+        Popup($(elem).html());
+    }
+
+    function popup()
+    {
+       // var mywindow = window.open(, 'my div', 'height=400,width=600');
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+    </script>
 {% endblock %}
 
 {% block stylesheet %}
     {{ parent() }}
+{#     <link rel="alternate media" type="pdf" media="print" href="{{ pdfPath }}" />#}
     <style type="text/css">
         .payType span{
             font-size: 12px;
@@ -139,11 +158,13 @@
 {{ parent() }}
 <script>
 function downloadPDF() {
+//     var pdfData = JSON.stringify();
+//     $().serializeArray();
     $.ajax({
-        url: "{{ path('api_public_post_generate_pdf') }}",
+        url: "{{ path('api_public_post_download_pdf') }}",
         type: 'POST',
         data: {
-            url: window.location.href
+            data: '{{ pdfData }}'
         }
     }).done(function (data) {
         alert(data);
