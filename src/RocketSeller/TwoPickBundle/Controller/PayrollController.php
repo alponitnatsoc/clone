@@ -452,6 +452,7 @@ use LiquidationMethodsTrait;
         $purchaseOrder->setIdUser($this->getUser());
         $purchaseOrder->setName('Pago Nomina');
         $purchaseOrder->setValue((floatval($totalAmount)));
+        $purchaseOrder->setPayMethodId($methodId);
 
         $em->persist($purchaseOrder);
         $em->flush(); //para obtener el id que se debe enviar a novopay
