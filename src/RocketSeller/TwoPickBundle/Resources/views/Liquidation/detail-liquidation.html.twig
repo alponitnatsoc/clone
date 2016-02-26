@@ -217,80 +217,68 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script>
         $(document).ready(function () {
-
             updateValues();
 
-            $('#btnCont').click(function () {
-                total = "{{ totalLiq }}";
-                message = $(".modalPayLiquidation");
-                var dialog = bootbox.dialog({
-                    title: "Confirmación de pago",
-                    closeButton: false,
-                    message: message,
-                    buttons: {
-                        cancel: {
-                            label: "Cancelar",
-                            className: "btn-default",
-                            callback: function () {
-                                $("#btnPay").prop('disabled', false);
-                            }
-                        },
-                        success: {
-                            label: "Pagar",
-                            className: "btn-default btn-orange btn-pay",
-                            callback: function () {
-                                $('#formPay').submit();
-                                $("#btnCont").prop('disabled', true);
-                            }
+            $('#formPay').on("submit", function(e) {
+                e.preventDefault();
+                var form = $('#formPay');
+
+                var url = form.attr('action');
+
+                $.ajax({
+                    url: url,
+                    type: form.attr('method'),
+                    data: {
+                        id_liq: "{{ id_liq }}",
+                        payment_method_liq: form.find('input[name="paymentMethodLiq"]:checked').val()
+                    }
+                }).done(function (data) {
+                    if (data["url"] != null) {
+                        console.log(data["url"]);
+                        console.log(data);
+                        redirUri = data["url"];
+//                         sendAjax(redirUri);
+                        window.location.href = redirUri;
+                    } else {
+                        $('#main').replaceWith(
+                                // ... with the returned one from the AJAX response.
+                                $(data).find('#main'));
+                        addClick();
+                        if (!jsLoader(url)) {
+                            addSumbit();
                         }
                     }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
                 });
-                $(message).show();
-                $(dialog.find('.btn-pay')[0]).prop('disabled', true);
-                $(dialog.find('.chkAccept')).change(function (e) {
-                    $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
-                });
-                $("#btnPay").prop('disabled', true);
-
             });
 
-            $('#btnBack').click(function () {
-                console.log("click");
-                //document.location = "{{ path('payroll') }}";
-            });
-        });
+            $("form[name='addPaymentMethod']").submit(function(e){
+                e.preventDefault();
 
-        $('#formPay').on("submit", function(e) {
-            e.preventDefault();
-            var form = $('#formPay');
-
-            var url = form.attr('action');
-
-            $.ajax({
-                url: url,
-                type: form.attr('method'),
-                data: {
-                    id_liq: "{{ id_liq }}",
-                    payment_method_liq: form.find('input[name="paymentMethodLiq"]:checked').val()
-                }
-            }).done(function (data) {
-                if (data["url"] != null) {
-                    console.log(data["url"]);
-                    console.log(data);
-                    redirUri = data["url"];
-//                     sendAjax(redirUri);
-                    window.location.href = redirUri;
-                } else {
-                    $('#main').replaceWith(
-                            // ... with the returned one from the AJAX response.
-                            $(data).find('#main'));
-                    addClick();
-                    if (!jsLoader(url)) {
-                        addSumbit();
+                var url = $(this).attr('action');
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        credit_card: $(this).find("input[name='form[credit_card]']").val(),
+                        expiry_date_year: $(this).find("input[name='form[expiry_date_year]']").val(),
+                        expiry_date_month: $(this).find("input[name='form[expiry_date_month]']").val(),
+                        cvv: $(this).find("input[name='form[cvv]']").val(),
+                        name_on_card: $(this).find("input[name='form[name_on_card]']").val()
                     }
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+                }).done(function (data) {
+                    console.log(data);
+                    $('#modalPayLiquidation2').find(".modal-body").append("Metodo de pago agregado con exito");
+                    $('#myModalAddPaymentMethod2').modal('toggle');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + " - " + errorThrown);
+                    alert(jqXHR);
+                });
+            });
+
+            $('.chkAccept').change(function (e) {
+                $('.btn-pay').prop('disabled', !e.currentTarget.checked);
             });
         });
 
@@ -303,58 +291,5 @@
             total = $('.formatValueTotal').attr("total");
             $('.formatValueTotal').html("Pagar " + numeral(total).format('$ 0,0.00'));
         }
-
-        $("form[name='addPaymentMethod']").submit(function(e){
-            e.preventDefault();
-
-            var url = $(this).attr('action');
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    credit_card: $(this).find("input[name='form[credit_card]']").val(),
-                    expiry_date_year: $(this).find("input[name='form[expiry_date_year]']").val(),
-                    expiry_date_month: $(this).find("input[name='form[expiry_date_month]']").val(),
-                    cvv: $(this).find("input[name='form[cvv]']").val(),
-                    name_on_card: $(this).find("input[name='form[name_on_card]']").val()
-                }
-            }).done(function (data) {
-                console.log(data);
-                $('#modalPayLiquidation2').find(".modal-body").append("Metodo de pago agregado con exito");
-                $('#myModalAddPaymentMethod2').modal('toggle');
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus + " - " + errorThrown);
-                alert(jqXHR);
-            });
-        });
-
-        $('#addPaymentMethod').click(function () {
-            modalPaymethod = $("#myModalAddPaymentMethod");
-            var dialog1 = bootbox.dialog({
-                title: "Agregar nuevo método de pago",
-                closeButton: true,
-                message: modalPaymethod,
-                buttons: {
-                    cancel: {
-                        label: "Cancelar",
-                        className: "btn-default",
-                        callback: function () {
-                        }
-                    },
-                    success: {
-                        label: "Enviar",
-                        className: "btn-default btn-orange",
-                        callback: function () {
-                            $("form[name='addPaymentMethod']").submit();
-                        }
-                    }
-                }
-            });
-            $(modalPaymethod).show();
-        });
-
-        $('.chkAccept').change(function (e) {
-            $('.btn-pay').prop('disabled', !e.currentTarget.checked);
-        });
     </script>
 {% endblock %}
