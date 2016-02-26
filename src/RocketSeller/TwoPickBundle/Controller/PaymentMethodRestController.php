@@ -221,6 +221,7 @@ class PaymentMethodRestController extends Controller
                         $pay->setIdDispercionNovo($transferId);
                         $pay->setPurchaseOrdersDescription($desc);
                         $em->persist($pay);
+                        $em->flush();
                     }else{
                         //TODO TIMEOUT
                         $view->setStatusCode(500)->setData(array('error'=>array('Dispersion'=>'se exedio el tiempo de espera pero el dinero se sacó')));
@@ -257,6 +258,7 @@ class PaymentMethodRestController extends Controller
                 $pay->setIdDispercionNovo("none");
                 $pay->setPurchaseOrdersDescription($description);
                 $em->persist($pay);
+                $em->flush();
                 $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
                 return $view;
             }
