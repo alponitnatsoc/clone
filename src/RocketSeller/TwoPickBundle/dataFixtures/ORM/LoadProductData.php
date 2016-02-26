@@ -17,6 +17,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 0 a 10 días');
         $product->setPrice(floatval('16500'));
         $product->setSimpleName('PS1');
+        $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
         $manager->persist($product);
 
@@ -25,6 +26,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 11 a 19 días');
         $product->setPrice(floatval('21000'));
         $product->setSimpleName('PS2');
+        $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
         $manager->persist($product);
 
@@ -33,6 +35,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 20 o más días');
         $product->setPrice(floatval('27500'));
         $product->setSimpleName('PS3');
+        $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
         $manager->persist($product);
 
@@ -41,6 +44,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product->setDescription('Pago Nomina');
         $product->setPrice(null);
         $product->setSimpleName('PN');
+        $product->setTaxTax(null);
         $product->setValidity(null);
         $manager->persist($product);
 
@@ -49,6 +53,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product->setDescription('Pago PILA');
         $product->setPrice(null);
         $product->setSimpleName('PP');
+        $product->setTaxTax(null);
         $product->setValidity(null);
         $manager->persist($product);
 
