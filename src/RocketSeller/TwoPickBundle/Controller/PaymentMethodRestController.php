@@ -3,7 +3,9 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use DateTime;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -155,19 +157,21 @@ class PaymentMethodRestController extends Controller
      *   }
      * )
      *
-     * @param Request $request
+     * @param Request $requestt
      * @return View
      */
-    public function postPayPurchaseOrderAction(Request $request)
+    public function postPayPurchaseOrderAction(Request $requestt)
     {
         /** @var User $user */
         $user=$this->getUser();
         $person=$user->getPersonPerson();
-        $params=$request->request->all();
+        $params=$requestt->request->all();
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrder=$params["purchaseOrder"];
-
+        $request = $this->container->get('request');
+        $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
+        $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrdersDescription $description */
         foreach ($descriptions as $description) {
             $description->getValue();
@@ -187,6 +191,45 @@ class PaymentMethodRestController extends Controller
                     "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
+                $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+                if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
+                    return $view;
+                }
+                /** @var PurchaseOrdersDescription $desc */
+                foreach ($descriptions as $desc) {
+                    $payRoll=$desc->getPayrollPayroll();
+                    if($desc->getProductProduct()->getSimpleName()=="PP"){
+                        $type=2;
+                    }elseif($desc->getProductProduct()->getSimpleName()=="PN"){
+                        $type=1;
+                    }else{continue;}
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "documentNumber"=>$person->getDocument(),
+                        "beneficiaryId"=>$payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getDocument(),
+                        "beneficiaryAmount"=>$desc->getValue(),
+                        "dispersionType"=>$type,
+                        "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPayment', array('_format' => 'json'));
+                    if($insertionAnswer->getStatusCode()==200){
+                        $transferId=json_decode($insertionAnswer->getContent(),true)["transfer-id"];
+                        $pay=new Pay();
+                        $pay->setUserIdUser($user);
+                        $pay->setIdDispercionNovo($transferId);
+                        $pay->setPurchaseOrdersDescription($desc);
+                        $em->persist($pay);
+                    }else{
+                        //TODO TIMEOUT
+                        $view->setStatusCode(500)->setData(array('error'=>array('Dispersion'=>'se exedio el tiempo de espera pero el dinero se sacó')));
+                        return $view;
+                    }
+
+                }
+
+                $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                return $view;
 
             }else{
                 $tax=$description->getTaxTax();
@@ -203,21 +246,22 @@ class PaymentMethodRestController extends Controller
                     "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-
+                $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+                if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
+                    return $view;
+                }
+                $transferId=json_decode($insertionAnswer->getContent(),true)["transfer-id"];
+                $pay=new Pay();
+                $pay->setUserIdUser($user);
+                $pay->setIdDispercionNovo($transferId);
+                $pay->setPurchaseOrdersDescription($description);
+                $em->persist($pay);
+                $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                return $view;
             }
         }
 
-        $request = $this->container->get('request');
-        $request->setMethod("DELETE");
-        $request->request->add(array(
-            "documentNumber"=>$idUser,
-            "paymentMethodId"=>$idPayM,
-        ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
-        $view = View::create();
-        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-
-        return $view;
     }
 }
 ?>
