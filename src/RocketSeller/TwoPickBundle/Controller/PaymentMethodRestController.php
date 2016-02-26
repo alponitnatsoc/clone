@@ -169,7 +169,7 @@ class PaymentMethodRestController extends Controller
         $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId=$params["idPurchaseOrder"];
-        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrder")->find($purchaseOrder);
+        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrder")->find($purchaseOrderId);
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
