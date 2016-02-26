@@ -166,12 +166,13 @@ class PaymentMethodRestController extends Controller
         $user=$this->getUser();
         $person=$user->getPersonPerson();
         $params=$requestt->request->all();
+        $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrders $purchaseOrder */
-        $purchaseOrder=$params["purchaseOrder"];
+        $purchaseOrderId=$params["idPurchaseOrder"];
+        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrder")->find($purchaseOrder);
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
-        $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrdersDescription $description */
         foreach ($descriptions as $description) {
             $description->getValue();
@@ -238,8 +239,8 @@ class PaymentMethodRestController extends Controller
                     "documentNumber"=>$person->getDocument(),
                     "MethodId"=>$purchaseOrder->getPayMethodId(),
                     "totalAmount"=>$purchaseOrder->getValue(),
-                    "taxAmount"=>$purchaseOrder->getValue()-($purchaseOrder->getValue()/$tax->getValue()),
-                    "taxBase"=>$purchaseOrder->getValue()/$tax->getValue(),
+                    "taxAmount"=>$purchaseOrder->getValue()-($purchaseOrder->getValue()/($tax->getValue()+1)),
+                    "taxBase"=>$purchaseOrder->getValue()/($tax->getValue()+1),
                     "commissionAmount"=>0,
                     "commissionBase"=>0,
                     "chargeMode"=>3,
