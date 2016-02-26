@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use Symfony\Component\HttpFoundation\Request;
 
 class PaymentMethodRestController extends Controller
 {
@@ -34,7 +35,6 @@ class PaymentMethodRestController extends Controller
      * @RequestParam(name="credit_card", nullable=false,  requirements="\d+", strict=true, description="CC Number")
      * @RequestParam(name="expiry_date_year", nullable=false,  requirements="[0-9]{4}", strict=true, description="YEAR in YYYY format.")
      * @RequestParam(name="expiry_date_month", nullable=false,  requirements="[0-9]{2}", strict=true, description="Month in MM format.")
-     * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
      * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
      * @RequestParam(name="name_on_card", nullable=false, strict=true, description="The name on card")
      */
@@ -119,6 +119,42 @@ class PaymentMethodRestController extends Controller
      * @return View
      */
     public function getDeletePayMethodAction($idPayM,$idUser)
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        if($user->getPersonPerson()->getDocument()!=$idUser){
+            $view = View::create();
+            $view->setStatusCode(403);
+            return $view;
+        }
+        $request = $this->container->get('request');
+        $request->setMethod("DELETE");
+        $request->request->add(array(
+            "documentNumber"=>$idUser,
+            "paymentMethodId"=>$idPayM,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteClientPaymentMethod', array('_format' => 'json'));
+        $view = View::create();
+        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+
+        return $view;
+    }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function postPayPurchaseOrderAction(Request $request)
     {
         /** @var User $user */
         $user=$this->getUser();
