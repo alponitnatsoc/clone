@@ -164,7 +164,7 @@
                         </div>
                         <div>
                             {{ paymentMethod['method-id'] }}
-                            <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}"> {{ paymentMethod['account'] }}<br>
+                            <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required> {{ paymentMethod['account'] }}<br>
                         </div>
                     {% endfor  %}
                     <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar 2</a>
@@ -172,7 +172,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btn-pay" disabled="true">Save changes</button>
+                    <button type="submit" class="btn btn-default btn-orange btn-pay" disabled="true">Pay</button>
                 </div>
             </div>
         </div>
@@ -271,7 +271,7 @@
                 type: form.attr('method'),
                 data: {
                     id_liq: "{{ id_liq }}",
-                    payment_method_liq: 2
+                    payment_method_liq: form.find('input[name="paymentMethodLiq"]:checked').val()
                 }
             }).done(function (data) {
                 if (data["url"] != null) {
@@ -316,7 +316,7 @@
                     expiry_date_year: $(this).find("input[name='form[expiry_date_year]']").val(),
                     expiry_date_month: $(this).find("input[name='form[expiry_date_month]']").val(),
                     cvv: $(this).find("input[name='form[cvv]']").val(),
-                    name_on_card: $(this).find("form[name_on_card]").val()
+                    name_on_card: $(this).find("input[name='form[name_on_card]']").val()
                 }
             }).done(function (data) {
                 console.log(data);
