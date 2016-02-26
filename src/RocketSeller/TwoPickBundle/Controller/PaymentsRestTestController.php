@@ -277,7 +277,7 @@ class PaymentsRestTestController extends FOSRestController
     }
     else
     {
-      $view->setStatusCode(201);
+      $view->setStatusCode(200);
 
       $view->setData((array('charge-third-id' => $a, 'charge-rc'=>'00')));
     }
