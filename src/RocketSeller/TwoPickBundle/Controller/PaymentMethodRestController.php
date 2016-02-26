@@ -162,10 +162,10 @@ class PaymentMethodRestController extends Controller
     {
         /** @var User $user */
         $user=$this->getUser();
+        $person=$user->getPersonPerson();
         $params=$request->request->all();
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrder=$params["purchaseOrder"];
-        $idPayM=$params["purchaseOrder"];
 
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
         /** @var PurchaseOrdersDescription $description */
@@ -177,14 +177,30 @@ class PaymentMethodRestController extends Controller
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "documentNumber"=>$person->getDocument(),
-                    "MethodId"=>$idPayM,
+                    "MethodId"=>$purchaseOrder->getPayMethodId(),
                     "totalAmount"=>$purchaseOrder->getValue(),
                     "taxAmount"=>0,
                     "taxBase"=>0,
                     "commissionAmount"=>0,
                     "commissionBase"=>0,
                     "chargeMode"=>2,
-                    "chargeId"=>$purchaseOrderId,
+                    "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
+
+            }else{
+                $tax=$description->getTaxTax();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentNumber"=>$person->getDocument(),
+                    "MethodId"=>$purchaseOrder->getPayMethodId(),
+                    "totalAmount"=>$purchaseOrder->getValue(),
+                    "taxAmount"=>$purchaseOrder->getValue()-($purchaseOrder->getValue()/$tax->getValue()),
+                    "taxBase"=>$purchaseOrder->getValue()/$tax->getValue(),
+                    "commissionAmount"=>0,
+                    "commissionBase"=>0,
+                    "chargeMode"=>3,
+                    "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
 
