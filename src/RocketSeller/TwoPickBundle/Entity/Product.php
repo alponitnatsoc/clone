@@ -48,6 +48,15 @@ class Product
     private $validity;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Tax
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
+     * })
+     */
+    private $taxTax;
+
+    /**
      * Get idProduct
      *
      * @return integer
@@ -175,6 +184,30 @@ class Product
     public function getSimpleName()
     {
         return $this->simpleName;
+    }
+
+    /**
+     * Set taxTax
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
+     *
+     * @return Product
+     */
+    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax = null)
+    {
+        $this->taxTax = $taxTax;
+
+        return $this;
+    }
+
+    /**
+     * Get taxTax
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Tax
+     */
+    public function getTaxTax()
+    {
+        return $this->taxTax;
     }
 
 }

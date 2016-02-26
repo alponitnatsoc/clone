@@ -33,7 +33,7 @@ class LoadTaxData extends AbstractFixture implements OrderedFixtureInterface, Co
         $manager->persist($tax);
         $manager->flush();
 
-        //$this->addReference('tax-iva', $tax);
+        $this->addReference('tax-iva', $tax);
     }
 
     public function getOrder()

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tax
 {
+
     /**
      * @var integer
      *
@@ -117,4 +118,5 @@ class Tax
     {
         return $this->description;
     }
+
 }
