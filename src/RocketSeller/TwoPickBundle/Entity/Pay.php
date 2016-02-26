@@ -123,53 +123,6 @@ class Pay
         return $this->message;
     }
 
-    /**
-     * Set purchaseOrdersPurchaseOrders
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders
-     *
-     * @return Pay
-     */
-    public function setPurchaseOrdersPurchaseOrders(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrdersPurchaseOrders)
-    {
-        $this->purchaseOrdersPurchaseOrders = $purchaseOrdersPurchaseOrders;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseOrdersPurchaseOrders
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     */
-    public function getPurchaseOrdersPurchaseOrders()
-    {
-        return $this->purchaseOrdersPurchaseOrders;
-    }
-
-    /**
-     * Set payTypePayType
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType
-     *
-     * @return Pay
-     */
-    public function setPayTypePayType(\RocketSeller\TwoPickBundle\Entity\PayType $payTypePayType)
-    {
-        $this->payTypePayType = $payTypePayType;
-
-        return $this;
-    }
-
-    /**
-     * Get payTypePayType
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\PayType
-     */
-    public function getPayTypePayType()
-    {
-        return $this->payTypePayType;
-    }
 
     /**
      * Set payMethodPayMethod

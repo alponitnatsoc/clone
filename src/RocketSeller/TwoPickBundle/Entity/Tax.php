@@ -74,7 +74,7 @@ class Tax
     /**
      * Set value
      *
-     * @param string $value
+     * @param float $value
      *
      * @return Tax
      */
@@ -88,7 +88,7 @@ class Tax
     /**
      * Get value
      *
-     * @return string
+     * @return float
      */
     public function getValue()
     {
