@@ -5,6 +5,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -84,7 +85,8 @@ class PaymentMethodRestController extends Controller
             "chargeId"=>$purchaseOrderId,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-        if(!($insertionAnswer->getStatusCode()==200&&($insertionAnswer->getContent()["charge-rc"]=="00"||$insertionAnswer->getContent()["charge-rc"]=="08"))){
+        $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+        if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
             $this->getDeletePayMethodAction($idPayM,$person->getDocument());
             $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
             return $view;
@@ -139,6 +141,7 @@ class PaymentMethodRestController extends Controller
 
         return $view;
     }
+
     /**
      * Return the overall user list.
      *
@@ -152,17 +155,42 @@ class PaymentMethodRestController extends Controller
      *   }
      * )
      *
+     * @param Request $request
      * @return View
      */
     public function postPayPurchaseOrderAction(Request $request)
     {
         /** @var User $user */
         $user=$this->getUser();
-        if($user->getPersonPerson()->getDocument()!=$idUser){
-            $view = View::create();
-            $view->setStatusCode(403);
-            return $view;
+        $params=$request->request->all();
+        /** @var PurchaseOrders $purchaseOrder */
+        $purchaseOrder=$params["purchaseOrder"];
+        $idPayM=$params["purchaseOrder"];
+
+        $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
+        /** @var PurchaseOrdersDescription $description */
+        foreach ($descriptions as $description) {
+            $description->getValue();
+            $product=$description->getProductProduct();
+            $simpleName=$product->getSimpleName();
+            if($simpleName=="PN"||$simpleName=="PP"){
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentNumber"=>$person->getDocument(),
+                    "MethodId"=>$idPayM,
+                    "totalAmount"=>$purchaseOrder->getValue(),
+                    "taxAmount"=>0,
+                    "taxBase"=>0,
+                    "commissionAmount"=>0,
+                    "commissionBase"=>0,
+                    "chargeMode"=>2,
+                    "chargeId"=>$purchaseOrderId,
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
+
+            }
         }
+
         $request = $this->container->get('request');
         $request->setMethod("DELETE");
         $request->request->add(array(
