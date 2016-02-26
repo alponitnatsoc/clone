@@ -138,6 +138,18 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
         $PurchaseOrdersStatusRechazadoB7->setIdNovoPay('B7');
         $manager->persist($PurchaseOrdersStatusRechazadoB7);
 
+        $PurchaseOrdersStatusDispersion1 = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatusDispersion1->setName('DispersionAprobada');
+        $PurchaseOrdersStatusDispersion1->setDescription('La dispersion fue aprobada');
+        $PurchaseOrdersStatusDispersion1->setIdNovoPay('-1');
+        $manager->persist($PurchaseOrdersStatusDispersion1);
+
+        $PurchaseOrdersStatusDispersion2 = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatusDispersion2->setName('DispersionRechazada');
+        $PurchaseOrdersStatusDispersion2->setDescription('La dispersion fue rechazada');
+        $PurchaseOrdersStatusDispersion2->setIdNovoPay('-2');
+        $manager->persist($PurchaseOrdersStatusDispersion2);
+
         $manager->flush();
     }
 
