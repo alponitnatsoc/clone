@@ -32,18 +32,6 @@ class UserController extends Controller
         $user=$this->getUser();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
-        $request = $this->container->get('request');
-        $request->setMethod("POST");
-        $request->request->add(array(
-            "documentNumber"=>"123123123",
-            "beneficiaryId"=>"12312",
-            "beneficiaryAmount"=>"123123",
-            "dispersionType"=>"2",
-            "chargeId"=>"12312312",
-        ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsMethodRest:getPayPurchaseOrder',array("idPurchaseOrder"=>5), array('_format' => 'json'));
-        echo "Status Code".$insertionAnswer->getStatusCode()." Content".$insertionAnswer->getContent();
-        die();
         $invoicesEmited=new ArrayCollection();
         $purchaseOrders=$user->getPurchaseOrders();
         /** @var PurchaseOrders $purchaseOrder */

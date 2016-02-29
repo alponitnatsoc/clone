@@ -75,7 +75,7 @@ class PaymentsRestTestController extends FOSRestController
     {
       $view->setStatusCode(400);
     }
-    return $view;
+    return $view->setStatusCode(201);
   }
 
   /**
