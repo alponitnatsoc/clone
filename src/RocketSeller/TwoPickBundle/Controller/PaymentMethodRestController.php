@@ -182,7 +182,7 @@ class PaymentMethodRestController extends FOSRestController
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "documentNumber"=>$person->getDocument(),
-                    "MethodId"=>$purchaseOrder->getPayMethodId(),
+                    "MethodId"=>$description->getPayMethodId(),
                     "totalAmount"=>$purchaseOrder->getValue(),
                     "taxAmount"=>0,
                     "taxBase"=>0,
@@ -238,7 +238,7 @@ class PaymentMethodRestController extends FOSRestController
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "documentNumber"=>$person->getDocument(),
-                    "MethodId"=>$purchaseOrder->getPayMethodId(),
+                    "MethodId"=>$description->getPayMethodId(),
                     "totalAmount"=>$purchaseOrder->getValue(),
                     "taxAmount"=>$purchaseOrder->getValue()-($purchaseOrder->getValue()/($tax->getValue()+1)),
                     "taxBase"=>$purchaseOrder->getValue()/($tax->getValue()+1),
@@ -248,7 +248,8 @@ class PaymentMethodRestController extends FOSRestController
                     "chargeId"=>$purchaseOrder->getIdPurchaseOrders(),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-                $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+                $answer=json_decode($insertionAnswer->getContent(),true);
+                $chargeRC=$answer["charge-rc"];
                 if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;

@@ -21,12 +21,6 @@ class PurchaseOrders
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $idPurchaseOrders;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", nullable = TRUE)
-     */
-    private $payMethodId;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
@@ -253,6 +247,7 @@ class PurchaseOrders
      */
     public function addPurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
     {
+        $purchaseOrderDescription->setPurchaseOrders($this);
         $this->purchaseOrderDescriptions[] = $purchaseOrderDescription;
 
         return $this;
@@ -300,30 +295,5 @@ class PurchaseOrders
     public function getIdUser()
     {
         return $this->idUser;
-    }
-
-
-    /**
-     * Set payMethodId
-     *
-     * @param integer $payMethodId
-     *
-     * @return PurchaseOrders
-     */
-    public function setPayMethodId($payMethodId)
-    {
-        $this->payMethodId = $payMethodId;
-
-        return $this;
-    }
-
-    /**
-     * Get payMethodId
-     *
-     * @return integer
-     */
-    public function getPayMethodId()
-    {
-        return $this->payMethodId;
     }
 }
