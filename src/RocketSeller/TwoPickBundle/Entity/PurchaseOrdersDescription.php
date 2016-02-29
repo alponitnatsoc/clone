@@ -27,13 +27,6 @@ class PurchaseOrdersDescription
     private $idPurchaseOrdersDescription;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", nullable = TRUE)
-     */
-    private $payMethodId;
-
-    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="purchaseOrdersDescription")
      * @ORM\JoinColumns({
@@ -336,31 +329,6 @@ class PurchaseOrdersDescription
     public function removePayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
     {
         $this->payrollPayroll->removeElement($payrollPayroll);
-    }
-
-
-    /**
-     * Set payMethodId
-     *
-     * @param integer $payMethodId
-     *
-     * @return PurchaseOrders
-     */
-    public function setPayMethodId($payMethodId)
-    {
-        $this->payMethodId = $payMethodId;
-
-        return $this;
-    }
-
-    /**
-     * Get payMethodId
-     *
-     * @return integer
-     */
-    public function getPayMethodId()
-    {
-        return $this->payMethodId;
     }
 
 }
