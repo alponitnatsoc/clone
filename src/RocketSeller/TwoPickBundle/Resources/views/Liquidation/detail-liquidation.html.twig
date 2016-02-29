@@ -157,16 +157,18 @@
                     <h2 class="formatValue">{{ totalLiq }}</h2>
                 </div>
                 <div class="modal-body">
+                    <div id="paymethods">
                     {% for key,paymentMethod in paymentMethods %}
                         {% set data = paymentMethod["payment-type"] %}
                         <div>
-                            <strong>Medio de pago {{ key }}: </strong>
+                            <strong>{{ key }}: </strong>
                         </div>
                         <div>
                             {{ paymentMethod['method-id'] }}
-                            <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required> {{ paymentMethod['account'] }}<br>
+                            <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required /> {{ paymentMethod['account'] }}<br>
                         </div>
                     {% endfor  %}
+                    </div>
                     <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar 2</a>
                     <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
                 </div>
@@ -200,6 +202,7 @@
                     <input type="text" id="form_cvv" name="form[cvv]" required="required" class="form-control">
                     <label class="control-label required" for="form_name_on_card">Name on card</label>
                     <input type="text" id="form_name_on_card" name="form[name_on_card]" required="required" class="form-control">
+                    <input type="hidden" id="form_document" name="form_document" value="{{ employer.document }}" />
                 </form>
             </div>
             <div class="modal-footer">
@@ -214,7 +217,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+{#     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>#}
     <script>
         $(document).ready(function () {
             updateValues();
@@ -256,21 +259,21 @@
             $("form[name='addPaymentMethod']").submit(function(e){
                 e.preventDefault();
 
-                var url = $(this).attr('action');
+                form = $(this);
+                var url = form.attr('action');
                 $.ajax({
                     url: url,
                     type: 'POST',
                     data: {
-                        credit_card: $(this).find("input[name='form[credit_card]']").val(),
-                        expiry_date_year: $(this).find("input[name='form[expiry_date_year]']").val(),
-                        expiry_date_month: $(this).find("input[name='form[expiry_date_month]']").val(),
-                        cvv: $(this).find("input[name='form[cvv]']").val(),
-                        name_on_card: $(this).find("input[name='form[name_on_card]']").val()
+                        credit_card: form.find("input[name='form[credit_card]']").val(),
+                        expiry_date_year: form.find("input[name='form[expiry_date_year]']").val(),
+                        expiry_date_month: form.find("input[name='form[expiry_date_month]']").val(),
+                        cvv: form.find("input[name='form[cvv]']").val(),
+                        name_on_card: form.find("input[name='form[name_on_card]']").val()
                     }
                 }).done(function (data) {
                     console.log(data);
-                    $('#modalPayLiquidation2').find(".modal-body").append("Metodo de pago agregado con exito");
-                    $('#myModalAddPaymentMethod2').modal('toggle');
+                    updatePaymethods(form.find("input[name='form_document']").val());
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus + " - " + errorThrown);
                     alert(jqXHR);
@@ -290,6 +293,37 @@
             });
             total = $('.formatValueTotal').attr("total");
             $('.formatValueTotal').html("Pagar " + numeral(total).format('$ 0,0.00'));
+        }
+
+        function updatePaymethods(documentNumber) {
+            $.ajax({
+                url: '/api/public/v1/clients/' + documentNumber + '/list/paymentmethods',
+                type: 'GET',
+            }).done(function (data) {
+                $('#modalPayLiquidation2').find(".modal-body").prepend("Metodo de pago agregado con exito");
+                $('#myModalAddPaymentMethod2').modal('toggle');
+
+                $('#modalPayLiquidation2').find(".modal-body #paymethods").empty();
+
+                $.each( data['payment-methods'], function( key, value ) {
+                    alert( key + ": " + value );
+
+                    html = "<div>" +
+                        "<strong> " + key + ": </strong>" +
+                        "</div>" +
+                        "<div>" + value['method-id'] +
+                        "<input type='radio' name='paymentMethodLiq' value='" + value['method-id'] + "' required />" +
+                        value['account'] + "<br>" +
+                    "</div>";
+
+                    $('#modalPayLiquidation2').find(".modal-body #paymethods").append(html);
+
+                });
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus + " - " + errorThrown);
+                alert(jqXHR);
+            });
         }
     </script>
 {% endblock %}
