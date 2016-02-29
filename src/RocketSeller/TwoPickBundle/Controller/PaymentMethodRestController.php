@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Controller;
 use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -310,7 +310,5 @@ class PaymentMethodRestController extends FOSRestController
                 return $view;
             }
         }
-
     }
 }
-?>

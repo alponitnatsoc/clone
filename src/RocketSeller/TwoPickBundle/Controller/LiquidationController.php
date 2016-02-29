@@ -55,9 +55,6 @@ class LiquidationController extends Controller
      */
     public function showAction($id)
     {
-//         $em = $this->getDoctrine()->getManager();
-
-//         $entity = $em->getRepository('RocketSellerTwoPickBundle:Liquidation')->find($id);
         $entity = $this->liquidationDetail($id);
 
         if (!$entity) {
@@ -161,32 +158,13 @@ class LiquidationController extends Controller
 
         $id_liq = $liquidation->getId();
 
-//         $notification = new Notification();
-//         $notification->setAccion("Subir carta de renuncia");
-//         $notification->setDescription("Subir carta de renuncia firmada por " . $employeeInfo["name"]);
-//         $notification->setPersonPerson($employerPerson);
-//         $notification->setStatus(0);
-//         $notification->setType("renuncia");
-//         $notification->setTitle("Subir carta de renuncia");
-//         $em->persist($notification);
-//         $em->flush();
-
         $repoDocType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType");
         /** @var DocumentType $docType */
         $docType = $repoDocType->findOneBy(array(
             "name" => "Carta de renuncia"
         ));
 
-//         $relatedLink = $this->generateUrl("documentos_employee", array(
-//             "idNotification" => $notification->getId(),
-//             "id" => $employerPerson->getIdPerson(),
-//             "idDocumentType" => $docType->getIdDocumentType()
-//             )
-//         );
-//         $notification->setRelatedLink($relatedLink);
-//         $em->persist($notification);
         $em->flush();
-
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final.html.twig", array(
             "employeeInfo" => $employeeInfo,
@@ -195,8 +173,7 @@ class LiquidationController extends Controller
             "payroll" => $payroll,
             "novelties" => $novelties,
             "llamadosAtencion" => $llamadosAtencion,
-            "id_liq" => $id_liq,
-//             "relatedLink" => $relatedLink
+            "id_liq" => $id_liq
         ));
     }
 
@@ -407,7 +384,7 @@ class LiquidationController extends Controller
 //         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
         $documentNumber = $employerInfo["document"];
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
-//         var_dump($clientListPaymentmethods);
+
         $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
         $html = $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
@@ -423,7 +400,7 @@ class LiquidationController extends Controller
             'totalDeducciones' => $totalLiq["totalDed"],
             'totalDevengos' => $totalLiq["totalDev"],
             'employer' => $employerInfo,
-            'paymentMethods' => isset($responcePaymentsMethods["payments"]) ? $responcePaymentsMethods["payments"] : false,
+            'paymentMethods' => isset($responcePaymentsMethods["payment-methods"]) ? $responcePaymentsMethods["payment-methods"] : false,
             'id_liq' => $id_liq
         ));
 
@@ -535,14 +512,21 @@ class LiquidationController extends Controller
             'id_liq' => $id
         );
 
-        $filename = "liquidation-empleado-" . $employeeInfo["document"] . ".pdf";
-        $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/" . $filename;
-        $this->get('knp_snappy.pdf')->generateFromHtml(
-            $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
-                $viewData
-            ),
-            $path
-        );
+//         $filename = "liquidation-empleado-" . $employeeInfo["document"] . ".pdf";
+//         $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/" . $filename;
+
+//         if (!file_exists($path)) {
+//             $this->get('knp_snappy.pdf')->generateFromHtml(
+//                 $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
+//                     $viewData
+//                 ),
+//                 $path
+//             );
+//         }
+
+//         $viewData["pdfPath"] = $path;
+
+        //$viewData["pdfData"] = json_encode($viewData);
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig",
             $viewData

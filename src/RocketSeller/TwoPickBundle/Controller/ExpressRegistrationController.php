@@ -26,7 +26,26 @@ class ExpressRegistrationController extends Controller
         $user = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:User')
         ->find($id);
+        $person = $user->getPersonPerson();
+        $date = new \DateTime('02/31/1970');
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "documentType"=>$person->getDocumentType(),
+            "documentNumber"=>$person->getDocument(),
+            "name"=>$person->getNames(),
+            "lastName"=>$person->getLastName1()." ".$person->getLastName2(),
+            "year"=>$date->format("Y"),
+            "month"=>$date->format("m"),
+            "day"=>$date->format("d"),
+            "phone"=>$person->getPhones()->get(0)->getPhoneNumber(),
+            "email"=>$user->getEmail()
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
+            dump($insertionAnswer);
+            exit();
         return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
+        
     }
     public function successExpressAction($id)
     {

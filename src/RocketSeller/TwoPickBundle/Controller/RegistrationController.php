@@ -162,7 +162,7 @@ class RegistrationController extends BaseController
         $userManager->updateUser($user);
         if (null === $response = $event->getResponse()) {
             if ($user->getExpress()) {
-                $url = $this->generateUrl('express_payment',array('id'=>$user->getId()));   
+                $url = $this->generateUrl('payments_method');   
             }else{
                 $url = $this->generateUrl('edit_profile');
             }            
@@ -230,6 +230,8 @@ class RegistrationController extends BaseController
             $person = new Person();
             $person->setDocumentType($request->get("documentType"));
             $person->setDocument($request->get("document"));
+            $person->setLastName1($request->get("lastName1"));
+            $person->setLastName2($request->get("lastName2"));
             $employer = new Employer();            
             $phone = new Phone();            
             $phone->setPhoneNumber($request->get("phone"));
