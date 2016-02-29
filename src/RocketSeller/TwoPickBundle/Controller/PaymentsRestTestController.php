@@ -69,6 +69,7 @@ class PaymentsRestTestController extends FOSRestController
     if ($document == 123456789)
     {
       $view->setStatusCode(201);
+      $view->setData(array("algo"));
     }
     else
     {
