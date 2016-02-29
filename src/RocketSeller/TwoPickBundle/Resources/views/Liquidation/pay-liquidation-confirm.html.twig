@@ -34,10 +34,6 @@
                     <p><strong>Salario</strong></p>
                     <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
                 </div>
-    {#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
-    {#                 <p><strong>Días tomados de vacaciones</strong></p>#}
-    {#                 <span class="txthelp"><p></p></span>#}
-    {#             </div>#}
             </div>
         </div>
         <div class="col-sm-12">
@@ -54,14 +50,11 @@
                             <th><strong>Deducciones</strong></th>
                             <th></th>
                         </tr>
-            {#             {% set totalLiq = 0 %}#}
                         {% for ded in deducciones %}
                             <tr>
-                            {{ dump(ded.novelty) }}
                                 <td>{{ ded.novelty.name }}</td>
                                 <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
                             </tr>
-            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                         {% endfor %}
                         <tr class="info">
                             <td><strong>Total deducciones</strong></td>
@@ -76,7 +69,6 @@
                                 <td>{{ dev.novelty.name }}</td>
                                 <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
                             </tr>
-            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                         {% endfor %}
                         <tr class="info">
                             <td><strong>Total devengos</strong></td>
