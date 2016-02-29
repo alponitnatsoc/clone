@@ -1,6 +1,7 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
 use DateTime;
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
@@ -14,7 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use Symfony\Component\HttpFoundation\Request;
 
-class PaymentMethodRestController extends Controller
+class PaymentMethodRestController extends FOSRestController
 {
     /**
      * Add the credit card<br/>
@@ -157,18 +158,17 @@ class PaymentMethodRestController extends Controller
      *   }
      * )
      *
-     * @param Request $requestt
+     * @param $idPurchaseOrder
      * @return View
      */
-    public function postPayPurchaseOrderAction(Request $requestt)
+    public function getPayPurchaseOrderAction($idPurchaseOrder )
     {
         /** @var User $user */
         $user=$this->getUser();
         $person=$user->getPersonPerson();
-        $params=$requestt->request->all();
         $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrders $purchaseOrder */
-        $purchaseOrderId=$params["idPurchaseOrder"];
+        $purchaseOrderId=$idPurchaseOrder;
         $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
         $request = $this->container->get('request');
         $view = View::create();
