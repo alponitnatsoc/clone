@@ -42,7 +42,8 @@
                         </div>
                         <div id="main" class="col-sm-9">
                         	<div class="employer-regiser">
-                        		<a href="{{ path('express_registration', {'id':employer.personPerson.idPerson})}}">{{ employer.registerState}}%</a>
+                                <h3>Empleador</h3>
+                                <p>{{ employer.personPerson.names }} {{ employer.personPerson.lastName1}} {{ employer.registerState }}% <a href="{{ path('express_registration', {'id':employer.personPerson.idPerson})}}">Editar</a></p>
                         	</div>
                         	<div>                        		
                     			{% if employeesState == -1 %}
@@ -57,6 +58,8 @@
                                         </button>
                                                                             
                                     {% endfor %}
+                                    <a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson , 'idEmployee':-1})}}">Nuevo empleado</a>
+
                         		{% endif %}
                         	</div>
                         	<div>
