@@ -143,7 +143,7 @@
 <form method="post" action="{{ path('api_public_post_pay_liquidation') }}" id="formPay">
     <div class="col-sm-12 center" role="toolbar">
         <div class="col-xs-12 center">
-            <button type="button" class="btn btn-default">Volver atrás</button>
+            <button type="button" class="btn btn-default" onclick="history.back(-1)">Volver atrás</button>
             <button type="button" class="btn btn-default btn-orange formatValueTotal" id="btnCont2" total="{{ totalLiq }}" data-toggle="modal" data-target="#modalPayLiquidation2" >Pagar {{ totalLiq }}</button>
         </div>
     </div>
@@ -169,7 +169,7 @@
                         </div>
                     {% endfor  %}
                     </div>
-                    <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar 2</a>
+                    <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar otro método de pago</a>
                     <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
                 </div>
                 <div class="modal-footer">
@@ -306,7 +306,6 @@
                 $('#modalPayLiquidation2').find(".modal-body #paymethods").empty();
 
                 $.each( data['payment-methods'], function( key, value ) {
-                    alert( key + ": " + value );
 
                     html = "<div>" +
                         "<strong> " + key + ": </strong>" +
