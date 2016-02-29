@@ -672,7 +672,7 @@ $view = View::create();
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), $format);
 
         $view = View::create();
-#         var_dump(json_decode($insertionAnswer->getContent(), true));
+//         var_dump(json_decode($insertionAnswer->getContent(), true));
         if($insertionAnswer->getStatusCode()!=200){
             $view->setStatusCode(500)->setData(array('error'=>array("msnj"=>"No se pudo realizar el cobro, intenta nuevamente")));
             return $view;
