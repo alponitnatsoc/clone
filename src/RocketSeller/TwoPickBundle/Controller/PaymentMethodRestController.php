@@ -4,6 +4,7 @@ use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Pay;
@@ -144,7 +145,51 @@ class PaymentMethodRestController extends FOSRestController
 
         return $view;
     }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @param $idPurchaseOrder
+     * @return View
+     */
+    public function getCalculateChargeAction($idPurchaseOrder )
+    {
+        /** @var User $user */
+        $user=$this->getUser();
+        $person=$user->getPersonPerson();
+        $em=$this->getDoctrine()->getManager();
+        /** @var PurchaseOrders $purchaseOrder */
+        $purchaseOrderId=$idPurchaseOrder;
+        $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
+        /** @var Product $CT */
+        $CT=$em->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array("simpleName"=>"CT"));
+        $view = View::create();
+        $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
+        $chargeDescription=new PurchaseOrdersDescription();
+        $chargeDescription->setProductProduct($CT);
+        $chargeDescription->setDescription($CT->getDescription());
+        $chargeDescription->setValue(0);
+        /** @var PurchaseOrdersDescription $desc */
+        foreach ($descriptions as $desc ) {
+            $product=$desc->getProductProduct();
 
+        }
+        $purchaseOrder->addPurchaseOrderDescription($chargeDescription);
+        $em->persist($purchaseOrder);
+        $em->flush();
+        $view->setStatusCode(200);
+        return $view;
+
+    }
     /**
      * Return the overall user list.
      *
@@ -225,7 +270,7 @@ class PaymentMethodRestController extends FOSRestController
                         $em->flush();
                     }else{
                         //TODO TIMEOUT
-                        $view->setStatusCode(500)->setData(array('error'=>array('Dispersion'=>'se exedio el tiempo de espera pero el dinero se sacó')));
+                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array('error'=>array('Dispersion'=>'se exedio el tiempo de espera pero el dinero se sacó')));
                         return $view;
                     }
 
