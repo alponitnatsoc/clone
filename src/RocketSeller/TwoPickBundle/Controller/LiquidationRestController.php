@@ -527,47 +527,6 @@ class LiquidationRestController extends FOSRestController
     {
         $parameters = $request->request->all();
 
-        /*
-//         $employerName = $parameters["employer_name"];
-//         $employeeName = $parameters["employee_name"];
-//         $idContract = $parameters["contract_id"];
-        $url = $parameters["url"];
-
-//         $filename = $employerName . "-" . $employeeName . "-" . $idContract;
-//         $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename;
-//         if (!file_exists($path)) {
-//             $pdf = $this->get('knp_snappy.pdf')->generate($url, $path);
-//         }
-
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutput($url), 200, array(
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="file.pdf"'
-            )
-        );
-*/
-//         $view = View::create();
-//         $view->setData($pdf)->setStatusCode(200);
-//         return $view;
-
-//         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
-//         $pdf = new Response(
-//             $this->get('knp_snappy.pdf')->generateFromHtml(
-//                 $html,
-//                 $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename
-//                 )
-//             //             200,
-//             //             array(
-//             //                 'Content-Type'          => 'application/pdf',
-//             //                 'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
-//             //             )
-//             );
-
-
-
-
-//         var_dump($parameters);
-
         $data = array(
             "employeeInfo" => json_decode($parameters["employeeInfo"], true),
             "contractInfo" => json_decode($parameters["contractInfo"], true),
@@ -588,7 +547,7 @@ class LiquidationRestController extends FOSRestController
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                'Content-Disposition' => 'attachment; filename="liquidacion.pdf"'
             )
         );
 
