@@ -299,11 +299,13 @@ class PayrollRestController extends FOSRestController
      *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
      *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
-     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
+     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
      *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
      *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=false, requirements="([0-9])", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="transport_aux", nullable=false, requirements="(S|N)", strict=true, description="Weather or not it needs transportation help. Its just a flag SQL looks for it legaly.")
+     *   (name="society", nullable=false, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *
      * @return View
      */
@@ -342,6 +344,11 @@ class PayrollRestController extends FOSRestController
         $mandatory['liquidation_type'] = true;
         $regex['contract_type'] = '([0-9])';
         $mandatory['contract_type'] = true;
+        $mandatory['salary_type'] = false;
+        $regex['transport_aux'] = '(S|N)';
+        $mandatory['transport_aux'] = true;
+        $regex['society'] = '(.)*';
+        $mandatory['society'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -365,6 +372,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_FORMA_PAGO'] = $parameters['payment_method'];
         $unico['EMP_TIPOLIQ'] = $parameters['liquidation_type'];
         $unico['EMP_TIPO_CONTRATO'] = $parameters['contract_type'];
+        $unico['RECIBE_AUX_TRA'] = $parameters['transport_aux'];
+        $unico['EMP_SOCIEDAD'] = $parameters['society'];
         $unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly.
 
         $content[] = $unico;
@@ -412,6 +421,8 @@ class PayrollRestController extends FOSRestController
      *   (name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", strict=false, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
+     *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *
      * @return View
      */
@@ -453,6 +464,11 @@ class PayrollRestController extends FOSRestController
         $mandatory['salary_type'] = false;
         $regex['contract_type'] = '([0-9])';
         $mandatory['contract_type'] = false;
+        $mandatory['salary_type'] = false;
+        $regex['transport_aux'] = '(S|N)';
+        $mandatory['transport_aux'] = false;
+        $regex['society'] = '(.)*';
+        $mandatory['society'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -476,6 +492,9 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
         $unico['EMP_TIPOLIQ'] = isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
+        $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
+        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
+
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
         $content[] = $unico;
@@ -544,6 +563,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
      *    (name="value", nullable=false, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+     *    (name="date_change", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day to apply the salary, it can be the same as the start date.")
      *
      *
      * @return View
@@ -559,6 +579,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = true;
+        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -568,6 +590,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['CON_CODIGO'] = 1; // 1 is salary, it is always our case.
         $unico['COF_VALOR'] = $parameters['value'];
+        if(isset($parameters['date_change']))
+          $unico['COF_FECHA_CAMBIO'] = $parameters['date_change'];
 
         $content[] = $unico;
         $parameters = array();
@@ -599,6 +623,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
      *    (name="value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+     *    (name="date_change", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day to apply the salary, it can be the same as the start date.")
      *
      * @return View
      */
@@ -612,6 +637,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = false;
+        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -622,6 +649,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
         $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
+        $unico['COF_FECHA_CAMBIO'] = isset($parameters['date_change']) ? $parameters['date_change'] : $info['COF_FECHA_CAMBIO'];
 
         $content[] = $unico;
         $parameters = array();
@@ -727,9 +755,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software, it can be found in the table entity_type, field payroll_code")
-     *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.
-     *                                                                                              If it is AFP, it should be 1 in normal conditions, if the entity is no aporta 0 and pensionado 2, and the entity is 0 as described on the table.
-     *                                                                                              For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
+     *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.)                                                                                             For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
      *    (name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software, it is found in the table entity, under payroll_code")
      *    (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *
@@ -1668,7 +1694,7 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
-     * Gets the general payroll.<br/>
+     * Gets the general payroll history.<br/>
      *
      * @ApiDoc(
      *   resource = true,
