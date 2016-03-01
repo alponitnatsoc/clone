@@ -21,6 +21,7 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\NoveltyType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Liquidation controller.
@@ -51,20 +52,150 @@ class LiquidationController extends Controller
     }
 
     /**
-     * Finds and displays a Liquidation entity.
-     *
+     * @param integer $id - Liquidation ID
+     * @param integer (1|2|3) $type - Tipo de respuesta que se espera
+     *              1 - Si es HTML para imprimir
+     *              2 - Respuesta en PDF
+     *              3 - Enviar por correo
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showAction($id)
+    public function showAction($id, $type)
     {
-        $entity = $this->liquidationDetail($id);
+        /** @var Liquidation $liquidation */
+        $liquidation = $this->liquidationDetail($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Liquidation entity.');
+        $employerHasEmployee = $liquidation->getEmployerHasEmployee();
+
+        $data = json_decode($liquidation->getDetailLiquidation(), true);
+        $totalLiq = $this->totalLiquidation($data);
+
+        foreach ($data as $key => $liq) {
+            $payroll_code = $liq["CON_CODIGO"];
+            /** @var NoveltyType $noveltyType */
+            $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
+
+            if ($noveltyType) {
+                $tmp[$key]["novelty"]["name"] = $noveltyType->getName();
+                $tmp[$key]["liq"] = $liq;
+                switch ($noveltyType->getNaturaleza()):
+                case "DED":
+                    $deducciones[] = $tmp[$key];
+                    break;
+                case "DEV":
+                    $devengos[] = $tmp[$key];
+                    break;
+                default:
+                    break;
+                    endswitch;
+            }
         }
 
-        return $this->render('RocketSellerTwoPickBundle:Liquidation:show.html.twig', array(
-            'entity' => $entity
-        ));
+        $id_ehe = $employerHasEmployee->getIdEmployerHasEmployee();
+        $employee_id = $id_ehe . "9"; //@todo el 9 es para los mocks
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $this->getEmployee($id_ehe);
+        /** @var \RocketSeller\TwoPickBundle\Entity\Person $person */
+        $person = $employee->getPersonPerson();
+
+        $employeeInfo = array(
+            'name' => $person->getNames(),
+            'lastName1' => $person->getLastName1(),
+            'lastName2' => $person->getLastName2(),
+            'documentType' => $person->getDocumentType(),
+            'document' => $person->getDocument(),
+            'docExpeditionPlace' => $person->getDocumentExpeditionPlace()
+        );
+
+        $employer = $this->getEmployer($id_ehe);
+        $personEmployer = $employer->getPersonPerson();
+        $employerInfo = array(
+            'name' => $personEmployer->getNames(),
+            'lastName1' => $personEmployer->getLastName1(),
+            'lastName2' => $personEmployer->getLastName2(),
+            'documentType' => $personEmployer->getDocumentType(),
+            'document' => $personEmployer->getDocument()
+        );
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
+        $contract = $this->getActiveContract($id_ehe);
+        $startDate = $contract[0]->getStartDate();
+
+        $contractInfo = array(
+            'contractType' => $contract[0]->getContractTypeContractType()->getName(),
+            'contractPeriod' => $contract[0]->getTimeCommitmentTimeCommitment()->getName(),
+            'salary' => $contract[0]->getSalary(),
+            'vacationDays' => "",
+            'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
+            'startDate' => $startDate,
+            'id' => $contract[0]->getIdContract()
+        );
+
+        $data = array(
+            "employeeInfo" => $employeeInfo,
+            "contractInfo" => $contractInfo,
+            "deducciones" => $deducciones,
+            "totalDeducciones" => $totalLiq["totalDed"],
+            "devengos" => $devengos,
+            "totalDevengos" => $totalLiq["totalDev"],
+            "totalLiq" => $totalLiq["total"],
+            "employer" => $employerInfo
+        );
+
+        switch ($type):
+            case 1:
+                return $this->render("RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig",
+                    $data
+                );
+                break;
+            case 2:
+                $html = $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
+                    $data
+                );
+
+                return new Response(
+                    $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+                    200,
+                    array(
+                        'Content-Type'        => 'application/pdf',
+                        'Content-Disposition' => 'attachment; filename="liquidacion.pdf"'
+                    )
+                );
+                break;
+            case 3:
+                $path = $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . ".pdf";
+
+                if (!file_exists($path)) {
+
+                    $this->get('knp_snappy.pdf')->generateFromHtml(
+                        $this->renderView(
+                            'RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
+                            $data
+                        ),
+                        $path
+                    );
+
+                }
+
+                /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
+                $smailer = $this->get('symplifica.mailer.twig_swift');
+
+                $send = $smailer->sendEmail($this->getUser(), "RocketSellerTwoPickBundle:Liquidation:send-email.txt.twig", "plinio.romero@symplifica.com", "plinio.romero@symplifica.com", $path);
+                if ($send) {
+                }
+
+                $response = new JsonResponse();
+                $response->setData(array(
+                    'data' => $send
+                ));
+                $response->setStatusCode(200);
+
+                return $response;
+
+                break;
+            default:
+                break;
+        endswitch;
     }
 
     /**
@@ -229,38 +360,6 @@ class LiquidationController extends Controller
 
         /** @var Liquidation $liquidation */
         $liquidation = $this->liquidationDetail($id_liq);
-
-//         $liquidation->getId();
-
-//         $liquidation_reason = $liquidation->getLiquidationReason()->getPayrollCode();
-//         if ($liquidation_reason == 7 || $liquidation_reason == 10 ) {
-//             $notification = new Notification();
-//             $notification->setAccion("Subir carta de renuncia");
-//             $notification->setDescription("Subir carta de renuncia firmada por " . $employeeInfo["name"]);
-//             $notification->setPersonPerson($employerPerson);
-//             $notification->setStatus(1);
-//             $notification->setType("alert");
-//             $notification->setTitle("Subir carta de renuncia");
-//             $em->persist($notification);
-//             $em->flush();
-
-//             $repoDocType = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:DocumentType");
-//             /** @var DocumentType $docType */
-//             $docType = $repoDocType->findOneBy(array(
-//                 "name" => "Carta de renuncia"
-//             ));
-
-//             $relatedLink = $this->generateUrl("documentos_employee", array(
-//                     "idNotification" => $notification->getId(),
-//                     "id" => $employerPerson->getIdPerson(),
-//                     "idDocumentType" => $docType->getIdDocumentType()
-//                 )
-//             );
-
-//             $notification->setRelatedLink($relatedLink);
-//             $em->persist($notification);
-//             $em->flush();
-//         }
 
         /** @var Notification $notification */
         $notification = $this->notificationByPersonLiquidation($id_liq, $employerPerson->getIdPerson());
@@ -513,22 +612,6 @@ class LiquidationController extends Controller
             'employer' => $employerInfo,
             'id_liq' => $id
         );
-
-//         $filename = "liquidation-empleado-" . $employeeInfo["document"] . ".pdf";
-//         $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/" . $filename;
-
-//         if (!file_exists($path)) {
-//             $this->get('knp_snappy.pdf')->generateFromHtml(
-//                 $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
-//                     $viewData
-//                 ),
-//                 $path
-//             );
-//         }
-
-//         $viewData["pdfPath"] = $path;
-
-        //$viewData["pdfData"] = json_encode($viewData);
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig",
             $viewData
