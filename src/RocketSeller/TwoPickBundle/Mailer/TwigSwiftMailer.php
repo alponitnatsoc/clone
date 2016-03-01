@@ -75,16 +75,14 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
-    public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail)
+    public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail, $path = null)
     {
-//         $templateName = $template;
         $context = array(
             'toEmail' => $toEmail,
             'user' => $user
         );
-//         $fromEmail = $fromEmail;
-        $toEmail = $toEmail;
-        return $this->sendMessage($templateName, $context, $fromEmail, $toEmail);
+
+        return $this->sendMessage($templateName, $context, $fromEmail, $toEmail, $path);
     }
 
     /**
@@ -92,8 +90,9 @@ class TwigSwiftMailer implements MailerInterface
      * @param array  $context
      * @param string $fromEmail
      * @param string $toEmail
+     * @param string $path - Path donde se encuentra el archivo a enviar como adjunto en el correo
      */
-    protected function sendMessage($templateName, $context, $fromEmail, $toEmail)
+    protected function sendMessage($templateName, $context, $fromEmail, $toEmail, $path = null)
     {
         $context = $this->twig->mergeGlobals($context);
         $template = $this->twig->loadTemplate($templateName);
@@ -105,6 +104,10 @@ class TwigSwiftMailer implements MailerInterface
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail);
+
+        if ($path) {
+            $message->attach(\Swift_Attachment::fromPath($path));
+        }
 
         if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html')

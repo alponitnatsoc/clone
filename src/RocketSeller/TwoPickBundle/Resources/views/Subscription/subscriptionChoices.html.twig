@@ -2,6 +2,11 @@
 {% block title %}Symplifica - Activar Suscripción{% endblock %}
 
 {% block fos_user_content %}
+    {% for flash_message in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger" role="alert"> 
+            {{ flash_message }}
+        </div>
+    {% endfor %}
     <h3>Activación de la suscripción</h3>
     <div style="margin: 10px;padding: 10px; text-align: center; display: block;">
         {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
