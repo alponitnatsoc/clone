@@ -858,6 +858,12 @@ class EmployeeRestController extends FOSRestController
             if ($save2->getData('response')['response']['message'] == 'added') {
                 $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
                 if ($save3->getData('response')['response']['message'] == 'added') {
+                    /** @var User $user */
+                    $user=$this->getUser();
+                    $user->setStatus(2);
+                    $em=$this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
                     $flag = true;
                 } else {
                     return $save3;
@@ -871,7 +877,7 @@ class EmployeeRestController extends FOSRestController
 
         if ($flag) {
             //return $this->forward('RocketSellerTwoPickBundle:Default:subscriptionChoices');
-            return $this->redirectToRoute('subscription_choices');
+            return $this->redirectToRoute('ajax');
             //$view->setData(array('url' => $this->generateUrl('subscription_choices')))->setStatusCode(200);
         } else {
             $view = View::create();
@@ -1186,8 +1192,10 @@ class EmployeeRestController extends FOSRestController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $view = View::create();
+
         if ($user == null) {
-            return;
+            return $view->setData(array('error' => array('User' => 'user not logged')))->setStatusCode(403);
         }
 
         $register_social_security = $paramFetcher->get("register_social_security");
@@ -1198,13 +1206,15 @@ class EmployeeRestController extends FOSRestController
         /** @var Employer $realEmployer */
         $realEmployer = $employerRepo->find($idEmployer);
         if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
-            return;
+            return $view->setData(array('error' => array('Employer' => 'not the loged employer')))->setStatusCode(403);
         }
         $realEmployer->setEconomicalActivity($register_social_security['economicalActivity']);
+        /** @var Entity $realArl */
         $realArl = $entityRepo->find($register_social_security['arl']);
+        /** @var Entity $realSeverances */
         $realSeverances = $entityRepo->find($register_social_security['severances']);
         if ($realSeverances == null || $realArl == null) {
-            return;
+            return $view->setData(array('error' => array('Entity' => 'Entities Not found')))->setStatusCode(404);
         }
         $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
@@ -1234,9 +1244,7 @@ class EmployeeRestController extends FOSRestController
             $em->flush();
         }
 
-        $view = View::create();
-        $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
-        return $view;
+        return $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
     }
 
     /**
