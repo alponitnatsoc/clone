@@ -1,4 +1,5 @@
 <?php
+
 namespace RocketSeller\TwoPickBundle\Traits;
 
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -9,6 +10,7 @@ use RocketSeller\TwoPickBundle\Entity\Pay;
 
 trait EmployerHasEmployeeMethodsTrait
 {
+
     protected function showContracts($id)
     {
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
@@ -36,7 +38,7 @@ trait EmployerHasEmployeeMethodsTrait
         $employerHasEmployee = $repository->find($id);
         $contracts = $this->showContracts($id);
         /** @var Contract $contract */
-        foreach($contracts as $contract) {
+        foreach ($contracts as $contract) {
             if ($contract->getState() == 1) {
                 $payrolls = $contract->getPayrolls()->getValues();
                 break;
@@ -45,10 +47,10 @@ trait EmployerHasEmployeeMethodsTrait
 
         $pagosRecibidos = array();
         /** @var Payroll $payroll */
-        foreach($payrolls as $payroll) {
+        foreach ($payrolls as $payroll) {
             $purchaseOrders = $payroll->getPurchaseOrders()->getValues();
             /** @var PurchaseOrders $po */
-            foreach($purchaseOrders as $key => $po) {
+            foreach ($purchaseOrders as $key => $po) {
                 if ($po->getPurchaseOrdersStatusPurchaseOrdersStatus()->getIdPurchaseOrdersStatus() == 1) {
                     $pagosRecibidos[$key]["dateCreated"] = $po->getDateCreated();
                     $pagosRecibidos[$key]["dateModified"] = $po->getDateModified();
@@ -57,9 +59,9 @@ trait EmployerHasEmployeeMethodsTrait
                     $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
                     /** @var Pay $pay */
                     $pay = $payRepository->findOneBy(
-                        array(
-                            "purchaseOrdersPurchaseOrders" => $idPO
-                        )
+                            array(
+                                "purchaseOrdersPurchaseOrders" => $idPO
+                            )
                     );
                     $pagosRecibidos[$key]["idPay"] = $pay->getIdPay();
                 }
@@ -103,4 +105,5 @@ trait EmployerHasEmployeeMethodsTrait
 
         return $contract;
     }
+
 }

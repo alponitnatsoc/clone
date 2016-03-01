@@ -19,6 +19,9 @@ class DashBoardController extends Controller
      * */
     public function showDashBoardAction(Request $request)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
         //¿Cómo vamos a hacer para saber en que parte del form está el usuario?
         //para el render se envía un array steps en el cuals e le puede agregar el estado el usuario
         /* @var $user User */
@@ -100,10 +103,10 @@ class DashBoardController extends Controller
             $steps ['1'] = $step2;
         }
         $step4 = array(
-            'url' => $paymentState ? "" : $this->generateUrl('subscription_choices'),
+            'url' => $stateRegister != 100 ? "" : $this->generateUrl('subscription_choices'),
             'name' => "Pago afiliación",
             'paso' => 3,
-            'state' => $paymentState,
+            'state' => $paymentState ? 100 : 0,
             'boxStyle' => "big",
             'stateMessage' => !$paymentState ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;

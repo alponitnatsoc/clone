@@ -104,7 +104,6 @@
 {% endblock stylesheet %}
 {% block fos_user_content %}
 
-
     <div class="row-fluid" id='pagoMembresiaFormContainer'>
         {{ form_start(form) }}
         {{ form_errors(form) }}
@@ -113,9 +112,9 @@
             <span style="margin: 20px">Ingrese la información de pago. Los campos marcados con * son obligatorios:</span>
             <div style="margin: 20px">
                 <span><b>Nombre del titular y dirección de facturación*</b></span>
-                <input type="checkbox" name="chkSameAdress" id="chkSameAdress" value="1" checked/>
+                <input type="checkbox" name="chkSameAdress" id="chkSameAdress" value="1" checked="true"/>
                 <label for="chkSameAdress">Los mismos datos del empleador</label>
-                <div name="divSameAdress" id="divSameAdress">
+                <div name="divSameAdress" id="divSameAdress" class="toHide2">
                     <label style="font-weight: bold;">{{ employer.names ~" "~ employer.lastName1 ~" "~ employer.lastName2  }}</label><br>
                     <label>{{ employer.mainAddress }}</label><br>
                     <label>{{ employer.city.name ~", "~ employer.department.name }}</label>
@@ -124,7 +123,7 @@
                     <div class="col-sm-12 col-xs-12 blockUpData" >
                         <div class="col-sm-4 col-xs-12">
                             <img id="typePerson" src="/img/typePerson.png">
-                            {{ form_row(form.personType, { 'attr': {'class': 'foo'} }) }}
+                            {{ form_row(form.personType) }}
                         </div>
                         <div class="col-sm-4 col-xs-12">
                             <img id="documentType" src="/img/documentType.png">
@@ -170,25 +169,23 @@
         <div id="infoTarjeta" class="infoTarjeta form-group">
             <div class="col-md-12 center">
                 <span style="margin-top: 20px"><b>Información de la tarjeta de crédito*</b></span>
-                <input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>       
+                <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
             </div>     
             <div class="col-md-12" style="margin-top: 20px">
                 <div class="col-md-12">
+                    <div class="col-md-7">
+                        <label>Nombre en la tarjeta</label><br>
+                        <div id="divCardName" >
+                            <input type="text" id="card_name" name="card_name" class="form-control" placeholder="nombre" required="required">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <div class="col-md-4">
                         <label>Número tarjeta de crédito</label><br>
-                        <div id="divCardNumber" class="toHide" >
-
-                            <input type="number" min="0" step="1" maxlength="16" id="card_number" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" required="required">
-
-                        </div>
-                        <div id="divPaymentMethods">
-                            <select id="paymentMethod" name="paymentMethod" class="form-control" required="required">
-                                <option value="">Seleccione...</option>
-                                {% for paymentMethod in paymentMethods %}
-                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
-                                {% endfor  %}
-                            </select>
+                        <div id="divCardNumber" >
+                            <input type="number" min="1"  step="1" maxlength="16" id="card_number" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" required="required">
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -218,7 +215,7 @@
                     <label>Código de seguridad</label><br>
                     <div style="display: inline-block">
                         <label></label><br>
-                        <input type="number" name="cvv" id="cvv" min="0" maxlength="3" placeholder="123" required="required"><div class="cvvHelp">?</div>
+                        <input type="number" name="cvv" id="cvv" min="0" minlength="3" maxlength="3" placeholder="123" required="required"><div class="cvvHelp">?</div>
                         <div id="cvvHelp" class="toHide">
                             Corresponde a los tres dígitos ubicados al respaldo de su tarjeta de crédito
                             <img src="/img/cvvHelp.png"> 
@@ -229,14 +226,19 @@
             </div>
         </div>
 
-        <div id="codigoReferido" class="codigoReferido form-group">
-            <div class="col-md-12 center" style="margin-top: 20px">
-                <label>¿Cuenta con algún código de promoción?</label>
-                <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
-                <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código"  style="margin-top: 20px">
-                <div id="codigo_referido_estado" class="text-small"></div>
+        {% if isRefered|length <=0 %}
+            <div id="codigoReferido" class="codigoReferido form-group">
+                <div class="col-md-12 center" style="margin-top: 20px">
+                    <label>¿Cuenta con algún código de promoción?</label>
+                    <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
+                    <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código"  style="margin-top: 20px">
+                    <div id="codigo_referido_estado" class="text-small"></div>
+                </div>
             </div>
-        </div>
+        {% endif %}
+
+        <input type="hidden" id="tieneReferidos" value="{{ haveRefered|length }}"> 
+        <input type="hidden" id="esReferido" value="{{ isRefered|length }}">
 
         <div id="confirmacionPago" class="confirmacionPago form-group" style="margin: 10px 0px 10px 0px">
             <div class="col-md-12 center" style="margin-top: 30px">
@@ -254,237 +256,124 @@
                         <div class="col-md-8 text-left">
                             Servicio mensual Symplifica por:
                         </div>
+                        {% set subtotal = 0 %}
                         {% set total = 0 %}
-                        {% for employee in employerHasEmployee %}
+                        {% set iva = 0 %}
+                        {% set descuento = 0 %}
+                        {% set descuento2 = 0 %}
+                        {% for employeeData in employees %}
+                            {% set employee = employeeData['employee'] %}
+                            {% set contrato = employeeData['contrato'] %}
+                            {% set product = employeeData['product'] %}
                             <div class="col-md-12">
                                 <div class="col-md-1">
                                     <div class="glyphicon glyphicon-user"></div>
                                 </div>                            
                                 <div class="col-md-8">       
-                                    {{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }} 
-                                    emplado a {{ contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.name|lower }}
+                                    {{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}, 
+                                    labora {{ contrato.workableDaysMonth }} días al mes.
                                 </div>  
                                 <div class="col-md-3">
-                                    {% if contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.idTimeCommitment == 1 %}
-                                        <b>$ 25.000</b
-                                        {% set total = total+25000 %}
-                                    {% elseif contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.idTimeCommitment == 2 %}
-                                        <b>$ 20.000</b>
-                                        {% set total = total+20000 %}
-                                    {% elseif contratos[employee.idEmployerHasEmployee].timeCommitmentTimeCommitment.idTimeCommitment == 3 %}
-                                        <b>$ 15.000</b>
-                                        {% set total = total+15000 %}
+                                    {% if employee.isFree > 0 %}
+                                        <b>$ 0 </b><span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>
+                                    {% else %}                          
+                                        {% set iva = product.taxTax %}              
+                                        {% set price = product.taxTax?(product.price * (1 + product.taxTax.value)):product.price %}
+                                        {% set subtotal = subtotal + product.price %}
+                                        <b>$ {{ product.price|number_format }}</b>
                                     {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>
-                    <div class="col-md-2">
+                        <div class="col-md-2">
 
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">        
+                        <div class="col-md-2">
+
+                        </div>              
+                        <div class="col-md-8">
+                            {% if isRefered %}
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por ser referido:</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                        {% set descuento = descuento + (subtotal*0.1) %}
+                                        <div  style="font-size: 10px;"><b>$ {{ descuento|number_format }}</b></div>
+                                    </div>
+                                </div> 
+                            {% endif%}
+                            {% if haveRefered %}
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por tener {{ haveRefered|length }} referido(s):</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
+                                        {% set descuento2 = descuento2 + ((subtotal * 0.1)*(haveRefered|length)) %}
+                                        <div  style="font-size: 10px;"><b>$ {{ descuento2|number_format }}</b></div>
+                                    </div>
+                                </div> 
+                            {% endif%}
+                            <div class="col-md-12">
+                                <div class="col-md-1">
+                                </div>                            
+                                <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
+                                    <b>SUBTOTAL:</b>
+                                </div>  
+                                <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                    {% set subtotal = (subtotal - descuento - descuento2)>0?(subtotal - descuento - descuento2):0 %}
+                                    <div  style="font-size: 15px;"><b>$ {{ subtotal|number_format  }}</b></div>
+                                </div>
+                            </div> 
+                            <div class="col-md-12">
+                                <div class="col-md-1">
+                                </div>                            
+                                <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
+                                    <b>IVA:</b>
+                                </div>  
+                                <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                    {% set iva = subtotal * iva.value %} 
+                                    <div  style="font-size: 15px;"><b>$ {{ iva|number_format  }}</b></div>
+                                </div>
+                            </div> 
+                            <div class="col-md-12">
+                                <div class="col-md-1">
+                                </div>                            
+                                <div class="col-md-8 text-right" style="font-size: 20px; padding-top: 5px;">
+                                    <b>TOTAL:</b>
+                                </div>  
+                                <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                    <div  style="font-size: 20px;"><b>$ {{ (subtotal + iva)|number_format  }}</b></div>
+                                    <!--<div style="font-size: 10px;">Incluye IVA</div>-->
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-2">
+
+                        </div> 
+
+                    </div>      
+                    <div class="col-md-12" style="margin: 30px 0 20px 0;">
+                        <input type="checkbox" id="tos" name="tos">
+                        <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a> de Symplifica para el cargo mensual del valor del plan</label>                        
                     </div>
                 </div>
+            </div> 
 
-                <div class="col-md-12">        
-                    <div class="col-md-2">
-
-                    </div>              
-                    <div class="col-md-8">
-                        <div class="col-md-12">
-                            <div class="col-md-1">
-                            </div>                            
-                            <div class="col-md-8 text-right" style="font-size: 20px; padding-top: 5px;">
-                                <b>TOTAL:</b>
-                            </div>  
-                            <div class="col-md-3 te" style="padding-top: 5px;">
-                                <div  style="font-size: 20px;"><b>$ {{ total }}</b></div>
-                                <div style="font-size: 10px;">Incluye IVA</div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="col-md-2">
-
-                    </div> 
-
-                </div>      
+            <div class="row buttons center">
+                <div class="col-xs-12 center">
+                    <input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> 
+                    <input type="submit" id="sumbit" class="btn btn-default btn-orange disabled" value="Finalizar" />
+                </div>
             </div>
-        </div> 
-
-        <div class="col-md-12 center" style="margin: 10px 0px 10px 0px">
-            <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
-                <a class="btn btn-default notAjax" href="{{ path('subscription_choices') }}">Atras</a>
-            </div>
-            <div style="display: -webkit-inline-box; padding: 10px; text-align: center;">
-                <a id="sumbit"  class="btn btn-default btn-orange notAjax">Finalizar</a>
-            </div>
+            {{ form_end(form) }}
         </div>
-        {{ form_end(form) }}
-    </div>
 
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('public/js/jquery.creditCardValidator.js') }}"></script>
-    <script type="text/javascript">
-
-        function addListeners() {
-            $('select').filter(function () {
-                return this.id.match(/department/);
-            }).change(function () {
-                var $department = $(this);
-                // ... retrieve the corresponding form.
-                var $form = $(this).closest('form');
-                // Simulate form data, but only include the selected department value.
-                var data = {};
-                data[$department.attr('name')] = $department.val();
-                var citySelectId = $department.attr("id").replace("_department", "_city");
-                // Submit data via AJAX to the form's action path.
-                $.ajax({
-                    method: "POST",
-                    url: "/api/public/v1/cities",
-                    data: {department: $department.val()}
-                }).done(function (data) {
-                    $('#' + citySelectId).html(
-                            // ... with the returned one from the AJAX response.
-                            jsonToHTML(data)
-                            );
-                });
-
-            });
-        }
-        $(document).ready(function () {
-            $(".cvvHelp").on('click', function () {
-                $("#cvvHelp").toggleClass('toHide');
-            });
-            $("#pago_membresia_personType_0").change(function () {
-                if ($(this).is(':checked')) {
-                    $("#pago_membresia_documentType").html('<option value="" selected="selected">Seleccionar una opción</option><option value="CC">Cedula Ciudadania</option><option value="CE">Cedula Extranjeria</option><option value="TI">Tarjeta de identidad</option>');
-                    $("#datosNIT").addClass('toHide');
-                }
-            });
-            $("#pago_membresia_personType_1").change(function () {
-                if ($(this).is(':checked')) {
-                    $("#pago_membresia_documentType").html('<option value="" selected="selected">Seleccionar una opción</option><option value="NIT">NIT</option>');
-                    $("#datosNIT").removeClass('toHide');
-                }
-            });
-
-            $("#pago_membresia_personType_0").prop('checked', true);
-
-            $("#chkSameAdress").change(function () {
-                if ($(this).is(':checked')) {
-                    $("#divSameAdress").removeClass('toHide');
-                    $("#divOtherAdress").addClass('toHide');
-                } else {
-                    $("#divOtherAdress").removeClass('toHide');
-                    $("#divSameAdress").addClass('toHide');
-                }
-            });
-
-            $("#chkSameTCC").change(function () {
-                if ($(this).is(':checked')) {
-                    $("#divCardNumber").addClass('toHide');
-                    $("#divPaymentMethods").removeClass('toHide');
-                } else {
-                    $("#divPaymentMethods").addClass('toHide');
-                    $("#divCardNumber").removeClass('toHide');
-                }
-            });
-
-            $("#codigo_referido").focusout(function () {
-                if ($("#codigo_referido").val().length >= 6) {
-                    $.ajax({
-                        method: "POST",
-                        url: "{{ path('api_public_post_validate_code') }}",
-                        data: {code: $(this).val()},
-                        beforeSend: function (xhr) {
-                            $("#codigo_referido_estado").html('Validando código');
-                            $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                            $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
-                        }
-                    }).done(function (data) {
-                        if (data) {
-                            $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
-                            $("#codigo_referido_estado").addClass('codigo_referido_valido');
-                            $("#codigo_referido_estado").html('Código valido');
-                        } else {
-                            $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                            $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                            $("#codigo_referido_estado").html('Código invalido');
-                        }
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                        $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                        $("#codigo_referido_estado").html('No se pudo validar el código');
-                        console.log("FAIL codigo_referido {{ path('api_public_post_validate_code') }}:");
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-
-                    });
-                }
-            });
-
-            $("#sumbit").on('click', function () {
-                $('form[name="pago_membresia"]').submit();
-                /*$.ajax({
-                 method: "POST",
-                 url: "{{ path('api_public_post_pay_membresia') }}",
-                 data: $('form[name="pago_membresia"]').serialize(),
-                 beforeSend: function (xhr) {
-                 }
-                 }).done(function (data) {
-                 if (data) {
-                 window.location('{{ path('show_dashboard_employer') }}');
-                 } else {
-                 
-                 }
-                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                 console.log(jqXHR);
-                 console.log(textStatus);
-                 console.log(errorThrown);
-                 
-                 });*/
-            });
-        });
-        $(function () {
-            $('#card_number').validateCreditCard(function (result) {
-                $(this).removeClass();
-                if (result.card_type == null) {
-                    $('.vertical.maestro').slideUp({
-                        duration: 200
-                    }).animate({
-                        opacity: 0
-                    }, {
-                        queue: false,
-                        duration: 200
-                    });
-                    return;
-                }
-                $(this).addClass(result.card_type.name);
-                if (result.card_type.name === 'maestro') {
-                    $('.vertical.maestro').slideDown({
-                        duration: 200
-                    }).animate({
-                        opacity: 1
-                    }, {
-                        queue: false
-                    });
-                } else {
-                    $('.vertical.maestro').slideUp({
-                        duration: 200
-                    }).animate({
-                        opacity: 0
-                    }, {
-                        queue: false,
-                        duration: 200
-                    });
-                }
-                if (result.valid) {
-                    return $(this).addClass('valid');
-                } else {
-                    return $(this).removeClass('valid');
-                }
-            });
-        });
-    </script>
-{% endblock %}
+    {% endblock %}
