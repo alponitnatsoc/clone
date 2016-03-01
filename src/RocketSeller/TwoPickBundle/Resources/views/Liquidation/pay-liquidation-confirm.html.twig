@@ -90,7 +90,8 @@
         </div>
     </div>
     <div id="postLiq" class="col-sm-12 center">
-        <a type="button" onclick="window.print()" class="btn btn-default">Imprimir</a>
+        <iframe width="1" height="1" id="printFrame" style="display: none"></iframe>
+        <button type="button" onclick="javascript:print('{{ path('liquidation_show', {'id': id_liq, 'type': 1} ) }}')" class="btn btn-default">Imprimir</button>
         <a type="button" href="{{ path('liquidation_show', {'id': id_liq, 'type': 2} ) }}" target="_blank" class="btn btn-default notAjax">Guardar PDF</a>
         <button type="button" onclick="$('#enviarPorEmail').modal('toggle')" class="btn btn-default">Enviar Email</button>
     </div>
@@ -182,5 +183,19 @@ $(document).ready(function () {
         });
     });
 });
+
+function print(url){
+    $('#printFrame').attr('src', url);
+    $("#printFrame").load(function(){
+        var frame = document.getElementById('printFrame');
+        if (!frame) {
+            alert("Error: Can't find printing frame.");
+            return;
+        }
+        frame = frame.contentWindow;
+        frame.focus();
+        frame.print();
+     });
+}
 </script>
 {% endblock %}
