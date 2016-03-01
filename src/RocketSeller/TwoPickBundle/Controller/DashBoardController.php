@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,10 +23,12 @@ class DashBoardController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        //¿Cómo vamos a hacer para saber en que parte del form está el usuario?
+
         //para el render se envía un array steps en el cuals e le puede agregar el estado el usuario
-        /* @var $user User */
+        /* @var User $user  */
         $user = $this->getUser();
+        if($user->getStatus()>=2 )
+            return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
         $paymentState = $user->getPaymentState();
         $stateRegister = 0;
         $stateEmployees = 0;
@@ -112,7 +115,7 @@ class DashBoardController extends Controller
         $steps ['3'] = $step4;
 
         $step5 = array(
-            'url' => $stateEmployees != 100 ? "" : $this->generateUrl('matrix_choose'),
+            'url' => $paymentState != 100 ? "" : $this->generateUrl('matrix_choose'),
             'name' => "Finalizar afiliación",
             'paso' => 4,
             'state' => $stateAfiliation,

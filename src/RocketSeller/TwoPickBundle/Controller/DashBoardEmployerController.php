@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Controller\NotificationController;
@@ -15,9 +16,13 @@ class DashBoardEmployerController extends Controller {
      * @return La vista de el formulario de la nueva persona
      * */
     public function showDashBoardAction(Request $request) {
+        /** @var User $user */
         $user = $this->getUser();
         if (empty($user)) {
             return $this->redirectToRoute('fos_user_security_login');
+        }
+        if($user->getStatus()<2 ) {
+            return $this->forward('RocketSellerTwoPickBundle:DashBoard:showDashBoard');
         }
         try {
             $orderBy = ($request->query->get('orderBy')) ? $request->query->get('orderBy') : 'deadline';
