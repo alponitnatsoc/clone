@@ -20,6 +20,7 @@ use RocketSeller\TwoPickBundle\Traits\NoveltyMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Traits\NotificationMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\NoveltyType;
 
 /**
  * Liquidation controller.
@@ -474,10 +475,11 @@ class LiquidationController extends Controller
 
         foreach ($data as $key => $liq) {
             $payroll_code = $liq["CON_CODIGO"];
+            /** @var NoveltyType $noveltyType */
             $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
 
             if ($noveltyType) {
-                $tmp[$key]["novelty"] = $noveltyType;
+                $tmp[$key]["novelty"]["name"] = $noveltyType->getName();
                 $tmp[$key]["liq"] = $liq;
                 switch ($noveltyType->getNaturaleza()):
                 case "DED":

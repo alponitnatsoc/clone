@@ -563,13 +563,21 @@ class LiquidationRestController extends FOSRestController
 //             //             )
 //             );
 
-        $data = $parameters["data"];
-        $data = json_decode(html_entity_decode($data), true);
-var_dump($data);
 
-$view = View::create();
-        $view->setData($data)->setStatusCode(200);
-        return $view;
+
+
+//         var_dump($parameters);
+
+        $data = array(
+            "employeeInfo" => json_decode($parameters["employeeInfo"], true),
+            "contractInfo" => json_decode($parameters["contractInfo"], true),
+            "deducciones" => json_decode($parameters["deducciones"], true),
+            "totalDeducciones" => $parameters["totalDeducciones"],
+            "devengos" => json_decode($parameters["devengos"], true),
+            "totalDevengos" => $parameters["totalDevengos"],
+            "totalLiq" => $parameters["totalLiq"],
+            "employer" => json_decode($parameters["employer"], true)
+        );
 
         $html = $this->renderView('RocketSellerTwoPickBundle:Liquidation:liquidation-pdf.html.twig',
             $data
