@@ -181,7 +181,7 @@ class PaymentMethodRestController extends FOSRestController
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc ) {
             $product=$desc->getProductProduct();
-
+            //TODO is the new novo the same stuff
         }
         $purchaseOrder->addPurchaseOrderDescription($chargeDescription);
         $em->persist($purchaseOrder);
