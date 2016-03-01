@@ -32,7 +32,7 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function getEmployees($person)
+    public function getEmployees($person, $activeEmployee = false)
     {
         try {
             $employerHasEmployee = $this->getdoctrine()
@@ -45,6 +45,11 @@ class SubscriptionController extends Controller
 
             $employees = array();
             foreach ($employerHasEmployee as $keyEmployee => $employee) {
+                if ($activeEmployee) {
+                    if ($employee->getState() == 0) {
+                        break;
+                    }
+                }
                 $contracts = $employee->getContracts();
                 foreach ($contracts as $keyContract => $contract) {
                     if ($contract->getState() > 0) {
@@ -165,7 +170,7 @@ class SubscriptionController extends Controller
             $user = $this->getUser();
             $person = $user->getPersonPerson();
             $billingAdress = $person->getBillingAddress();
-            $employees = $this->getEmployees($user->getPersonPerson()->getEmployer());
+            $employees = $this->getEmployees($user->getPersonPerson()->getEmployer(), true);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('api_public_post_pay_membresia', array('format' => 'json')),
