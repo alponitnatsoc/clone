@@ -59,7 +59,7 @@ class LiquidationController extends Controller
      *              3 - Enviar por correo
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showAction($id, $type)
+    public function showAction(Request $request, $id, $type)
     {
         /** @var Liquidation $liquidation */
         $liquidation = $this->liquidationDetail($id);
@@ -158,12 +158,22 @@ class LiquidationController extends Controller
                     200,
                     array(
                         'Content-Type'        => 'application/pdf',
-                        'Content-Disposition' => 'attachment; filename="liquidacion.pdf"'
+                        'Content-Disposition' => 'attachment; filename="liquidacion-' . $employeeInfo["document"] . '-' . $id . '.pdf"'
                     )
                 );
                 break;
             case 3:
-                $path = $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . ".pdf";
+                $method = $request->getMethod();
+
+                if ($method == 'POST') {
+                    $params = $request->request->all();
+
+                    $toEmail = $params["toEmail"];
+                } else {
+                    $toEmail = "plinio.romero@symplifica.com";
+                }
+
+                $path = $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . "-" . $id . ".pdf";
 
                 if (!file_exists($path)) {
 
@@ -180,7 +190,9 @@ class LiquidationController extends Controller
                 /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
                 $smailer = $this->get('symplifica.mailer.twig_swift');
 
-                $send = $smailer->sendEmail($this->getUser(), "RocketSellerTwoPickBundle:Liquidation:send-email.txt.twig", "plinio.romero@symplifica.com", "plinio.romero@symplifica.com", $path);
+                $fromEmail = $this->getUser()->getEmail();
+
+                $send = $smailer->sendEmail($this->getUser(), "RocketSellerTwoPickBundle:Liquidation:send-email.txt.twig", $fromEmail, $toEmail, $path);
                 if ($send) {
                 }
 
