@@ -44,14 +44,14 @@ class PagoMembresiaForm extends AbstractType
                     'expanded' => false,
                     'label' => 'Tipo de documento*',
                     'placeholder' => 'Seleccionar una opción',
-                    'required' => true,
+                    'required' => false,
                     'property_path' => 'documentType'
                 ))
                 ->add('document', 'text', array(
                     'constraints' => array(
                         new NotBlank()
                     ),
-                    'required' => true,
+                    'required' => false,
                     'label' => 'Número de documento*',
                     'property_path' => 'document'
                 ))
@@ -59,7 +59,7 @@ class PagoMembresiaForm extends AbstractType
                     'constraints' => array(
                         new NotBlank()
                     ),
-                    'required' => true,
+                    'required' => false,
                     'label' => 'Razón Social*',
                     'property_path' => 'razonSocial'
                 ))
@@ -67,7 +67,7 @@ class PagoMembresiaForm extends AbstractType
                     'constraints' => array(
                         new NotBlank()
                     ),
-                    'required' => true,
+                    'required' => false,
                     'label' => 'Nombres*',
                     'property_path' => 'names'
                 ))
@@ -75,7 +75,7 @@ class PagoMembresiaForm extends AbstractType
                     'constraints' => array(
                         new NotBlank()
                     ),
-                    'required' => true,
+                    'required' => false,
                     'label' => 'Primer Apellido*',
                     'property_path' => 'lastName1'
                 ))
@@ -83,11 +83,12 @@ class PagoMembresiaForm extends AbstractType
                     'constraints' => array(
                         new NotBlank()
                     ),
+                    'required' => false,
                     'label' => 'Segundo Apellido',
                     'property_path' => 'lastName2'
                 ))
                 ->add('phone', 'text', array(
-                    'required' => true,
+                    'required' => false,
                     'label' => 'Telefono*',
                     'property_path' => 'phone'
                 ))
@@ -95,7 +96,7 @@ class PagoMembresiaForm extends AbstractType
                     'constraints' => array(
                         new NotBlank()
                     ),
-                    'required' => true,
+                    'required' => false,
                     "label" => "Dirección*"
                 ))
                 ->add('department', 'entity', array(
@@ -106,7 +107,7 @@ class PagoMembresiaForm extends AbstractType
                     'property_path' => 'department',
                     'label' => 'Departamento*',
                     'placeholder' => 'Seleccionar una opción',
-                    'required' => true
+                    'required' => false
                 ))
                 ->add('city', 'entity', array(
                     'class' => 'RocketSellerTwoPickBundle:City',
@@ -116,7 +117,7 @@ class PagoMembresiaForm extends AbstractType
                     'property_path' => 'city',
                     'label' => 'Ciudad*',
                     'placeholder' => 'Seleccionar una opción',
-                    'required' => true
+                    'required' => false
         ));
 
 
@@ -130,7 +131,7 @@ class PagoMembresiaForm extends AbstractType
                 'expanded' => false,
                 'property_path' => 'city',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'required' => false
             ));
         };
 

@@ -253,6 +253,7 @@ class PurchaseOrders
      */
     public function addPurchaseOrderDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrderDescription)
     {
+        $purchaseOrderDescription->setPurchaseOrders($this);
         $this->purchaseOrderDescriptions[] = $purchaseOrderDescription;
 
         return $this;

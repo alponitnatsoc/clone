@@ -150,6 +150,7 @@ function startEmployee() {
     });*/
     selectedVal = $(contractType).find("option:selected").text();
     if (selectedVal == "Término fijo") {
+        $("#register_employee_employeeHasEmployers_existentNew_0").attr("checked", true);
         $(".definite").each(function () {
             $(this).show();
         });
@@ -217,22 +218,12 @@ function startEmployee() {
                 frequencyId: $(form).find("select[name='method_type_fields[frequencyFrequency]']").val(),
                 accountNumber: $(form).find("input[name='method_type_fields[accountNumber]']").val(),
                 cellphone: $(form).find("input[name='method_type_fields[cellphone]']").val(),
-                creditCard: $(form).find("input[name='register_employee[credit_card]']").val(),
-                expiryDate: $(form).find("input[name='register_employee[expiry_date]']").val(),
-                cvv: $(form).find("input[name='register_employee[cvv]']").val(),
-                nameOnCard: $(form).find("input[name='register_employee[name_on_card]']").val(),
                 contractId: $(form).find("input[name='register_employee[idContract]']").val(),
-            },
-            statusCode: {
-                200: function (data) {
-                    console.log(data["url"]);
-                    sendAjax(data["url"]);
-                },
-                400: function (data, errorThrown) {
-                    alert("400 :" + errorThrown + "\n" + data.responseJSON.error.exception[0].message);
-                }
             }
         }).done(function (data) {
+            console.log(data["url"]);
+            history.pushState("","",data["url"]);
+            sendAjax(data["url"]);
         }).fail(function (data, textStatus, errorThrown) {
             console.log(data);
             console.log(textStatus);

@@ -9,17 +9,18 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
-use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
-
 use RocketSeller\TwoPickBundle\Traits\GetTransactionDetailTrait;
 
 class EmployerRestController extends FOSRestController
 {
+
     use GetTransactionDetailTrait;
+
     /**
      * Obtener el detalle de una transaccion
      *
@@ -71,9 +72,9 @@ class EmployerRestController extends FOSRestController
         $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
         /** @var User $user */
         $user = $userRepository->findOneBy(
-            array(
-                "id" => $id
-            )
+                array(
+                    "id" => $id
+                )
         );
 
         $data = array();
@@ -87,10 +88,10 @@ class EmployerRestController extends FOSRestController
                 if ($user) {
                     $employerHasEmployee = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     $contracts = array();
-                    foreach($employerHasEmployee as $ehe) {
+                    foreach ($employerHasEmployee as $ehe) {
                         $contracts[] = $ehe->getContracts();
                     }
-                    foreach($contracts as $contract) {
+                    foreach ($contracts as $contract) {
                         /** @var Contract $contract */
                         $data[] = $contract;
                     }
@@ -128,5 +129,63 @@ class EmployerRestController extends FOSRestController
         return $view;
     }
 
+    /**
+     * Busca el empleado que trabaja menos tiempo y lo marca como gratuito
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener todos los datos de una orden de compra.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $idEmployer - del empoyerHasEmployee
+     * @param string $freeTime - tiempo de meses gratis
+     *
+     * @return View
+     *
+     */
+    public function getEmployeeFreeAction($idEmployer, $freeTime)
+    {
+        $view = View::create();
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $repositoryContract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
+        /* @var $employerHasEmployees EmployerHasEmployee */
+        $employerHasEmployees = $repository->findBy(array('employerEmployer' => $idEmployer));
+
+        if (!empty($employerHasEmployees)) {
+            $elmenor = array();
+            foreach ($employerHasEmployees as $key => $employerHasEmployee) {
+                /* @var $contract Contract */
+                $contract = $repositoryContract->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee, 'state' => 1));
+                if (empty($elmenor)) {
+                    $elmenor = array('employerHasEmployee' => null, 'contrato' => null);
+                    $elmenor['employerHasEmployee'] = $employerHasEmployee;
+                    $elmenor['contrato'] = $contract;
+                } else {
+                    if ($contract->getWorkableDaysMonth() < $elmenor['contrato']->getWorkableDaysMonth()) {
+                        $elmenor['employerHasEmployee'] = $employerHasEmployee;
+                        $elmenor['contrato'] = $contract;
+                    }
+                }
+            }
+            $employerHasEmployee = $elmenor['employerHasEmployee'];
+            $employerHasEmployee->setIsFree($freeTime);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($employerHasEmployee);
+            $em->flush();
+
+            //$view->setData($employerHasEmployee);
+            $view->setData("employerHasEmployee " . $employerHasEmployee->getIdEmployerHasEmployee() . " marcado como gratuito " . $freeTime);
+            $view->setStatusCode(200);
+        } else {
+            $view->setData("sin empleados");
+            $view->setStatusCode(400);
+        }
+        //return $this->handleView($view);
+        return $view;
+    }
 
 }

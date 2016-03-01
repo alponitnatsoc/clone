@@ -14,7 +14,7 @@ trait ReferredMethodsTrait
     {
         if ($code) {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
-            $user = $repository->findBy(array('code' => $code));
+            $user = $repository->findOneBy(array('code' => $code));
             if ($user) {
                 return $user;
             }
@@ -32,7 +32,7 @@ trait ReferredMethodsTrait
     {
         if ($userId) {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Referred');
-            $referencia = $repository->findBy(array('userId' => $userId, 'referredUserId' => $referredUserId));
+            $referencia = $repository->findOneBy(array('userId' => $userId, 'referredUserId' => $referredUserId));
             if ($referencia) {
                 return $referencia;
             }

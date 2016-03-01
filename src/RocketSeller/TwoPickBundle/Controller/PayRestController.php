@@ -9,6 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\PayMethodsTrait;
 use RocketSeller\TwoPickBundle\Controller\ProcedureController;
+use RocketSeller\TwoPickBundle\Entity\User;
 
 class PayRestController extends FOSRestController
 {
@@ -59,6 +60,7 @@ use PayMethodsTrait;
      * @param Request $request.
      * Rest Parameters:
      *
+     * (name="userId", nullable=false, requirements="([0-9])+", strict=true, description="id del usuario.")
      * (name="documentType", nullable=false, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
      * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
      * (name="name", nullable=false, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")
@@ -74,42 +76,25 @@ use PayMethodsTrait;
     public function postPayMembresiaAction(Request $request)
     {
 
-        $user = $this->getUser();
-        $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        $employer = $user->getPersonPerson()->getEmployer();
-        $salaries = array();
-        $payrolls = array();
-        $novelties = array();
-        $aportes = array();
-        foreach ($employeesData as $employerHasEmployee) {
-            if ($employerHasEmployee->getState() == 1) {
-                $contracts = $employerHasEmployee->getContracts();
-                foreach ($contracts as $contract) {
-                    if ($contract->getState() == 1) {
-                        $activePayroll = $contract->getActivePayroll();
-                        $payrolls = $contract->getPayrolls();
-                    }
-                }
-            }
-        }
-        $procedureType = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:ProcedureType')
-                ->findByName("Registro empleador y empleados");
-        $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-            'employerId' => $employer->getIdEmployer(),
-            'idProcedureType' => $procedureType[0]->getIdProcedureType()
-        ));
-
-        return $this->redirectToRoute('show_dashboard_employer');
-
         $parameters = $request->request->all();
-        //$documentType = $parameters['documentType'];
+        $userId = $parameters['userId'];
+
+
+        /* @var $user User */
+        $user = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->find($userId);
+
+        $user->setPaymentState(1);
+        $user->setDayToPay(date("d"));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
         $view = View::create();
-        $view->setData(true);
+        //$view->setData(array('msg' => "No se pudo realizar el pago por intente mas tarde."));
+        //$view->setStatusCode(400);
+        $view->setData(array('msg' => "Pago realizado correctamente"));
         $view->setStatusCode(200);
-
-
 
         return $view;
     }

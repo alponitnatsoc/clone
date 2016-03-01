@@ -54,7 +54,12 @@ class EmployerHasEmployee
     /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
-    private $state=1;
+    private $state = 1;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=TRUE)
+     */
+    private $isFree = 0;
 
     /**
      * Set idEmployerHasEmployee
@@ -237,4 +242,28 @@ class EmployerHasEmployee
         return $this->contracts->matching($criteria);
     }
 
+
+    /**
+     * Set isFree
+     *
+     * @param integer $isFree
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setIsFree($isFree)
+    {
+        $this->isFree = $isFree;
+
+        return $this;
+    }
+
+    /**
+     * Get isFree
+     *
+     * @return integer
+     */
+    public function getIsFree()
+    {
+        return $this->isFree;
+    }
 }

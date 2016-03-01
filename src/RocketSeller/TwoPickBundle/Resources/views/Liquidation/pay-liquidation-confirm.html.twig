@@ -34,10 +34,6 @@
                     <p><strong>Salario</strong></p>
                     <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
                 </div>
-    {#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
-    {#                 <p><strong>Días tomados de vacaciones</strong></p>#}
-    {#                 <span class="txthelp"><p></p></span>#}
-    {#             </div>#}
             </div>
         </div>
         <div class="col-sm-12">
@@ -54,14 +50,11 @@
                             <th><strong>Deducciones</strong></th>
                             <th></th>
                         </tr>
-            {#             {% set totalLiq = 0 %}#}
                         {% for ded in deducciones %}
                             <tr>
-                            {{ dump(ded.novelty) }}
                                 <td>{{ ded.novelty.name }}</td>
                                 <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
                             </tr>
-            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                         {% endfor %}
                         <tr class="info">
                             <td><strong>Total deducciones</strong></td>
@@ -76,7 +69,6 @@
                                 <td>{{ dev.novelty.name }}</td>
                                 <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
                             </tr>
-            {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                         {% endfor %}
                         <tr class="info">
                             <td><strong>Total devengos</strong></td>
@@ -97,9 +89,19 @@
             </div>
         </div>
     </div>
+    <form action="{{ path('api_public_post_download_pdf') }}" method="post" name="pdfLiquidation">
+        <input type="hidden" name="employeeInfo" value='{{ employeeInfo|json_encode()|raw }}' />
+        <input type="hidden" name="contractInfo" value='{{ contractInfo|json_encode()|raw }}' />
+        <input type="hidden" name="deducciones" value='{{ deducciones|json_encode()|raw }}' />
+        <input type="hidden" name="totalDeducciones" value='{{ totalDeducciones }}' />
+        <input type="hidden" name="devengos" value='{{ devengos|json_encode()|raw }}' />
+        <input type="hidden" name="totalDevengos" value='{{ totalDevengos }}' />
+        <input type="hidden" name="totalLiq" value='{{ totalLiq }}' />
+        <input type="hidden" name="employer" value='{{ employer|json_encode()|raw }}' />
+    </form>
     <div id="postLiq" class="col-sm-12 center">
         <button type="button" onclick="window.print()" class="btn btn-default">Imprimir</button>
-        <button type="button" onclick="downloadPDF()" class="btn btn-default">Guardar PDF</button>
+        <button type="button" onclick="$('form[name=pdfLiquidation]').submit()" class="btn btn-default">Guardar PDF</button>
         <button type="button" class="btn btn-default">Enviar Email</button>
     </div>
     <div class="col-sm-12">
@@ -164,10 +166,17 @@ function downloadPDF() {
         url: "{{ path('api_public_post_download_pdf') }}",
         type: 'POST',
         data: {
-            data: '{{ pdfData }}'
+            employeeInfo: '{{ employeeInfo|json_encode()|raw }}',
+            contractInfo: '{{ contractInfo|json_encode()|raw }}',
+            deducciones: '{{ deducciones|json_encode()|raw }}',
+            totalDeducciones: '{{ totalDeducciones }}',
+            devengos: '{{ devengos|json_encode()|raw }}',
+            totalDevengos: '{{ totalDevengos }}',
+            totalLiq: '{{ totalLiq }}',
+            employer: '{{ employer|json_encode()|raw }}'
         }
     }).done(function (data) {
-        alert(data);
+        window.open(data);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });

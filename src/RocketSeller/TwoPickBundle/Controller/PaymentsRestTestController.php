@@ -69,12 +69,13 @@ class PaymentsRestTestController extends FOSRestController
     if ($document == 123456789)
     {
       $view->setStatusCode(201);
+      $view->setData(array("algo"));
     }
     else
     {
       $view->setStatusCode(400);
     }
-    return $view;
+    return $view->setStatusCode(201);
   }
 
   /**
@@ -315,7 +316,7 @@ class PaymentsRestTestController extends FOSRestController
     }
     else
     {
-      $view->setStatusCode(201);
+      $view->setStatusCode(200);
       $view->setData((array('transfer-id' => 34567)));
     }
 

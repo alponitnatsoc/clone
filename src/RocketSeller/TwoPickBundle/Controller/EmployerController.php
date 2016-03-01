@@ -24,46 +24,47 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+
     public function showDataAction()
     {
         /** @var User $user */
-        $user=$this->getUser();
-        $person=$user->getPersonPerson();
-        $employer=$person->getEmployer();
+        $user = $this->getUser();
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();
 
-        return $this->render('RocketSellerTwoPickBundle:Employer:showPerson.html.twig', array('employer'=>$employer));
+        return $this->render('RocketSellerTwoPickBundle:Employer:showPerson.html.twig', array('employer' => $employer));
     }
+
     public function editEmployerAction()
     {
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $people */
         $people = $user->getPersonPerson();
         $employer = $people->getEmployer();
-        if ($employer==null) {
-            $employer=new Employer();
+        if ($employer == null) {
+            $employer = new Employer();
             $people->setEmployer($employer);
         }
 
-        if (count($employer->getWorkplaces())==0) {
+        if (count($employer->getWorkplaces()) == 0) {
             $workplace = new Workplace();
             $employer->addWorkplace($workplace);
             $people->setEmployer($employer);
         }
         $employer->setEmployerType("persona");
-        if($people->getPhones()->count()==0||$people->getPhones()==null){
-            $phone=new Phone();
+        if ($people->getPhones()->count() == 0 || $people->getPhones() == null) {
+            $phone = new Phone();
             $people->addPhone($phone);
         }
 
         $form = $this->createForm(new EmployerEdit(), $employer, array(
-            'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
+            'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format' => 'json')),
             'method' => 'POST',
         ));
 
 
         return $this->render(
-            'RocketSellerTwoPickBundle:Employer:editPerson.html.twig',
-            array('form' => $form->createView())
+                        'RocketSellerTwoPickBundle:Employer:editPerson.html.twig', array('form' => $form->createView())
         );
     }
 
