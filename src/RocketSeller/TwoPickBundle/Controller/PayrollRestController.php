@@ -185,6 +185,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
+        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         //TODO(daniel.serrano): Remove the mock URL.
         // This URL is only for testing porpouses and should be removed.
 
@@ -268,6 +269,177 @@ class PayrollRestController extends FOSRestController
         }
         $answer .= "</Interfaz" . $idInterfaz . "Solic>";
         return $answer;
+    }
+
+    /**
+     * Insert a new society .<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Inserts a new society in the SQL software, this
+     *                  represents the employer.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *   (name="society_id", nullable=false, requirements="(.)*", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_name", nullable=false, requirements="(.)*", strict=true, description="Name of the society, this can be the same name of the employer.")
+     *   (name="society_nit", nullable=false, requirements="([0-9])+(-[0-9]+)?", strict=true, description="Nit of the society it could be the root or the C.C.")
+     *   (name="society_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
+     *   (name="society_mail", nullable=false, requirements="(.)*", strict=true, description="Company mail, it can be the mail registered in symplifica.")
+     *
+     * @return View
+     */
+    public function postAddSocietyAction(Request $request)
+    {
+
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['society_id'] = '(.)*';
+        $mandatory['society_id'] = true;
+        $regex['society_name'] = '(.)*';
+        $mandatory['society_name'] = true;
+        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
+        $mandatory['society_nit'] = true;
+        $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['society_start_date'] = true;
+        $regex['society_mail'] = '(.)*';
+        $mandatory['society_mail'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        $unico['TIPOCON'] = 0;
+        $unico['COD_SOCIEDAD'] = $parameters['society_id'];
+        $unico['NOMBRE_SOCIEDAD'] = $parameters['society_name'];
+        $unico['SOCIEDAD_NIT'] = $parameters['society_nit'];
+        $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = $parameters['society_start_date'];
+        $unico['SOC_EMAIL'] = $parameters['society_mail'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '649';
+        $parameters['clXMLSolic'] = $this->createXml($content, 649);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Modify a new society .<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modify a new society in the SQL software, this
+     *                  represents the employer.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *   (name="society_id", nullable=false, requirements="(.)*", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_name", nullable=true, requirements="(.)*", strict=false, description="Name of the society, this can be the same name of the employer.")
+     *   (name="society_nit", nullable=true, requirements="([0-9])+(-[0-9]+)?", strict=false, description="Nit of the society it could be the root or the C.C.")
+     *   (name="society_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=false, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
+     *   (name="society_mail", nullable=true, requirements="(.)*", strict=false, description="Company mail, it can be the mail registered in symplifica.")
+     *
+     * @return View
+     */
+    public function postModifySocietyAction(Request $request)
+    {
+
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['society_id'] = '(.)*';
+        $mandatory['society_id'] = true;
+        $regex['society_name'] = '(.)*';
+        $mandatory['society_name'] = false;
+        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
+        $mandatory['society_nit'] = false;
+        $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['society_start_date'] = false;
+        $regex['society_mail'] = '(.)*';
+        $mandatory['society_mail'] = false;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        $unico['TIPOCON'] = 1;
+        $unico['COD_SOCIEDAD'] = isset($parameters['society_id']) ? $parameters['society_id'] : ['COD_SOCIEDAD'];
+        $unico['NOMBRE_SOCIEDAD'] = isset($parameters['society_name']) ? $parameters['society_name'] : ['NOMBRE_SOCIEDAD'];
+        $unico['SOCIEDAD_NIT'] = isset($parameters['society_nit']) ? $parameters['society_nit'] : ['SOCIEDAD_NIT'];
+        $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = isset($parameters['society_start_date']) ? $parameters['society_start_date'] : ['SOCIEDAD_FECHA_CONSTITUCION'];
+        $unico['SOC_EMAIL'] = isset($parameters['society_mail']) ? $parameters['society_mail'] : ['SOC_EMAIL'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '649';
+        $parameters['clXMLSolic'] = $this->createXml($content, 649);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Gets all the information of the society.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets all the information of a given society.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $societyId The id of the society to be queried.
+     *
+     * @return View
+     */
+    public function getSocietyAction($societyId)
+    {
+        $content = array();
+        $unico = array();
+
+        $unico['COD_SOCIEDAD'] = $societyId;
+
+        $content[] = $unico;
+        $parameters = array();
+
+        $parameters['inInexCod'] = '653';
+        $parameters['clXMLSolic'] = $this->createXml($content, 653, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
     }
 
     /**
