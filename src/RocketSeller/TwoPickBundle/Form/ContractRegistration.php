@@ -37,8 +37,8 @@ class ContractRegistration extends AbstractType
             ))
             ->add('existentNew', 'choice', array(
                 'choices' => array(
-                     1=> 'Seleccionar',
-                     0=> 'Seleccionar',
+                     1=> 'Término Fijo',
+                     0=> 'Término Indefinido',
                 ),
                 'multiple' => false,
                 'mapped' => false,
