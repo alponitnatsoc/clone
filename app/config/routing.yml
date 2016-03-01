@@ -364,6 +364,9 @@ subscription_choices:
 activate_subscription:
     path: /activar-suscripcion
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:activarSuscripcion }
+subscription_pay:
+    path:     /subscription/pay
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:paySuscripcion }
 inactive_user:
     path: /suscripcion-inactiva
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionInactiva }

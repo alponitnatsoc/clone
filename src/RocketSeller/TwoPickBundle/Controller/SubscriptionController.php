@@ -10,6 +10,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Referred;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionController extends Controller
 {
@@ -173,7 +174,7 @@ class SubscriptionController extends Controller
             $employees = $this->getEmployees($user->getPersonPerson()->getEmployer(), true);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
-                'action' => $this->generateUrl('api_public_post_pay_membresia', array('format' => 'json')),
+                'action' => $this->generateUrl('subscription_pay'),
                 'method' => 'POST',
             ));
 
@@ -185,6 +186,30 @@ class SubscriptionController extends Controller
                         'isRefered' => $this->userIsRefered(),
                         'haveRefered' => $this->userHaveValidRefered()
             ));
+        } else {
+            return $this->redirectToRoute("subscription_choices");
+        }
+    }
+
+    public function paySuscripcionAction(Request $request)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($request->isMethod('POST')) {
+            $request = new Request();
+            $request->setMethod('POST');
+            $request->request->set('userId', $this->getUser()->getId());
+
+            $data = $this->forward('RocketSellerTwoPickBundle:PayRest:postPayMembresia', array('request' => $request), array('_format' => 'json'));
+            $data2 = json_decode($data->getContent(), true);
+            if ($data->getStatusCode() == Response::HTTP_OK) {
+                $this->addFlash('success', $data2['msg']);
+                return $this->redirectToRoute("matrix_choose");
+            }
+            $this->addFlash('error', $data2['msg']);
+            return $this->redirectToRoute("subscription_choices");
         } else {
             return $this->redirectToRoute("subscription_choices");
         }
