@@ -10,14 +10,25 @@
 <script src="{{ asset('public/js/jquery.scrollme.js') }}"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
 <style type="text/css">
 html,body{
   margin:0px;
   height:100%;
 }
 </style>
+<body>
 
+      <!------------------------------------------- Google Tag Manager ------------------------------------------>
+
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TR6JCJ');</script>
+
+    <!------------------------------------------ End Google Tag Manager ------------------------------------------>
     <header>
     	<div id="zona-logo">
             <div id="logo"><img class="logo-size" src="{{ asset('public/img/landing/logo.png') }}" width="190" height="auto"></div>
@@ -29,12 +40,13 @@ html,body{
                    <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica" target="_blank"><li class="blue redes"><li><img src="{{ asset('public/img/landing/link.png') }}"></li></a>
                 </ul></div>
         </div>
+        <div id="prueba">
+          <div id="texto-banner">
+          	<h1>La herramienta más sencilla para administrar empleados domésticos y de pequeñas empresas</h1>
+              <h3>Nada como la tranquilidad de saber que estás haciendo las cosas bien</h2>
 
-        <div id="texto-banner">
-        	<h1>La herramienta más sencilla para administrar empleados domésticos y de pequeñas empresas</h1>
-            <h3>Nada como la tranquilidad de saber que estás haciendo las cosas bien</h2>
-
-            <a href="#formulario"><div class="calltoaction">Obtén 1 mes gratis por pre-inscribirte</div></a>
+              <a href="#formulario"><div id="btn_intencion1" class="calltoaction">Obtén 1 mes gratis por pre-inscribirte</div></a>
+          </div>
         </div>
 
         <div id="bull-cont">
@@ -98,7 +110,7 @@ html,body{
         <div id="precio">
             <h2 style="font-size: 25px">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2><br>
             <p class="cuadro-precio">Hasta <span>$29.500</span> /mes x empleado</p>
-            <a href="#formulario"><div class="calltoaction">¡Qué estas esperando pre-inscribete ya!</div></a>
+            <a href="#formulario"><div id="btn_intencion2" class="calltoaction">¡Qué estas esperando pre-inscribete ya!</div></a>
         </div>
 
         <div id="man">
@@ -123,7 +135,7 @@ html,body{
                     </div>
                     <div class="seccion-hombre desaparece">
                         <img src="{{ asset('public/img/landing/man-noback.png') }}" class="imghombre">
-                        <a href="#formulario"><div class="callto">¡Quiero Symplifica!</div></a>
+                        <a href="#formulario"><div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div></a>
                     </div>
                     <div class="seccion-hombre">
                         <div class="info-hombre">
@@ -137,7 +149,7 @@ html,body{
                         </div>
                     </div>
                     <div class="boton-hombre aparece">
-                        <a href="#formulario"><div class="callto">¡Quiero Symplifica!</div></a>
+                        <a href="#formulario"><div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div></a>
                     </div>
                  </div>
             </div>
@@ -181,7 +193,7 @@ html,body{
                 {{ form_row(form.entity_type, { 'id': 'entity' }) }}
                 {{ form_row(form.email) }}
                 {{ form_row(form.phone) }}
-                <button type="submit">Enviar</button>
+                <button id="btn_registro" type="submit">Enviar</button>
             {{ form_end(form) }}
         </div>
     </section>
