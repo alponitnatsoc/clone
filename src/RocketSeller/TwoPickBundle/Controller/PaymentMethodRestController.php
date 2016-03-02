@@ -61,7 +61,7 @@ class PaymentMethodRestController extends FOSRestController
         ));
         $view = View::create();
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=201){
+        if($insertionAnswer->getStatusCode()==201){
             $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
             return $view;
         }
