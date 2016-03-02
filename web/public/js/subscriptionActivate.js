@@ -15,10 +15,10 @@ function startSubscriptionActivate() {
                 "pago_membresia[city]": {required: true},
                 "pago_membresia[address]": {required: true},
                 "pago_membresia[phone]": {required: true, number: true},
-                "card_number": {required: true, number: true, maxlength: 16, minlength: 16, min: 1},
+                "credit_card": {required: true, number: true, maxlength: 16, minlength: 16, min: 1},
                 "card_name": {required: true},
-                "expiry_date_month": {required: true, number: true, maxlength: 2, max: 12, min: 1},
-                "expiry_date_year": {required: true, number: true, maxlength: 2, max: 99, min: 16},
+                "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
+                "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
                 "cvv": {required: true, number: true, maxlength: 3, minlength: 3, max: 999, min: 1}
 
             },
@@ -31,7 +31,7 @@ function startSubscriptionActivate() {
                 "pago_membresia[city]": {required: "Por favor selecciona una ciudad"},
                 "pago_membresia[address]": {required: "Por favor ingrese una dirección"},
                 "pago_membresia[phone]": {required: "Por favor ingrese un telefono", number: "ingresa solamente dígitos"},
-                "card_number": {
+                "credit_card": {
                     required: "Por favor ingrese el numero de la tarjeta",
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo 16 digitos",
@@ -43,14 +43,16 @@ function startSubscriptionActivate() {
                 "expiry_date_month": {
                     required: "Por favor ingrese el mes de vencimiento",
                     number: "ingresa solamente dígitos",
-                    maxlength: "mes del 01 al 12",
+                    maxlength: "maximo mes de 2 digitos",
+                    minlength: "minimo mes de 1 digitos",
                     max: "mes del 01 al 12",
                     min: "mes del 01 al 12"
                 },
                 "expiry_date_year": {
                     required: "Por favor ingrese el año de vencimiento",
                     number: "ingresa solamente dígitos",
-                    maxlength: "año del 16 al 99",
+                    maxlength: "maximo año de 4 digitos",
+                    minlength: "minimo año de 4 digitos",
                     max: "año del 16 al 99",
                     min: "año del 16 al 99"
                 },
@@ -67,7 +69,7 @@ function startSubscriptionActivate() {
     });
 
     $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
-        $('#card_number').validateCreditCard(function (result) {
+        $('#credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
             if (result.card_type == null) {
                 $('.vertical.maestro').slideUp({
@@ -120,7 +122,7 @@ function startSubscriptionActivate() {
         var $form = $(this).closest('form');
         // Simulate form data, but only include the selected department value.
         var data = {};
-        data[$department.attr('name')] = $department.val(); 
+        data[$department.attr('name')] = $department.val();
         var citySelectId = $department.attr("id").replace("_department", "_city");
         // Submit data via AJAX to the form's action path.
         $.ajax({

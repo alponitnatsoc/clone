@@ -55,3 +55,6 @@
     text-align: left;
     vertical-align: middle;
 }
+.flashSubscription{
+    display: inline-block;
+}

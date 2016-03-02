@@ -3,7 +3,7 @@
 
 {% block fos_user_content %}
     {% for flash_message in app.session.flashbag.get('error') %}
-        <div class="alert alert-danger" role="alert"> 
+        <div class="alert alert-danger flashSubscription" role="alert"> 
             {{ flash_message }}
         </div>
     {% endfor %}
