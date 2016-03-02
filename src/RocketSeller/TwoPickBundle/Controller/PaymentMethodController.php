@@ -39,7 +39,7 @@ class PaymentMethodController extends Controller
                 "codeCheck"=>$form->get("cvv")->getData(),
             ));
 
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsMethodRest:postAddCreditCard', array('_format' => 'json'));
             echo "Status Code Employee PayMethod: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
             if($insertionAnswer->getStatusCode()!=201){
                 return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig', array(
