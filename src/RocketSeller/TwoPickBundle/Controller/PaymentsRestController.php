@@ -82,7 +82,7 @@ class PaymentsRestController extends FOSRestController
             if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '80') {
                 $url_request = "http://localhost/api/public/v1/mock" . $path;
             } else {
-                $url_request = "http://localhost:10630/api/public/v1/mock" . $path;
+                $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
             }
         } else {
             $url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
@@ -104,7 +104,7 @@ class PaymentsRestController extends FOSRestController
                 $response = $client->put($url_request, $options);
             }
         } catch (Exception $e) {
-            
+
         }
         $view = View::create();
         $view->setStatusCode($response->getStatusCode());
