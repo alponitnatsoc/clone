@@ -54,6 +54,9 @@ class DashBoardController extends Controller
                 /** @var EmployerHasEmployee $value */
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
+                    if($value->getEmployeeEmployee()->getRegisterState()!=100){
+                        $idCurrentEmployee=$value->getEmployeeEmployee()->getIdEmployee();
+                    }
                     $stateEmployees+=$value->getEmployeeEmployee()->getRegisterState();
                     if ($value->getEmployeeEmployee()->getEntities()->count() != 0) {
                         $stateAfiliation+=$minUnit;
