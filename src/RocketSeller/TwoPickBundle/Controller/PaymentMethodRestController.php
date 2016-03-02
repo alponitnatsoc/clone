@@ -89,7 +89,11 @@ class PaymentMethodRestController extends FOSRestController
             "chargeId"=>$purchaseOrderId,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-        $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+        if($insertionAnswer->getStatusCode()==200) {
+            $chargeRC = json_decode($insertionAnswer->getContent(), true)["charge-rc"];
+        } else{
+            $chargeRC="-1";
+        }
         if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
             $this->getDeletePayMethodAction($idPayM,$person->getDocument());
             $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
