@@ -240,6 +240,8 @@ class SubscriptionController extends Controller
                 $request->request->set('cvv', $request->get('cvv'));
                 $request->request->set('name_on_card', $request->get('name_on_card'));
                 $data = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
+                var_dump($data);
+                die();
                 if ($data->getStatusCode() != Response::HTTP_CREATED) {
                     $this->addFlash('error', $data->getContent());
                     return $this->redirectToRoute("subscription_choices");
