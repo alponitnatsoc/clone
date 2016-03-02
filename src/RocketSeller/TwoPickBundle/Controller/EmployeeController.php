@@ -357,6 +357,10 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $todayPlus=new \DateTime();
+        $todayPlus->setDate(intval($todayPlus->format("Y"))+1,$todayPlus->format("m"),$todayPlus->format("d"));
+        $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
+        $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
             if ($contracts->count() != 0) {

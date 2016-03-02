@@ -565,8 +565,8 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="transportAid", nullable=true, strict=true, description="aid for the employee to transport.")
      * @RequestParam(name="sisben", nullable=true, strict=true, description="employee belongs to SISBEN.")
      * @RequestParam(name="benefitsConditions", nullable=true, strict=true, description="benefits conditions.")
-     * @RequestParam(array=true, name="startDate", nullable=true, strict=true, description="benefits conditions.")
-     * @RequestParam(array=true, name="endDate", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(name="startDate", nullable=false, strict=true, description="benefits conditions.")
+     * @RequestParam(name="endDate", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(name="workableDaysMonth", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(array=true, name="workTimeStart", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(array=true, name="workTimeEnd", nullable=true, strict=true, description="benefits conditions.")
@@ -680,8 +680,7 @@ class EmployeeRestController extends FOSRestController
             $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
 
             $startDate = $paramFetcher->get('startDate');
-            $datetime = new DateTime();
-            $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
+            $datetime = new DateTime($startDate);
             $contract->setStartDate($datetime);
 
             /* $workTimeStart = $paramFetcher->get('workTimeStart');
@@ -696,10 +695,8 @@ class EmployeeRestController extends FOSRestController
 
             if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
                 $endDate = $paramFetcher->get('endDate');
-                $datetime = new DateTime();
-                $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
+                $datetime = new DateTime($endDate);
                 $contract->setEndDate($datetime);
-
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
