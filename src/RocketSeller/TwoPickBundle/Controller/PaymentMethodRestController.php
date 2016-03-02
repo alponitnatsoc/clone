@@ -89,16 +89,10 @@ class PaymentMethodRestController extends FOSRestController
             "chargeId"=>$purchaseOrderId,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()==200) {
-            $chargeRC = json_decode($insertionAnswer->getContent(), true)["charge-rc"];
-        } else{
-            $chargeRC="-1";
-        }
+        $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
         if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
             $this->getDeletePayMethodAction($idPayM,$person->getDocument());
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array(
-                'data'=>$insertionAnswer->getContent(),
-                'error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
+            $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
             return $view;
         }
         $request->setMethod("DELETE");
@@ -108,9 +102,9 @@ class PaymentMethodRestController extends FOSRestController
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteReversePaymentMethod', array('_format' => 'json'));
         if($insertionAnswer->getStatusCode()!=200){
-            $view->setStatusCode(200)->setData(array('response'=>array("method-id"=>$idPayM),'error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
+            $view->setStatusCode(200)->setData(array('error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
         }else{
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array('response'=>array("method-id"=>$idPayM),"extra-data"=>$insertionAnswer->getContent()));
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
         }
         return $view;
 

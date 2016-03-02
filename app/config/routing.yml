@@ -377,7 +377,7 @@ express_start:
     path: /express-start
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerExpress }
 express_payment:
-    path: /express-payment/{id}
+    path: /express-payment
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:expressPayment }
 express_payment_add:
     path: /express-payment/{id}/add

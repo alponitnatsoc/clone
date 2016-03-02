@@ -21,11 +21,12 @@ use RocketSeller\TwoPickBundle\Form\BasicEmployeePersonRegistration;
 
 class ExpressRegistrationController extends Controller
 {
-    public function expressPaymentAction($id)
+    public function expressPaymentAction()
     {
-        $user = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:User')
-        ->find($id);
+        //$user = $this->getDoctrine()
+        //->getRepository('RocketSellerTwoPickBundle:User')
+        //->find($id);
+        $user = $this->getUser();
         $person = $user->getPersonPerson();
         $date = new \DateTime('02/31/1970');
         $request = $this->container->get('request');
@@ -44,7 +45,7 @@ class ExpressRegistrationController extends Controller
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode()==201) {
             //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
-            return $this->redirectToRoute('express_payment_add',array('id'=>$id));
+            return $this->redirectToRoute('express_payment_add',array('id'=>$user->getId()));
 
         }else{
             dump($insertionAnswer->getStatusCode());
@@ -79,14 +80,16 @@ class ExpressRegistrationController extends Controller
             $request->request->add(array(
                 "documentType"=>$person->getDocumentType(),
                 "documentNumber"=>$person->getDocument(),
-                "accountNumber"=>$form->get("credit_card")->getData(),
-                "expirationYear"=>$form->get("expiry_date_year")->getData(),
-                "expirationMonth"=>$form->get("expiry_date_month")->getData(),
-                "codeCheck"=>$form->get("cvv")->getData(),
+                "credit_card"=>$form->get("credit_card")->getData(),
+                "expiry_date_year"=>$form->get("expiry_date_year")->getData(),
+                "expiry_date_month"=>$form->get("expiry_date_month")->getData(),
+                "cvv"=>$form->get("cvv")->getData(),
             ));
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
-            echo "Status Code Employee PayMethod: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
+            dump($insertionAnswer);
+            dump($request);
+            exit();
             if($insertionAnswer->getStatusCode()!=201){
                 return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
                     'form' => $form->createView(),
@@ -98,7 +101,7 @@ class ExpressRegistrationController extends Controller
                 'data' => $data,
                 ));
         }
-            return $this->render('RocketSellerTwoPickBundle:Registration:paymentMethod.html.twig', array(
+            return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
                 'form' => $form->createView(),
         ));
     }
