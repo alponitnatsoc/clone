@@ -94,6 +94,8 @@ class PaymentMethodRestController extends FOSRestController
             $this->getDeletePayMethodAction($idPayM,$person->getDocument());
             $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
             return $view;
+
+            
         }
         $request->setMethod("DELETE");
         $request->request->add(array(

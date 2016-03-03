@@ -45,19 +45,17 @@ class ExpressRegistrationController extends Controller
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode()==201) {
             //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
-            return $this->redirectToRoute('express_payment_add',array('id'=>$user->getId()));
+            return $this->redirectToRoute('express_payment_add');
 
         }else{
-            dump($insertionAnswer->getStatusCode());
+            dump($insertionAnswer);
             exit();
         }
         
         
     }
-    public function addCreditCardAction($id, Request $request){
-        $user = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:User')
-        ->find($id);
+    public function addCreditCardAction(Request $request){       
+        $user = $this->getUser();
         $person = $user->getPersonPerson();
         $form = $this->createFormBuilder()
             ->add('credit_card', 'text')
@@ -88,7 +86,6 @@ class ExpressRegistrationController extends Controller
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
             dump($insertionAnswer);
-            dump($request);
             exit();
             if($insertionAnswer->getStatusCode()!=201){
                 return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
@@ -104,6 +101,9 @@ class ExpressRegistrationController extends Controller
             return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
                 'form' => $form->createView(),
         ));
+    }
+    public function startExpressPay(){
+        return true;
     }
     public function successExpressAction($id)
     {
