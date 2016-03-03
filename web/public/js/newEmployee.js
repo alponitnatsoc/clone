@@ -155,6 +155,7 @@ function startEmployee() {
             $(this).show();
         });
     } else {
+        $("#register_employee_employeeHasEmployers_existentNew_1").attr("checked", true);
         $(".definite").each(function () {
             $(this).hide();
         });
@@ -650,7 +651,7 @@ function addListeners() {
         $('#contractNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_yesExistent").on("click", function(){
-        $("#existentNext").attr('disabled',false);
+        $('#contractNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function(){
         history.pushState("","","/manage/employees");
