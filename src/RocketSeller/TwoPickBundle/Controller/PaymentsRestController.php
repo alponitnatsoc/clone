@@ -1171,7 +1171,7 @@ class PaymentsRestController extends FOSRestController
      *   resource = true,
      *   description = "Modifies a beneficiary in the payments system.",
      *   statusCodes = {
-     *     201 = "Created",
+     *     200 = "Created",
      *     400 = "Bad Request",
      *     401 = "Unauthorized",
      *     404 = "Not Found"
@@ -1181,8 +1181,8 @@ class PaymentsRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-     * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+     * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document Employer.")
+     * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document Employee.")
      *
      * (name="documentType", nullable=true, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
      * (name="name", nullable=true, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")

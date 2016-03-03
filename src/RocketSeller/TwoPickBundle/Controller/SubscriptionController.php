@@ -132,6 +132,8 @@ class SubscriptionController extends Controller
             foreach ($eHEes as $employeeC) {
                 //dump($employeeC);
                 if ($employeeC->getState() > 0) {
+                    //check if it exist
+
                     $contracts = $employeeC->getContracts();
                     /** @var Contract $cont */
                     $contract = null;
