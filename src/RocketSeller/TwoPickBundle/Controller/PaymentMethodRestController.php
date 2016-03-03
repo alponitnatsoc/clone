@@ -221,6 +221,7 @@ class PaymentMethodRestController extends FOSRestController
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId=$idPurchaseOrder;
         $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
+        $pOSRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
@@ -246,9 +247,17 @@ class PaymentMethodRestController extends FOSRestController
                 $answer=json_decode($insertionAnswer->getContent(),true);
                 $chargeRC=$answer["charge-rc"];
                 if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>$chargeRC));
+                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                    $em->persist($purchaseOrder);
+                    $em->flush();
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;
                 }
+                $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>"00"));
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
+                $em->flush();
                 /** @var PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
                     $payRoll=$desc->getPayrollPayroll();
@@ -303,9 +312,16 @@ class PaymentMethodRestController extends FOSRestController
                 $answer=json_decode($insertionAnswer->getContent(),true);
                 $chargeRC=$answer["charge-rc"];
                 if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>$chargeRC));
+                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                    $em->persist($purchaseOrder);
+                    $em->flush();
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;
                 }
+                $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>"00"));
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
                 $pay=new Pay();
                 $pay->setUserIdUser($user);
                 $pay->setIdDispercionNovo(-1);
