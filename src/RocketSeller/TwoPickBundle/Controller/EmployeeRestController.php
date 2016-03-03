@@ -565,8 +565,8 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="transportAid", nullable=true, strict=true, description="aid for the employee to transport.")
      * @RequestParam(name="sisben", nullable=true, strict=true, description="employee belongs to SISBEN.")
      * @RequestParam(name="benefitsConditions", nullable=true, strict=true, description="benefits conditions.")
-     * @RequestParam(array=true, name="startDate", nullable=true, strict=true, description="benefits conditions.")
-     * @RequestParam(array=true, name="endDate", nullable=true, strict=true, description="benefits conditions.")
+     * @RequestParam(name="startDate", nullable=false, strict=true, description="benefits conditions.")
+     * @RequestParam(name="endDate", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(name="workableDaysMonth", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(array=true, name="workTimeStart", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(array=true, name="workTimeEnd", nullable=true, strict=true, description="benefits conditions.")
@@ -680,8 +680,7 @@ class EmployeeRestController extends FOSRestController
             $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
 
             $startDate = $paramFetcher->get('startDate');
-            $datetime = new DateTime();
-            $datetime->setDate($startDate['year'], $startDate['month'], $startDate['day']);
+            $datetime = new DateTime($startDate);
             $contract->setStartDate($datetime);
 
             /* $workTimeStart = $paramFetcher->get('workTimeStart');
@@ -696,10 +695,8 @@ class EmployeeRestController extends FOSRestController
 
             if ($contract->getContractTypeContractType()->getName() == "Término fijo") {
                 $endDate = $paramFetcher->get('endDate');
-                $datetime = new DateTime();
-                $datetime->setDate($endDate['year'], $endDate['month'], $endDate['day']);
+                $datetime = new DateTime($endDate);
                 $contract->setEndDate($datetime);
-
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
@@ -858,6 +855,12 @@ class EmployeeRestController extends FOSRestController
             if ($save2->getData('response')['response']['message'] == 'added') {
                 $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
                 if ($save3->getData('response')['response']['message'] == 'added') {
+                    /** @var User $user */
+                    $user=$this->getUser();
+                    $user->setStatus(2);
+                    $em=$this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->flush();
                     $flag = true;
                 } else {
                     return $save3;
@@ -871,7 +874,7 @@ class EmployeeRestController extends FOSRestController
 
         if ($flag) {
             //return $this->forward('RocketSellerTwoPickBundle:Default:subscriptionChoices');
-            return $this->redirectToRoute('subscription_choices');
+            return $this->redirectToRoute('ajax');
             //$view->setData(array('url' => $this->generateUrl('subscription_choices')))->setStatusCode(200);
         } else {
             $view = View::create();
@@ -1186,8 +1189,10 @@ class EmployeeRestController extends FOSRestController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $view = View::create();
+
         if ($user == null) {
-            return;
+            return $view->setData(array('error' => array('User' => 'user not logged')))->setStatusCode(403);
         }
 
         $register_social_security = $paramFetcher->get("register_social_security");
@@ -1198,13 +1203,15 @@ class EmployeeRestController extends FOSRestController
         /** @var Employer $realEmployer */
         $realEmployer = $employerRepo->find($idEmployer);
         if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
-            return;
+            return $view->setData(array('error' => array('Employer' => 'not the loged employer')))->setStatusCode(403);
         }
         $realEmployer->setEconomicalActivity($register_social_security['economicalActivity']);
+        /** @var Entity $realArl */
         $realArl = $entityRepo->find($register_social_security['arl']);
+        /** @var Entity $realSeverances */
         $realSeverances = $entityRepo->find($register_social_security['severances']);
         if ($realSeverances == null || $realArl == null) {
-            return;
+            return $view->setData(array('error' => array('Entity' => 'Entities Not found')))->setStatusCode(404);
         }
         $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
@@ -1234,9 +1241,7 @@ class EmployeeRestController extends FOSRestController
             $em->flush();
         }
 
-        $view = View::create();
-        $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
-        return $view;
+        return $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
     }
 
     /**

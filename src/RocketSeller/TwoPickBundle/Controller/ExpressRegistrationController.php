@@ -8,6 +8,8 @@ use RocketSeller\TwoPickBundle\Form\Type\ContactType;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -21,11 +23,12 @@ use RocketSeller\TwoPickBundle\Form\BasicEmployeePersonRegistration;
 
 class ExpressRegistrationController extends Controller
 {
-    public function expressPaymentAction($id)
+    public function expressPaymentAction()
     {
-        $user = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:User')
-        ->find($id);
+        //$user = $this->getDoctrine()
+        //->getRepository('RocketSellerTwoPickBundle:User')
+        //->find($id);
+        $user = $this->getUser();
         $person = $user->getPersonPerson();
         $date = new \DateTime('02/31/1970');
         $request = $this->container->get('request');
@@ -42,10 +45,114 @@ class ExpressRegistrationController extends Controller
             "email"=>$user->getEmail()
             ));
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode()==201) {
+            //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
+            return $this->redirectToRoute('express_payment_add');
+
+        }else{
             dump($insertionAnswer);
             exit();
-        return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
+        }
         
+        
+    }
+    public function addCreditCardAction(Request $request){       
+        $user = $this->getUser();
+        $person = $user->getPersonPerson();
+        $form = $this->createFormBuilder()
+            ->add('credit_card', 'text')
+            ->add('expiry_date_year', 'text')
+            ->add('expiry_date_month', 'text')
+            ->add('cvv', 'text')
+            ->add('name_on_card', 'text')
+            ->add('save', 'submit', array('label' => 'Submit'))
+            ->getForm();
+
+        $form->handleRequest($request);
+            if ($form->isValid()) {
+            $user = $this->getUser();
+            /** @var Person $person */
+            $person=$user->getPersonPerson();
+            $data = $form->getData();
+
+            //TODO NovoPayment
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "documentType"=>$person->getDocumentType(),
+                "documentNumber"=>$person->getDocument(),
+                "credit_card"=>$form->get("credit_card")->getData(),
+                "expiry_date_year"=>$form->get("expiry_date_year")->getData(),
+                "expiry_date_month"=>$form->get("expiry_date_month")->getData(),
+                "cvv"=>$form->get("cvv")->getData(),
+            ));
+
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
+            $response = json_decode($insertionAnswer->getContent());            
+            $methodId = $response->{'response'}->{'method-id'};            
+            if($insertionAnswer->getStatusCode()!=201){
+                return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
+                    'form' => $form->createView(),
+                    'errno' => "Not a valid Credit Card check the data again"
+                ));
+            }
+
+            /*return $this->render('RocketSellerTwoPickBundle:Registration:cardSuccess.html.twig', array(
+                'data' => $data,
+                ));*/
+            //return $this->redirectToRoute('express_pay_start',array('id'=>$methodId));
+            return $this->startExpressPayAction($methodId); 
+        }
+            return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
+                'form' => $form->createView(),
+        ));
+    }
+    public function startExpressPayAction($id){
+        $user = $this->getUser();
+        $products = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Product')
+        ->findBySimpleName("PRE");
+        $product = $products[0];
+        $totalValue = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
+        return $this->render('RocketSellerTwoPickBundle:Registration:payRegisterExpress.html.twig', 
+            array(
+                'product' => $product,
+                'totalValue'=> $totalValue,
+                'methodId' =>$id
+                )
+            );
+
+    }
+    public function payRegisterExpressAction($id){
+        
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $person = $user->getPersonPerson();
+
+        $PurchaseOrders = new PurchaseOrders();
+        $PurchaseOrders->setIdUser($user);
+        $PurchaseOrders->setPayMethodId($id);
+        $PurchaseOrders->setName("Registro express");
+
+        $PurchaseOrdersDescription = new PurchaseOrdersDescription();        
+        $products = $this->getDoctrine()
+        ->getRepository('RocketSellerTwoPickBundle:Product')
+        ->findBySimpleName("PRE");
+        $product = $products[0];
+        $PurchaseOrdersDescription->setProductProduct($product);
+        $value = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
+        $PurchaseOrders->setValue($value);
+        $PurchaseOrdersDescription->setValue($value);
+        $PurchaseOrdersDescription->setDescription($product->getDescription());
+        $em->persist($PurchaseOrdersDescription);
+        $PurchaseOrders->addPurchaseOrderDescription($PurchaseOrdersDescription);
+        $em->persist($PurchaseOrders);
+        $em->flush();
+
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()));
+
+        
+        echo "status".$insertionAnswer->getStatusCode()."contetn ";
+        return $this->render('RocketSellerTwoPickBundle:Registration:expressSuccess.html.twig');
     }
     public function successExpressAction($id)
     {

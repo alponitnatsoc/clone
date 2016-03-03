@@ -516,12 +516,8 @@ function startEmployee() {
                 sisben: $(form).find("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val(),
                 //benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
                 employeeId: $(form).find("input[name='register_employee[idEmployee]']").val(),
-                startDate: {'year': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][year]']").val(),
-                    'month': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][month]']").val(),
-                    'day': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][day]']").val()},
-                endDate: {'year': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][year]']").val(),
-                    'month': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][month]']").val(),
-                    'day': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][day]']").val()},
+                startDate: $("#register_employee_employeeHasEmployers_startDate").val(),
+                endDate: $("#register_employee_employeeHasEmployers_endDate").val(),
                 //workableDaysMonth: $(form).find("select[name='register_employee[employeeHasEmployers][workableDaysMonth]']").val(),
                 //workTimeStart: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][hour]']").val(),
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][minute]']").val()},
@@ -603,12 +599,16 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
-    $("#ex6").slider();
-    $("#ex6").on("slide", function(slideEvt) {
-        $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
+    var $salary =$("#register_employee_employeeHasEmployers_salaryD");
+    $salary.val(accounting.unformat($salary.val()));
+    var $slidder=$("#ex6");
+    $slidder.val(accounting.unformat($salary.val()));
+    $slidder.slider();
+    $slidder.on("slide", function(slideEvt) {
+        $salary.val(slideEvt.value);
         calculator();
         formatMoney($("#totalExpensesVal"));
-        formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
+        formatMoney($salary);
     });
     $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function(){
         if($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val()=="1") {
@@ -661,7 +661,7 @@ function addListeners() {
         sendAjax("/manage/employees")
     });
 
-    $("#register_employee_employeeHasEmployers_salaryD").on("input", function(){
+    $salary.on("input", function(){
         calculator();
         formatMoney($("#totalExpensesVal"));
     });

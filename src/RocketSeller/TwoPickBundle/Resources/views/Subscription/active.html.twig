@@ -28,7 +28,7 @@
             -moz-box-sizing: content-box;
             -webkit-box-sizing: content-box;
         }*/
-        .infoTarjeta #card_number {
+        .infoTarjeta #credit_card {
             background-image: url(public/img/creditCard.png), url(public/img/creditCard.png);
             background-position: 2px -117px, 233px -55px;
             background-size: 120px 361px, 120px 361px;
@@ -36,34 +36,34 @@
             padding-left: 54px;
             /*width: 225px;*/
         }
-        .infoTarjeta #card_number.visa {
+        .infoTarjeta #credit_card.visa {
             background-position: 2px -159px, 260px -61px;
         }
-        .infoTarjeta #card_number.visa_electron {
+        .infoTarjeta #credit_card.visa_electron {
             background-position: 2px -201px, 260px -61px;
         }
-        .infoTarjeta #card_number.mastercard {
+        .infoTarjeta #credit_card.mastercard {
             background-position: 2px -243px, 260px -61px;
         }
-        .infoTarjeta #card_number.maestro {
+        .infoTarjeta #credit_card.maestro {
             background-position: 2px -285px, 260px -61px;
         }
-        .infoTarjeta #card_number.discover {
+        .infoTarjeta #credit_card.discover {
             background-position: 2px -327px, 260px -61px;
         }
-        .infoTarjeta #card_number.valid.visa {
+        .infoTarjeta #credit_card.valid.visa {
             background-position: 2px -159px, 233px -82px;
         }
-        .infoTarjeta #card_number.valid.visa_electron {
+        .infoTarjeta #credit_card.valid.visa_electron {
             background-position: 2px -201px, 233px -82px;
         }
-        .infoTarjeta #card_number.valid.mastercard {
+        .infoTarjeta #credit_card.valid.mastercard {
             background-position: 2px -243px, 233px -82px;
         }
-        .infoTarjeta #card_number.valid.maestro {
+        .infoTarjeta #credit_card.valid.maestro {
             background-position: 2px -285px, 233px -82px;
         }
-        .infoTarjeta #card_number.valid.discover {
+        .infoTarjeta #credit_card.valid.discover {
             background-position: 2px -327px, 233px -82px;
         }
         .toHide{
@@ -177,7 +177,7 @@
                     <div class="col-md-7">
                         <label>Nombre en la tarjeta</label><br>
                         <div id="divCardName" >
-                            <input type="text" id="card_name" name="card_name" class="form-control" placeholder="nombre" required="required">
+                            <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="nombre" required="required">
                         </div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                     <div class="col-md-4">
                         <label>Número tarjeta de crédito</label><br>
                         <div id="divCardNumber" >
-                            <input type="number" min="1"  step="1" maxlength="16" id="card_number" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" required="required">
+                            <input type="number" min="1"  step="1" maxlength="16" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
                         </div>
                     </div>
                     <div class="col-md-1">
@@ -204,11 +204,25 @@
                     <label>Fecha de vencimiento</label><br>
                     <div style="display: inline-block">
                         <label>Mes</label><br>
-                        <input type="number" min="01" max="12" step="1" maxlength="2" name="expiry_date_month" id="expiry_date_month" placeholder="mm" required="required">
+                        <select id="expiry_date_month" name="expiry_date_month" class="form-control" required="required">
+                            <option value="01">1</option>
+                            <option value="02">2</option>
+                            <option value="03">3</option>
+                            <option value="04">4</option>
+                            <option value="05">5</option>
+                            <option value="06">6</option>
+                            <option value="07">7</option>
+                            <option value="08">8</option>
+                            <option value="09">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <!-- <input type="number" min="01" max="12" step="1" maxlength="2" name="expiry_date_month" id="expiry_date_month" placeholder="mm" required="required"> -->
                     </div>                    
                     <div style="display: inline-block">
                         <label>Año</label><br>
-                        <input type="number" min="16" max="99" step="1" maxlength="2" name="expiry_date_year" id="expiry_date_year" placeholder="yy" required="required">
+                        <input type="number" min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="yy" required="required">
                     </div>
                 </div>
                 <div class="col-md-3" style="margin-top: 10px">

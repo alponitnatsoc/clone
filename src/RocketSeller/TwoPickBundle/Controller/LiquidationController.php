@@ -173,7 +173,7 @@ class LiquidationController extends Controller
                     $toEmail = "plinio.romero@symplifica.com";
                 }
 
-                $path = $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . "-" . $id . ".pdf";
+                $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . "-" . $id . ".pdf";
 
                 if (!file_exists($path)) {
 
@@ -504,9 +504,8 @@ class LiquidationController extends Controller
             'employeeInfo' => $employeeInfo,
             'contractInfo' => $contractInfo,
             'totalLiq' => $totalLiq["total"],
-            'tmp' => $tmp,
-            'devengos' => $devengos,
-            'deducciones' => $deducciones,
+            'devengos' => ( isset($devengos) )?$devengos:null,
+            'deducciones' => ( isset($deducciones) )?$deducciones:null,
             'employee_id' => $employee_id,
             'period' => $period,
             'totalDeducciones' => $totalLiq["totalDed"],

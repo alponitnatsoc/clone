@@ -6,9 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
 use RocketSeller\TwoPickBundle\Entity\BillingAddress;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\PayMethod;
+use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -94,6 +101,13 @@ class SubscriptionController extends Controller
 
     public function addToNovo()
     {
+        /* @var $user User */
+        $user = $this->getUser();
+        /* @var $person Person */
+        $person = $user->getPersonPerson();
+        /* @var $employer Employer */
+        $employer = $person->getEmployer();
+
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
@@ -108,50 +122,74 @@ class SubscriptionController extends Controller
             "email" => $user->getEmail()
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
+        //dump($insertionAnswer);
         //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
 
         if ($insertionAnswer->getStatusCode() == 406 || $insertionAnswer->getStatusCode() == 201) {
             $eHEes = $employer->getEmployerHasEmployees();
+            //dump($eHEes);
             /** @var EmployerHasEmployee $employeeC */
             foreach ($eHEes as $employeeC) {
-                if ($employeeC->getState() > 1) {
+                //dump($employeeC);
+                if ($employeeC->getState() > 0) {
+                    //check if it exist
+
                     $contracts = $employeeC->getContracts();
                     /** @var Contract $cont */
                     $contract = null;
                     foreach ($contracts as $cont) {
-                        if ($cont->getState() == 1)
+                        if ($cont->getState() == 1) {
                             $contract = $cont;
+                        }
                     }
+
+                    /* @var $payMC PayMethod */
                     $payMC = $contract->getPayMethodPayMethod();
-                    $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
-                            $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
-                    $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
-                    $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
-                    $request->setMethod("POST");
-                    $request->request->add(array(
-                        "documentType" => $employeePerson->getDocumentType(),
-                        "beneficiaryId" => $employeePerson->getDocument(),
-                        "documentNumber" => $person->getDocument(),
-                        "name" => $employeePerson->getNames(),
-                        "lastName" => $employeePerson->getLastName1() . " " . $employeePerson->getLastName2(),
-                        "yearBirth" => $employeePerson->getBirthDate()->format("Y"),
-                        "monthBirth" => $employeePerson->getBirthDate()->format("m"),
-                        "dayBirth" => $employeePerson->getBirthDate()->format("d"),
-                        "phone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
-                        "email" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
-                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
-                        "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                        "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                        "paymentMethodId" => $paymentMethodId,
-                        "paymentAccountNumber" => $paymentMethodAN,
-                        "paymentBankNumber" => 0, //THIS SHOULD HAVE THE NOVO ID BANK TABLE
-                        "paymentType" => $payMC->getAccountTypeAccountType()->getName(),
-                    ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                    //echo "Status Code Employee: " . $employeePerson->getNames() . " -> " . $insertionAnswer->getStatusCode() . " content" . $insertionAnswer->getContent();
+
+                    /* @var $payType PayType */
+                    $payType = $payMC->getPayTypePayType();
+
+                    if ($payType->getPayrollCode() != 'EFE') {
+
+                        $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
+                                $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
+                        $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
+                        $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "documentType" => $employeePerson->getDocumentType(),
+                            "beneficiaryId" => $employeePerson->getDocument(),
+                            "documentNumber" => $person->getDocument(),
+                            "name" => $employeePerson->getNames(),
+                            "lastName" => $employeePerson->getLastName1() . " " . $employeePerson->getLastName2(),
+                            "yearBirth" => $employeePerson->getBirthDate()->format("Y"),
+                            "monthBirth" => $employeePerson->getBirthDate()->format("m"),
+                            "dayBirth" => $employeePerson->getBirthDate()->format("d"),
+                            "phone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
+                            "email" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
+                                    "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+                            "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                            "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
+                            "paymentMethodId" => $paymentMethodId,
+                            "paymentAccountNumber" => $paymentMethodAN,
+                            "paymentBankNumber" => 0, //THIS SHOULD HAVE THE NOVO ID BANK TABLE
+                            "paymentType" => $payMC->getAccountTypeAccountType()->getName(),
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
+                        if ($insertionAnswer->getStatusCode() != 201) {
+                            $this->addFlash('error', $insertionAnswer->getContent());
+                            return false;
+                        }
+                        //dump($insertionAnswer);
+                        //echo "Status Code Employee: " . $employeePerson->getNames() . " -> " . $insertionAnswer->getStatusCode() . " content" . $insertionAnswer->getContent();
+                    }
                 }
             }
+        } else {
+            $this->addFlash('error', $insertionAnswer->getContent());
+            return false;
         }
+        return true;
     }
 
     public function activarSuscripcionAction(Request $request)
@@ -198,18 +236,49 @@ class SubscriptionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
-            $request = new Request();
-            $request->setMethod('POST');
-            $request->request->set('userId', $this->getUser()->getId());
+            $em = $this->getDoctrine()->getManager();
+            if ($this->addToNovo()) {
+                $request = new Request();
+                $request->setMethod('POST');
+                $request->request->set('credit_card', $request->get('credit_card'));
+                $request->request->set('expiry_date_year', $request->get('expiry_date_year'));
+                $request->request->set('expiry_date_month', $request->get('expiry_date_month'));
+                $request->request->set('cvv', $request->get('cvv'));
+                $request->request->set('name_on_card', $request->get('name_on_card'));
+                $data = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
+                if ($data->getStatusCode() != Response::HTTP_CREATED) {
+                    $this->addFlash('error', $data->getContent());
+                    return $this->redirectToRoute("subscription_choices");
+                    //throw $this->createNotFoundException($data->getContent());
+                } else {
+                    dump($data->getContent());
+                    die;
 
-            $data = $this->forward('RocketSellerTwoPickBundle:PayRest:postPayMembresia', array('request' => $request), array('_format' => 'json'));
-            $data2 = json_decode($data->getContent(), true);
-            if ($data->getStatusCode() == Response::HTTP_OK) {
-                $this->addFlash('success', $data2['msg']);
-                return $this->redirectToRoute("matrix_choose");
+                    $purchaseOrder = new PurchaseOrders();
+                    $purchaseOrder->setIdUser($this->getUser());
+                    $purchaseOrder->setName('Pago Membresia');
+                    $purchaseOrder->setValue((floatval($totalAmount)));
+                    $purchaseOrder->setPayMethodId($methodId);
+
+                    $em->persist($purchaseOrder);
+                    $em->flush(); //para obtener el id que se debe enviar a novopay
+
+                    $request = new Request();
+                    $request->setMethod('POST');
+                    $request->request->set('userId', $this->getUser()->getId());
+                    $data = $this->forward('RocketSellerTwoPickBundle:PayRest:postPayMembresia', array('request' => $request), array('_format' => 'json'));
+                    $data2 = json_decode($data->getContent(), true);
+                    if ($data->getStatusCode() == Response::HTTP_OK) {
+                        $this->addFlash('success', $data2['msg']);
+                        die;
+                        return $this->redirectToRoute("matrix_choose");
+                    }
+                    $this->addFlash('error', $data2['msg']);
+                    return $this->redirectToRoute("subscription_choices");
+                }
+            } else {
+                return $this->redirectToRoute("subscription_choices");
             }
-            $this->addFlash('error', $data2['msg']);
-            return $this->redirectToRoute("subscription_choices");
         } else {
             return $this->redirectToRoute("subscription_choices");
         }
