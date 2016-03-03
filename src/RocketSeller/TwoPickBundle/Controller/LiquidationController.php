@@ -173,7 +173,7 @@ class LiquidationController extends Controller
                     $toEmail = "plinio.romero@symplifica.com";
                 }
 
-                $path = $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . "-" . $id . ".pdf";
+                $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/liquidations/" . $employeeInfo["document"] . "-" . $id . ".pdf";
 
                 if (!file_exists($path)) {
 
