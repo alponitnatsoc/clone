@@ -599,16 +599,12 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
-    var $salary =$("#register_employee_employeeHasEmployers_salaryD");
-    $salary.val(accounting.unformat($salary.val()));
-    var $slidder=$("#ex6");
-    $slidder.val(accounting.unformat($salary.val()));
-    $slidder.slider();
-    $slidder.on("slide", function(slideEvt) {
-        $salary.val(slideEvt.value);
+    $("#ex6").slider();
+    $("#ex6").on("slide", function(slideEvt) {
+        $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
         calculator();
         formatMoney($("#totalExpensesVal"));
-        formatMoney($salary);
+        formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
     });
     $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function(){
         if($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val()=="1") {
@@ -661,7 +657,7 @@ function addListeners() {
         sendAjax("/manage/employees")
     });
 
-    $salary.on("input", function(){
+    $("#register_employee_employeeHasEmployers_salaryD").on("input", function(){
         calculator();
         formatMoney($("#totalExpensesVal"));
     });
