@@ -199,7 +199,7 @@ class PayrollRestController extends FOSRestController
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
-        die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
 
@@ -320,6 +320,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 0;
         $unico['COD_SOCIEDAD'] = $parameters['society_id'];
         $unico['NOMBRE_SOCIEDAD'] = $parameters['society_name'];
+        // For now we are adding the same nit as id.
         $unico['SOCIEDAD_NIT'] = $parameters['society_id'];
         $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = $parameters['society_start_date'];
         $unico['SOC_EMAIL'] = $parameters['society_mail'];
