@@ -286,7 +286,7 @@ class PaymentMethodRestController extends FOSRestController
                 return $view;
 
             }else{
-                $tax=$description->getTaxTax();
+                $tax=$description->getTaxTax();//TODO CAMBIAR esto por sacar el iva de el procudcto
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "documentNumber"=>$person->getDocument(),
