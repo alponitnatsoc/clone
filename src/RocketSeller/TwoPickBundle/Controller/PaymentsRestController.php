@@ -104,7 +104,7 @@ class PaymentsRestController extends FOSRestController
                 $response = $client->put($url_request, $options);
             }
         } catch (Exception $e) {
-            
+
         }
         dump($response);
         $view = View::create();
@@ -1172,7 +1172,7 @@ class PaymentsRestController extends FOSRestController
      *   resource = true,
      *   description = "Modifies a beneficiary in the payments system.",
      *   statusCodes = {
-     *     201 = "Created",
+     *     200 = "Created",
      *     400 = "Bad Request",
      *     401 = "Unauthorized",
      *     404 = "Not Found"
