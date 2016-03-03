@@ -1,0 +1,56 @@
+{% extends "::base.html.twig" %}
+{% block sidebar %}{% endblock %}
+{% block fos_user_content %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
+{% endblock stylesheets %}
+	{% block body %}
+		<div class="container">
+			<div class="content col-md-12">
+				<div class="col-md-6">
+					<h1>Pagar</h1>
+					<p>Estas a un paso de pagar </p>
+				</div>
+				<div class="col-md-6">
+					<table style="width:100%">
+					<thead>
+						<tr>
+							<th>
+								Nombre	
+							</th>
+							<th>
+								valor	
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								{{ product.name}}
+							</td>
+							<td>
+								${{ product.price}}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								{{ product.taxTax.name}}
+							</td>
+							<td>
+								{{ product.taxTax.value}}%
+							</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td>${{totalValue}}</td>
+						</tr>													
+					</tbody>
+				</table>
+				<a href="{{path('express_pay',{'id':methodId})}}" class="btn btn-symplifica" role="button">Pagar</a>
+				</div>
+				
+			</div>
+		</div>		
+	{% endblock %}
+{% endblock fos_user_content %}
