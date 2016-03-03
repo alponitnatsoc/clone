@@ -30,15 +30,22 @@ class Department
      * })
      */
     private $countryCountry;
+
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $name;
+
     /**
      *
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\City", mappedBy="departmentDepartment")
      */
     private $citys;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $departmentCode;
 
     /**
      * Set idDepartment
@@ -155,5 +162,29 @@ class Department
     public function __toString()
     {
         return (string) $this->name;
+    }
+
+    /**
+     * Set departmentCode
+     *
+     * @param integer $departmentCode
+     *
+     * @return Department
+     */
+    public function setDepartmentCode($departmentCode)
+    {
+        $this->departmentCode = $departmentCode;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentCode
+     *
+     * @return integer
+     */
+    public function getDepartmentCode()
+    {
+        return $this->departmentCode;
     }
 }

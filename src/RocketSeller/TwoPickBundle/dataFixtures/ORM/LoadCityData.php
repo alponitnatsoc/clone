@@ -5,18 +5,50 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\City;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadCityData extends AbstractFixture implements OrderedFixtureInterface
+class LoadCityData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
     public function load(ObjectManager $manager)
     {
-        $cityMedellin = new City();
-        $cityMedellin->setName('Medellin');        
-        $cityMedellin->setDepartmentDepartment($this->getReference('department-antioquia'));
-        $manager->persist($cityMedellin);
-        $manager->flush();
+        $path = $this->container->getParameter('kernel.root_dir') . "/../web/public/docs/data/colombia_ciudades.csv";
+        $countryCode = 343; //Codigo de Colombia
 
-        $this->addReference('city-medellin', $cityMedellin);
+        if (file_exists($path)) {
+            $data = file($path);
+            foreach ($data as $key => $city) {
+
+                if ($key != 0) {
+                    $datos = explode("," , $city);
+
+                    $deptoCode = trim($datos[0]);
+                    $cityCode = trim($datos[1]);
+                    $cityName = ucwords(mb_strtolower(trim($datos[3]), "UTF8"));
+
+                    $cityEntity = new City();
+                    $cityEntity->setCityCode($cityCode);
+                    $cityEntity->setDepartmentDepartment($this->getReference('c-code-' . $countryCode . '-d-code-' . $deptoCode));
+                    $cityEntity->setName($cityName);
+
+                    $manager->persist($cityEntity);
+
+                    $this->addReference('c-code-' . $countryCode . 'd-code-' . $deptoCode . '-city-code-' . $cityCode, $cityEntity);
+                }
+            }
+        }
+
+        $manager->flush();
     }
     public function getOrder()
     {
@@ -25,4 +57,3 @@ class LoadCityData extends AbstractFixture implements OrderedFixtureInterface
         return 5;
     }
 }
-    

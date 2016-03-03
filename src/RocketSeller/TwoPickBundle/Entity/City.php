@@ -30,10 +30,16 @@ class City
      * })
      */
     private $departmentDepartment;
+
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $cityCode;
 
 
     /**
@@ -110,5 +116,29 @@ class City
     public function __toString()
     {
         return (string) $this->name;
+    }
+
+    /**
+     * Set cityCode
+     *
+     * @param integer $cityCode
+     *
+     * @return City
+     */
+    public function setCityCode($cityCode)
+    {
+        $this->cityCode = $cityCode;
+
+        return $this;
+    }
+
+    /**
+     * Get cityCode
+     *
+     * @return integer
+     */
+    public function getCityCode()
+    {
+        return $this->cityCode;
     }
 }
