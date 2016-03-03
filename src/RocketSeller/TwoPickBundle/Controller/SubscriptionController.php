@@ -13,6 +13,9 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -231,6 +234,7 @@ class SubscriptionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
+            $em = $this->getDoctrine()->getManager();
             if ($this->addToNovo()) {
                 $request = new Request();
                 $request->setMethod('POST');
@@ -245,6 +249,18 @@ class SubscriptionController extends Controller
                     return $this->redirectToRoute("subscription_choices");
                     //throw $this->createNotFoundException($data->getContent());
                 } else {
+                    dump($data->getContent());
+                    die;
+
+                    $purchaseOrder = new PurchaseOrders();
+                    $purchaseOrder->setIdUser($this->getUser());
+                    $purchaseOrder->setName('Pago Membresia');
+                    $purchaseOrder->setValue((floatval($totalAmount)));
+                    $purchaseOrder->setPayMethodId($methodId);
+
+                    $em->persist($purchaseOrder);
+                    $em->flush(); //para obtener el id que se debe enviar a novopay
+
                     $request = new Request();
                     $request->setMethod('POST');
                     $request->request->set('userId', $this->getUser()->getId());
