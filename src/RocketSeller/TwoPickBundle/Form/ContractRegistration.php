@@ -98,16 +98,14 @@ class ContractRegistration extends AbstractType
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
-            ->add('salary', 'money', array(
-                'currency'=>'COP',
+            ->add('salary', 'number', array(
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
                 'required'=>false,
                 'attr' => array(
                     'onclick' => 'formatMoney($(this))'
                 )
             ))
-            ->add('salaryD', 'money', array(
-                'currency'=>'COP',
+            ->add('salaryD', 'number', array(
                 'label'=>'Salario Diario',
                 'required'=>false,
                 'attr' => array(
