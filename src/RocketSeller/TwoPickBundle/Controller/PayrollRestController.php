@@ -199,18 +199,18 @@ class PayrollRestController extends FOSRestController
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
-        //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
 
         // This two lines is to remove extra text from the respose that breaks the
         // php parser.
-        //$plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
-        //$plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
+        $plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
+        $plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
 
         // This line is to put every piece into a different unico, because end_reg
         // doesn'e match the xml standard.
-        //$plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
+        $plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
 
         // TODO(daniel.serrano): Remove this debug lines.
         libxml_use_internal_errors(true);
@@ -289,9 +289,8 @@ class PayrollRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     *   (name="society_id", nullable=false, requirements="(.)*", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_id", nullable=false, requirements="[0-9]+", strict=true, description="Id of the society, this must be unique.")
      *   (name="society_name", nullable=false, requirements="(.)*", strict=true, description="Name of the society, this can be the same name of the employer.")
-     *   (name="society_nit", nullable=false, requirements="([0-9])+(-[0-9]+)?", strict=true, description="Nit of the society it could be the root or the C.C.")
      *   (name="society_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
      *   (name="society_mail", nullable=false, requirements="(.)*", strict=true, description="Company mail, it can be the mail registered in symplifica.")
      *
@@ -304,12 +303,10 @@ class PayrollRestController extends FOSRestController
         $regex = array();
         $mandatory = array();
         // Set all the parameters info.
-        $regex['society_id'] = '(.)*';
+        $regex['society_id'] = '[0-9]+';
         $mandatory['society_id'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = true;
-        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
-        $mandatory['society_nit'] = true;
         $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['society_start_date'] = true;
         $regex['society_mail'] = '(.)*';
@@ -323,7 +320,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 0;
         $unico['COD_SOCIEDAD'] = $parameters['society_id'];
         $unico['NOMBRE_SOCIEDAD'] = $parameters['society_name'];
-        $unico['SOCIEDAD_NIT'] = $parameters['society_nit'];
+        $unico['SOCIEDAD_NIT'] = $parameters['society_id'];
         $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = $parameters['society_start_date'];
         $unico['SOC_EMAIL'] = $parameters['society_mail'];
 
@@ -356,7 +353,7 @@ class PayrollRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     *   (name="society_id", nullable=false, requirements="(.)*", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_id", nullable=false, requirements="[0-9]+", strict=true, description="Id of the society, this must be unique.")
      *   (name="society_name", nullable=true, requirements="(.)*", strict=false, description="Name of the society, this can be the same name of the employer.")
      *   (name="society_nit", nullable=true, requirements="([0-9])+(-[0-9]+)?", strict=false, description="Nit of the society it could be the root or the C.C.")
      *   (name="society_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=false, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
@@ -371,7 +368,7 @@ class PayrollRestController extends FOSRestController
         $regex = array();
         $mandatory = array();
         // Set all the parameters info.
-        $regex['society_id'] = '(.)*';
+        $regex['society_id'] = '[0-9]+';
         $mandatory['society_id'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = false;
@@ -428,7 +425,8 @@ class PayrollRestController extends FOSRestController
         $content = array();
         $unico = array();
 
-        $unico['COD_SOCIEDAD'] = $societyId;
+        $unico['CODSOCIEDAD'] = $societyId;
+        $unico['SOCIEDADNIT'] = $societyId;
 
         $content[] = $unico;
         $parameters = array();

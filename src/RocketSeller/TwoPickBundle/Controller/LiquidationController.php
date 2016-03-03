@@ -78,20 +78,19 @@ class LiquidationController extends Controller
                 $tmp[$key]["novelty"]["name"] = $noveltyType->getName();
                 $tmp[$key]["liq"] = $liq;
                 switch ($noveltyType->getNaturaleza()):
-                case "DED":
-                    $deducciones[] = $tmp[$key];
-                    break;
-                case "DEV":
-                    $devengos[] = $tmp[$key];
-                    break;
-                default:
-                    break;
-                    endswitch;
+                    case "DED":
+                        $deducciones[] = $tmp[$key];
+                        break;
+                    case "DEV":
+                        $devengos[] = $tmp[$key];
+                        break;
+                    default:
+                        break;
+                endswitch;
             }
         }
 
         $id_ehe = $employerHasEmployee->getIdEmployerHasEmployee();
-        $employee_id = $id_ehe . "9"; //@todo el 9 es para los mocks
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $this->getEmployee($id_ehe);
@@ -380,7 +379,6 @@ class LiquidationController extends Controller
             $relatedLink = $notification->getRelatedLink();
         }
 
-
         $form = $this->createForm(new LiquidationType());
 
         return $this->render("RocketSellerTwoPickBundle:Liquidation:final-steps.html.twig", array(
@@ -469,11 +467,9 @@ class LiquidationController extends Controller
                 switch ($noveltyType->getNaturaleza()):
                     case "DED":
                         $deducciones[] = $tmp[$key];
-//                         $totalDeducciones += $this->totalLiquidation($tmp[$key]["liq"]);
                         break;
                     case "DEV":
                         $devengos[] = $tmp[$key];
-//                         $totalDevengos += $this->totalLiquidation($tmp[$key]["liq"]);
                         break;
                     default:
                         break;
@@ -493,7 +489,6 @@ class LiquidationController extends Controller
         $em->persist($liquidation);
         $em->flush();
 
-//         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
         $documentNumber = $employerInfo["document"];
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
 
@@ -592,16 +587,14 @@ class LiquidationController extends Controller
                 $tmp[$key]["novelty"]["name"] = $noveltyType->getName();
                 $tmp[$key]["liq"] = $liq;
                 switch ($noveltyType->getNaturaleza()):
-                case "DED":
-                    $deducciones[] = $tmp[$key];
-                    //                         $totalDeducciones += $this->totalLiquidation($tmp[$key]["liq"]);
-                    break;
-                case "DEV":
-                    $devengos[] = $tmp[$key];
-                    //                         $totalDevengos += $this->totalLiquidation($tmp[$key]["liq"]);
-                    break;
-                default:
-                    break;
+                    case "DED":
+                        $deducciones[] = $tmp[$key];
+                        break;
+                    case "DEV":
+                        $devengos[] = $tmp[$key];
+                        break;
+                    default:
+                        break;
                 endswitch;
             }
         }
