@@ -108,9 +108,9 @@ class PaymentMethodRestController extends FOSRestController
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteReversePaymentMethod', array('_format' => 'json'));
         if($insertionAnswer->getStatusCode()!=200){
-            $view->setStatusCode(200)->setData(array('response'=>array("method-id"=>$idPayM),'error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
+            $view->setStatusCode(201)->setData(array('response'=>array("method-id"=>$idPayM),'error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
         }else{
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array('response'=>array("method-id"=>$idPayM),"extra-data"=>$insertionAnswer->getContent()));
+            $view->setStatusCode(201)->setData(array('response'=>array("method-id"=>$idPayM),"extra-data"=>$insertionAnswer->getContent()));
         }
         return $view;
 
