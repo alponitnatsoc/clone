@@ -601,8 +601,9 @@ function jsonCalcToHTML(data) {
 function addListeners() {
     var $salary =$("#register_employee_employeeHasEmployers_salaryD");
     $salary.val(accounting.unformat($salary.val()))
-    $("#ex6").slider();
-    $("#ex6").on("slide", function(slideEvt) {
+    var $slidder=$("#ex6");
+    $slidder.slider();
+    $slidder.on("slide", function(slideEvt) {
         $salary.val(slideEvt.value);
         calculator();
         formatMoney($("#totalExpensesVal"));

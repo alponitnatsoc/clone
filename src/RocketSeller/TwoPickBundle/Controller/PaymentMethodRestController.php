@@ -308,7 +308,7 @@ class PaymentMethodRestController extends FOSRestController
                 }
                 $pay=new Pay();
                 $pay->setUserIdUser($user);
-                $pay->setIdDispercionNovo("none");
+                $pay->setIdDispercionNovo(-1);
                 $pay->setPurchaseOrdersDescription($description);
                 $em->persist($pay);
                 $em->flush();
