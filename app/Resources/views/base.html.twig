@@ -146,28 +146,28 @@
                                         </div>
                                     {% endif %}
                                     <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'reports' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href=""{% endif %}>Reportes</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href=""{% endif %}>Reportes</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_calculator_form' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'setup' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href=""{% endif %}>Configuración</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href=""{% endif %}>Configuración</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
                                     </div>
 
                                 </div>
@@ -175,6 +175,11 @@
                         </div>
                         <div id="main"  class="col-sm-9">
                             {% block main %}
+                                {% if app.user.status is defined%}
+                                    {% set status = app.user.status %}
+                                {% else %}
+                                    {% set status = 0 %}
+                                {% endif %}
                                 <div class="span12">
                                     {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                                         <div class="col-sm-12 col-xs-12 profile-Data">
@@ -182,7 +187,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="profile" style="display: inline"> <a class="notAjax" href=" {{ path('show_user') }}">Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                        <span id="profile" style="display: inline"> <a {% if status < 2 %} class="noClick" href="" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -317,7 +322,7 @@
                         sendAjax(redirector);
                     }
                 });
-
+                addNoClick();
                 function sendAjax(url, form) {
 
                     $.ajax({
@@ -357,6 +362,11 @@
                         var href = $(this).attr('href');
                         history.pushState({}, '', href);
                         sendAjax(href);
+                    });
+                }
+                function addNoClick() {
+                    $(".noClick").on("click", function (e) {
+                        e.preventDefault();
                     });
                 }
                 function addSumbit() {
