@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Carta de aceptaci&oacute;n de renuncia</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 842px;
+    width: 595px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+
+
+<p><strong>Se&ntilde;ores</strong></p>
+<p><strong>SYMPLIFICA SAS</strong></p>
+<p><strong>Bogot&aacute;</strong></p>
+<p>&nbsp;</p>
+<p style="text-align: center;"><strong>REFERENCIA: MANDATO ESPEC&Iacute;FICO PARA EL MANEJO DE RECURSOS</strong></p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Mediante la presente, yo, <strong>{{ data.employer.name }}</strong>, identificado con {{ data.employer.docType }} No. {{ data.employer.docNumber }}
+expedida en {{ data.employer.docExpPlace }}, actuando en nombre propio, en adelante el <strong>MANDANTE</strong>, confiero a <strong>SYMPLIFICA SAS</strong>
+un mandato espec&iacute;fico para la administraci&oacute;n por parte de dicha compa&ntilde;&iacute;a, de los recursos
+transferidos por mi a trav&eacute;s de los medios de pago disponibles en la p&aacute;gina web Symplifica.com (la "P&aacute;gina Web"),  destinados
+a pagar la n&oacute;mina, otros pagos laborales y/o los aportes a las entidades de seguridad social a que est&eacute;n afiliados mis trabajadores.
+Por lo tanto, <strong>SYMPLIFICA</strong> deber&aacute; destinar dichos dineros &uacute;nicamente al pago de la n&oacute;mina, otros pagos laborales y aportes
+a seguridad social de mis trabajadores, ajust&aacute;ndose estrictamente a las instrucciones dadas por mi a trav&eacute;s de la P&aacute;gina
+Web en cuanto al valor y fecha de los pagos a los trabajadores que yo registre en la misma, y el valor y fecha de los
+aportes a cada una de las entidades de seguridad social (por medio del operador de la P.I.L.A. escogido por SYMPLIFICA).
+No obstante, el <strong>MANDANTE</strong> reconoce que dependiendo del medio de pago, la transferencia de los recursos al operador de
+la P.I.L.A. y/o a los trabajadores, seg&uacute;n el caso, no es inmediata y requerir&aacute; de cierta antelaci&oacute;n para que los pagos
+se entiendan realizados a los mismos en las fechas solicitadas por el <strong>MANDANTE</strong>.</p>
+
+<p style="text-align: justify;">Declaro que la administraci&oacute;n de pagos de n&oacute;mina, otros pagos laborales y aportes a la seguridad social de mis
+trabajadores, ser&aacute; realizada por <strong>SYMPLIFICA</strong> en calidad de mandatario y ajust&aacute;ndose a las instrucciones y a la informaci&oacute;n
+que yo le haya suministrado. Por lo tanto, en ning&uacute;n caso podr&aacute; considerarse que <strong>SYMPLIFICA</strong> act&uacute;a como patrono o empleador
+de los trabajadores del <strong>MANDANTE</strong>.</p>
+
+<p style="text-align: justify;">El presente mandato conlleva mi autorizaci&oacute;n para que <strong>SYMPLIFICA</strong> realice ante el operador de la P.I.L.A.,
+las entidades de seguridad social y entidades financieras, los tr&aacute;mites, reclamaciones, correcciones y dem&aacute;s gestiones que
+se requieran para cumplir debidamente con la actividad encomendada.</p>
+
+<p style="text-align: justify;">El presente mandato es conferido a <strong>SYMPLIFICA</strong> por t&eacute;rmino indefinido, y ser&aacute; aplicable a todos los
+pagos y aportes a seguridad social que el <strong>MANDANTE</strong> opte por efectuar a trav&eacute;s de los medios disponibles en la P&aacute;gina Web, respecto de
+cualquiera de los trabajadores registrados en la misma ahora o en el futuro por el <strong>MANDANTE</strong>.</p>
+
+<p style="text-align: justify;">Este mandato podr&aacute; terminar por la renuncia del <strong>MANDATARIO</strong> o la revocatoria del <strong>MANDANTE</strong>,
+en cualquier momento, sin que se genere la obligaci&oacute;n de indemnizar a la otra parte por dicha terminaci&oacute;n.</p>
+
+<p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a <strong>SYMPLIFICA SAS</strong> el {{ "now"|localizeddate('long', 'none', local) }} </p>
+
+<p>&nbsp;</p>
+
+<p><strong>EL MANDANTE,</strong></p>
+
+_____________________________________
+<p>Nombre: {{ data.employer.name }}</p>
+{{ data.employer.docType }} No. {{ data.employer.docNumber }} de {{ data.employer.docExpPlace }}
+
+<p>&nbsp;</p>
+
+<p><strong>ACEPTO,</strong></p>
+
+_______________________
+<p>Nombre: Representante Legal Symplifica SAS</p>
+C.C. XXXX de XXXX
+
+<hr />
+
+</body>
+</html>
