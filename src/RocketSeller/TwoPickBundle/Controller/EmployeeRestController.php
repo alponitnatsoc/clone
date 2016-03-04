@@ -77,6 +77,10 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitAction(ParamFetcher $paramFetcher)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+        }
         /** @var User $user */
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -271,6 +275,10 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep1Action(ParamFetcher $paramFetcher)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+        }
         $user = $this->getUser();
         /** @var Person $people */
         $people = $user->getPersonPerson();
@@ -416,6 +424,10 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep2Action(ParamFetcher $paramFetcher)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+        }
         $user = $this->getUser();
         /** @var Person $person */
         $person = $user->getPersonPerson();
@@ -577,6 +589,10 @@ class EmployeeRestController extends FOSRestController
      */
     public function postNewEmployeeSubmitStep3Action(ParamFetcher $paramFetcher)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+        }
         $user = $this->getUser();
         /** @var Person $person */
         $person = $user->getPersonPerson();
@@ -848,6 +864,10 @@ class EmployeeRestController extends FOSRestController
      */
     public function postMatrixChooseSubmitAction(ParamFetcher $paramFetcher)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $view = View::create();
+            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+        }
         $flag = false;
         $save = $this->saveMatrixChooseSubmitStep1($paramFetcher);
         if ($save->getData('response')['response']['message'] == 'added') {

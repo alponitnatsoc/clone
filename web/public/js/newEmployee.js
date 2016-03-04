@@ -226,9 +226,9 @@ function startEmployee() {
             history.pushState("","",data["url"]);
             sendAjax(data["url"]);
         }).fail(function (data, textStatus, errorThrown) {
-            console.log(data);
-            console.log(textStatus);
-            console.log(errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     var $collectionHolderPhones;
@@ -380,8 +380,9 @@ function startEmployee() {
             $(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-            console.log(jqXHR);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-2').click(function (e) {
@@ -431,7 +432,9 @@ function startEmployee() {
         }).done(function (data) {
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-3').click(function (e) {
@@ -531,7 +534,9 @@ function startEmployee() {
             $('#formNav > .active').next('li').find('a').trigger('click');
             $(form).find("input[name='register_employee[idContract]']").val(data['response']['idContract']);
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     loadConstrains();

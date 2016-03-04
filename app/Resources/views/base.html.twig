@@ -321,8 +321,16 @@
                     if (redirector) {
                         sendAjax(redirector);
                     }
-                });
                 addNoClick();
+
+            });
+            function errorHandleTry(data){
+                if (typeof data.responseJSON["url"] != 'undefined') {
+                    window.location.href=data.responseJSON["url"];
+                    data=false;
+                }
+                return data;
+            }
                 function sendAjax(url, form) {
 
                     $.ajax({

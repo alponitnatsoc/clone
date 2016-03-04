@@ -26,10 +26,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController extends Controller
 {
+    public function checkLogin(){
+        if($this->getUser()==null)
+            return null;
+        return $this->getUser();
+    }
     public function myAccountShowAction(Request $request)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
         /** @var User $user */
-        $user=$this->getUser();
+        $user=$this->checkLogin();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
         $invoicesEmited=new ArrayCollection();
@@ -132,7 +140,7 @@ class UserController extends Controller
             'form' => $form->createView(),
             'flag' => $flag,
             'invoices'=>$invoicesEmited,
-            'payMethods'=>$responsePaymentsMethods["payment-methods"],
+            'payMethods'=>isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
             'dayService'=>$dDiff->days,
             'eHEToSend'=>array('fullTime'=>$fullTime,'partialTime'=>$atemporel),
             'amountToPay'=>$amountToPay,
