@@ -176,7 +176,7 @@ class SubscriptionController extends Controller
                             "paymentType" => $payMC->getAccountTypeAccountType()->getName(),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 201) {
+                        if (!($insertionAnswer->getStatusCode() == 201||$insertionAnswer->getStatusCode() == 406)) {
                             $this->addFlash('error', $insertionAnswer->getContent());
                             return false;
                         }
