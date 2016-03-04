@@ -17,9 +17,14 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
+use RocketSeller\TwoPickBundle\Traits\ContractMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\BasicPersonDataMethodsTrait;
 
 class DocumentController extends Controller
 {
+    use ContractMethodsTrait;
+    use BasicPersonDataMethodsTrait;
+
 	public function showDocumentsAction($id){
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
@@ -263,5 +268,64 @@ class DocumentController extends Controller
 
 	    $response->setContent($content);
 	    return $response;
+	}
+
+	public function downloadDocumentsAction($ref, $id, $type)
+	{
+        switch ($ref):
+    	    case "contrato":
+                $data = array(
+
+                );
+    	        break;
+            case "aceptacion":
+                $data = array(
+
+                );
+    	        break;
+	        case "mandato":
+	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
+                $employer = $repository->find($id);
+
+	            $employerPerson = $employer->getPersonPerson();
+	            $employerInfo = array(
+	                'name' => $this->fullName($employerPerson->getIdPerson()),
+	                'docType' => $employerPerson->getDocumentType(),
+	                'docNumber' => $employerPerson->getDocument(),
+	                'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+	            );
+	            $data = array(
+	                'employer' => $employerInfo
+	            );
+	            break;
+    	    default:
+    	        break;
+	    endswitch;
+
+	    $template = 'RocketSellerTwoPickBundle:Document:' . $ref . '.html.twig';
+
+	    switch ($type):
+    	    case "html":
+        	    return $this->render($template, array(
+        	        'data' => $data
+        	    ));
+        	    break;
+    	    case "pdf":
+    	        $html = $this->renderView($template, array(
+    	            'data' => $data
+    	        ));
+                return new Response(
+                    $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+                    200,
+                    array(
+                        'Content-Type'        => 'application/pdf',
+                        'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"'
+                    )
+                );
+                break;
+    	    default:
+    	        break;
+        endswitch;
 	}
 }
