@@ -1,0 +1,154 @@
+@import (reference) "bootstrap-variables.less";
+@import (reference) "variables.less";
+
+
+body, html {
+	min-height: 100%;
+}
+
+body {
+	font-family: @fuente;
+	padding: 0;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.light {
+	font-weight: 300;
+}
+
+.btn {
+	&.btn-registro {
+		display: inline;
+		width: 100%;
+		background-color: @btn-orange-color;
+		border-radius: 15px;
+		color: #fff;
+		border:0;
+		&:hover {
+			box-shadow: @btn-hover;
+		}
+	}
+}
+
+nav {
+	&.navbar {
+		border: 0;
+		margin-bottom: 0;
+		min-height: @topbar-height;
+	}
+	#topbar {
+		font-size: 14px;
+		background-color: @topbar-color;
+		height: @topbar-height;
+		line-height: @topbar-height;
+		a {
+			color: #9A999E;
+			font-weight: bold;
+			font-size: 15px;
+		}
+	}
+	#menubar {
+		padding: 40px 0;
+
+		button {
+			margin: 0;
+			padding: 0;
+			&.navbar-toggle {
+				.icon-bar {
+					background-color: #333;
+				}
+			}
+		}
+
+		.menu {
+			border-left: 1px solid #333;
+			border-right: 1px solid #333;
+			ul {
+				padding: 0;
+				li {
+					text-transform: uppercase;
+					float: left;
+					display: block;
+					margin-right: 30px;
+					a {
+						color: #333;
+					}
+				}
+			}
+		}
+	}
+}
+
+footer {
+	background-color: #f00;
+	background-color: @footer-color;
+	width: 100%;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	color: #fff;
+	@media (min-width: @screen-md-min) {
+		.logo {
+			float: right;
+		}
+		.col-md-3 {
+			border-right: 1px solid #fff;
+		}
+	}
+	.menu {
+		ul {
+			padding: 0;
+			li {
+				list-style: none;
+				margin-bottom: 15px;
+				a {
+					color: #fff;
+					font-size: 16px;
+					font-weight: 300;
+				}
+			}
+		}
+	}
+
+	.disclaimer {
+		margin-top: 20px;
+		text-align: center;
+		font-size: 12px;
+		font-weight: 300;
+		p {
+			margin-bottom: 0;
+		}
+	}
+
+	.redes {
+		margin-top: 20px;
+	}
+}
+
+.social-network {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url(/img/redes-new.png);
+	&:hover {
+		box-shadow: @btn-hover;
+	}
+	a {
+		display: block;
+		width: 24px;
+		height: 24px;
+	}
+	&.facebook {
+		background-position: 0 0;
+	}
+
+	&.linkedin {
+		background-position: -28px 0;
+	}
+
+	&.twitter {
+		background-position: -56px 0;
+	}
+}
