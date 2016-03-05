@@ -162,7 +162,7 @@ class RegistrationController extends BaseController
         $userManager->updateUser($user);
         if (null === $response = $event->getResponse()) {
             if ($user->getExpress()) {
-                $url = $this->generateUrl('payments_method');   
+                $url = $this->generateUrl('express_payment');   
             }else{
                 $url = $this->generateUrl('edit_profile');
             }            

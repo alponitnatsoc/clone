@@ -3,11 +3,12 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Traits\ReferredMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Invitation;
 use RocketSeller\TwoPickBundle\Entity\Referred;
@@ -72,11 +73,11 @@ class ReferredRestController extends FOSRestController
     private function validateCode($code)
     {
         $view = View::create();
-        $view->setStatusCode(200);
+        $view->setStatusCode(Response::HTTP_OK);
         if ($this->getUser()) {
-            $user_dueno = $this->userValidateCode($code)[0];
+            $user_dueno = $this->userValidateCode($code);
             if ($user_dueno) {
-                $refered = $this->referedValidateCode($user_dueno->getId(), $this->getUser()->getId())[0];
+                $refered = $this->referedValidateCode($user_dueno->getId(), $this->getUser()->getId());
                 if (!$refered) {
 
                     $em = $this->getDoctrine()->getManager();
@@ -101,15 +102,15 @@ class ReferredRestController extends FOSRestController
                 if ($user_dueno && $refered) {
                     $view->setData(true);
                 } else {
-                    $view->setStatusCode(400);
-                    $view->setData('valid code, error al redimir');
+                    $view->setStatusCode(Response::HTTP_CREATED);
+                    $view->setData('codigo valido, error al redimir');
                 }
             } else {
-                $view->setStatusCode(400);
-                $view->setData('no valid code');
+                $view->setStatusCode(Response::HTTP_CREATED);
+                $view->setData('codigo no valido');
             }
         } else {
-            $view->setStatusCode(400);
+            $view->setStatusCode(Response::HTTP_CREATED);
             $view->setData('no user');
         }
         return $view;

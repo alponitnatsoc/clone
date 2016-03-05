@@ -203,64 +203,7 @@ class EmployeeController extends Controller
         $eps = null;
         $severances = null;
         $arls = null;
-        //TODO note remove this to diego step
-        $request = $this->container->get('request');
-        $request->setMethod("POST");
-        $request->request->add(array(
-            "documentType"=>$person->getDocumentType(),
-            "documentNumber"=>$person->getDocument(),
-            "name"=>$person->getNames(),
-            "lastName"=>$person->getLastName1()." ".$person->getLastName2(),
-            "year"=>$person->getBirthDate()->format("Y"),
-            "month"=>$person->getBirthDate()->format("m"),
-            "day"=>$person->getBirthDate()->format("d"),
-            "phone"=>$person->getPhones()->get(0)->getPhoneNumber(),
-            "email"=>$user->getEmail()
-            ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        echo "Status Code Employer: ".$person->getNames()." -> ".$insertionAnswer->getStatusCode();
 
-        if($insertionAnswer->getStatusCode()==406||$insertionAnswer->getStatusCode()==201){
-            $eHEes=$employer->getEmployerHasEmployees();
-            /** @var EmployerHasEmployee $employeeC */
-            foreach ($eHEes as $employeeC ) {
-                $contracts=$employeeC->getContracts();
-                /** @var Contract $cont */
-                $contract=null;
-                foreach ($contracts as $cont) {
-                    if($cont->getState()==1)
-                        $contract=$cont;
-                }
-                $payMC=$contract->getPayMethodPayMethod();
-                $paymentMethodId=$payMC->getAccountTypeAccountType()->getName()=="Ahorros"?4:
-                    $payMC->getAccountTypeAccountType()->getName()=="Corriente"?5:6;
-                $paymentMethodAN=$payMC->getAccountNumber()==null?$payMC->getCellPhone():$payMC->getAccountNumber();
-                $employeePerson=$employeeC->getEmployeeEmployee()->getPersonPerson();
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "documentType"=>$employeePerson->getDocumentType(),
-                    "beneficiaryId"=>$employeePerson->getDocument(),
-                    "documentNumber"=>$person->getDocument(),
-                    "name"=>$employeePerson->getNames(),
-                    "lastName"=>$employeePerson->getLastName1()." ".$employeePerson->getLastName2(),
-                    "yearBirth"=>$employeePerson->getBirthDate()->format("Y"),
-                    "monthBirth"=>$employeePerson->getBirthDate()->format("m"),
-                    "dayBirth"=>$employeePerson->getBirthDate()->format("d"),
-                    "phone"=>$employeePerson->getPhones()->get(0)->getPhoneNumber(),
-                    "email"=>$employeePerson->getEmail()==null?$employeePerson->getDocumentType().$person->getDocument().
-                        "@".$employeePerson->getNames().".com":$employeePerson->getEmail(),
-                    "companyId"=>$person->getDocument(),//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                    "companyBranch"=>"0",//TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
-                    "paymentMethodId"=>$paymentMethodId,
-                    "paymentAccountNumber"=>$paymentMethodAN,
-                    "paymentBankNumber"=>0,//THIS SHOULD HAVE THE NOVO ID BANK TABLE
-                    "paymentType"=>$payMC->getAccountTypeAccountType()->getName(),
-                ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                echo "Status Code Employee: ".$employeePerson->getNames()." -> ".$insertionAnswer->getStatusCode()." content".$insertionAnswer->getContent() ;
-            }
-
-        }
 
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
@@ -414,6 +357,10 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $todayPlus=new \DateTime();
+        $todayPlus->setDate(intval($todayPlus->format("Y"))+1,$todayPlus->format("m"),$todayPlus->format("d"));
+        $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
+        $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
             if ($contracts->count() != 0) {
@@ -431,7 +378,7 @@ class EmployeeController extends Controller
                 }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($contract->getWorkableDaysMonth() / 4);
                 if($contract->getWorkableDaysMonth()!=null)
-                    $form->get('employeeHasEmployers')->get("salaryD")->setData($contract->getSalary()/$contract->getWorkableDaysMonth());
+                    $form->get('employeeHasEmployers')->get("salaryD")->setData(intval($contract->getSalary()/$contract->getWorkableDaysMonth()));
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }

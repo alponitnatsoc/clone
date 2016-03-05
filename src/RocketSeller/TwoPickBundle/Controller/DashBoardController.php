@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,10 +20,15 @@ class DashBoardController extends Controller
      * */
     public function showDashBoardAction(Request $request)
     {
-        //¿Cómo vamos a hacer para saber en que parte del form está el usuario?
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+
         //para el render se envía un array steps en el cuals e le puede agregar el estado el usuario
-        /* @var $user User */
+        /* @var User $user  */
         $user = $this->getUser();
+        if($user->getStatus()>=2 )
+            return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
         $paymentState = $user->getPaymentState();
         $stateRegister = 0;
         $stateEmployees = 0;
@@ -48,6 +54,9 @@ class DashBoardController extends Controller
                 /** @var EmployerHasEmployee $value */
                 foreach ($employees as $key => $value) {
                     //para cada empleado se mira si tiene por lo menos 1 contrato
+                    if($value->getEmployeeEmployee()->getRegisterState()!=100){
+                        $idCurrentEmployee=$value->getEmployeeEmployee()->getIdEmployee();
+                    }
                     $stateEmployees+=$value->getEmployeeEmployee()->getRegisterState();
                     if ($value->getEmployeeEmployee()->getEntities()->count() != 0) {
                         $stateAfiliation+=$minUnit;
@@ -100,16 +109,16 @@ class DashBoardController extends Controller
             $steps ['1'] = $step2;
         }
         $step4 = array(
-            'url' => $paymentState ? "" : $this->generateUrl('subscription_choices'),
+            'url' => $stateRegister != 100 ? "" : $this->generateUrl('subscription_choices'),
             'name' => "Pago afiliación",
             'paso' => 3,
-            'state' => $paymentState,
+            'state' => $paymentState ? 100 : 0,
             'boxStyle' => "big",
             'stateMessage' => !$paymentState ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 
         $step5 = array(
-            'url' => $stateEmployees != 100 ? "" : $this->generateUrl('matrix_choose'),
+            'url' => $paymentState != 100 ? "" : $this->generateUrl('matrix_choose'),
             'name' => "Finalizar afiliación",
             'paso' => 4,
             'state' => $stateAfiliation,

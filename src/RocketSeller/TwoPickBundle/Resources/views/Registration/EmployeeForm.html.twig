@@ -339,11 +339,10 @@
                                             <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.yesExistent) }}</div>
                                             <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.noExistent) }}</div>
                                         </div>
+                                    </div>
                                         <div class="row">
                                             <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-form btnPrevious" >Anterior</a></div>
-                                            <div class="col-xs-6"><buttton id="existentNext" class="btn btn-orange" disabled >Siguiente</buttton></div>
                                         </div>
-                                    </div>
 
 
                                 </div>
@@ -392,7 +391,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a></div>
-                                    <div class="col-xs-6"><a class="btn btn-orange" >Siguiente</a></div>
+                                    <div class="col-xs-6"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
                                 </div>
 
                             </div>
@@ -438,7 +437,7 @@
                                 </div>
 
                                 <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
-                                <a class="btn btn-primary btnNext-contract btnNext btn-orange" >Siguiente</a>
+                                <a class="btn btn-orange btnNext-contract" >Siguiente</a>
 
                             </div>
 
@@ -471,7 +470,7 @@
                                         <input id="ex6" type="text" data-slider-min="0" data-slider-max="200000" data-slider-step="1000" data-slider-value="{{ form.employeeHasEmployers.salaryD.vars.value }}"/>
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                         <div style="text-align: right">
-                                            <a id="link_calculator" href="" class="nav-link">Mostrar detalles</a>
+                                            <a id="link_calculator" href="" class="notAjax">Mostrar detalles</a>
                                         </div>
                                     </div>
 
@@ -620,45 +619,7 @@
 
                 </div>
                 <br />
-                <div id="userPayMethod">
-                    <h4>Información de la tarjeta de crédito</h4>
-                    <p>El pago de sueldo y/o aportes a seguridad social será cargado a su tarjeta de crédito ofreciéndole al empleador la facilidad de manejar todos los pagos por medio de Symplifica con un solo clic.</p>
-                    <div class="col-sm-10 col-xs-12 blockUpData" style="margin-bottom: 20px;">
 
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.credit_card) }}    
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.credit_card) }}    
-                            </div>                        
-                        </div>
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.expiry_date) }}    
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.expiry_date) }}    
-                            </div>                        
-                        </div>
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.name_on_card) }}    
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.name_on_card) }}    
-                            </div>                        
-                        </div>
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.cvv) }}    
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.cvv) }}    
-                            </div>                        
-                        </div>
-                    </div>
-                </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious-form btnPrevious" >< Anterior</a>
                     <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Salvar</button>

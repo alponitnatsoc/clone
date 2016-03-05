@@ -89,8 +89,9 @@ function startAfiliation() {
             console.log(data);
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-            console.log(jqXHR);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-2').click(function (e) {
@@ -118,8 +119,9 @@ function startAfiliation() {
             console.log(data);
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-            console.log(jqXHR);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
 }

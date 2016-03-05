@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints\Date;
 use RocketSeller\TwoPickBundle\Entity\Liquidation;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
-use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Traits\LiquidationReasonMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Notification;
@@ -287,7 +286,6 @@ class LiquidationRestController extends FOSRestController
             $view->setStatusCode(410);
             return $view;
         }
-//         $data = $response->getContent();
 
         /**
          * Obtener datos de la preliquidacion antes de consolidarla
@@ -336,7 +334,6 @@ class LiquidationRestController extends FOSRestController
      */
     public function postFinalPreLiquidationSubmitAction(Request $request)
     {
-
         $data = array();
         $view = View::create();
 
@@ -345,12 +342,7 @@ class LiquidationRestController extends FOSRestController
         $idEmperHasEmpee = $parameters["employee_id"];
         $employee_id = $idEmperHasEmpee . "9"; //@todo el 9 es para los mocks
         $username = $parameters["username"];
-//         $year = $parameters["year"];
-//         $month = $parameters["month"];
-//         $day = $parameters["day"];
         $frequency = $parameters["frequency"];
-//         $cutDate = $parameters["cutDate"];
-//         $processDate = $parameters["processDate"];
         $retirementCause = $parameters["retirementCause"];
         $id_liq = $parameters["id_liq"];
 
@@ -416,18 +408,6 @@ class LiquidationRestController extends FOSRestController
         }
 //         Desprocesar
 
-//         $em = $this->getDoctrine()->getManager();
-//         $date = $year . "-" . $month . "-" . $day;
-//         $lastWorkDay = new \DateTime($date);
-        /**
-         * Actualizar datos de liquidacion en DB
-         * @var Liquidation $liquidation
-         */
-//         $liquidation = $this->liquidationDetail($id_liq);
-//         $liquidation->setLastWorkDay($lastWorkDay);
-//         $em->persist($liquidation);
-//         $em->flush();
-
         $data = array(
             "employee_id" => $employee_id,
             "period" => $period,
@@ -466,7 +446,6 @@ class LiquidationRestController extends FOSRestController
      */
     public function postFinalLiquidationSubmitAction(Request $request)
     {
-
         $data = array();
         $view = View::create();
 
@@ -527,47 +506,6 @@ class LiquidationRestController extends FOSRestController
     {
         $parameters = $request->request->all();
 
-        /*
-//         $employerName = $parameters["employer_name"];
-//         $employeeName = $parameters["employee_name"];
-//         $idContract = $parameters["contract_id"];
-        $url = $parameters["url"];
-
-//         $filename = $employerName . "-" . $employeeName . "-" . $idContract;
-//         $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename;
-//         if (!file_exists($path)) {
-//             $pdf = $this->get('knp_snappy.pdf')->generate($url, $path);
-//         }
-
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutput($url), 200, array(
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="file.pdf"'
-            )
-        );
-*/
-//         $view = View::create();
-//         $view->setData($pdf)->setStatusCode(200);
-//         return $view;
-
-//         $this->get('knp_snappy.pdf')->generate('http://www.google.fr', '/path/to/the/file.pdf');
-//         $pdf = new Response(
-//             $this->get('knp_snappy.pdf')->generateFromHtml(
-//                 $html,
-//                 $this->get('kernel')->getRootDir() . "/../web/public/docs/generados/liq-def-" . $filename
-//                 )
-//             //             200,
-//             //             array(
-//             //                 'Content-Type'          => 'application/pdf',
-//             //                 'Content-Disposition'   => 'attachment; filename="certificadoLaboral.pdf"'
-//             //             )
-//             );
-
-
-
-
-//         var_dump($parameters);
-
         $data = array(
             "employeeInfo" => json_decode($parameters["employeeInfo"], true),
             "contractInfo" => json_decode($parameters["contractInfo"], true),
@@ -588,10 +526,9 @@ class LiquidationRestController extends FOSRestController
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                'Content-Disposition' => 'attachment; filename="liquidacion.pdf"'
             )
         );
-
     }
 
     /**
@@ -626,22 +563,14 @@ class LiquidationRestController extends FOSRestController
 
         /** @var Liquidation $liquidation */
         $liquidation = $this->liquidationDetail($id_liq);
-        $employerPerson = $liquidation->getEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-        $employerDocument = $employerPerson->getDocument();
-
-        $employee = $liquidation->getEmployerHasEmployee()->getEmployeeEmployee();
-        $employeePerson = $employee->getPersonPerson();
-        $employeeDocument = $employeePerson->getDocument();
 
         $contract = $liquidation->getContract();
         $payroll = $contract->getActivePayroll();
-        $employeePayMethod = $contract->getPayMethodPayMethod();
-        $employeePayType = $employeePayMethod->getPayTypePayType();
 
         $total = $liquidation->getCost();
 
         $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-        /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
+        /** @var $purchaseOrdersStatus PurchaseOrdersStatus */
         $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
 
         $purchaseOrder = new PurchaseOrders();
@@ -680,7 +609,6 @@ class LiquidationRestController extends FOSRestController
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), $format);
 
         $view = View::create();
-//         var_dump(json_decode($insertionAnswer->getContent(), true));
         if($insertionAnswer->getStatusCode()!=200){
             $view->setStatusCode(500)->setData(array('error'=>array("msnj"=>"No se pudo realizar el cobro, intenta nuevamente")));
             return $view;

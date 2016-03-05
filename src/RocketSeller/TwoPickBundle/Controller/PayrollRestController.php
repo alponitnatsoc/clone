@@ -185,6 +185,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
+        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         //TODO(daniel.serrano): Remove the mock URL.
         // This URL is only for testing porpouses and should be removed.
 
@@ -271,6 +272,176 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Insert a new society .<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Inserts a new society in the SQL software, this
+     *                  represents the employer.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *   (name="society_id", nullable=false, requirements="[0-9]+", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_name", nullable=false, requirements="(.)*", strict=true, description="Name of the society, this can be the same name of the employer.")
+     *   (name="society_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
+     *   (name="society_mail", nullable=false, requirements="(.)*", strict=true, description="Company mail, it can be the mail registered in symplifica.")
+     *
+     * @return View
+     */
+    public function postAddSocietyAction(Request $request)
+    {
+
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['society_id'] = '[0-9]+';
+        $mandatory['society_id'] = true;
+        $regex['society_name'] = '(.)*';
+        $mandatory['society_name'] = true;
+        $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['society_start_date'] = true;
+        $regex['society_mail'] = '(.)*';
+        $mandatory['society_mail'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        $unico['TIPOCON'] = 0;
+        $unico['COD_SOCIEDAD'] = $parameters['society_id'];
+        $unico['NOMBRE_SOCIEDAD'] = $parameters['society_name'];
+        // For now we are adding the same nit as id.
+        $unico['SOCIEDAD_NIT'] = $parameters['society_id'];
+        $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = $parameters['society_start_date'];
+        $unico['SOC_EMAIL'] = $parameters['society_mail'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '649';
+        $parameters['clXMLSolic'] = $this->createXml($content, 649);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Modify a new society .<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Modify a new society in the SQL software, this
+     *                  represents the employer.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *   (name="society_id", nullable=false, requirements="[0-9]+", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_name", nullable=true, requirements="(.)*", strict=false, description="Name of the society, this can be the same name of the employer.")
+     *   (name="society_nit", nullable=true, requirements="([0-9])+(-[0-9]+)?", strict=false, description="Nit of the society it could be the root or the C.C.")
+     *   (name="society_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=false, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
+     *   (name="society_mail", nullable=true, requirements="(.)*", strict=false, description="Company mail, it can be the mail registered in symplifica.")
+     *
+     * @return View
+     */
+    public function postModifySocietyAction(Request $request)
+    {
+
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['society_id'] = '[0-9]+';
+        $mandatory['society_id'] = true;
+        $regex['society_name'] = '(.)*';
+        $mandatory['society_name'] = false;
+        $regex['society_nit'] = '([0-9])+(-[0-9]+)?';
+        $mandatory['society_nit'] = false;
+        $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['society_start_date'] = false;
+        $regex['society_mail'] = '(.)*';
+        $mandatory['society_mail'] = false;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        $unico['TIPOCON'] = 1;
+        $unico['COD_SOCIEDAD'] = isset($parameters['society_id']) ? $parameters['society_id'] : ['COD_SOCIEDAD'];
+        $unico['NOMBRE_SOCIEDAD'] = isset($parameters['society_name']) ? $parameters['society_name'] : ['NOMBRE_SOCIEDAD'];
+        $unico['SOCIEDAD_NIT'] = isset($parameters['society_nit']) ? $parameters['society_nit'] : ['SOCIEDAD_NIT'];
+        $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = isset($parameters['society_start_date']) ? $parameters['society_start_date'] : ['SOCIEDAD_FECHA_CONSTITUCION'];
+        $unico['SOC_EMAIL'] = isset($parameters['society_mail']) ? $parameters['society_mail'] : ['SOC_EMAIL'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '649';
+        $parameters['clXMLSolic'] = $this->createXml($content, 649);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Gets all the information of the society.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets all the information of a given society.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $societyId The id of the society to be queried.
+     *
+     * @return View
+     */
+    public function getSocietyAction($societyId)
+    {
+        $content = array();
+        $unico = array();
+
+        $unico['CODSOCIEDAD'] = $societyId;
+        $unico['SOCIEDADNIT'] = $societyId;
+
+        $content[] = $unico;
+        $parameters = array();
+
+        $parameters['inInexCod'] = '653';
+        $parameters['clXMLSolic'] = $this->createXml($content, 653, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
      * Insert employee personal information. The id should be created in our side
      * and we should keep track of it for further actions.<br/>
      *
@@ -299,11 +470,13 @@ class PayrollRestController extends FOSRestController
      *   (name="birth_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Employee birth day on the format DD-MM-YYYY.")
      *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
-     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day(format: DD-MM-YYYY).")
+     *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
      *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
      *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=false, requirements="([0-9])", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="transport_aux", nullable=false, requirements="(S|N)", strict=true, description="Weather or not it needs transportation help. Its just a flag SQL looks for it legaly.")
+     *   (name="society", nullable=false, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *
      * @return View
      */
@@ -342,6 +515,11 @@ class PayrollRestController extends FOSRestController
         $mandatory['liquidation_type'] = true;
         $regex['contract_type'] = '([0-9])';
         $mandatory['contract_type'] = true;
+        $mandatory['salary_type'] = false;
+        $regex['transport_aux'] = '(S|N)';
+        $mandatory['transport_aux'] = true;
+        $regex['society'] = '(.)*';
+        $mandatory['society'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -365,6 +543,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_FORMA_PAGO'] = $parameters['payment_method'];
         $unico['EMP_TIPOLIQ'] = $parameters['liquidation_type'];
         $unico['EMP_TIPO_CONTRATO'] = $parameters['contract_type'];
+        $unico['RECIBE_AUX_TRA'] = $parameters['transport_aux'];
+        $unico['EMP_SOCIEDAD'] = $parameters['society'];
         $unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly.
 
         $content[] = $unico;
@@ -412,6 +592,8 @@ class PayrollRestController extends FOSRestController
      *   (name="payment_method", nullable=true, requirements="(CHE|CON|EFE)", strict=false, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=true, requirements="(J|M|Q)", strict=false, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
+     *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
+     *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
      *
      * @return View
      */
@@ -453,6 +635,11 @@ class PayrollRestController extends FOSRestController
         $mandatory['salary_type'] = false;
         $regex['contract_type'] = '([0-9])';
         $mandatory['contract_type'] = false;
+        $mandatory['salary_type'] = false;
+        $regex['transport_aux'] = '(S|N)';
+        $mandatory['transport_aux'] = false;
+        $regex['society'] = '(.)*';
+        $mandatory['society'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -476,6 +663,9 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['EMP_FORMA_PAGO'];
         $unico['EMP_TIPOLIQ'] = isset($parameters['liquidation_type']) ? $parameters['liquidation_type'] : $info['EMP_TIPOLIQ'];
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
+        $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
+        $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
+
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
         $content[] = $unico;
@@ -544,6 +734,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
      *    (name="value", nullable=false, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+     *    (name="date_change", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day to apply the salary, it can be the same as the start date.")
      *
      *
      * @return View
@@ -559,6 +750,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = true;
+        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -568,6 +761,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['CON_CODIGO'] = 1; // 1 is salary, it is always our case.
         $unico['COF_VALOR'] = $parameters['value'];
+        if(isset($parameters['date_change']))
+          $unico['COF_FECHA_CAMBIO'] = $parameters['date_change'];
 
         $content[] = $unico;
         $parameters = array();
@@ -599,6 +794,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id, must be provided by us, and must be unique. It can't be the CC.")
      *    (name="value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value of the concept.")
+     *    (name="date_change", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Day to apply the salary, it can be the same as the start date.")
      *
      * @return View
      */
@@ -612,6 +808,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = false;
+        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -622,6 +820,7 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
         $unico['COF_VALOR'] = isset($parameters['value']) ? $parameters['value'] : $info['COF_VALOR'];
+        $unico['COF_FECHA_CAMBIO'] = isset($parameters['date_change']) ? $parameters['date_change'] : $info['COF_FECHA_CAMBIO'];
 
         $content[] = $unico;
         $parameters = array();
@@ -727,9 +926,7 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="entity_type_code", nullable=false, requirements="([A-Za-z])+", strict=true, description="Code of the entity type as described by sql software, it can be found in the table entity_type, field payroll_code")
-     *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.
-     *                                                                                              If it is AFP, it should be 1 in normal conditions, if the entity is no aporta 0 and pensionado 2, and the entity is 0 as described on the table.
-     *                                                                                              For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
+     *    (name="coverage_code", nullable=false, requirements="([0-9])+", strict=true, description="Code of the coverage as described by sql software, it can be found in the table position field payroll_coverage_code if it is an ARP.)                                                                                             For EPS, it should always be used the code 1, meaning that it is individual, parafiscal should always be 1 menaing caja de compensacion.")
      *    (name="entity_code", nullable=false, requirements="([0-9])+", description="Code of the entity as described by sql software, it is found in the table entity, under payroll_code")
      *    (name="start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *
@@ -1668,7 +1865,7 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
-     * Gets the general payroll.<br/>
+     * Gets the general payroll history.<br/>
      *
      * @ApiDoc(
      *   resource = true,

@@ -2,11 +2,13 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use DateTime;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvent;
@@ -16,7 +18,9 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 class ContractRegistration extends AbstractType
 {
     private $workplaces;
+    private $today;
     function __construct($workplaces){
+        $this->today= new DateTime();
         $this->workplaces=$workplaces;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -98,18 +102,14 @@ class ContractRegistration extends AbstractType
                 'currency'=>'COP',
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
                 'required'=>false,
-                'attr' => array(
-                    'onclick' => 'formatMoney($(this))'
-                )
+                'scale'=>0
             ))
             ->add('salaryD', 'money', array(
                 'currency'=>'COP',
                 'label'=>'Salario Diario',
                 'required'=>false,
-                'attr' => array(
-                    'onclick' => 'formatMoney($(this))'
-                ),
                 'mapped'=>false,
+                'scale'=>0
             ))
             ->add('benefits', 'collection', array(
                 'type' => new BenefitPick(),
@@ -134,12 +134,18 @@ class ContractRegistration extends AbstractType
                 'label'=>'Hora fin:'
             ))*/
             ->add('startDate', 'date', array(
-                'years' => range(2010,2020),
-                'label' => 'Fecha inicio de contrato*:'
+                'label' => 'Fecha inicio de contrato*:',
+                'widget' => 'single_text',
+                'attr' => array(
+                    'min' => $this->today->format("Y-m-d")
+                )
             ))
             ->add('endDate', 'date', array(
-                'years' => range(2016,2020),
-                'label' => 'Fecha fin de contrato*:'
+                'label' => 'Fecha fin de contrato*:',
+                'widget' => 'single_text',
+                'attr' => array(
+                    'min' => $this->today->format("Y-m-d")
+                )
             ))
             ->add('weekWorkableDays', 'choice', array(
                 'choices' => array(

@@ -26,6 +26,10 @@ class PersonController extends Controller
     **/
     public function editPersonAction()
     {
+
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
         $em = $this->getDoctrine()->getManager();
         $user=$this->getUser();
         /** @var Person $people */

@@ -100,7 +100,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="smallint")
      */
-    private $status = 2;
+    private $status = 1;
     /**
      * Columna utilizada para saber si el usuario requiere registro express
      * 0 false

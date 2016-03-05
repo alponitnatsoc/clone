@@ -89,10 +89,16 @@ class PaymentMethodRestController extends FOSRestController
             "chargeId"=>$purchaseOrderId,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-        $chargeRC=json_decode($insertionAnswer->getContent(),true)["charge-rc"];
+        if($insertionAnswer->getStatusCode()==200) {
+            $chargeRC = json_decode($insertionAnswer->getContent(), true)["charge-rc"];
+        } else{
+            $chargeRC="-1";
+        }
         if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
             $this->getDeletePayMethodAction($idPayM,$person->getDocument());
-            $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array(
+                'data'=>$insertionAnswer->getContent(),
+                'error'=>array("Credit Card"=>"No se pudo agregar el medio de Pago")));
             return $view;
         }
         $request->setMethod("DELETE");
@@ -102,9 +108,9 @@ class PaymentMethodRestController extends FOSRestController
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:deleteReversePaymentMethod', array('_format' => 'json'));
         if($insertionAnswer->getStatusCode()!=200){
-            $view->setStatusCode(200)->setData(array('error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
+            $view->setStatusCode(201)->setData(array('response'=>array("method-id"=>$idPayM),'error'=>array("Credit Card"=>"Se agrego la taerjeta de Credito, pero no se pudo reversar el cobro")));
         }else{
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+            $view->setStatusCode(201)->setData(array('response'=>array("method-id"=>$idPayM),"extra-data"=>$insertionAnswer->getContent()));
         }
         return $view;
 
@@ -181,7 +187,7 @@ class PaymentMethodRestController extends FOSRestController
         /** @var PurchaseOrdersDescription $desc */
         foreach ($descriptions as $desc ) {
             $product=$desc->getProductProduct();
-
+            //TODO is the new novo the same stuff
         }
         $purchaseOrder->addPurchaseOrderDescription($chargeDescription);
         $em->persist($purchaseOrder);
@@ -215,6 +221,7 @@ class PaymentMethodRestController extends FOSRestController
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId=$idPurchaseOrder;
         $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
+        $pOSRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
@@ -240,9 +247,17 @@ class PaymentMethodRestController extends FOSRestController
                 $answer=json_decode($insertionAnswer->getContent(),true);
                 $chargeRC=$answer["charge-rc"];
                 if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>$chargeRC));
+                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                    $em->persist($purchaseOrder);
+                    $em->flush();
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;
                 }
+                $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>"00"));
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
+                $em->flush();
                 /** @var PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
                     $payRoll=$desc->getPayrollPayroll();
@@ -280,7 +295,7 @@ class PaymentMethodRestController extends FOSRestController
                 return $view;
 
             }else{
-                $tax=$description->getTaxTax();
+                $tax=$product->getTaxTax();
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "documentNumber"=>$person->getDocument(),
@@ -297,12 +312,19 @@ class PaymentMethodRestController extends FOSRestController
                 $answer=json_decode($insertionAnswer->getContent(),true);
                 $chargeRC=$answer["charge-rc"];
                 if(!($insertionAnswer->getStatusCode()==200&&($chargeRC=="00"||$chargeRC=="08"))){
+                    $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>$chargeRC));
+                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                    $em->persist($purchaseOrder);
+                    $em->flush();
                     $view->setStatusCode(400)->setData(array('error'=>array("Credit Card"=>"No se pudo hacer el cobro a la tarjeta de Credito","charge-rc"=>$chargeRC)));
                     return $view;
                 }
+                $pOS=$pOSRepo->findOneBy(array("idNovoPay"=>"00"));
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
                 $pay=new Pay();
                 $pay->setUserIdUser($user);
-                $pay->setIdDispercionNovo("none");
+                $pay->setIdDispercionNovo(-1);
                 $pay->setPurchaseOrdersDescription($description);
                 $em->persist($pay);
                 $em->flush();

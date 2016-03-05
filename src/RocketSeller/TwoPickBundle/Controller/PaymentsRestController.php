@@ -87,7 +87,6 @@ class PaymentsRestController extends FOSRestController
         } else {
             $url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
         }
-
         $response = null;
         $options = array(
             'headers' => $headers,
@@ -104,9 +103,9 @@ class PaymentsRestController extends FOSRestController
             } else if ($action == "put") {
                 $response = $client->put($url_request, $options);
             }
-          } catch (Exception $e) {
+        } catch (Exception $e) {
 
-          }
+        }
         $view = View::create();
         $view->setStatusCode($response->getStatusCode());
 
@@ -371,7 +370,7 @@ class PaymentsRestController extends FOSRestController
     public function postCallApprovalAction(Request $request)
     {
         $parameters = $request->request->all();
-        return $this->callApi($parameters['header'], $parameters['parameters_fixed'],$parameters['path']);
+        return $this->callApi($parameters['header'], $parameters['parameters_fixed'], $parameters['path']);
     }
 
     /**
@@ -448,28 +447,26 @@ class PaymentsRestController extends FOSRestController
         $parameters_fixed['charge-third-id'] = $parameters['chargeId'];
 
         /** @var View $responseView */
-
         //$responseView = $this->callApi($header, $parameters_fixed, $path);
 
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
-            "header"=>$header,
-            "parameters_fixed"=>$parameters_fixed,
-            "path"=>$path
+            "header" => $header,
+            "parameters_fixed" => $parameters_fixed,
+            "path" => $path
         ));
         $view = View::create();
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postCallApproval', array('_format' => 'json'));
 
         // I check that the problem was not a time out or connection error.
         // IF it was, we have to undo the transaction and return error.
-        if($insertionAnswer->getStatusCode() == 500)
-        {
-          // We have a problem here.
-          $request =  new Request();
-          $request->request->set("documentNumber", $parameters['documentNumber']);
-          $request->request->set("chargeId", $parameters['chargeId']);
-          $this->deleteReversePaymentMethodAction($request);
+        if ($insertionAnswer->getStatusCode() == 500) {
+            // We have a problem here.
+            $request = new Request();
+            $request->request->set("documentNumber", $parameters['documentNumber']);
+            $request->request->set("chargeId", $parameters['chargeId']);
+            $this->deleteReversePaymentMethodAction($request);
         }
 
         return $insertionAnswer;
@@ -1174,7 +1171,7 @@ class PaymentsRestController extends FOSRestController
      *   resource = true,
      *   description = "Modifies a beneficiary in the payments system.",
      *   statusCodes = {
-     *     201 = "Created",
+     *     200 = "Created",
      *     400 = "Bad Request",
      *     401 = "Unauthorized",
      *     404 = "Not Found"
@@ -1184,8 +1181,8 @@ class PaymentsRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document.")
-     * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document.")
+     * (name="documentNumber", nullable=false, requirements="([0-9])+", strict=true, description="document Employer.")
+     * (name="beneficiaryId", nullable=false, requirements="([0-9])+", strict=true, description="document Employee.")
      *
      * (name="documentType", nullable=true, requirements="([A-Z|a-z]){2}", strict=true, description="documentType.")
      * (name="name", nullable=true, requirements="([a-z|A-Z| ])+", strict=true, description="first name.")

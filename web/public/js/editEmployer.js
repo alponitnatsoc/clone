@@ -114,7 +114,9 @@ function startEmployerEdit() {
         }).done(function (data) {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-2').click(function (e) {
@@ -173,7 +175,9 @@ function startEmployerEdit() {
             }*/
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     //funcion que agrega un listener a cada department
@@ -321,7 +325,9 @@ function startEmployerEdit() {
 
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $("#employerDismiss").on('click', function () {

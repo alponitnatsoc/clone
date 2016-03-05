@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="purchase_orders_description", indexes={
  *      @ORM\Index(name="fk_purchase_orders_description_purchase_orders1", columns={"purchase_orders_id_purchase_orders"}), 
- *      @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}), 
- *      @ORM\Index(name="fk_purchase_orders_description_tax1", columns={"tax_id_tax"})      
+ *      @ORM\Index(name="fk_purchase_orders_description_product1", columns={"product_id_product"}),
  *  })
  * @ORM\Entity(repositoryClass="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescriptionRepository")
  */
@@ -35,15 +34,6 @@ class PurchaseOrdersDescription
      *
      */
     private $payrollPayroll;
-
-    /**
-     * @var \RocketSeller\TwoPickBundle\Entity\Tax
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Tax")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tax_id_tax", referencedColumnName="id_tax")
-     * })
-     */
-    private $taxTax;
 
     /**
      * @ORM\OneToMany(targetEntity="Pay", mappedBy="purchaseOrdersDescription", cascade={"persist"})
@@ -175,30 +165,6 @@ class PurchaseOrdersDescription
     public function getPayrollPayroll()
     {
         return $this->payrollPayroll;
-    }
-
-    /**
-     * Set taxTax
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Tax $taxTax
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setTaxTax(\RocketSeller\TwoPickBundle\Entity\Tax $taxTax = null)
-    {
-        $this->taxTax = $taxTax;
-
-        return $this;
-    }
-
-    /**
-     * Get taxTax
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Tax
-     */
-    public function getTaxTax()
-    {
-        return $this->taxTax;
     }
 
     /**

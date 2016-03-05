@@ -150,10 +150,12 @@ function startEmployee() {
     });*/
     selectedVal = $(contractType).find("option:selected").text();
     if (selectedVal == "Término fijo") {
+        $("#register_employee_employeeHasEmployers_existentNew_0").attr("checked", true);
         $(".definite").each(function () {
             $(this).show();
         });
     } else {
+        $("#register_employee_employeeHasEmployers_existentNew_1").attr("checked", true);
         $(".definite").each(function () {
             $(this).hide();
         });
@@ -217,26 +219,16 @@ function startEmployee() {
                 frequencyId: $(form).find("select[name='method_type_fields[frequencyFrequency]']").val(),
                 accountNumber: $(form).find("input[name='method_type_fields[accountNumber]']").val(),
                 cellphone: $(form).find("input[name='method_type_fields[cellphone]']").val(),
-                creditCard: $(form).find("input[name='register_employee[credit_card]']").val(),
-                expiryDate: $(form).find("input[name='register_employee[expiry_date]']").val(),
-                cvv: $(form).find("input[name='register_employee[cvv]']").val(),
-                nameOnCard: $(form).find("input[name='register_employee[name_on_card]']").val(),
                 contractId: $(form).find("input[name='register_employee[idContract]']").val(),
-            },
-            statusCode: {
-                200: function (data) {
-                    console.log(data["url"]);
-                    sendAjax(data["url"]);
-                },
-                400: function (data, errorThrown) {
-                    alert("400 :" + errorThrown + "\n" + data.responseJSON.error.exception[0].message);
-                }
             }
         }).done(function (data) {
+            console.log(data["url"]);
+            history.pushState("","",data["url"]);
+            sendAjax(data["url"]);
         }).fail(function (data, textStatus, errorThrown) {
-            console.log(data);
-            console.log(textStatus);
-            console.log(errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     var $collectionHolderPhones;
@@ -388,8 +380,9 @@ function startEmployee() {
             $(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-            console.log(jqXHR);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-2').click(function (e) {
@@ -439,7 +432,9 @@ function startEmployee() {
         }).done(function (data) {
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     $('#btn-3').click(function (e) {
@@ -525,12 +520,8 @@ function startEmployee() {
                 sisben: $(form).find("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val(),
                 //benefitsConditions: $(form).find("textarea[name='register_employee[employeeHasEmployers][benefitsConditions]']").val(),
                 employeeId: $(form).find("input[name='register_employee[idEmployee]']").val(),
-                startDate: {'year': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][year]']").val(),
-                    'month': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][month]']").val(),
-                    'day': $(form).find("select[name='register_employee[employeeHasEmployers][startDate][day]']").val()},
-                endDate: {'year': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][year]']").val(),
-                    'month': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][month]']").val(),
-                    'day': $(form).find("select[name='register_employee[employeeHasEmployers][endDate][day]']").val()},
+                startDate: $("#register_employee_employeeHasEmployers_startDate").val(),
+                endDate: $("#register_employee_employeeHasEmployers_endDate").val(),
                 //workableDaysMonth: $(form).find("select[name='register_employee[employeeHasEmployers][workableDaysMonth]']").val(),
                 //workTimeStart: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][hour]']").val(),
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][minute]']").val()},
@@ -543,7 +534,9 @@ function startEmployee() {
             $('#formNav > .active').next('li').find('a').trigger('click');
             $(form).find("input[name='register_employee[idContract]']").val(data['response']['idContract']);
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
         });
     });
     loadConstrains();
@@ -663,7 +656,7 @@ function addListeners() {
         $('#contractNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_yesExistent").on("click", function(){
-        $("#existentNext").attr('disabled',false);
+        $('#contractNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function(){
         history.pushState("","","/manage/employees");
