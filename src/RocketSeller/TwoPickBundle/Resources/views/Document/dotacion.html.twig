@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Entrega de dotación</title>
+<meta charset="utf-8" />
+
+<!-- Latest compiled and minified CSS -->
+{# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">#}
+
+<!-- Optional theme -->
+{# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">#}
+{# <link rel="stylesheet" href="http://localhost:8000/css/bootstrap.min.css">#}
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+
+<head>
+<body>
+<hr />
+<p><strong>Soporte entrega de dotaci&oacute;n</strong>
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+{# localizeddate('none', 'none', local, null, "cccc, d MMMM Y 'às' hh:mm aaa")#}
+
+<p>Ciudad: {{ data.contract.city }}</p>
+
+<p>Empresa usuaria: {{ data.employer.name }}</p>
+<p>Fecha ingreso: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}</p>
+<p>&nbsp;</p>
+<p>Esta dotación corresponde del --DESDE-- al --HASTA--.</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Yo {{ data.employee.name }}, identificado con la {{ data.employee.docType }} No. {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}, dejo constancia que he recibido
+el calzado - vestido y/o elementos de protección personal, para el desempeño de mis funciones, de acuerdo con lo
+previsto en los artículos 230 y 232 del código sustantivo del trabajo, asi como lo previsto en la ley 9º y la Resolucion 2400
+de 1979, de acuerdo a lo relacionado a continuación.</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered" border=1>
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Descripcion <em>(Elementos entregados)</em></th>
+                <th>Talla</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p style="text-align: justify;">Del mismo modo, manifiesto que me obligo a destinar la dotación que me ha sido suministrada para el uso en las labores
+contratadas, de acuerdo con lo señalado en el artículo 233 de mismo estatuto.</p>
+
+<p style="text-align: justify;">Para ningún efecto este constituye salario ni tendrán los efectos de las mismas para liquidación de otras prestaciones sociales
+y demás derechos económicos. El trabajador se compromete de utilizar la dotación e igual los elementos de protección personal
+para la realización de sus labores en el horario de trabajo (Art. 230 CST).</p>
+
+<p style="text-align: justify;">En constancia, se firma la presente a los {{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }}</p>
+
+<p>&nbsp;</p>
+
+<div>
+<p>Firma de quien recibe</p>
+
+______________________
+<p>Nombre: {{ data.employee.name }}</p>
+<p>{{ data.employee.docType }}: {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}</p>
+<p>Cargo: {{ data.contract.position }}</p>
+</div>
+<p>&nbsp;</p>
+<div>
+<p>Firma de quien entrega</p>
+
+_______________________
+<p>Nombre: {{ data.employer.name }}</p>
+<p>{{ data.employer.docType }}: {{ data.employer.docNumber }} de {{ data.employer.docExpPlace }}</p>
+</div>
+
+<hr />
+
+</body>
+</html>
