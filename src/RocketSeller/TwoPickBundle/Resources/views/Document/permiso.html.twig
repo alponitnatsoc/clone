@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>ACTA DE AUTORIZACIÓN DESCUENTO</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+<p>&nbsp;</p>
+<p>Señor(a):</p>
+<p>{{ data.employer.name }}</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;"><strong>ASUNTO:</strong> Solicitud de permiso laboral no remunerado</p>
+<p style="text-align: justify;">De la manera más atenta solicito a usted(es), concederme ______ día(s) de permiso para no cumplir
+con mis funciones contratadas por este tiempo de inasistencia.</p>
+<p style="text-align: justify;">Este permiso lo solicito a partir del “Día ___ Mes ____ Año _______” y sé de ante mano que es un
+permiso no remunerado.</p>
+<p style="text-align justify;"><strong>El reintegro laboral será el “Día ___ Mes ____ Año _______”</strong></p>
+<p>&nbsp;</p>
+
+<p>Atentamente,</p>
+
+_____________________________________
+<p>{{ data.employee.name }}</p>
+<p>{{ data.employee.docType }} Nº {{ data.employee.docNumber }}</p>
+
+<p>&nbsp;</p><p>&nbsp;</p>
+
+<p>Nombre de quien autoriza: {{ data.employer.name }}</p>
+<p>Solicitud aprobada por el jefe inmediato</p>
+<hr />
+
+</body>
+</html>

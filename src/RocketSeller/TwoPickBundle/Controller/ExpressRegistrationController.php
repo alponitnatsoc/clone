@@ -108,10 +108,10 @@ class ExpressRegistrationController extends Controller
     }
     public function startExpressPayAction($id){
         $user = $this->getUser();
-        $products = $this->getDoctrine()
+        $product = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Product')
-        ->findBySimpleName("PRE");
-        $product = $products[0];
+        ->findOneBySimpleName("PRE");
+        
         $totalValue = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
         return $this->render('RocketSellerTwoPickBundle:Registration:payRegisterExpress.html.twig', 
             array(
@@ -134,10 +134,10 @@ class ExpressRegistrationController extends Controller
         $PurchaseOrders->setName("Registro express");
 
         $PurchaseOrdersDescription = new PurchaseOrdersDescription();        
-        $products = $this->getDoctrine()
+        $product = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Product')
-        ->findBySimpleName("PRE");
-        $product = $products[0];
+        ->findOneBySimpleName("PRE");
+     
         $PurchaseOrdersDescription->setProductProduct($product);
         $value = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
         $PurchaseOrders->setValue($value);
@@ -147,11 +147,9 @@ class ExpressRegistrationController extends Controller
         $PurchaseOrders->addPurchaseOrderDescription($PurchaseOrdersDescription);
         $em->persist($PurchaseOrders);
         $em->flush();
+        $format = array('_format'=>'json');
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()),$format);
 
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()));
-
-        
-        echo "status".$insertionAnswer->getStatusCode()."contetn ";
         return $this->render('RocketSellerTwoPickBundle:Registration:expressSuccess.html.twig');
     }
     public function successExpressAction($id)

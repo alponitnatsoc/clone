@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>REF – SUPENCION</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+<p>&nbsp;</p>
+<p>Señor(a):</p>
+<p>{{ data.employee.name }}</p>
+<p>{{ data.contract.position }}</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;"><strong>REF – SUPENCION</strong> "Razones de la suspensión "</p>
+<p style="text-align: justify;">Estimado (a) Trabajador (a)</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">De acuerdo con la diligencia de descargos Nº ____ adelantada el Día ____ Mes____ Año________. </p>
+<p style="text-align: justify;">Le informo que debido a: (Anotar las razones por las cuales se le llama
+la atención) el Día ____ Mes____ Año_______. Nos vemos en la obligación de suspenderlo disciplinariamente, el día ____________ hasta
+el día ___________ de acuerdo a incumplimiento del Art 58 de CST.</p>
+<p style="text-align: justify;">Cabe resaltar que usted es muy importante para nosotros y por esto lo invitamos a que tome
+medidas correctivas, para que no se vuelvan a presentar estos hechos.</p>
+<p style="text-align: justify;">Le recordamos que de repetirse esta conducta frente al desarrollo de sus actividades y el
+cumplimiento de sus responsabilidades, nos veremos en la obligación de tomar otro tipo de medidas disciplinarias más drásticas
+que podrán ir desde suspensión parcial o definitiva de su contrato de trabajo.</p>
+<p>&nbsp;</p>
+
+<p>Cordialmente,</p>
+
+
+_____________________________________
+<p>{{ data.employer.name }}</p>
+
+<p>&nbsp;</p>
+
+_____________________________________
+<p>{{ data.employee.name }}</p>
+
+<p>&nbsp;</p>
+<p>c.c. Hoja de Vida</p>
+<p>Nº de contrato {{ data.contract.numero }}</p>
+<p>&nbsp;</p>
+<hr />
+
+</body>
+</html>
