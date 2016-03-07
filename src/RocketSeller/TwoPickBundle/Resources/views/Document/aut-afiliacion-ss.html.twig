@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Carta de Autorización afiliaciones a seguridad social</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+
+
+<p><strong>Se&ntilde;ores</strong></p>
+<p><strong>SYMPLIFICA SAS</strong></p>
+<p><strong>Bogot&aacute;</strong></p>
+<p>&nbsp;</p>
+<p style="text-align: center;"><strong>REFERENCIA: AUTORIZACIÓN PARA REALIZAR AFILIACIONES ANTE ENTIDADES DE SEGURIDAD SOCIAL</strong></p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Mediante la presente, nosotros:</p>
+<p style="text-align: justify;">
+<ol type="i">
+<li>{{ data.employer.name }}, identificado con {{ data.employer.docType }} No. {{ data.employer.docNumber }} expedida en {{ data.employer.docExpPlace }}, actuando en nombre propio, en adelante el “EMPLEADOR”.</li>
+<li>{{ data.employee.name }}, identificado con {{ data.employee.docType }} No. {{ data.employee.docNumber }} expedida en {{ data.employee.docExpPlace }}, actuando en nombre propio, en adelante el “TRABAJADOR”;</li>
+</ol>
+</p>
+<p style="text-align: justify;">Conferimos a la sociedad SYMPLIFICA SAS, identificada con NIT 900.862.831-7, y/o a las personas naturales a quienes esta sociedad
+designe,  autorización para solicitar ante las entidades del sistema de seguridad social enunciadas más abajo en la ciudad de {{ data.contract.city }}, la afiliación del
+TRABAJADOR, en calidad de dependiente del EMPLEADOR. Dicha afiliación se realizará con base en la información suministrada por el EMPLEADOR a  SYMPLIFICA SAS a
+través de la página web Symplifica.com, la cual tanto el TRABAJADOR como EL EMPLEADOR declaran conocer y aceptar. Por lo tanto, nuestro autorizado SYMPLIFICA SAS
+y/o a las personas naturales a quienes esta sociedad designe, podrán realizar todos los trámites, diligencias y suscripción de documentos que sean necesarios
+para solicitar y obtener la afiliación del TRABAJADOR como dependiente del EMPLEADOR ante las siguientes entidades:</p>
+
+<p style="text-align: justify;">EPS: {{ data.employee.eps.name }}</p>
+<p style="text-align: justify;">AFP: {{ data.employee.afp.name }}</p>
+<p style="text-align: justify;">ARL: {{ data.employer.arl.name }}</p>
+<p style="text-align: justify;">CAJA DE COMPENSACIÓN FAMILIAR: {{ data.employer.ccf.name }}</p>
+
+<p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a <strong>SYMPLIFICA SAS</strong> el {{ "now"|localizeddate('long', 'none', local) }} </p>
+
+<p>&nbsp;</p>
+
+<p><strong>EL EMPLEADOR,</strong></p>
+
+_____________________________________
+<p>Nombre: {{ data.employer.name }}</p>
+{{ data.employer.docType }} No. {{ data.employer.docNumber }} de {{ data.employer.docExpPlace }}
+
+<p>&nbsp;</p>
+
+<p><strong>EL TRABAJADOR,</strong></p>
+
+_______________________
+<p>Nombre: {{ data.employee.name }}</p>
+{{ data.employee.docType }} No. {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}
+
+<hr />
+
+</body>
+</html>

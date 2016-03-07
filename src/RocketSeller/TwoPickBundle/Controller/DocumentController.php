@@ -23,12 +23,16 @@ use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 
 class DocumentController extends Controller
 {
     use ContractMethodsTrait;
     use BasicPersonDataMethodsTrait;
     use EmployerHasEmployeeMethodsTrait;
+    use EmployeeMethodsTrait;
+    use EmployerMethodsTrait;
 
 	public function showDocumentsAction($id){
 		$person = $this->getDoctrine()
@@ -282,6 +286,8 @@ class DocumentController extends Controller
                 $data = array(
                 );
     	        break;
+	        case "aut-afiliacion-ss":
+	        case "trato-datos":
     	    case "dotacion":
     	        //$id de la relacion employerhasempployee
     	        /** @var Employee $employee */
@@ -296,7 +302,9 @@ class DocumentController extends Controller
     	            'name' => $this->fullName($employeePerson->getIdPerson()),
     	            'docType' => $employeePerson->getDocumentType(),
     	            'docNumber' => $employeePerson->getDocument(),
-    	            'docExpPlace' => $employeePerson->getDocumentExpeditionPlace()
+    	            'docExpPlace' => $employeePerson->getDocumentExpeditionPlace(),
+    	            'eps' => $this->getEmployeeEps($employee->getIdEmployee()),
+    	            'afp' => $this->getEmployeeAfp($employee->getIdEmployee())
     	        );
 
     	        $employerPerson = $employer->getPersonPerson();
@@ -304,7 +312,9 @@ class DocumentController extends Controller
     	            'name' => $this->fullName($employerPerson->getIdPerson()),
     	            'docType' => $employerPerson->getDocumentType(),
     	            'docNumber' => $employerPerson->getDocument(),
-    	            'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+    	            'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+    	            'arl' => $this->getEmployerArl($employer->getIdEmployer()),
+    	            'ccf' => $this->getEmployerCcf($employer->getIdEmployer())
     	        );
     	        $contractInfo = array(
     	            'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
@@ -318,14 +328,14 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
-            case "trato-datos":
-                $data = array(
-                );
-    	        break;
-	        case "aut-afiliacion-ss":
-	            $data = array(
-	            );
-	            break;
+//             case "trato-datos":
+//                 $data = array(
+//                 );
+//     	        break;
+// 	        case "aut-afiliacion-ss":
+// 	            $data = array(
+// 	            );
+// 	            break;
 	        case "aut-descuento":
 	            break;
 	        case "otro-si": break;
