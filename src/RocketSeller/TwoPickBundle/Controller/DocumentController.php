@@ -286,6 +286,11 @@ class DocumentController extends Controller
                 $data = array(
                 );
     	        break;
+	        case "cert-laboral-activo":
+	        case "cert-laboral-retiro":
+	        case "retiro-cesantias":
+	        case "not-despido":
+	        case "descargo":
 	        case "suspencion":
 	        case "llamado-atencion":
 	        case "vacaciones":
@@ -319,14 +324,18 @@ class DocumentController extends Controller
     	            'docNumber' => $employerPerson->getDocument(),
     	            'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
     	            'arl' => $this->getEmployerArl($employer->getIdEmployer()),
-    	            'ccf' => $this->getEmployerCcf($employer->getIdEmployer())
+    	            'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
+    	            'email' => $employerPerson->getEmail(),
+    	            'tel' => $employerPerson->getPhones()[0]
     	        );
     	        $contractInfo = array(
     	            'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
     	            'position' => $contract[0]->getPositionPosition()->getName(),
     	            'fechaInicio' => $contract[0]->getStartDate(),
     	            'fechaFin' => $contract[0]->getEndDate(),
-    	            'numero' => $contract[0]->getIdContract()
+    	            'numero' => $contract[0]->getIdContract(),
+    	            'type' => $contract[0]->getContractTypeContractType()->getName(),
+    	            'salary' => $contract[0]->getSalary()
     	        );
 
     	        $data = array(
@@ -336,11 +345,6 @@ class DocumentController extends Controller
     	        );
     	        break;
 	        case "otro-si": break;
-	        case "descargo": break;
-	        case "not-despido": break;
-	        case "retiro-cesantias": break;
-	        case "cert-laboral-retiro": break;
-	        case "cert-laboral-activo": break;
 	        case "mandato":
 	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
