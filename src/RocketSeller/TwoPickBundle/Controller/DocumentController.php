@@ -286,6 +286,10 @@ class DocumentController extends Controller
                 $data = array(
                 );
     	        break;
+	        case "llamado-atencion":
+	        case "vacaciones":
+	        case "permiso":
+	        case "aut-descuento":
 	        case "aut-afiliacion-ss":
 	        case "trato-datos":
     	    case "dotacion":
@@ -319,7 +323,9 @@ class DocumentController extends Controller
     	        $contractInfo = array(
     	            'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
     	            'position' => $contract[0]->getPositionPosition()->getName(),
-    	            'fechaInicio' => $contract[0]->getStartDate()
+    	            'fechaInicio' => $contract[0]->getStartDate(),
+    	            'fechaFin' => $contract[0]->getEndDate(),
+    	            'numero' => $contract[0]->getIdContract()
     	        );
 
     	        $data = array(
@@ -328,20 +334,7 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
-//             case "trato-datos":
-//                 $data = array(
-//                 );
-//     	        break;
-// 	        case "aut-afiliacion-ss":
-// 	            $data = array(
-// 	            );
-// 	            break;
-	        case "aut-descuento":
-	            break;
 	        case "otro-si": break;
-	        case "permiso": break;
-	        case "vacaciones": break;
-	        case "llamado-atencion": break;
 	        case "suspencion": break;
 	        case "descargo": break;
 	        case "not-despido": break;
