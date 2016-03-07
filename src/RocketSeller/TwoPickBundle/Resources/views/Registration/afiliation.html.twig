@@ -78,11 +78,21 @@
                             <div class="col-sm-3 col-xs-12">
                                 {{ form_row(employee.nameEmployee) }}
                             </div>
-                            <div class="col-sm-3 col-xs-12">
-                                {{ form_row(employee.wealth) }}
+                            <div class="wrapper">
+                                <div class="hidden">
+                                    {{ form_row(employee.wealth) }}
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    {{ form_row(employee.wealthAC,{'value' : employee.wealth.vars.data.name}) }}
+                                </div>
                             </div>
-                            <div class="col-sm-3 col-xs-12">
-                                {{ form_row(employee.pension) }}
+                            <div class="wrapper">
+                                <div class="hidden">
+                                    {{ form_row(employee.pension) }}
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    {{ form_row(employee.pensionAC,{'value' : employee.pension.vars.data.name}) }}
+                                </div>
                             </div>
                             <div class="col-sm-3 col-xs-12">
                                 {{ form_row(employee.beneficiaries) }}
@@ -132,18 +142,31 @@
                                 <i class="fa fa-home"></i>
                                 {{ form_label(form.severances,null,{'label_attr': {'class': 'title'}})}}
                             </div>
+
+                            <div class="wrapper">
+                                <div class="hidden">
+                                    {{ form_row(form.severances) }}
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    {{ form_row(form.severancesAC,{'value' : form.severances.vars.data.name}) }}
+                                </div>
+                            </div>
                             <div class="col-sm-12 form-group">
-                                {{ form_widget(form.severances) }}
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-sm-6 col-xs-12">
                             <div class="col-sm-12">
                                 <i class="fa fa-home"></i>
                                 {{ form_label(form.arl,null,{'label_attr': {'class': 'title'}})}}
                             </div>
-                            <div class="col-sm-12 form-group">
-                                {{ form_widget(form.arl) }}
-                            </div>                             
+                            <div class="wrapper">
+                                <div class="hidden">
+                                    {{ form_row(form.arl) }}
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    {{ form_row(form.arlAC,{'value' : form.arl.vars.data.name}) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

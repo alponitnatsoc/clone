@@ -57,6 +57,18 @@ class AffiliationEmployerEmployee extends AbstractType
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
+            ->add('severancesAC', 'text', array(
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true,
+                'attr'=>array("class"=>'autocomS')
+            ))
+            ->add('arlAC', 'text', array(
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true,
+                'attr'=>array("class"=>'autocomA')
+            ))
             ->add('save', 'submit', array(
                 'label' => 'Save',
                 'attr'   =>  array(
