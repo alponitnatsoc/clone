@@ -2,6 +2,5 @@ download_documents:
     path:     /downloads/{ref}/{id}/{type}
     defaults: { _controller: "RocketSellerTwoPickBundle:Document:downloadDocuments" }
     requirements:
-        ref: (mandato|aceptacion|contrato)
         id: \d+
         type: (pdf|html)

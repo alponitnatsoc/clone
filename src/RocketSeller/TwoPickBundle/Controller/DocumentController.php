@@ -19,11 +19,16 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\ContractMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\BasicPersonDataMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Contract;
 
 class DocumentController extends Controller
 {
     use ContractMethodsTrait;
     use BasicPersonDataMethodsTrait;
+    use EmployerHasEmployeeMethodsTrait;
 
 	public function showDocumentsAction($id){
 		$person = $this->getDoctrine()
@@ -272,18 +277,69 @@ class DocumentController extends Controller
 
 	public function downloadDocumentsAction($ref, $id, $type)
 	{
-        switch ($ref):
+        switch ($ref){
     	    case "contrato":
                 $data = array(
-
                 );
     	        break;
-            case "aceptacion":
+    	    case "dotacion":
+    	        //$id de la relacion employerhasempployee
+    	        /** @var Employee $employee */
+    	        $employee = $this->getEmployee($id);
+    	        /** @var Employer $employer */
+    	        $employer = $this->getEmployer($id);
+    	        /** @var Contract $contract */
+    	        $contract = $this->getActiveContract($id);
+
+    	        $employeePerson = $employee->getPersonPerson();
+    	        $employeeInfo = array(
+    	            'name' => $this->fullName($employeePerson->getIdPerson()),
+    	            'docType' => $employeePerson->getDocumentType(),
+    	            'docNumber' => $employeePerson->getDocument(),
+    	            'docExpPlace' => $employeePerson->getDocumentExpeditionPlace()
+    	        );
+
+    	        $employerPerson = $employer->getPersonPerson();
+    	        $employerInfo = array(
+    	            'name' => $this->fullName($employerPerson->getIdPerson()),
+    	            'docType' => $employerPerson->getDocumentType(),
+    	            'docNumber' => $employerPerson->getDocument(),
+    	            'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+    	        );
+    	        $contractInfo = array(
+    	            'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
+    	            'position' => $contract[0]->getPositionPosition()->getName(),
+    	            'fechaInicio' => $contract[0]->getStartDate()
+    	        );
+
+    	        $data = array(
+    	            'employee' => $employeeInfo,
+    	            'employer' => $employerInfo,
+    	            'contract' => $contractInfo
+    	        );
+    	        break;
+            case "trato-datos":
                 $data = array(
-
                 );
     	        break;
+	        case "aut-afiliacion-ss":
+	            $data = array(
+	            );
+	            break;
+	        case "aut-descuento":
+	            break;
+	        case "otro-si": break;
+	        case "permiso": break;
+	        case "vacaciones": break;
+	        case "llamado-atencion": break;
+	        case "suspencion": break;
+	        case "descargo": break;
+	        case "not-despido": break;
+	        case "retiro-cesantias": break;
+	        case "cert-laboral-retiro": break;
+	        case "cert-laboral-activo": break;
 	        case "mandato":
+	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
                 $employer = $repository->find($id);
@@ -301,16 +357,17 @@ class DocumentController extends Controller
 	            break;
     	    default:
     	        break;
-	    endswitch;
+        };
 
 	    $template = 'RocketSellerTwoPickBundle:Document:' . $ref . '.html.twig';
 
-	    switch ($type):
+	    switch ($type){
     	    case "html":
         	    return $this->render($template, array(
         	        'data' => $data
         	    ));
         	    break;
+    	    default:
     	    case "pdf":
     	        $html = $this->renderView($template, array(
     	            'data' => $data
@@ -324,8 +381,6 @@ class DocumentController extends Controller
                     )
                 );
                 break;
-    	    default:
-    	        break;
-        endswitch;
+	    };
 	}
 }
