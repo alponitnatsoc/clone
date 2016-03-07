@@ -19,11 +19,20 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\ContractMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\BasicPersonDataMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\EmployerHasEmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 
 class DocumentController extends Controller
 {
     use ContractMethodsTrait;
     use BasicPersonDataMethodsTrait;
+    use EmployerHasEmployeeMethodsTrait;
+    use EmployeeMethodsTrait;
+    use EmployerMethodsTrait;
 
 	public function showDocumentsAction($id){
 		$person = $this->getDoctrine()
@@ -272,18 +281,72 @@ class DocumentController extends Controller
 
 	public function downloadDocumentsAction($ref, $id, $type)
 	{
-        switch ($ref):
+        switch ($ref){
     	    case "contrato":
                 $data = array(
-
                 );
     	        break;
-            case "aceptacion":
-                $data = array(
+	        case "cert-laboral-activo":
+	        case "cert-laboral-retiro":
+	        case "retiro-cesantias":
+	        case "not-despido":
+	        case "descargo":
+	        case "suspencion":
+	        case "llamado-atencion":
+	        case "vacaciones":
+	        case "permiso":
+	        case "aut-descuento":
+	        case "aut-afiliacion-ss":
+	        case "trato-datos":
+    	    case "dotacion":
+    	        //$id de la relacion employerhasempployee
+    	        /** @var Employee $employee */
+    	        $employee = $this->getEmployee($id);
+    	        /** @var Employer $employer */
+    	        $employer = $this->getEmployer($id);
+    	        /** @var Contract $contract */
+    	        $contract = $this->getActiveContract($id);
 
-                );
+    	        $employeePerson = $employee->getPersonPerson();
+    	        $employeeInfo = array(
+    	            'name' => $this->fullName($employeePerson->getIdPerson()),
+    	            'docType' => $employeePerson->getDocumentType(),
+    	            'docNumber' => $employeePerson->getDocument(),
+    	            'docExpPlace' => $employeePerson->getDocumentExpeditionPlace(),
+    	            'eps' => $this->getEmployeeEps($employee->getIdEmployee()),
+    	            'afp' => $this->getEmployeeAfp($employee->getIdEmployee())
+    	        );
+
+    	        $employerPerson = $employer->getPersonPerson();
+    	        $employerInfo = array(
+    	            'name' => $this->fullName($employerPerson->getIdPerson()),
+    	            'docType' => $employerPerson->getDocumentType(),
+    	            'docNumber' => $employerPerson->getDocument(),
+    	            'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+    	            'arl' => $this->getEmployerArl($employer->getIdEmployer()),
+    	            'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
+    	            'email' => $employerPerson->getEmail(),
+    	            'tel' => $employerPerson->getPhones()[0]
+    	        );
+    	        $contractInfo = array(
+    	            'city' => $contract[0]->getWorkplaceWorkplace()->getCity()->getName(),
+    	            'position' => $contract[0]->getPositionPosition()->getName(),
+    	            'fechaInicio' => $contract[0]->getStartDate(),
+    	            'fechaFin' => $contract[0]->getEndDate(),
+    	            'numero' => $contract[0]->getIdContract(),
+    	            'type' => $contract[0]->getContractTypeContractType()->getName(),
+    	            'salary' => $contract[0]->getSalary()
+    	        );
+
+    	        $data = array(
+    	            'employee' => $employeeInfo,
+    	            'employer' => $employerInfo,
+    	            'contract' => $contractInfo
+    	        );
     	        break;
+	        case "otro-si": break;
 	        case "mandato":
+	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
                 $employer = $repository->find($id);
@@ -301,16 +364,17 @@ class DocumentController extends Controller
 	            break;
     	    default:
     	        break;
-	    endswitch;
+        };
 
 	    $template = 'RocketSellerTwoPickBundle:Document:' . $ref . '.html.twig';
 
-	    switch ($type):
+	    switch ($type){
     	    case "html":
         	    return $this->render($template, array(
         	        'data' => $data
         	    ));
         	    break;
+    	    default:
     	    case "pdf":
     	        $html = $this->renderView($template, array(
     	            'data' => $data
@@ -324,8 +388,6 @@ class DocumentController extends Controller
                     )
                 );
                 break;
-    	    default:
-    	        break;
-        endswitch;
+	    };
 	}
 }
