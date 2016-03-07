@@ -64,13 +64,21 @@ nav {
 		}
 
 		.menu {
-			border-left: 1px solid #333;
-			border-right: 1px solid #333;
+			@media (max-width: @screen-sm-max) {
+				padding: 0;
+				margin: 20px 0;
+			}
+			@media (min-width: @screen-md-min) {
+				border-left: 1px solid #333;
+				border-right: 1px solid #333;
+			}
 			ul {
 				padding: 0;
 				li {
 					text-transform: uppercase;
-					float: left;
+					@media (min-width: @screen-md-min) {
+						float: left;
+					}
 					display: block;
 					margin-right: 30px;
 					a {

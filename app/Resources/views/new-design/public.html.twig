@@ -51,12 +51,12 @@
             <div class="col-md-10 col-xs-12">
               <div id="navmenu" class="row navbar-collapse collapse">
                 <div class="col-md-10 menu">
-                    <ul>
-                      <li><a href="#">Producto</a></li>
-                      <li><a href="#">Precios</a></li>
-                      <li><a href="#">Preguntas Frecuentes</a></li>
-                      <li><a href="#">Contáctenos</a></li>
-                      <li><a href="#">Nosotros</a></li>
+                    <ul class="clearfix">
+                      <li><a href="/producto">Producto</a></li>
+                      <li><a href="/precios">Precios</a></li>
+                      <li><a href="/preguntas-frequentes">Preguntas Frecuentes</a></li>
+                      <li><a href="/contactenos">Contáctenos</a></li>
+                      <li><a href="/nosotros">Nosotros</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2">
@@ -67,7 +67,9 @@
           </div>
         </div>
       </nav>
-      {% block body %}{% endblock %}
+      <div class="row-fluid">
+        {% block body %}{% endblock %}
+      </div>
       <footer>
         <div class="container">
           <div class="col-md-8 col-md-push-2">
