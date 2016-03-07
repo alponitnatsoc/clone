@@ -1,0 +1,35 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% if not last_username is defined %}
+	{% set last_username = "" %}
+{% endif %}
+		{% if error is defined %}
+			{% if error %}
+			    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
+		{% endif %}
+		<form class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post">
+			<fieldset>
+				<div>
+					<input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
+				</div>
+		  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="Email" class="form-control input-md" value="{{ last_username }}" style="margin-bottom: 15px;"/>
+		  		<input id="password" name="_password" type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control input-md" required="required" />
+		  		<div class="spacing">
+                    <input type="checkbox" name="_remember_me" id="remember_me" value="on" />
+                    <small>Recordar mi usuario Symplifica.com</small>
+                </div>
+		  		<div class="spacing"><a href="#" id="forgotBtn" data-toggle="modal" sty><small>¿Olvidó su contraseña?</small></a><br/></div>
+		  		<div class="row">
+		  			<div class="col-xs-4">
+		  				<label>Ingresar con:</label>
+		  			</div>
+			  		<div class="col-xs-8 redes">
+			  			{% include "RocketSellerTwoPickBundle:General:new/redes-login.html.twig" %}
+			  		</div>
+			  	</div>
+		  		<div style="text-align: center">
+		  			<button id="_submit" name="_submit" type="submit" class="btn register-AS1 btn-symplifica" style="width: 50%;margin-bottom: 30px; margin-top: 15px;">{{ 'security.login.submit'|trans }}</button>
+		  		</div>
+			</fieldset>
+		</form>
+</div>
