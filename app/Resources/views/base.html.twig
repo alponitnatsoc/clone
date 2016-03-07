@@ -321,16 +321,16 @@
                     if (redirector) {
                         sendAjax(redirector);
                     }
-                addNoClick();
+                    addNoClick();
 
-            });
-            function errorHandleTry(data){
-                if (typeof data.responseJSON["url"] != 'undefined') {
-                    window.location.href=data.responseJSON["url"];
-                    data=false;
+                });
+                function errorHandleTry(data) {
+                    if (typeof data.responseJSON["url"] != 'undefined') {
+                        window.location.href = data.responseJSON["url"];
+                        data = false;
+                    }
+                    return data;
                 }
-                return data;
-            }
                 function sendAjax(url, form) {
 
                     $.ajax({
@@ -433,13 +433,13 @@
                             });
 
                             return true;
-                        } else if (url.indexOf("{{ path('subscription_choices') }}") !== -1) {
+                        } else if (url.lastIndexOf("{{ path('subscription_choices') }}") !== -1) {
                             $.getScript("{{ asset('public/js/subscriptionChoise.js') }}").done(function () {
                                 startSubscriptionChoise();
                             });
 
                             return true;
-                        } else if (url.indexOf("{{ path('activate_subscription') }}") !== -1) {
+                        } else if (url.lastIndexOf("{{ path('activate_subscription') }}") !== -1) {
                             $.getScript("{{ asset('public/js/subscriptionActivate.js') }}").done(function () {
                                 startSubscriptionActivate();
                             });

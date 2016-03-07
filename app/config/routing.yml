@@ -359,10 +359,10 @@ help_detail:
     defaults: { _controller: RocketSellerTwoPickBundle:Home:helpDetail }
 
 subscription_choices:
-    path:     /subscription
+    path:     /subscription/choice
     defaults: { _controller: RocketSellerTwoPickBundle:Subscription:subscriptionChoices }
 activate_subscription:
-    path: /activar-suscripcion
+    path: /subscription/confirm
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:activarSuscripcion }
 subscription_pay:
     path:     /subscription/pay
