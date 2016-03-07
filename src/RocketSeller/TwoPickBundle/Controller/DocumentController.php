@@ -286,6 +286,7 @@ class DocumentController extends Controller
                 $data = array(
                 );
     	        break;
+	        case "otrosi":
 	        case "cert-laboral-activo":
 	        case "cert-laboral-retiro":
 	        case "retiro-cesantias":
@@ -344,7 +345,6 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
-	        case "otro-si": break;
 	        case "mandato":
 	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
