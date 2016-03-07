@@ -286,6 +286,7 @@ class DocumentController extends Controller
                 $data = array(
                 );
     	        break;
+	        case "suspencion":
 	        case "llamado-atencion":
 	        case "vacaciones":
 	        case "permiso":
@@ -335,7 +336,6 @@ class DocumentController extends Controller
     	        );
     	        break;
 	        case "otro-si": break;
-	        case "suspencion": break;
 	        case "descargo": break;
 	        case "not-despido": break;
 	        case "retiro-cesantias": break;
