@@ -1,25 +1,25 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Traits;
 
-trait EmployeeMethodsTrait
+trait EmployerMethodsTrait
 {
-    protected function getEmployeeDetails($id)
+    protected function getEmployerDetails($id)
     {
-        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         $employee = $repository->find($id);
 
         return $employee;
     }
 
-    protected function getEmployeeEps($id)
+    protected function getEmployerArl($id)
     {
-        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $repository->find($id);
         $entities = $employee->getEntities();
         /** @var \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity */
         foreach ($entities as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                 return $entity->getEntityEntity();
             }
         }
@@ -27,15 +27,15 @@ trait EmployeeMethodsTrait
         return null;
     }
 
-    protected function getEmployeeAfp($id)
+    protected function getEmployerCcf($id)
     {
-        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $repository->find($id);
         $entities = $employee->getEntities();
         /** @var \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity */
         foreach ($entities as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName() == "CC Familiar") {
                 return $entity->getEntityEntity();
             }
         }
