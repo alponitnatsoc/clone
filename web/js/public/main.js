@@ -14,4 +14,8 @@ $(document).ready(function() {
 		$('#btnLogin .fa-inverse').removeClass('fa-caret-down');
 	});
 
+	$('#slideLogin').click(function(evt) {
+		evt.stopPropagation();
+	})
+
 });
