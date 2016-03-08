@@ -477,6 +477,10 @@
                 <source>CC_name</source>
                 <target>Cédula de ciudadanía</target>
             </trans-unit>
+            <trans-unit id="bad_credentials">
+                <source>Bad credentials.</source>
+                <target>Usuario o contraseña inválidos</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
