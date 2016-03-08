@@ -86,10 +86,4 @@ class DefaultController extends Controller
                     'routes' => $routes
         ));
     }
-
-    public function infoAction()
-    {
-        phpinfo();
-    }
-
 }

@@ -696,8 +696,10 @@ class EmployeeRestController extends FOSRestController
             $contract->setTimeCommitmentTimeCommitment($tempTimeCommitment);
 
             $startDate = $paramFetcher->get('startDate');
+            $endDate = null;
             $datetime = new DateTime($startDate);
             $contract->setStartDate($datetime);
+            $contract->setEndDate($endDate);
 
             /* $workTimeStart = $paramFetcher->get('workTimeStart');
               $datetime = new DateTime();

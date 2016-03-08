@@ -449,6 +449,3 @@ blog:
 contactenos:
     path:     /contactenos
     defaults: { _controller: RocketSellerTwoPickBundle:Public:contactenos }
-info:
-    path: /info
-    defaults: { _controller: RocketSellerTwoPickBundle:Default:info }
