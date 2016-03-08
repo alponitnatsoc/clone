@@ -696,10 +696,15 @@ a.helpTxt {
     }
     &+#main {
         border-right: 1px solid #e9e9e9;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.12);
         background-color: #fff;
         min-height: 685px;
         padding-bottom: 40px;
+        &+#copy {
+            color: #B9BABD;
+            font-size: 12px;
+            padding-top: 20px;
+        }
     }
 
     .leftColumnLogo {
@@ -732,6 +737,13 @@ a.helpTxt {
         }
         a {
             color: @dark_gray;
+
+            &.noClick {
+                color: #B9BABD;
+                &:hover, &:active, &:focus {
+                    text-decoration: none;
+                }
+            }
         }
         &.activeMenu a {
             /*color: @selectedMenuColor !important;*/
@@ -742,6 +754,8 @@ a.helpTxt {
             margin-left: 0;
         }
     }
+
+
 }
 .block-Data {
     h1 {
