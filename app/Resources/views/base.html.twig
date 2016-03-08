@@ -53,7 +53,7 @@
                             {% set status = 0 %}
                         {% endif %}
                         <div class="txthelp">
-                            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233{% if status < 2 %} <a class="btn btn-primpary btn-orange notAjax" href="express-payment/add">Registro Express</a>{% endif %}</span>
+                            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
                         </div>
                     </div>
                 </div>
@@ -141,13 +141,14 @@
                                     {% else %}
                                         {% set status = 0 %}
                                     {% endif %}
+                                    {% if status < 2 %} <a class="btn btn-primpary btn-orange notAjax" href="express-payment/add">Registro Express</a>{% endif %}
                                     {% if status >= 2 %}
                                         <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                             <a href="{{ path('show_dashboard_employer') }}">Inicio</a>
                                         </div>
                                     {% elseif  status == 1 %}
                                         <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                            <a href="{{ path('show_dashboard') }}">Inicio</a>
+                                            <a href="{{ path('show_dashboard') }}">Tablero de control</a>
                                         </div>
                                     {% endif %}
                                     <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
@@ -178,7 +179,7 @@
                                 </div>
                             {% endblock %}
                         </div>
-                        <div id="main"  class="col-sm-9">
+                        <div id="main"  class="col-sm-9 clearfix">
                             {% block main %}
                                 {% if app.user.status is defined%}
                                     {% set status = app.user.status %}
@@ -207,12 +208,15 @@
                                 </div>
                             {% endblock %}
                         </div>
+                        <div id="copy" class="col-sm-9 col-sm-push-3">
+                            Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
+                        </div>
                     </div>
                 </div>
             {% endblock %}
         </div>
         {% block footer %}
-            <footer>
+            <!--<footer>
                 <div class="container">
                     <div class="col-sm-2 logo">
                         <img src="{{ asset('img/logo-oscuro.png') }}" alt="Sympifica" class="hidden-sm img-responsive"/>
@@ -237,7 +241,7 @@
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer>-->
     {% endblock %}
     {% block javascripts %}
         <script>
