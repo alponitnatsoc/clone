@@ -420,13 +420,13 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getSocietyAction($societyId)
+    public function getSocietyAction($societyNit)
     {
         $content = array();
         $unico = array();
 
-        $unico['CODSOCIEDAD'] = $societyId;
-        $unico['SOCIEDADNIT'] = $societyId;
+        $unico['CODSOCIEDAD'] = "";
+        $unico['SOCIEDADNIT'] = $societyNit;
 
         $content[] = $unico;
         $parameters = array();
