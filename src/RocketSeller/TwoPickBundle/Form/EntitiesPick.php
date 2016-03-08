@@ -30,18 +30,27 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->wealthEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>' ',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'label'=>' '
+
             ))
             ->add('pension', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->pensionEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
+                'label'=>' '
+            ))
+            ->add('wealthAC', 'text', array(
+                'mapped' => false,
                 'label'=>' ',
-                'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                'required' => true,
+                'attr'=>array("class"=>'autocomW')
+            ))
+            ->add('pensionAC', 'text', array(
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true,
+                'attr'=>array("class"=>'autocomP')
             ))
             ->add('beneficiaries', 'choice', array(
                 'choices' => array(

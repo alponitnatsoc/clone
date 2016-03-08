@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>NOTIFICACION TERMINACACION DE CONTRATO LABORAL</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+<p>&nbsp;</p>
+<p>Señor(a):</p>
+<p>{{ data.employee.name }}</p>
+<p>{{ data.employee.docNumber }}</p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">REF: <strong>NOTIFICACION TERMINACACION DE CONTRATO LABORAL</strong></p>
+<p style="text-align: justify;">Apreciado trabajador</p>
+<p style="text-align: justify;">Cordialmente me permito comunicarle que sus obligaciones laborales, por la cuales fue contrato
+finalizaran el día XX de XXXXXXX del XXXX los motivos de la finalización del contrato fue su reiterado incumplimiento al
+ART 58 CST dando así por terminada la relación laboral, por tanto agradecemos por el tiempo laborado.</p>
+<p style="text-align: justify;">Adicionalmente queremos informarle que usted cuenta con 5 días hábiles para realizarse el examen médico
+de egreso, dicha autorización deberá ser solicitada a su jefe directo.</p>
+<p style="text-align: justify;">Agradecemos los servicios prestados y le deseamos éxitos en sus actividades futuras.</p>
+<p>&nbsp;</p>
+
+<p>Atentamente,</p>
+
+_____________________________________
+<p>{{ data.employer.name }}</p>
+<p>{{ data.employer.docType }} Nº {{ data.employer.docNumber }}</p>
+
+<p>&nbsp;</p>
+<hr />
+
+</body>
+</html>

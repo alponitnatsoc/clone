@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>ADICION AL CONTRATO INDIVIDUAL DE TRABAJO Al CONTRATO</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<head>
+<body>
+<hr />
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>#}
+<p>&nbsp;</p>
+<p style="text-align: center;"><strong>ADICION AL CONTRATO INDIVIDUAL DE TRABAJO Al CONTRATO Nº {{ data.contract.numero }}.</strong></p>
+<p>&nbsp;</p>
+<p style="text-align: justify;">Entre {{ data.employee.name }} , identificada con {{ data.employee.docType }} númer {{ data.employee.docNumber }} actuando en nombre propio
+y quien en adelante y para efectos de este acuerdo se denominará el TRABAJADOR y el {{ data.employer.name }} identificado con
+{{ data.employer.docType }} número {{ data.employer.docNumber }} y quien en adelante y para efectos de este acuerdo se denominará
+EL EMPLEADOR, se ha convenido lo siguiente:</p>
+<p style="text-align: justify;"><strong>CLAUSULA PRIMERA:</strong> INGRESOS SALARIALES: El TRABAJADOR de conformidad con el numeral
+1 del artículo 132 C.S.T., subrogado por el artículo 18 de la ley 50 de 1990, devengará a partir de FECHA INICIO,
+un salario básico mensual equivalente a NUEVO SALARIO.</p>
+<p style="text-align: justify;">PARAGRAFO PRIMERO: Dentro de este pago se encuentra incluida la remuneración de los
+descansos dominicales y festivos de que trata los capítulos I, II y III del título VII del C.S.T.</p>
+<p style="text-align: justify;">PARAGRAFO SEGUNDO: El trabajador autoriza de manera libre y voluntaria los cambios
+anteriormente relacionados.</p>
+<p style="text-align: justify;"><strong>CLAUSULA SEGUNDA:</strong> Las partes declaran en forma expresa que a partir de la fecha de suscripción
+del presente Otrosí, el trabajador tan solo devengará los ingresos salariales antes indicados.</p>
+<p style="text-align: justify;"><strong>CLAUSULA CUARTA:</strong> Los demás términos y condiciones del contrato de trabajo conservan vigencia,
+siempre y cuando no sean contrarios a lo estipulado en el presente documento.</p>
+<p style="text-align: justify;">En constancia de lo anterior se firma el presente documento a
+los {{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
+
+<p>&nbsp;</p>
+
+<p>EL TRABAJADOR</p>
+
+
+_____________________________________
+<p>{{ data.employee.name }}</p>
+<p>{{ data.employee.docType }} Nº {{ data.employee.docNumber }}</p>
+
+<p>&nbsp;</p>
+
+<p>EL PATRONO</p>
+
+
+_____________________________________
+<p>{{ data.employer.name }}</p>
+<p>{{ data.employer.docType }} Nº {{ data.employer.docNumber }}</p>
+
+<hr />
+
+</body>
+</html>

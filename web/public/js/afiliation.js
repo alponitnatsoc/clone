@@ -23,6 +23,11 @@ function startAfiliation() {
             });
         });
     });
+    initEntitiesFields();
+
+    $(".hidden").each(function () {
+        $(this).hide();
+    });
 
     $("#chkAcept").on('click', function () {
         if ($(this).is(':checked')) {
@@ -124,4 +129,119 @@ function startAfiliation() {
             }
         });
     });
+    function initEntitiesFields(){
+        var dataPen=[];
+        $("#register_social_security_employerHasEmployees_0_pension").find("> option").each(function() {
+            dataPen.push({'label':this.text,'value':this.value});
+        });
+        $(".autocomP").each(function () {
+            var autoTo=$(this);
+            $(this).autocomplete({
+                source: function(request, response) {
+                    var results = $.ui.autocomplete.filter(dataPen, request.term);
+
+                    response(results.slice(0, 5));
+                },
+                minLength: 0,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+                    $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+
+                }
+            });
+            $(this).on("focus",function () {
+                $(autoTo).autocomplete("search", $(autoTo).val());
+            });
+        });
+        var dataWe=[];
+        $("#register_social_security_employerHasEmployees_0_wealth").find("> option").each(function() {
+            dataWe.push({'label':this.text,'value':this.value});
+        });
+        $(".autocomW").each(function () {
+            var autoTo=$(this);
+            $(this).autocomplete({
+                source: function(request, response) {
+                    var results = $.ui.autocomplete.filter(dataWe, request.term);
+
+                    response(results.slice(0, 5));
+                },                minLength: 0,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+                    $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+
+                }
+            });
+            $(this).on("focus",function () {
+                $(autoTo).autocomplete("search", $(autoTo).val());
+            });
+
+        });
+        var dataSev=[];
+        $("#register_social_security_severances").find("> option").each(function() {
+            dataSev.push({'label':this.text,'value':this.value});
+        });
+        $(".autocomS").each(function () {
+            var autoTo=$(this);
+            $(this).autocomplete({
+                source: function(request, response) {
+                    var results = $.ui.autocomplete.filter(dataSev, request.term);
+
+                    response(results.slice(0, 5));
+                },                minLength: 0,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+                    $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+
+                }
+            });
+            $(this).on("focus",function () {
+                $(autoTo).autocomplete("search", $(autoTo).val());
+            });
+
+        });
+        var dataArl=[];
+        $("#register_social_security_arl").find("> option").each(function() {
+            dataArl.push({'label':this.text,'value':this.value});
+        });
+        $(".autocomA").each(function () {
+            var autoTo=$(this);
+            $(this).autocomplete({
+                source: function(request, response) {
+                    var results = $.ui.autocomplete.filter(dataArl, request.term);
+
+                    response(results.slice(0, 5));
+                },                minLength: 0,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+                    $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                },
+                focus: function(event, ui) {
+                    event.preventDefault();
+                    autoTo.val(ui.item.label);
+
+                }
+            });
+            $(this).on("focus",function () {
+                $(autoTo).autocomplete("search", $(autoTo).val());
+            });
+
+        });
+
+    }
 }
