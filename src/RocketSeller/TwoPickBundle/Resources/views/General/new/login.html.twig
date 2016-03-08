@@ -7,7 +7,7 @@
 			    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
 		{% endif %}
-		<form class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post">
+		<form id="forma-login" class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post">
 			<fieldset>
 				<div>
 					<input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
