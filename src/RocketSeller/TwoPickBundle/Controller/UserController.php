@@ -41,6 +41,112 @@ class UserController extends Controller
         $user=$this->checkLogin();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
+        //SQL Comsumpsion
+        /*
+        //Create Society
+        $view = View::create();
+        if($employer->getIdSqlSociety()!=null){
+            //TODO NOT RETURN BUT CHECK EACH EMPLOYEE
+        }
+        $em=$this->getDoctrine()->getManager();
+        $dateToday=new DateTime();
+        $dateToday->setDate(2016,02,01);//TODO ERASE THIS SHIT
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "society_nit"=>$person->getDocument(),
+            "society_name"=>$person->getNames(),
+            "society_start_date"=>$dateToday->format("d-m-Y"),
+            "society_mail"=>$user->getEmail(),
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=200){
+            echo "Cago society SC".$insertionAnswer->getStatusCode();
+            die();
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+            return $view;
+        }
+        $request->setMethod("GET");
+        $view = View::create();
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety',array("societyNit"=>$person->getDocument()), array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=200){
+            echo "Cago sacar id Society SC".$insertionAnswer->getStatusCode();
+            die();
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+            return $view;
+        }
+        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
+        $employer->setIdSqlSociety($idSQL);
+        $em->persist($employer);
+        $em->flush();
+        //return $view->setStatusCode(201);
+        //Employee creation
+        $employerHasEmployees=$employer->getEmployerHasEmployees();
+        /** @var EmployerHasEmployee $eHE
+        foreach ( $employerHasEmployees as $eHE) {
+            if($eHE->getState()==1){
+                $contracts=$eHE->getContracts();
+                $actContract=null;
+                /** @var Contract $c
+                foreach ($contracts as $c) {
+                    if($c->getState()==1){
+                        $actContract=$c;
+                        break;
+                    }
+                }
+                $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
+                if($liquidationType=="J")
+                    $liquidationType="M";
+                $endDate=$actContract->getEndDate();
+                $employee=$eHE->getEmployeeEmployee();
+                $employeePerson=$employee->getPersonPerson();
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                    "last_name"=>$employeePerson->getLastName1(),
+                    "first_name"=>$employeePerson->getNames(),
+                    "document_type"=>$employeePerson->getDocumentType(),
+                    "document"=>$employeePerson->getDocument(),
+                    "gender"=>$employeePerson->getGender(),
+                    "birth_date"=>$employeePerson->getBirthDate()->format("d-m-Y"),
+                    "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                    "end_date"=>$endDate?:"",
+                    "contract_number"=>$actContract->getIdContract(),
+                    "worked_hours_day"=>8,
+                    "payment_method"=>"EFE",
+                    "liquidation_type"=>$liquidationType,
+                    "contract_type"=>$actContract->getContractTypeContractType()->getPayrollCode(),
+                    "transport_aux"=>$actContract->getTransportAid()==1?"N":"S",
+                    "society"=>$employer->getIdSqlSociety(),
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
+                if($insertionAnswer->getStatusCode()!=200){
+                    echo "Cago insertar employee ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                    die();
+                    $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                    return $view;
+                }
+
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                    "value"=>$actContract->getSalary(),
+                    "date_change"=>$actContract->getStartDate()->format("d-m-Y"),
+                ));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
+                if($insertionAnswer->getStatusCode()!=200){
+                    echo "Cago FIXnoseque employee ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                    die();
+                    $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                    return $view;
+                }
+
+            }
+
+        }
+
+        die("ALL GOOD MOTHAFOCAK");
+        */
         $invoicesEmited=new ArrayCollection();
         $purchaseOrders=$user->getPurchaseOrders();
         /** @var PurchaseOrders $purchaseOrder */
@@ -58,90 +164,6 @@ class UserController extends Controller
 
             }
         }
-        //SQL Comsumpsion
-        //Create Society
-        $view = View::create();
-        /*if($employer->getIdSqlSociety()!=null){
-            return $view->setStatusCode(406)->setData(array("error"=>array("Employer"=>"Already Exists")));
-        }*/
-        $em=$this->getDoctrine()->getManager();
-        $dateToday=new DateTime();
-        $request = $this->container->get('request');
-        $request->setMethod("POST");
-        $request->request->add(array(
-            "society_nit"=>$person->getDocument(),
-            "society_name"=>$person->getNames(),
-            "society_start_date"=>$dateToday->format("d-m-Y"),
-            "society_mail"=>$user->getEmail(),
-        ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=200){
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-            return $view;
-        }
-        $request->setMethod("GET");
-        $view = View::create();
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety',array("societyNit"=>$person->getDocument()), array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=200){
-            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-            return $view;
-        }
-        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
-        $employer->setIdSqlSociety($idSQL);
-        $em->persist($employer);
-        $em->flush();
-        //return $view->setStatusCode(201);
-        //Employee creation
-        $employerHasEmployees=$employer->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $eHE */
-        foreach ( $employerHasEmployees as $eHE) {
-            if($eHE->getState()==1){
-                $contracts=$eHE->getContracts();
-                $actContract=null;
-                /** @var Contract $c */
-                foreach ($contracts as $c) {
-                    if($c->getState()==1){
-                        $actContract=$c;
-                        break;
-                    }
-                }
-                $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
-                if($liquidationType=="J")
-                    $liquidationType="M";
-                $endDate=$actContract->getEndDate();
-                $employee=$eHE->getEmployeeEmployee();
-                $employeePerson=$employee->getPersonPerson();
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "employee_id"=>$employeePerson->getDocument(),
-                    "last_name"=>$employeePerson->getLastName1(),
-                    "first_name"=>$employeePerson->getNames(),
-                    "document_type"=>$employeePerson->getDocumentType(),
-                    "document"=>$employeePerson->getDocument(),
-                    "gender"=>$employeePerson->getGender(),
-                    "birth_date"=>$employeePerson->getBirthDate()->format("d-m-Y"),
-                    "start_date"=>$dateToday->format("d-m-Y"),
-                    "end_date"=>$endDate==null?"":$endDate,
-                    "contract_number"=>$actContract->getIdContract(),
-                    "worked_hours_day"=>8,
-                    "payment_method"=>"EFE",
-                    "liquidation_type"=>$liquidationType,
-                    "contract_type"=>$actContract->getContractTypeContractType()->getPayrollCode(),
-                    "transport_aux"=>$actContract->getTransportAid()==1?"N":"S",
-                    "society"=>$employer->getIdSqlSociety(),
-                ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
-                if($insertionAnswer->getStatusCode()!=200){
-                    echo "cago mk ".$eHE->getIdEmployerHasEmployee()." SC ".$insertionAnswer->getStatusCode();
-                    $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                    return $view;
-                }
-            }
-
-        }
-
-        die("ALL GOOD MOTHAFOCAK");
-
         //Get pay Methods from Novo
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $person->getDocument()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
