@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Loader\ArrayLoader;
 
 
 class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
@@ -50,11 +52,12 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     } 
     
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception) {
+    	$translator = $this->service_container->get('translator');
 	    $result = array(
 	        'success' => false, 
 	        'function' => 'onAuthenticationFailure', 
 	        'error' => true, 
-	        'message' => $exception->getMessage()
+	        'message' => $translator->trans($exception->getMessage())
 	    );
 	    $response = new Response(json_encode($result));
 	    $response->headers->set('Content-Type', 'application/json');

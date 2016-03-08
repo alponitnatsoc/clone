@@ -289,7 +289,7 @@ class PayrollRestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
-     *   (name="society_id", nullable=false, requirements="[0-9]+", strict=true, description="Id of the society, this must be unique.")
+     *   (name="society_nit", nullable=false, requirements="[0-9]+", strict=true, description="nit of the society, this must be unique, can be something else in natural people.")
      *   (name="society_name", nullable=false, requirements="(.)*", strict=true, description="Name of the society, this can be the same name of the employer.")
      *   (name="society_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="start day on the format DD-MM-YYYY. It can be the day of registration if person.")
      *   (name="society_mail", nullable=false, requirements="(.)*", strict=true, description="Company mail, it can be the mail registered in symplifica.")
@@ -303,8 +303,8 @@ class PayrollRestController extends FOSRestController
         $regex = array();
         $mandatory = array();
         // Set all the parameters info.
-        $regex['society_id'] = '[0-9]+';
-        $mandatory['society_id'] = true;
+        $regex['society_nit'] = '[0-9]+';
+        $mandatory['society_nit'] = true;
         $regex['society_name'] = '(.)*';
         $mandatory['society_name'] = true;
         $regex['society_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
@@ -318,10 +318,9 @@ class PayrollRestController extends FOSRestController
         $unico = array();
 
         $unico['TIPOCON'] = 0;
-        $unico['COD_SOCIEDAD'] = $parameters['society_id'];
+        $unico['COD_SOCIEDAD'] = '';
         $unico['NOMBRE_SOCIEDAD'] = $parameters['society_name'];
-        // For now we are adding the same nit as id.
-        $unico['SOCIEDAD_NIT'] = $parameters['society_id'];
+        $unico['SOCIEDAD_NIT'] = $parameters['society_nit'];
         $unico['SOCIEDAD_FECHA_CONSTITUCION  '] = $parameters['society_start_date'];
         $unico['SOC_EMAIL'] = $parameters['society_mail'];
 
@@ -750,7 +749,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = true;
-        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $regex['date_change'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);

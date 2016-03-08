@@ -2,11 +2,6 @@
 {% if not last_username is defined %}
 	{% set last_username = "" %}
 {% endif %}
-		{% if error is defined %}
-			{% if error %}
-			    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-			{% endif %}
-		{% endif %}
 		<form id="forma-login" class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post">
 			<fieldset>
 				<div>
@@ -14,6 +9,11 @@
 				</div>
 		  		<input id="username" name="_username" required="required" autofocus="" type="text" placeholder="Email" class="form-control input-md" value="{{ last_username }}" style="margin-bottom: 15px;"/>
 		  		<input id="password" name="_password" type="password" placeholder="{{ 'security.login.password'|trans }}" class="form-control input-md" required="required" />
+		  		<div class="row">
+		  			<div class="col-xs-12">
+		  				<div class="error" id="errorLogin">Error</div>
+		  			</div>
+		  		</div>
 		  		<div class="spacing">
                     <input type="checkbox" name="_remember_me" id="remember_me" value="on" />
                     <small>Recordar mi usuario Symplifica.com</small>
