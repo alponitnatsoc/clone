@@ -18,12 +18,12 @@
         {% else %}
             <div id='' class='col-sm-12 col-xs-12 align-Resp'>
                 <a id='' class='btn col-sm-12 col-xs-12 blockStep {% if (step.state != 0 and step.state!=100) or (step.state==0 and step.url!="") %} active {% else %}{% if step.state==100 %} complete {% else %}blocked{% endif %} {% endif %} nav-link' href="{{step.url}}">
-                    <div class="col-xs-12 text-right" style="font-size: 12px;"><p>Paso <strong>{{step.paso}}</strong> de 4</p></div>
                     <div id='' class='col-md-2 col-xs-12 txt-AD0' style="text-align: left;">
-                        {% if step.state==100 %}<img src="/img/complete.png">{% else %}<img src="/img/employ.png">{% endif %}
+                        {% if step.state==100 %}<img src="/img/block-complete.png" class="center-block">{% else %} {% if step.state==0 %}<img src="/img/block-pending.png" class="center-block">{% else %}<img src="/img/block-active.png" class="center-block">{% endif %}{% endif %}
                     </div>
                     <div id='' class='col-md-6 col-xs-12 txt-AD1'>
-                        <div id='' class='text-left' style="line-height: 60px;" >
+                        <div id='' class='text-left' >
+                            {% if step.state!=100 %}<span class="step">Paso {{step.paso}} de 4</span>{% endif %}
                             {{step.name}}
                         </div>
                     </div>
