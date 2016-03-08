@@ -750,7 +750,7 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['value'] = '([0-9])+(.[0-9]+)?';
         $mandatory['value'] = true;
-        $regex['date_change'] = '([0-9])+(.[0-9]+)?';
+        $regex['date_change'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['date_change'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
