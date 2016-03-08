@@ -22,6 +22,13 @@ class Employer
     private $idEmployer;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $idSqlSociety;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
     private $employerType;
@@ -386,5 +393,29 @@ class Employer
     public function getRegisterExpress()
     {
         return $this->registerExpress;
+    }
+
+    /**
+     * Set idSqlSociety
+     *
+     * @param integer $idSqlSociety
+     *
+     * @return Employer
+     */
+    public function setIdSqlSociety($idSqlSociety)
+    {
+        $this->idSqlSociety = $idSqlSociety;
+
+        return $this;
+    }
+
+    /**
+     * Get idSqlSociety
+     *
+     * @return integer
+     */
+    public function getIdSqlSociety()
+    {
+        return $this->idSqlSociety;
     }
 }

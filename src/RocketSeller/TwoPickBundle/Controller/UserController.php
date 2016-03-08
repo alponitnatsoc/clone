@@ -57,8 +57,27 @@ class UserController extends Controller
 
             }
         }
+        //SQL Comsumpsion
+        //Create Society
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "documentType"=>$person->getDocumentType(),
+            "documentNumber"=>$person->getDocument(),
+            "accountNumber"=>$paramFetcher->get("credit_card"),
+            "expirationYear"=>$paramFetcher->get("expiry_date_year"),
+            "expirationMonth"=>$paramFetcher->get("expiry_date_month"),
+            "codeCheck"=>$paramFetcher->get("cvv"),
+        ));
+        $view = View::create();
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPaymentMethod', array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=201){
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+            return $view;
+        }
+
+
         //Get pay Methods from Novo
-        //TODO ASK FOR DANIEL SERVICE
         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $person->getDocument()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
         //get the remaining days of service
