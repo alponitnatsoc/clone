@@ -470,7 +470,7 @@ class PayrollRestController extends FOSRestController
      *   (name="start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the employee started working on the comopany(format: DD-MM-YYYY).")
      *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
      *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
-     *   (name="worked_hours_days", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
+     *   (name="worked_hours_day", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
      *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=false, requirements="([0-9])", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
@@ -506,8 +506,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['contract_number'] = false;
         $regex['last_contract_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['last_contract_end_date'] = false;
-        $regex['worked_hours_days'] = '([0-9])+';
-        $mandatory['worked_hours_days'] = true;
+        $regex['worked_hours_day'] = '([0-9])+';
+        $mandatory['worked_hours_day'] = true;
         $regex['payment_method'] = '(CHE|CON|EFE)';
         $mandatory['payment_method'] = true;
         $regex['liquidation_type'] = '(J|M|Q)';
@@ -538,7 +538,7 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_FECHA_INI_CONTRATO'] = $parameters['start_date']; // Same date.
         $unico['EMP_NRO_CONTRATO'] = $parameters['contract_number'];
         $unico['EMP_FECHA_FIN_CONTRATO'] = isset($parameters['last_contract_end_date']) ? $parameters['last_contract_end_date'] : '';
-        $unico['EMP_HORAS_TRAB'] = $parameters['worked_hours_days'];
+        $unico['EMP_HORAS_TRAB'] = $parameters['worked_hours_day'];
         $unico['EMP_FORMA_PAGO'] = $parameters['payment_method'];
         $unico['EMP_TIPOLIQ'] = $parameters['liquidation_type'];
         $unico['EMP_TIPO_CONTRATO'] = $parameters['contract_type'];
