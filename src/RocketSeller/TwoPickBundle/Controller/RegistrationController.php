@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\Invitation;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Form\RegistrationExpress;
 
 class RegistrationController extends BaseController
 {
@@ -161,15 +162,23 @@ class RegistrationController extends BaseController
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
         $userManager->updateUser($user);
         if (null === $response = $event->getResponse()) {
-            if ($user->getExpress()) {
+            /*if ($user->getExpress()) {
                 $url = $this->generateUrl('express_payment');   
             }else{
                 $url = $this->generateUrl('edit_profile');
-            }            
+            }*/
+
+            $url = $this->generateUrl('choose_registration');
             $response = new RedirectResponse($url);
         }
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
         return $response;
+    }
+    public function chooseRegisterAction()
+    {
+        $user = $this->getUser();
+        return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
+
     }
     // /**
     //  * Tell the user his account is now confirmed
@@ -200,56 +209,40 @@ class RegistrationController extends BaseController
     // }
     public function registerExpressAction(Request $request)
     {
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.registration.form.factory');
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
-        $user->setExpress(1);
-        $user->setUsername("atemporel_tempo_tmp");
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
+        $form = $this->createForm(new RegistrationExpress());
+        $person = $user->getPersonPerson();
+        $form->setData($person);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-            $person = new Person();
-            $person->setDocumentType($request->get("documentType"));
-            $person->setDocument($request->get("document"));
-            $person->setLastName1($request->get("lastName1"));
-            $person->setLastName2($request->get("lastName2"));
+            
+            $person->setDocumentType($form->get("documentType")->getData());
+            $person->setDocument($form->get("document")->getData());
+            $person->setLastName1($form->get("lastName1")->getData());
+            $person->setLastName2($form->get("lastName2")->getData());
             $employer = new Employer();            
             $phone = new Phone();            
             $phone->setPhoneNumber($request->get("phone"));
             $person->addPhone($phone);
-            $person->setNames($form->get("name")->getData());
+            $person->setNames($form->get("names")->getData());
             $employer->setPersonPerson($person);
+            $em->persist($person);
             $employer->setEmployerType("Persona");
             $employer->setRegisterState(10);
             $employer->setRegisterExpress(1);
             $em->persist($employer);
             $em->flush();
-            $user->setPersonPerson($person);
-            $user->setUsername($user->getEmail());
-            $userManager->updateUser($user);
+            $user->setExpress(1);
+            $em->persist($user);
+            $em->flush();
 
+            $url = $this->generateUrl('express_payment');
+            $response = new RedirectResponse($url);
+            return $response;
 
-
-            return $this->render('RocketSellerTwoPickBundle:Registration:checkEmail.html.twig');
+            //return $this->render('RocketSellerTwoPickBundle:Registration:checkEmail.html.twig');
         }
         return $this->render('FOSUserBundle:Registration:expressRegistration.html.twig', array(
                     'form' => $form->createView()

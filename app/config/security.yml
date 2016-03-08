@@ -36,6 +36,8 @@ security:
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
                 always_use_default_target_path: false
                 default_target_path: /pages
+                success_handler: authentication_handler
+                failure_handler: authentication_handler
             oauth:
                 failure_path: fos_user_registration_register
                 login_path: fos_user_security_login

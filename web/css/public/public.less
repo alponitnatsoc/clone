@@ -71,6 +71,9 @@ nav {
 	}
 	#topbar {
 		font-size: 14px;
+		@media (max-width: @screen-sm-max) {
+			font-size: 11px;
+		}
 		background-color: @topbar-color;
 		height: @topbar-height;
 		line-height: @topbar-height;
@@ -95,14 +98,15 @@ nav {
 				z-index: 100;
 				padding: 0 20px;
 				background-color: @topbar-color;
-				transition: max-height 0.15s, opacity 0.15s ease-out;
+				transition: max-height 0.15s ease-out, opacity 0.25s ease-out;
 				border: none;
+				box-shadow: @btn-hover;
 				&.active {
 					padding-top: 20px;
 					max-height: 500px;
 					display: block;
 					opacity: 1;
-					transition: max-height 0.25s, opacity 0.15s ease-in;
+					transition: max-height 0.25s ease-in, opacity 0.15s ease-in;
 				}
 			}
 		}

@@ -1,0 +1,20 @@
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block body %}
+	<div class="container">
+		<div class="content">
+			<h1>Felicitaciones has confirmado tu correo</h1>
+			<p>ahora debes escoger el tipo de registro que deseas hacer</p>
+			<div class="col-md-6">
+				<p>Registro normal</p>
+				<a href="{{path('edit_profile')}}" class="btn btn-registro">Iniciar</a>
+			</div>
+			<div class="col-md-6">
+				<p>Registro express</p>
+				<a href="{{path('express_start')}}" class="btn btn-registro">Iniciar</a>
+			</div>
+		</div>		
+	</div>	
+{% endblock body %}

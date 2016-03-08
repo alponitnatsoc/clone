@@ -389,7 +389,7 @@ express_pay_start:
     path: /express-pay/start/add
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:startExpressPay }
 express_success:
-    path: /express-success/{id}
+    path: /express-success
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:successExpress }
 express_registration:
     path: /express-registration/{id}
@@ -397,6 +397,12 @@ express_registration:
 express_registration_employee:
     path: /express-registration/{id}/employee-create/{idEmployee}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:employeeCreate }
+
+choose_registration:
+    path: /choose/register
+    defaults:  { _controller: RocketSellerTwoPickBundle:Registration:chooseRegister }
+
+
 back_employer_menu:
     path: /back-menu-employer/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }

@@ -19,19 +19,56 @@ class RegistrationExpress extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('person', new BasicPersonRegistration(), array(
-                'property_path' => 'personPerson'))
-            ->add('email', 'email', array('translation_domain' => 'FOSUserBundle', "attr" => array('placeholder' => 'form.email')))
-            ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password'), 'translation_domain' => 'FOSUserBundle'))
+            ->add('documentType', 'choice', array(
+                'choices' => array(
+                    'CC'   => 'Cédula de ciudadanía',
+                    'CE' => 'Cedula de extranjería',
+                    'TI' => 'Tarjeta de identidad'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'documentType',
+                'label' => 'Tipo de documento*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('document', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                ),
+                'property_path' => 'document',
+                'label' => 'Número de documento*',
+                "attr" => array(
+                    "data-toggle" => "tooltip", 
+                    "data-placement" => "right",
+                    "data-container" => "body",
+                    "title" => "Texto de ayuda"
+                )
+            ))
+            ->add('names', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                ),'label' => 'Nombres*'))
+            ->add('lastName1', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                ),'label' => 'Primer Apellido*'))
+            ->add('lastName2', 'text', array(
+                'constraints' => array(
+                    new NotBlank()
+                ),
+                'label' => 'Segundo Apellido',
+                'required' => false
+            ))
             ->add('save', 'submit', array(
-                'label' => 'Create',
+                'label' => 'Continuar',
             ));
             
     }
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RocketSeller\TwoPickBundle\Entity\User',            
+            'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person',            
         ));
     }
 

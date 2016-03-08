@@ -122,6 +122,7 @@ class ExpressRegistrationController extends Controller
             );
 
     }
+
     public function payRegisterExpressAction($id){
         
         $em = $this->getDoctrine()->getManager();
@@ -149,14 +150,16 @@ class ExpressRegistrationController extends Controller
         $em->flush();
         $format = array('_format'=>'json');
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()),$format);
+        $user->setExpress(2);
+        $em->persist($user);
+        $em->flush();
+        
+        return $this->redirectToRoute('express_success');
 
-        return $this->render('RocketSellerTwoPickBundle:Registration:expressSuccess.html.twig');
     }
-    public function successExpressAction($id)
+    public function successExpressAction()
     {
-        $user = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:User')
-        ->find($id);
+        $user = $this->getUser();
         $role = $this->getDoctrine()
         ->getRepository('RocketSellerTwoPickBundle:Role')
         ->findByName("ROLE_BACK_OFFICE");
