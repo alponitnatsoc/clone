@@ -226,7 +226,7 @@ class PayrollRestController extends FOSRestController
         $array = json_decode($json, TRUE);
 
         $result = array();
-        $errorCode = 201;
+        $errorCode = 200;
         $this->getContentRecursive($array, $result, $errorCode);
         if (count($result) == 1)
             $result = $result[0];
