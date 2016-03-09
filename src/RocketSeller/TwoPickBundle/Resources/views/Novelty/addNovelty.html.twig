@@ -14,6 +14,10 @@
 					<div style="display: none;">
 						{{ form_row(document.documentTypeDocumentType) }}
 					</div>
+                    {% if (document.documentTypeDocumentType.vars.data.refPdf) %}
+                        Tenemos un formato de {{ document.documentTypeDocumentType.vars.data.name }} diligenciado listo para ser firmado
+                        <a id="" class="download-link notAjax" href="{{ path('download_documents', {'id': document.parent.parent.vars.data.idNovelty, 'type': 'pdf', 'ref': document.documentTypeDocumentType.vars.data.refPdf } ) }}"><i class="fa fa-cloud-download">PDF</i></a>
+                    {% endif %}
 					<div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
 						<div class="col-sm-12 col-xs-12">
 							<div class="col-sm-6 label-group">
