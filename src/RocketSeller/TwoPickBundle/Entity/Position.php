@@ -72,32 +72,6 @@ class Position
         return $this->name;
     }
 
-
-
-        /**
-         * Set payroll code
-         *
-         * @param string $payroll_code
-         *
-         * @return PayType
-         */
-        public function setPayrollCoverageCode($payroll_code)
-        {
-            $this->payroll_code = $payroll_code;
-
-            return $this;
-        }
-
-        /**
-         * Get payroll_code
-         *
-         * @return string
-         */
-        public function getPayrollCoverageCode()
-        {
-            return $this->payroll_code;
-        }
-
     /**
      * Constructor
      */
@@ -138,5 +112,29 @@ class Position
     public function getConstraints()
     {
         return $this->constraints;
+    }
+
+    /**
+     * Set payrollCoverageCode
+     *
+     * @param string $payrollCoverageCode
+     *
+     * @return Position
+     */
+    public function setPayrollCoverageCode($payrollCoverageCode)
+    {
+        $this->payroll_coverage_code = $payrollCoverageCode;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollCoverageCode
+     *
+     * @return string
+     */
+    public function getPayrollCoverageCode()
+    {
+        return $this->payroll_coverage_code;
     }
 }
