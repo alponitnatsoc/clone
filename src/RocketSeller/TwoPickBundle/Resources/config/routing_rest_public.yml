@@ -90,3 +90,7 @@ payment_method:
     type: rest
     resource: "RocketSellerTwoPickBundle:PaymentMethodRest"
     name_prefix: api_public_
+payment_express_register:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:ExpressRegistrationRest"
+    name_prefix: api_public_

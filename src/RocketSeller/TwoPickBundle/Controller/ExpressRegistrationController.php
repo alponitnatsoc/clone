@@ -29,28 +29,20 @@ class ExpressRegistrationController extends Controller
         //->getRepository('RocketSellerTwoPickBundle:User')
         //->find($id);
         $user = $this->getUser();
+        $idUser = $user->getId();
         $person = $user->getPersonPerson();
-        $date = new \DateTime('02/31/1970');
-        $request = $this->container->get('request');
-        $request->setMethod("POST");
-        $request->request->add(array(
-            "documentType"=>$person->getDocumentType(),
-            "documentNumber"=>$person->getDocument(),
-            "name"=>$person->getNames(),
-            "lastName"=>$person->getLastName1()." ".$person->getLastName2(),
-            "year"=>$date->format("Y"),
-            "month"=>$date->format("m"),
-            "day"=>$date->format("d"),
-            "phone"=>$person->getPhones()->get(0)->getPhoneNumber(),
-            "email"=>$user->getEmail()
-            ));
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClient', array('_format' => 'json'));
-        if ($insertionAnswer->getStatusCode()==201) {
+        $format = array('_format' => 'json');
+        $response = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:getPayment', array(
+                'id' => $idUser                
+            ),
+            $format
+        );
+        if ($response->getStatusCode()==201) {
             //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
             return $this->redirectToRoute('express_payment_add');
 
         }else{
-            dump($insertionAnswer);
+            dump($response);
             exit();
         }
         
@@ -127,34 +119,21 @@ class ExpressRegistrationController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $person = $user->getPersonPerson();
 
-        $PurchaseOrders = new PurchaseOrders();
-        $PurchaseOrders->setIdUser($user);
-        $PurchaseOrders->setPayMethodId($id);
-        $PurchaseOrders->setName("Registro express");
-
-        $PurchaseOrdersDescription = new PurchaseOrdersDescription();        
-        $product = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:Product')
-        ->findOneBySimpleName("PRE");
-     
-        $PurchaseOrdersDescription->setProductProduct($product);
-        $value = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
-        $PurchaseOrders->setValue($value);
-        $PurchaseOrdersDescription->setValue($value);
-        $PurchaseOrdersDescription->setDescription($product->getDescription());
-        $em->persist($PurchaseOrdersDescription);
-        $PurchaseOrders->addPurchaseOrderDescription($PurchaseOrdersDescription);
-        $em->persist($PurchaseOrders);
-        $em->flush();
         $format = array('_format'=>'json');
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()),$format);
-        $user->setExpress(2);
-        $em->persist($user);
-        $em->flush();
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:postPayRegisterExpress', array('id' => $user->getId(),'idPayMethod'=>$id),$format);
+
+        if ($insertionAnswer->getStatusCode()==200) {           
+            return $this->redirectToRoute('express_success');
+        }elseif ($insertionAnswer == 404) {
+            dump("Procesando");
+            exit();
+        }else{
+            dump($insertionAnswer);
+            exit();
+        }
         
-        return $this->redirectToRoute('express_success');
+        
 
     }
     public function successExpressAction()
