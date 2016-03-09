@@ -147,7 +147,7 @@ class NoveltyController extends Controller {
             if ($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
                 $user = $this->getUser();
-                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
+                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                 $em->persist($notification);
                 $em->flush();
                 $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
@@ -194,7 +194,7 @@ class NoveltyController extends Controller {
                 if ($notificationReferenced == -1) {
                     /** @var User $user */
                     $user = $this->getUser();
-                    $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
+                    $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                     $em->persist($notification);
                     $em->flush();
                     $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
