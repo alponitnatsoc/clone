@@ -6,11 +6,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Entity;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,6 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\UserType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -42,7 +45,7 @@ class UserController extends Controller
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
         //SQL Comsumpsion
-        /*
+
         //Create Society
         $view = View::create();
         if($employer->getIdSqlSociety()!=null){
@@ -59,35 +62,36 @@ class UserController extends Controller
             "society_start_date"=>$dateToday->format("d-m-Y"),
             "society_mail"=>$user->getEmail(),
         ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
+        /*$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
         if($insertionAnswer->getStatusCode()!=200){
             echo "Cago society SC".$insertionAnswer->getStatusCode();
             die();
             $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
             return $view;
-        }
+        }*/
         $request->setMethod("GET");
         $view = View::create();
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety',array("societyNit"=>$person->getDocument()), array('_format' => 'json'));
+        /*$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety',array("societyNit"=>$person->getDocument()), array('_format' => 'json'));
         if($insertionAnswer->getStatusCode()!=200){
             echo "Cago sacar id Society SC".$insertionAnswer->getStatusCode();
             die();
             $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
             return $view;
         }
-        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
+        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];*/
+        $idSQL=$employer->getIdSqlSociety();
         $employer->setIdSqlSociety($idSQL);
         $em->persist($employer);
         $em->flush();
         //return $view->setStatusCode(201);
         //Employee creation
         $employerHasEmployees=$employer->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $eHE
+        /** @var EmployerHasEmployee $eHE */
         foreach ( $employerHasEmployees as $eHE) {
             if($eHE->getState()==1){
                 $contracts=$eHE->getContracts();
                 $actContract=null;
-                /** @var Contract $c
+                /** @var Contract $c */
                 foreach ($contracts as $c) {
                     if($c->getState()==1){
                         $actContract=$c;
@@ -119,13 +123,13 @@ class UserController extends Controller
                     "transport_aux"=>$actContract->getTransportAid()==1?"N":"S",
                     "society"=>$employer->getIdSqlSociety(),
                 ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
+                /*$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
                 if($insertionAnswer->getStatusCode()!=200){
                     echo "Cago insertar employee ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
                     die();
                     $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
                     return $view;
-                }
+                }*/
 
                 $request->setMethod("POST");
                 $request->request->add(array(
@@ -133,23 +137,109 @@ class UserController extends Controller
                     "value"=>$actContract->getSalary(),
                     "date_change"=>$actContract->getStartDate()->format("d-m-Y"),
                 ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
+                /*$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
                 if($insertionAnswer->getStatusCode()!=200){
                     echo "Cago FIXnoseque employee ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
                     die();
                     $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
                     return $view;
                 }
+                //ADDING THE ENTITIES
+                $emEntities=$employee->getEntities();
+                /** @var EmployeeHasEntity $eEntity
+                foreach ( $emEntities as $eEntity) {
+                    $entity=$eEntity->getEntityEntity();
+                    $eType=$entity->getEntityTypeEntityType();
+                    if($eType->getPayrollCode()=="EPS"){
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code"=>$eType->getPayrollCode(),
+                            "coverage_code"=>"2",//EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
+                            "entity_code"=>$entity->getPayrollCode(),
+                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                        if($insertionAnswer->getStatusCode()!=200){
+                            echo "Cago insertar entidad EPS ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                            die();
+                            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                            return $view;
+                        }
+                    }
+                    if($eType->getPayrollCode()=="AFP"){
+                        if($entity->getPayrollCode()==0){
+                            $coverage=$entity->getName()=="Pensionado"?2:0;
+                        }else{
+                            $coverage=1;
+                        }
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code"=>$eType->getPayrollCode(),
+                            "coverage_code"=>$coverage,//the relation coverage from SQL
+                            "entity_code"=>$entity->getPayrollCode(),
+                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                        if($insertionAnswer->getStatusCode()!=200){
+                            echo "Cago insertar entidad AFP ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                            die();
+                            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                            return $view;
+                        }
+                    }
+                }*/
+                $emEntities=$employer->getEntities();
+                /** @var EmployerHasEntity $eEntity */
+                foreach ( $emEntities as $eEntity) {
+                    $entity=$eEntity->getEntityEntity();
+                    $eType=$entity->getEntityTypeEntityType();
+                    if($eType->getPayrollCode()=="ARP"){
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code"=>$eType->getPayrollCode(),
+                            "coverage_code"=>$actContract->getPositionPosition()->getPayrollCoverageCode(),
+                            "entity_code"=>$entity->getPayrollCode(),
+                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                        if($insertionAnswer->getStatusCode()!=200){
+                            echo "Cago insertar entidad ARP ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                            die();
+                            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                            return $view;
+                        }
+                    }
+                    if($eType->getPayrollCode()=="PARAFISCAL"){
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code"=>$eType->getPayrollCode(),
+                            "coverage_code"=>"1",//Forever and ever don't change this
+                            "entity_code"=>$entity->getPayrollCode(),
+                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                        if($insertionAnswer->getStatusCode()!=200){
+                            echo "Cago insertar entidad PARAFISCAL ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                            die();
+                            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                            return $view;
+                        }
+                    }
+                }
 
             }
 
-        }
+}
 
-        die("ALL GOOD MOTHAFOCAK");
-        */
-        $invoicesEmited=new ArrayCollection();
-        $purchaseOrders=$user->getPurchaseOrders();
-        /** @var PurchaseOrders $purchaseOrder */
+die("ALL GOOD MOTHAFOCAK");
+
+$invoicesEmited=new ArrayCollection();
+$purchaseOrders=$user->getPurchaseOrders();
+/** @var PurchaseOrders $purchaseOrder */
         foreach ($purchaseOrders as $purchaseOrder) {
             $id=$purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay();
             if($id==0||$id==8){//this ids for novo mean aproved
