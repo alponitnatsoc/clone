@@ -214,14 +214,15 @@ class PaymentMethodRestController extends FOSRestController
      */
     public function getPayPurchaseOrderAction($idPurchaseOrder )
     {
-        /** @var User $user */
-        $user=$this->getUser();
-        $person=$user->getPersonPerson();
+
         $em=$this->getDoctrine()->getManager();
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId=$idPurchaseOrder;
         $purchaseOrder=$em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
         $pOSRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        /** @var User $user */
+        $user=$purchaseOrder->getIdUser();
+        $person=$user->getPersonPerson();
         $request = $this->container->get('request');
         $view = View::create();
         $descriptions=$purchaseOrder->getPurchaseOrderDescriptions();
