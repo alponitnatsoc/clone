@@ -82,6 +82,11 @@ class Novelty
     private $amount;
 
     /**
+     * @ORM\Column(type="string", nullable=TRUE, name="description", length=200)
+     */
+    private $description;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -324,5 +329,29 @@ class Novelty
     public function getPayrollPayroll()
     {
         return $this->payrollPayroll;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Novelty
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
