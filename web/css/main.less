@@ -884,6 +884,7 @@ table.record_properties {
 
     &:hover {
         opacity: 1;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)!important;
     }
     .txt-AD0 img {
         margin-top: 15px;
@@ -979,6 +980,24 @@ table.record_properties {
         }
     }
 
+    &.inline {
+        margin-top: 20px;
+        background-color: #F7F7F7;
+        border: none;
+        &:hover {
+            box-shadow: none!important;
+        }
+
+        .txt-AD1 {
+            span {
+                &.step {
+                    font-size: 24px;
+                    color: @blue;
+                }
+            }
+        }
+    }
+
 }
 .statusBarIcon {
     height: 89px;
@@ -986,10 +1005,6 @@ table.record_properties {
     background-color: @blue;
     width: 107px;
     padding-top: 4px;
-}
-
-.btn.blockStep:hover {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)!important;
 }
 
 .btn.blockStep.blocked:hover {
@@ -1014,21 +1029,19 @@ table.record_properties {
     font-weight: 700;
 }
 .nav-tabs.nav-justified > li:first-child a {
-    border-width: 2px 0px 0px 0px;
     background-color: transparent;
     margin: 0 15px 0 0;
     border-radius: 0;
 }
 .nav-tabs.nav-justified > li:last-child a {
-    border-width: 2px 0px 0px 0px;
     background-color: transparent;
     margin: 0 0 0 0;
     border-radius: 0;
 }
 .nav-tabs.nav-justified > li > a {
     color: #999;
-    border-width: 2px 0px 0px 0px;
-    border-color: @lightGrayText;
+    border-width: 1px 0px 0px 0px;
+    border-color: #71C8C6;
     margin: 0 15px 0 0;
     background-color: transparent;
     border-radius: 0;
@@ -1099,6 +1112,11 @@ table.record_properties {
     }
     div {
         text-align: center;
+        &.form-group {
+            div {
+                text-align: left;
+            }
+        }
     }
     label {
         font-weight: 300 !important;
@@ -1607,5 +1625,28 @@ select {
         }
     }
     #contractTypeTab {
+    }
+}
+
+#register_employer_youAre {
+    .radio {
+        &:last-child{
+            label {
+                color: #ddd;
+            }
+        }
+    }
+}
+
+.formulario {
+    margin-bottom: 20px;
+    border-top: 1px solid #E6E7E8;
+    border-bottom: 1px solid #E6E7E8;
+    .remember {
+        padding: 20px 0;
+        text-align: center;
+        .fa {
+            color: #5d5d5d!important;
+        }
     }
 }
