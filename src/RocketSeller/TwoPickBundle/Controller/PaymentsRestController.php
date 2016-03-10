@@ -77,7 +77,7 @@ class PaymentsRestController extends FOSRestController
         //$client = $this->get('guzzle.client.api_rest');
         // Line bellow was working, commneted for the change of VPN.
         $client = new Client(['http_errors' => false]);
-        $sslParams = array('cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment'));
+        $sslParams = array('ssl_key' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment'));
         /*$request = $client->get('', array(), array(
             'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
         ));*/
