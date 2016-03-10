@@ -35,6 +35,7 @@ class UserController extends Controller
             return null;
         return $this->getUser();
     }
+
     public function myAccountShowAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -44,6 +45,7 @@ class UserController extends Controller
         $user=$this->checkLogin();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
+        //
         //SQL Comsumpsion
 
         //Create Society
@@ -189,9 +191,9 @@ class UserController extends Controller
                             return $view;
                         }
                     }
-                }*/
+                }
                 $emEntities=$employer->getEntities();
-                /** @var EmployerHasEntity $eEntity */
+                /** @var EmployerHasEntity $eEntity
                 foreach ( $emEntities as $eEntity) {
                     $entity=$eEntity->getEntityEntity();
                     $eType=$entity->getEntityTypeEntityType();
@@ -229,17 +231,16 @@ class UserController extends Controller
                             return $view;
                         }
                     }
-                }
+                }*/
 
             }
 
-}
+    }
 
-die("ALL GOOD MOTHAFOCAK");
 
-$invoicesEmited=new ArrayCollection();
-$purchaseOrders=$user->getPurchaseOrders();
-/** @var PurchaseOrders $purchaseOrder */
+    $invoicesEmited=new ArrayCollection();
+    $purchaseOrders=$user->getPurchaseOrders();
+    /** @var PurchaseOrders $purchaseOrder */
         foreach ($purchaseOrders as $purchaseOrder) {
             $id=$purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay();
             if($id==0||$id==8){//this ids for novo mean aproved

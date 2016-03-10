@@ -96,6 +96,11 @@ class Contract
     private $salary;
 
     /**
+     * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
+     */
+    private $weekWorkableDays;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployeeContractType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployeeContractType")
      * @ORM\JoinColumns({
@@ -752,5 +757,40 @@ class Contract
     public function getTransportAid()
     {
         return $this->transportAid;
+    }
+    /**
+     * Add weekWorkableDay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
+     *
+     * @return Contract
+     */
+    public function addWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
+    {
+        $weekWorkableDay->setContractContract($this);
+        $this->weekWorkableDays[] = $weekWorkableDay;
+
+        return $this;
+    }
+
+    /**
+     * Remove weekWorkableDay
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay
+     */
+    public function removeWeekWorkableDay(\RocketSeller\TwoPickBundle\Entity\WeekWorkableDays $weekWorkableDay)
+    {
+        $weekWorkableDay->setContractContract(null);
+        $this->weekWorkableDays->removeElement($weekWorkableDay);
+    }
+
+    /**
+     * Get weekWorkableDays
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWeekWorkableDays()
+    {
+        return $this->weekWorkableDays;
     }
 }
