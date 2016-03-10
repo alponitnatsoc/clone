@@ -106,40 +106,96 @@ class NoveltyRestController extends FOSRestController
      * @param $contractId
      * @return View
      */
-    protected function getVacationDaysAction($dateStart, $dateEnd,$contractId)
+    public function getValidVacationDaysAction($dateStart, $dateEnd,$contractId)
     {
         $em=$this->getDoctrine()->getManager();
         $contractRepo=$em->getRepository("RocketSellerTwoPickBundle:Contract");
         /** @var Contract $realContract */
         $realContract=$contractRepo->find($contractId);
         $wkd=array();
-        $weekWorkableDays=$realContract->getWeekWorkableDays();
-        /** @var WeekWorkableDays $wwd */
-        foreach ($weekWorkableDays as $wwd) {
-            $wkd[$wwd->getDayNumber()]=true;
+        if($realContract->getTimeCommitmentTimeCommitment()->getName()=="Tiempo Completo"){
+            $wkd[6]=true;
+            $wkd[5]=true;
+            $wkd[4]=true;
+            $wkd[3]=true;
+            $wkd[2]=true;
+            $wkd[1]=true;
+        }else{
+            $weekWorkableDays=$realContract->getWeekWorkableDays();
+            /** @var WeekWorkableDays $wwd */
+            foreach ($weekWorkableDays as $wwd) {
+                $wkd[$wwd->getDayNumber()]=true;
+            }
         }
         $dateRStart= new DateTime($dateStart);
         $dateREnd= new DateTime($dateEnd);
+        $dateREnd->modify('+1 day');
         $interval=$dateRStart->diff($dateREnd);
         $answer=0;
         $numberDays=$interval->format("%a");
         for($i=0;$i<$numberDays;$i++){
             $dateToCheck=new DateTime();
             $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
-            $this->workable($dateToCheck);
-            if(isset($wkd[$dateToCheck->format("w")])){
+
+            if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
                 $answer++;
             }
 
         }
-
-
         $view = View::create();
         $view->setStatusCode(200)->setData(array("days"=>$answer));
 
         return $view;
     }
+
+    /**
+     * @param DateTime $dateToCheck
+     * @return bool
+     */
     private function workable ($dateToCheck){
+        $holyDays=array();
+        $date=new DateTime("2016-"."01"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."01"."-"."11");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."21");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."24");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."03"."-"."25");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."01");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."09");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."05"."-"."30");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."06"."-"."06");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."07"."-"."04");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."07"."-"."20");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."08"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."08"."-"."15");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."10"."-"."17");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."11"."-"."07");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."11"."-"."14");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."12"."-"."08");
+        $holyDays[]=$date;
+        $date=new DateTime("2016-"."12"."-"."25");
+        $holyDays[]=$date;
+        /** @var DateTime $hd */
+        foreach ($holyDays as $hd) {
+            if($dateToCheck->format("Y-m-d")==$hd->format("Y-m-d"))
+                return false;
+        }
+
         return true;
     }
 

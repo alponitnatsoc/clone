@@ -130,14 +130,27 @@ class NoveltyController extends Controller {
         $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll))), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $plus=$payRol->getPeriod()==4?24:14;
-            $dateEndPayroll=new DateTime();
-            $dateEndPayroll->setDate($payRol->getYear(),$payRol->getMonth(),1+$plus);
-            if($novelty->getDateStart()>$dateEndPayroll){
-                return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
-                    'form' => $form->createView(),
-                    'errno'=> 'La fecha no puede ser mayor a la fecha de terminación del periodo de nómina! '.$dateEndPayroll->format("Y-m-d")
-                ));
+            //check if novelty date start is valid
+            if($novelty->getDateStart()!=null){
+                $plus=$payRol->getPeriod()==4?24:14;
+                $dateEndPayroll=new DateTime();
+                $dateEndPayroll->setDate($payRol->getYear(),$payRol->getMonth(),1+$plus);
+                if($novelty->getDateStart()>$dateEndPayroll){
+                    return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+                        'form' => $form->createView(),
+                        'errno'=> 'La fecha no puede ser mayor a la fecha de terminación del periodo de nómina! '.$dateEndPayroll->format("Y-m-d")
+                    ));
+                }
+            }
+            if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
+                $request->setMethod("GET");
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDays',array(
+                    "dateStart"=>$novelty->getDateStart(),
+                    "dateEnd"=>$novelty->getDateEnd(),
+                    "contractId"=>$payRol->getContractContract()->getIdContract()
+                    ), array('_format' => 'json'));
+                $days=json_decode($insertionAnswer->getContent(),true)["days"];
+                $novelty->setUnits($days);
             }
             $novelty->setName($noveltyType->getName());
             $payRol->addNovelty($novelty);

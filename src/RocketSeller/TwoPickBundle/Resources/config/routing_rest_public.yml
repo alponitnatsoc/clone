@@ -2,6 +2,10 @@ tokens :
     type: rest
     resource: "RocketSellerTwoPickBundle:TokenRest"
     name_prefix: api_public_
+novelty :
+    type: rest
+    resource : "RocketSellerTwoPickBundle:NoveltyRest"
+    name_prefix: api_public_
 notification :
     type: rest
     resource: "RocketSellerTwoPickBundle:NotificationRest"
