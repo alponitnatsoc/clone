@@ -75,7 +75,12 @@ class PaymentsRestController extends FOSRestController
     public function callApi($headers, $parameters, $path, $action = "post", $timeout = 10)
     {
         //$client = $this->get('guzzle.client.api_rest');
+        // Line bellow was working, commneted for the change of VPN.
         $client = new Client(['http_errors' => false]);
+        $sslParams = array('cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment'));
+        /*$request = $client->get('', array(), array(
+            'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
+        ));*/
         // $url_request = $this->container->getParameter('novo_payments_url') ;
         // URL used for test porpouses, the line above should be used in production.
         if (isset($_SERVER['SERVER_NAME']) && in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1'))) {
@@ -95,13 +100,13 @@ class PaymentsRestController extends FOSRestController
         );
         try {
             if ($action == "post") {
-                $response = $client->post($url_request, $options);
+                $response = $client->post($url_request, $options, $sslParams);
             } else if ($action == "delete") {
-                $response = $client->delete($url_request, $options);
+                $response = $client->delete($url_request, $options, $sslParams);
             } else if ($action == "get") {
-                $response = $client->get($url_request, $options);
+                $response = $client->get($url_request, $options, $sslParams);
             } else if ($action == "put") {
-                $response = $client->put($url_request, $options);
+                $response = $client->put($url_request, $options, $sslParams);
             }
         } catch (Exception $e) {
 
