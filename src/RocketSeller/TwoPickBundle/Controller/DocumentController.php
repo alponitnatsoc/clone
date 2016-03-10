@@ -291,7 +291,6 @@ class DocumentController extends Controller
 	        case "not-despido":
 	        case "suspencion":
 	        case "llamado-atencion":
-	        case "permiso":
 	        case "aut-afiliacion-ss":
 	        case "trato-datos":
     	        //$id de la relacion employerhasempployee
@@ -339,6 +338,7 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
+	        case "permiso":
 	        case "dotacion":
 	        case "aut-descuento":
 	        case "descargo":

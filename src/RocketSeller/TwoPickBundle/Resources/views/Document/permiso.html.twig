@@ -24,11 +24,11 @@ body {
 <p>{{ data.employer.name }}</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;"><strong>ASUNTO:</strong> Solicitud de permiso laboral no remunerado</p>
-<p style="text-align: justify;">De la manera más atenta solicito a usted(es), concederme ______ día(s) de permiso para no cumplir
-con mis funciones contratadas por este tiempo de inasistencia.</p>
-<p style="text-align: justify;">Este permiso lo solicito a partir del “Día ___ Mes ____ Año _______” y sé de ante mano que es un
-permiso no remunerado.</p>
-<p style="text-align: justify;"><strong>El reintegro laboral será el “Día ___ Mes ____ Año _______”</strong></p>
+<p style="text-align: justify;">De la manera más atenta solicito a usted(es), concederme {{ data.novelty.units }}
+día(s) de permiso para no cumplir con mis funciones contratadas por este tiempo de inasistencia.</p>
+<p style="text-align: justify;">Este permiso lo solicito a partir del {{ data.novelty.dateStart|localizeddate('long', 'none', local) }}
+y sé de ante mano que es un permiso no remunerado.</p>
+<p style="text-align: justify;"><strong>El reintegro laboral será el {{ data.novelty.dateEnd|localizeddate('long', 'none', local) }}</strong></p>
 <p>&nbsp;</p>
 
 <p>Atentamente,</p>
