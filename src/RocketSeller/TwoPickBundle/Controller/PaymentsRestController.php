@@ -75,7 +75,13 @@ class PaymentsRestController extends FOSRestController
     public function callApi($headers, $parameters, $path, $action = "post", $timeout = 10)
     {
         //$client = $this->get('guzzle.client.api_rest');
+        // Line bellow was working, commneted for the change of VPN.
         $client = new Client(['http_errors' => false]);
+        $sslParams = array('cert' => ['/home/ubuntu/.ssh/myKeystore.pem', 'N0v0payment']);
+        //$client->setDefaultOption('verify', '/home/ubuntu/.ssh/MyKeystore.pem');
+        /*$request = $client->get('', array(), array(
+            'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
+        ));*/
         // $url_request = $this->container->getParameter('novo_payments_url') ;
         // URL used for test porpouses, the line above should be used in production.
         if (isset($_SERVER['SERVER_NAME']) && in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1'))) {
@@ -85,23 +91,25 @@ class PaymentsRestController extends FOSRestController
                 $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
             }
         } else {
-            $url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
+            //$url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
+            $url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
         }
         $response = null;
         $options = array(
             'headers' => $headers,
             'json' => $parameters,
-            'timeout' => $timeout
+            'timeout' => $timeout,
+            'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
         );
         try {
             if ($action == "post") {
-                $response = $client->post($url_request, $options);
+                $response = $client->post($url_request, $options, $sslParams);
             } else if ($action == "delete") {
-                $response = $client->delete($url_request, $options);
+                $response = $client->delete($url_request, $options, $sslParams);
             } else if ($action == "get") {
-                $response = $client->get($url_request, $options);
+                $response = $client->get($url_request, $options, $sslParams);
             } else if ($action == "put") {
-                $response = $client->put($url_request, $options);
+                $response = $client->put($url_request, $options, $sslParams);
             }
         } catch (Exception $e) {
 

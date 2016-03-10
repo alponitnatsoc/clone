@@ -342,54 +342,63 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $totalDiasVacas->setColumnName('units');
         $totalDiasVacas->setDataType('text');
         $totalDiasVacas->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation'));
+        $manager->persist($totalDiasVacas);
 
         $descargosStart = new NoveltyTypeFields();
         $descargosStart->setName('Día de ocurrencia');
         $descargosStart->setColumnName('date_start');
         $descargosStart->setDataType('date');
         $descargosStart->setNoveltyTypeNoveltyType($this->getReference('novelty-descargos'));
+        $manager->persist($descargosStart);
 
         $desPrestamoStart = new NoveltyTypeFields();
         $desPrestamoStart->setName('Fecha inicio descuento');
         $desPrestamoStart->setColumnName('date_start');
         $desPrestamoStart->setDataType('date');
         $desPrestamoStart->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+        $manager->persist($desPrestamoStart);
 
         $desPrestamoMotivo = new NoveltyTypeFields();
         $desPrestamoMotivo->setName('Motivo');
         $desPrestamoMotivo->setColumnName('description');
         $desPrestamoMotivo->setDataType('text');
         $desPrestamoMotivo->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+        $manager->persist($desPrestamoMotivo);
 
         $desPrestamoCuotas = new NoveltyTypeFields();
         $desPrestamoCuotas->setName('Número de cuotas');
         $desPrestamoCuotas->setColumnName('units');
         $desPrestamoCuotas->setDataType('text');
         $desPrestamoCuotas->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+        $manager->persist($desPrestamoCuotas);
 
         $dotacionStart = new NoveltyTypeFields();
         $dotacionStart->setName('Fecha inicio');
         $dotacionStart->setColumnName('date_start');
         $dotacionStart->setDataType('date');
         $dotacionStart->setNoveltyTypeNoveltyType($this->getReference('novelty-dotacion'));
+        $manager->persist($dotacionStart);
 
         $dotacionEnd = new NoveltyTypeFields();
         $dotacionEnd->setName('Fecha fin');
         $dotacionEnd->setColumnName('date_end');
         $dotacionEnd->setDataType('date');
         $dotacionEnd->setNoveltyTypeNoveltyType($this->getReference('novelty-dotacion'));
+        $manager->persist($dotacionEnd);
 
         $noveltyUnpaidDays = new NoveltyTypeFields();
         $noveltyUnpaidDays->setName('Total de días');
         $noveltyUnpaidDays->setColumnName('units');
         $noveltyUnpaidDays->setDataType('text');
         $noveltyUnpaidDays->setNoveltyTypeNoveltyType($this->getReference('novelty-unpaid'));
+        $manager->persist($noveltyUnpaidDays);
 
         $despido = new NoveltyTypeFields();
         $despido->setName('Fin de contrato');
         $despido->setColumnName('date_end');
         $despido->setDataType('date');
         $despido->setNoveltyTypeNoveltyType($this->getReference('novelty-despido'));
+        $manager->persist($despido);
 
         $manager->flush();
 
