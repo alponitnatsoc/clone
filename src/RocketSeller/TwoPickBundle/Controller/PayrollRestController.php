@@ -1136,6 +1136,8 @@ class PayrollRestController extends FOSRestController
         $unico['NOV_UNIDADES'] = isset($parameters['unity_numbers']) ? $parameters['unity_numbers'] : "";
         $unico['NOV_FECHA_DESDE_CAUSA'] = isset($parameters['novelty_start_date']) ? $parameters['novelty_start_date'] : "";
         $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
+        $unico['COD_PROC'] = '1'; // Always process as payroll.
+        $unico['USUARIO'] = 'SRHADMIN'; // This may change in the future.
 
         $content[] = $unico;
         $parameters = array();
@@ -1253,6 +1255,9 @@ class PayrollRestController extends FOSRestController
         $unico['EMPCODIGO'] = $employeeId;
         if ($liquidation_date != null && $liquidation_date != "NULL")
             $unico['NOVFECHALIQ'] = $liquidation_date;
+        else
+            $unico['NOVFECHALIQ'] = '';
+
 
         $content[] = $unico;
         $parameters = array();
