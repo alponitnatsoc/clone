@@ -21,11 +21,11 @@
 	        			<h3>{{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h3>
 	        			<p>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</p>
 	        		</div>
-	        		<div class="col-sm-12 top-box-employee">
+	        		<div class="col-sm-12 top-box-employee" style="border-bottom:1px dotted; padding-bottom:20px;">
 	        			<div class="col-sm-6 ">
 	        				<div class="col-sm-3 left-box">
 	        					<div class="col-sm-12 ">
-	        						<p><strong>Tipo contrato</strong></p>
+	        						<p><strong>contrato</strong></p>
 	        					</div>
 	        					<div class="col-sm-12 ">
 	        						<p>Termino fijo</p>
@@ -33,7 +33,7 @@
 	        				</div>
 	        				<div class="col-sm-3 middle-box">
 	        					<div class="col-sm-12">
-	        						<p><strong>Duración contrato</strong></p>
+	        						<p><strong>Duración</strong></p>
 	        					</div>
 	        					<div class="col-sm-12">
 	        						<p>Dias</p>
@@ -57,10 +57,103 @@
 	        				</div>
 	        			</div>
 	        			<div class="col-sm-6">
-	        				
+	        				<div class="col-sm-4 right-box">
+	        					<a class="btn btn-primpary btn-orange notAjax" href="">Novedad</a>
+	        				</div>
+	        				<div class="col-sm-4 right-box">
+	        					<a class="btn btn-primpary btn-orange notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar</a>
+	        				</div>
+	        				<div class="col-sm-4 right-box">
+	        					<a class="btn btn-primpary btn-orange notAjax" href="">Inactivar</a>
+	        				</div>
 	        			</div>
 	        		</div>
-  
+	        		<div class="col-sm-12 main-basicData" style="border-bottom:1px dotted;">	        						
+	        			<div class="col-sm-12">
+	        				<ul class="col-sm-6">
+	        					<li>
+	        						<p><strong>Estado civil</strong></p>
+	        						<p>Pais</p>
+	        					</li>
+	        				</ul>
+	        				<h4 class="col-sm-12"><strong>Datos de nacimiento</strong></h4>
+	        				<ul class="col-sm-6">
+	        					
+	        					<li>
+	        						<p><strong>Fecha</strong></p>
+	        						<p>{{employee.personPerson.birthDate|date('d/m/y')}}</p>
+	        					</li>
+	        					<li>
+	        						<p><strong>País</strong></p>
+	        						<p>
+	        							{% if employee.personPerson.birthCountry %}
+	        								{{ employee.personPerson.birthCountry.name}}
+	        							{% else %}
+	        								-
+	        							{% endif %}
+
+        							</p>
+	        					</li>
+	        				</ul>
+	        				<ul class="col-sm-6">
+	        					<li>
+	        						<p><strong>Departament</strong></p>
+	        						<p>	        							
+	        							{% if employee.personPerson.birthDepartment %}
+	        								{{ employee.personPerson.birthDepartment.name}}
+	        							{% else %}
+	        								-
+	        							{% endif %}
+	        						</p>
+	        					</li>
+	        					<li>
+	        						<p><strong>Ciudad/municipio</strong></p>
+	        						<p>
+	        							{% if employee.personPerson.birthCity %}
+	        								{{ employee.personPerson.birthCity.name}}
+	        							{% else %}
+	        								-
+	        							{% endif %}
+	        						</p>
+	        					</li>
+	        				</ul>
+	        			</div>
+	        			
+	        		</div>
+	        		<div class="col-sm-12 main-basicData">	        						
+	        			<div class="col-sm-12">
+	        				<h4 class="col-sm-12"><strong>Datos de contacto</strong></h4>
+	        				<ul class="col-sm-6">
+	        					
+	        					<li>
+	        						<p><strong>Direccion</strong></p>
+	        						<p>{{employee.personPerson.mainAddress}}</p>
+	        					</li>
+	        					<li>
+	        						<p><strong>Departamento</strong></p>
+	        						<p>{{employee.personPerson.department.name}}</p>
+	        					</li>
+	        					<li>
+	        						<p><strong>Ciudad</strong></p>
+	        						<p>{{employee.personPerson.city.name}}</p>
+	        					</li>
+	        				</ul>
+	        				<ul class="col-sm-6">
+	        					<li>
+	        						<p><strong>Teléfono</strong></p>
+	        						<p>{{employee.personPerson.phones[0].phoneNumber}}</p>
+	        					</li>
+	        					<li>
+	        						<p><strong>Ciudad/municipio</strong></p>
+	        						<p>Ciudad</p>
+	        					</li>
+	        				</ul>
+	        			</div>
+	        			
+	        		</div>
+  					<div class="col-sm-12 col-sm-offset-5">
+  						<a class="btn btn-primpary btnNext notAjax" href="/register/employee/{{employee.idEmployee}}">Editar Datos</a>
+  					</div>
             	</div>
             	<div id="contactData" class="tab-pane">
   					<p>Información de contrato</p>
