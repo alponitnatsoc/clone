@@ -78,7 +78,7 @@ class PaymentsRestController extends FOSRestController
         // Line bellow was working, commneted for the change of VPN.
         $client = new Client(['http_errors' => false]);
         $sslParams = array('cert' => '/home/ubuntu/.ssh/MyKeystore.pem');
-        $client->setDefaultOption('verify', '/home/ubuntu/.ssh/MyKeystore.pem');
+        //$client->setDefaultOption('verify', '/home/ubuntu/.ssh/MyKeystore.pem');
         /*$request = $client->get('', array(), array(
             'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
         ));*/
@@ -98,7 +98,8 @@ class PaymentsRestController extends FOSRestController
         $options = array(
             'headers' => $headers,
             'json' => $parameters,
-            'timeout' => $timeout
+            'timeout' => $timeout,
+            'verify' => '/home/ubuntu/.ssh/MyKeystore.pem'
         );
         try {
             if ($action == "post") {
