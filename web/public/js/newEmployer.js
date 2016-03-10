@@ -59,8 +59,8 @@ function startEmployer() {
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="col-md-5 col-xs-8 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo lugar de trabajo</a>');
-    var $newLinkLi = $('<li class="col-md-12"></li>').append($addPhoneLink);
+    var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
+    var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
     $collectionHolder = $('ul.workplaces');
