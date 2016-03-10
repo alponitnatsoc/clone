@@ -85,10 +85,23 @@ class EmployeeRestController extends FOSRestController
             return $view->setStatusCode($insertionAnswer->getStatusCode());
         }
 
-        /* $contracts=$realEmployerHasEmployee->getContracts();
-         foreach ($contracts as $cont) {
-
-         }*/
+        $contracts=$realEmployerHasEmployee->getContracts();
+        $actContract=null;
+        /** @var Contract $cont */
+        foreach ($contracts as $cont) {
+            if($cont->getState()==1){
+                $actContract=$cont;
+                break;
+            }
+        }
+        $methodToCall="postExecutePayrollLiquidation";
+        $novelties=$actContract->getActivePayroll()->getNovelties();
+        /** @var Novelty $nov */
+        foreach ($novelties as $nov) {
+            if($nov->getNoveltyTypeNoveltyType()->getPayrollCode()==145||$nov->getNoveltyTypeNoveltyType()->getPayrollCode()==150){
+                $methodToCall="postExecuteVacationLiquidation";
+            }
+        }
 
         $executionType="P";
         $request->setMethod("POST");
@@ -96,7 +109,7 @@ class EmployeeRestController extends FOSRestController
             "employee_id"=>$idEmployerHasEmployee,
             "execution_type"=>$executionType,
         ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postExecutePayrollLiquidation', array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
 
         if($insertionAnswer->getStatusCode()!=200){
             return $view->setStatusCode($insertionAnswer->getStatusCode());
