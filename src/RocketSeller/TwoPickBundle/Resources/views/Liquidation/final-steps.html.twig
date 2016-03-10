@@ -71,28 +71,23 @@
             <div class="col-sm-12">
                 <ul class="list-group">
                     {% if novelties %}
-                    {% for novelty in novelties %}
-                    {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
-                        <li class="list-group-item">
-{#                             {{ dump(novelty) }}#}
-
-                                {{ novelty.name }}
-                                {% if novelty.dateStart %}
-                                    {{ novelty.dateStart.date }}
-                                {% endif %}
-
-                        </li>
-                        {% endif %}
-                    {% endfor %}
+                        {% for novelty in novelties %}
+                            {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
+                                <li class="list-group-item">
+                                    {{ novelty.name }}
+                                    {% if novelty.dateStart %}
+                                        {{ novelty.dateStart.date }}
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </ul>
-{#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
             {% if liquidationReason != 2 %}
                 <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
             {% endif %}
             </div>
         </div>
-
         {% if liquidationReason == 2 %}
             <div class="liq-container" id="liqJustaCausa">
                 <div class="col-sm-12">
@@ -162,10 +157,8 @@
 
         <div class="col-sm-12 col-xs-12 center" id="contLiq">
             <div class="col-sm-6 col-sm-push-3">
-
                 <button type="button" class="btn btn-info btn-lg" onclick="history.go(-1)">Anterior</button>
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
-
                 <br /><br />
             </div>
         </div>
@@ -203,7 +196,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-{#                     <button type="button" class="btn btn-primary" disabled="disabled">Continuar</button>#}
                     {{ form_widget(form.save, { 'label': 'Continuar' }) }}
                 </div>
             </div>
@@ -237,34 +229,23 @@ $("#uploadLinkRenuncia").on('click',function(event){
     var uri = $(this).attr("href");
 
     $.ajax({
-         //method: "POST",
          url: uri,
-         //(data: $('form[name="pago_membresia"]').serialize(),
          beforeSend: function (xhr) {
          }
-     }).done(function (data) {
-        //$("#modal-body").html(data);
+    }).done(function (data) {
         $('#modal-body').replaceWith($(data).find('#main'));
         $("#myModal").modal('show');
         var files;
-        // Add events
         $('input[type=file]').on('change', prepareUpload);
 
-        // Grab the files and set them to our variable
-        function prepareUpload(event)
-        {
-          files = event.target.files;
+        function prepareUpload(event) {
+            files = event.target.files;
         }
-     }).fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
          console.log(jqXHR);
          console.log(textStatus);
          console.log(errorThrown);
      });
-
-});
-
-$.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
-    validateLiqForm();
 });
 
 $('input[type="checkbox"][name="checkConfirmLiq"]').change(function() {
@@ -311,58 +292,12 @@ function loadNovelty(url) {
     });
 }
 
-$('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio').on("change", function(){
-
-    var form = $("form");
-    var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
-    var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
-    var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
-
-    var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
-
-    var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
-    var username = "{{ employeeInfo.usernameEmployer }}";
-
-    var url = "{{ path('api_public_post_pre_liquidation') }}";
-
-    var frequency = "{{ contractInfo.frequency }}";
-
-    $("#liquidationValue").html("*")
-
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            employee_id: employer_has_employee_id,
-            username: username,
-            year: year,
-            month: month,
-            day: day,
-            frequency: frequency,
-            cutDate: processDate,
-            processDate: processDate,
-            retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
-        }
-    }).done(function (data) {
-        $("#liquidationValue").prepend(data["totalLiq"]["total"]);
-        formatMoney($("#liquidationValue"));
-        $("#liquidation-step1").removeAttr("disabled");
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-    });
-});
-
 $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (e) {
     e.preventDefault();
 
     $('#createdModal').modal('toggle');
 
     var form = $("form[name='rocketseller_twopickbundle_liquidation']");
-//     var day = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][day]']").val();
-//     var month = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][month]']").val();
-//     var year = form.find("select[name='rocketseller_twopickbundle_liquidation[lastWorkDay][year]']").val();
-
-//     var processDate = (0 + day).slice(-2) + "-" + (0 + month).slice(-2) + "-" + year;
 
     var employer_has_employee_id = "{{ employeeInfo.idEmperHasEmpee }}" ;
     var username = "{{ employeeInfo.usernameEmployer }}";
@@ -377,13 +312,7 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
         data: {
             employee_id: employer_has_employee_id,
             username: username,
-//             year: year,
-//             month: month,
-//             day: day,
             frequency: frequency,
-//             cutDate: processDate,
-//             processDate: processDate,
-//             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val(),
             retirementCause: "{{ liquidationReason }}",
             id_liq: "{{ id_liq }}"
         }
@@ -391,13 +320,10 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
         if (data["url"] != null) {
             console.log(data["url"]);
             redirUri = data["url"];
-
-//             sendAjax(redirUri);
             window.location.href = redirUri;
         } else {
             $('#main').replaceWith(
-                    // ... with the returned one from the AJAX response.
-                    $(data).find('#main'));
+            $(data).find('#main'));
             addClick();
             if (!jsLoader(url)) {
                 addSumbit();

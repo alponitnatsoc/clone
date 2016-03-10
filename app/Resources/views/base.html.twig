@@ -456,6 +456,12 @@
                             });
 
                             return true;
+                        } else if (url.lastIndexOf("/liquidations/final") !== -1) {
+                            $.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
+                                validateLiqForm();
+                            });
+
+                            return true;
                         }
                         return false;
                     }

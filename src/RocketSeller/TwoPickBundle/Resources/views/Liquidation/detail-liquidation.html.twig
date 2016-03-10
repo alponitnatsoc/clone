@@ -38,7 +38,6 @@
         }
     </style>
 {% endblock %}
-{# {{ dump(data) }}#}
     <h2 class="center">La liquidación fue calculada exitosamente</h2>
     <div class="employee_head_liquidation">
         <div class="col-sm-12 employee_data">
@@ -217,7 +216,6 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
-{#     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>#}
     <script>
         $(document).ready(function () {
             updateValues();
@@ -240,12 +238,10 @@
                         console.log(data["url"]);
                         console.log(data);
                         redirUri = data["url"];
-//                         sendAjax(redirUri);
                         window.location.href = redirUri;
                     } else {
                         $('#main').replaceWith(
-                                // ... with the returned one from the AJAX response.
-                                $(data).find('#main'));
+                            $(data).find('#main'));
                         addClick();
                         if (!jsLoader(url)) {
                             addSumbit();
@@ -316,7 +312,6 @@
                     "</div>";
 
                     $('#modalPayLiquidation2').find(".modal-body #paymethods").append(html);
-
                 });
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
