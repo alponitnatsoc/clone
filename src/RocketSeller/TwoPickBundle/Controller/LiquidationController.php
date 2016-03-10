@@ -655,6 +655,10 @@ class LiquidationController extends Controller
             'data' => $data
         ));
 
+//         return $this->render('RocketSellerTwoPickBundle:Liquidation:carta-' . $ref . '.html.twig', array(
+//             'data' => $data
+//         ));
+
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
             200,
