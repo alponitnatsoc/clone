@@ -27,7 +27,7 @@ class DocumentType
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
      */
     private $refPdf;
 

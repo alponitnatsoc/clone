@@ -78,6 +78,43 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $cartaRenuncia->setName('Carta de renuncia');
         $manager->persist($cartaRenuncia);
 
+
+
+        $solVacaciones = new DocumentType();
+        $solVacaciones->setName('Solicitud de vacaciones');
+        $solVacaciones->setRefPdf('vacaciones');
+        $manager->persist($solVacaciones);
+
+        $suspencion = new DocumentType();
+        $suspencion->setName('Suspencion');
+        $suspencion->setRefPdf('suspencion');
+        $manager->persist($suspencion);
+
+        $descargo = new DocumentType();
+        $descargo->setName('Version libre de hechos');
+        $descargo->setRefPdf('descargo');
+        $manager->persist($descargo);
+
+        $descuento = new DocumentType();
+        $descuento->setName('Autorización de descuento');
+        $descuento->setRefPdf('aut-descuento');
+        $manager->persist($descuento);
+
+        $dotacion = new DocumentType();
+        $dotacion->setName('Soporte entrega de dotación');
+        $dotacion->setRefPdf('dotacion');
+        $manager->persist($dotacion);
+
+        $permiso = new DocumentType();
+        $permiso->setName('Licencia no remunerada');
+        $permiso->setRefPdf('permiso');
+        $manager->persist($permiso);
+
+        $notDespido = new DocumentType();
+        $notDespido->setName('Notificación de despido');
+        $notDespido->setRefPdf('not-despido');
+        $manager->persist($notDespido);
+
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
@@ -97,6 +134,14 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $this->addReference('document-registro-civil', $documentTypeRegistroCivil);
         $this->addReference('document-documento-identidad', $documentTypeDocumentoIdent);
         $this->addReference('document-carta-renuncia', $cartaRenuncia);
+
+        $this->addReference('document-not-despido', $notDespido);
+        $this->addReference('document-permiso', $permiso);
+        $this->addReference('document-dotacion', $dotacion);
+        $this->addReference('document-aut-descuento', $descuento);
+        $this->addReference('document-descargo', $descargo);
+        $this->addReference('document-suspencion', $suspencion);
+        $this->addReference('document-sol-vacaciones', $solVacaciones);
     }
     public function getOrder()
     {

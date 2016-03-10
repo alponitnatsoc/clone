@@ -831,15 +831,19 @@ a.helpTxt {
     }
 }
 
-.wizardAddLink {
-    margin: -15px 0 16px;
-}
-
 .wizardAddLink a {
     margin: 0px; 
-    padding: 0px; 
-    color: #00cdcc; 
-    font-size: 20px;
+    font-size: 14px;
+    border: 1px solid @color_boton;
+    padding: 10px;
+    color: @color_boton;
+    display: inline-block;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    &:hover {
+        text-decoration: none;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
 }
 .pay-Data {
     h4 {
@@ -874,7 +878,7 @@ table.record_properties {
     background-image: none;
     background-color: #fff;
     border-radius: 2px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 5px!important;
     padding-bottom: 13px!important;
     text-shadow: none;
@@ -936,13 +940,12 @@ table.record_properties {
     }
     &.complete {
         margin-top: 10px;
-        background: #3b4b5a !important;
+        background: #F7F7F7 !important;
         background-image: none;
         background: 0 0;
-        border: 1px solid #919191;
+        border: none;
         border-radius: 0;
         box-shadow: none!important;
-        margin-bottom: 20px;
         padding: 15px;
         text-shadow: none;
         color: #fff;
@@ -951,7 +954,7 @@ table.record_properties {
             font-family: @open;
             font-size: 24px;
             text-transform: initial;
-            color: #fff;
+            color: #000;
             white-space: normal;
             p {
                 letter-spacing: 0;
@@ -960,6 +963,11 @@ table.record_properties {
                 font-weight: 100;
                 margin-bottom: 0px;
             }
+        }
+
+        .btn.stepIni {
+            background-color: #314A5A;
+            border: none;
         }
     }
     &.blocked {
@@ -1010,7 +1018,7 @@ table.record_properties {
 .btn.blockStep.blocked:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)!important; 
 }
-.add_phone_link, .remove_phone_link  {
+.remove_phone_link  {
     font-size: 15px;
 }
 .nav.nav-tabs.nav-justified {
@@ -1556,7 +1564,7 @@ select {
 }
 
 .btn-orange {
-    text-transform: capitalize;
+    text-transform: none;
     background-color: @color_boton;
     box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     outline: none;
@@ -1648,5 +1656,26 @@ select {
         .fa {
             color: #5d5d5d!important;
         }
+    }
+
+    h3 {
+        text-align: center!important;
+        font-size: 21px;
+        margin-bottom: 30px;
+    }
+}
+
+#register_employer_sameWorkHouse {
+    text-align: center;
+}
+
+#addWorkplace {
+    padding: 40px;
+    border: 2px dashed #f2f2f2;
+}
+
+.add_phone_link {
+    span {
+        font-size: 15px;
     }
 }

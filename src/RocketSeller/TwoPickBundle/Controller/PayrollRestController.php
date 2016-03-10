@@ -1470,7 +1470,7 @@ class PayrollRestController extends FOSRestController
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL, it can be found on the table novelty_type, under payroll_code, there is a column  absenteeism_or_novelty, to get if it can be used here.")
      *    (name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
-     *    (name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism ends(format: DD-MM-YYYY)")
+     *    (name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="End day the absenteeism starts(format: DD-MM-YYYY)")
      *    (name="absenteeism_units", nullable=false, requirements="([0-9])+", description="Number of units, can be hours or days")
      *    (name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
      *
@@ -1508,7 +1508,9 @@ class PayrollRestController extends FOSRestController
         $unico['AUS_FECHA_INICIAL'] = $parameters['absenteeism_start_date'];
         $unico['AUS_FECHA_FINAL'] = $parameters['absenteeism_end_date'];
         $unico['AUS_UNIDADES'] = $parameters['absenteeism_units'];
-        $unico['AUS_ESTADO'] = isset($parameters['absenteeism_state']) ? $parameters['absenteeism_state'] : "";
+        $unico['AUS_ESTADO'] = isset($parameters['absenteeism_state']) ? $parameters['absenteeism_state'] : "ACT";
+        $unico['COD_PROC'] = '1'; // Always send it as payroll;
+        $unico['USUARIO'] = 'SRHADMIN';
 
         $content[] = $unico;
         $parameters = array();
@@ -2452,7 +2454,7 @@ class PayrollRestController extends FOSRestController
 
 
         $unico['COD_PROC'] = 1; // payroll liquidation is always 1.
-        $unico['USUARIO'] = ''; // Empty by default.
+        $unico['USUARIO'] = 'SRHADMIN'; // Empty by default.
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['TIP_EJEC'] = $parameters['execution_type'];
 
@@ -2576,6 +2578,56 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
+
+    /**
+     * Executes the vacations liquidation process.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the contributions liquidation process.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postNuevosPagosAction(Request $request)
+    {
+         ini_set("soap.wsdl_cache_enabled", 1);
+         $opts = array(
+             //"ssl" => array("ciphers" => "RC4-SHA")
+         );
+         $consumptionsWsUrl = sprintf(\UneConstants::UNE_WS_MY_CONSUMPTION_WSDL_URL, $this->_uneHostname);
+         $client = new \SoapClient("http://52.86.183.212:8080/dssp/services/listServices",
+             array("connection_timeout" => 20,
+                 "trace" => true,
+                 "exceptions" => true,
+                 "stream_context" => stream_context_create($opts),
+                 //"login" => $login,
+                 //"password" => $pass
+         ));
+
+         $args = array('numeroRadicado' => "111111111000111", );
+
+
+         $res = $client->__soapCall("ConsultarEstadoRecaudo", $args);
+
+         var_dump($res);
+         if (is_string($res)) {
+             $res = new \SimpleXMLElement($res);
+         }
+    }
+
 
 }
 

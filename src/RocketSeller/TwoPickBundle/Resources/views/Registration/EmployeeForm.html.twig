@@ -64,19 +64,17 @@
         </style>
     {% endblock %}
     <div class="col-sm-12 col-xs-12 align-Resp">
-        <div class="btn col-sm-12 col-xs-12 blockStep complete nav-link">
-            <div style="text-align: left;" class="col-md-2 col-xs-12 txt-AD0 statusBarIcon">
-                <img src="/img/employ_white.png">                    
+        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">                    
             </div>
-            <div class="col-md-10 col-xs-12 txt-AD1">
-                <div class="col-xs-12 text-right" style:"font-size: 12px;">
-                    <p>Paso <strong>2</strong> de 3</p>
-                </div>
-                <div class="text-left" id="">
-                    Datos de los empleados
+            <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                <div id="" class="text-left">
+                    <span class="step">Paso 2 de 4</span>                            
+                    Datos de mis empleados
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
 
@@ -100,211 +98,217 @@
 
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                </div>
-                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-xs-12 label-group">
-                            <h3>Datos básicos</h3>
+                <div class="formulario col-xs-12" style="border-bottom: none;">
+                    <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-xs-12 label-group">
+                                <h3>Datos básicos</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.documentType) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.documentType) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.documentType) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.documentType) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.document) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.document) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.document) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.names) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.names) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.document) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.lastName1) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.lastName1) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.names) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.names) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.lastName1) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.lastName1) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12 center">
-                        <div class="col-sm-6 col-sm-push-3">
-                            <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext">Consultar</a>
-                        </div>
-                    </div>
+                        <!--<div class="col-sm-12 col-xs-12 center">
+                            <div class="col-sm-6 col-sm-push-3">
+                                <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext">Consultar</a>
+                            </div>
+                        </div>-->
 
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.lastName2) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.lastName2) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.lastName2) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.lastName2) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.civilStatus) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.civilStatus) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.civilStatus) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.gender) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.gender) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.civilStatus) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.documentExpeditionDate) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.documentExpeditionDate) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.gender) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.gender) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.documentExpeditionDate) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.documentExpeditionDate) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.documentExpeditionPlace) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.documentExpeditionPlace) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-xs-12 label-group">
-                            <h3>Datos de nacimiento</h3>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.documentExpeditionPlace) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.documentExpeditionPlace) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.birthDate) }}    
+                </div>
+                <div class="formulario col-xs-12">
+                    <div class="col-sm-10 col-xs-12">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-xs-12 label-group">
+                                <h3>Datos de nacimiento</h3>
+                            </div>
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.birthDate) }}    
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.birthDate) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.birthDate) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.birthCountry) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.birthCountry) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.birthDepartment) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.birthDepartment) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.birthCity) }}    
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.birthCity) }}    
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
+                        </div>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.birthCountry) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.birthCountry) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                    <div class="col-sm-12 col-xs-12 remember">
+                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.birthDepartment) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.birthDepartment) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.birthCity) }}    
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.birthCity) }}    
-                        </div>
-                        <!--<img src="/img/typePerson.png">-->                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12 center">
-                            <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Salvar y Continuar</a>
-                            <br /><br />
-                    </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                        <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Salvar y continuar</a>
+                        <br /><br />
                 </div>
             </div>
 
             <div id="contactData" class="tab-pane fade in {%   if tab==2 %} active {% endif %}">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                <div class="formulario col-xs-12">
+                    <div class="col-sm-10 col-xs-12 content-input blockUpData">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.personExtra.email)}}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.personExtra.email) }}
+                            </div>                    
+                        </div>                    
+                        <div class="col-sm-12">
+                            <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
+                                {% for phone in form.person.phones %}
+                                    <li id="phone_{{loop.index}}" class="phoneLi">
+                                        {{ form_row(phone.id) }}
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(phone.phoneNumber)}}    
+                                        </div>
+                                        <div class="col-sm-6 form-group input">
+                                            {{ form_widget(phone.phoneNumber)}}    
+                                        </div>                                                                        
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6 label-group">
+                                <label>Dirección donde vive el empleado*</label>
+                            </div>
+                            <div class="col-sm-6 form-group input">
+                                {{ form_widget(form.person.mainAddress) }}
+                            </div>                    
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.department)}}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.department) }}
+                            </div>                    
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.person.city)}}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.person.city) }}
+                            </div>                    
+                        </div>                                          
+                    </div>
+                    <div class="col-sm-12 col-xs-12 remember">
+                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                    </div>
                 </div>
-                <br/>
-                <div class="col-sm-10 col-xs-12 content-input">
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.personExtra.email)}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.personExtra.email) }}
-                        </div>                    
-                    </div>                    
-                    <div class="col-sm-12">
-                        <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
-                            {% for phone in form.person.phones %}
-                                <li id="phone_{{loop.index}}" class="phoneLi">
-                                    {{ form_row(phone.id) }}
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(phone.phoneNumber)}}    
-                                    </div>
-                                    <div class="col-sm-6 form-group input">
-                                        {{ form_widget(phone.phoneNumber)}}    
-                                    </div>                                                                        
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            <label>Dirección donde vive el empleado*</label>
-                        </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ form_widget(form.person.mainAddress) }}
-                        </div>                    
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.department)}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.department) }}
-                        </div>                    
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.person.city)}}
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.person.city) }}
-                        </div>                    
-                    </div>                                          
-                </div>
-                <br/><br/>
                 <div class="col-sm-12 col-xs-12 center">
 
                     <a class="btn btn-primary btnPrevious-form btnPrevious">Anterior</a>
 
 
-                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-orange">Salvar y Continuar</a>
+                    <a id="btn-2" href="{{ path('api_public_post_new_employee_submit_step2') }}" class="btn btn-orange">Salvar y continuar</a>
                     <br /><br />
 
                 </div>

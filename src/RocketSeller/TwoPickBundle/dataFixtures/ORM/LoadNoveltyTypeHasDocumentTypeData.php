@@ -39,7 +39,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         // Licencia no remunerada.
         $NoveltyNoRemuneradaFormato = new NoveltyTypeHasDocumentType();
         $NoveltyNoRemuneradaFormato->setNoveltyTypeNoveltyType($this->getReference('novelty-unpaid'));
-        $NoveltyNoRemuneradaFormato->setDocumentTypeDocumentType($this->getReference('document-formato-soporte'));
+        $NoveltyNoRemuneradaFormato->setDocumentTypeDocumentType($this->getReference('document-permiso'));
         $NoveltyNoRemuneradaFormato->setPersonType('employee');
         $manager->persist($NoveltyNoRemuneradaFormato);
 
@@ -53,7 +53,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         //Suspension.
         $NoveltySuspensionFormato = new NoveltyTypeHasDocumentType();
         $NoveltySuspensionFormato->setNoveltyTypeNoveltyType($this->getReference('novelty-suspension'));
-        $NoveltySuspensionFormato->setDocumentTypeDocumentType($this->getReference('document-formato-soporte'));
+        $NoveltySuspensionFormato->setDocumentTypeDocumentType($this->getReference('document-suspencion'));
         $NoveltySuspensionFormato->setPersonType('employee');
         $manager->persist($NoveltySuspensionFormato);
 
@@ -153,7 +153,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         // Vacaciones.
         $NoveltyVacacionesSoporte = new NoveltyTypeHasDocumentType();
         $NoveltyVacacionesSoporte->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation'));
-        $NoveltyVacacionesSoporte->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyVacacionesSoporte->setDocumentTypeDocumentType($this->getReference('document-sol-vacaciones'));
         $NoveltyVacacionesSoporte->setPersonType('employee');
         $manager->persist($NoveltyVacacionesSoporte);
 
@@ -175,7 +175,7 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         // Descuento prestamos.
         $NoveltyPrestamoSoporte = new NoveltyTypeHasDocumentType();
         $NoveltyPrestamoSoporte->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
-        $NoveltyPrestamoSoporte->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
+        $NoveltyPrestamoSoporte->setDocumentTypeDocumentType($this->getReference('document-aut-descuento'));
         $NoveltyPrestamoSoporte->setPersonType('employee');
         $manager->persist($NoveltyPrestamoSoporte);
 
@@ -190,6 +190,25 @@ class LoadNoveltyTypeHasDocumentTypeData extends AbstractFixture implements Orde
         $NoveltyAbandonoPuesto->setDocumentTypeDocumentType($this->getReference('document-documento-soporte'));
         $NoveltyAbandonoPuesto->setPersonType('employee');
         $manager->persist($NoveltyAbandonoPuesto);
+
+
+        $noveltyDescargo = new NoveltyTypeHasDocumentType();
+        $noveltyDescargo->setNoveltyTypeNoveltyType($this->getReference('novelty-descargos'));
+        $noveltyDescargo->setDocumentTypeDocumentType($this->getReference('document-descargo'));
+        $noveltyDescargo->setPersonType('employee');
+        $manager->persist($noveltyDescargo);
+
+        $novDotacion = new NoveltyTypeHasDocumentType();
+        $novDotacion->setNoveltyTypeNoveltyType($this->getReference('novelty-dotacion'));
+        $novDotacion->setDocumentTypeDocumentType($this->getReference('document-dotacion'));
+        $novDotacion->setPersonType('employee');
+        $manager->persist($novDotacion);
+
+        $novDespido = new NoveltyTypeHasDocumentType();
+        $novDespido->setNoveltyTypeNoveltyType($this->getReference('novelty-despido'));
+        $novDespido->setDocumentTypeDocumentType($this->getReference('document-not-despido'));
+        $novDespido->setPersonType('employee');
+        $manager->persist($novDespido);
 
         $manager->flush();
     }

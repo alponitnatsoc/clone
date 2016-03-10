@@ -22,7 +22,7 @@ class WorkPlaceRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank()
                 ),
-                "label"=>"Nombre del lugar de trabajo*",
+                "label"=>"Nombre asignado a este lugar de trabajo*",
                 'required' => true
             ))
             ->add('mainAddress', 'text', array(

@@ -222,68 +222,65 @@
             </div>
 
             <div id="workplacesData" class="tab-pane fade h3">                
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Corresponden a los puntos donde laborará o dependerá cada empleado.</span>
-                </div>
-                
-                <div class="col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
-                    <div class="col-sm-12 col-xs-12">
-                        {{ form_row(form.sameWorkHouse) }}
+                <div class="col-xs-12 formulario">
+                    <div class="col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                        <div class="col-sm-12 col-xs-12">
+                            {{ form_row(form.sameWorkHouse) }}
+                        </div>
                     </div>
-                </div>
 
-                {# iterate over each existing workplaces and render its fields #}
-                <ul class="workplaces" data-prototype="
-                    {% filter escape %}
-                        {{ include('RocketSellerTwoPickBundle:DataPrototypes:workplacesPrototype.html.twig', { 'form': form.workplaces.vars.prototype|e }) }}
-                    {% endfilter %} "  style="list-style: none">
-                    {% for workplace in form.workplaces %}
-                        <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
-                            <div class="row">
-                                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
-                                    <div class="col-sm-12 col-xs-12">
-                                        {{ form_row(workplace.id) }}
-                                        <div class="col-sm-6 label-group">
-                                            {{ form_label(workplace.name) }}
+                    {# iterate over each existing workplaces and render its fields #}
+                    <ul class="workplaces" data-prototype="
+                        {% filter escape %}
+                            {{ include('RocketSellerTwoPickBundle:DataPrototypes:workplacesPrototype.html.twig', { 'form': form.workplaces.vars.prototype|e }) }}
+                        {% endfilter %} "  style="list-style: none">
+                        {% for workplace in form.workplaces %}
+                            <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
+                                <div class="row">
+                                    <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
+                                        <div class="col-sm-12 col-xs-12">
+                                            {{ form_row(workplace.id) }}
+                                            <div class="col-sm-6 label-group">
+                                                {{ form_label(workplace.name) }}
+                                            </div>
+                                            <div class="col-sm-6 form-group input">
+                                                {{ form_widget(workplace.name) }}
+                                            </div>                                                                                
                                         </div>
-                                        <div class="col-sm-6 form-group input">
-                                            {{ form_widget(workplace.name) }}
-                                        </div>                                                                                
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="col-sm-6 label-group">
+                                                {{ form_label(workplace.mainAddress) }}
+                                            </div>
+                                            <div class="col-sm-6 form-group input">
+                                                {{ form_widget(workplace.mainAddress) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="col-sm-6 label-group">
+                                                {{ form_label(workplace.department)}}
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                {{ form_widget(workplace.department)}}
+                                            </div>                                                                            
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="col-sm-6 label-group">
+                                                {{ form_label(workplace.city) }}
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                {{ form_widget(workplace.city) }}
+                                            </div>                                        
+                                        </div>
+                                        
                                     </div>
-                                    <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
-                                            {{ form_label(workplace.mainAddress) }}
-                                        </div>
-                                        <div class="col-sm-6 form-group input">
-                                            {{ form_widget(workplace.mainAddress) }}
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12">
-                                        <div class="col-sm-6 label-group">
-                                            {{ form_label(workplace.department)}}
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            {{ form_widget(workplace.department)}}
-                                        </div>                                                                            
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12">
-                                        <div class="col-sm-6 label-group">
-                                            {{ form_label(workplace.city) }}
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            {{ form_widget(workplace.city) }}
-                                        </div>                                        
-                                    </div>
-                                    
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
-                                        
-                        </div>
-                    {% endfor %}                    
-                </ul>
+                        {% endfor %}                    
+                    </ul>
+                    <div class="col-sm-12 col-xs-12 remember">
+                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
                     <br /><br />
