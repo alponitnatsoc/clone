@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
+use DateTime;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Form\DocumentPick;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
@@ -20,10 +21,12 @@ class NoveltyForm extends AbstractType
     private $fields;
     private $hasDocuments;
     private $url;
+    private $today;
     function __construct($fields,$hasDocuments,$url=null){
         $this->url=$url;
         $this->fields=$fields;
         $this->hasDocuments=$hasDocuments;
+        $today= new DateTime();
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
