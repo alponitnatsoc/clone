@@ -294,7 +294,6 @@ class DocumentController extends Controller
 	        case "permiso":
 	        case "aut-afiliacion-ss":
 	        case "trato-datos":
-    	    case "dotacion":
     	        //$id de la relacion employerhasempployee
     	        /** @var Employee $employee */
     	        $employee = $this->getEmployee($id);
@@ -340,6 +339,7 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
+	        case "dotacion":
 	        case "aut-descuento":
 	        case "descargo":
             case "vacaciones":
@@ -357,10 +357,14 @@ class DocumentController extends Controller
 	            $employeeInfo = array(
 	                'name' => $this->fullName($employeePerson->getIdPerson()),
 	                'docType' => $employeePerson->getDocumentType(),
-	                'docNumber' => $employeePerson->getDocument()
+	                'docNumber' => $employeePerson->getDocument(),
+	                'docExpPlace' => $employeePerson->getDocumentExpeditionPlace()
 	            );
 	            $employerInfo = array(
-	                'name' => $this->fullName($employerPerson->getIdPerson())
+	                'name' => $this->fullName($employerPerson->getIdPerson()),
+	                'docType' => $employerPerson->getDocumentType(),
+	                'docNumber' => $employerPerson->getDocument(),
+	                'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
 	            );
 	            $contractInfo = array(
 	                'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),

@@ -34,7 +34,7 @@ body {
 <p>Empresa usuaria: {{ data.employer.name }}</p>
 <p>Fecha ingreso: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}</p>
 <p>&nbsp;</p>
-<p>Esta dotación corresponde del --DESDE-- al --HASTA--.</p>
+<p>Esta dotación corresponde del {{ data.novelty.dateStart|localizeddate('long', 'none', local) }} al {{ data.novelty.dateEnd|localizeddate('long', 'none', local) }}.</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">Yo {{ data.employee.name }}, identificado con la {{ data.employee.docType }} No. {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}, dejo constancia que he recibido
 el calzado - vestido y/o elementos de protección personal, para el desempeño de mis funciones, de acuerdo con lo
@@ -42,7 +42,7 @@ previsto en los artículos 230 y 232 del código sustantivo del trabajo, asi com
 de 1979, de acuerdo a lo relacionado a continuación.</p>
 
 <div class="table-responsive">
-    <table class="table table-bordered" border=1>
+    <table class="table table-bordered" border=1 width="100%">
         <thead>
             <tr>
                 <th>Cantidad</th>
@@ -51,7 +51,27 @@ de 1979, de acuerdo a lo relacionado a continuación.</p>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr height="25px">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr height="25px">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr height="25px">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr height="25px">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr height="25px">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -69,9 +89,8 @@ para la realización de sus labores en el horario de trabajo (Art. 230 CST).</p>
 
 <p style="text-align: justify;">En constancia, se firma la presente a los {{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }}</p>
 
-<p>&nbsp;</p>
 
-<div>
+<div style="width: 50%; float: left;">
 <p>Firma de quien recibe</p>
 
 ______________________
@@ -79,8 +98,7 @@ ______________________
 <p>{{ data.employee.docType }}: {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}</p>
 <p>Cargo: {{ data.contract.position }}</p>
 </div>
-<p>&nbsp;</p>
-<div>
+<div style="width: 50%; float: left;">
 <p>Firma de quien entrega</p>
 
 _______________________
