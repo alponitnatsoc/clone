@@ -286,6 +286,13 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $NoveltyVacationEnd->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation'));
         $manager->persist($NoveltyVacationEnd);
 
+        $NoveltyVacationEnd = new NoveltyTypeFields();
+        $NoveltyVacationEnd->setName('Dias en dinero');
+        $NoveltyVacationEnd->setColumnName('amount');
+        $NoveltyVacationEnd->setDataType('integer');
+        $NoveltyVacationEnd->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation'));
+        $manager->persist($NoveltyVacationEnd);
+
         $NoveltyVacationMoneyStart = new NoveltyTypeFields();
         $NoveltyVacationMoneyStart->setName('Día de inicio');
         $NoveltyVacationMoneyStart->setColumnName('date_start');

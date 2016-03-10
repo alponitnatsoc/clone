@@ -421,6 +421,29 @@ class EmployeeController extends Controller
                     'payType' => $payType)
         );
     }
+    public function showEmployeeAction($id){
+        $user = $this->getUser();
+        $person = $user->getPersonPerson();
+
+        $employer = $this->loadClassByArray(array('personPerson'=>$person),'Employer');
+        $employee = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Employee')
+                ->find($id);
+
+        $employerHasEmployee = $this->loadClassByArray(array(
+                'employerEmployer'=>$employer,
+                'employeeEmployee'=>$employee,
+            ),
+            'EmployerHasEmployee'
+        );
+
+
+        return $this->render(
+                                'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
+                            'employee' => $employee,
+                            'employerHasEmployee'=> $employerHasEmployee,
+                ));
+    }
 
     /**
      * Muestra los beneficiarios del empleado

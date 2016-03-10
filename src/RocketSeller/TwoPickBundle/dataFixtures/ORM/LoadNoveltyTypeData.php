@@ -179,7 +179,7 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltyVacationMoney->setName('Vacaciones en dinero');
         $NoveltyVacationMoney->setPayrollCode('150');
         $NoveltyVacationMoney->setPeriod('dia');
-        $NoveltyVacationMoney->setGrupo('Vacaciones');
+        $NoveltyVacationMoney->setGrupo('no_show');
         $NoveltyVacationMoney->setNaturaleza('DEV');
         $manager->persist($NoveltyVacationMoney);
 

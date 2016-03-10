@@ -61,10 +61,6 @@
                 <p><strong>Salario</strong></p>
                 <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
             </div>
-{#             <div class="col-sm-2 col-sm-20 employee_data_info">#}
-{#                 <p><strong>Días tomados de vacaciones</strong></p>#}
-{#                 <span class="txthelp"><p></p></span>#}
-{#             </div>#}
         </div>
     </div>
     <div id="liquidationStep1">
@@ -92,12 +88,8 @@
         </div>
         <div class="col-sm-12 col-xs-12 center">
             <div class="col-sm-6 col-sm-push-3">
-{#                 <a id="liquidation-step1" disabled=true href="{{ path("api_public_post_final_liquidation_step1") }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>#}
-
-{#                 <a id="liquidation-newstep1" disabled=true href="{{ path("final_liquidation_steps", {"id": employeeInfo.idEmperHasEmpee, "id_liq": id_liq, "step": 2} ) }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>#}
                 <a id="liquidation-newstep1" disabled=true href="{{ path("api_public_post_final_liquidation_step1" ) }}" class="btn btn-info btn-lg notAjax">Continuar el proceso de liquidación</a>
                 <input name="rocketseller_twopickbundle_liquidation[id_liq]" value="{{ id_liq }}" type="hidden" />
-{#                 <button type="button" class="btn btn-info btn-lg">Continuar el proceso de liquidación</button>#}
                 <br /><br />
             </div>
         </div>
@@ -110,22 +102,18 @@
             <div class="col-sm-12">
                 <ul class="list-group">
                     {% if novelties %}
-                    {% for novelty in novelties %}
-                    {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
-                        <li class="list-group-item">
-{#                             {{ dump(novelty) }}#}
-
-                                {{ novelty.name }}
-                                {% if novelty.dateStart %}
-                                    {{ novelty.dateStart.date }}
-                                {% endif %}
-
-                        </li>
-                        {% endif %}
-                    {% endfor %}
+                        {% for novelty in novelties %}
+                            {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
+                                <li class="list-group-item">
+                                    {{ novelty.name }}
+                                    {% if novelty.dateStart %}
+                                        {{ novelty.dateStart.date }}
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </ul>
-{#                 <a id="btn-1" href="/novelty/select/{{ payroll.idPayroll }}" class="btn btn-primary btnNext btn-orange">Agregar novedad</a>#}
             {% if not llamadosAtencion %}
                 <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar Novedad</button>
             {% endif %}
@@ -160,7 +148,6 @@
                     <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-{#                     <span id="uploadLinkRenuncia" href="{{ relatedLink }}" class="btn btn-primary btnNext btn-orange download-link"><i class="fa fa-upload"></i>Subir carta de renuncia</span>#}
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
                     <button type="button" id="btnDownloadAceptacion" class="btn btn-primary btnNext btn-orange download-link" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</button>
@@ -194,17 +181,13 @@
             </div>
             {% endif %}
         </div>
-
         <div class="col-sm-12 col-xs-12 center" id="contLiq" style="display:none">
             <div class="col-sm-6 col-sm-push-3">
-
                 <button type="button" class="btn btn-info btn-lg" onclick="$('#liquidationStep2').hide();$('#liquidationStep1').show()">Anterior</button>
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
-
                 <br /><br />
             </div>
         </div>
-
         <div class="liq-container">
             <div class="col-sm-6">
                 <strong>Le puede interesar este contenido de nuestro blog:</strong>
@@ -238,7 +221,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-{#                     <button type="button" class="btn btn-primary" disabled="disabled">Continuar</button>#}
                     {{ form_widget(form.save, { 'label': 'Continuar' }) }}
                 </div>
             </div>
@@ -271,32 +253,24 @@ $("#uploadLinkRenuncia").on('click',function(event){
     event.preventDefault();
     var uri = $(this).attr("href");
 
-    alert(uri);
     $.ajax({
-         //method: "POST",
-         url: uri,
-         //(data: $('form[name="pago_membresia"]').serialize(),
-         beforeSend: function (xhr) {
-         }
-     }).done(function (data) {
-        //$("#modal-body").html(data);
+        url: uri,
+        beforeSend: function (xhr) {
+        }
+    }).done(function (data) {
         $('#modal-body').replaceWith($(data).find('#main'));
         $("#myModal").modal('show');
         var files;
-        // Add events
         $('input[type=file]').on('change', prepareUpload);
 
-        // Grab the files and set them to our variable
-        function prepareUpload(event)
-        {
-          files = event.target.files;
+        function prepareUpload(event) {
+            files = event.target.files;
         }
-     }).fail(function (jqXHR, textStatus, errorThrown) {
-         console.log(jqXHR);
-         console.log(textStatus);
-         console.log(errorThrown);
-     });
-
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+    });
 });
 
 $.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
@@ -426,13 +400,10 @@ $("form[name='rocketseller_twopickbundle_liquidation']").on("submit", function (
         if (data["url"] != null) {
             console.log(data["url"]);
             redirUri = data["url"];
-
-//             sendAjax(redirUri);
             window.location.href = redirUri;
         } else {
             $('#main').replaceWith(
-                    // ... with the returned one from the AJAX response.
-                    $(data).find('#main'));
+                $(data).find('#main'));
             addClick();
             if (!jsLoader(url)) {
                 addSumbit();

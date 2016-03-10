@@ -16,6 +16,8 @@
                             <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
                             /
                             <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
+                            /
+                            <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
                         </div>
                     </div>
                 {% endfor %}
