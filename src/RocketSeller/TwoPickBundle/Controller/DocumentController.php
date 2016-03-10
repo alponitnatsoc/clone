@@ -288,7 +288,6 @@ class DocumentController extends Controller
 	        case "cert-laboral-activo":
 	        case "cert-laboral-retiro":
 	        case "retiro-cesantias":
-	        case "not-despido":
 	        case "suspencion":
 	        case "llamado-atencion":
 	        case "aut-afiliacion-ss":
@@ -338,6 +337,7 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
+	        case "not-despido":
 	        case "permiso":
 	        case "dotacion":
 	        case "aut-descuento":
