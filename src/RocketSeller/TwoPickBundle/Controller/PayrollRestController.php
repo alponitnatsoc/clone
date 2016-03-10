@@ -2579,6 +2579,56 @@ class PayrollRestController extends FOSRestController
         return $responseView;
     }
 
+    /**
+     * Executes the vacations liquidation process.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the contributions liquidation process.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postNuevosPagosAction(Request $request)
+    {
+         ini_set("soap.wsdl_cache_enabled", 1);
+         $opts = array(
+             //"ssl" => array("ciphers" => "RC4-SHA")
+         );
+         $consumptionsWsUrl = sprintf(\UneConstants::UNE_WS_MY_CONSUMPTION_WSDL_URL, $this->_uneHostname);
+         $client = new \SoapClient("http://52.86.183.212:8080/dssp/services/listServices",
+             array("connection_timeout" => 20,
+                 "trace" => true,
+                 "exceptions" => true,
+                 "stream_context" => stream_context_create($opts),
+                 //"login" => $login,
+                 //"password" => $pass
+         ));
+
+         $args = array('numeroRadicado' => "111111111000111", );
+
+
+         $res = $client->__soapCall("ConsultarEstadoRecaudo", $args);
+
+         var_dump($res);
+         if (is_string($res)) {
+             $res = new \SimpleXMLElement($res);
+         }
+    }
+
+
 }
 
 ?>
