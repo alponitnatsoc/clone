@@ -328,12 +328,68 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $llegadaTardeStart->setNoveltyTypeNoveltyType($this->getReference('novelty-llegada-tarde'));
         $manager->persist($llegadaTardeStart);
 
-        $bandonoPuesto = new NoveltyTypeFields();
-        $bandonoPuesto->setName('Día de inicio');
-        $bandonoPuesto->setColumnName('date_start');
-        $bandonoPuesto->setDataType('date');
-        $bandonoPuesto->setNoveltyTypeNoveltyType($this->getReference('novelty-abandono-puesto'));
-        $manager->persist($bandonoPuesto);
+        $abandonoPuesto = new NoveltyTypeFields();
+        $abandonoPuesto->setName('Día de inicio');
+        $abandonoPuesto->setColumnName('date_start');
+        $abandonoPuesto->setDataType('date');
+        $abandonoPuesto->setNoveltyTypeNoveltyType($this->getReference('novelty-abandono-puesto'));
+        $manager->persist($abandonoPuesto);
+
+
+
+        $totalDiasVacas = new NoveltyTypeFields();
+        $totalDiasVacas->setName('Total de días');
+        $totalDiasVacas->setColumnName('units');
+        $totalDiasVacas->setDataType('text');
+        $totalDiasVacas->setNoveltyTypeNoveltyType($this->getReference('novelty-vacation'));
+
+        $descargosStart = new NoveltyTypeFields();
+        $descargosStart->setName('Día de ocurrencia');
+        $descargosStart->setColumnName('date_start');
+        $descargosStart->setDataType('date');
+        $descargosStart->setNoveltyTypeNoveltyType($this->getReference('novelty-descargos'));
+
+        $desPrestamoStart = new NoveltyTypeFields();
+        $desPrestamoStart->setName('Fecha inicio descuento');
+        $desPrestamoStart->setColumnName('date_start');
+        $desPrestamoStart->setDataType('date');
+        $desPrestamoStart->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+
+        $desPrestamoMotivo = new NoveltyTypeFields();
+        $desPrestamoMotivo->setName('Motivo');
+        $desPrestamoMotivo->setColumnName('description');
+        $desPrestamoMotivo->setDataType('text');
+        $desPrestamoMotivo->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+
+        $desPrestamoCuotas = new NoveltyTypeFields();
+        $desPrestamoCuotas->setName('Número de cuotas');
+        $desPrestamoCuotas->setColumnName('units');
+        $desPrestamoCuotas->setDataType('text');
+        $desPrestamoCuotas->setNoveltyTypeNoveltyType($this->getReference('novelty-discount-loan'));
+
+        $dotacionStart = new NoveltyTypeFields();
+        $dotacionStart->setName('Fecha inicio');
+        $dotacionStart->setColumnName('date_start');
+        $dotacionStart->setDataType('date');
+        $dotacionStart->setNoveltyTypeNoveltyType($this->getReference('novelty-dotacion'));
+
+        $dotacionEnd = new NoveltyTypeFields();
+        $dotacionEnd->setName('Fecha fin');
+        $dotacionEnd->setColumnName('date_end');
+        $dotacionEnd->setDataType('date');
+        $dotacionEnd->setNoveltyTypeNoveltyType($this->getReference('novelty-dotacion'));
+
+        $noveltyUnpaidDays = new NoveltyTypeFields();
+        $noveltyUnpaidDays->setName('Total de días');
+        $noveltyUnpaidDays->setColumnName('units');
+        $noveltyUnpaidDays->setDataType('text');
+        $noveltyUnpaidDays->setNoveltyTypeNoveltyType($this->getReference('novelty-unpaid'));
+
+        $despido = new NoveltyTypeFields();
+        $despido->setName('Fin de contrato');
+        $despido->setColumnName('date_end');
+        $despido->setDataType('date');
+        $despido->setNoveltyTypeNoveltyType($this->getReference('novelty-despido'));
 
         $manager->flush();
 
@@ -381,7 +437,18 @@ class LoadNoveltyTypeFieldsData extends AbstractFixture implements OrderedFixtur
         $this->addReference('novelty-liberty-bonus-amount', $NoveltyLibertyBonusAmount);
         $this->addReference('novelty-discount-loan-amount', $NoveltyDiscountLoanAmount);
         $this->addReference('novelty-llegada-tarde-start', $llegadaTardeStart);
-        $this->addReference('novelty-abandono-puesto-start', $bandonoPuesto);
+        $this->addReference('novelty-abandono-puesto-start', $abandonoPuesto);
+
+        $this->addReference('novelty-vacaciones-total-dias', $totalDiasVacas);
+        $this->addReference('novelty-descargos-start', $descargosStart);
+        $this->addReference('novelty-des-prestamo-start', $desPrestamoStart);
+        $this->addReference('novelty-des-prestamo-motivo', $desPrestamoMotivo);
+        $this->addReference('novelty-des-prestamo-cuotas', $desPrestamoCuotas);
+        $this->addReference('novelty-dotacion-start', $dotacionStart);
+        $this->addReference('novelty-dotacion-end', $dotacionEnd);
+        $this->addReference('novelty-novelty-unpaid-days', $noveltyUnpaidDays);
+        $this->addReference('novelty-despido-end', $despido);
+
 
     }
     public function getOrder()
