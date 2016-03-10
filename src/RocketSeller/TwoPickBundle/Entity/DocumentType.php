@@ -27,6 +27,11 @@ class DocumentType
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $refPdf;
+
+    /**
      * Get idDocumentType
      *
      * @return integer
@@ -64,4 +69,28 @@ class DocumentType
         return (string) $this->name;
     }
 
+
+    /**
+     * Set refPdf
+     *
+     * @param string $refPdf
+     *
+     * @return DocumentType
+     */
+    public function setRefPdf($refPdf)
+    {
+        $this->refPdf = $refPdf;
+
+        return $this;
+    }
+
+    /**
+     * Get refPdf
+     *
+     * @return string
+     */
+    public function getRefPdf()
+    {
+        return $this->refPdf;
+    }
 }

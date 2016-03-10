@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>ACTA DE AUTORIZACIÓN DESCUENTO</title>
+<title>Solicitud de vacaciones</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -24,14 +24,12 @@ body {
 <p>{{ data.employer.name }}</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;"><strong>ASUNTO:</strong> Solicitud de vacaciones</p>
-<p style="text-align: justify;">De la manera más atenta solicito a usted(es), concederme ______ días vacaciones, correspondientes
-al mi periodo trabajado</p>
-<p style="text-align: justify;">
-Fecha de inicio del contrato: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}
-Fecha de fin de contrato: {{ data.contract.fechaFin.date|localizeddate('long', 'none', local) }}
-</p>
-<p style="text-align: justify;">Dichas vacaciones desearía tomarlas a partir del “Día ___ Mes ____ Año _______”</p>
-<p style="text-align: justify;"><strong>Por este motivo el reintegro laboral será el “Día ___ Mes ____ Año _______”</strong></p>
+<p style="text-align: justify;">De la manera más atenta solicito a usted(es), concederme {{ data.novelty.units }} días de
+vacaciones, correspondientes al periodo trabajado</p>
+<p style="text-align: justify;">Fecha de inicio del contrato: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}</p>
+<p style="text-align: justify;">Fecha de fin de contrato: {{ data.contract.fechaFin.date|localizeddate('long', 'none', local) }}</p>
+<p style="text-align: justify;">Dichas vacaciones desearía tomarlas a partir del Día {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}</p>
+<p style="text-align: justify;"><strong>Por este motivo el reintegro laboral será el Día {{ data.novelty.dateEnd|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}</strong></p>
 <p>&nbsp;</p>
 
 <p>Atentamente,</p>

@@ -24,9 +24,9 @@ body {
 <p>{{ data.employee.name }}</p>
 <p>{{ data.contract.position }}</p>
 <p>&nbsp;</p>
-<p style="text-align: justify;"><strong>Acta de Descargos Nº</strong>______</p>
-<p style="text-align: justify;">Estimado (a) Trabajador (a) es importante que nos mencione lo sucedido al pasado
-Día _____ Mes______ Año________, por favor descríbanos brevemente los hechos:</p>
+<p style="text-align: justify;"><strong>Acta de Descargos Nº</strong>{{ data.novelty.id }}</p>
+<p style="text-align: justify;">Estimado (a) Trabajador (a) es importante que nos mencione lo sucedido el pasado
+{{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">______________________________________________________________________</p>
 <p style="text-align: justify;">______________________________________________________________________</p>
@@ -58,7 +58,7 @@ _____________________________________
 
 
 _____________________________________
-<p>{{ data.employee.name }}</p>
+<p>{{ data.employer.name }}</p>
 
 <p>&nbsp;</p>
 

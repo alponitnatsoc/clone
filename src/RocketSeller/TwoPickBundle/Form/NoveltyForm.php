@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -89,10 +89,9 @@ class NoveltyForm extends AbstractType
             'data_class' => 'RocketSeller\TwoPickBundle\Entity\Novelty',
         ));
     }
-    
+
     public function getName()
     {
         return 'novelty_fields';
     }
-} 
-?>
+}

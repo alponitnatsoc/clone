@@ -46,7 +46,86 @@ use DateTime;
 
 class EmployeeRestController extends FOSRestController
 {
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when any Id does not exist in the DB"
+     *   }
+     * )
+     *
+     * @param integer $idEmployerHasEmployee
+     *
+     *
+     * @RequestParam(name="$idEmployerHasEmployee", nullable=false, strict=true, description="workplace department.")
+     *
+     * @return View
+     */
+    public function getLiquidatePayrollAction($idEmployerHasEmployee){
+        $em=$this->getDoctrine()->getManager();
+        $repoEmployee=$em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $realEmployerHasEmployee */
+        $realEmployerHasEmployee=$repoEmployee->find($idEmployerHasEmployee);
+        $view = View::create();
 
+        $executionType="D";
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "employee_id"=>$idEmployerHasEmployee,
+            "execution_type"=>$executionType,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postExecutePayrollLiquidation', array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=200){
+            return $view->setStatusCode($insertionAnswer->getStatusCode());
+        }
+
+        $contracts=$realEmployerHasEmployee->getContracts();
+        $actContract=null;
+        /** @var Contract $cont */
+        foreach ($contracts as $cont) {
+            if($cont->getState()==1){
+                $actContract=$cont;
+                break;
+            }
+        }
+        $methodToCall="postExecutePayrollLiquidation";
+        $novelties=$actContract->getActivePayroll()->getNovelties();
+        /** @var Novelty $nov */
+        foreach ($novelties as $nov) {
+            if($nov->getNoveltyTypeNoveltyType()->getPayrollCode()==145||$nov->getNoveltyTypeNoveltyType()->getPayrollCode()==150){
+                $methodToCall="postExecuteVacationLiquidation";
+            }
+        }
+
+        $executionType="P";
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "employee_id"=>$idEmployerHasEmployee,
+            "execution_type"=>$executionType,
+        ));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
+
+        if($insertionAnswer->getStatusCode()!=200){
+            return $view->setStatusCode($insertionAnswer->getStatusCode());
+        }
+
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll',array(
+            "employeeId"=>$idEmployerHasEmployee,
+        ), array('_format' => 'json'));
+        if($insertionAnswer->getStatusCode()!=200){
+            return $view->setStatusCode($insertionAnswer->getStatusCode());
+        }
+        return $view->setStatusCode(200)->setData(json_decode($insertionAnswer->getContent(),true));
+
+
+    }
     /**
      * Create a Person from the submitted data.<br/>
      *

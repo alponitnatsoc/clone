@@ -25,6 +25,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 
 class DocumentController extends Controller
 {
@@ -283,23 +284,14 @@ class DocumentController extends Controller
 	{
         switch ($ref){
     	    case "contrato":
-                $data = array(
-                );
-    	        break;
 	        case "otrosi":
 	        case "cert-laboral-activo":
 	        case "cert-laboral-retiro":
 	        case "retiro-cesantias":
-	        case "not-despido":
-	        case "descargo":
 	        case "suspencion":
 	        case "llamado-atencion":
-	        case "vacaciones":
-	        case "permiso":
-	        case "aut-descuento":
 	        case "aut-afiliacion-ss":
 	        case "trato-datos":
-    	    case "dotacion":
     	        //$id de la relacion employerhasempployee
     	        /** @var Employee $employee */
     	        $employee = $this->getEmployee($id);
@@ -345,6 +337,58 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
+	        case "not-despido":
+	        case "permiso":
+	        case "dotacion":
+	        case "aut-descuento":
+	        case "descargo":
+            case "vacaciones":
+	            //$id de la novedad
+	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Novelty');
+	            /** @var Novelty $novelty */
+	            $novelty = $repository->find($id);
+	            $contract = $novelty->getPayrollPayroll()->getContractContract();
+	            $empleHasEmplr = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+	            $employee = $empleHasEmplr->getEmployeeEmployee();
+	            $employeePerson = $employee->getPersonPerson();
+	            $employer = $empleHasEmplr->getEmployerEmployer();
+	            $employerPerson = $employer->getPersonPerson();
+
+	            $employeeInfo = array(
+	                'name' => $this->fullName($employeePerson->getIdPerson()),
+	                'docType' => $employeePerson->getDocumentType(),
+	                'docNumber' => $employeePerson->getDocument(),
+	                'docExpPlace' => $employeePerson->getDocumentExpeditionPlace()
+	            );
+	            $employerInfo = array(
+	                'name' => $this->fullName($employerPerson->getIdPerson()),
+	                'docType' => $employerPerson->getDocumentType(),
+	                'docNumber' => $employerPerson->getDocument(),
+	                'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+	            );
+	            $contractInfo = array(
+	                'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+	                'position' => $contract->getPositionPosition()->getName(),
+	                'fechaInicio' => $contract->getStartDate(),
+	                'fechaFin' => $contract->getEndDate()
+	            );
+	            $noveltyInfo = array(
+	                'id' => $novelty->getIdNovelty(),
+	                'units' => $novelty->getUnits(),
+	                'dateStart' => $novelty->getDateStart(),
+	                'dateEnd' => $novelty->getDateEnd(),
+	                'amount' => money_format("$%!i", $novelty->getAmount()),
+	                'motivo' => $novelty->getDescription()
+	            );
+
+	            $data = array(
+	                'employee' => $employeeInfo,
+	                'employer' => $employerInfo,
+	                'contract' => $contractInfo,
+	                'novelty' => $noveltyInfo
+	            );
+
+	            break;
 	        case "mandato":
 	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');

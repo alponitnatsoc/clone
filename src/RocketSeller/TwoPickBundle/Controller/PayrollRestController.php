@@ -1251,7 +1251,7 @@ class PayrollRestController extends FOSRestController
         $unico = array();
 
         $unico['EMPCODIGO'] = $employeeId;
-        if ($liquidation_date != null)
+        if ($liquidation_date != null && $liquidation_date != "NULL")
             $unico['NOVFECHALIQ'] = $liquidation_date;
 
         $content[] = $unico;
@@ -1831,9 +1831,9 @@ class PayrollRestController extends FOSRestController
         $unico['EMPCODIGO'] = $employeeId;
         if ($period == 'NULL' || $period == "null")
             $period = null;
-        $unico['NOMI_PERIODO'] = $period ? : "";
-        $unico['NOMI_MES'] = $month ? : "";
-        $unico['NOMI_ANO'] = $year ? : "";
+        $unico['NOMIPERIODO'] = $period ? : "";
+        $unico['NOMIMES'] = $month ? : "";
+        $unico['NOMIANO'] = $year ? : "";
 
         $content[] = $unico;
         $parameters = array();
@@ -2122,15 +2122,8 @@ class PayrollRestController extends FOSRestController
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="exit_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Exit day of the period to be enjoyed by the employee.")
-     *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period to be inserted in the cumulatives.")
-     *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month when it is inserted")
-     *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Day when it is inserted")
-     *    (name="payment_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date for payment of the vacations(format: DD-MM-YYYY).")
-     *    (name="payment_method", nullable=true, requirements="(.)*", strict=true, description="How the vacations are going to be payed, accoirding to SQL software codes.")
-     *    (name="cut_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Cut date for averages(format: DD-MM-YYYY).")
-     *    (name="days", nullable=true, requirements="([0-9])+", strict=true, description="Days to be paid in money.")
-     *    (name="calendar_days", nullable=true, requirements="([0-9])+", strict=true, description="Calendar days to be enjoyed.")
-     *    (name="days_time", nullable=true, requirements="([0-9])+", strict=true, description="Days payed in time.")
+     *    (name="return_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Return day to the company.(format: DD-MM-YYYY).")
+     *    (name="money_days", nullable=true, requirements="([0-9])+", strict=true, description="Days to be paid in money.")
      *
      * @return View
      */
@@ -2144,24 +2137,11 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['exit_date'] = true;
-        $regex['period'] = '([0-9])+';
-        $mandatory['period'] = true;
-        $regex['month'] = '([0-9])+';
-        $mandatory['month'] = true;
-        $regex['year'] = '([0-9])+';
-        $mandatory['year'] = true;
-        $regex['payment_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
-        $mandatory['payment_date'] = true;
-        $regex['payment_method'] = '(.)*';
-        $mandatory['payment_method'] = false;
-        $regex['cut_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
-        $mandatory['cut_date'] = false;
-        $regex['days'] = '([0-9])+';
-        $mandatory['days'] = false;
-        $regex['calendar_days'] = '([0-9])+';
-        $mandatory['calendar_days'] = false;
-        $regex['days_time'] = '([0-9])+';
-        $mandatory['days_time'] = false;
+        $regex['return_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['return_date'] = true;
+        $regex['money_days'] = '([0-9])+';
+        $mandatory['money_days'] = false;
+
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -2174,15 +2154,8 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 0;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['PARV_FECHA_SALIDA'] = $parameters['exit_date'];
-        $unico['PARV_PERIODO'] = $parameters['period'];
-        $unico['PARV_MES'] = $parameters['month'];
-        $unico['PARV_ANO'] = $parameters['year'];
-        $unico['PARV_FEC_PAGO'] = $parameters['payment_date'];
-        $unico['PARV_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : '';
-        $unico['PARV_FEC_CORTE'] = isset($parameters['cut_date']) ? $parameters['cut_date'] : '';
-        $unico['PARV_DIAS_DINERO'] = isset($parameters['days']) ? $parameters['days'] : '';
-        $unico['PARV_DIAS_CALENDARIO'] = isset($parameters['calendar_days']) ? $parameters['calendar_days'] : '';
-        $unico['PARV_DIAS_TIEMPO'] = isset($parameters['days_time']) ? $parameters['days_time'] : '';
+        $unico['PARV_FECHA_TERMINA_DISF'] = $parameters['return_date'];
+        $unico['PARV_DIAS_DINERO'] = isset($parameters['money_days']) ? $parameters['money_days'] : '';
 
         $content[] = $unico;
         $parameters = array();
@@ -2213,16 +2186,9 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="exit_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Exit day of the period to be enjoyed by the employee.")
-     *    (name="period", nullable=true, requirements="([0-9])+", strict=true, description="Period to be inserted in the cumulatives.")
-     *    (name="month", nullable=true, requirements="([0-9])+", strict=true, description="Month when it is inserted")
-     *    (name="year", nullable=true, requirements="([0-9])+", strict=true, description="Day when it is inserted")
-     *    (name="payment_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", description="Date for payment of the vacations(format: DD-MM-YYYY).")
-     *    (name="payment_method", nullable=true, requirements="(.)*", strict=true, description="How the vacations are going to be payed, accoirding to SQL software codes.")
-     *    (name="cut_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Cut date for averages(format: DD-MM-YYYY).")
-     *    (name="days", nullable=true, requirements="([0-9])+", strict=true, description="Days to be paid in money.")
-     *    (name="calendar_days", nullable=true, requirements="([0-9])+", strict=true, description="Calendar days to be enjoyed.")
-     *    (name="days_time", nullable=true, requirements="([0-9])+", strict=true, description="Days payed in time.")     *
+     *    (name="exit_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Exit day of the period to be enjoyed by the employee.")
+     *    (name="return_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Return day to the company.(format: DD-MM-YYYY).")
+     *    (name="money_days", nullable=true, requirements="([0-9])+", strict=true, description="Days to be paid in money.")
      * @return View
      */
     public function postModifyVacationParametersAction(Request $request)
@@ -2235,24 +2201,10 @@ class PayrollRestController extends FOSRestController
         $mandatory['employee_id'] = true;
         $regex['exit_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['exit_date'] = false;
-        $regex['period'] = '([0-9])+';
-        $mandatory['period'] = false;
-        $regex['month'] = '([0-9])+';
-        $mandatory['month'] = false;
-        $regex['year'] = '([0-9])+';
-        $mandatory['year'] = false;
-        $regex['payment_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
-        $mandatory['payment_date'] = false;
-        $regex['payment_method'] = '(.)*';
-        $mandatory['payment_method'] = false;
-        $regex['cut_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
-        $mandatory['cut_date'] = false;
-        $regex['days'] = '([0-9])+';
-        $mandatory['days'] = false;
-        $regex['calendar_days'] = '([0-9])+';
-        $mandatory['calendar_days'] = false;
-        $regex['days_time'] = '([0-9])+';
-        $mandatory['days_time'] = false;
+        $regex['return_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['return_date'] = false;
+        $regex['money_days'] = '([0-9])+';
+        $mandatory['money_days'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -2267,15 +2219,8 @@ class PayrollRestController extends FOSRestController
         $unico['TIPOCON'] = 1;
         $unico['EMP_CODIGO'] = isset($parameters['employee_id']) ? $parameters['employee_id'] : $info['EMP_CODIGO'];
         $unico['PARV_FECHA_SALIDA'] = isset($parameters['exit_date']) ? $parameters['exit_date'] : $info['PARV_FECHA_SALIDA'];
-        $unico['PARV_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PARV_PERIODO'];
-        $unico['PARV_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PARV_MES'];
-        $unico['PARV_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PARV_ANO'];
-        $unico['PARV_FEC_PAGO'] = isset($parameters['payment_date']) ? $parameters['payment_date'] : $info['PARV_FEC_PAGO'];
-        $unico['PARV_FORMA_PAGO'] = isset($parameters['payment_method']) ? $parameters['payment_method'] : $info['PARV_FORMA_PAGO'];
-        $unico['PARV_FEC_CORTE'] = isset($parameters['cut_date']) ? $parameters['cut_date'] : $info['PARV_FEC_CORTE'];
-        $unico['PARV_DIAS_DINERO'] = isset($parameters['days']) ? $parameters['days'] : $info['PARV_DIAS_DINERO'];
-        $unico['PARV_DIAS_CALENDARIO'] = isset($parameters['calendar_days']) ? $parameters['calendar_days'] : $info['PARV_DIAS_CALENDARIO'];
-        $unico['PARV_DIAS_TIEMPO'] = isset($parameters['days_time']) ? $parameters['days_time'] : $info['PARV_DIAS_TIEMPO'];
+        $unico['PARV_FECHA_TERMINA_DISF'] = isset($parameters['return_date']) ? $parameters['return_date'] : $info['PARV_FECHA_TERMINA_DISF'];
+        $unico['PARV_DIAS_DINERO'] = isset($parameters['money_days']) ? $parameters['money_days'] : $info['PARV_DIAS_DINERO'];
 
         $content[] = $unico;
         $parameters = array();
@@ -2311,7 +2256,7 @@ class PayrollRestController extends FOSRestController
         $content = array();
         $unico = array();
 
-        $unico['EMPCODIGO'] = $employeeId;
+        $unico['EMP_CODIGO'] = $employeeId;
 
         $content[] = $unico;
         $parameters = array();
@@ -2348,7 +2293,7 @@ class PayrollRestController extends FOSRestController
         $content = array();
         $unico = array();
 
-        $unico['EMPCODIGO'] = $employeeId;
+        $unico['EMP_CODIGO'] = $employeeId;
 
         $content[] = $unico;
         $parameters = array();
@@ -2381,13 +2326,12 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getPendingVacationsAction($employeeId, $companyId)
+    public function getPendingVacationsAction($employeeId)
     {
         $content = array();
         $unico = array();
 
-        $unico['EMPCODIGO'] = $employeeId;
-        $unico['EN1_CODIGO'] = $companyId;
+        $unico['EMP_CODIGO'] = $employeeId;
 
         $content[] = $unico;
         $parameters = array();
@@ -2551,6 +2495,61 @@ class PayrollRestController extends FOSRestController
 
 
         $unico['COD_PROC'] = 100; // payroll liquidation is always 100.
+        $unico['USUARIO'] = ''; // Empty by default.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['TIP_EJEC'] = $parameters['execution_type'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '611';
+        $parameters['clXMLSolic'] = $this->createXml($content, 611);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Executes the vacations liquidation process.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the contributions liquidation process.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postExecuteVacationLiquidationAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['execution_type'] = '(P|D|C)';
+        $mandatory['execution_type'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['COD_PROC'] = 2; // vacation liquidation is always 2.
         $unico['USUARIO'] = ''; // Empty by default.
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['TIP_EJEC'] = $parameters['execution_type'];

@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Application\Sonata\MediaBundle\Document\Media;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -129,7 +130,15 @@ class NoveltyController extends Controller {
         $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll))), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
-
+            $plus=$payRol->getPeriod()==4?24:14;
+            $dateEndPayroll=new DateTime();
+            $dateEndPayroll->setDate($payRol->getYear(),$payRol->getMonth(),1+$plus);
+            if($novelty->getDateStart()>$dateEndPayroll){
+                return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+                    'form' => $form->createView(),
+                    'errno'=> 'La fecha no puede ser mayor a la fecha de terminación del periodo de nómina! '.$dateEndPayroll->format("Y-m-d")
+                ));
+            }
             $novelty->setName($noveltyType->getName());
             $payRol->addNovelty($novelty);
             $em = $this->getDoctrine()->getEntityManager();
@@ -138,7 +147,7 @@ class NoveltyController extends Controller {
             if ($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
                 $user = $this->getUser();
-                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
+                $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                 $em->persist($notification);
                 $em->flush();
                 $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));
@@ -185,7 +194,7 @@ class NoveltyController extends Controller {
                 if ($notificationReferenced == -1) {
                     /** @var User $user */
                     $user = $this->getUser();
-                    $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad","Novedad Incompleta","Completar","alert",$user->getPersonPerson());
+                    $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
                     $em->persist($notification);
                     $em->flush();
                     $notification->setRelatedLink($this->generateUrl("novelty_edit", array('noveltyId' => $novelty->getIdNovelty(), 'notificationReferenced' => $notification->getId())));

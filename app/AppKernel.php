@@ -8,7 +8,7 @@ class AppKernel extends Kernel
     public function __construct($environment, $debug)
     {
         date_default_timezone_set('America/Bogota');
-        setlocale(LC_ALL, "ES_ES");
+        setlocale(LC_ALL, "es_CO");
         parent::__construct($environment, $debug);
     }
     public function registerBundles()
@@ -64,7 +64,7 @@ class AppKernel extends Kernel
             new Accord\MandrillSwiftMailerBundle\AccordMandrillSwiftMailerBundle(),
             //twilio
             new Vresh\TwilioBundle\VreshTwilioBundle(),
-            
+
             //KnpSnappyBundle create PDF/image form url/html
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle()
 
