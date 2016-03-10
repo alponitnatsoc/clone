@@ -700,15 +700,6 @@ class Contract
         return $this->activePayroll;
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 
     /**
@@ -793,4 +784,15 @@ class Contract
     {
         return $this->weekWorkableDays;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

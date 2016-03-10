@@ -7,12 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
-use RocketSeller\TwoPickBundle\Entity\Novelty;
-use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use DateTime;
 
@@ -33,62 +30,39 @@ class NotificationRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Request $request
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="notificationId", nullable=false,  requirements="\d+", strict=true, description="the notification id.")
+     * @RequestParam(name="status", nullable=false,  requirements="-1|0|1", strict=true, description="the novelty type id.")
      * @return View
      */
-    public function postAddNoveltySQLAction(Request $request)
+    public function postChangeStatusAction(ParamFetcher $paramFetcher)
     {
-        /** @var Novelty $novelty */
-        $novelty=$request->request->get("novelty");
+        $user = $this->getUser();
         $view = View::create();
-        $request = $this->container->get('request');
-        $noveltyType=$novelty->getNoveltyTypeNoveltyType();
-        $idEmployerHasEmployee=$novelty->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
-        if($noveltyType->getAbsenteeism()==null){
-            if($noveltyType->getPayrollCode()==150||$noveltyType->getPayrollCode()==145){
-                $methodToCall="postAddVacationParameters";
-                $request->request->add(array(
-                    "employee_id"=>$idEmployerHasEmployee,
-                    "money_days"=>$novelty->getAmount(),
-                    "number_days"=>$novelty->getUnits(),
-                    "exit_date"=>$novelty->getDateStart()->format("d-m-Y"),
-                ));
-            }else{
-                $methodToCall="postAddNoveltyEmployee";
-                $request->request->add(array(
-                    "employee_id"=>$idEmployerHasEmployee,
-                    "novelty_concept_id"=>$noveltyType->getPayrollCode(),
-                    "novelty_value"=>$novelty->getAmount(),
-                    "unity_numbers"=>$novelty->getUnits(),
-                    "novelty_start_date"=>$novelty->getDateStart()->format("d-m-Y"),
-                    "novelty_end_date"=>$novelty->getDateEnd()->format("d-m-Y"),
-                ));
-            }
-            $request->setMethod("POST");
-
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
-            if($insertionAnswer->getStatusCode()!=200){
-                return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
-            }
-            return $view->setStatusCode(201);
-
-        }else{
-            $methodToCall="postAddAbsenteeismEmployee";
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "employee_id"=>$idEmployerHasEmployee,
-                "absenteeism_type_id"=>$noveltyType->getAbsenteeism(),
-                "absenteeism_state"=>"ACT",
-                "absenteeism_units"=>$novelty->getUnits(),
-                "absenteeism_start_date"=>$novelty->getDateStart()->format("d-m-Y"),
-                "absenteeism_end_date"=>$novelty->getDateEnd()->format("d-m-Y"),
-            ));
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
-            if($insertionAnswer->getStatusCode()!=200){
-                return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
-            }
-            return $view->setStatusCode(201);
+        if($user==null){
+            $view->setStatusCode(401);
+            return $view;
         }
+        /** @var NotificationEmployer $notification */
+        $notification = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Notification')
+            ->find($paramFetcher->get('notificationId'));
+        if($notification==null){
+            $view->setStatusCode(404);
+            return $view;
+        }
+        $notification->setStatus($paramFetcher->get('status'));
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($notification);
+        $em->flush();
+        $view->setStatusCode(200);
+        $response=array();
+        $response["url"]="notifications/employer";
+        $serializer = $this->get('jms_serializer');
+        $serializer->serialize($response, "json");
+        $view->setData($response);
+        return $view;
     }
 
     /**

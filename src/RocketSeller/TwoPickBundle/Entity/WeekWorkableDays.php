@@ -23,6 +23,11 @@ class WeekWorkableDays
     private $idWeekWorkableDays;
 
     /**
+     * @ORM\Column(type="smallint")
+     */
+    private $dayNumber;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $dayName;
@@ -95,5 +100,29 @@ class WeekWorkableDays
     public function getContractContract()
     {
         return $this->contractContract;
+    }
+
+    /**
+     * Set dayNumber
+     *
+     * @param integer $dayNumber
+     *
+     * @return WeekWorkableDays
+     */
+    public function setDayNumber($dayNumber)
+    {
+        $this->dayNumber = $dayNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get dayNumber
+     *
+     * @return integer
+     */
+    public function getDayNumber()
+    {
+        return $this->dayNumber;
     }
 }
