@@ -1109,6 +1109,9 @@ class PayrollRestController extends FOSRestController
         $parameters = $request->request->all();
         $regex = array();
         $mandatory = array();
+        // Remove all the null values from the array.
+        $parameters = array_filter($parameters);
+
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
@@ -1478,6 +1481,8 @@ class PayrollRestController extends FOSRestController
         $parameters = $request->request->all();
         $regex = array();
         $mandatory = array();
+        // Remove all the null values from the array.
+        $parameters = array_filter($parameters);
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
@@ -2137,6 +2142,8 @@ class PayrollRestController extends FOSRestController
         $parameters = $request->request->all();
         $regex = array();
         $mandatory = array();
+        // Remove all the null values from the array.
+        $parameters = array_filter($parameters);
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
