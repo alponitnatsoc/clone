@@ -99,11 +99,11 @@ class PaymentsRestController extends FOSRestController
             'headers' => $headers,
             'json' => $parameters,
             'timeout' => $timeout,
-            'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
+            'verify' => true//'/home/ubuntu/.ssh/myKeystore.pem'
         );
         try {
             if ($action == "post") {
-                $response = $client->post($url_request, $options);
+                $response = $client->post($url_request, $options, $sslParams);
             } else if ($action == "delete") {
                 $response = $client->delete($url_request, $options, $sslParams);
             } else if ($action == "get") {
