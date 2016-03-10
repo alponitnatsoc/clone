@@ -81,10 +81,6 @@ class Novelty
      */
     private $amount;
 
-
-
-
-
     /**
      * Constructor
      */

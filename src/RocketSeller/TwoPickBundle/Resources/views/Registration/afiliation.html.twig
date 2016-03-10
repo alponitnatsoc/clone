@@ -74,6 +74,16 @@
                         </div>
                     </div>
                     {% for employee in form.employerHasEmployees %}
+                        {% if employee.wealth.vars.data.name is defined %}
+                            {% set wname = employee.wealth.vars.data.name %}
+                        {% else %}
+                            {% set wname = "" %}
+                        {% endif %}
+                        {% if employee.pension.vars.data.name is defined %}
+                            {% set pname = employee.pension.vars.data.name %}
+                        {% else %}
+                            {% set pname = "" %}
+                        {% endif %}
                         <div class="col-sm-12 col-xs-12 blockUpData">
                             <div class="col-sm-3 col-xs-12">
                                 {{ form_row(employee.nameEmployee) }}
@@ -83,7 +93,7 @@
                                     {{ form_row(employee.wealth) }}
                                 </div>
                                 <div class="col-sm-3 col-xs-12">
-                                    {{ form_row(employee.wealthAC,{'value' : employee.wealth.vars.data.name}) }}
+                                    {{ form_row(employee.wealthAC,{'value' : wname}) }}
                                 </div>
                             </div>
                             <div class="wrapper">
@@ -91,7 +101,7 @@
                                     {{ form_row(employee.pension) }}
                                 </div>
                                 <div class="col-sm-3 col-xs-12">
-                                    {{ form_row(employee.pensionAC,{'value' : employee.pension.vars.data.name}) }}
+                                    {{ form_row(employee.pensionAC,{'value' : pname}) }}
                                 </div>
                             </div>
                             <div class="col-sm-3 col-xs-12">
@@ -142,13 +152,22 @@
                                 <i class="fa fa-home"></i>
                                 {{ form_label(form.severances,null,{'label_attr': {'class': 'title'}})}}
                             </div>
-
+                            {% if employee.severances.vars.data.name is defined %}
+                                {% set sname = employee.severances.vars.data.name %}
+                            {% else %}
+                                {% set sname = "" %}
+                            {% endif %}
+                            {% if employee.arl.vars.data.name is defined %}
+                                {% set aname = employee.arl.vars.data.name %}
+                            {% else %}
+                                {% set aname = "" %}
+                            {% endif %}
                             <div class="wrapper">
                                 <div class="hidden">
                                     {{ form_row(form.severances) }}
                                 </div>
                                 <div class="col-sm-6 col-xs-12">
-                                    {{ form_row(form.severancesAC,{'value' : form.severances.vars.data.name}) }}
+                                    {{ form_row(form.severancesAC,{'value' : sname}) }}
                                 </div>
                             </div>
                             <div class="col-sm-12 form-group">
@@ -164,7 +183,7 @@
                                     {{ form_row(form.arl) }}
                                 </div>
                                 <div class="col-sm-6 col-xs-12">
-                                    {{ form_row(form.arlAC,{'value' : form.arl.vars.data.name}) }}
+                                    {{ form_row(form.arlAC,{'value' : aname}) }}
                                 </div>
                             </div>
                         </div>

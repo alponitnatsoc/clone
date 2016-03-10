@@ -25,6 +25,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 
 class DocumentController extends Controller
 {
@@ -283,18 +284,13 @@ class DocumentController extends Controller
 	{
         switch ($ref){
     	    case "contrato":
-                $data = array(
-                );
-    	        break;
 	        case "otrosi":
 	        case "cert-laboral-activo":
 	        case "cert-laboral-retiro":
 	        case "retiro-cesantias":
 	        case "not-despido":
-	        case "descargo":
 	        case "suspencion":
 	        case "llamado-atencion":
-	        case "vacaciones":
 	        case "permiso":
 	        case "aut-descuento":
 	        case "aut-afiliacion-ss":
@@ -345,6 +341,80 @@ class DocumentController extends Controller
     	            'contract' => $contractInfo
     	        );
     	        break;
+	        case "descargo":
+	            //$id de la novedad
+	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Novelty');
+	            /** @var Novelty $novelty */
+	            $novelty = $repository->find($id);
+	            $contract = $novelty->getPayrollPayroll()->getContractContract();
+	            $empleHasEmplr = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+	            $employee = $empleHasEmplr->getEmployeeEmployee();
+	            $employeePerson = $employee->getPersonPerson();
+	            $employer = $empleHasEmplr->getEmployerEmployer();
+	            $employerPerson = $employer->getPersonPerson();
+
+	            $employeeInfo = array(
+	                'name' => $this->fullName($employeePerson->getIdPerson())
+	            );
+	            $employerInfo = array(
+	                'name' => $this->fullName($employerPerson->getIdPerson())
+	            );
+	            $contractInfo = array(
+	                'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+	                'position' => $contract->getPositionPosition()->getName()
+	            );
+	            $noveltyInfo = array(
+	                'id' => $novelty->getIdNovelty(),
+	                'dateStart' => $novelty->getDateStart()
+	            );
+
+	            $data = array(
+	                'employee' => $employeeInfo,
+	                'employer' => $employerInfo,
+	                'contract' => $contractInfo,
+	                'novelty' => $noveltyInfo
+	            );
+
+	            break;
+	        case "vacaciones":
+	            //$id de la novedad
+	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Novelty');
+                /** @var Novelty $novelty */
+                $novelty = $repository->find($id);
+                $contract = $novelty->getPayrollPayroll()->getContractContract();
+                $empleHasEmplr = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+                $employee = $empleHasEmplr->getEmployeeEmployee();
+                $employeePerson = $employee->getPersonPerson();
+                $employer = $empleHasEmplr->getEmployerEmployer();
+                $employerPerson = $employer->getPersonPerson();
+
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument()
+                );
+                $employerInfo = array(
+                    'name' => $this->fullName($employerPerson->getIdPerson())
+                );
+                $contractInfo = array(
+                    'city' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'fechaInicio' => $contract->getStartDate(),
+                    'fechaFin' => $contract->getEndDate()
+                );
+                $vacaciones = array(
+                    'days' => $novelty->getUnits(),
+                    'dateStart' => $novelty->getDateStart(),
+                    'dateEnd' => $novelty->getDateEnd()
+                );
+
+                $data = array(
+                    'employee' => $employeeInfo,
+                    'employer' => $employerInfo,
+                    'contract' => $contractInfo,
+                    'vacaciones' => $vacaciones
+                );
+
+                break;
 	        case "mandato":
 	            //$id del empleador
 	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
