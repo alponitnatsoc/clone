@@ -19,8 +19,10 @@ class ContractRegistration extends AbstractType
 {
     private $workplaces;
     private $today;
+    private $todayOneYear;
     function __construct($workplaces){
         $this->today= new DateTime();
+        $this->todayOneYear= new DateTime((intval($this->today->format("Y"))+1)."-".$this->today->format("m")."-".$this->today->format("d"));
         $this->workplaces=$workplaces;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -135,17 +137,13 @@ class ContractRegistration extends AbstractType
             ))*/
             ->add('startDate', 'date', array(
                 'label' => 'Fecha inicio de contrato*:',
-                'widget' => 'single_text',
-                'attr' => array(
-                    'min' => $this->today->format("Y-m-d")
-                )
+                'data' => $this->today,
+                'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
                 'label' => 'Fecha fin de contrato*:',
-                'widget' => 'single_text',
-                'attr' => array(
-                    'min' => $this->today->format("Y-m-d")
-                )
+                'data' => $this->todayOneYear,
+                'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+3),
             ))
             ->add('weekWorkableDays', 'choice', array(
                 'choices' => array(
