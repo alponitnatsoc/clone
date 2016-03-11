@@ -205,7 +205,7 @@ class SubscriptionController extends Controller
         }
         $user = $this->getUser();
         $data = $this->getData($user->getPersonPerson()->getEmployer());
-        dump($data);
+        //dump($data);
         //die;
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                     'employees' => $data['employees'],
@@ -236,7 +236,7 @@ class SubscriptionController extends Controller
             $billingAdress = $person->getBillingAddress();
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
-            dump($data);
+            //dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),

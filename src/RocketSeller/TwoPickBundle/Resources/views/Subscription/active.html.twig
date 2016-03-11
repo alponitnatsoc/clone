@@ -253,6 +253,7 @@
 
         <input type="hidden" id="tieneReferidos" value="{{ descuento_haveRefered['object']|length }}"> 
         <input type="hidden" id="esReferido" value="{{ descuento_isRefered['object']|length }}">
+        <input type="hidden" id="esReferidoPercent" value="{{ descuento_isRefered['percent'] }}">
 
         <div id="confirmacionPago" class="confirmacionPago form-group" style="margin: 10px 0px 10px 0px">
             <div class="col-md-12 center" style="margin-top: 30px">
@@ -354,7 +355,7 @@
                                     <b>TOTAL:</b>
                                 </div>  
                                 <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    <div  style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
+                                    <div id="divTotal" style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
                                     <input type="hidden" id="total" value="{{ total_con_descuentos }}">  
                                     <div style="font-size: 10px;">IVA incluido</div>
                                 </div>

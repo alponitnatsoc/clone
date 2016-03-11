@@ -177,20 +177,21 @@ function startSubscriptionActivate() {
                 $("#divCardNumber").removeClass('toHide');
             }
         });
-        function recalc() {
-            html = '<div class="col-md-1">\n\
-                                    </div>\n\
-                                        <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">\n\
-                                        <b>Descuento por ser referido:</b>\n\
-                                    </div>                                      \n\
-                    <div class="col-md-3 text-right" style="padding-top: 5px;">\n\
-                                        <div  style="font-size: 10px;"><b>$ {{  }}</b></div>\n\
-                < /div>';
+        function esReferido() {
+            esReferidoPercent = $("#esReferidoPercent").val();
+            subtotal = $("#subtotal").val();
+            esReferidoValue = subtotal * esReferidoPercent;
+
+            html = '<div class="col-md-1"></div>\n\
+                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;"><b>Descuento por ser referido:</b></div>                                      \n\
+                    <div class="col-md-3 text-right" style="padding-top: 5px;"><div  style="font-size: 10px;"><b>' + getPrice(esReferidoValue) + '</b></div>';
             $("#descuento_isRefered").html(html);
 
-            subtotal = $("#subtotal").val();
             total = $("#total").val();
-
+            total = total - esReferidoValue;
+            $("#total").val(total);
+            html = '<b>' + getPrice(total) + '</b>';
+            $("#divTotal").html(html);
         }
         $("#codigo_referido").focusout(function () {
             if ($("#esReferido").val() == 0) {
@@ -212,7 +213,7 @@ function startSubscriptionActivate() {
                             $("#codigo_referido_estado").addClass('codigo_referido_valido');
                             $("#codigo_referido_estado").html('Código valido');
                             $("#codigoReferido").hide();
-                            recalc();
+                            esReferido();
                         } else {
                             $("#codigo_referido_estado").removeClass('codigo_referido_valido');
                             $("#codigo_referido_estado").addClass('codigo_referido_invalido');
@@ -236,5 +237,13 @@ function startSubscriptionActivate() {
             }
         });
     });
+
+    function getPrice(valor) {
+        price = parseFloat(valor.toString().replace(/,/g, ""))
+                .toFixed(0)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return "$ " + price;
+    }
 }
 
