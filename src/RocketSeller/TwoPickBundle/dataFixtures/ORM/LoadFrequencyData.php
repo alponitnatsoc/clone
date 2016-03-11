@@ -11,11 +11,6 @@ class LoadFreuencyData extends AbstractFixture implements OrderedFixtureInterfac
 {
     public function load(ObjectManager $manager)
     {
-        $FrequencyDiaria = new Frequency();
-        $FrequencyDiaria->setName('Diario');
-        $FrequencyDiaria->setPayrollCode('J');
-
-        $manager->persist($FrequencyDiaria);
 
         $FrequencyMensual = new Frequency();
         $FrequencyMensual->setName('Mensual');
@@ -31,7 +26,6 @@ class LoadFreuencyData extends AbstractFixture implements OrderedFixtureInterfac
 
         $manager->flush();
 
-        $this->addReference('frequency-diaria', $FrequencyDiaria);
         $this->addReference('frequency-mensual', $FrequencyMensual);
         $this->addReference('frequency-quincenal', $FrequencyQuincenal);
     }

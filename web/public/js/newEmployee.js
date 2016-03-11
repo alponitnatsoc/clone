@@ -605,7 +605,7 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
-    $("#ex6").slider();
+    $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function(slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
         calculator();

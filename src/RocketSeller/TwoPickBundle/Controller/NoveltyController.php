@@ -145,8 +145,8 @@ class NoveltyController extends Controller {
             if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
                 $request->setMethod("GET");
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDays',array(
-                    "dateStart"=>$novelty->getDateStart(),
-                    "dateEnd"=>$novelty->getDateEnd(),
+                    "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
+                    "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
                     "contractId"=>$payRol->getContractContract()->getIdContract()
                     ), array('_format' => 'json'));
                 $days=json_decode($insertionAnswer->getContent(),true)["days"];
