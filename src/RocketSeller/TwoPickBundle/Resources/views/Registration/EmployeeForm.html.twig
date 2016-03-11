@@ -315,9 +315,6 @@
             </div>
 
             <div id="contractData" class="tab-pane fade in {%   if tab==3 %} active {% endif %}">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios<a href="{{ path('show_help') }}" target="_blank" class="helpTxt">> ayuda</a></span>
-                </div>
                 <div class="col-md-10 col-md-push-1">
                     <div id="contractDataWiz">
                         <ul id="contractNav" class="nav nav-tabs nav-justified">
@@ -328,59 +325,101 @@
                         </ul>
                         <div class="tab-content">
                             <div id="newOrOldTab" class="tab-pane fade in active">
-                                <div>
-                                    <h2>
-                                        Bienvenido a nuestro asistente de contratación de empleado
-                                    </h2>
-                                    <p>Por favor responda las siguientes preguntas y nosotros nos encargaremos de orientar
-                                        la información al modelo de contrato más conveniente para cada caso:</p>
-                                    <p>¿Su empleado es nuevo o ya se encuentra trabajando con usted?</p>
+                                <div class="innerForm">
+                                    <div class="title">
+                                        <h2>
+                                            Bienvenido a nuestro <br /><span>asistente de contratación de empleado</span>
+                                        </h2>
+                                    </div>
+                                    <div id="existentQuestion">
+                                        <p class="text-center typeQuestion">¿Tu empleado es nuevo o <br />ya se encuentra trabajando contigo?</p>
 
-                                    <div class="row">
-                                        <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.new) }}</div>
-                                        <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.existent) }}</div>
+                                        <div class="row">
+                                            <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.new) }}</div>
+                                            <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.existent) }}</div>
+                                        </div>
                                     </div>
                                     <div id="existentDataToShow">
-                                        Si el empleado es antiguo, nuestra recomendación es generar un nuevo contrato donde
-                                        se especificará que reemplaza al actual sin generar inconvenientes al empleado ni al empleador.
-                                        ¿Confirma hacerlo de esa manera?
-                                        En caso negativo las herramientas elaboradas por Symplifica no podrán satisfacer sus necesidades.
                                         <div class="row">
-                                            <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.yesExistent) }}</div>
-                                            <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.noExistent) }}</div>
+                                            <ul class="col-md-10 col-md-push-1">
+                                                <li>Para darte de alta en Symplifica debes generar un nuevo contrato con tu empleado.</li>
+                                                <li>Este contrato reemplazará cualquier contrato o acuerdo anterior.</li>
+                                                <li>Esto no significa que las obligaciones o deberes como empleador que adquiriste en el pasado queden cerradas.</li>
+                                                <li>Esto es un mecanismo que usamos para generar un corte y poder garantizar que de aca en adelante estas haciendo las cosas bien.</li>
+                                                <li>Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="row">
+                                            <p class="text-center typeQuestion">¿Estas de acuerdo en generar un nuevo contrato con tu empleado?</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10 col-md-push-1">
+                                                <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.yesExistent) }}</div>
+                                                <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.noExistent) }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                        <div class="row">
-                                            <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-form btnPrevious" >Anterior</a></div>
-                                        </div>
-
-
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 text-center"><a class="btn btn-primary btnPrevious-form btnPrevious" >Anterior</a></div>
                                 </div>
                             </div>
                             <div id="contractTypeTab" class="tab-pane fade in">
-                                Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones
-                                laborales que le va a ofrecer:
-                                <div id="contractBenefitsTable">
-                                    <table>
-                                        <tr>
-                                            <td style="vertical-align:top">{{ form_widget(form.employeeHasEmployers.existentNew.children[0]) }}</td>
-                                            <td>
-                                                <h4>Beneficios</h4>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.
-                                                <h4>Puntos Críticos</h4>
-                                                Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="vertical-align:top">{{ form_widget(form.employeeHasEmployers.existentNew.children[1]) }}</td>
-                                            <td>
-                                                <h4>Beneficios</h4>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet.
-                                                <h4>Puntos Críticos</h4>
-                                                Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <div class="row">
+                                    <p class="text-center typeQuestion">Escoje el tipo de contrato que más se ajusta a tus requerimientos</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10 col-md-push-1">
+                                        <div class="col-xs-6">
+                                            {{ form_widget(form.employeeHasEmployers.existentNew.children[0]) }}
+                                            <div class="form-group">
+                                                <button type="button" id="btnToggleFijo" class="btn-default btn btn-toggle active">Término Fijo</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            {{ form_widget(form.employeeHasEmployers.existentNew.children[1]) }}
+                                            <div class="form-group">
+                                                <button type="button" id="btnToggleIndefinido" class="btn-default btn btn-toggle">Término Indefinido</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="contractFijo">
+                                    <div class="row">
+                                        <p class="text-center typeQuestion">Características</p>
+                                    </div>
+                                    <div class="row">
+                                        <ul class="col-md-8 col-md-push-2">
+                                            <li>El periodo de prueba máximo es de 15 días.</li>
+                                            <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
+                                            <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
+                                            <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <p class="text-center typeQuestion">A tener en cuenta</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.</p>
+                                    </div>
+                                </div>
+                                <div id="contractIndefinido">
+                                    <div class="row">
+                                        <p class="text-center typeQuestion">Características</p>
+                                    </div>
+                                    <div class="row">
+                                        <ul class="col-md-8 col-md-push-2">
+                                            <li>No tiene una fecha determinada de terminación</li>
+                                            <li>El periodo de prueba máximo es de 2 meses</li>
+                                            <li>Recomendado para empleadores que quieran contratar a un empleado por un largo periodo de tiempo</li>
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <p class="text-center typeQuestion">A tener en cuenta</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
+                                    </div>
                                 </div>
                                 <br/>
                                 <div class="col-sm-12 col-xs-12">
@@ -408,46 +447,50 @@
 
 
                             <div id="employeeContractTypeTab" class="tab-pane fade in">
-
-
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.position) }}
+                                <div class="formulario col-xs-12">
+                                    <div class="col-sm-12 col-xs-12 blockUpData">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.position) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.position) }}
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.position) }}
+
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.timeCommitment) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.timeCommitment) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-xs-12 days">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.sisben) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.sisben) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.workplaces) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.workplaces) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12 remember">
+                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.timeCommitment) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.timeCommitment) }}
-                                    </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a></div>
+                                    <div class="col-xs-6"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
                                 </div>
-
-                                <div class="col-sm-12 col-xs-12 days">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.sisben) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.sisben) }}
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.workplaces) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.workplaces) }}
-                                    </div>
-                                </div>
-
-                                <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
-                                <a class="btn btn-orange btnNext-contract" >Siguiente</a>
 
                             </div>
 
@@ -505,7 +548,7 @@
                                 <div class="col-sm-12 col-xs-12 center">
 
                                     <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
-                                    <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
+                                    <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Salvar y Continuar</a>
                                 </div>
                                 <!-- Modal -->
                                 <div id="calculatorResultsModal" class="modal fade" role="dialog">

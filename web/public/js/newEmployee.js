@@ -1,4 +1,4 @@
-
+    
 /**
  * Created by gabrielsamoma on 11/11/15.
  */
@@ -620,6 +620,8 @@ function addListeners() {
                     $(".definite").each(function () {
                         $(this).show();
                     });
+                    $('#contractIndefinido').hide();
+                    $('#contractFijo').show();
                 }
             });
         }
@@ -630,6 +632,9 @@ function addListeners() {
                     $(".definite").each(function () {
                         $(this).hide();
                     });
+                    console.log("Test");
+                    $('#contractIndefinido').show();
+                    $('#contractFijo').hide();
                 }
             });
         }
@@ -650,6 +655,7 @@ function addListeners() {
         });
     });
     $("#register_employee_employeeHasEmployers_existent").on("click", function(){
+        $('#existentQuestion').hide();
         $("#existentDataToShow").show();
     });
     $("#register_employee_employeeHasEmployers_new").on("click", function(){
@@ -661,6 +667,18 @@ function addListeners() {
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function(){
         history.pushState("","","/manage/employees");
         sendAjax("/manage/employees")
+    });
+
+    $('#btnToggleFijo').click(function() {
+        $('#register_employee_employeeHasEmployers_existentNew_0').trigger('click');
+        $(this).addClass('active');
+        $('#btnToggleIndefinido').removeClass('active');
+    });
+
+    $('#btnToggleIndefinido').click(function() {
+        $('#register_employee_employeeHasEmployers_existentNew_1').trigger('click');
+        $(this).addClass('active');
+        $('#btnToggleFijo').removeClass('active');
     });
 
     $("#register_employee_employeeHasEmployers_salaryD").on("input", function(){
