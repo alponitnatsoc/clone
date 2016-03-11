@@ -24,8 +24,8 @@
                     <span>Regístrate con tu red social favorita</span>
                 </div>
                 {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
-                    
-                    
+
+
             </div>
 
         </div>
@@ -45,9 +45,9 @@
     <script type="text/javascript">
         $("#chkTOS").change(function () {
             if ($(this).is(':checked')) {
-                $("#btnSubmit").removeClass('disabled');
+                $("#btnSubmit").prop('disabled', false);
             } else {
-                $("#btnSubmit").addClass('disabled');
+                $("#btnSubmit").prop('disabled', true);
             }
         });
     </script>
