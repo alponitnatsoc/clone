@@ -43,8 +43,7 @@ class AffiliationEmployerEmployee extends AbstractType
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Caja de Compensación Familiar*',                
-                'placeholder' => 'Seleccionar una opción',
+                'label'=>'Caja de Compensación Familiar*',
                 'required' => true
             ))
 
@@ -54,7 +53,6 @@ class AffiliationEmployerEmployee extends AbstractType
                 'choice_label' =>'name',
                 'mapped' => false,
                 'label'=>'Administradora de Riesgos Labolares*',
-                'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
             ->add('severancesAC', 'text', array(

@@ -226,7 +226,7 @@ class LiquidationRestController extends FOSRestController
 
         $parameters = $request->request->all();
 
-        $employee_id = $parameters["employee_id"] . "9"; //@todo el 9 es para los mocks
+        $employee_id = $parameters["employee_id"]; //@todo el 9 es para los mocks
         $username = $parameters["username"];
         $year = $parameters["year"];
         $month = $parameters["month"];
@@ -292,7 +292,8 @@ class LiquidationRestController extends FOSRestController
          */
         $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
                 'employeeId' => $employee_id,
-                'period' => $period
+                'period' => $period,
+                'mockFinalLiquidation' => true
             ),
             $format
         );
@@ -340,7 +341,7 @@ class LiquidationRestController extends FOSRestController
         $parameters = $request->request->all();
 
         $idEmperHasEmpee = $parameters["employee_id"];
-        $employee_id = $idEmperHasEmpee . "9"; //@todo el 9 es para los mocks
+        $employee_id = $idEmperHasEmpee; //@todo el 9 es para los mocks
         $username = $parameters["username"];
         $frequency = $parameters["frequency"];
         $retirementCause = $parameters["retirementCause"];
@@ -451,7 +452,7 @@ class LiquidationRestController extends FOSRestController
 
         $parameters = $request->request->all();
 
-        $employee_id = $parameters["employee_id"] . "9"; //@todo el 9 es para los mocks
+        $employee_id = $parameters["employee_id"]; //@todo el 9 es para los mocks
         $period = $parameters["period"];
 
         $format = array('_format' => 'json');

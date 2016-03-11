@@ -8,7 +8,7 @@
 		{% endif %}
 	{{ form_start(form) }}
 	    {{ form_errors(form) }}
-		<div id="formFields">
+		<div id="formFields" class="form-black">
 			{{ form_row(form.noveltyType) }}
 			{% if form.documents is defined %}
 				{% for document in form.documents %}

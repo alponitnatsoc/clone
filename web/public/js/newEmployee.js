@@ -1,4 +1,4 @@
-    
+
 /**
  * Created by gabrielsamoma on 11/11/15.
  */
@@ -17,6 +17,15 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "required",
                 "register_employee[person][department]": "required",
                 "register_employee[person][city]": "required",
+
+                "register_employee[personExtra][civilStatus]": "required",
+                "register_employee[personExtra][gender]": "required",
+                "register_employee[personExtra][documentExpeditionDate]": "required",
+                "register_employee[personExtra][documentExpeditionPlace]": "required",
+                "register_employee[personExtra][birthCountry]": "required",
+                "register_employee[personExtra][birthDepartment]": "required",
+                "register_employee[personExtra][birthCity]": "required",
+
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
@@ -39,6 +48,15 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "Por favor ingresa un salario",
                 "register_employee[person][department]": "Por favor selecciona un departamento",
                 "register_employee[person][city]": "Por favor selecciona una ciudad",
+
+                "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
+                "register_employee[personExtra][gender]": "Por favor selecciona una opción",
+                "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
+                "register_employee[personExtra][documentExpeditionPlace]": "Por favor selecciona una opción",
+                "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
+                "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
+                "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
+
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
@@ -605,7 +623,7 @@ function jsonCalcToHTML(data) {
 }
 
 function addListeners() {
-    $("#ex6").slider();
+    $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function(slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
         calculator();

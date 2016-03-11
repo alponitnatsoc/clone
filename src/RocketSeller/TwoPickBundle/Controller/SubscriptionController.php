@@ -43,7 +43,7 @@ class SubscriptionController extends Controller
     /**
      * 
      * @param Employer $employer Empleador del cual se buscaran los empleados
-     * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos 12031768-0
+     * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos
      * @return boolean
      */
     public function getData(Employer $employer, $activeEmployee = false)
@@ -65,8 +65,10 @@ class SubscriptionController extends Controller
         $descuento_isRefered = isset($config['DIR']) ? $config['DIR'] : 0.2;
         $descuento_haveRefered = isset($config['DHR']) ? $config['DHR'] : 0.2;
         foreach ($employerHasEmployee as $keyEmployee => $employee) {
-            if ($activeEmployee && ($employee->getState() == 0)) {
-                break;
+            if ($activeEmployee) {
+                if ($employee->getState() == 0) {
+                    continue;
+                }
             }
             $contracts = $employee->getContractByState(1);
             foreach ($contracts as $keyContract => $contract) {
@@ -203,16 +205,21 @@ class SubscriptionController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
+        /* @var $user User */
         $user = $this->getUser();
-        $data = $this->getData($user->getPersonPerson()->getEmployer());
-        //dump($data);
-        //die;
+        $data = $this->getData($user->getPersonPerson()->getEmployer(), false);
+        $date = new \DateTime();
+        $date->add(new \DateInterval('P1M'));
+        $startDate = $date->format('Y-m-d');
+
+        dump($startDate);
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                     'employees' => $data['employees'],
                     'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
                     'total' => $data['total_sin_descuentos'],
                     'descuento_3er' => $data['descuento_3er'],
-                    'user' => $user
+                    'user' => $user,
+                    'startDate' => $startDate
         ));
     }
 
@@ -223,20 +230,20 @@ class SubscriptionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
-            /*
-              $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-              'freeTime' => ($this->getUser()->getStatus() > 1 ? $this->getUser()->getStatus() - 1 : 0),
-              'all' => true
-              ), array('_format' => 'json')
-              );
-             */
+
+            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+                'freeTime' => 1,
+                'all' => true
+                    ), array('_format' => 'json')
+            );
+
             $user = $this->getUser();
             $person = $user->getPersonPerson();
             $billingAdress = $person->getBillingAddress();
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
-            //dump($data);
+            dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
@@ -281,38 +288,39 @@ class SubscriptionController extends Controller
                     return $this->redirectToRoute("subscription_choices");
                     //throw $this->createNotFoundException($data->getContent());
                 } else {
-
-                    return $this->redirectToRoute("subscription_success");
-
                     $data = $this->getData($this->getUser()->getPersonPerson()->getEmployer(), true);
-
-                    dump($postAddCreditCard->getContent());
+                    //dump($postAddCreditCard->getContent());
                     //die;
                     $methodId = json_encode($postAddCreditCard->getContent(), true);
+
+
+                    $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
+                    /** @var $purchaseOrdersStatus PurchaseOrdersStatus */
+                    $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
 
                     $purchaseOrder = new PurchaseOrders();
                     $purchaseOrder->setIdUser($this->getUser());
                     $purchaseOrder->setName('Pago Membresia');
-                    $purchaseOrder->setValue((floatval($totalAmount)));
-                    $purchaseOrder->setPayMethodId($methodId);
+                    $purchaseOrder->setValue($data['total_con_descuentos']);
+
+                    $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
+
+                    //$purchaseOrder->setPayMethodId($methodId);
                     $purchaseOrder->setPayMethodId(isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : null);
 
                     $em->persist($purchaseOrder);
                     $em->flush(); //para obtener el id que se debe enviar a novopay
 
-                    $request = new Request();
-                    $request->setMethod('POST');
-                    $request->request->set('userId', $this->getUser()->getId());
-                    $data = $this->forward('RocketSellerTwoPickBundle:PayRest:postPayMembresia', array('request' => $request), array('_format' => 'json'));
-                    $data2 = json_decode($data->getContent(), true);
-                    if ($data->getStatusCode() == Response::HTTP_OK) {
-                        $this->addFlash('success', $data2['msg']);
+                    $responce = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), array('_format' => 'json'));
+
+                    $data = json_decode($responce->getContent(), true);
+                    if ($responce->getStatusCode() == Response::HTTP_OK) {
+                        $this->addFlash('success', $data['msg']);
+                        //dump($data);                        
                         //die;
-                        //return $this->redirectToRoute("matrix_choose");
                         return $this->redirectToRoute("subscription_success");
-                        //return $this->redirect("/subscription/success");
                     }
-                    $this->addFlash('error', $data2['msg']);
+                    $this->addFlash('error', $data['msg']);
                     return $this->redirectToRoute("subscription_choices");
                 }
             } else {

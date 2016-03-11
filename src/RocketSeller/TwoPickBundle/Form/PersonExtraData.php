@@ -21,17 +21,17 @@ class PersonExtraData extends AbstractType
         $builder
             ->add('civilStatus', 'choice', array(
                 'choices' => array(
-                    'soltero'   => 'Soltero',
-                    'casado' => 'Casado',
+                    'soltero'   => 'Soltero(a)',
+                    'casado' => 'Casado(a)',
                     'unionLibre' => 'Union Libre',
-                    'viudo' => 'Viudo'
+                    'viudo' => 'Viudo(a)'
                 ),
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'civilStatus',
-                'label' => 'Estado civil',
+                'label' => 'Estado civil*',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => false
+                'required' => true
             ))
             ->add('gender', 'choice', array(
                 'choices' => array(
@@ -41,21 +41,22 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'gender',
-                'label' => 'Género',
+                'label' => 'Género*',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => false
+                'required' => true
             ))
             ->add('documentExpeditionDate', 'date', array(
                 'data' => new DateTime('1975-01-01'),
                 'years' => range(1900,2015),
-                'label' => 'Fecha de expedición de documento de identidad'
+                'label' => 'Fecha de expedición de documento de identidad*',
+                'required' => true
             ))
             ->add('documentExpeditionPlace', 'text', array(
-                'label' => 'Lugar de expedición de documento de identidad',
-                'required' => false
+                'label' => 'Lugar de expedición de documento de identidad*',
+                'required' => true
             ))
             ->add('birthCountry', 'entity', array(
-                'label' => 'País de Nacimiento',
+                'label' => 'País de Nacimiento*',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Country',
                 'property' => 'name',
@@ -63,10 +64,10 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'birthCountry',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => false
+                'required' => true
             ))
             ->add('birthDepartment', 'entity', array(
-                'label' => 'Departamento de Nacimiento',
+                'label' => 'Departamento de Nacimiento*',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'property' => 'name',
@@ -74,10 +75,10 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'birthDepartment',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => false
+                'required' => true
             ))
             ->add('birthCity', 'entity', array(
-                'label' => 'Ciudad de Nacimiento',
+                'label' => 'Ciudad de Nacimiento*',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:City',
                 'property' => 'name',
@@ -85,7 +86,7 @@ class PersonExtraData extends AbstractType
                 'expanded' => false,
                 'property_path' => 'birthCity',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => false
+                'required' => true
             ))
             ->add('email', 'text', array(
                 'constraints' => array(

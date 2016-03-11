@@ -7,8 +7,12 @@ function addNoveltySelectListener() {
     form.submit(function (e) {
         e.preventDefault();
         var value=form.find("input[name='form[noveltyType]']:checked").val();
+        var valueText=form.find("input[name='form[noveltyType]']:checked").parent().text();
         if($("#novelty_fields_noveltyType").val() !=null){
             value="";
+        }
+        if(valueText ==" Vacaciones"){
+            $("#novelty_fields_date_start")
         }
         $.ajax( {
             type: "POST",

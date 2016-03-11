@@ -50,19 +50,40 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 
 
         // ARL.
-        $EntitySuraARL = new Entity();
-        $EntitySuraARL->setName('Sura');
-        $EntitySuraARL->setPayrollCode('670');
- 		    $EntitySuraARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityAlfaARL = new Entity();
+        $EntityAlfaARL->setName('SEGUROS DE VIDA ALFA S.A .- ARP ALFA');
+        $EntityAlfaARL->setPayrollCode('600');
+ 		    $EntityAlfaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
-        $manager->persist($EntitySuraARL);
+        $manager->persist($EntityAlfaARL);
 
-        $EntityColpatriaARL = new Entity();
-        $EntityColpatriaARL->setName('Colpatria');
-        $EntityColpatriaARL->setPayrollCode('635');
- 		    $EntityColpatriaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityAgricolaARL = new Entity();
+        $EntityAgricolaARL->setName('ARP AGRICOLA');
+        $EntityAgricolaARL->setPayrollCode('605');
+        $EntityAgricolaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
-        $manager->persist($EntityColpatriaARL);
+        $manager->persist($EntityAgricolaARL);
+
+        $EntityAtlasARL = new Entity();
+        $EntityAtlasARL->setName('ARP ATLAS');
+        $EntityAtlasARL->setPayrollCode('610');
+        $EntityAtlasARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+        $manager->persist($EntityAtlasARL);
+
+        $EntityAuroraARL = new Entity();
+        $EntityAuroraARL->setName('ARP AURORA');
+        $EntityAuroraARL->setPayrollCode('615');
+        $EntityAuroraARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+        $manager->persist($EntityAuroraARL);
+
+        $EntityBbvaARL = new Entity();
+        $EntityBbvaARL->setName('ARP BBVA SEGUROS DE VIDA');
+        $EntityBbvaARL->setPayrollCode('620');
+        $EntityBbvaARL->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+        $manager->persist($EntityBbvaARL);
 
         // Pensiones.
         $EntityPorvenir = new Entity();
@@ -115,8 +136,26 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 
         $manager->persist($EntityCafam);
 
+        $EntityColsubsidio = new Entity();
+        $EntityColsubsidio->setName('COLSUBSIDIO');
+        $EntityColsubsidio->setPayrollCode('500');
+        $EntityColsubsidio->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
+        $manager->persist($EntityColsubsidio);
 
+        $EntityAfidro = new Entity();
+        $EntityAfidro->setName('AFIDRO - BOGOTA');
+        $EntityAfidro->setPayrollCode('502');
+        $EntityAfidro->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
+
+        $manager->persist($EntityAfidro);
+
+        $EntityAseguradores= new Entity();
+        $EntityAseguradores->setName('ASEGURADORES');
+        $EntityAseguradores->setPayrollCode('504');
+        $EntityAseguradores->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
+
+        $manager->persist($EntityAseguradores);
 
         $manager->flush();
 
@@ -128,8 +167,11 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-famisanar-eps', $EntityFamisanarEPS);
 
         // ARL.
-        $this->addReference('entity-sura-arl', $EntitySuraARL);
-        $this->addReference('entity-colpatria-arl', $EntityColpatriaARL);
+        $this->addReference('entity-alfa-arl', $EntityAlfaARL);
+        $this->addReference('entity-agricola-arl', $EntityAgricolaARL);
+        $this->addReference('entity-atlas-arl', $EntityAtlasARL);
+        $this->addReference('entity-aurora-arl', $EntityAuroraARL);
+        $this->addReference('entity-bbva-arl', $EntityBbvaARL);
 
         // Pensiones.
         $this->addReference('entity-proteccion', $EntityProteccion);
@@ -141,6 +183,9 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         //Caja compensasion.
         $this->addReference('entity-comfacundi', $EntityComfacundi);
         $this->addReference('entity-cafam', $EntityCafam);
+        $this->addReference('entity-colsubsidio', $EntityColsubsidio);
+        $this->addReference('entity-afidro', $EntityAfidro);
+        $this->addReference('entity-aseguradores', $EntityAseguradores);
     }
     public function getOrder()
     {

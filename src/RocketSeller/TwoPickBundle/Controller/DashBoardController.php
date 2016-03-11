@@ -110,7 +110,7 @@ class DashBoardController extends Controller
         }
         $step4 = array(
             'url' => $stateRegister != 100 ? "" : $this->generateUrl('subscription_choices'),
-            'name' => "Pago afiliación",
+            'name' => "Subscipción a Symplifica",
             'paso' => 3,
             'state' => $paymentState ? 100 : 0,
             'boxStyle' => "big",

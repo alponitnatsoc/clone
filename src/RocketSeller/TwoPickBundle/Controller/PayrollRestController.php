@@ -185,7 +185,8 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
+        $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
+        //$url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         //TODO(daniel.serrano): Remove the mock URL.
         // This URL is only for testing porpouses and should be removed.
 
@@ -1832,11 +1833,20 @@ class PayrollRestController extends FOSRestController
      *        depending on the week to be paid, monthly always 4.
      * @param Int $month Month of the liquidation.
      * @param Int $year Year of the liquidation.
+     * @param Boolean mock_final_liquidation Important, only for tests,
+     *                do not use in production, tells if final or general payrrol.
      *
      * @return View
      */
-    public function getGeneralPayrollAction($employeeId, $period = null, $month = null, $year = null)
+    public function getGeneralPayrollAction($employeeId, $period = null,
+                                            $month = null, $year = null,
+                                            $mockFinalLiquidation=false)
     {
+        // Only in tests, do not use in production!!.
+        // TODO(daniel.serrano): Delete this, important!!.
+        if($mockFinalLiquidation)
+          $employeeId = $employeeId * -1;
+
         $content = array();
         $unico = array();
 

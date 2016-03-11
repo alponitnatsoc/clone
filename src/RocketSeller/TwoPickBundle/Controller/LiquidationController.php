@@ -534,7 +534,7 @@ class LiquidationController extends Controller
         $total = $liquidation->getCost();
 
         $id_ehe = $liquidation->getEmployerHasEmployee()->getIdEmployerHasEmployee();
-        $employee_id = $id_ehe . "9"; //@todo el 9 es para los mocks
+        $employee_id = $id_ehe; //@todo el 9 es para los mocks
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
         $employee = $this->getEmployee($id_ehe);
