@@ -1749,3 +1749,37 @@ select {
         font-size: 15px;
     }
 }
+
+.blue {
+    color: @blue;
+}
+
+#employees {
+    margin-top: 30px;
+    border-top: 1px solid #DEDFE0;
+    
+    .employee {
+        margin-top: 10px;
+        > div > .col-xs-12 {
+            border: 1px solid #DEDFE0;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .employee_name {
+            font-weight: bold;
+            color: #314A5A;
+            font-size: 16px;
+        }
+        .employee_work_time {
+            font-size: 16px;
+            font-weight: 100;
+        }
+        .btn {
+            background-color: #00CBC9;
+            border: none;
+            &:hover {
+                box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            }
+        }
+    }
+}

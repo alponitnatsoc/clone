@@ -7,8 +7,20 @@
             {{ flash_message }}
         </div>
     {% endfor %}
-    <h3>Activación de la suscripción</h3>
-    <div style="margin: 10px;padding: 10px; text-align: center; display: block;">
+    <div class="col-sm-12 col-xs-12 align-Resp">
+        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">                    
+            </div>
+            <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                <div id="" class="text-left">
+                    <span class="step">Paso 3 de 4</span>                            
+                    Pago afiliación
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="blue col-xs-12 text-center">
         {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
         {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
         {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
@@ -17,61 +29,83 @@
         {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
         {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}   
         <p>
-            A continuación podrás activar tu suscripción.
-        </p>
-        <p>
             Has registrado los siguientes empleados:
         </p> 
     </div>
-    <form action="{{ path('activate_subscription') }}" method="POST">
+    <div id="employees" class="col-xs-12">
+        <div class="row-fluid clearfix">
+            <form action="{{ path('activate_subscription') }}" method="POST">
 
-        {% for key, price in productos %}
-            <input type="hidden" id="{{ key }}" value="{{ price }}"/>
-        {% endfor %}
+                {% for key, price in productos %}
+                    <input type="hidden" id="{{ key }}" value="{{ price }}"/>
+                {% endfor %}
 
-        {% for employeeData in employees %}
+                {% for employeeData in employees %}
 
-            {% set employee = employeeData['employee'] %}
-            {% set contrato = employeeData['contrato'] %}
-            {% set producto = employeeData['product'] %}
+                    {% set employee = employeeData['employee'] %}
+                    {% set contrato = employeeData['contrato'] %}
+                    {% set producto = employeeData['product'] %}
 
-            <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
-                <div> 
-                    <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                    <div class="col-md-4 col-sm-6 employee {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="employee_name">
+                                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                                </div>
+                                {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                                <div class="employee_work_time {{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                                    Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
+                                </div>
+                                <div>
+                                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
+                    <div class="row-fluid">
+                        <div class="col-xs-12">
+                            Agregar empleado        
+                        </div>
+                    </div>
                 </div>
-                <div class="employee_name">
-                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
+                    <div class="row-fluid">
+                        <div class="col-xs-12">
+                            Agregar empleado        
+                        </div>
+                    </div>
                 </div>
-                {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                <div class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
-                    Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
+                <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
+                    <div class="row-fluid">
+                        <div class="col-xs-12">
+                            Agregar empleado        
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+
+                <div class="col-lg-1 result_ajax"></div>
+                <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
+                    Este servicio tendrá el siguiente valor:
+                    <div class="div_price">     
+                        <div id="result_price"></div>      
+                        <div id="result_discount"></div>    
+                    </div>
                 </div>
-            </div>
+                <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
+                <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <input type="submit" class="btn btn-default" value="Continuación del pago"/>
+                </div>
 
-
-        {% endfor %}
-
-        <div class="col-lg-1 result_ajax"></div>
-        <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
-            Este servicio tendrá el siguiente valor:
-            <div class="div_price">     
-                <div id="result_price"></div>      
-                <div id="result_discount"></div>    
-            </div>
+            </form>
         </div>
-        <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
-        <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
-        <div style="text-align: center; margin-top: 20px;">
-            <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-            <input type="submit" class="btn btn-default" value="Continuación del pago"/>
-        </div>
-
-    </form>
+    </div>
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">
         <div class="modal-dialog">
