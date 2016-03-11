@@ -799,7 +799,7 @@ class PaymentsRestController extends FOSRestController
 
         /** @var View $responseView */
         $responseView = $this->callApi($header, $parameters, $path, 'get');
-        $card = "xxxxx";
+        $card = "******";
         $card = substr($card, 0, 4);
         if (substr($card, 0, 1) == '4') {
             //Visa.
@@ -838,7 +838,7 @@ class PaymentsRestController extends FOSRestController
                 $paymentType = '2';
             }
             $unidad['payment-type'] = $paymentType;
-            $unidad['account'] = "" . $cardFinal;
+            $unidad['account'] = "****-****-****-" . substr($cardFinal, -4);
             $unidad['method-id'] = $method_id;
             $retorno['payment-methods'][] = $unidad;
             if ($terminar)

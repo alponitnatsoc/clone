@@ -27,6 +27,11 @@ class Bank
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=5)
+     */
+    private $novopaymentCode;
+
+    /**
      * Get idBank
      *
      * @return integer
@@ -58,5 +63,29 @@ class Bank
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set novopaymentCode
+     *
+     * @param string $name
+     *
+     * @return Bank
+     */
+    public function setNovopaymentCode($novopaymentCode)
+    {
+        $this->novopaymentCode = $novopaymentCode;
+
+        return $this;
+    }
+
+    /**
+     * Get novopaymentCode
+     *
+     * @return string
+     */
+    public function getNovopaymentCode()
+    {
+        return $this->novopaymentCode;
     }
 }
