@@ -345,6 +345,7 @@ class SubscriptionController extends Controller
                         $this->addFlash('success', $data);
                         //dump($data);                        
                         //die;
+                        $this->sendEmailPaySuccessAction();
                         return $this->redirectToRoute("subscription_success");
                     }
                     $this->addFlash('error', $responce->getContent());
@@ -421,6 +422,15 @@ class SubscriptionController extends Controller
             }
         }
         return $configData;
+    }
+
+    private function sendEmailPaySuccessAction()
+    {
+        $toEmail = $this->getUser()->getEmail();
+        $fromEmail = "servicioalcliente@symplifica.com";
+        $tsm = $this->get('symplifica.mailer.twig_swift');
+        $response = $tsm->sendEmail($this->getUser(), "RocketSellerTwoPickBundle:Subscription:paySuccess.txt.twig", $fromEmail, $toEmail);
+        return $response;
     }
 
 }
