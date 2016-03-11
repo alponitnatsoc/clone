@@ -161,18 +161,30 @@ class UserRestController extends FOSRestController
     {
 
         $entity = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
-            array('id' => $paramFetcher->get('id'))
+                array('id' => $paramFetcher->get('id'))
         );
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($entity->getUsername());
 
-        if($paramFetcher->get('username')){ $user->setUsername($paramFetcher->get('username')); }
-        if($paramFetcher->get('email')){$user->setEmail($paramFetcher->get('email')); }
-        if($paramFetcher->get('password')){$user->setPlainPassword($paramFetcher->get('password')); }
-        if($paramFetcher->get('name')){$user->setName($paramFetcher->get('name')); }
-        if($paramFetcher->get('lastname')){$user->setLastname($paramFetcher->get('lastname')); }
-        if($paramFetcher->get('status')){$user->setStatus($paramFetcher->get('status')); }
+        if ($paramFetcher->get('username')) {
+            $user->setUsername($paramFetcher->get('username'));
+        }
+        if ($paramFetcher->get('email')) {
+            $user->setEmail($paramFetcher->get('email'));
+        }
+        if ($paramFetcher->get('password')) {
+            $user->setPlainPassword($paramFetcher->get('password'));
+        }
+        if ($paramFetcher->get('name')) {
+            $user->setName($paramFetcher->get('name'));
+        }
+        if ($paramFetcher->get('lastname')) {
+            $user->setLastname($paramFetcher->get('lastname'));
+        }
+        if ($paramFetcher->get('status')) {
+            $user->setStatus($paramFetcher->get('status'));
+        }
 
         $view = View::create();
 
@@ -242,7 +254,7 @@ class UserRestController extends FOSRestController
     {
 
         $entity = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
-            array('username' => $slug)
+                array('username' => $slug)
         );
 
         if (!$entity) {
@@ -277,7 +289,7 @@ class UserRestController extends FOSRestController
     {
         $userManager = $this->container->get("fos_user.user_manager");
 
-        $user = $userManager->findUserBy(array('id'=>$id));
+        $user = $userManager->findUserBy(array('id' => $id));
         $ordersByUser = $user->getPurchaseOrders();
 
         $view = View::create();
@@ -319,25 +331,24 @@ class UserRestController extends FOSRestController
 
         /** @var PurchaseOrders $data */
         $data = $purchaseOrdersRepository->findOneBy(
-            array(
-                "idUser" => $id,
-                "purchaseOrdersTypePurchaseOrdersType" => 1, //Tipo de orden de compra Servicio de Symplifica
-                "purchaseOrdersStatusPurchaseOrdersStatus" => 1 //Estatus de orden de compra Pagada
-            ),
-            array("date_created" => "DESC")
+                array(
+            "idUser" => $id,
+            "purchaseOrdersTypePurchaseOrdersType" => 1, //Tipo de orden de compra Servicio de Symplifica
+            "purchaseOrdersStatusPurchaseOrdersStatus" => 1 //Estatus de orden de compra Pagada
+                ), array("date_created" => "DESC")
         );
 
         if ($data) {
             $dateMod = $data->getDateCreated();
             $date = new \DateTime();
 
-            $inicio = date( "Y-m-d ", $dateMod->getTimestamp());
-            $fin = date( "Y-m-d ", $date->getTimestamp());
+            $inicio = date("Y-m-d ", $dateMod->getTimestamp());
+            $fin = date("Y-m-d ", $date->getTimestamp());
 
             $start_ts = strtotime($inicio);
             $end_ts = strtotime($fin);
             $diff = $end_ts - $start_ts;
-            $dateDiff = round(round($diff / 3600)/24);
+            $dateDiff = round(round($diff / 3600) / 24);
         }
 
         if (isset($dateDiff) && $dateDiff <= 30) {
@@ -391,36 +402,36 @@ class UserRestController extends FOSRestController
         $resCode = $statusActual;
         $msgCode = "umm";
         switch ($statusActual) {
-        	case 0: //Suscripcion inactiva
-        	case 1: //Suscripcion activa
-        	    $status = $this->getUserActiveSuscriptionAction($id);
-        	    $data = $status->getData();
-        	    $code = $data["code"];
+            case 0: //Suscripcion inactiva
+            case 1: //Suscripcion activa
+                $status = $this->getUserActiveSuscriptionAction($id);
+                $data = $status->getData();
+                $code = $data["code"];
 
-        	    if ($code != $statusActual) {
-        	        switch ($code) {
-        	            case 1: //Suscripcion debe ser Activa
-        	                $this->updateUserStatus($id, 1);
-        	                $resCode = 2;
-        	                $msgCode = "La suscripcion del usuario se ha activado";
-        	                break;
-    	                case 0: //Sucripicion debe ser Inactiva
-        	            case 404: //No se encuentra pago de suscripcion alguna al servicio
-        	            default:
-        	                $this->updateUserStatus($id, 0);
-    	                    $resCode = 1;
-    	                    $msgCode = "La suscripcion del usuario se ha desactivado";
-    	                    break;
-        	        }
-        	    } else {
-        	        $resCode = 0;
-        	        $msgCode = "La suscripcion del usuario no ha cambiado de estado";
-        	    }
-        	    break;
+                if ($code != $statusActual) {
+                    switch ($code) {
+                        case 1: //Suscripcion debe ser Activa
+                            $this->updateUserStatus($id, 1);
+                            $resCode = 2;
+                            $msgCode = "La suscripcion del usuario se ha activado";
+                            break;
+                        case 0: //Sucripicion debe ser Inactiva
+                        case 404: //No se encuentra pago de suscripcion alguna al servicio
+                        default:
+                            $this->updateUserStatus($id, 0);
+                            $resCode = 1;
+                            $msgCode = "La suscripcion del usuario se ha desactivado";
+                            break;
+                    }
+                } else {
+                    $resCode = 0;
+                    $msgCode = "La suscripcion del usuario no ha cambiado de estado";
+                }
+                break;
             case 2: //Suscripcion gratis por el primer mes
                 $userManager = $this->container->get("fos_user.user_manager");
                 /** @var User $user */
-                $user = $userManager->findUserBy(array('id'=>$id));
+                $user = $userManager->findUserBy(array('id' => $id));
                 $dateCreated = $user->getDateCreated();
                 $nowDate = new \DateTime();
 
@@ -439,7 +450,7 @@ class UserRestController extends FOSRestController
             case 3: //Suscripcion gratis 3 primeros meses por completar el registro en 48 horas
                 $userManager = $this->container->get("fos_user.user_manager");
                 /** @var User $user */
-                $user = $userManager->findUserBy(array('id'=>$id));
+                $user = $userManager->findUserBy(array('id' => $id));
                 $dateCreated = $user->getDateCreated();
                 $nowDate = new \DateTime();
                 $dateDif = date_diff($nowDate, $dateCreated);
@@ -485,6 +496,68 @@ class UserRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher
      * @RequestParam(name="id", nullable=false, strict=true, description="id del usuario")
+     * @RequestParam(name="freeTime", nullable=true, strict=true, description="tiempo free")
+     * @RequestParam(name="all", nullable=false, strict=true, description="true:setea todos los empleados a free, false:setea el empleado con menos jornada free")
+     *
+     * @return View
+     */
+    public function postUpdateUserStatusByEmployeeAction(ParamFetcher $paramFetcher)
+    {
+        $view = View::create();
+        $id = $paramFetcher->get("id");
+        $all = $paramFetcher->get("all");
+        $freeTime = $paramFetcher->get("freeTime");
+        $userManager = $this->container->get("fos_user.user_manager");
+
+        /** @var User $user */
+        $user = $userManager->findUserBy(array('id' => $id));
+        if ($user) {
+            if ($freeTime == null) {
+                $date1 = $user->getDateCreated();
+                $date2 = new \DateTime(date('Y-m-d'));
+                $differ = $date1->diff($date2);
+                $daysbetween = $differ->format('%d');
+                $hoursbetween = $differ->format('%h');
+                if ($daysbetween > 0) {
+                    $hoursbetween = $hoursbetween + ($daysbetween * 24);
+                }
+                if ($hoursbetween <= 48) {
+                    $freeTime = 3;
+                } else {
+                    $freeTime = 2;
+                }
+            }
+
+            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+                'idEmployer' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
+                'freeTime' => $freeTime,
+                'all' => $all
+                    ), array('_format' => 'json')
+            );
+
+            $view->setStatusCode(200);
+            $view->setData('OK');
+        } else {
+            $view->setStatusCode(400);
+            $view->setData('ERROR');
+        }
+        return $view;
+    }
+
+    /**
+     * Actualizar estado de la suscripcion de un usuario
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Actualizar estado de la suscripcion de un usuario.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @RequestParam(name="id", nullable=false, strict=true, description="id del usuario")
      * @RequestParam(name="status", nullable=false, strict=true, description="nuevo estado del usuario")
      *
      * @return View
@@ -498,6 +571,7 @@ class UserRestController extends FOSRestController
         $view->setData($response)->setStatusCode(200);
         return $view;
     }
+
     /**
      * Actualizar estado de la suscripcion de un usuario
      *
@@ -532,7 +606,7 @@ class UserRestController extends FOSRestController
     {
         $userManager = $this->container->get("fos_user.user_manager");
         /** @var User $user */
-        $user = $userManager->findUserBy(array('id'=>$id));
+        $user = $userManager->findUserBy(array('id' => $id));
         $status = $user->getStatus();
 
         return $status;
@@ -551,11 +625,11 @@ class UserRestController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         /** @var User $user */
-        $user = $userManager->findUserBy(array('id'=>$id));
+        $user = $userManager->findUserBy(array('id' => $id));
         $em->persist($user);
         $em->flush();
 
-        if(isset($status)){
+        if (isset($status)) {
             $user->setStatus($status);
         }
 

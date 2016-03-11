@@ -10,7 +10,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="#">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">                    
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -21,7 +21,7 @@
         </a>
     </div>
     <div class="col-xs-12 text-center">
-        {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
+        {% set time_free = freeTime?freeTime:0%}
         {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
         {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
         {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
@@ -75,7 +75,7 @@
                         <div class="row-fluid">
                             <div class="col-xs-12">
                                 <a href="/register/employee"><i class="fa fa-plus-circle fa-4x"></i><br />
-                                Agregar empleado</a>
+                                    Agregar empleado</a>
                             </div>
                         </div>
                     </div>
