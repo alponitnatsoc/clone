@@ -230,20 +230,20 @@ class SubscriptionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
-            /*
-              $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-              'freeTime' => ($this->getUser()->getStatus() > 1 ? $this->getUser()->getStatus() - 1 : 0),
-              'all' => true
-              ), array('_format' => 'json')
-              );
-             */
+
+            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+                'freeTime' => 1,
+                'all' => true
+                    ), array('_format' => 'json')
+            );
+
             $user = $this->getUser();
             $person = $user->getPersonPerson();
             $billingAdress = $person->getBillingAddress();
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
-            //dump($data);
+            dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
