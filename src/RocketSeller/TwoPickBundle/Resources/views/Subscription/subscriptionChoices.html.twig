@@ -54,7 +54,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="employee_name">
-                                        <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                                        <b>{{ employee.employeeEmployee.personPerson.names ~ ' ' ~ employee.employeeEmployee.personPerson.lastname1}}</b>
                                     </div>
                                     {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
                                     <div class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
