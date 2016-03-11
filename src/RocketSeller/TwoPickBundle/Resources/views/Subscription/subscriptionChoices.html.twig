@@ -51,7 +51,7 @@
                         {% set contrato = employeeData['contrato'] %}
                         {% set producto = employeeData['product'] %}
 
-                        <div class="col-md-4 employee text-center {{ employee.state ?'activo':'inactivo' }}">
+                        <div class="col-md-4 employee text-center {{ employee.state>0 ?'activo':'inactivo' }}">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="employee_name">
