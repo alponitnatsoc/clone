@@ -683,8 +683,9 @@ function addListeners() {
         $('#contractNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function(){
-        history.pushState("","","/manage/employees");
-        sendAjax("/manage/employees")
+        $('#noNuevoContrato').modal();
+//        history.pushState("","","/manage/employees");
+//        sendAjax("/manage/employees")
     });
 
     $('#btnToggleFijo').click(function() {
