@@ -10,7 +10,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="#">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">                    
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -21,13 +21,12 @@
         </a>
     </div>
     <div class="col-xs-12 text-center">
-        {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
-        {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
-        {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
-        {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
-        {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
-        {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
-        {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}   
+        {% set day = startDate|date("d") %}
+        {% set month = startDate|date("F")|trans %}
+        {% set year = startDate|date("Y") %}
+        {% set day_pay = startDate|date("d") %}
+        {% set month_pay = startDate|date("F")|trans %}
+        {% set year_pay = startDate|date("Y") %}   
         <p>
             En este momento cuenta con SERVICIO GRATUITO hasta el {{ day }} de {{ month }} de {{ year }}. Sin embargo ya puede llevar a cabo la activación de la suscripción al servicio de Symplifica.
         </p>
@@ -51,7 +50,7 @@
                         {% set contrato = employeeData['contrato'] %}
                         {% set producto = employeeData['product'] %}
 
-                        <div class="col-md-4 employee text-center {{ employee.state ?'activo':'inactivo' }}">
+                        <div class="col-md-4 employee text-center {{ employee.state>0 ?'activo':'inactivo' }}">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="employee_name">
@@ -67,15 +66,13 @@
                                 </div>
                             </div>
                         </div>
-
-
                     {% endfor %}
 
                     <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
-                        <div class="row-fluid">
+                        <div class="row">
                             <div class="col-xs-12">
-                                <a href="/register/employee"><i class="fa fa-plus-circle fa-4x"></i><br />
-                                Agregar empleado</a>
+                                <a href="/register/employee" class="notAjax"><i class="fa fa-plus-circle fa-4x"></i><br />
+                                    Agregar empleado</a>
                             </div>
                         </div>
                     </div>

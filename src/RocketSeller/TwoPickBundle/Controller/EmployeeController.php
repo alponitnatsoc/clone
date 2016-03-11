@@ -436,12 +436,19 @@ class EmployeeController extends Controller
             ),
             'EmployerHasEmployee'
         );
+        $contracts = $employerHasEmployee->getContracts();
+        foreach ($contracts as $contract) {
+             if ($contract->getState()) {
+                 $activeContract = $contract;
+             }
+         } 
 
 
         return $this->render(
                                 'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
                             'employee' => $employee,
                             'employerHasEmployee'=> $employerHasEmployee,
+                            'contract' => $activeContract
                 ));
     }
 

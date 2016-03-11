@@ -301,18 +301,20 @@
 
                         </div>              
                         <div class="col-md-8">
-                            <div class="col-md-12">
-                                <div class="col-md-1">
-                                </div>                            
-                                <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
-                                    <b>SUBTOTAL:</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    <div  style="font-size: 15px;"><b>$ {{ total_sin_descuentos|number_format  }}</b></div>
-                                    <input type="hidden" id="subtotal" value="{{ total_sin_descuentos }}">  
-                                </div>
-                            </div> 
-                            {% if descuento_3er['value'] %}
+                            {% if total_sin_descuentos > 0 %}
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
+                                        <b>SUBTOTAL:</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                        <div  style="font-size: 15px;"><b>$ {{ total_sin_descuentos|number_format  }}</b></div>
+                                        <input type="hidden" id="subtotal" value="{{ total_sin_descuentos }}">  
+                                    </div>
+                                </div> 
+                            {% endif %}
+                            {% if descuento_3er['value'] and descuento_3er['value']  > 0%}
                                 <div class="col-md-12">
                                     <div class="col-md-1">
                                     </div>                            
@@ -325,7 +327,7 @@
                                 </div> 
                             {% endif%}
                             <div class="col-md-12" id="descuento_isRefered">
-                                {% if descuento_isRefered['object'] %}
+                                {% if descuento_isRefered['object'] and descuento_isRefered['value'] > 0 %}
                                     <div class="col-md-1">
                                     </div>                            
                                     <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
@@ -336,7 +338,7 @@
                                     </div>
                                 {% endif%}
                             </div> 
-                            {% if descuento_haveRefered['object'] %}
+                            {% if descuento_haveRefered['object'] and descuento_haveRefered['value'] > 0 %}
                                 <div class="col-md-12">
                                     <div class="col-md-1">
                                     </div>                            

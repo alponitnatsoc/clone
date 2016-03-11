@@ -154,10 +154,13 @@ function startSubscriptionChoise() {
             Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
             Trabajo_por_días = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
         } else {
-            Tiempo_Completo = $(".activo > .tiempo_completo").length;
-            Medio_tiempo = $(".activo > .medio_tiempo").length;
-            Trabajo_por_días = $(".activo > .trabajo_por_dias").length;
+            Tiempo_Completo = $(".activo .tiempo_completo").length;
+            Medio_tiempo = $(".activo .medio_tiempo").length;
+            Trabajo_por_días = $(".activo .trabajo_por_dias").length;
         }
+        console.log("Tiempo_Completo:" + Tiempo_Completo);
+        console.log("Medio_tiempo:" + Medio_tiempo);
+        console.log("Trabajo_por_días:" + Trabajo_por_días);
         if (Tiempo_Completo > 0) {
             total = total + (Tiempo_Completo * $("#PS3").val());
         }

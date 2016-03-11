@@ -21,10 +21,10 @@ class PersonExtraData extends AbstractType
         $builder
             ->add('civilStatus', 'choice', array(
                 'choices' => array(
-                    'soltero'   => 'Soltero',
-                    'casado' => 'Casado',
+                    'soltero'   => 'Soltero(a)',
+                    'casado' => 'Casado(a)',
                     'unionLibre' => 'Union Libre',
-                    'viudo' => 'Viudo'
+                    'viudo' => 'Viudo(a)'
                 ),
                 'multiple' => false,
                 'expanded' => false,
