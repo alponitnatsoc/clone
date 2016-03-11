@@ -15,7 +15,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product = new Product();
         $product->setName('Pago Symplifica 0 a 10');
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 0 a 10 días');
-        $product->setPrice(floatval('16500'));
+        $product->setPrice(floatval('16500')); //14224+(16500*0.16)=16500
         $product->setSimpleName('PS1');
         $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
@@ -24,7 +24,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product = new Product();
         $product->setName('Pago Symplifica 11 a 19');
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 11 a 19 días');
-        $product->setPrice(floatval('21000'));
+        $product->setPrice(floatval('21000')); //18103+(21000*0.16)=21000
         $product->setSimpleName('PS2');
         $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
@@ -33,7 +33,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product = new Product();
         $product->setName('Pago Symplifica 20 o +');
         $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 20 o más días');
-        $product->setPrice(floatval('27500'));
+        $product->setPrice(floatval('27500')); //23706+(27500*0.16)=27500
         $product->setSimpleName('PS3');
         $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
