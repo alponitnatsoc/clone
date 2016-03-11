@@ -118,7 +118,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-loading-text="Enviando..." data-complete-text="Enviado" onclick='$("form[name=enviarLiquidacion]").submit();'>Enviar</button>
+                    <button type="button" class="btn btn-primary" data-loading-text="Enviando..." data-complete-text="Enviado" onclick="$('form[name=enviarLiquidacion]').submit();">Enviar</button>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="alternate media" type="pdf" media="print" href="{{ path('liquidation_show', {'id': id_liq, 'type': 1} ) }}" />
+{#     <link rel="alternate media" type="pdf" media="print" href="{{ path('liquidation_show', {'id': id_liq, 'type': 1} ) }}" />#}
     <style type="text/css">
         .payType span{
             font-size: 12px;
