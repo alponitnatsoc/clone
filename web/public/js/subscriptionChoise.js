@@ -74,6 +74,7 @@ function startSubscriptionChoise() {
     var contratoid = '';
     var button = '';
     $('#modal_confirm').on('show.bs.modal', function (event) {
+        //event.preventDefault();
         button = $(event.relatedTarget);
         contratoid = button.data('contrato-id');
         if ($(".activo").length > 1 || $(button).html() == "Activar") {
@@ -146,6 +147,7 @@ function startSubscriptionChoise() {
         var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0;
         var descuento_html = '';
         var descuento = 0;
+        var subtotal = 0;
         var total = 0;
         if (contenedor == '_calc') {
             Tiempo_Completo = tiempo_completoSlider ? parseInt(tiempo_completoSlider.noUiSlider.get()) : 0;
@@ -167,10 +169,11 @@ function startSubscriptionChoise() {
         }
 
         if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_días) >= 3) {
-            descuento = (total * 0.1);
-            descuento_html = "El descuento del 10% por valor de " + getPrice(descuento) + " ya fue aplicado.";
+            descuento = (total * $("#descuento_percent").val());
+            descuento_html = "El descuento del " + ($("#descuento_percent").val() * 100) + "% por valor de " + getPrice(descuento) + " ya fue aplicado.";
             $("#result_discount" + contenedor).html(descuento_html);
         } else {
+            descuento = 0;
             $("#result_discount" + contenedor).html('');
         }
 

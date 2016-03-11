@@ -67,7 +67,6 @@ function startSubscriptionActivate() {
             }
         });
     });
-
     $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
         $('#credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
@@ -108,7 +107,6 @@ function startSubscriptionActivate() {
             }
         });
     });
-
     function jsonToHTML(data) {
         var htmls = "<option value=''>Seleccionar una opción</option>";
         for (var i = 0; i < data.length; i++) {
@@ -136,7 +134,6 @@ function startSubscriptionActivate() {
                     );
         });
     });
-
     $(document).ready(function () {
 
         $("#chkSameAdress").change(function () {
@@ -148,7 +145,6 @@ function startSubscriptionActivate() {
                 $("#divSameAdress").addClass('toHide');
             }
         });
-
         $("#tos").on('change', function () {
             if ($(this).is(":checked")) {
                 $("#sumbit").removeClass('disabled');
@@ -181,48 +177,64 @@ function startSubscriptionActivate() {
                 $("#divCardNumber").removeClass('toHide');
             }
         });
+        function recalc() {
+            html = '<div class="col-md-1">\n\
+                                    </div>\n\
+                                        <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">\n\
+                                        <b>Descuento por ser referido:</b>\n\
+                                    </div>                                      \n\
+                    <div class="col-md-3 text-right" style="padding-top: 5px;">\n\
+                                        <div  style="font-size: 10px;"><b>$ {{  }}</b></div>\n\
+                < /div>';
+            $("#descuento_isRefered").html(html);
+
+            subtotal = $("#subtotal").val();
+            total = $("#total").val();
+
+        }
         $("#codigo_referido").focusout(function () {
-            if ($("#codigo_referido").val().length >= 6) {
-                $.ajax({
-                    method: "POST",
-                    url: "/api/public/v1/validates/codes",
-                    data: {code: $(this).val()},
-                    beforeSend: function (xhr) {
-                        $("#codigo_referido_estado").html('Validando código...');
-                        $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                        $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+            if ($("#esReferido").val() == 0) {
+                if ($(this).val().length >= 6) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/api/public/v1/validates/codes",
+                        data: {code: $(this).val()},
+                        beforeSend: function (xhr) {
+                            $("#codigo_referido_estado").html('Validando código...');
+                            $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                            $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                        }
+                    }).done(function (data) {
+                        if (data == true) {
+                            $("#esReferido").val(1);
+                            $("#codigo_referido").attr('readonly', true);
+                            $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                            $("#codigo_referido_estado").addClass('codigo_referido_valido');
+                            $("#codigo_referido_estado").html('Código valido');
+                            $("#codigoReferido").hide();
+                            recalc();
+                        } else {
+                            $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                            $("#codigo_referido_estado").addClass('codigo_referido_invalido');
+                            $("#codigo_referido_estado").html(data);
+                        }
                     }
-                }).done(function (data) {
-                    if (data == true) {
-                        $("#esReferido").val(1);
-                        $("#codigo_referido").attr('readonly', true)
-                        $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
-                        $("#codigo_referido_estado").addClass('codigo_referido_valido');
-                        $("#codigo_referido_estado").html('Código valido');
-                    } else {
+                    ).fail(function (jqXHR, textStatus, errorThrown) {
                         $("#codigo_referido_estado").removeClass('codigo_referido_valido');
                         $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                        $("#codigo_referido_estado").html('Código invalido');
-                    }
-                }
-                ).fail(function (jqXHR, textStatus, errorThrown) {
+                        $("#codigo_referido_estado").html('No se pudo validar el código');
+                        console.log("FAIL codigo_referido {{ path('api_public_post_validate_code') }}:");
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    });
+                } else {
                     $("#codigo_referido_estado").removeClass('codigo_referido_valido');
                     $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                    $("#codigo_referido_estado").html('No se pudo validar el código');
-                    console.log("FAIL codigo_referido {{ path('api_public_post_validate_code') }}:");
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                });
-            } else {
-                $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                $("#codigo_referido_estado").html('Código invalido');
+                    $("#codigo_referido_estado").html('Código invalido');
+                }
             }
-
         });
     });
-
-
 }
 

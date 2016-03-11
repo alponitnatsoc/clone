@@ -143,11 +143,12 @@ class EmployerRestController extends FOSRestController
      *
      * @param integer $idEmployer - del empoyerHasEmployee
      * @param string $freeTime - tiempo de meses gratis
+     * @param boolean $all true:setear todos los empleados a free, false:setear solo el de menor jornada
      *
      * @return View
      *
      */
-    public function getEmployeeFreeAction($idEmployer, $freeTime)
+    public function setEmployeesFreeAction($idEmployer, $freeTime, $all = false)
     {
         $view = View::create();
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
@@ -157,28 +158,37 @@ class EmployerRestController extends FOSRestController
 
         if (!empty($employerHasEmployees)) {
             $elmenor = array();
+            $em = $this->getDoctrine()->getManager();
             foreach ($employerHasEmployees as $key => $employerHasEmployee) {
-                /* @var $contract Contract */
-                $contract = $repositoryContract->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee, 'state' => 1));
-                if (empty($elmenor)) {
-                    $elmenor = array('employerHasEmployee' => null, 'contrato' => null);
-                    $elmenor['employerHasEmployee'] = $employerHasEmployee;
-                    $elmenor['contrato'] = $contract;
-                } else {
-                    if ($contract->getWorkableDaysMonth() < $elmenor['contrato']->getWorkableDaysMonth()) {
-                        $elmenor['employerHasEmployee'] = $employerHasEmployee;
-                        $elmenor['contrato'] = $contract;
+                if ($employerHasEmployee->getState() > 0) {
+                    if ($all) {
+                        $employerHasEmployee->setIsFree($freeTime);
+                    } else {
+                        $employerHasEmployee->setIsFree(0); /* @var $contract Contract */
+                        $contract = $repositoryContract->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee, 'state' => 1));
+                        if (empty($elmenor)) {
+                            $elmenor = array('employerHasEmployee' => null, 'contrato' => null);
+                            $elmenor['employerHasEmployee'] = $employerHasEmployee;
+                            $elmenor['contrato'] = $contract;
+                        } else {
+                            if ($contract->getWorkableDaysMonth() < $elmenor['contrato']->getWorkableDaysMonth()) {
+                                $elmenor['employerHasEmployee'] = $employerHasEmployee;
+                                $elmenor['contrato'] = $contract;
+                            }
+                        }
                     }
+                    $em->persist($employerHasEmployee);
                 }
             }
-            $employerHasEmployee = $elmenor['employerHasEmployee'];
-            $employerHasEmployee->setIsFree($freeTime);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($employerHasEmployee);
+            if (!$all) {
+                $employerHasEmployee = $elmenor['employerHasEmployee'];
+                $employerHasEmployee->setIsFree($freeTime);
+                $em->persist($employerHasEmployee);
+            }
             $em->flush();
 
             //$view->setData($employerHasEmployee);
-            $view->setData("employerHasEmployee " . $employerHasEmployee->getIdEmployerHasEmployee() . " marcado como gratuito " . $freeTime);
+            $view->setData("OK");
             $view->setStatusCode(200);
         } else {
             $view->setData("sin empleados");

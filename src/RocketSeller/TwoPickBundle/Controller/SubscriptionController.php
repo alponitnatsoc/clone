@@ -40,63 +40,69 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function getEmployees($person, $activeEmployee = false)
+    /**
+     * 
+     * @param Employer $employer Empleador del cual se buscaran los empleados
+     * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos 12031768-0
+     * @return boolean
+     */
+    public function getData(Employer $employer, $activeEmployee = false)
     {
-        try {
-            $employerHasEmployee = $this->getdoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                    ->findByEmployerEmployer($person);
+        $config = $this->getConfigData();
 
-            $productos = $this->getdoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:Product')
-                    ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+        /* @var $employerHasEmployee EmployerHasEmployee */
+        $employerHasEmployee = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                ->findByEmployerEmployer($employer);
 
-            $employees = array();
-            foreach ($employerHasEmployee as $keyEmployee => $employee) {
-                if ($activeEmployee) {
-                    if ($employee->getState() == 0) {
-                        break;
-                    }
-                }
-                $contracts = $employee->getContracts();
-                foreach ($contracts as $keyContract => $contract) {
-                    if ($contract->getState() > 0) {
-                        $employees[$keyEmployee]['contrato'] = $contract;
-                        $employees[$keyEmployee]['employee'] = $employee;
-                        $employees[$keyEmployee]['product'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
-                        break;
-                    }
-                }
+        $productos = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Product')
+                ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+
+        $employees = array();
+        $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = 0;
+        $descuento_3er = isset($config['D3E']) ? $config['D3E'] : 0.1;
+        $descuento_isRefered = isset($config['DIR']) ? $config['DIR'] : 0.2;
+        $descuento_haveRefered = isset($config['DHR']) ? $config['DHR'] : 0.2;
+        foreach ($employerHasEmployee as $keyEmployee => $employee) {
+            if ($activeEmployee && ($employee->getState() == 0)) {
+                break;
             }
-            return array('employees' => $employees, 'productos' => $productos);
-        } catch (Exception $ex) {
-            $logger = $this->get('logger');
-            $logger->error(json_encode($ex));
-            return false;
+            $contracts = $employee->getContractByState(1);
+            foreach ($contracts as $keyContract => $contract) {
+                $employees[$keyEmployee]['contrato'] = $contract;
+                $employees[$keyEmployee]['employee'] = $employee;
+                $employees[$keyEmployee]['product'] = $employee->getIsFree() > 0 ? null : $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
+                $total_sin_descuentos += $employees[$keyEmployee]['product'] != null ? $employees[$keyEmployee]['product']->getPrice() : 0;
+                break;
+            }
         }
-    }
+        if (count($employees) >= 3) {
+            $valor_descuento_3er = round($total_sin_descuentos * $descuento_3er);
+        }
+        $userIsRefered = $this->userIsRefered();
+        if ($userIsRefered) {
+            $valor_descuento_isRefered = round($total_sin_descuentos * $descuento_isRefered);
+        }
+        $userHaveValidRefered = $this->userHaveValidRefered();
+        if ($userHaveValidRefered) {
+            $valor_descuento_haveRefered = round($total_sin_descuentos * (count($userHaveValidRefered) * $descuento_haveRefered));
+        }
 
-    private function orderProducts($productos)
-    {
-        $products = array();
-        foreach ($productos as $key => $value) {
-            $products[$value->getSimpleName()] = $value->getPrice();
+        if (($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered) > $total_sin_descuentos) {
+            $total_con_descuentos = 0;
+        } else {
+            $total_con_descuentos = $total_sin_descuentos - ($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered); //descuentos antes de iva            
         }
-        return $products;
-    }
-
-    public function subscriptionChoicesAction()
-    {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException();
-        }
-        $user = $this->getUser();
-        $employees = $this->getEmployees($user->getPersonPerson()->getEmployer());
-        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
-                    'employees' => $employees['employees'],
-                    'productos' => $this->orderProducts($employees['productos']),
-                    'user' => $user
-        ));
+        return array(
+            'employees' => $employees,
+            'productos' => $productos,
+            'total_sin_descuentos' => $total_sin_descuentos,
+            'total_con_descuentos' => $total_con_descuentos,
+            'descuento_3er' => array('percent' => $descuento_3er, 'value' => $valor_descuento_3er),
+            'descuento_isRefered' => array('percent' => $descuento_isRefered, 'value' => $valor_descuento_isRefered, 'object' => $userIsRefered),
+            'descuento_haveRefered' => array('percent' => $descuento_haveRefered, 'value' => $valor_descuento_haveRefered, 'object' => $userHaveValidRefered)
+        );
     }
 
     public function addToNovo()
@@ -176,7 +182,7 @@ class SubscriptionController extends Controller
                             "paymentType" => $payMC->getAccountTypeAccountType()->getName(),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
-                        if (!($insertionAnswer->getStatusCode() == 201||$insertionAnswer->getStatusCode() == 406)) {
+                        if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
                             $this->addFlash('error', $insertionAnswer->getContent());
                             return false;
                         }
@@ -192,24 +198,45 @@ class SubscriptionController extends Controller
         return true;
     }
 
-    public function activarSuscripcionAction(Request $request)
+    public function subscriptionChoicesAction()
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        $user = $this->getUser();
+        $data = $this->getData($user->getPersonPerson()->getEmployer());
+        dump($data);
+        //die;
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
+                    'employees' => $data['employees'],
+                    'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
+                    'total' => $data['total_sin_descuentos'],
+                    'descuento_3er' => $data['descuento_3er'],
+                    'user' => $user
+        ));
+    }
+
+    public function suscripcionConfirmAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
 
         if ($request->isMethod('POST')) {
-
-            $data = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployeeFree', array(
-                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-                'freeTime' => $this->getUser()->getStatus() > 1 ? $this->getUser()->getStatus() - 1 : 1
-                    ), array('_format' => 'json')
-            );
-
+            /*
+              $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+              'freeTime' => ($this->getUser()->getStatus() > 1 ? $this->getUser()->getStatus() - 1 : 0),
+              'all' => true
+              ), array('_format' => 'json')
+              );
+             */
             $user = $this->getUser();
             $person = $user->getPersonPerson();
             $billingAdress = $person->getBillingAddress();
-            $employees = $this->getEmployees($user->getPersonPerson()->getEmployer(), true);
+            $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
+
+            dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
@@ -219,17 +246,20 @@ class SubscriptionController extends Controller
             return $this->render('RocketSellerTwoPickBundle:Subscription:active.html.twig', array(
                         'form' => $form->createView(),
                         'employer' => $person,
-                        'employees' => $employees['employees'],
+                        'employees' => $data['employees'],
                         'billingAdress' => $billingAdress,
-                        'isRefered' => $this->userIsRefered(),
-                        'haveRefered' => $this->userHaveValidRefered()
+                        'total_sin_descuentos' => $data['total_sin_descuentos'],
+                        'total_con_descuentos' => $data['total_con_descuentos'],
+                        'descuento_3er' => $data['descuento_3er'],
+                        'descuento_isRefered' => $data['descuento_isRefered'],
+                        'descuento_haveRefered' => $data['descuento_haveRefered']
             ));
         } else {
             return $this->redirectToRoute("subscription_choices");
         }
     }
 
-    public function paySuscripcionAction(Request $request)
+    public function suscripcionPayAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
@@ -245,20 +275,27 @@ class SubscriptionController extends Controller
                 $request->request->set('expiry_date_month', $request->get('expiry_date_month'));
                 $request->request->set('cvv', $request->get('cvv'));
                 $request->request->set('name_on_card', $request->get('name_on_card'));
-                $data = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
-                if ($data->getStatusCode() != Response::HTTP_CREATED) {
-                    $this->addFlash('error', $data->getContent());
+                $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
+                if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                    $this->addFlash('error', $postAddCreditCard->getContent());
                     return $this->redirectToRoute("subscription_choices");
                     //throw $this->createNotFoundException($data->getContent());
                 } else {
-                    dump($data->getContent());
-                    die;
+
+                    return $this->redirectToRoute("subscription_success");
+
+                    $data = $this->getData($this->getUser()->getPersonPerson()->getEmployer(), true);
+
+                    dump($postAddCreditCard->getContent());
+                    //die;
+                    $methodId = json_encode($postAddCreditCard->getContent(), true);
 
                     $purchaseOrder = new PurchaseOrders();
                     $purchaseOrder->setIdUser($this->getUser());
                     $purchaseOrder->setName('Pago Membresia');
                     $purchaseOrder->setValue((floatval($totalAmount)));
                     $purchaseOrder->setPayMethodId($methodId);
+                    $purchaseOrder->setPayMethodId(isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : null);
 
                     $em->persist($purchaseOrder);
                     $em->flush(); //para obtener el id que se debe enviar a novopay
@@ -270,8 +307,10 @@ class SubscriptionController extends Controller
                     $data2 = json_decode($data->getContent(), true);
                     if ($data->getStatusCode() == Response::HTTP_OK) {
                         $this->addFlash('success', $data2['msg']);
-                        die;
-                        return $this->redirectToRoute("matrix_choose");
+                        //die;
+                        //return $this->redirectToRoute("matrix_choose");
+                        return $this->redirectToRoute("subscription_success");
+                        //return $this->redirect("/subscription/success");
                     }
                     $this->addFlash('error', $data2['msg']);
                     return $this->redirectToRoute("subscription_choices");
@@ -284,6 +323,13 @@ class SubscriptionController extends Controller
         }
     }
 
+    public function suscripcionSuccessAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Subscription:success.html.twig', array(
+                    'user' => $this->getUser()
+        ));
+    }
+
     /**
      * Buscar si el usuario fue referido por alguien
      * @param User $user
@@ -294,8 +340,12 @@ class SubscriptionController extends Controller
         /* @var $isRefered Referred */
         $isRefered = $this->getdoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Referred')
-                ->findOneBy(array('referredUserId' => $user != null ? $user : $this->getUser()));
-        return $isRefered;
+                ->findOneBy(array('referredUserId' => $user != null ? $user : $this->getUser(), 'status' => 0));
+
+        if ($isRefered && $isRefered->getUserId()->getPaymentState() > 0) {
+            return $isRefered;
+        }
+        return null;
     }
 
     /**
@@ -322,6 +372,20 @@ class SubscriptionController extends Controller
     {
         $user = $this->getUser();
         return $this->render('RocketSellerTwoPickBundle:Subscription:inactive.html.twig');
+    }
+
+    private function getConfigData()
+    {
+        #$configRepo = new Config();
+        $configRepo = $this->getdoctrine()->getRepository("RocketSellerTwoPickBundle:Config");
+        $configDataTmp = $configRepo->findAll();
+        $configData = array();
+        if ($configDataTmp) {
+            foreach ($configDataTmp as $key => $value) {
+                $configData[$value->getName()] = $value->getValue();
+            }
+        }
+        return $configData;
     }
 
 }

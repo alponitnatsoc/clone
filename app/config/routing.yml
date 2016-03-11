@@ -365,12 +365,15 @@ help_detail:
 subscription_choices:
     path:     /subscription/choice
     defaults: { _controller: RocketSellerTwoPickBundle:Subscription:subscriptionChoices }
-activate_subscription:
+subscription_confirm:
     path: /subscription/confirm
-    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:activarSuscripcion }
+    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionConfirm }
 subscription_pay:
     path:     /subscription/pay
-    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:paySuscripcion }
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionPay }
+subscription_success:
+    path:     /subscription/success
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionSuccess }
 inactive_user:
     path: /suscripcion-inactiva
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionInactiva }

@@ -62,6 +62,35 @@ class LoadConfigData extends AbstractFixture implements OrderedFixtureInterface
             unset($config);
         }
 
+        if (!isset($configData['DIR'])) {
+            $config = new Config();
+            $config->setName('DIR');
+            $config->setValue('0.2');
+            $config->setDescripcion('Descuento para usuarios que son referidos');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
+
+        if (!isset($configData['DHR'])) {
+            $config = new Config();
+            $config->setName('DHR');
+            $config->setValue('0.2');
+            $config->setDescripcion('Descuento para usuarios que tienen referidos');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
+
+        if (!isset($configData['D3E'])) {
+            $config = new Config();
+            $config->setName('D3E');
+            $config->setValue('0.1');
+            $config->setDescripcion('Descuento para usuarios con 3 empleados');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
         //$this->addReference('config', $config);
     }
 
