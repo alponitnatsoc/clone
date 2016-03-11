@@ -205,32 +205,21 @@ class SubscriptionController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-
-        /** @var User $user */
+        /* @var $user User */
         $user = $this->getUser();
-        $date1 = $user->getDateCreated();
-        $date2 = new \DateTime(date('Y-m-d'));
-        $differ = $date1->diff($date2);
-        $daysbetween = $differ->format('%d');
-        $hoursbetween = $differ->format('%h');
-        if ($daysbetween > 0) {
-            $hoursbetween = $hoursbetween + ($daysbetween * 24);
-        }
-        if ($hoursbetween <= 48) {
-            $freeTime = 3;
-        } else {
-            $freeTime = 2;
-        }
-
         $data = $this->getData($user->getPersonPerson()->getEmployer(), false);
-        dump($data);
+        $date = new \DateTime();
+        $date->add(new \DateInterval('P1M'));
+        $startDate = $date->format('Y-m-d');
+
+        dump($startDate);
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                     'employees' => $data['employees'],
                     'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
                     'total' => $data['total_sin_descuentos'],
                     'descuento_3er' => $data['descuento_3er'],
                     'user' => $user,
-                    'freeTime' => $freeTime
+                    'startDate' => $startDate
         ));
     }
 
