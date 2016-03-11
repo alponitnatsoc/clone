@@ -6,9 +6,9 @@ trait ReferredMethodsTrait
 {
 
     /**
-     * Valida si el codigo existe en la tabla de usuarios y retorna los registros
-     * @param type $code
-     * @return type
+     * Valida si el codigo existe en la tabla de usuarios y retorna el usuario
+     * @param string $code codigo de referido
+     * @return User
      */
     protected function userValidateCode($code)
     {

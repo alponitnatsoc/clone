@@ -12,6 +12,7 @@ use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Traits\ReferredMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Invitation;
 use RocketSeller\TwoPickBundle\Entity\Referred;
+use RocketSeller\TwoPickBundle\Entity\User;
 
 class ReferredRestController extends FOSRestController
 {
@@ -73,37 +74,42 @@ class ReferredRestController extends FOSRestController
     private function validateCode($code)
     {
         $view = View::create();
-        $view->setStatusCode(Response::HTTP_OK);
         if ($this->getUser()) {
+            /* @var $user_dueno User */
             $user_dueno = $this->userValidateCode($code);
             if ($user_dueno) {
-                $refered = $this->referedValidateCode($user_dueno->getId(), $this->getUser()->getId());
-                if (!$refered) {
+                if ($user_dueno->getPaymentState() > 0) {
+                    $refered = $this->referedValidateCode($user_dueno->getId(), $this->getUser()->getId());
+                    if (!$refered) {
 
-                    $em = $this->getDoctrine()->getManager();
+                        $em = $this->getDoctrine()->getManager();
 
-                    $invitation = new Invitation();
-                    $invitation->setUserId($user_dueno);
-                    $invitation->setEmail($this->getUser()->getEmail());
-                    $invitation->setStatus(1);
-                    $invitation->setSent(1);
-                    $em->persist($invitation);
-                    $em->flush();
+                        $invitation = new Invitation();
+                        $invitation->setUserId($user_dueno);
+                        $invitation->setEmail($this->getUser()->getEmail());
+                        $invitation->setStatus(1);
+                        $invitation->setSent(1);
+                        $em->persist($invitation);
+                        $em->flush();
 
-                    $refered = new Referred();
-                    $refered->setUserId($user_dueno);
-                    $refered->setReferredUserId($this->getUser());
-                    $refered->setStatus(0);
-                    $refered->setInvitationId($invitation);
+                        $refered = new Referred();
+                        $refered->setUserId($user_dueno);
+                        $refered->setReferredUserId($this->getUser());
+                        $refered->setStatus(0);
+                        $refered->setInvitationId($invitation);
 
-                    $em->persist($refered);
-                    $em->flush();
-                }
-                if ($user_dueno && $refered) {
-                    $view->setData(true);
+                        $em->persist($refered);
+                        $em->flush();
+
+                        $view->setData(true);
+                        $view->setStatusCode(Response::HTTP_OK);
+                    } else {
+                        $view->setStatusCode(Response::HTTP_CREATED);
+                        $view->setData('codigo valido, ya redimido');
+                    }
                 } else {
                     $view->setStatusCode(Response::HTTP_CREATED);
-                    $view->setData('codigo valido, error al redimir');
+                    $view->setData('codigo valido, pero sin membresia');
                 }
             } else {
                 $view->setStatusCode(Response::HTTP_CREATED);
@@ -111,7 +117,7 @@ class ReferredRestController extends FOSRestController
             }
         } else {
             $view->setStatusCode(Response::HTTP_CREATED);
-            $view->setData('no user');
+            $view->setData('no hay usuario autenticado');
         }
         return $view;
     }

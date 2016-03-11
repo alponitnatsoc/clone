@@ -92,14 +92,15 @@ class PaymentsRestController extends FOSRestController
             }
         } else {
             //$url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
-            $url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
+            //$url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
+            $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         }
         $response = null;
         $options = array(
             'headers' => $headers,
             'json' => $parameters,
             'timeout' => $timeout,
-            'verify' => ['/home/ubuntu/.ssh/myKeystore.pem', 'N0v0payment']
+            //'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
         );
         try {
             if ($action == "post") {

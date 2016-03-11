@@ -7,8 +7,20 @@
             {{ flash_message }}
         </div>
     {% endfor %}
-    <h3>Activación de la suscripción</h3>
-    <div style="margin: 10px;padding: 10px; text-align: center; display: block;">
+    <div class="col-sm-12 col-xs-12 align-Resp">
+        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="#">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">                    
+            </div>
+            <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                <div id="" class="text-left">
+                    <span class="step">Paso 3 de 4</span>                            
+                    Pago afiliación
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-12 text-center">
         {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
         {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
         {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
@@ -17,60 +29,91 @@
         {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
         {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %}   
         <p>
-            A continuación podrás activar tu suscripción.
+            En este momento cuenta con SERVICIO GRATUITO hasta el {{ day }} de {{ month }} de {{ year }}. Sin embargo ya puede llevar a cabo la activación de la suscripción al servicio de Symplifica.
         </p>
         <p>
-            Has registrado los siguientes empleados:
+            De acuerdo a la información registrada, usted cuenta con los siguientes empleados:
         </p> 
     </div>
-    <form action="{{ path('activate_subscription') }}" method="POST">
+    <form action="{{ path('subscription_confirm') }}" method="POST">  
+        <div id="employees" class="col-xs-12">
+            <div class="row-fluid clearfix">
+                <input type="hidden" id="descuento_percent" value="{{ descuento_3er['percent'] }}"/>  
+                <input type="hidden" id="descuento_value" value="{{ descuento_3er['value'] }}"/>      
+                {% for key, producto in productos %}
+                    <input type="hidden" id="{{ producto.simpleName }}" value="{{ producto.price }}"/>
+                    <input type="hidden" id="{{ producto.simpleName }}_IVA" value="{{ producto.taxTax.value }}"/>
+                {% endfor %}
+                <div class="col-md-12 text-center">
+                    {% for employeeData in employees %}
 
-        {% for key, price in productos %}
-            <input type="hidden" id="{{ key }}" value="{{ price }}"/>
-        {% endfor %}
+                        {% set employee = employeeData['employee'] %}
+                        {% set contrato = employeeData['contrato'] %}
+                        {% set producto = employeeData['product'] %}
 
-        {% for employeeData in employees %}
+                        <div class="col-md-4 employee text-center {{ employee.state ?'activo':'inactivo' }}">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="employee_name">
+                                        <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                                    </div>
+                                    {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                                    <div class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                                        Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
+                                    </div>
+                                    <div>
+                                        <div class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-            {% set employee = employeeData['employee'] %}
-            {% set contrato = employeeData['contrato'] %}
-            {% set producto = employeeData['product'] %}
 
-            <div class="col-md-3 {{ employee.state ?'activo':'inactivo' }}" style="text-align: center">
-                <div> 
-                    <img class="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'female':'male'  }}" src="{{ employee.employeeEmployee.personPerson.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Smiley face" height="42" width="42">
+                    {% endfor %}
+
+                    <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
+                        <div class="row-fluid">
+                            <div class="col-xs-12">
+                                <a href="/register/employee"><i class="fa fa-plus-circle fa-4x"></i><br />
+                                Agregar empleado</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="employee_name">
-                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
-                </div>
-                {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                <div class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
-                    Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
-                </div>
-                <div>
-                    <button class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inactivar':'Activar' }}</button>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div style="text-align: center; margin-top: 20px; font-weight: bold">
+                            <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Calcule el valor de suscripción</span>
+                        </div>
+                        <span style="color: #B0B2B5">Calcula cuánto sería el valor de la suscripción mensual si ingresas más empleados</span>
+                    </div>
                 </div>
             </div>
-
-
-        {% endfor %}
-
-        <div class="col-lg-1 result_ajax"></div>
-        <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
-            Este servicio tendrá el siguiente valor:
-            <div class="div_price">     
-                <div id="result_price"></div>      
-                <div id="result_discount"></div>    
+        </div>
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-lg-1 result_ajax"></div>
+                <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
+                    <span style="font-size: 20px;">Con el número de empleados<br /> nuestro servicio tendrá un costo mensual de:</span>
+                    <div class="div_price">     
+                        <div id="result_price"></div>
+                        <div>A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}</div>
+                        <div id="result_discount"></div>    
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    Recuerda que el primer mes es gratis y que te obsequiamos otro mes si  completas antes de 48 horas el registro y carga documentación 
+                </div>
+                {% if descuento_3er['value'] == 0 %}
+                    <div style="text-align: center; margin-top: 20px;">
+                        <strong>Recibe un 10% de descuento adicional</strong>, si registras tres o más de tus empleados.
+                    </div>
+                {% endif %}
+                <div style="text-align: center; margin-top: 20px;">
+                    <input type="submit" class="btn btn-orange" value="Continuar con el pago"/>
+                </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 20px;">Recibe un <b>10% de descuento</b> adicional, si registras tres o más de tus  empleados.</div>
-        <div style="text-align: center; margin-top: 20px; font-weight: bold">Calculadora para suscripciones</div>
-        <div style="text-align: center; margin-top: 20px;">
-            <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Seleccione el tipo y cantidad de empleados</span> para que calculesel valor por simplificar la manera de gestionarlos.
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-            <input type="submit" class="btn btn-default" value="Continuación del pago"/>
-        </div>
-
     </form>
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">

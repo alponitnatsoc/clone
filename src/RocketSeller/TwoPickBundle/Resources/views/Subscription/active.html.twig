@@ -29,7 +29,7 @@
             -webkit-box-sizing: content-box;
         }*/
         .infoTarjeta #credit_card {
-            background-image: url(public/img/creditCard.png), url(public/img/creditCard.png);
+            background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
             background-position: 2px -117px, 233px -55px;
             background-size: 120px 361px, 120px 361px;
             background-repeat: no-repeat;
@@ -240,7 +240,7 @@
             </div>
         </div>
 
-        {% if isRefered|length <=0 %}
+        {% if descuento_isRefered['object']|length <=0 %}
             <div id="codigoReferido" class="codigoReferido form-group">
                 <div class="col-md-12 center" style="margin-top: 20px">
                     <label>¿Cuenta con algún código de promoción?</label>
@@ -251,8 +251,9 @@
             </div>
         {% endif %}
 
-        <input type="hidden" id="tieneReferidos" value="{{ haveRefered|length }}"> 
-        <input type="hidden" id="esReferido" value="{{ isRefered|length }}">
+        <input type="hidden" id="tieneReferidos" value="{{ descuento_haveRefered['object']|length }}"> 
+        <input type="hidden" id="esReferido" value="{{ descuento_isRefered['object']|length }}">
+        <input type="hidden" id="esReferidoPercent" value="{{ descuento_isRefered['percent'] }}">
 
         <div id="confirmacionPago" class="confirmacionPago form-group" style="margin: 10px 0px 10px 0px">
             <div class="col-md-12 center" style="margin-top: 30px">
@@ -270,11 +271,6 @@
                         <div class="col-md-8 text-left">
                             Servicio mensual Symplifica por:
                         </div>
-                        {% set subtotal = 0 %}
-                        {% set total = 0 %}
-                        {% set iva = 0 %}
-                        {% set descuento = 0 %}
-                        {% set descuento2 = 0 %}
                         {% for employeeData in employees %}
                             {% set employee = employeeData['employee'] %}
                             {% set contrato = employeeData['contrato'] %}
@@ -288,13 +284,9 @@
                                     labora {{ contrato.workableDaysMonth }} días al mes.
                                 </div>  
                                 <div class="col-md-3">
+                                    <b>$ {{ (product!=null?product.price:0)|number_format }}</b>
                                     {% if employee.isFree > 0 %}
-                                        <b>$ 0 </b><span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>
-                                    {% else %}                          
-                                        {% set iva = product.taxTax %}              
-                                        {% set price = product.taxTax?(product.price * (1 + product.taxTax.value)):product.price %}
-                                        {% set subtotal = subtotal + product.price %}
-                                        <b>$ {{ product.price|number_format }}</b>
+                                        <span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>                                    
                                     {% endif %}
                                 </div>
                             </div>
@@ -309,32 +301,6 @@
 
                         </div>              
                         <div class="col-md-8">
-                            {% if isRefered %}
-                                <div class="col-md-12">
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
-                                        <b>Descuento por ser referido:</b>
-                                    </div>  
-                                    <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                        {% set descuento = descuento + (subtotal*0.1) %}
-                                        <div  style="font-size: 10px;"><b>$ {{ descuento|number_format }}</b></div>
-                                    </div>
-                                </div> 
-                            {% endif%}
-                            {% if haveRefered %}
-                                <div class="col-md-12">
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
-                                        <b>Descuento por tener {{ haveRefered|length }} referido(s):</b>
-                                    </div>  
-                                    <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
-                                        {% set descuento2 = descuento2 + ((subtotal * 0.1)*(haveRefered|length)) %}
-                                        <div  style="font-size: 10px;"><b>$ {{ descuento2|number_format }}</b></div>
-                                    </div>
-                                </div> 
-                            {% endif%}
                             <div class="col-md-12">
                                 <div class="col-md-1">
                                 </div>                            
@@ -342,21 +308,46 @@
                                     <b>SUBTOTAL:</b>
                                 </div>  
                                 <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    {% set subtotal = (subtotal - descuento - descuento2)>0?(subtotal - descuento - descuento2):0 %}
-                                    <div  style="font-size: 15px;"><b>$ {{ subtotal|number_format  }}</b></div>
+                                    <div  style="font-size: 15px;"><b>$ {{ total_sin_descuentos|number_format  }}</b></div>
+                                    <input type="hidden" id="subtotal" value="{{ total_sin_descuentos }}">  
                                 </div>
                             </div> 
-                            <div class="col-md-12">
-                                <div class="col-md-1">
-                                </div>                            
-                                <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
-                                    <b>IVA:</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    {% set iva = subtotal * (iva?iva.value:0) %} 
-                                    <div  style="font-size: 15px;"><b>$ {{ iva|number_format  }}</b></div>
-                                </div>
+                            {% if descuento_3er['value'] %}
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por tener 3 o mas empleados:</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
+                                        <div  style="font-size: 10px;"><b>$ {{ descuento_3er['value']|number_format }}</b></div>
+                                    </div>
+                                </div> 
+                            {% endif%}
+                            <div class="col-md-12" id="descuento_isRefered">
+                                {% if descuento_isRefered['object'] %}
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por ser referido:</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                        <div  style="font-size: 10px;"><b>$ {{ descuento_isRefered['value']|number_format }}</b></div>
+                                    </div>
+                                {% endif%}
                             </div> 
+                            {% if descuento_haveRefered['object'] %}
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                    </div>                            
+                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por tener {{ descuento_haveRefered['object']|length }} referido(s):</b>
+                                    </div>  
+                                    <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
+                                        <div  style="font-size: 10px;"><b>$ {{ descuento_haveRefered['value']|number_format }}</b></div>
+                                    </div>
+                                </div> 
+                            {% endif%}
                             <div class="col-md-12">
                                 <div class="col-md-1">
                                 </div>                            
@@ -364,8 +355,9 @@
                                     <b>TOTAL:</b>
                                 </div>  
                                 <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    <div  style="font-size: 20px;"><b>$ {{ (subtotal + iva)|number_format  }}</b></div>
-                                    <!--<div style="font-size: 10px;">Incluye IVA</div>-->
+                                    <div id="divTotal" style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
+                                    <input type="hidden" id="total" value="{{ total_con_descuentos }}">  
+                                    <div style="font-size: 10px;">IVA incluido</div>
                                 </div>
                             </div> 
                         </div>

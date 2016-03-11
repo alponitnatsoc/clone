@@ -1,12 +1,12 @@
 {% extends "::base.html.twig" %}
-{% block fos_user_content %}   
+{% block fos_user_content %}
     {% block stylesheets %}
         <style>
             .dashboard_employer_pending_tasks {
                 display: inline-block;
                 border:1px solid #efefef;
                 background: white;
-                margin: 10px;      
+                margin: 10px;
                 height: 300px;
                 border-radius: 0px !important;
                 padding-left: 0px !important;
@@ -19,14 +19,14 @@
                 margin: 5px;
             }
 
-            .panel_btn{    
+            .panel_btn{
                 text-align: center;
                 bottom: 0px;
                 position: absolute;
                 width: 100%;
-               
+
                 margin-bottom: 10px;
-            }       
+            }
             .panel-deadline{
                 text-align: center;
                 bottom: 40px;
@@ -49,7 +49,7 @@
             .type_notification{
                 background-color:lightgreen;
             }
-            .type_informative{                
+            .type_informative{
                 background-color:blue;
             }
             .type_reminder{
@@ -105,28 +105,28 @@
             .panel-logo{
                 height: 100px;
             }
-            .label-as-badge{                  
+            .label-as-badge{
                 height: 20px;
-                width: 100%;                
+                width: 100%;
                 padding: 2px;
                 color: black;
                 font-size: 15px;
                 border-radius: 0px !important;
             }
-            .label_list{    
+            .label_list{
                 padding: 0px 10px 5px 10px;
                 margin: 0px;
                 display: inline;
                 vertical-align: -webkit-baseline-middle;
             }
-            .glyphicon-th-large{                
+            .glyphicon-th-large{
                 color:#00CDCC;
             }
-            .glyphicon-th-large:hover{ 
-                color:#00CDCC;               
+            .glyphicon-th-large:hover{
+                color:#00CDCC;
                 cursor: pointer;
             }
-            .glyphicon-th-list{              
+            .glyphicon-th-list{
                 color:#00CDCC;
             }
             .dashboard_employer_order_by_select{
@@ -155,7 +155,7 @@
                 background-color: orange;
                 height: 10px;
                 width: 100%;
-                display: inline-block;                
+                display: inline-block;
             }
             .contador_logo{
                 height: 50px;
@@ -164,13 +164,13 @@
                 background-color: lightgreen;
                 height: 10px;
                 width: 100%;
-                display: inline-block;                
+                display: inline-block;
             }
             .dashboard_employer_contador_type_mensaje{
                 background-color: #00CDCC;
                 height: 10px;
                 width: 100%;
-                display: inline-block;                
+                display: inline-block;
             }
             .dashboard_employer_order_by{
                 width: 100%;
@@ -200,7 +200,7 @@
                 display: -webkit-inline-box;
                 vertical-align: -webkit-baseline-middle;
             }
-            .deadline_list{                
+            .deadline_list{
                 display: -webkit-inline-box;
                 vertical-align: -webkit-baseline-middle;
             }
@@ -231,8 +231,8 @@
                 display: table;
             }
         </style>
-    {% endblock %} 
-    <title>{% block title %}Dashboard - Employer{% endblock %}</title>  
+    {% endblock %}
+    <title>{% block title %}Dashboard - Employer{% endblock %}</title>
     {# dump(user) #}
     {% if notifications %}
         <h4>¡Bienvenido a tu centro de control de tareas pendientes!</h4>
@@ -247,7 +247,7 @@
                 <div class="col-sm-4 dashboard_employer_contador_div">
                     <div class="contador_logo"> </div>
                     <span class="dashboard_employer_contador_type_notification"></span>
-                    <span class="txthelp"><p>Notificaciones</p></span>                    
+                    <span class="txthelp"><p>Notificaciones</p></span>
                 </div>
                 <div class="col-sm-4 dashboard_employer_contador_div">
                     <div class="contador_logo"> </div>
@@ -268,12 +268,12 @@
 
                 <div class="col-sm-12">
                     <span class="glyphicon glyphicon-th-large view">
-                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important;">Cuadricula</a>                        
+                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important;">Cuadricula</a>
                     </span>
                     <span class="glyphicon glyphicon-th-list view">
-                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important;">Listado</a> 
+                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important;">Listado</a>
                     </span>
-                </div>                
+                </div>
             </div>
         </div>
         <div class="notification_contenedor">
@@ -300,7 +300,7 @@
                                     {% endif %}
                                     {% if difference.days == 1 %}
                                         {% set deadline_type =  '_warning' %}
-                                        {% set str_deadline =  str_deadline ~ '1 día' %}                                    
+                                        {% set str_deadline =  str_deadline ~ '1 día' %}
                                     {% else %}
                                         {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
                                     {% endif %}
@@ -329,7 +329,7 @@
                                 {% endif %}
                             </div>
                             <div class="col-sm-12 panel-logo">
-                                
+
                             </div>
                             <div class="panel-body">
                                 <p class="label-group">
@@ -346,7 +346,7 @@
                                     {% endif %}
                                     {% if difference.days == 1 %}
                                         {% set deadline_type =  '_warning' %}
-                                        {% set str_deadline =  str_deadline ~ '1 día' %}                                    
+                                        {% set str_deadline =  str_deadline ~ '1 día' %}
                                     {% else %}
                                         {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
                                     {% endif %}
@@ -354,7 +354,7 @@
                                 {% endif %}
                             </div>
                             </div>
-                            
+
                             <div class="panel_btn col-sm-12">
                                 {% if notification.accion %}
                                     {% if notification.accion|lower == "subir documento" %}
@@ -362,7 +362,7 @@
                                     {% else %}
                                         <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
                                     {% endif %}
-                                    
+
                                 {% else %}
                                     <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">View</a>
                                 {% endif %}
@@ -375,7 +375,7 @@
 
         <div class="report_novedad">
             <a class="btn-bg btn-default" href="{{ path('manage_employees') }}">Reportar novedad</a>
-        </div>     
+        </div>
         {% if(notifications) %}
             <div class="reminder_title">
                 Requerde que
@@ -387,7 +387,7 @@
                         <div class="label-as-badge label_list label-success">!</div>
                         <div class="description_list">
                             {{ notification.description }}
-                        </div>                   
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -406,7 +406,7 @@
             <h4 class="modal-title">Modal Header</h4>
           </div>
           <div class="modal-body" id="modal-body">
-            
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -419,7 +419,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>        
+    <script>
         $(document).ready(function () {
 
             $(".dashboard_employer_order_by_select").on('change', function () {
@@ -455,19 +455,19 @@
             $(".dashboard_employer_contador_alert_count").html($(".type_alert").length);
             $(".dashboard_employer_contador_notification_count").html($(".type_notification").length);
             $(".dashboard_employer_contador_mensaje_count").html($(".type_mensaje").length);
-            
 
-            $(".download-link").on('click',function(event){                
-                event.preventDefault(); 
+
+            $(".download-link").on('click',function(event){
+                event.preventDefault();
                 var uri = $(this).attr("href");
 
-                alert(uri);
+//                 alert(uri);
                 $.ajax({
                      //method: "POST",
                      url: uri,
                      //(data: $('form[name="pago_membresia"]').serialize(),
                      beforeSend: function (xhr) {
-                        
+
                      }
                  }).done(function (data) {
                     //$("#modal-body").html(data);
@@ -485,7 +485,7 @@
                  }).fail(function (jqXHR, textStatus, errorThrown) {
                      console.log(jqXHR);
                      console.log(textStatus);
-                     console.log(errorThrown);                     
+                     console.log(errorThrown);
                  });
 
             });

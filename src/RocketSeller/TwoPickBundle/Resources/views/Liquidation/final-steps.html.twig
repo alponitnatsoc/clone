@@ -70,7 +70,7 @@
             </div><br />
             <div class="col-sm-12">
                 <ul class="list-group">
-                    {% if novelties %}
+                    {% if novelties is not empty %}
                         {% for novelty in novelties %}
                             {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
                                 <li class="list-group-item">
@@ -81,6 +81,8 @@
                                 </li>
                             {% endif %}
                         {% endfor %}
+                    {% else %}
+                        <li>No hay novedades reportadas</li>
                     {% endif %}
                 </ul>
             {% if liquidationReason != 2 %}
@@ -112,9 +114,11 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
                 </div>
+                {% else %}
+                <div class="col-sm-12">No tiene llamados de atencion reportados</div>
                 {% endif %}
+                <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
             </div>
         {% elseif liquidationReason in [7,10] %}
             <div class="liq-container" id="liqSinJustaCausa">
@@ -285,6 +289,16 @@ function loadNovelty(url) {
             startNovelty();
         });
 
+//         $('#noveltyModal').modal('show');
+
+        $('#noveltyModal').modal({
+            show: false,
+            keyboard: false,
+            backdrop: 'static'
+        });
+        $('#noveltyModal').on('hidden.bs.modal', function () {
+            window.location.reload();
+        })
         $('#noveltyModal').modal('show');
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
