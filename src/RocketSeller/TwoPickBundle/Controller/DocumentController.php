@@ -298,29 +298,59 @@ class DocumentController extends Controller
     	            'docType' => $employeePerson->getDocumentType(),
     	            'docNumber' => $employeePerson->getDocument(),
     	            'residencia' => $employeePerson->getNeighborhood(),
-    	            'tel' => $employeePerson->getPhones()
+    	            'tel' => $employeePerson->getPhones()->getValues()[0]
     	        );
 
     	        $employerInfo = array(
     	            'name' => $this->fullName($employerPerson->getIdPerson()),
     	            'docType' => $employerPerson->getDocumentType(),
     	            'docNumber' => $employerPerson->getDocument(),
-                    'tel' => $employerPerson->getPhones()
+                    'tel' => $employerPerson->getPhones()->getValues()[0]
     	        );
 
+
+    	        $interno = $contract->getTransportAid();
+    	        $position = $contract->getPositionPosition()->getName();
+
+    	        $contractType = $contract->getContractTypeContractType()->getName();
+
+    	        $startDate = $contract->getStartDate();
+    	        $endDate = $contract->getEndDate();
+
+                //contrato termino fijo contractType payroll_code 2, indefinido payroll_code 1
+    	        $payrollCode = $contract->getContractTypeContractType()->getPayrollCode();
+    	        switch ($payrollCode) {
+    	            default:
+    	            case 1:
+    	                $years = $months = $days = $years_months = null;
+    	                $ref .= '-indefinido';
+    	                break;
+    	            case 2:
+    	                $diff = $endDate->diff($startDate);
+    	                $years = $diff->format("%y");
+    	                $months = $diff->format("%m");
+    	                $days = $diff->format("%d");
+    	                $years_months = ($diff->format("%y") * 12) + $diff->format("%m");
+    	                $ref .= '-fijo';
+    	                break;
+    	        }
+
     	        $contractInfo = array(
-    	            "endDate" => $contract->getEndDate(),
-    	            "startDate" => $contract->getStartDate(),
-    	            "position" => $contract->getPositionPosition()->getName(),
+    	            "endDate" => $endDate,
+    	            "startDate" => $startDate,
+    	            "position" => $position,
     	            "salary" => $contract->getSalary(),
     	            "frequency" => $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getName(),
     	            "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
-    	            "interno" => $contract->getTransportAid(),
-    	            "contractType" => $contract->getContractTypeContractType()->getName(),
+    	            "interno" => $interno,
+    	            "contractType" => $contractType,
     	            "workplace" => $contract->getWorkplaceWorkplace()->getCity()->getName(),
-    	            "numero" => $contract->getIdContract()
+    	            "numero" => $contract->getIdContract(),
+	                "years" => $years,
+	                "months" => $months,
+	                "years_months" => $years_months,
+    	            "days" => $days
     	        );
-    	        $ref .= "-indefinido";
 
     	        $data = array(
     	            'employee' => $employeeInfo,
