@@ -302,17 +302,25 @@ class SubscriptionController extends Controller
                     $purchaseOrder->setIdUser($this->getUser());
                     $purchaseOrder->setName('Pago Membresia');
                     $purchaseOrder->setValue($data['total_con_descuentos']);
-
                     $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
+
+                    $purchaseOrderDescription = new PurchaseOrdersDescription();
+                    $purchaseOrderDescription->setDescription("Pago Membresia");
+                    $purchaseOrderDescription->setPurchaseOrders($purchaseOrder);
+                    $purchaseOrderDescription->setPurchaseOrdersStatus($purchaseOrdersStatus);
+                    $purchaseOrderDescription->setValue($data['total_con_descuentos']);
+                    $purchaseOrder->addPurchaseOrderDescription($purchaseOrderDescription);
 
                     //$purchaseOrder->setPayMethodId($methodId);
                     $purchaseOrder->setPayMethodId(isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : null);
 
+                    $em->persist($purchaseOrderDescription);
                     $em->persist($purchaseOrder);
                     $em->flush(); //para obtener el id que se debe enviar a novopay
 
                     $responce = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), array('_format' => 'json'));
-
+                    dump($responce);
+                    die;
                     $data = json_decode($responce->getContent(), true);
                     if ($responce->getStatusCode() == Response::HTTP_OK) {
                         $this->addFlash('success', $data['msg']);

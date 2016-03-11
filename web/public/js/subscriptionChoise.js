@@ -119,7 +119,7 @@ function startSubscriptionChoise() {
                 parent.addClass("inactivo");
             }
             if (data.state == 'Activo') {
-                $(obj).html("Inactivar");
+                $(obj).html("Inhabilitar");
                 if (female > 0) {
                     state = "activada";
                 } else if (male > 0) {
