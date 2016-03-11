@@ -318,11 +318,12 @@ use LiquidationMethodsTrait;
             if ($data) {
                 $documentNumber = $this->getUser()->getPersonPerson()->getDocument();
                 $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+                dump($clientListPaymentmethods);
                 $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
                 return $this->render('RocketSellerTwoPickBundle:Payroll:calculate.html.twig', array(
                             'dataNomina' => $data,
-                            'paymentMethods' => isset($responcePaymentsMethods["payments"]) ? $responcePaymentsMethods["payments"] : false
+                            'paymentMethods' => isset($responcePaymentsMethods["payment-methods"]) ? $responcePaymentsMethods["payment-methods"] : false
                 ));
             } else {
                 return $this->redirectToRoute("payroll");

@@ -1,23 +1,35 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-    <div class="employees">
-        <div class="col-sm-12 col-xs-12 block-Data">
-            <h1>Empleados ({{employees|length}})</h1>
+    <div class="col-sm-12 col-xs-12 align-Resp">
+        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                 <img src="/img/block-inline.png" class="center-block">                    
+            </div>
+            <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                <div id="" class="text-left">
+                    Mis empleados
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-12" id="employees">
+        <div class="col-sm-12 col-xs-12">
             <div class="row">
                 {% for employee in employees %}
-                    <div class="row-fluid clearfix employee">
-                        <div class="col-xs-1 text-center">
-                            <i class="fa fa-user fa-2x"></i>
-                        </div>
-                        <div class="col-xs-7">
-                            {{employee.getEmployeeEmployee.getPersonPerson.getFullName()}}
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
-                            /
-                            <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
-                            /
-                            <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
+                    <div class="col-md-4 employee">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="employee_name">
+                                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                                </div>
+                                <div class="">
+                                    <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
+                                    /
+                                    <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
+                                    /
+                                    <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
