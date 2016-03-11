@@ -1,4 +1,4 @@
-    
+
 /**
  * Created by gabrielsamoma on 11/11/15.
  */
@@ -17,6 +17,15 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "required",
                 "register_employee[person][department]": "required",
                 "register_employee[person][city]": "required",
+
+                "register_employee[person][civilStatus]": "required",
+                "register_employee[person][gender]": "required",
+                "register_employee[person][documentExpeditionDate]": "required",
+                "register_employee[person][documentExpeditionPlace]": "required",
+                "register_employee[person][birthCountry]": "required",
+                "register_employee[person][birthDepartment]": "required",
+                "register_employee[person][birthCity]": "required",
+
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
@@ -39,6 +48,15 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "Por favor ingresa un salario",
                 "register_employee[person][department]": "Por favor selecciona un departamento",
                 "register_employee[person][city]": "Por favor selecciona una ciudad",
+
+                "register_employee[person][civilStatus]": "Por favor selecciona una opción",
+                "register_employee[person][gender]": "Por favor selecciona una opción",
+                "register_employee[person][documentExpeditionDate]": "Por favor selecciona una opción",
+                "register_employee[person][documentExpeditionPlace]": "Por favor selecciona una opción",
+                "register_employee[person][birthCountry]": "Por favor selecciona una opción",
+                "register_employee[person][birthDepartment]": "Por favor selecciona una opción",
+                "register_employee[person][birthCity]": "Por favor selecciona una opción",
+
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
