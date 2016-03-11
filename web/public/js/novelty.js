@@ -12,7 +12,7 @@ function addNoveltySelectListener() {
             value="";
         }
         if(valueText ==" Vacaciones"){
-
+            $("#novelty_fields_date_start")
         }
         $.ajax( {
             type: "POST",
