@@ -596,28 +596,28 @@ function jsonToHTML(data) {
     return htmls;
 }
 function jsonCalcToHTML(data) {
-    var htmls="<h2 class='text-center'>Si su empleado tiene estas características debe pagar:</h2>" +
-        "<ul class='list-group'>";
-    htmls+="<li class='list-group-item'>Costo total para el empleador: "+data.totalExpenses+"</li>";
-    htmls+="<li class='list-group-item'>Ingreso neto para el empleado: "+data.totalIncome+"</li>";
-    htmls+="<li class='list-group-item'>Diario Gastos: "+data.dailyExpenses+"</li>";
-    htmls+="<li class='list-group-item'>Diario Ingreso: "+data.dailyIncome+"</li>";
+    var htmls="<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
+        "<ul class='lista_listo'>";
+    htmls+="<li>Costo total para el empleador: "+Math.floor(data.totalExpenses)+"</li>";
+    htmls+="<li>Ingreso neto para el empleado: "+Math.floor(data.totalIncome)+"</li>";
+    htmls+="<li>Diario Gastos: "+Math.floor(data.dailyExpenses)+"</li>";
+    htmls+="<li>Diario Ingreso: "+Math.floor(data.dailyIncome)+"</li>";
     htmls+="</ul>";
-    htmls+="<h2 class='text-center'>Detalles:</h2>" +
-        "<ul class='list-group'>";
-    htmls+="<li class='list-group-item'>Gastos Empleador EPS: "+data.EPSEmployerCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleador Pensión: "+data.PensEmployerCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado ARL: "+data.arlCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado Cesantias: "+data.cesCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado Intereses/cesantias: "+data.taxCesCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado Caja Comp: "+data.cajaCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado Vacaciones: "+data.vacationsCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Auxilio de Trasnporte: "+data.transportCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Dotacion/150000 pesos trimestre: "+data.dotationCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos SENA: "+data.senaCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos ICBF: "+data.icbfCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado EPS: "+data.EPSEmployeeCal+"</li>";
-    htmls+="<li class='list-group-item'>Gastos Empleado Pensión: "+data.PensEmployeeCal+"</li>";
+    htmls+="<h2 class='modal-title'>Detalles:</h2>" +
+        "<ul class='lista_listo'>";
+    htmls+="<li>Gastos Empleador EPS: "+Math.floor(data.EPSEmployerCal)+"</li>";
+    htmls+="<li>Gastos Empleador Pensión: "+Math.floor(data.PensEmployerCal)+"</li>";
+    htmls+="<li>Gastos Empleado ARL: "+Math.floor(data.arlCal)+"</li>";
+    htmls+="<li>Gastos Empleado Cesantias: "+Math.floor(data.cesCal)+"</li>";
+    htmls+="<li>Gastos Empleado Intereses/cesantias: "+Math.floor(data.taxCesCal)+"</li>";
+    htmls+="<li>Gastos Empleado Caja Comp: "+Math.floor(data.cajaCal)+"</li>";
+    htmls+="<li>Gastos Empleado Vacaciones: "+Math.floor(data.vacationsCal)+"</li>";
+    htmls+="<li>Gastos Auxilio de Trasnporte: "+Math.floor(data.transportCal)+"</li>";
+    htmls+="<li>Gastos Dotacion/150000 pesos trimestre: "+Math.floor(data.dotationCal)+"</li>";
+    htmls+="<li>Gastos SENA: "+Math.floor(data.senaCal)+"</li>";
+    htmls+="<li>Gastos ICBF: "+Math.floor(data.icbfCal)+"</li>";
+    htmls+="<li>Gastos Empleado EPS: "+Math.floor(data.EPSEmployeeCal)+"</li>";
+    htmls+="<li>Gastos Empleado Pensión: "+Math.floor(data.PensEmployeeCal)+"</li>";
     htmls+="</ul>";
     return htmls;
 }

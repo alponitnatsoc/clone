@@ -89,10 +89,10 @@
         {{ form_start(form) }}
 
         <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de Contacto</li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
 
         </ul>
 
@@ -551,14 +551,14 @@
                                     <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Salvar y Continuar</a>
                                 </div>
                                 <!-- Modal -->
-                                <div id="calculatorResultsModal" class="modal fade" role="dialog">
+                                <!--div id="calculatorResultsModal" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
 
-                                        <!-- Modal content-->
+
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">Detalles Calculadora</h4>
+                                                <h3 class="modal-title">Detalles Calculadora</h3>
                                             </div>
                                             <div class="modal-body">
 
@@ -569,6 +569,22 @@
                                         </div>
 
                                     </div>
+                                </div-->
+                                <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h3 class="modal-title">Detalles Calculadora</h3>
+                                      </div>
+                                      <div class="modal-body">
+
+                                      </div>
+                                      <div class="modal-footer">
+                                            <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                             </div>
                         </div>

@@ -180,18 +180,20 @@ function startSubscriptionActivate() {
         function esReferido() {
             esReferidoPercent = $("#esReferidoPercent").val();
             subtotal = $("#subtotal").val();
-            esReferidoValue = subtotal * esReferidoPercent;
+            if (subtotal > 0) {
+                esReferidoValue = subtotal * esReferidoPercent;
 
-            html = '<div class="col-md-1"></div>\n\
+                html = '<div class="col-md-1"></div>\n\
                     <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;"><b>Descuento por ser referido:</b></div>                                      \n\
                     <div class="col-md-3 text-right" style="padding-top: 5px;"><div  style="font-size: 10px;"><b>' + getPrice(esReferidoValue) + '</b></div>';
-            $("#descuento_isRefered").html(html);
+                $("#descuento_isRefered").html(html);
 
-            total = $("#total").val();
-            total = total - esReferidoValue;
-            $("#total").val(total);
-            html = '<b>' + getPrice(total) + '</b>';
-            $("#divTotal").html(html);
+                total = $("#total").val();
+                total = total - esReferidoValue;
+                $("#total").val(total);
+                html = '<b>' + getPrice(total) + '</b>';
+                $("#divTotal").html(html);
+            }
         }
         $("#codigo_referido").focusout(function () {
             if ($("#esReferido").val() == 0) {
@@ -229,10 +231,6 @@ function startSubscriptionActivate() {
                         console.log(textStatus);
                         console.log(errorThrown);
                     });
-                } else {
-                    $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                    $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                    $("#codigo_referido_estado").html('Código invalido');
                 }
             }
         });

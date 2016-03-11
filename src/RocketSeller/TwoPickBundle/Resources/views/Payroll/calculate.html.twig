@@ -117,7 +117,7 @@
                                         <div style="display: -webkit-inline-box;vertical-align: middle;">
                                             <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">
                                                 {% for paymentMethod in paymentMethods %}
-                                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account-number'] }}</option>
+                                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
                                                 {% endfor  %}
                                             </select>
                                             <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
