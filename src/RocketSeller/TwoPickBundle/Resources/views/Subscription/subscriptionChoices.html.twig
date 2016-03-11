@@ -61,7 +61,7 @@
                                         Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
                                     </div>
                                     <div>
-                                        <div class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ producto.price|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inhabilitar':'Activar' }}</div>
+                                        <div class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inhabilitar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>

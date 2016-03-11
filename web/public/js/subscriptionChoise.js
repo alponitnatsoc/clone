@@ -22,7 +22,7 @@ function startSubscriptionChoise() {
         tiempo_parcialSlider.noUiSlider.on('change', function () {
             calculatePrice("_calc");
         });
-        tiempo_parcialSlider.noUiSlider.set($(".activo > .trabajo_por_dias").length);
+        tiempo_parcialSlider.noUiSlider.set($(".activo .trabajo_por_dias").length);
 
         medio_tiempoSlider = document.getElementById('medio_tiempo');
         noUiSlider.create(medio_tiempoSlider, {
@@ -44,7 +44,7 @@ function startSubscriptionChoise() {
         medio_tiempoSlider.noUiSlider.on('change', function () {
             calculatePrice("_calc");
         });
-        medio_tiempoSlider.noUiSlider.set($(".activo > .medio_tiempo").length);
+        medio_tiempoSlider.noUiSlider.set($(".activo .medio_tiempo").length);
 
         tiempo_completoSlider = document.getElementById('tiempo_completo');
         noUiSlider.create(tiempo_completoSlider, {
@@ -66,13 +66,14 @@ function startSubscriptionChoise() {
         tiempo_completoSlider.noUiSlider.on('change', function () {
             calculatePrice("_calc");
         });
-        tiempo_completoSlider.noUiSlider.set($(".activo > .tiempo_completo").length);
+        tiempo_completoSlider.noUiSlider.set($(".activo .tiempo_completo").length);
 
         calculatePrice('');
     });
 
     var contratoid = '';
     var button = '';
+    $(".modal-content .close").hide();
     $('#modal_confirm').on('show.bs.modal', function (event) {
         //event.preventDefault();
         button = $(event.relatedTarget);
