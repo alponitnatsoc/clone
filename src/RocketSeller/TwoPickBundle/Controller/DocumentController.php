@@ -284,6 +284,50 @@ class DocumentController extends Controller
 	{
         switch ($ref){
     	    case "contrato":
+    	        // id del contrato
+    	        /** @var Contract $contract */
+    	        $contract = $this->contractDetail($id);
+    	        $employerHasEmployee = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+    	        $employee = $employerHasEmployee->getEmployeeEmployee();
+    	        $employeePerson = $employee->getPersonPerson();
+    	        $employer = $employerHasEmployee->getEmployerEmployer();
+    	        $employerPerson = $employer->getPersonPerson();
+
+    	        $employeeInfo = array(
+    	            'name' => $this->fullName($employeePerson->getIdPerson()),
+    	            'docType' => $employeePerson->getDocumentType(),
+    	            'docNumber' => $employeePerson->getDocument(),
+    	            'residencia' => $employeePerson->getNeighborhood(),
+    	            'tel' => $employeePerson->getPhones()
+    	        );
+
+    	        $employerInfo = array(
+    	            'name' => $this->fullName($employerPerson->getIdPerson()),
+    	            'docType' => $employerPerson->getDocumentType(),
+    	            'docNumber' => $employerPerson->getDocument(),
+                    'tel' => $employerPerson->getPhones()
+    	        );
+
+    	        $contractInfo = array(
+    	            "endDate" => $contract->getEndDate(),
+    	            "startDate" => $contract->getStartDate(),
+    	            "position" => $contract->getPositionPosition()->getName(),
+    	            "salary" => $contract->getSalary(),
+    	            "frequency" => $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getName(),
+    	            "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
+    	            "interno" => $contract->getTransportAid(),
+    	            "contractType" => $contract->getContractTypeContractType()->getName(),
+    	            "workplace" => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+    	            "numero" => $contract->getIdContract()
+    	        );
+    	        $ref .= "-indefinido";
+
+    	        $data = array(
+    	            'employee' => $employeeInfo,
+    	            'employer' => $employerInfo,
+                    'contract' => $contractInfo
+    	        );
+    	        break;
 	        case "otrosi":
 	        case "cert-laboral-activo":
 	        case "cert-laboral-retiro":
@@ -387,7 +431,6 @@ class DocumentController extends Controller
 	                'contract' => $contractInfo,
 	                'novelty' => $noveltyInfo
 	            );
-
 	            break;
 	        case "mandato":
 	            //$id del empleador
