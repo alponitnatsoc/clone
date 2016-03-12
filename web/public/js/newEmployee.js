@@ -130,6 +130,39 @@ function startEmployee() {
             });
         }
     });
+    $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
+        if(!checkDate(new Date(
+            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
+            parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val())-1,
+            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
+            ))){
+            var datenow = new Date();
+            var year= datenow.getFullYear();
+            var month= datenow.getMonth();
+            var day= datenow.getDate();
+
+            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(year);
+            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(month+1);
+            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(day);
+        }
+
+    });
+    $("#register_employee_employeeHasEmployers_endDate").on("change", function () {
+        if(!checkDate(new Date(
+                $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(),
+                parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val())-1,
+                $(this).find("#register_employee_employeeHasEmployers_endDate_day").val()
+            ))){
+            var datenow = new Date();
+            var year= datenow.getFullYear();
+            var month= datenow.getMonth();
+            var day= datenow.getDate();
+
+            $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year+1);
+            $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month+1);
+            $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
+        }
+    });
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
     if (selectedVal == " Trabajo por días") {
         $(".days").each(function () {
@@ -396,6 +429,7 @@ function startEmployee() {
         }).done(function (data) {
             console.log(data);
             $(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
+            history.pushState("","","/register/employee/"+data['response']['idEmployee']);
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
@@ -947,4 +981,12 @@ function calculator(){
 
     $("#totalExpensesVal").text(totalExpenses.toFixed(0));
 
+}
+function checkDate (date){
+    var dateNow= new Date();
+    if(date<dateNow){
+        alert("La fecha no puede ser anterior a hoy");
+        return false;
+    }
+    return true;
 }
