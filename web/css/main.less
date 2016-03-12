@@ -173,18 +173,7 @@ span {
 .modal {
     background-color: rgba(0, 0, 0, 0.6);
 }
-.vertical-alignment-helper {
-    display:table;
-    height: 100%;
-    width: 100%;
-    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
-}
-.vertical-align-center {
-    /* To center vertically */
-    display: table-cell;
-    vertical-align: middle;
-    pointer-events:none;
-}
+
 .modal-content {
     /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
     width:inherit;
@@ -837,7 +826,7 @@ a.helpTxt {
     margin: 0px; 
     font-size: 26px;
     border: 3px dashed @color_boton;
-    padding: 25px 0;
+    padding: 15px 0;
     color: @color_boton;
     display: inline-block;
     margin-top: -5px;
