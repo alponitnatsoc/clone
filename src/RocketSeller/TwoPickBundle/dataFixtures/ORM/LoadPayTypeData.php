@@ -28,8 +28,8 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($PayTypeEfectivo);
 
         $PayTypeRetiro = new PayType();
-        $PayTypeRetiro->setName('Retiro en cajero automático Servibanca sin necesidad de cuenta bancaria');
-        $PayTypeRetiro->setDescripcion('Retiro en cajero automático Servibanca sin necesidad de cuenta bancaria','El empleado recibirá su dinero de forma segura y usted conocerá la trazabilidad de cada transacción. El empleado NO REQUIRE CUENTA BANCARIA así como tampoco asumirá costos por transacción.<br />\nIdeal para empleados que desean tener efectivo a la mano siempre\n');
+        $PayTypeRetiro->setName('Daviplata');
+        $PayTypeRetiro->setDescripcion('Su empleado podrá retirar sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo.','El empleado recibirá su dinero de forma segura y usted conocerá la trazabilidad de cada transacción. El empleado NO REQUIRE CUENTA BANCARIA así como tampoco asumirá costos por transacción.<br />\nIdeal para empleados que desean tener efectivo a la mano siempre\n');
         $PayTypeRetiro->setImage('/img/icon_servibanca.png');
         $PayTypeRetiro->setPayrollCode('CON');
 
