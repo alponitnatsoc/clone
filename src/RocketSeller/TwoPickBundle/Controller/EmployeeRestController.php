@@ -46,6 +46,7 @@ use DateTime;
 
 class EmployeeRestController extends FOSRestController
 {
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -66,66 +67,66 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    public function getLiquidatePayrollAction($idEmployerHasEmployee){
-        $em=$this->getDoctrine()->getManager();
-        $repoEmployee=$em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+    public function getLiquidatePayrollAction($idEmployerHasEmployee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoEmployee = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var EmployerHasEmployee $realEmployerHasEmployee */
-        $realEmployerHasEmployee=$repoEmployee->find($idEmployerHasEmployee);
+        $realEmployerHasEmployee = $repoEmployee->find($idEmployerHasEmployee);
         $view = View::create();
 
-        $executionType="D";
+        $executionType = "D";
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
-            "employee_id"=>$idEmployerHasEmployee,
-            "execution_type"=>$executionType,
+            "employee_id" => $idEmployerHasEmployee,
+            "execution_type" => $executionType,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postExecutePayrollLiquidation', array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=200){
+        if ($insertionAnswer->getStatusCode() != 200) {
             return $view->setStatusCode($insertionAnswer->getStatusCode());
         }
 
-        $contracts=$realEmployerHasEmployee->getContracts();
-        $actContract=null;
+        $contracts = $realEmployerHasEmployee->getContracts();
+        $actContract = null;
         /** @var Contract $cont */
         foreach ($contracts as $cont) {
-            if($cont->getState()==1){
-                $actContract=$cont;
+            if ($cont->getState() == 1) {
+                $actContract = $cont;
                 break;
             }
         }
-        $methodToCall="postExecutePayrollLiquidation";
-        $novelties=$actContract->getActivePayroll()->getNovelties();
+        $methodToCall = "postExecutePayrollLiquidation";
+        $novelties = $actContract->getActivePayroll()->getNovelties();
         /** @var Novelty $nov */
         foreach ($novelties as $nov) {
-            if($nov->getNoveltyTypeNoveltyType()->getPayrollCode()==145||$nov->getNoveltyTypeNoveltyType()->getPayrollCode()==150){
-                $methodToCall="postExecuteVacationLiquidation";
+            if ($nov->getNoveltyTypeNoveltyType()->getPayrollCode() == 145 || $nov->getNoveltyTypeNoveltyType()->getPayrollCode() == 150) {
+                $methodToCall = "postExecuteVacationLiquidation";
             }
         }
 
-        $executionType="P";
+        $executionType = "P";
         $request->setMethod("POST");
         $request->request->add(array(
-            "employee_id"=>$idEmployerHasEmployee,
-            "execution_type"=>$executionType,
+            "employee_id" => $idEmployerHasEmployee,
+            "execution_type" => $executionType,
         ));
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:' . $methodToCall, array('_format' => 'json'));
 
-        if($insertionAnswer->getStatusCode()!=200){
+        if ($insertionAnswer->getStatusCode() != 200) {
             return $view->setStatusCode($insertionAnswer->getStatusCode());
         }
 
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll',array(
-            "employeeId"=>$idEmployerHasEmployee,
-        ), array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=200){
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+            "employeeId" => $idEmployerHasEmployee,
+                ), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             return $view->setStatusCode($insertionAnswer->getStatusCode());
         }
-        return $view->setStatusCode(200)->setData(json_decode($insertionAnswer->getContent(),true));
-
-
+        return $view->setStatusCode(200)->setData(json_decode($insertionAnswer->getContent(), true));
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -158,7 +159,7 @@ class EmployeeRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         /** @var User $user */
         $user = $this->getUser();
@@ -356,7 +357,7 @@ class EmployeeRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         $user = $this->getUser();
         /** @var Person $people */
@@ -505,7 +506,7 @@ class EmployeeRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         $user = $this->getUser();
         /** @var Person $person */
@@ -670,7 +671,7 @@ class EmployeeRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         $user = $this->getUser();
         /** @var Person $person */
@@ -800,7 +801,7 @@ class EmployeeRestController extends FOSRestController
                 $sisben = $paramFetcher->get('sisben');
                 $contract->setWorkableDaysMonth($actualWeekWorkableDays * 4);
                 $contract->setSisben($sisben);
-                $contract->setSalary($paramFetcher->get('salaryD')*$actualWeekWorkableDays * 4);
+                $contract->setSalary($paramFetcher->get('salaryD') * $actualWeekWorkableDays * 4);
 
                 /* $workableDays = $contract->getWeekWorkableDays();
                   foreach ($workableDays as $workableDay) {
@@ -832,7 +833,7 @@ class EmployeeRestController extends FOSRestController
 
                   $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
                   $contract->setWorkableDaysMonth($workableDaysMonth); */
-            }else{
+            } else {
                 $contract->setSalary($paramFetcher->get('salary'));
                 $contract->setWorkableDaysMonth(30);
                 $contract->setTransportAid($paramFetcher->get('transportAid'));
@@ -947,7 +948,7 @@ class EmployeeRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         $flag = false;
         $save = $this->saveMatrixChooseSubmitStep1($paramFetcher);
@@ -957,9 +958,9 @@ class EmployeeRestController extends FOSRestController
                 $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
                 if ($save3->getData('response')['response']['message'] == 'added') {
                     /** @var User $user */
-                    $user=$this->getUser();
+                    $user = $this->getUser();
                     $user->setStatus(2);
-                    $em=$this->getDoctrine()->getManager();
+                    $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
                     $em->flush();
                     $flag = true;
@@ -1033,11 +1034,11 @@ class EmployeeRestController extends FOSRestController
         } else {
             $entities = $entities_b;
         }
-        foreach ($entities as $key => $value) {
-            $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a " . $value->getEntityEntity()->getName();
-            $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
-            $this->createNotification($user->getPersonPerson(), $msj, $url);
-        }
+        //foreach ($entities as $key => $value) {
+        $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a las entidades.";
+        $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
+        $this->createNotification($user->getPersonPerson(), $msj, $url);
+        //}
     }
 
     private function validateDocumentsEmployee($realEmployee)
