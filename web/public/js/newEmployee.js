@@ -764,6 +764,28 @@ function addListeners() {
                     );
         });
     });
+    $('select').filter(function () {
+        return this.id.match(/Department/);
+    }).change(function () {
+        var $department = $(this);
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected department value.
+        var data = {};
+        data[$department.attr('name')] = $department.val();
+        var citySelectId = $department.attr("id").replace("Department", "City");
+        // Submit data via AJAX to the form's action path.
+        $.ajax({
+            method: "POST",
+            url: "/api/public/v1/cities",
+            data: {department: $department.val()}
+        }).done(function (data) {
+            $('#' + citySelectId).html(
+                    // ... with the returned one from the AJAX response.
+                    jsonToHTML(data)
+                    );
+        });
+    });
 }
 //Extract Constraints
 var transportAid;
