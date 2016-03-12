@@ -904,6 +904,26 @@ function calculator(){
         totalIncome=(salaryM+transportCal-EPSEmployerCal-PensEmployerCal);
 
     }
+
+    if(salaryD==0){
+
+         totalExpenses=0;
+         totalIncome=0;
+         EPSEmployerCal=0;
+         EPSEmployeeCal=0;
+         PensEmployeeCal=0;
+         PensEmployerCal=0;
+         transportCal=0;
+         cesCal=0;
+         taxCesCal=0;
+         dotationCal=0;
+         vacationsCal=0;
+         arlCal=0;
+         cajaCal=0;
+         senaCal=0;
+         icbfCal=0;
+         base=0;
+    }
     var resposne=[];
     resposne['totalExpenses']=totalExpenses;
     resposne['dailyExpenses']=totalExpenses/numberOfDays;

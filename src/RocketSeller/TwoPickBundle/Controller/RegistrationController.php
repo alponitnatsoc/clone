@@ -104,6 +104,7 @@ class RegistrationController extends BaseController
 
             $person = new Person();
             $person->setNames($form->get("name")->getData());
+            $person->setLastName1($form->get("lastName")->getData());
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
             $userManager->updateUser($user);
