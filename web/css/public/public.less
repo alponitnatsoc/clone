@@ -215,6 +215,7 @@ footer {
 	height: 23px;
 	background-image: url(/img/redes-new.png);
 	margin-left: 5px;
+	border-radius: 5px;
 	&:hover {
 		box-shadow: @btn-hover;
 	}
@@ -234,6 +235,10 @@ footer {
 	&.twitter {
 		background-position: -56px 0;
 	}
+
+	&.google-plus {
+		background-position: -86px 0;	
+	}
 }
 @media only screen and (max-device-width : 360px) {
 
@@ -245,4 +250,9 @@ footer {
 			}
 		}
 	}
+}
+
+#errorLogin.error {
+    color: #f00;
+    display: none;
 }
