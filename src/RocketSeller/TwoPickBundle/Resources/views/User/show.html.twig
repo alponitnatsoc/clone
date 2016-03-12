@@ -119,3 +119,33 @@
         </div>
     </div>
 {% endblock fos_user_content%}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    <!--
+    $(document).ready(function () {
+        changePassword();
+    });
+
+    function changePassword() {
+        $('form.fos_user_change_password').submit(function(e){
+            e.preventDefault();
+
+            var form = $(this);
+            var div = form.parent();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+            }).done(function (data) {
+                div.html(data);
+                changePassword();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus + " - " + errorThrown);
+            });
+        });
+    }
+    //-->
+    </script>
+{% endblock %}

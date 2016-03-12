@@ -15,7 +15,7 @@ function startSubscriptionActivate() {
                 "pago_membresia[city]": {required: true},
                 "pago_membresia[address]": {required: true},
                 "pago_membresia[phone]": {required: true, number: true},
-                "credit_card": {required: true, number: true, maxlength: 16, minlength: 16, min: 1},
+                "credit_card": {required: true, number: true, min: 1},
                 "card_name": {required: true},
                 "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
                 "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
@@ -70,36 +70,7 @@ function startSubscriptionActivate() {
     $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
         $('#credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
-            if (result.card_type == null) {
-                $('.vertical.maestro').slideUp({
-                    duration: 200
-                }).animate({
-                    opacity: 0
-                }, {
-                    queue: false,
-                    duration: 200
-                });
-                return;
-            }
             $(this).addClass(result.card_type.name);
-            if (result.card_type.name === 'maestro') {
-                $('.vertical.maestro').slideDown({
-                    duration: 200
-                }).animate({
-                    opacity: 1
-                }, {
-                    queue: false
-                });
-            } else {
-                $('.vertical.maestro').slideUp({
-                    duration: 200
-                }).animate({
-                    opacity: 0
-                }, {
-                    queue: false,
-                    duration: 200
-                });
-            }
             if (result.valid) {
                 return $(this).addClass('valid');
             } else {

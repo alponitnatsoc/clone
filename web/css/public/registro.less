@@ -1,0 +1,82 @@
+@import (reference) "bootstrap-variables.less";
+@import (reference) "variables.less";
+
+
+#registrationContainer {    
+  background: url(/img/registrationBackground.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.smallOrangeBox {
+    width: 450px;
+    margin: 40px auto;
+
+    & label {
+        display: none;
+    }
+
+    .smallOrangeBoxTitle {
+        background-color: @orange;
+        height: 60px;
+        text-align: center;
+        margin: 0;
+
+    }
+
+    .boxImagetitle {
+        max-width: 180px;
+        margin: 14px 0 0;
+    }
+
+    .smallOrangeBoxContent {
+        background-color: @whiteBackGround;
+        padding: 10px 40px;
+        text-align: center;
+
+        & h3 {
+            color: @txtGray;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 100;
+        }
+        & span {
+            color: @txtGray;   
+            display: block;
+            margin-bottom: 5px;
+        }
+        & .light-text {
+            color: @txtLightGray;
+            display: block;
+        }
+
+        & .txt-A1-terms {
+            color: @txtGray;
+            font-size: 12px;
+        }
+
+        & .smallDivider {
+            margin: 5px 0;
+        }
+
+        & .registrationSocialNetworks {
+            margin: 10px 0;
+            overflow: hidden;
+            width: 100%;
+        }
+    }
+
+    .smallOrangeBoxNetworks {
+        background-color: @whiteBackGround;
+    }
+
+}
+
+@media only screen and (max-device-width : 360px) { 
+ 
+.smallOrangeBox {
+    width: 100%;
+}
+
+}
