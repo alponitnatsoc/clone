@@ -17,11 +17,12 @@
             {{ form_row(form.sisben) }}
         </div>
         <div class="common">
+            {{ form_row(form.transporte) }}
+
             {{ form_row(form.auxilio) }}
             <div class="aid">
                 {{ form_row(form.auxilioD) }}
             </div>
-            {{ form_row(form.transporte) }}
         </div>
         <div class="col-sm-12 col-xs-12 center">
             {{ form_row(form.save) }}
@@ -31,4 +32,20 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 </div>
+    <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detalles Calculadora</h3>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock fos_user_content %}

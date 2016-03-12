@@ -35,7 +35,7 @@ class CalculatorController extends Controller
                 'label'=>'Número de días trabajados al mes'))
             ->add('transporte', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Ese valor incluye el subsidio de transporte?'))
             ->add('auxilio', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Le paga bonificación / auxilio anual?'))
-            ->add('sisben', 'choice',array('choices'=>array('1'=>'si','0'=>'no'), 'expanded'=>true,'multiple'=>false,'label'=>'¿Pertenece al Sisben?','required'=>false))
+            ->add('sisben', 'choice',array('choices'=>array('1'=>'si','0'=>'no'),'empty_value'=>false, 'expanded'=>true,'multiple'=>false,'label'=>'¿Pertenece al Sisben?',"required"=>false))
             ->add('auxilioD', 'money',array(
                 'currency'=>'COP',
                 'label'=>' ',
