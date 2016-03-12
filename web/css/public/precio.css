@@ -1,0 +1,84 @@
+#middleBannerPrice {
+  background-image: url(/img/precio/bannerMiddle.png);
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+#middleBannerPrice .blockTem {
+  padding: 40px 0px;
+}
+#middleBannerPrice .blockTem h3 {
+  font-weight: 800;
+  font-size: 24px;
+  color: #e59233;
+}
+#middleBannerPrice .blockTem span {
+  font-weight: 100;
+  font-size: 20px;
+  color: #ffffff;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+#timerBlock {
+  padding: 20px 0px;
+}
+#timerBlock span {
+  display: block;
+  overflow: hidden;
+  font-weight: 100;
+  font-size: 16px;
+  padding: 0px 40px;
+}
+#timerBlock h3 {
+  font-weight: 100;
+  font-size: 23px;
+  font-style: italic;
+}
+#timerBlock .icon-g1 {
+  background-position: -8px -480px;
+  width: 77px;
+  height: 78px;
+  margin: 10px auto;
+}
+#timerBlock .icon-g2 {
+  background-position: -91px -480px;
+  width: 77px;
+  height: 78px;
+  margin: 10px auto;
+}
+#timerBlock .icon-g3 {
+  background-position: -173px -480px;
+  width: 77px;
+  height: 78px;
+  margin: 10px auto;
+}
+#timerBlock .boxValue {
+  background: #EDEEF0;
+  padding: 5px 15px;
+  width: 50%;
+  margin: 15px auto;
+}
+#timerBlock .boxValue span {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0px;
+}
+#timerBlock .boxValue span.big {
+  font-size: 28px;
+  font-weight: 800;
+  padding: 0px;
+}
+#timerBlock .boxValue p {
+  font-weight: 100;
+  font-size: 15px;
+}
+@media only screen and (max-device-width: 360px) {
+  #timerBlock span {
+    padding: 0px;
+  }
+  #timerBlock .boxValue {
+    width: 80%;
+  }
+}

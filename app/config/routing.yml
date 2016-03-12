@@ -456,3 +456,11 @@ blog:
 contactenos:
     path:     /contactenos
     defaults: { _controller: RocketSellerTwoPickBundle:Public:contactenos }
+
+faq:
+    path:     /preguntas-frecuentes
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:faq }
+
+producto:
+    path:     /producto
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:producto }

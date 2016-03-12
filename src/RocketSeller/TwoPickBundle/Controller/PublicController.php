@@ -51,4 +51,16 @@ class PublicController extends Controller
             "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
         ));   
     }
+
+    public function faqAction() {
+        return $this->render('RocketSellerTwoPickBundle:Public:FAQ.html.twig', array(
+            "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
+        ));   
+    }
+
+    public function productoAction() {
+        return $this->render('RocketSellerTwoPickBundle:Public:producto.html.twig', array(
+            "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
+        ));   
+    }
 }

@@ -31,10 +31,6 @@ terminos_condiciones:
     path:     /terminos-condiciones
     defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:terminosCondiciones }
 
-preguntas_frecuentes:
-    path:     /preguntas-frecuentes
-    defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:preguntasFrecuentes }
-
 politica_privacidad:
     path:     /politica-privacidad
     defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad }

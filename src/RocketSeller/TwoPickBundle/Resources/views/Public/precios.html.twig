@@ -1,210 +1,81 @@
 {% extends "::new-design/public.html.twig" %}
 
 {% block body %}
-
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<h1>Precios</h1>
-			</div>
-			<div class="col-xs-12">
-				Estas son nuestras tarifas mensuales por cada empleado contratado. Entre más empleados, más económico el servicio.
-			</div>
-		</div>
-	</div>
-	<div class="container" style="margin-top: 30px;">
-		<div class="row" id="precios">
-			<div class="col-md-4 text-center">
-				<img src="/img/icons/calendar.png" class="img-responsive center-block" />
-				<p>Tiempo Parcial</p>
-				<p>Para empleados que laboran de 1 a 10 días al mes</p>
-			</div>
-			<div class="col-md-4 text-center">
-				<img src="/img/icons/halftime-clock.png" class="img-responsive center-block" />
-				<p>Medio Tiempo</p>
-				<p>Para empleados que laboran de 11 a 19 días al mes</p>
-			</div>
-			<div class="col-md-4 text-center">
-				<img src="/img/icons/fulltime-clock.png" class="img-responsive center-block" />
-				<p>Tiempo Completo</p>
-				<p>Para empleados que laboran más de 20 días al mes</p>
-			</div>
-		</div>
-	</div>
-	<div class="row-fluid" style="background-color: #efefef">
-		<div class="container">
-			<div class="row" id="precios">
-				<div class="col-md-4 text-center">
-					hasta<br />
-					<span class="big">$15.000</span><br />
-					por empleado
-				</div>
-				<div class="col-md-4 text-center">
-					hasta<br />
-					<span class="big">$20.000</span><br />
-					por empleado
-				</div>
-				<div class="col-md-4 text-center">
-					hasta<br />
-					<span class="big">$25.000</span><br />
-					por empleado
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Services block -->
-	<div class="container" style="margin-top: 30px;">
-		<div class="col-md-12">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="row">
-								<p class="text-center">
-									Después del tercer empleado obtiene el 10% de descuento.
-								</p>
-								<p class="text-center">
-									¿No está convencido? Calcule el valor total del servicio de acuerdo a su caso indicando la cantidad de empleados por cada modalidad de contrato:
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12 services-bar-container">
-							<div class="row">
-								<div class="col-md-12 services-bar-item">
-									<div class="row">
-										<div class="col-md-4 clearfix">
-											<i class="fa fa-calendar fa-3x" style="display: block; float: right; color: #00cdcc; margin-left: 15px;"></i>
-											<p style="display: block; float:right;" class="text-right">Tiempo Parcial<br /> trabaja(n) 1 a 10 días al mes</p>
-										</div>
-										<div class="col-md-6 clearfix">
-											<!-- Activate Simple Slider on your input -->
-											<input class="display-none ez-slider" type="text"  value="0">
-											<input class="price" type="hidden" value="15000">
-											<div class="pasos">
-													<a href="#" value="0">0</a>
-													<a href="#" value="1">1</a>
-													<a href="#" value="2">2</a>
-													<a href="#" value="3">3</a>
-													<a href="#" value="4">4</a>
-													<a href="#" value="5">5</a>
-												</div>
-										</div>
-										<div class="col-md-2 text-center clearfix">
-											<i class="fa fa-users fa-2x" style="color: #00CDCC;"></i><br />empleados
-										</div>
-									</div>
-								</div>
-								<div class="col-md-12 services-bar-item">
-									<div class="row">
-										<div class="col-md-4 clearfix">
-											<i class="fa fa-calendar fa-3x" style="display: block; float: right; color: #00cdcc; margin-left: 15px;"></i>
-											<p style="display: block; float:right;" class="text-right">Medio Tiempo<br /> trabaja(n) 11 a 19 días al mes</p>
-										</div>
-										<div class="col-md-6 clearfix">
-											<!-- Activate Simple Slider on your input -->
-											<input class="display-none ez-slider" type="text"  value="0">
-											<input class="price" type="hidden" value="20000">
-											<div class="pasos">
-													<a href="#" value="0">0</a>
-													<a href="#" value="1">1</a>
-													<a href="#" value="2">2</a>
-													<a href="#" value="3">3</a>
-													<a href="#" value="4">4</a>
-													<a href="#" value="5">5</a>
-												</div>
-										</div>
-										<div class="col-md-2 text-center clearfix">
-											<i class="fa fa-users fa-2x" style="color: #00CDCC;"></i><br />empleados
-										</div>
-									</div>
-								</div>
-								<div class="col-md-12 services-bar-item">
-									<div class="row">
-										<div class="col-md-4 clearfix">
-											<i class="fa fa-calendar fa-3x" style="display: block; float: right; color: #00cdcc; margin-left: 15px;"></i>
-											<p style="display: block; float:right;" class="text-right">Tiempo Completo<br /> trabaja(n) más de 20 días al mes</p>
-										</div>
-										<div class="col-md-6 clearfix">
-											<!-- Activate Simple Slider on your input -->
-											<input class="display-none ez-slider" type="text"  value="0">
-											<input class="price" type="hidden" value="25000">
-											<div class="pasos">
-													<a href="#" value="0">0</a>
-													<a href="#" value="1">1</a>
-													<a href="#" value="2">2</a>
-													<a href="#" value="3">3</a>
-													<a href="#" value="4">4</a>
-													<a href="#" value="5">5</a>
-												</div>
-										</div>
-										<div class="col-md-2 text-center clearfix">
-											<i class="fa fa-users fa-2x" style="color: #00CDCC;"></i><br />empleados
-										</div>
-									</div>
-								</div>	
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row-fluid" id="valor-mensual">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-9 titulo">
-					<i class="fa fa-money fa-3x"></i>  <span>El valor mensual del servicio para su caso es</span>
-				</div>
-				<div class="col-md-3 text-center">
-					<span class="valor" id="valorTotalSym">$0</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row-fluid" style="border-bottom: 1px solid #ccc;">
-		<div class="row">
-			<div class="col-xs-12 text-center" style="margin-top: 40px; margin-bottom: 40px;">
-				<a class="btn btn-symplifica" href="">Regísrese ya y obtenga 1 mes gratis</a>
-			</div>
-		</div>
-	</div>
-	<!-- multiple comments block -->
-	<div class="bg-lightGray">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12 multiple-comments-block">
-					<div class="row">
-						<!-- multiple comments block item -->
-						<div class="col-md-8 multiple-comments-block-item border-right-lightGray col-md-push-2">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="row">
-										<img src="/img/thumbnail.png">
-									</div>
-								</div>
-								<div class="col-md-9">
-									<div class="row">
-										<div class="padding-left padding-right">
-											<p>
-												<b class="text-lightBlue">"</b>
-												Ahora no tengo que estar pendiente de cuándo debo realizar el pago a mi empleada, <span class="text-lightBlue">Symplifica</span> me avisa con días de antelación
-												<b class="text-lightBlue">"</b>
-											</p>
-											<p>
-												<span>Marta Liliana Suárez</span>
-												<br/>
-												<span>Madre y esposa</span>
-											</p>
-										</div>
-									</div>
-								</div>	
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+<section id="middleBannerPrice" class="txtC">
+            <div class="blockTem">
+                <h3>Soluciona mes a mes</h3>
+                <span>todo en un solo lugar</span>
+                <a href="#" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
+            </div>
+        </section>
+        <section id="timerBlock" class="txtC">
+            <div class="container">
+                <div class="iconsB col-md-12 col-xs-12">
+                    <div class="col-md-4 col-xs-12">
+                        <span class="icon-g1"></span>
+                        <h3>Tiempo parcial</h3>
+                        <span>Para empleados que laboran de 1 a 10 días al mes</span>
+                        <p></p>
+                        <div class="boxValue">
+                            <span><em>hasta</em></span>
+                            <span class="big">$15.000</span>
+                            <p>Por empleado</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <span class="icon-g2"></span>
+                        <h3>Medio tiempo</h3>
+                        <span>Para empleados que laboran de 11 a 19 días al mes</span>
+                        <p></p>
+                        <div class="boxValue">
+                            <span><em>hasta</em></span>
+                            <span class="big">$15.000</span>
+                            <p>Por empleado</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <span class="icon-g3"></span>
+                        <h3>Tiempo completo</h3>
+                        <span>Para empleados que laboran más de 20 días al mes</span>
+                        <p></p>
+                        <div class="boxValue">
+                            <span><em>hasta</em></span>
+                            <span class="big">$15.000</span>
+                            <p>Por empleado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="destaquedMsg" class="txtC">
+            <div class="container">
+                <span>La tranquilidad de hacer</span>
+                <span><strong>las cosas bien por muy poco</strong></span>
+            </div>
+        </section>
+        <section id="calculateBlock" class="txtC">
+            <div class="container">
+                <h2>Calcula el valor mensual del servicio de acuerdo al número y tipo de </br>empleados que quieras administrar</h2>
+                <div class="iconsC col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+                    <div class="col-md-3 col-xs-8">
+                        <span>Tiempo parcial</br><em>1 - 2 días/semana</em></span>
+                        <div class="lineDown"><p></p></div>
+                    </div>
+                    <div class="col-md-3 col-xs-8">
+                        <span>Tiempo parcial</br><em>3 - 4 días/semana</em></span>
+                        <div class="lineDown"><p></p></div>
+                    </div>
+                    <div class="col-md-3 col-xs-8">
+                        <span>Tiempo completo</br><em>tiempo completo</em></span>
+                        <div class="lineDown"><p></p></div>
+                    </div>
+                </div>
+                <div class="infoResult col-md-8 col-md-offset-2 col-xs-12">
+                    <span class="R1">El valor mensual del servicio</span>
+                    <span class="R2"><em>para tu caso es:</em></span>
+                    <span class="R3"><strong>3</strong> <em>empleados</em> <strong>= $25.000</strong></span>
+                    <p><em>Después del tercer empleado obtén el 10% de descuento.</em></p>
+                </div>
+            </div>
+        </section>
 {% endblock %}

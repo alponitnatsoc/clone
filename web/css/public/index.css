@@ -1,0 +1,373 @@
+body {
+  color: #444242 !important;
+}
+.txtL {
+  text-align: left;
+}
+.txtC {
+  text-align: center;
+}
+.txtR {
+  text-align: right;
+}
+[class^="icon-"],
+[class*="icon-"] {
+  background: url("../../img/sprite.png") no-repeat;
+  display: inline-block;
+  vertical-align: text-top;
+}
+#bannerPpal {
+  position: relative;
+  overflow: hidden;
+}
+#bannerPpal .boxBanner {
+  position: absolute;
+  display: table;
+  background-color: #29292c;
+  top: 20%;
+  left: 22%;
+  font-size: 22px;
+  color: #ffffff;
+  font-weight: 100;
+  padding: 15px;
+}
+#bannerPpal .boxBanner em {
+  font-size: 16px;
+}
+#bannerPpal .buttonBanner {
+  position: absolute;
+  top: 63%;
+  left: 22%;
+  padding-left: 0px;
+}
+#bannerPpal .buttonBanner .btn.btn-registro.an1 {
+  border-radius: 15px 0px 0px 15px;
+  border: 1px solid #FF9421;
+}
+#bannerPpal .buttonBanner .btn.btn-registro.an2 {
+  border-radius: 0px 15px 15px 0px;
+  background-color: #fff;
+  border: 1px solid #e59233;
+  color: #e59233;
+}
+#bannerPpal .buttonBanner .btn.btn-registro.an2 i {
+  font-size: 20px;
+  vertical-align: top;
+}
+#iconsHead h2 {
+  font-size: 20px;
+  font-weight: 100;
+}
+#iconsHead ul {
+  padding-left: 0px;
+  margin: 20px 0px;
+}
+#iconsHead ul li {
+  list-style: none;
+  display: inline-block;
+  width: 15%;
+  border: 0px solid #000;
+  vertical-align: top;
+  margin: 0px 5px;
+}
+#iconsHead ul li span {
+  font-size: 12px;
+  font-weight: 100;
+  display: block;
+  margin: 10px 0px;
+  height: 55px;
+}
+#iconsHead ul li .btn.btn-more-min {
+  display: inline;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 5px;
+  color: #47828a;
+  border: 1px solid #aaa9af;
+  font-size: 10px;
+  padding: 3px 8px;
+}
+#iconsHead ul li .btn.btn-more-min:hover {
+  background-color: #aaa9af;
+  color: #ffffff;
+}
+#iconsHead .icon-h1 {
+  background-position: -6px -391px;
+  width: 76px;
+  height: 76px;
+  margin: 10px auto;
+}
+#iconsHead .icon-h2 {
+  background-position: -89px -391px;
+  width: 74px;
+  height: 77px;
+  margin: 10px auto;
+}
+#iconsHead .icon-h3 {
+  background-position: -173px -392px;
+  width: 74px;
+  height: 76px;
+  margin: 10px auto;
+}
+#iconsHead .icon-h4 {
+  background-position: -256px -392px;
+  width: 74px;
+  height: 76px;
+  margin: 10px auto;
+}
+#iconsHead .icon-h5 {
+  background-position: -340px -392px;
+  width: 74px;
+  height: 76px;
+  margin: 10px auto;
+}
+#middleBanner {
+  background-image: url(/img/home/bannerMiddle.png);
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+#middleBanner .blockTem {
+  padding: 40px 0px;
+}
+#middleBanner .blockTem i {
+  font-size: 70px;
+  color: #ffffff;
+}
+#middleBanner .blockTem h3 {
+  font-weight: 800;
+  font-size: 18px;
+  color: #e59233;
+}
+#middleBanner .blockTem span {
+  font-weight: 100;
+  font-size: 16px;
+  color: #ffffff;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+#middleBanner .blockTem .btn-registro.an3 {
+  background: #ffffff;
+  border: 1px solid #FF9421;
+  color: #FF9421;
+}
+#destaquedMsg {
+  background-color: #EDEEF0;
+  height: auto;
+  padding: 30px;
+}
+#destaquedMsg span {
+  font-size: 18px;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  font-weight: 100;
+}
+#opinionBlock {
+  background-color: #f7f7f7;
+  height: auto;
+  padding: 20px;
+}
+#opinionBlock h2 {
+  font-size: 20px;
+  font-weight: 100;
+}
+#opinionBlock img {
+  margin: 15px auto;
+  border-radius: 50%;
+}
+#opinionBlock span {
+  margin: 10px 10%;
+  display: block;
+  overflow: hidden;
+  font-weight: 100;
+}
+.iconsB {
+  margin: 20px 0px;
+}
+#calculateBlock {
+  height: auto;
+  padding: 20px;
+}
+#calculateBlock h2 {
+  font-size: 20px;
+  font-weight: 100;
+}
+#calculateBlock .iconsC span {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  font-weight: 600;
+}
+#calculateBlock .iconsC span em {
+  font-weight: 100;
+}
+#calculateBlock .iconsC div {
+  margin: 15px 30px;
+  border: 1px solid #cbcbce;
+  border-radius: 6px;
+  padding: 15px;
+}
+#calculateBlock .iconsC div .lineDown {
+  width: 6px;
+  height: 140px;
+  background: #e05f5a;
+  margin: 20px 50%;
+  border: none;
+  padding: 0px;
+  border-radius: 2px;
+  position: relative;
+}
+#calculateBlock .iconsC div .lineDown p {
+  border: 1px solid #e05f5a;
+  background: #ffffff;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 30px;
+  left: -4px;
+  border-radius: 50%;
+}
+#calculateBlock .infoResult span {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+#calculateBlock .infoResult span.R1 {
+  font-weight: 100;
+  font-size: 18px;
+}
+#calculateBlock .infoResult span.R2 {
+  font-weight: 600;
+  font-size: 20px;
+}
+#calculateBlock .infoResult span.R3 {
+  padding: 10px;
+  background: #71cbc9;
+  color: #ffffff;
+  border-radius: 5px;
+  margin: 20px auto;
+  font-size: 24px;
+  width: 45%;
+}
+#calculateBlock .infoResult span.R3 strong {
+  font-size: 28px;
+  font-weight: 800;
+}
+#calculateBlock .infoResult p {
+  font-size: 16px;
+}
+#bannerDown {
+  background-image: url(/img/home/bannerDown.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+}
+#bannerDown .blockItem {
+  margin: 60px 0px;
+}
+#bannerDown .blockItem .boxInfo {
+  background: #424c5a;
+  color: #ffffff;
+  padding: 15px 25px;
+  margin: 60px 0px;
+}
+#bannerDown .blockItem .boxInfo h4 {
+  font-size: 14px;
+  font-style: italic;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+#bannerDown .blockItem .boxInfo span {
+  font-weight: 100;
+  font-size: 14px;
+}
+#boxFeatures {
+  padding: 30px;
+}
+#boxFeatures h3 {
+  font-weight: 100;
+  font-size: 32px;
+  margin-bottom: 25px;
+}
+#boxFeatures ul {
+  padding-left: 0px;
+}
+#boxFeatures ul li {
+  font-size: 16px;
+  margin: 5px 0px;
+  list-style: none;
+  float: left;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+#boxFeatures span {
+  background: #e59233;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  border-radius: 50%;
+  padding: 5px 10px;
+  float: left;
+  margin-right: 20px;
+  font-weight: 800;
+}
+#boxFeatures p {
+  float: left;
+}
+#boxFeatures img {
+  display: initial;
+}
+@media only screen and (max-device-width: 360px) {
+  section {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  #iconsHead ul li {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  #calculateBlock .iconsC div {
+    margin: 15px 0px 15px 16%;
+  }
+  #calculateBlock .infoResult span.R3 {
+    width: 100%;
+    font-size: 18px;
+  }
+  #bannerDown {
+    background-image: url(/img/home/bannerDownResp.png);
+  }
+  #bannerDown .blockItem {
+    margin: 10px 0px;
+  }
+  .blockItem {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .blockItem .boxInfo {
+    margin: 20px 0px !important;
+  }
+  #boxFeatures p {
+    width: 80%;
+    font-size: 14px;
+  }
+  #bannerPpal .boxBanner {
+    position: relative;
+    left: 0%;
+    font-size: 16px;
+    text-align: center;
+    padding-bottom: 50px;
+  }
+  #bannerPpal .buttonBanner {
+    position: relative;
+    display: block;
+    left: 10%;
+    margin-top: -35px;
+  }
+}

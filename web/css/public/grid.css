@@ -1,0 +1,75 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*  SECTIONS  ============================================================================= */
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+/*  GROUPING  ============================================================================= */
+
+
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+/*  GRID COLUMN SETUP   ==================================================================== */
+
+.col {
+	display: block;
+	float:left;
+	margin: 1% 0 1% 1.6%;
+	
+}
+
+.col:first-child { margin-left: 0; } /* all browsers except IE6 and lower */
+
+
+/*3 columnas*/
+
+.span_3_of_3 {
+	width: 100%; 
+}
+
+.span_2_of_3 {
+	width: 66.13%; 
+}
+
+.span_1_of_3 {
+	width: 32.26%; 
+}
+
+/*2 columnas*/
+
+.span_2_of_2 {
+	width: 100%;
+}
+
+.span_1_of_2 {
+	width: 49.2%;
+}
+
+/*responsive*/
+
+@media screen and (max-width: 1024px) {
+	.span_1_of_3, .span_1_of_2 {
+	width: 100%; 
+}
+
+	 .col {margin: 2% 0 0% 0%;}
+	
+	}
+
+
+

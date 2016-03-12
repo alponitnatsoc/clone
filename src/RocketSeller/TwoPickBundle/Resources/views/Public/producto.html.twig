@@ -1,0 +1,115 @@
+{% extends "::new-design/public.html.twig" %}
+
+{% block body %}
+<div id="banner">
+      <div id="banner-txt">
+          <h2 class="azul-medio">Somos la herramienta</h2>
+            <h3 class="azul-fuerte">que estabas buscando</h3>
+            <p>Disminuya los riesgos y haga una gestión de sus empleados<br>de forma eficiente y fácil</p>
+            <div class="btn btn-registro big margin"><em>¿Ya te registraste?</em></div>
+        </div>
+    </div>
+    
+    <section>
+            <div class="mensaje gris">
+              <h1>¿Por qué symplifica?</h1>
+                <p>Beneficios pensados para pequeñas empresas o personas</p>
+            </div>
+            
+            <div class="wall">
+            
+                <div class="contenedor">
+                    <div class="section group">
+                        <div class="info-product col span_1_of_3">
+                          <img src="img/productos/icono1.png">
+                          <h1 class="gris">Contrato personalizado</h1><br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.
+
+Morbi eget lacinia diam. Donec elit sem, scelerisque sit amet tempus sit amet, sagittis a nisi Aliquam malesuada velit nec velit tempus elementum sed eu dui.
+                        </div>
+                        <div class="info-product col span_1_of_3">
+                          <img src="img/productos/icono2.png">
+                          <h1 class="gris">Contratación guiada</h1><br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.
+
+Morbi eget lacinia diam. Donec elit sem, scelerisque sit amet tempus sit amet, sagittis a nisi Aliquam malesuada velit nec velit tempus elementum sed eu dui.
+                        </div>
+                        <div class="info-product col span_1_of_3">
+                          <img src="img/productos/icono3.png">
+                          <h1 class="gris">Afiliación sencilla</h1><br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.
+
+Morbi eget lacinia diam. Donec elit sem, scelerisque sit amet tempus sit amet, sagittis a nisi Aliquam malesuada velit nec velit tempus elementum sed eu dui.
+                        </div>
+                   </div>
+                   
+                   <div class="section group">
+                        <div class="info-product col span_1_of_2">
+                          <img src="img/productos/icono4.png">
+                          <h1 class="gris">Pago de nomina online</h1><br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.
+
+Morbi eget lacinia diam. Donec elit sem, scelerisque sit amet tempus sit amet, sagittis a nisi Aliquam malesuada velit nec velit tempus elementum sed eu dui.
+                        </div>
+                        <div class="info-product col span_1_of_2">
+                          <img src="img/productos/icono5.png">
+                          <h1 class="gris">Historial de documentos</h1><br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.
+
+Morbi eget lacinia diam. Donec elit sem, scelerisque sit amet tempus sit amet, sagittis a nisi Aliquam malesuada velit nec velit tempus elementum sed eu dui.
+                        </div>
+                   </div>
+                   
+                </div>
+          </div>
+    </section>
+
+    <section id="sliderBlock" class="gris">
+        <div class="mensaje">
+              <h1>Multiples tareas a solo un<br>click de distancia</h1>
+            </div>
+        
+            <div id="slide-show">
+              <div id="slide">
+                  <div class="flexslider">
+                      <ul class="slides">
+                        <li>
+                            <img src="img/productos/slide1.png" />
+                            </li>
+                            <li>
+                            <img src="img/productos/slide1.png" />
+                            </li>
+                            <li>
+                            <img src="img/productos/slide1.png" />
+                            </li>
+                            <li>
+                            <img src="img/productos/slide1.png" />
+                            </li>
+                      </ul>
+                    </div>
+                </div>
+                <div id="slide-text">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ex pulvinar, malesuada ante sed, commodo mi. Integer ac eros quis enim pellentesque mattis non.</p>
+                </div>
+                <a href="" class="btn btn-registro big txtC"><em>Prueba un mes gratis</em></a>
+            </div>
+    </section>
+    
+    
+  <!-- jQuery -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+  <!-- FlexSlider -->
+  <script defer src="js/jquery.flexslider.js"></script>
+
+  <script type="text/javascript">
+    $(window).load(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+      });
+    });
+  </script>
+{% endblock %}
