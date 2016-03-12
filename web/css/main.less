@@ -1039,16 +1039,20 @@ table.record_properties {
     color: @dark_blue; 
     border-radius: 0;
     font-weight: 700;
+    text-align: center;
+    pointer-events: none;
 }
 .nav-tabs.nav-justified > li:first-child a {
     background-color: transparent;
     margin: 0 15px 0 0;
     border-radius: 0;
+    pointer-events: none;
 }
 .nav-tabs.nav-justified > li:last-child a {
     background-color: transparent;
     margin: 0 0 0 0;
     border-radius: 0;
+    pointer-events: none;
 }
 .nav-tabs.nav-justified > li,
 .nav-tabs.nav-justified > li > a {
@@ -1060,9 +1064,14 @@ table.record_properties {
     border-radius: 0;
     font-weight: 300;
     text-align: center;
+    pointer-events: none;
 }
 .nav-tabs.nav-justified > li > a:hover {
     background-color: transparent;
+}
+
+.tabsEnabled {
+    pointer-events: initial !important;   
 }
 .form-horizontal {
     .spacing {
@@ -1884,3 +1893,8 @@ select {
 .btn {
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
+
+.ui-helper-hidden-accessible { display:none; }
+
+
+.ui-autocomplete{position:absolute;top:100%;left:0;z-index:1000;float:left;display:none;min-width:160px;padding:4px 0;margin:2px 0 0;list-style:none;background-color:#fff;border-color:#ccc;border-color:rgba(0,0,0,.2);border-style:solid;border-width:1px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 5px 10px rgba(0,0,0,.2);-moz-box-shadow:0 5px 10px rgba(0,0,0,.2);box-shadow:0 5px 10px rgba(0,0,0,.2);-webkit-background-clip:padding-box;-moz-background-clip:padding;background-clip:padding-box}

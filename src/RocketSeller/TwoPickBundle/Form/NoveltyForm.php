@@ -2,7 +2,6 @@
 
 namespace RocketSeller\TwoPickBundle\Form;
 
-use DateTime;
 use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Form\DocumentPick;
 use RocketSeller\TwoPickBundle\Entity\NoveltyTypeFields;
@@ -21,13 +20,10 @@ class NoveltyForm extends AbstractType
     private $fields;
     private $hasDocuments;
     private $url;
-    private $today;
     function __construct($fields,$hasDocuments,$url=null){
         $this->url=$url;
         $this->fields=$fields;
         $this->hasDocuments=$hasDocuments;
-        $this->today= new DateTime();
-        $this->today->setDate($this->today->format("Y"),$this->today->format("m"),1);
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -67,17 +63,6 @@ class NoveltyForm extends AbstractType
                         ->add($field->getColumnName(), $field->getDataType(), array(
                             'label' => $field->getName(),
                             'currency' => 'COP',
-                            'required' => false
-                        ));
-                }
-                elseif($field->getDataType()=='date'){
-                    $builder
-                        ->add($field->getColumnName(), $field->getDataType(), array(
-                            'label' => $field->getName(),
-                            'widget' => 'single_text',
-                            'attr' => array(
-                                'min' => $this->today->format("Y-m-d")
-                            ),
                             'required' => false
                         ));
                 }else{

@@ -225,7 +225,8 @@ function startAfiliation() {
                     var results = $.ui.autocomplete.filter(dataArl, request.term);
 
                     response(results.slice(0, 5));
-                },                minLength: 0,
+                },
+                minLength: 0,
                 select: function(event, ui) {
                     event.preventDefault();
                     autoTo.val(ui.item.label);
