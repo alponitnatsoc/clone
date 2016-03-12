@@ -1,0 +1,394 @@
+@import (reference) "bootstrap-variables.less";
+@import (reference) "variables.less";
+
+body {
+    color: @body !important;
+}
+.txtL {
+    text-align: left;
+}
+.txtC {
+    text-align: center;
+}
+.txtR {
+    text-align: right;
+}
+[class^="icon-"], [class*="icon-"]{
+    background: url(@sprite) no-repeat;
+    display: inline-block;
+    vertical-align: text-top;
+}
+#bannerPpal {
+    position: relative;
+    overflow: hidden;
+    .boxBanner {
+        position: absolute;
+        display: table;
+        background-color: @boxDark;
+        top: 20%;
+        left: 22%;
+        font-size: 22px;
+        color: @txtWhite;
+        font-weight: @light;
+        padding: 15px;
+        em {
+            font-size: 16px;
+        }
+    }
+    .buttonBanner {
+        position: absolute;
+        top: 63%;
+        left: 22%;
+        padding-left: 0px;
+        .btn.btn-registro.an1 {
+            border-radius: 15px 0px 0px 15px;
+            border: 1px solid @btn-orange-color;
+        }
+        .btn.btn-registro.an2 {
+            border-radius: 0px 15px 15px 0px;
+            background-color: #fff;
+            border: 1px solid @orange;
+            color: @orange;
+            i {
+                font-size: 20px;
+                vertical-align: top;
+            }
+        }
+    }
+}
+#iconsHead {
+    h2 {
+        font-size: 20px;
+        font-weight: @light;
+    }
+    ul {
+        padding-left: 0px;
+        margin: 20px 0px;
+    }
+    ul li {
+        list-style: none;
+        display: inline-block;
+        width: 15%;
+        border: 0px solid #000;
+        vertical-align: top;
+        margin: 0px 5px;
+        span {
+            font-size: 12px;
+            font-weight: @light;
+            display: block;
+            margin: 10px 0px;
+            height: 55px;
+        }
+        .btn.btn-more-min {
+            display: inline;
+            width: 100%;
+            background-color: transparent;
+            border-radius: 5px;
+            color: @btn-more;
+            border: 1px solid #aaa9af;
+            font-size: 10px;
+            padding: 3px 8px;
+            &:hover {
+                background-color: #aaa9af;
+                color: @txtWhite;
+            }
+        }
+    }
+    .icon-h1 {
+        background-position: -6px -391px;
+        width: 76px;
+        height: 76px;
+        margin: 10px auto;
+        }
+    .icon-h2 {
+        background-position: -89px -391px;
+        width: 74px;
+        height: 77px;
+        margin: 10px auto;
+        }
+    .icon-h3 {
+        background-position: -173px -392px;
+        width: 74px;
+        height: 76px;
+        margin: 10px auto;
+        }
+    .icon-h4 {
+        background-position: -256px -392px;
+        width: 74px;
+        height: 76px;
+        margin: 10px auto;
+        }
+    .icon-h5 {
+        background-position: -340px -392px;
+        width: 74px;
+        height: 76px;
+        margin: 10px auto;
+        }
+}
+#middleBanner {
+    background-image: url(/img/home/bannerMiddle.png);
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    .blockTem {
+        padding: 40px 0px;
+        i {
+            font-size: 70px;
+            color: @txtWhite;
+        }
+        h3 {
+            font-weight: @extrabold;
+            font-size: 18px;
+            color: @orange;
+        }
+        span {
+            font-weight: @light;
+            font-size: 16px;
+            color: @txtWhite;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 30px; 
+        }
+        .btn-registro.an3 {
+            background: @txtWhite;
+            border: 1px solid @btn-orange-color;
+            color: @btn-orange-color;
+        }
+    }
+}
+#destaquedMsg {
+    background-color: @topbar-color;
+    height: auto;
+    padding: 30px;
+    span {
+        font-size: 18px;
+        display: block;width: 100%;
+        overflow: hidden;
+        font-weight: @light;
+    }
+}
+#opinionBlock {
+    background-color: @topmid-color;
+    height: auto;
+    padding: 20px;
+    h2 {
+        font-size: 20px;
+        font-weight: @light;
+    }
+    img {
+        margin: 15px auto;
+        border-radius: 50%;
+    }
+    span {
+        margin: 10px 10%;
+        display: block;
+        overflow: hidden;
+        font-weight: @light;
+    }
+}
+.iconsB {
+    margin: 20px 0px;
+}
+#calculateBlock {
+    height: auto;
+    padding: 20px;
+    h2 {
+        font-size: 20px;
+        font-weight: @light;
+    }
+    .iconsC {
+        span {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        font-weight: @semibold;
+        em {
+           font-weight: @light; 
+            }
+        }
+        div {
+        margin: 15px 30px;
+        border: 1px solid #cbcbce;
+        border-radius: 6px;
+        padding: 15px;
+            .lineDown {
+                width: 6px;
+                height: 140px;
+                background: @linecalcule;
+                margin: 20px 50%;
+                border: none;
+                padding: 0px;
+                border-radius: 2px;
+                position: relative;
+                p {
+                    border: 1px solid @linecalcule;
+                    background: @txtWhite;
+                    width: 15px;
+                    height: 15px;
+                    position: absolute;
+                    top: 30px;
+                    left: -4px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+    .infoResult {
+        span {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+        }
+        span.R1 {
+            font-weight: @light;
+            font-size: 18px;
+        }
+        span.R2 {
+            font-weight: @semibold;
+            font-size: 20px;
+        }
+        span.R3 {
+            padding: 10px;
+            background: @blue;
+            color: @txtWhite;
+            border-radius: 5px;
+            margin: 20px auto;
+            font-size: 24px;
+            width: 45%;
+            strong {
+                font-size: 28px;
+                font-weight: @extrabold;
+            }
+        }
+        p {
+            font-size: 16px;
+        }
+    }
+}
+#bannerDown {
+    background-image: url(/img/home/bannerDown.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    .blockItem {
+        margin: 60px 0px;
+        .boxInfo {
+            background: @green;
+            color: @txtWhite;
+            padding: 15px 25px;
+            margin: 60px 0px;
+            h4 {
+                font-size: 14px;
+                font-style: italic;
+                text-transform: uppercase;
+                font-weight: @semibold;
+            }
+            span {
+                font-weight: @light;
+                font-size: 14px;
+            }
+        }
+    }
+}
+#boxFeatures {
+    padding: 30px;
+    h3 {
+        font-weight: @light;
+        font-size: 32px;
+        margin-bottom: 25px;
+    }
+    ul {
+        padding-left: 0px;
+    }
+    ul li {
+        font-size: 16px;
+        margin: 5px 0px;
+        list-style: none;
+        float: left;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+    }
+    span {
+        background: @orange;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        color: @txtWhite;
+        font-size: 14px;
+        border-radius: 50%; 
+        padding: 5px 10px;
+        float: left;
+        margin-right: 20px;
+        font-weight: @extrabold;
+    }
+    p {
+        float: left;
+    }
+    img {
+        display: initial;
+    }
+}
+@media only screen and (max-device-width : 360px) { 
+
+    section {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    #iconsHead {
+        ul li {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+    #calculateBlock {
+        .iconsC {
+            div {
+                margin: 15px 0px 15px 16%;
+            }
+        }
+        .infoResult {
+            span.R3 {
+                width: 100%;
+                font-size: 18px;
+            }
+        }
+    }
+    #bannerDown {
+        background-image: url(/img/home/bannerDownResp.png);
+        .blockItem {
+            margin: 10px 0px;
+        }
+    }
+    .blockItem {
+        padding-left: 0px;
+        padding-right: 0px;
+        .boxInfo {
+            margin: 20px 0px !important;
+        }
+    }
+    #boxFeatures {
+        p {
+            width: 80%;
+            font-size: 14px;
+        }
+    }
+    #bannerPpal {
+        .boxBanner {
+            position: relative;
+            left: 0%;
+            font-size: 16px;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+        .buttonBanner {
+            position: relative;
+            display: block;
+            left: 10%;
+            margin-top: -35px;
+        }
+    }
+
+}

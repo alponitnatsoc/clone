@@ -1,0 +1,95 @@
+#middleBannerAbout {
+  background-image: url(/img/nosotros/bannerMiddle.png);
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+#middleBannerAbout .blockTem {
+  padding: 40px 0px;
+}
+#middleBannerAbout .blockTem h3 {
+  font-weight: 800;
+  font-size: 24px;
+  color: #e59233;
+}
+#middleBannerAbout .blockTem span {
+  font-weight: 100;
+  font-size: 20px;
+  color: #ffffff;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+#infoContact .colInfo {
+  padding: 30px 0px;
+}
+#infoContact span {
+  float: left;
+  margin-right: 15px;
+  font-size: 22px;
+  font-weight: 100;
+}
+#infoContact span p,
+#infoContact span a {
+  font-style: italic;
+  font-size: 20px;
+  color: #444242;
+}
+#infoContact h2 {
+  font-size: 20px;
+  font-weight: 100;
+}
+#infoContact .icon-t1 {
+  background-position: -444px -298px;
+  width: 57px;
+  height: 57px;
+}
+#infoContact .icon-t2 {
+  background-position: -509px -298px;
+  width: 57px;
+  height: 57px;
+}
+#formContact {
+  background-color: #f7f7f7;
+  height: auto;
+  padding: 20px;
+}
+#formContact .btn.btn-default.send {
+  display: inline;
+  width: auto;
+  padding: 5px 35px;
+  background-color: #FF9421;
+  background-image: none;
+  border-radius: 0px;
+  color: #fff;
+  border: 0;
+}
+#formContact .btn.btn-default.send:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+#formContact .form-group label {
+  color: #89878c;
+  font-size: 18px;
+  font-weight: 100;
+  padding-left: 20px;
+}
+#formContact .form-group input,
+#formContact .form-group textarea {
+  border: none;
+  background: #e2e1d9;
+}
+@media only screen and (max-device-width: 360px) {
+  #infoContact span {
+    margin-right: 8px;
+    margin-bottom: 15px;
+  }
+  #infoContact span,
+  #infoContact p,
+  #infoContact a {
+    font-size: 16px !important;
+  }
+  #infoContact span:last-child {
+    margin-right: 0px;
+  }
+}

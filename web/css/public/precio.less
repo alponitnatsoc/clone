@@ -1,0 +1,91 @@
+@import (reference) "bootstrap-variables.less";
+@import (reference) "variables.less";
+
+#middleBannerPrice {
+    background-image: url(/img/precio/bannerMiddle.png);
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    .blockTem {
+        padding: 40px 0px;
+        h3 {
+            font-weight: @extrabold;
+            font-size: 24px;
+            color: @orange;
+        }
+        span {
+            font-weight: @light;
+            font-size: 20px;
+            color: @txtWhite;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 30px; 
+        }
+    }
+}
+#timerBlock {
+    padding: 20px 0px;
+    span {
+        display: block;
+        overflow: hidden;
+        font-weight: @light;
+        font-size: 16px;
+        padding: 0px 40px;
+    }
+    h3 {
+        font-weight: @light;
+        font-size: 23px;
+        font-style: italic;
+    }
+    .icon-g1 {
+        background-position: -8px -480px;
+        width: 77px;
+        height: 78px;
+        margin: 10px auto;
+        }
+    .icon-g2 {
+        background-position: -91px -480px;
+        width: 77px;
+        height: 78px;
+        margin: 10px auto;
+        }
+    .icon-g3 {
+        background-position: -173px -480px;
+        width: 77px;
+        height: 78px;
+        margin: 10px auto;
+        }
+    .boxValue {
+        background: @topbar-color;
+        padding: 5px 15px;
+        width: 50%;
+        margin: 15px auto;
+        span {
+            font-size: 14px;
+            font-weight: @semibold;
+            padding: 0px;
+        }
+        span.big {
+            font-size: 28px;
+            font-weight: @extrabold;
+            padding: 0px;
+        }
+        p {
+            font-weight: @light;
+            font-size: 15px;
+        }
+    }
+}
+@media only screen and (max-device-width : 360px) { 
+
+    #timerBlock {
+        span {
+            padding: 0px;
+        }
+        .boxValue {
+            width: 80%;
+        }
+    }
+
+}

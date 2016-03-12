@@ -1,0 +1,128 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.gris {
+  color: #87868a;
+}
+.azul-fuerte {
+  color: #424c5a;
+}
+.azul-medio {
+  color: #47828a;
+}
+.centrar {
+  margin: 0 auto;
+}
+#banner {
+  background: url(../../img/productos/banner.png) no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 310px;
+}
+#banner-txt {
+  margin: 0 auto;
+  width: 70%;
+  padding-top: 5%;
+}
+#banner-txt h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+#banner-txt h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  text-align: left;
+}
+#banner-txt h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 28px;
+  margin-top: 0px;
+}
+#banner-txt p {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 100;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+/*empieza la seccion de los produtos*/
+.mensaje {
+  text-align: center;
+  margin: 30px 0;
+}
+.mensaje h1 {
+  font-weight: 100;
+  font-size: 26px;
+}
+.mensaje p {
+  font-weight: 100;
+  font-size: 18px;
+  font-style: normal;
+}
+.contenedor {
+  width: 90%;
+  margin: 0 auto;
+}
+.wall {
+  background: url(../../img/productos/wall.png) no-repeat;
+  padding: 30px 0;
+  background-size: cover;
+  background-position: center;
+}
+.info-product {
+  height: auto;
+  background: #FFF;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #87868a;
+  padding: 30px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0px 3px 5px #888888;
+}
+.info-product h1 {
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 100;
+}
+#sliderBlock {
+  height: auto;
+  padding: 30px;
+}
+.margin {
+  margin-top: 15px;
+}
+/*empieza la seccion de slideshow*/
+#slide {
+  height: auto;
+  overflow: hidden;
+}
+#slide-show {
+  width: 70%;
+  height: auto;
+  margin: 0 auto;
+  text-align: center;
+}
+.calltoaction {
+  background: #e59233;
+  width: 220px;
+  height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  color: #FFF;
+  padding-top: 10px;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+#slide-text {
+  margin-bottom: 40px;
+}
+#slide-text p {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 100;
+}

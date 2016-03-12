@@ -1,37 +1,48 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
-<div class="container">
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="imagen-encabezado"></div>
-		</div>
-		<div class="col-sm-6 hidden-xs">
-			<div class="imagen-encabezado"></div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<h1>Contáctenos</h1>
-		</div>
-	</div>
-</div>
-<div class="row-fluid entradilla">
-	<div class="container">
-		<div class="col-xs-10" style="border: none;">
-			<i class="fa fa-thumbs-o-up fa-4x" style="display:block; float: left; margin-right: 30px; color: #00CDCC"></i>
-			<span style="display: block; float: left; width: 90%;">Somos una empresa convencida de la importancia de simplificar el manejo de los empleados conforme a la ley, disminuyendo riesgos y facilitando su gestión a procesos de un solo clic.</span>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<p>Somos una empresa convencida de la importancia de simplificar el manejo de los empleados conforme a la ley, disminuyendo riesgos y facilitando su gestión a procesos de un solo clic.</p>
-
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odiom.</p>
-
-			<p>Nulla facilisis ullamcorper ipsum, et laoreet augue dignissim vitae. Proin porttitor tellus urna, eget semper magna tempus sit amet. Pellentesque faucibus, neque ac venenatis gravida, nisi justo pretium sapien, vitae euismod velit tortor a nunc. Nam et nisi felis. Ut egestas ex ac velit tempor, eu condimentum purus scelerisque. Mauris ornare ac ex quis cursus. Vivamus ullamcorper nisi sed quam bibendum, et volutpat lorem pretium. Nam ac nulla ut lorem congue tempor.</p>
-		</div>
-	</div>
-</div>
+		<section id="middleBannerAbout" class="txtC">
+            <div class="blockTem">
+                <h3>Contactanos</h3>
+                <span>Symplifica te ayuda</span>
+                <a href="#" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
+            </div>
+        </section>
+        <section id="infoContact" class="txtC">
+            <div class="container">
+                <h2>Nos importan tus inquietudes</h2>
+                <div class="colInfo col-md-8 col-md-offset-2 txtL col-xs-12">
+                    <div class="col-md-6 col-xs-12">
+                        <span class="icon-t1"></span>
+                        <span>Llamanos </br><p><strong>350 856 7864</strong></p></span>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <span class="icon-t2"></span>
+                        <span>Escribenos </br><p><strong><a href="mailto:contacto@symplifica.com">contacto@symplifica.com</a></strong></p></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="formContact" class="txtL">
+            <div class="container">
+                <div class="col-md-6 col-md-offset-3 col-xs-12">
+                    <form>
+                        <div class="form-group">
+                            <label for="input_name">Nombre</label>
+                            <input type="text" class="form-control" id="input_name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_email">Email</label>
+                            <input type="email" class="form-control" id="input_email"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_message">Mensaje</label>
+                            <textarea type="text" class="form-control" id="input_message" rows="8"></textarea>
+                        </div>
+                        <div class="txtC">
+                            <button type="submit" class="btn btn-default send">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
 {% endblock %}

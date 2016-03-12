@@ -8,7 +8,7 @@
         </div>
     {% endfor %}
     <div class="col-sm-12 col-xs-12 align-Resp">
-        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="#">
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
                 <img src="/img/block-inline.png" class="center-block">                    
             </div>
@@ -18,7 +18,7 @@
                     Pago afiliación
                 </div>
             </div>
-        </a>
+        </div>
     </div>
     <div class="col-xs-12 text-center">
         {% set day = startDate|date("d") %}
@@ -50,7 +50,7 @@
                         {% set contrato = employeeData['contrato'] %}
                         {% set producto = employeeData['product'] %}
 
-                        <div class="col-md-4 employee text-center {{ employee.state>0 ?'activo':'inactivo' }}">
+                        <div class="col-md-4 col-sm-6 employee text-center {{ employee.state>0 ?'activo':'inactivo' }}">
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="employee_name">
@@ -69,7 +69,7 @@
                     {% endfor %}
 
                     <div class="col-md-4 col-sm-6 employee add" style="text-align: center">
-                        <div class="row">
+                        <div class="row-fluid">
                             <div class="col-xs-12">
                                 <a href="/register/employee" class="notAjax"><i class="fa fa-plus-circle fa-4x"></i><br />
                                     Agregar empleado</a>

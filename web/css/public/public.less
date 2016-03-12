@@ -1,5 +1,14 @@
 @import (reference) "bootstrap-variables.less";
 @import (reference) "variables.less";
+@import (css) "index.css";
+@import (css) "nosotros.css";
+@import (css) "preguntas.css";
+@import (css) "precio.css";
+@import (css) "contacto.css";
+@import (css) "producto.css";
+@import (css) "express.css";
+@import (css) "grid.css";
+@import (css) "flexslider.css";
 
 
 body, html {
@@ -31,7 +40,9 @@ body {
 			box-shadow: @btn-hover;
 		}
 	}
-
+	&.btn-registro.big {
+		font-size: 18px;
+	}
 	&.btn-symplifica {
 		text-transform: capitalize;
 	    background-color: @btn-orange-color;
@@ -80,7 +91,7 @@ nav {
 		a {
 			color: #9A999E;
 			font-weight: bold;
-			font-size: 15px;
+			font-size: 14px;
 		}
 		#navbar {
 			position: relative;
@@ -108,16 +119,11 @@ nav {
 					opacity: 1;
 					transition: max-height 0.25s ease-in, opacity 0.15s ease-in;
 				}
-
-				#errorLogin {
-					color: #f00;
-					display: none;
-				}
 			}
 		}
 	}
 	#menubar {
-		padding: 40px 0;
+		padding: 20px 0;
 
 		button {
 			margin: 0;
@@ -140,6 +146,7 @@ nav {
 			}
 			ul {
 				padding: 0;
+				margin: 5px 0px;
 				li {
 					text-transform: uppercase;
 					@media (min-width: @screen-md-min) {
@@ -225,5 +232,16 @@ footer {
 
 	&.twitter {
 		background-position: -56px 0;
+	}
+}
+@media only screen and (max-device-width : 360px) {
+
+	#topbar {
+		#navbar {
+			text-align: left !important;
+			.light {
+				display: none;
+			}
+		}
 	}
 }
