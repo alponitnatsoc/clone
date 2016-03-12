@@ -1001,7 +1001,7 @@ function calculator(){
     var htmlRes=jsonCalcToHTML(resposne);
     $("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
-    $("#totalExpensesVal").text(totalExpenses.toFixed(0));
+    $("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
 function checkDate (date){
