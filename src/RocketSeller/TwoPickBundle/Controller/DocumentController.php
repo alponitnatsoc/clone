@@ -103,6 +103,8 @@ class DocumentController extends Controller
 			$medias=$document->getMediaMedia();
 			/** @var Media $media */
 			foreach ($medias as $media) {
+								dump($media->getContentType());
+				exit();
 				$media->setBinaryContent($media);
 				$media->setName('documento');
 				$media->setProviderStatus(Media::STATUS_OK);
@@ -124,8 +126,14 @@ class DocumentController extends Controller
 			    'idNotification' => 0
 			));
 	}
-
+	//JPG,PNG,TIF, BMP, DOC,PDF
 	public function addDocAction($id,$idDocumentType,$idNotification,Request $request){
+		$fileTypePermitted = array(
+								'image/jpeg',
+								'image/png',
+								'application/pdf',
+								'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+								);
 		$em = $this->getDoctrine()->getManager();
 		$person = $this->getDoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Person')
@@ -136,7 +144,7 @@ class DocumentController extends Controller
 		$document=new Document();
 		$document->setPersonPerson($person);
 		$document->setStatus(1);
-		$document->setName('nombre');
+		$document->setName('Diferente');
 		$document->setDocumentTypeDocumentType($documentType);
 
 		$form = $this->createForm(new DocumentRegistration(),$document);
@@ -144,15 +152,21 @@ class DocumentController extends Controller
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
+			
+			if (in_array($document->getMediaMedia()->getContentType(),$fileTypePermitted)) {
+					
 			$medias=$document->getMediaMedia();
 			/** @var Media $media */
 			foreach ($medias as $media) {
+
 				$media->setBinaryContent($media);
 				$media->setName($document->getName());
 				$media->setProviderStatus(Media::STATUS_OK);
 				$media->setProviderReference($media->getBinaryContent());
 				$em->persist($media);
 				$em->flush();
+
+
 			}
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($document);
@@ -171,6 +185,11 @@ class DocumentController extends Controller
 			}else{
 				return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 			}
+				
+			}else{
+				throw new \Exception('Formato no valido.');
+			}
+
 			//return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 			//return $this->redirect('/pages?redirector=/matrix/choose');
 

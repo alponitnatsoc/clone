@@ -219,3 +219,44 @@
         {{ form_end(form) }}
     </div>
 {% endblock fos_user_content%}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $(".upload-link").on('click',function(event){
+                event.preventDefault();
+                var uri = $(this).attr("href");
+
+//                 alert(uri);
+                $.ajax({
+                     //method: "POST",
+                     url: uri,
+                     //(data: $('form[name="pago_membresia"]').serialize(),
+                     beforeSend: function (xhr) {
+
+                     }
+                 }).done(function (data) {
+                    //$("#modal-body").html(data);
+                    $('#modal-body').replaceWith($(data).find('#main'));
+                    $("#myModal").modal('show');
+                    var files;
+                    // Add events
+                    $('input[type=file]').on('change', prepareUpload);
+
+                    // Grab the files and set them to our variable
+                    function prepareUpload(event)
+                    {
+                      files = event.target.files;
+                    }
+                 }).fail(function (jqXHR, textStatus, errorThrown) {
+                     console.log(jqXHR);
+                     console.log(textStatus);
+                     console.log(errorThrown);
+                 });
+
+            });
+
+
+        });
+    </script>
+{% endblock javascripts %}
