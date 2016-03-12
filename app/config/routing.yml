@@ -374,6 +374,9 @@ subscription_pay:
 subscription_success:
     path:     /subscription/success
     defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionSuccess }
+subscription_error:
+    path:     /subscription/error
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionError }
 inactive_user:
     path: /suscripcion-inactiva
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionInactiva }
