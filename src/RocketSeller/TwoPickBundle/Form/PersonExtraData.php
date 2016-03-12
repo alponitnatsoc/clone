@@ -46,8 +46,10 @@ class PersonExtraData extends AbstractType
                 'required' => true
             ))
             ->add('documentExpeditionDate', 'date', array(
-                'data' => new DateTime('1975-01-01'),
-                'years' => range(1900,2015),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
+                'years' => range(2015,1900),
                 'label' => 'Fecha de expedición de documento de identidad*',
                 'required' => true
             ))

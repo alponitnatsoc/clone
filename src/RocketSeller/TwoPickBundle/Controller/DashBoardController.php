@@ -109,7 +109,7 @@ class DashBoardController extends Controller
             $steps ['1'] = $step2;
         }
         $step4 = array(
-            'url' => $stateRegister != 100 ? "" : $this->generateUrl('subscription_choices'),
+            'url' => $stateEmployees != 100 ? "" : $this->generateUrl('subscription_choices'),
             'name' => "Subscipción a Symplifica",
             'paso' => 3,
             'state' => $paymentState ? 100 : 0,
@@ -118,7 +118,7 @@ class DashBoardController extends Controller
         $steps ['3'] = $step4;
 
         $step5 = array(
-            'url' => $paymentState != 100 ? "" : $this->generateUrl('matrix_choose'),
+            'url' => $paymentState != 1 ? "" : $this->generateUrl('matrix_choose'),
             'name' => "Finalizar afiliación",
             'paso' => 4,
             'state' => $stateAfiliation,

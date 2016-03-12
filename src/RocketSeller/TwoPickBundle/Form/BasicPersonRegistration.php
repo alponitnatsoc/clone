@@ -60,8 +60,10 @@ class BasicPersonRegistration extends AbstractType
                 'required' => false
             ))
             ->add('birthDate', 'date', array(
-                'data' => new DateTime('1975-01-01'),
-                'years' => range(1900,2015),
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
+                'years' => range(2015,1900),
                 'constraints' => array(
                     new NotBlank()
                 ),'label' => 'Fecha de Nacimiento*'))

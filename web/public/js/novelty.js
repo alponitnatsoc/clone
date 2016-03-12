@@ -4,6 +4,13 @@
 function addNoveltySelectListener() {
     var modBody=$("#noveltyModal").find(".modal-body");
     var form=modBody.find("form");
+
+    $("#novelty_fields_date_start").on("change", function(){
+
+    });
+    $("#novelty_fields_date_end").on("change", function(){
+
+    });
     form.submit(function (e) {
         e.preventDefault();
         var value=form.find("input[name='form[noveltyType]']:checked").val();
@@ -12,6 +19,7 @@ function addNoveltySelectListener() {
             value="";
         }
         if(valueText ==" Vacaciones"){
+            //calculate days
             $("#novelty_fields_date_start")
         }
         $.ajax( {
