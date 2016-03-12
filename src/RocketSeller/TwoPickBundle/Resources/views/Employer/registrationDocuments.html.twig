@@ -165,12 +165,14 @@
                         {% for doc in employeeDocs if (doc.status) and  (documents[2] == doc.documentTypeDocumentType) %}
                                 <a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
                             {% else %}
+                            <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                                 <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                                    <i class="fa fa-upload"></i> Documento</a>
+                                    <i class="fa fa-upload"></i> Documento--</a>
                         {% endfor %}
                     {% else %}
+                    <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                         <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}"><i class="fa fa-upload"></i>
-                        Documento</a>
+                        Documento++</a>
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding">
