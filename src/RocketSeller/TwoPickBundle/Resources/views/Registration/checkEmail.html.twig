@@ -1,8 +1,30 @@
-{% extends "::base.html.twig" %}
+{% extends "::new-design/public.html.twig" %}
 
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block body %}
+
+<div id="postRegistrationContainer" class="row-fluid clearfix">
+
+    <div class="topBackgroundImage">
+        <h2>Revisa tu correo</h2>
+        <span>Estas cerca de poder disfrutar de la herramienta</span>
+    </div>
+    <div class="mainText">
+        <h3>Hemos enviado un correo electrónico <br />a la dirección ingresada</h3>
+        <span>Para finalizar el proceso de registro requerimos que confirmes tu <br />dirección haciendo click en el vinculo que se encuentra en el mensaje enviado.</span>
+    </div>
+    <div class="subText">
+        <h3>¡Gracias por contar con Symplifica!</h3>
+        <br />
+        <a class="btn btn-registro" href="/">&nbsp;&nbsp;Entendido&nbsp;&nbsp;</a>
+        <br />
+    </div>
+
+</div>    
+
+
+<!--
 	<div class="container block-Intro-green">
         <div class="container">
             <div class="col-sm-3 col-md-2">
@@ -26,4 +48,5 @@
 
    </div>
    <br /><br />
+-->
 {% endblock body %}
