@@ -35,14 +35,11 @@ class ResettingRestController extends FOSRestController
         $view = View::create();
 
         $username = $request->request->get('username');
-// var_dump($username);
+
         /** @var $user UserInterface */
         $user = $this->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
-// var_dump($user);
+
         if (null === $user) {
-//             return $this->render('FOSUserBundle:Resetting:request.html.twig', array(
-//                 'invalid_username' => $username
-//             ));
             $data = array(
                 "msj" => "Email incorrecto"
             );
@@ -53,7 +50,6 @@ class ResettingRestController extends FOSRestController
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
-//             return $this->render('FOSUserBundle:Resetting:passwordAlreadyRequested.html.twig');
             $data = array(
                 "msj" => "El password ya fue solicitado",
                 "ttl" => $this->container->getParameter('fos_user.resetting.token_ttl')
@@ -73,10 +69,6 @@ class ResettingRestController extends FOSRestController
         $tmp = $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
-
-//         return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
-//             array('email' => $this->getObfuscatedEmail($user))
-//         ));
 
         $data = array(
             "msj" => "Fue enviado un email al email " . $username . " para resetear la contraseña",

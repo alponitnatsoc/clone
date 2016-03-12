@@ -18,16 +18,15 @@ $("form.fos_user_resetting_request").on('submit', function(e) {
 
     var form = $("form.fos_user_resetting_request");
     var btn = form.find("#_submit").button('loading');
-//     alert(form.attr('action'));
     $.ajax({
         url : form.attr('action'),
         type: form.attr('method'),
         data: form.serialize()
     }).done(function( data ) {
         var div = form.parent("div");
-        div.html("<div class='col-sm-8 col-md-12 col-xs-12'>Hemos enviado un mensaje a tu dirección de correo electrónico con las instrucciones para reestablecer tu contraseña.</div>" +
-                "<div class='col-sm-12 col-xs-12 center'>" +
-                    '<a class="btn btn-default btn-orange" href="/login">Entendido</a>' +
+        div.html("<div class='form-group'>Hemos enviado un mensaje a tu dirección de correo electrónico con las instrucciones para reestablecer tu contraseña.</div>" +
+                "<div style='text-align: center'>" +
+                    '<a class="btn btn-symplifica" href="/">Entendido</a>' +
                 "</div>"
             );
         btn.button('complete');

@@ -84,8 +84,11 @@ class EmployerController extends Controller
                 ->findByPersonPerson($person);
         $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
                 ->findByEmployerEmployer($employer);
+        /** @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee $employerHasEmployee */
         foreach ($employerHasEmployees as $employerHasEmployee) {
-            array_push($employees, $employerHasEmployee->getEmployeeEmployee());
+            $emp = $employerHasEmployee->getEmployeeEmployee();
+            $emp->idContract = $employerHasEmployee->getContractByState(1);
+            array_push($employees, $emp);
         }
         array_push($documents, $em->getRepository('RocketSellerTwoPickBundle:DocumentType')
                         ->findByName('Cedula')[0]);
@@ -97,7 +100,13 @@ class EmployerController extends Controller
                         ->findByName('Carta autorización Symplifica')[0]);
         $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
         $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);
-        return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig', array('employer' => $person, 'documents' => $documents, 'employees' => $employees, 'documentsTypeByEmployee' => $documentsTypeByEmployee, 'documentsTypeByEmployer' => $documentsTypeByEmployer));
+        return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig', array(
+            'employer' => $person,
+            'documents' => $documents,
+            'employees' => $employees,
+            'documentsTypeByEmployee' => $documentsTypeByEmployee,
+            'documentsTypeByEmployer' => $documentsTypeByEmployer
+        ));
     }
 
     public function documentsTypeByEmployer($person)
@@ -275,7 +284,7 @@ class EmployerController extends Controller
                 array_push($result, $document->getDocumentTypeDocumentType());
             }
         }
-        //documentos que necesita por empleado         
+        //documentos que necesita por empleado
         $documentsPerEmployee = $this->fillArray($result, $entityByEmployee);
         //documentos que tiene por empleado
         $documentsByEmployee = $this->documentsTypeByEmployee($employees);
@@ -303,7 +312,7 @@ class EmployerController extends Controller
         return $documentsByEmployee;
     }
 
-    //se eliminan los documentos repetidos por empleado 
+    //se eliminan los documentos repetidos por empleado
     public function removeDuplicated($employeeDocs)
     {
         $nonRepeated = array();
@@ -368,7 +377,7 @@ class EmployerController extends Controller
         return $this->fieldNotRequired($result, $this->removeDuplicated($filled));
     }
 
-    //se agregan los documentos por empleado 
+    //se agregan los documentos por empleado
     public function employeeDocuments($entityEmployee)
     {
         $empDocs = array();

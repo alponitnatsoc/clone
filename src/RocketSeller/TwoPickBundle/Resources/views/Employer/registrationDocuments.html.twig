@@ -117,17 +117,17 @@
                 {% if documents[2] in documentsTypeByEmployee[0] %}
                     {% for doc in employeeDocs  if doc.status %}
                         {% if (documents[2] == doc.documentTypeDocumentType) %}
-
                                 <a class="download-link" href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
-
                         {% endif %}
                         {% else %}
+                            <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                             <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                                <i class="fa fa-upload"></i> Documento</a>
+                                <i class="fa fa-upload"></i> Documento-</a>
                     {% endfor %}
                 {% else %}
+                    <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                     <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                    <i class="fa fa-upload"></i> Documento</a>
+                    <i class="fa fa-upload"></i> Documento+</a>
                 {% endif %}
             </div>
             <div class="col-sm-2 col-xs-12 nopadding">
@@ -153,8 +153,12 @@
                                     <i class="fa fa-upload"></i> Documento</a>
                         {% endfor %}
                     {% else %}
+                    
                         <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
                         <i class="fa fa-upload"></i> Documento</a>
+                    
+                        
+
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
@@ -165,12 +169,14 @@
                         {% for doc in employeeDocs if (doc.status) and  (documents[2] == doc.documentTypeDocumentType) %}
                                 <a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
                             {% else %}
+                            <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                                 <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                                    <i class="fa fa-upload"></i> Documento</a>
+                                    <i class="fa fa-upload"></i> Documento--</a>
                         {% endfor %}
                     {% else %}
+                    <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
                         <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}"><i class="fa fa-upload"></i>
-                        Documento</a>
+                        Documento++</a>
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding">
@@ -180,6 +186,25 @@
         </div>
         {% endfor %}
   {% endif %}
+      <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body" id="modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
 
 <!--
@@ -210,11 +235,13 @@
 		<tr><td>algo</td></tr>
 	</tbody>
 </table>-->
-<script>
 
-    function authDownload() {
-        window.open('/documents/downloads/mandato//pdf');
-        var authDownload = document.getElementById('auth-download-button');
-    }
-</script>
 {% endblock %}
+
+    <script>
+
+        function authDownload() {
+            window.open('/documents/downloads/mandato//pdf');
+            var authDownload = document.getElementById('auth-download-button');
+        }
+    </script>
