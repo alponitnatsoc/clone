@@ -35,7 +35,7 @@ class DocumentRegistration extends AbstractType
             ))
 
             ->add('save', 'submit', array(
-                'label' => 'Create',
+                'label' => 'Subir',
             ));
         $builder->get('mediaMedia')->add('binaryContent', 'file', ['label' => 'Subir Archivo' , 'translation_domain'=>'messages']);
     }

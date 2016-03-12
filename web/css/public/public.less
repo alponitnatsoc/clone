@@ -256,3 +256,77 @@ footer {
     color: #f00;
     display: none;
 }
+
+.block-Intro-green {
+    background:@dark_green;
+    display:block;
+    padding:30px 0px;
+    margin:10px 0px 25px 0px;
+    position: relative;
+    min-height: 160px;
+    width: 100%;
+    .up-Intro {
+        font-family: @open;
+        color:#ffffff;
+        font-size:32px;
+        font-weight:bold;
+        > img {
+            margin-top: -4px;
+        }
+    }
+    .boxIntro-Heading {
+        position: absolute;
+        background: @blue;
+        left: 13%;
+        top: 30%;
+        text-align: center;
+        width: 150px;
+        height: 150px;
+        padding: 28px 0px;
+        img {
+        }
+    }
+}
+
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+    border-radius: 11px;
+    .close {
+        position: absolute; 
+        right: 15px; 
+        top: 15px;
+        z-index: 100; 
+        color: #fff;
+        span {
+            font-size: 34px;
+        }
+        @media (max-width: @screen-md-min) {
+            right: 5px;
+            top: 5px;
+            span {
+                font-size: 20px;
+            }   
+        }
+        opacity: 0.8!important;
+    }
+    .block-Intro-green {
+        height: auto;
+        padding: 20px 0;
+        margin: 0;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        min-height: 0;
+        .boxIntro-Heading {
+            top: 0;
+            left: 0;
+            position: relative;
+            padding: 10px 0;
+            height: auto;
+        }
+    }
+}

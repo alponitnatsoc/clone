@@ -81,8 +81,8 @@ employees_documents:
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:viewDocuments }
 
 show_documents:
-    path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments}
+    path:      /manage/employee/{id}/documents/{idNotification}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments , idNotification: -1 }
 
 edit_documents:
     path:      /manage/employee/{id}/documents/edit/{idDocument}
@@ -374,6 +374,9 @@ subscription_pay:
 subscription_success:
     path:     /subscription/success
     defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionSuccess }
+subscription_error:
+    path:     /subscription/error
+    defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionError }
 inactive_user:
     path: /suscripcion-inactiva
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionInactiva }
