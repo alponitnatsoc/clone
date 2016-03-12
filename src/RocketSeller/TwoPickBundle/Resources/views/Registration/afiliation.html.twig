@@ -223,6 +223,16 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $(".upload-link").hover(function() {
+                    $(this).css('cursor','pointer');
+                }, function() {
+                    $(this).css('cursor','auto');
+            });
+            $(".donwload-link").hover(function() {
+                    $(this).css('cursor','pointer');
+                }, function() {
+                    $(this).css('cursor','auto');
+            });
             $(".upload-link").on('click',function(event){
                 event.preventDefault();
                 var uri = $(this).attr("href");

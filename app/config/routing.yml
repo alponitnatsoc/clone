@@ -81,8 +81,8 @@ employees_documents:
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:viewDocuments }
 
 show_documents:
-    path:      /manage/employee/{id}/documents
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments}
+    path:      /manage/employee/{id}/documents/{idNotification}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments , idNotification: -1 }
 
 edit_documents:
     path:      /manage/employee/{id}/documents/edit/{idDocument}

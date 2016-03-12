@@ -68,7 +68,7 @@ class AffiliationEmployerEmployee extends AbstractType
                 'attr'=>array("class"=>'autocomA')
             ))
             ->add('save', 'submit', array(
-                'label' => 'Save',
+                'label' => 'Guardar',
                 'attr'   =>  array(
                 'class'   => 'btn btn-primary btnNext btn-orange')                
             ));

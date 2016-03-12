@@ -766,7 +766,7 @@ filename = "certificadoLaboral.pdf"'
         return $this->fieldNotRequired($result, $this->removeDuplicated($filled));
     }
 
-    public function employeeDocumentsAction($id)
+    public function employeeDocumentsAction($id,$idNotification)
     {
         $keys = array();
         $documentsPerEmployee = array();
