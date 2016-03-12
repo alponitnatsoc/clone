@@ -76,24 +76,29 @@ class SubscriptionController extends Controller
             foreach ($contracts as $keyContract => $contract) {
                 $employees[$keyEmployee]['contrato'] = $contract;
                 $employees[$keyEmployee]['employee'] = $employee;
-                $employees[$keyEmployee]['product'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
+                $employees[$keyEmployee]['product']['object'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
                 if ($employee->getIsFree() > 0) {
-                    $employees[$keyEmployee]['product']->setPrice(0);
+                    $employees[$keyEmployee]['product']['price'] = 0;
+                } else {
+                    $employees[$keyEmployee]['product']['price'] = $employees[$keyEmployee]['product']['object']->getPrice();
                 }
-                $total_sin_descuentos += $employees[$keyEmployee]['product']->getPrice();
+                $total_sin_descuentos += $employees[$keyEmployee]['product']['price'];
                 break;
             }
         }
         if (count($employees) >= 3) {
             $valor_descuento_3er = round($total_sin_descuentos * $descuento_3er);
+            $employees = $this->updateProductPrice($employees, $descuento_3er);
         }
         $userIsRefered = $this->userIsRefered();
         if ($userIsRefered) {
             $valor_descuento_isRefered = round($total_sin_descuentos * $descuento_isRefered);
+            $employees = $this->updateProductPrice($employees, $descuento_isRefered);
         }
         $userHaveValidRefered = $this->userHaveValidRefered();
         if ($userHaveValidRefered) {
             $valor_descuento_haveRefered = round($total_sin_descuentos * (count($userHaveValidRefered) * $descuento_haveRefered));
+            $employees = $this->updateProductPrice($employees, $descuento_haveRefered);
         }
 
         if (($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered) > $total_sin_descuentos) {
@@ -110,6 +115,14 @@ class SubscriptionController extends Controller
             'descuento_isRefered' => array('percent' => $descuento_isRefered, 'value' => $valor_descuento_isRefered, 'object' => $userIsRefered),
             'descuento_haveRefered' => array('percent' => $descuento_haveRefered, 'value' => $valor_descuento_haveRefered, 'object' => $userHaveValidRefered)
         );
+    }
+
+    private function updateProductPrice($employees, $descuentoPercent)
+    {
+        foreach ($employees as $key => $employe) {
+            $employees[$key]['product']['price'] = $employe['product']['price'] - ($employe['product']['price'] * $descuentoPercent);
+        }
+        return $employees;
     }
 
     public function addToNovo()
@@ -217,7 +230,7 @@ class SubscriptionController extends Controller
         $date->add(new \DateInterval('P1M'));
         $startDate = $date->format('Y-m-d');
 
-        //dump($data);
+        dump($data);
         //die;
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                     'employees' => $data['employees'],
@@ -237,19 +250,19 @@ class SubscriptionController extends Controller
 
         if ($request->isMethod('POST')) {
 
-            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-                'freeTime' => 1,
-                'all' => true
-                    ), array('_format' => 'json')
-            );
+            /* $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+              'freeTime' => 1,
+              'all' => true
+              ), array('_format' => 'json')
+              ); */
 
             $user = $this->getUser();
             $person = $user->getPersonPerson();
             $billingAdress = $person->getBillingAddress();
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
-            //dump($data);
+            dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
@@ -315,8 +328,8 @@ class SubscriptionController extends Controller
                         $purchaseOrderDescription->setDescription("Pago Membresia");
                         $purchaseOrderDescription->setPurchaseOrders($purchaseOrder);
                         $purchaseOrderDescription->setPurchaseOrdersStatus($purchaseOrdersStatus);
-                        $purchaseOrderDescription->setValue($employee['product']->getPrice());
-                        $purchaseOrderDescription->setProductProduct($employee['product']);
+                        $purchaseOrderDescription->setValue($employee['product']['price']);
+                        $purchaseOrderDescription->setProductProduct($employee['product']['object']);
                         $purchaseOrder->addPurchaseOrderDescription($purchaseOrderDescription);
                     }
 
@@ -332,6 +345,7 @@ class SubscriptionController extends Controller
                         $this->addFlash('success', $data);
                         //dump($data);                        
                         //die;
+                        $this->sendEmailPaySuccessAction();
                         return $this->redirectToRoute("subscription_success");
                     }
                     $this->addFlash('error', $responce->getContent());
@@ -408,6 +422,15 @@ class SubscriptionController extends Controller
             }
         }
         return $configData;
+    }
+
+    private function sendEmailPaySuccessAction()
+    {
+        $toEmail = $this->getUser()->getEmail();
+        $fromEmail = "servicioalcliente@symplifica.com";
+        $tsm = $this->get('symplifica.mailer.twig_swift');
+        $response = $tsm->sendEmail($this->getUser(), "RocketSellerTwoPickBundle:Subscription:paySuccess.txt.twig", $fromEmail, $toEmail);
+        return $response;
     }
 
 }
