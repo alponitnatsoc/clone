@@ -17,7 +17,6 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "required",
                 "register_employee[person][department]": "required",
                 "register_employee[person][city]": "required",
-
                 "register_employee[personExtra][civilStatus]": "required",
                 "register_employee[personExtra][gender]": "required",
                 "register_employee[personExtra][documentExpeditionDate]": "required",
@@ -25,7 +24,6 @@ function startEmployee() {
                 "register_employee[personExtra][birthCountry]": "required",
                 "register_employee[personExtra][birthDepartment]": "required",
                 "register_employee[personExtra][birthCity]": "required",
-
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
@@ -33,10 +31,10 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
                 "register_employee[employeeHasEmployers][payMethod]": "required"/*,
-                "register_employee[credit_card]": "required",
-                "register_employee[cvv]": "required",
-                "register_employee[expiry_date]": "required",
-                "register_employee[name_on_card]": "required"*/
+                 "register_employee[credit_card]": "required",
+                 "register_employee[cvv]": "required",
+                 "register_employee[expiry_date]": "required",
+                 "register_employee[name_on_card]": "required"*/
 
             },
             messages: {
@@ -48,7 +46,6 @@ function startEmployee() {
                 //"register_employee[employeeHasEmployers][salary]": "Por favor ingresa un salario",
                 "register_employee[person][department]": "Por favor selecciona un departamento",
                 "register_employee[person][city]": "Por favor selecciona una ciudad",
-
                 "register_employee[personExtra][civilStatus]": "Por favor selecciona una opción",
                 "register_employee[personExtra][gender]": "Por favor selecciona una opción",
                 "register_employee[personExtra][documentExpeditionDate]": "Por favor selecciona una opción",
@@ -56,7 +53,6 @@ function startEmployee() {
                 "register_employee[personExtra][birthCountry]": "Por favor selecciona una opción",
                 "register_employee[personExtra][birthDepartment]": "Por favor selecciona una opción",
                 "register_employee[personExtra][birthCity]": "Por favor selecciona una opción",
-
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
@@ -64,10 +60,10 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción"/*,
-                "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
-                "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
-                "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
-                "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"*/
+                 "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
+                 "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
+                 "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
+                 "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"*/
             }
         });
         $("ul.phones input[name*='phoneNumber']").each(function () {
@@ -131,35 +127,35 @@ function startEmployee() {
         }
     });
     $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
-        if(!checkDate(new Date(
-            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
-            parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val())-1,
-            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
-            ))){
+        if (!checkDate(new Date(
+                $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
+                parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,
+                $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
+                ))) {
             var datenow = new Date();
-            var year= datenow.getFullYear();
-            var month= datenow.getMonth();
-            var day= datenow.getDate();
+            var year = datenow.getFullYear();
+            var month = datenow.getMonth();
+            var day = datenow.getDate();
 
             $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(year);
-            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(month+1);
+            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(month + 1);
             $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(day);
         }
 
     });
     $("#register_employee_employeeHasEmployers_endDate").on("change", function () {
-        if(!checkDate(new Date(
+        if (!checkDate(new Date(
                 $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(),
-                parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val())-1,
+                parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val()) - 1,
                 $(this).find("#register_employee_employeeHasEmployers_endDate_day").val()
-            ))){
+                ))) {
             var datenow = new Date();
-            var year= datenow.getFullYear();
-            var month= datenow.getMonth();
-            var day= datenow.getDate();
+            var year = datenow.getFullYear();
+            var month = datenow.getMonth();
+            var day = datenow.getDate();
 
-            $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year+1);
-            $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month+1);
+            $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year + 1);
+            $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month + 1);
             $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
         }
     });
@@ -186,19 +182,19 @@ function startEmployee() {
             $('#TIModal').modal('toggle');
         }
     });
-    var contractType=$("#register_employee_employeeHasEmployers_contractType");
+    var contractType = $("#register_employee_employeeHasEmployers_contractType");
     /*contractType.change(function () {
-        var selectedVal = $(this).find("option:selected").text();
-        if (selectedVal == "Término fijo") {
-            $(".definite").each(function () {
-                $(this).show();
-            });
-        } else {
-            $(".definite").each(function () {
-                $(this).hide();
-            });
-        }
-    });*/
+     var selectedVal = $(this).find("option:selected").text();
+     if (selectedVal == "Término fijo") {
+     $(".definite").each(function () {
+     $(this).show();
+     });
+     } else {
+     $(".definite").each(function () {
+     $(this).hide();
+     });
+     }
+     });*/
     selectedVal = $(contractType).find("option:selected").text();
     if (selectedVal == "Término fijo") {
         $("#register_employee_employeeHasEmployers_existentNew_0").attr("checked", true);
@@ -213,16 +209,16 @@ function startEmployee() {
     }
     //funcion que agrega un listener a cada department
     addListeners();
-    var payType=$("input[name='register_employee[employeeHasEmployers][payMethod]']");
-    var payTypeChecked=$("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
-    if(payTypeChecked.val()!=null){
+    var payType = $("input[name='register_employee[employeeHasEmployers][payMethod]']");
+    var payTypeChecked = $("input[name='register_employee[employeeHasEmployers][payMethod]']:checked");
+    if (payTypeChecked.val() != null) {
         $.ajax({
-            url: '/pay/method/fields/' + payTypeChecked.val()+'/'+$("input[name='register_employee[idContract]']").val(),
+            url: '/pay/method/fields/' + payTypeChecked.val() + '/' + $("input[name='register_employee[idContract]']").val(),
             type: 'GET'
         }).done(function (data) {
             $('#putFields_' + payTypeChecked.val()).html(
-                // ... with the returned one from the AJAX response.
-                $(data).find('#formFields'));
+                    // ... with the returned one from the AJAX response.
+                    $(data).find('#formFields'));
         });
     }
 
@@ -236,7 +232,7 @@ function startEmployee() {
                     // ... with the returned one from the AJAX response.
                     $(data).find('#formFields'));
             $('#putFields_' + payTypeChecked.val()).html("");
-            payTypeChecked=payMethod;
+            payTypeChecked = payMethod;
 
         });
     });
@@ -274,10 +270,10 @@ function startEmployee() {
             }
         }).done(function (data) {
             console.log(data["url"]);
-            history.pushState("","",data["url"]);
+            history.pushState("", "", data["url"]);
             sendAjax(data["url"]);
         }).fail(function (data, textStatus, errorThrown) {
-            if(jqXHR==errorHandleTry(jqXHR)){
+            if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
@@ -325,10 +321,10 @@ function startEmployee() {
         e.preventDefault();
         addBenefitForm($collectionHolderB, $newLinkLi);
     });
-    $('#si_tiene_contrato').change(function(evt) {
+    $('#si_tiene_contrato').change(function (evt) {
         $('#noTarget').collapse('hide')
     });
-    $('#no_tiene_contrato').change(function(evt) {
+    $('#no_tiene_contrato').change(function (evt) {
         $('#noTarget').collapse('show')
     });
     $('#btn-inquiry').click(function (e) {
@@ -429,10 +425,10 @@ function startEmployee() {
         }).done(function (data) {
             console.log(data);
             $(form).find("input[name='register_employee[idEmployee]']").val(data['response']['idEmployee']);
-            history.pushState("","","/register/employee/"+data['response']['idEmployee']);
+            history.pushState("", "", "/register/employee/" + data['response']['idEmployee']);
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            if(jqXHR==errorHandleTry(jqXHR)){
+            if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
@@ -484,7 +480,7 @@ function startEmployee() {
         }).done(function (data) {
             $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            if(jqXHR==errorHandleTry(jqXHR)){
+            if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
@@ -506,47 +502,47 @@ function startEmployee() {
         //    return;
         //}
 
-        var idsBenef = [], amountBenef = [], periodicityBenef = [], weekWorkableDaysIds = [],benefType=[];
+        var idsBenef = [], amountBenef = [], periodicityBenef = [], weekWorkableDaysIds = [], benefType = [];
         var flagValid = true;
         var i = 0;
         /*
-        $(form).find("ul.benefits input[name*='idContractHasBenefits']").each(function () {
-            idsBenef[i++] = $(this).val();
-        });
-        i = 0;
-        $(form).find("ul.benefits select[name*='benefitType']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-            benefType[i++] = $(this).val();
-        });
+         $(form).find("ul.benefits input[name*='idContractHasBenefits']").each(function () {
+         idsBenef[i++] = $(this).val();
+         });
          i = 0;
-        $(form).find("[name='register_employee[employeeHasEmployers][weekWorkableDays][]']:checked").each(function () {
-            weekWorkableDaysIds[i++] = $(this).val();
-        });
+         $(form).find("ul.benefits select[name*='benefitType']").each(function () {
+         if (!validator.element($(this))) {
+         flagValid = false;
+         return;
+         }
+         benefType[i++] = $(this).val();
+         });
          i = 0;
-        $(form).find("ul.benefits input[name*='amount']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-            amountBenef[i++] = $(this).val();
-        });
+         $(form).find("[name='register_employee[employeeHasEmployers][weekWorkableDays][]']:checked").each(function () {
+         weekWorkableDaysIds[i++] = $(this).val();
+         });
          i = 0;
-        $(form).find("ul.benefits select[name*='periodicity']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-            periodicityBenef[i++] = $(this).val();
-        });
-        */
+         $(form).find("ul.benefits input[name*='amount']").each(function () {
+         if (!validator.element($(this))) {
+         flagValid = false;
+         return;
+         }
+         amountBenef[i++] = $(this).val();
+         });
+         i = 0;
+         $(form).find("ul.benefits select[name*='periodicity']").each(function () {
+         if (!validator.element($(this))) {
+         flagValid = false;
+         return;
+         }
+         periodicityBenef[i++] = $(this).val();
+         });
+         */
         var salary = $(form).find("input[name='register_employee[employeeHasEmployers][salary]']");
         /*if (!(validator.element(salary))) {
-            //alert("Llenaste algunos campos incorrectamente");
-            return;
-        }*/
+         //alert("Llenaste algunos campos incorrectamente");
+         return;
+         }*/
 
         if (!flagValid) {
             //alert("Llenaste algunos campos incorrectamente");
@@ -556,6 +552,10 @@ function startEmployee() {
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
+            beforeSend: function (xhr) {
+                if (!validateSalary())
+                    return false;
+            },
             data: {
                 //employeeType: employeeType.val(),
                 contractType: contractType.val(),
@@ -586,7 +586,7 @@ function startEmployee() {
             $('#formNav > .active').next('li').find('a').trigger('click');
             $(form).find("input[name='register_employee[idContract]']").val(data['response']['idContract']);
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            if(jqXHR==errorHandleTry(jqXHR)){
+            if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
@@ -630,42 +630,42 @@ function jsonToHTML(data) {
     return htmls;
 }
 function jsonCalcToHTML(data) {
-    var htmls="<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
-        "<ul class='lista_listo'>";
-    htmls+="<li>Costo total para el empleador: "+Math.floor(data.totalExpenses)+"</li>";
-    htmls+="<li>Ingreso neto para el empleado: "+Math.floor(data.totalIncome)+"</li>";
-    htmls+="<li>Diario Gastos: "+Math.floor(data.dailyExpenses)+"</li>";
-    htmls+="<li>Diario Ingreso: "+Math.floor(data.dailyIncome)+"</li>";
-    htmls+="</ul>";
-    htmls+="<h2 class='modal-title'>Detalles:</h2>" +
-        "<ul class='lista_listo'>";
-    htmls+="<li>Gastos Empleador EPS: "+Math.floor(data.EPSEmployerCal)+"</li>";
-    htmls+="<li>Gastos Empleador Pensión: "+Math.floor(data.PensEmployerCal)+"</li>";
-    htmls+="<li>Gastos Empleado ARL: "+Math.floor(data.arlCal)+"</li>";
-    htmls+="<li>Gastos Empleado Cesantias: "+Math.floor(data.cesCal)+"</li>";
-    htmls+="<li>Gastos Empleado Intereses/cesantias: "+Math.floor(data.taxCesCal)+"</li>";
-    htmls+="<li>Gastos Empleado Caja Comp: "+Math.floor(data.cajaCal)+"</li>";
-    htmls+="<li>Gastos Empleado Vacaciones: "+Math.floor(data.vacationsCal)+"</li>";
-    htmls+="<li>Gastos Auxilio de Trasnporte: "+Math.floor(data.transportCal)+"</li>";
-    htmls+="<li>Gastos Dotacion/150000 pesos trimestre: "+Math.floor(data.dotationCal)+"</li>";
-    htmls+="<li>Gastos SENA: "+Math.floor(data.senaCal)+"</li>";
-    htmls+="<li>Gastos ICBF: "+Math.floor(data.icbfCal)+"</li>";
-    htmls+="<li>Gastos Empleado EPS: "+Math.floor(data.EPSEmployeeCal)+"</li>";
-    htmls+="<li>Gastos Empleado Pensión: "+Math.floor(data.PensEmployeeCal)+"</li>";
-    htmls+="</ul>";
+    var htmls = "<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
+            "<ul class='lista_listo'>";
+    htmls += "<li>Costo total para el empleador: " + Math.floor(data.totalExpenses) + "</li>";
+    htmls += "<li>Ingreso neto para el empleado: " + Math.floor(data.totalIncome) + "</li>";
+    htmls += "<li>Diario Gastos: " + Math.floor(data.dailyExpenses) + "</li>";
+    htmls += "<li>Diario Ingreso: " + Math.floor(data.dailyIncome) + "</li>";
+    htmls += "</ul>";
+    htmls += "<h2 class='modal-title'>Detalles:</h2>" +
+            "<ul class='lista_listo'>";
+    htmls += "<li>Gastos Empleador EPS: " + Math.floor(data.EPSEmployerCal) + "</li>";
+    htmls += "<li>Gastos Empleador Pensión: " + Math.floor(data.PensEmployerCal) + "</li>";
+    htmls += "<li>Gastos Empleado ARL: " + Math.floor(data.arlCal) + "</li>";
+    htmls += "<li>Gastos Empleado Cesantias: " + Math.floor(data.cesCal) + "</li>";
+    htmls += "<li>Gastos Empleado Intereses/cesantias: " + Math.floor(data.taxCesCal) + "</li>";
+    htmls += "<li>Gastos Empleado Caja Comp: " + Math.floor(data.cajaCal) + "</li>";
+    htmls += "<li>Gastos Empleado Vacaciones: " + Math.floor(data.vacationsCal) + "</li>";
+    htmls += "<li>Gastos Auxilio de Trasnporte: " + Math.floor(data.transportCal) + "</li>";
+    htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + Math.floor(data.dotationCal) + "</li>";
+    htmls += "<li>Gastos SENA: " + Math.floor(data.senaCal) + "</li>";
+    htmls += "<li>Gastos ICBF: " + Math.floor(data.icbfCal) + "</li>";
+    htmls += "<li>Gastos Empleado EPS: " + Math.floor(data.EPSEmployeeCal) + "</li>";
+    htmls += "<li>Gastos Empleado Pensión: " + Math.floor(data.PensEmployeeCal) + "</li>";
+    htmls += "</ul>";
     return htmls;
 }
 
 function addListeners() {
     $("#ex6").bootstrapSlider();
-    $("#ex6").on("slide", function(slideEvt) {
+    $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
         calculator();
         formatMoney($("#totalExpensesVal"));
         formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
     });
-    $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function(){
-        if($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val()=="1") {
+    $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function () {
+        if ($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val() == "1") {
             $("#register_employee_employeeHasEmployers_contractType").find("option").each(function () {
                 if ($(this).text() == "Término fijo") {
                     $(this).attr('selected', 'selected');
@@ -676,8 +676,7 @@ function addListeners() {
                     $('#contractFijo').show();
                 }
             });
-        }
-        else {
+        } else {
             $("#register_employee_employeeHasEmployers_contractType option").each(function () {
                 if ($(this).text() == "Término indefinido") {
                     $(this).attr('selected', 'selected');
@@ -691,14 +690,14 @@ function addListeners() {
             });
         }
     });
-    $("#register_employee_employeeHasEmployers_weekWorkableDays").on("change",function(){
-       calculator();
+    $("#register_employee_employeeHasEmployers_weekWorkableDays").on("change", function () {
+        calculator();
         formatMoney($("#totalExpensesVal"));
 
     });
-    $("#register_employee_employeeHasEmployers_indefinite").on("click", function(){
-        $("#register_employee_employeeHasEmployers_contractType option").each(function() {
-            if($(this).text() == "Término indefinido") {
+    $("#register_employee_employeeHasEmployers_indefinite").on("click", function () {
+        $("#register_employee_employeeHasEmployers_contractType option").each(function () {
+            if ($(this).text() == "Término indefinido") {
                 $(this).attr('selected', 'selected');
                 $(".definite").each(function () {
                     $(this).hide();
@@ -706,37 +705,40 @@ function addListeners() {
             }
         });
     });
-    $("#register_employee_employeeHasEmployers_existent").on("click", function(){
+    $("#register_employee_employeeHasEmployers_existent").on("click", function () {
         $('#existentQuestion').hide();
         $("#existentDataToShow").show();
     });
-    $("#register_employee_employeeHasEmployers_new").on("click", function(){
+    $("#register_employee_employeeHasEmployers_new").on("click", function () {
         $('#contractNav > .active').next('li').find('a').trigger('click');
     });
-    $("#register_employee_employeeHasEmployers_yesExistent").on("click", function(){
+    $("#register_employee_employeeHasEmployers_yesExistent").on("click", function () {
         $('#contractNav > .active').next('li').find('a').trigger('click');
     });
-    $("#register_employee_employeeHasEmployers_noExistent").on("click", function(){
+    $("#register_employee_employeeHasEmployers_noExistent").on("click", function () {
         $('#noNuevoContrato').modal();
 //        history.pushState("","","/manage/employees");
 //        sendAjax("/manage/employees")
     });
 
-    $('#btnToggleFijo').click(function() {
+    $('#btnToggleFijo').click(function () {
         $('#register_employee_employeeHasEmployers_existentNew_0').trigger('click');
         $(this).addClass('active');
         $('#btnToggleIndefinido').removeClass('active');
     });
 
-    $('#btnToggleIndefinido').click(function() {
+    $('#btnToggleIndefinido').click(function () {
         $('#register_employee_employeeHasEmployers_existentNew_1').trigger('click');
         $(this).addClass('active');
         $('#btnToggleFijo').removeClass('active');
     });
 
-    $("#register_employee_employeeHasEmployers_salaryD").on("input", function(){
+    $("#register_employee_employeeHasEmployers_salaryD").on("input", function () {
         calculator();
         formatMoney($("#totalExpensesVal"));
+    });
+    $("#register_employee_employeeHasEmployers_salary").on("focusout", function () {
+        validateSalary();
     });
     $("#link_calculator").on("click", function (e) {
         e.preventDefault();
@@ -805,32 +807,32 @@ var dotation;
 var transportAidDaily;
 var vacations30D;
 var dotationDaily;
-function loadConstrains(){
-    var constraints=null;
+function loadConstrains() {
+    var constraints = null;
     $.ajax({
-        url : "/api/public/v1/calculator/constraints",
+        url: "/api/public/v1/calculator/constraints",
         type: "GET",
-        statusCode:{
-            200: function(data){
+        statusCode: {
+            200: function (data) {
                 //Extract Constraints
-                constraints= data["response"];
-                transportAid=parseFloat(constraints['auxilio transporte']);
-                smmlv=parseFloat(constraints['smmlv']);
-                EPSEmployer=parseFloat(constraints['eps empleador']);
-                EPSEmployee=parseFloat(constraints['eps empleado']);
-                PensEmployer=parseFloat(constraints['pension empleador']);
-                PensEmployee=parseFloat(constraints['pension empleado']);
-                arl=parseFloat(constraints['arl']);
-                caja=parseFloat(constraints['caja']);
-                sena=parseFloat(constraints['sena']);
-                icbf=parseFloat(constraints['icbf']);
-                vacations=parseFloat(constraints['vacaciones']);
-                taxCes=parseFloat(constraints['intereses cesantias']);
-                ces=parseFloat(constraints['cesantias']);
-                dotation=parseFloat(constraints['dotacion']);
-                transportAidDaily=transportAid/30;
-                vacations30D=vacations/30;
-                dotationDaily=dotation/30;
+                constraints = data["response"];
+                transportAid = parseFloat(constraints['auxilio transporte']);
+                smmlv = parseFloat(constraints['smmlv']);
+                EPSEmployer = parseFloat(constraints['eps empleador']);
+                EPSEmployee = parseFloat(constraints['eps empleado']);
+                PensEmployer = parseFloat(constraints['pension empleador']);
+                PensEmployee = parseFloat(constraints['pension empleado']);
+                arl = parseFloat(constraints['arl']);
+                caja = parseFloat(constraints['caja']);
+                sena = parseFloat(constraints['sena']);
+                icbf = parseFloat(constraints['icbf']);
+                vacations = parseFloat(constraints['vacaciones']);
+                taxCes = parseFloat(constraints['intereses cesantias']);
+                ces = parseFloat(constraints['cesantias']);
+                dotation = parseFloat(constraints['dotacion']);
+                transportAidDaily = transportAid / 30;
+                vacations30D = vacations / 30;
+                dotationDaily = dotation / 30;
                 calculator();
             }
         }
@@ -838,176 +840,199 @@ function loadConstrains(){
 
 }
 
-function calculator(){
-    var type=$("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
-    var salaryM=parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
-    var salaryD=parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
-    var numberOfDays=parseFloat($("#register_employee_employeeHasEmployers_weekWorkableDays").val())*4;
-    var aid=0;
-    var aidD=0;
-    var sisben=$("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
-    var transport=$("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
-    if(transport==1){
-        transportAid=0;
+function calculator() {
+    var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
+    var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
+    var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+    var numberOfDays = parseFloat($("#register_employee_employeeHasEmployers_weekWorkableDays").val()) * 4;
+    var aid = 0;
+    var aidD = 0;
+    var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
+    var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
+    if (transport == 1) {
+        transportAid = 0;
     }
-    if(type.parent().text()==" Trabajo por días"){
-        type="days";
-    }else{type="complete";}
-    transport=0;
-    var totalExpenses=0;
-    var totalIncome=0;
-    var EPSEmployerCal=0;
-    var EPSEmployeeCal=0;
-    var PensEmployeeCal=0;
-    var PensEmployerCal=0;
-    var transportCal=0;
-    var cesCal=0;
-    var taxCesCal=0;
-    var dotationCal=0;
-    var vacationsCal=0;
-    var arlCal=0;
-    var cajaCal=0;
-    var senaCal=0;
-    var icbfCal=0;
-    var base=0;
-    if(aid==0){
-        aidD=0;
+    if (type.parent().text() == " Trabajo por días") {
+        type = "days";
+    } else {
+        type = "complete";
     }
-    if(type=="days"){
-        if(transport==1){
-            salaryD-=transportAidDaily;
+    transport = 0;
+    var totalExpenses = 0;
+    var totalIncome = 0;
+    var EPSEmployerCal = 0;
+    var EPSEmployeeCal = 0;
+    var PensEmployeeCal = 0;
+    var PensEmployerCal = 0;
+    var transportCal = 0;
+    var cesCal = 0;
+    var taxCesCal = 0;
+    var dotationCal = 0;
+    var vacationsCal = 0;
+    var arlCal = 0;
+    var cajaCal = 0;
+    var senaCal = 0;
+    var icbfCal = 0;
+    var base = 0;
+    if (aid == 0) {
+        aidD = 0;
+    }
+    if (type == "days") {
+        if (transport == 1) {
+            salaryD -= transportAidDaily;
         }
         //if it overpass the SMMLV calculates as a full time job  or
         //if does not belongs to SISBEN
-        if(((salaryD+transportAidDaily+aidD)*numberOfDays)>smmlv||sisben==0){
-            if(((salaryD+transportAidDaily+aidD)*numberOfDays)>smmlv){
-                base=(salaryD+aidD)*numberOfDays;
-            }else{base=smmlv;}
+        if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv || sisben == 0) {
+            if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv) {
+                base = (salaryD + aidD) * numberOfDays;
+            } else {
+                base = smmlv;
+            }
 
-            totalExpenses=((salaryD+aidD+transportAidDaily+dotationDaily)*numberOfDays)+((EPSEmployer+PensEmployer+arl+caja+sena+icbf)*base)+(vacations30D*numberOfDays*salaryD)+((taxCes+ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-            EPSEmployerCal=EPSEmployer*base;
-            EPSEmployeeCal=EPSEmployee*base;
-            PensEmployerCal=PensEmployer*base;
-            PensEmployeeCal=PensEmployee*base;
-            arlCal=arl*base;
-            cesCal=((ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-            taxCesCal=((taxCes)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-            cajaCal=caja*base;
-            vacationsCal=vacations30D*numberOfDays*salaryD;
-            transportCal=transportAidDaily*numberOfDays;
-            dotationCal=dotationDaily*numberOfDays;
-            senaCal=sena*base;
-            icbfCal=icbf*base;
-            totalIncome=(salaryD*numberOfDays)-EPSEmployerCal-PensEmployerCal;
-        }else{
-            EPSEmployee=0;
-            EPSEmployer=0;
-            base=smmlv;
+            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer + PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            EPSEmployerCal = EPSEmployer * base;
+            EPSEmployeeCal = EPSEmployee * base;
+            PensEmployerCal = PensEmployer * base;
+            PensEmployeeCal = PensEmployee * base;
+            arlCal = arl * base;
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            cajaCal = caja * base;
+            vacationsCal = vacations30D * numberOfDays * salaryD;
+            transportCal = transportAidDaily * numberOfDays;
+            dotationCal = dotationDaily * numberOfDays;
+            senaCal = sena * base;
+            icbfCal = icbf * base;
+            totalIncome = (salaryD * numberOfDays) - EPSEmployerCal - PensEmployerCal;
+        } else {
+            EPSEmployee = 0;
+            EPSEmployer = 0;
+            base = smmlv;
             //calculate the caja and pens in base of worked days
-            if(numberOfDays<=7){
-                PensEmployerCal=PensEmployer*base/4;
-                PensEmployeeCal=PensEmployee*base/4;
-                cajaCal=caja*base;
-            }else if(numberOfDays<=14){
-                PensEmployerCal=PensEmployer*base/2;
-                PensEmployeeCal=PensEmployee*base/2;
-                cajaCal=caja*base/2;
-            }else if(numberOfDays<=21){
-                PensEmployerCal=PensEmployer*base*3/4;
-                PensEmployeeCal=PensEmployee*base*3/4;
-                cajaCal=caja*base*3/4;
-            }else {
-                PensEmployerCal=PensEmployer*base;
-                PensEmployeeCal=PensEmployee*base;
-                cajaCal=caja*base;
+            if (numberOfDays <= 7) {
+                PensEmployerCal = PensEmployer * base / 4;
+                PensEmployeeCal = PensEmployee * base / 4;
+                cajaCal = caja * base;
+            } else if (numberOfDays <= 14) {
+                PensEmployerCal = PensEmployer * base / 2;
+                PensEmployeeCal = PensEmployee * base / 2;
+                cajaCal = caja * base / 2;
+            } else if (numberOfDays <= 21) {
+                PensEmployerCal = PensEmployer * base * 3 / 4;
+                PensEmployeeCal = PensEmployee * base * 3 / 4;
+                cajaCal = caja * base * 3 / 4;
+            } else {
+                PensEmployerCal = PensEmployer * base;
+                PensEmployeeCal = PensEmployee * base;
+                cajaCal = caja * base;
             }
             //then calculate arl ces and the rest
-            totalExpenses=((salaryD+aidD+transportAidDaily+dotationDaily)*numberOfDays)+((EPSEmployer+arl+sena+icbf)*base)+(vacations30D*numberOfDays*salaryD)+((taxCes+ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid))+PensEmployeeCal+cajaCal+PensEmployerCal;
-            EPSEmployerCal=EPSEmployer*base;
-            EPSEmployeeCal=EPSEmployee*base;
-            arlCal=arl*base;
-            cesCal=((ces)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-            taxCesCal=((taxCes)*(((salaryD+aidD)*numberOfDays*30/28)+transportAid));
-            vacationsCal=vacations30D*numberOfDays*salaryD;
-            transportCal=transportAidDaily*numberOfDays;
-            dotationCal=dotationDaily*numberOfDays;
-            senaCal=sena*base;
-            icbfCal=icbf*base;
-            totalIncome=((salaryD+transportAidDaily)*numberOfDays)-PensEmployeeCal;
+            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer + arl + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
+            EPSEmployerCal = EPSEmployer * base;
+            EPSEmployeeCal = EPSEmployee * base;
+            arlCal = arl * base;
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            vacationsCal = vacations30D * numberOfDays * salaryD;
+            transportCal = transportAidDaily * numberOfDays;
+            dotationCal = dotationDaily * numberOfDays;
+            senaCal = sena * base;
+            icbfCal = icbf * base;
+            totalIncome = ((salaryD + transportAidDaily) * numberOfDays) - PensEmployeeCal;
         }
 
-    }else{
-        if(transport==1){
-            salaryM-=transportAid;
-        }else if(salaryM+aidD>smmlv*2){
-            transportAid=0;
+    } else {
+        if (transport == 1) {
+            salaryM -= transportAid;
+        } else if (salaryM + aidD > smmlv * 2) {
+            transportAid = 0;
         }
 
-        totalExpenses=salaryM+aidD+transportAid+dotation+((EPSEmployer+PensEmployer+arl+caja+vacations30D+sena+icbf)*(salaryM+aidD))+((taxCes+ces)*(salaryM+aidD+transportAid));
-        EPSEmployerCal=EPSEmployer*(salaryM+aidD);
-        EPSEmployeeCal=EPSEmployee*(salaryM+aidD);
-        PensEmployerCal=PensEmployer*(salaryM+aidD);
-        PensEmployeeCal=PensEmployee*(salaryM+aidD);
-        arlCal=arl*(salaryM+aidD);
-        cesCal=ces*(salaryM+aidD+transportAid);
-        taxCesCal=taxCes*(salaryM+aidD+transportAid);
-        cajaCal=caja*(salaryM+aidD);
-        vacationsCal=vacations30D*(salaryM+aidD);
-        transportCal=transportAid;
-        dotationCal=dotation;
-        senaCal=sena*(salaryM+aidD);
-        icbfCal=icbf*(salaryM+aidD);
-        totalIncome=(salaryM+transportCal-EPSEmployerCal-PensEmployerCal);
+        totalExpenses = salaryM + aidD + transportAid + dotation + ((EPSEmployer + PensEmployer + arl + caja + vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid));
+        EPSEmployerCal = EPSEmployer * (salaryM + aidD);
+        EPSEmployeeCal = EPSEmployee * (salaryM + aidD);
+        PensEmployerCal = PensEmployer * (salaryM + aidD);
+        PensEmployeeCal = PensEmployee * (salaryM + aidD);
+        arlCal = arl * (salaryM + aidD);
+        cesCal = ces * (salaryM + aidD + transportAid);
+        taxCesCal = taxCes * (salaryM + aidD + transportAid);
+        cajaCal = caja * (salaryM + aidD);
+        vacationsCal = vacations30D * (salaryM + aidD);
+        transportCal = transportAid;
+        dotationCal = dotation;
+        senaCal = sena * (salaryM + aidD);
+        icbfCal = icbf * (salaryM + aidD);
+        totalIncome = (salaryM + transportCal - EPSEmployerCal - PensEmployerCal);
 
     }
 
-    if(salaryD==0){
+    if (salaryD == 0) {
 
-         totalExpenses=0;
-         totalIncome=0;
-         EPSEmployerCal=0;
-         EPSEmployeeCal=0;
-         PensEmployeeCal=0;
-         PensEmployerCal=0;
-         transportCal=0;
-         cesCal=0;
-         taxCesCal=0;
-         dotationCal=0;
-         vacationsCal=0;
-         arlCal=0;
-         cajaCal=0;
-         senaCal=0;
-         icbfCal=0;
-         base=0;
+        totalExpenses = 0;
+        totalIncome = 0;
+        EPSEmployerCal = 0;
+        EPSEmployeeCal = 0;
+        PensEmployeeCal = 0;
+        PensEmployerCal = 0;
+        transportCal = 0;
+        cesCal = 0;
+        taxCesCal = 0;
+        dotationCal = 0;
+        vacationsCal = 0;
+        arlCal = 0;
+        cajaCal = 0;
+        senaCal = 0;
+        icbfCal = 0;
+        base = 0;
     }
-    var resposne=[];
-    resposne['totalExpenses']=totalExpenses;
-    resposne['dailyExpenses']=totalExpenses/numberOfDays;
-    resposne['dailyIncome']=totalIncome/numberOfDays;
-    resposne['EPSEmployerCal']=EPSEmployerCal;
-    resposne['EPSEmployeeCal']=EPSEmployeeCal;
-    resposne['PensEmployerCal']=PensEmployerCal;
-    resposne['PensEmployeeCal']=PensEmployeeCal;
-    resposne['arlCal']=arlCal;
-    resposne['cesCal']=cesCal;
-    resposne['taxCesCal']=taxCesCal;
-    resposne['cajaCal']=cajaCal;
-    resposne['vacationsCal']=vacationsCal;
-    resposne['transportCal']=transportCal;
-    resposne['dotationCal']=dotationCal;
-    resposne['senaCal']=senaCal;
-    resposne['icbfCal']=icbfCal;
-    resposne['totalIncome']=totalIncome;
-    var htmlRes=jsonCalcToHTML(resposne);
+    var resposne = [];
+    resposne['totalExpenses'] = totalExpenses;
+    resposne['dailyExpenses'] = totalExpenses / numberOfDays;
+    resposne['dailyIncome'] = totalIncome / numberOfDays;
+    resposne['EPSEmployerCal'] = EPSEmployerCal;
+    resposne['EPSEmployeeCal'] = EPSEmployeeCal;
+    resposne['PensEmployerCal'] = PensEmployerCal;
+    resposne['PensEmployeeCal'] = PensEmployeeCal;
+    resposne['arlCal'] = arlCal;
+    resposne['cesCal'] = cesCal;
+    resposne['taxCesCal'] = taxCesCal;
+    resposne['cajaCal'] = cajaCal;
+    resposne['vacationsCal'] = vacationsCal;
+    resposne['transportCal'] = transportCal;
+    resposne['dotationCal'] = dotationCal;
+    resposne['senaCal'] = senaCal;
+    resposne['icbfCal'] = icbfCal;
+    resposne['totalIncome'] = totalIncome;
+    var htmlRes = jsonCalcToHTML(resposne);
     $("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
     $("#totalExpensesVal").text(totalExpenses.toFixed(0));
 
 }
-function checkDate (date){
-    var dateNow= new Date();
-    if(date<dateNow){
+function checkDate(date) {
+    var dateNow = new Date();
+    if (date < dateNow) {
         alert("La fecha no puede ser anterior a hoy");
+        return false;
+    }
+    return true;
+}
+function getPrice(valor) {
+    price = parseFloat(valor.toString().replace(/,/g, ""))
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return "$ " + price;
+}
+function validateSalary() {
+    salarioMinimo = $("#salarioMinimo").val();
+    if (!salarioMinimo) {
+        salarioMinimo = 689454;
+    }
+    if ($("#register_employee_employeeHasEmployers_salary").val() < salarioMinimo) {
+        alert('El salario minimo legal es de ' + getPrice(salarioMinimo));
+        $("#register_employee_employeeHasEmployers_salary").val(salarioMinimo);
         return false;
     }
     return true;
