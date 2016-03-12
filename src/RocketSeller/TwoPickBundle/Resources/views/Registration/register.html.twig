@@ -1,35 +1,33 @@
-{% extends "::public.html.twig" %}
+{% extends "::new-design/public.html.twig" %}
 
 {% block body %}
-<div class="row-fluid clearfix" style="background-color: #3c4b5a; padding-bottom: 30px;">
-    <div class="container">
-        <div class="container">
-            <div class="col-sm-12 txt-A1-register">
-                <span>Estamos listos para facilitarte la gestión de tus empleados</span>
-                <m>¿Empezamos?</m>
-                <span>Regístrate gratis, puedes hacerlo de dos formas:</span>
-            </div>
-            <div id='' class='col-sm-12 col-md-7'>
-                <div class="left-headline">
-                    <img src="/img/arrow.png">
-                    <span>Regístrate con tus datos personales</span>
-                </div>
+<div id="registrationContainer" class="row-fluid clearfix" style="background-color: #3c4b5a; padding-bottom: 30px;">
+
+    <div class="smallOrangeBox">
+        <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle"></div>
+        
+        <div class="smallOrangeBoxContent">
+            
+                <h3>¿Empezamos?</h3>
+                <span>Estamos listos para facilitarte la <br />gestión de tus empleados</span>
+
+                <span class="light-text">Puedes registrarte gratis de dos maneras</span>
+                <hr class="smallDivider" />
                 {% include "FOSUserBundle:Registration:register_content.html.twig" %}
-            </div>
-            <div id='' class='col-sm-12 col-md-1'>
-            </div>
-            <div id='' class='col-sm-12 col-md-4'>
-                <div class="right-headline">
-                    <img src="/img/heart.png">
-                    <span>Regístrate con tu red social favorita</span>
+
+                
+                <div class="registrationSocialNetworks">
+                    <hr class="smallDivider"></hr>
+                    <span>o puedes registrarte también con tu red solcial favorita</span>
+                    {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
                 </div>
-                {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
 
-
-            </div>
 
         </div>
     </div>
+
+
+
 </div>
 {% endblock body %}
 {% block styles %}

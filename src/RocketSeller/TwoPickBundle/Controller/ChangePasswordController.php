@@ -58,6 +58,7 @@ class ChangePasswordController extends BaseController
 
         $form->handleRequest($request);
 
+        $success = false;
         if ($form->isValid()) {
             /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
@@ -74,11 +75,13 @@ class ChangePasswordController extends BaseController
 
             $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
-            return $response;
+//             return $response;
+            $success = true;
         }
 
         return $this->render('FOSUserBundle:ChangePassword:changePassword.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'success' => $success
         ));
     }
 }

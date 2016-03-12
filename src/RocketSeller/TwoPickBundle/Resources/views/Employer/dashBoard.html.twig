@@ -372,10 +372,10 @@
                 {% endif %}
             {% endfor %}
         </div>
-
+        {#
         <div class="report_novedad">
             <a class="btn-bg btn-default" href="{{ path('manage_employees') }}">Reportar novedad</a>
-        </div>
+        </div>#}
         {% if(notifications) %}
             <div class="reminder_title">
                 Requerde que
@@ -409,7 +409,7 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
 
@@ -421,6 +421,11 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
+            $(".download-link").hover(function() {
+                    $(this).css('cursor','pointer');
+                }, function() {
+                    $(this).css('cursor','auto');
+            });
 
             $(".dashboard_employer_order_by_select").on('change', function () {
                 window.location.replace($(this).val());
@@ -460,6 +465,8 @@
             $(".download-link").on('click',function(event){
                 event.preventDefault();
                 var uri = $(this).attr("href");
+                var html = '';
+                alert(uri);
 
 //                 alert(uri);
                 $.ajax({
@@ -470,8 +477,12 @@
 
                      }
                  }).done(function (data) {
-                    //$("#modal-body").html(data);
-                    $('#modal-body').replaceWith($(data).find('#main'));
+                    html = data;
+                    $("#modal-body").html('');
+                    
+                    //$('#modal-body').replaceWith($(html).find('#main'));
+                    $('#modal-body').html($(html).find('#main'));
+
                     $("#myModal").modal('show');
                     var files;
                     // Add events

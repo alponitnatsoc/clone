@@ -349,7 +349,7 @@ class SubscriptionController extends Controller
                         return $this->redirectToRoute("subscription_success");
                     }
                     $this->addFlash('error', $responce->getContent());
-                    return $this->redirectToRoute("subscription_choices");
+                    return $this->redirectToRoute("subscription_error");
                 }
             } else {
                 return $this->redirectToRoute("subscription_choices");
@@ -362,6 +362,13 @@ class SubscriptionController extends Controller
     public function suscripcionSuccessAction(Request $request)
     {
         return $this->render('RocketSellerTwoPickBundle:Subscription:success.html.twig', array(
+                    'user' => $this->getUser()
+        ));
+    }
+
+    public function suscripcionErrorAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Subscription:error.html.twig', array(
                     'user' => $this->getUser()
         ));
     }

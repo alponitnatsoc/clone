@@ -153,42 +153,43 @@ class DocumentController extends Controller
 
 		if ($form->isValid()) {
 			
-			if (in_array($document->getMediaMedia()->getContentType(),$fileTypePermitted)) {
+			if (in_array($document->getMediaMedia()->getContentType(),$fileTypePermitted)) 
+			{
 					
-			$medias=$document->getMediaMedia();
-			/** @var Media $media */
-			foreach ($medias as $media) {
+					$medias=$document->getMediaMedia();
+					/** @var Media $media */
+					foreach ($medias as $media) {
 
-				$media->setBinaryContent($media);
-				$media->setName($document->getName());
-				$media->setProviderStatus(Media::STATUS_OK);
-				$media->setProviderReference($media->getBinaryContent());
-				$em->persist($media);
-				$em->flush();
+						$media->setBinaryContent($media);
+						$media->setName($document->getName());
+						$media->setProviderStatus(Media::STATUS_OK);
+						$media->setProviderReference($media->getBinaryContent());
+						$em->persist($media);
+						$em->flush();
 
 
-			}
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($document);
-			$em->flush();
-			//$view = View::createView();
+					}
+					$em = $this->getDoctrine()->getManager();
+					$em->persist($document);
+					$em->flush();
+					//$view = View::createView();
 
-			//return new Response('guwegwei');
-			if ($idNotification!=0) {
-				$em = $this->getDoctrine()->getManager();
-				$notification = $this->getDoctrine()
-				->getRepository('RocketSellerTwoPickBundle:Notification')
-				->find($idNotification);
-				$notification->setStatus(0);
-				$em->flush();
-				return $this->redirect($request->server->get('HTTP_REFERER'));
-			}else{
-				return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
-			}
-				
-			}else{
-				throw new \Exception('Formato no valido.');
-			}
+					//return new Response('guwegwei');
+					if ($idNotification!=0) {
+						$em = $this->getDoctrine()->getManager();
+						$notification = $this->getDoctrine()
+						->getRepository('RocketSellerTwoPickBundle:Notification')
+						->find($idNotification);
+						$notification->setStatus(0);
+						$em->flush();
+						return $this->redirect($request->server->get('HTTP_REFERER'));
+					}else{
+						return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
+					}
+						
+					}else{
+						throw new \Exception('Formato no valido.');
+					}
 
 			//return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 			//return $this->redirect('/pages?redirector=/matrix/choose');

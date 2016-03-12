@@ -1,5 +1,10 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+    {% if app.user.status is defined%}
+        {% set status = app.user.status %}
+    {% else %}
+        {% set status = 0 %}
+    {% endif %}
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
@@ -23,11 +28,13 @@
                                     <b>{{ employee.employeeEmployee.personPerson.names }}</b>
                                 </div>
                                 <div class="">
-                                    <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
-                                    /
-                                    <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
-                                    /
-                                    <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
+                                    {% if status < 2 %}
+                                        <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
+                                    {% else %}
+                                        <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
+                                        /
+                                        <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
