@@ -4,37 +4,40 @@
 	<!-- Modal -->
 	<div id="noveltyModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
-
-			<!-- Modal content-->
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Agregar prueba Novedad</h4>
-				</div>
-				<div class="modal-body">
-					{{ form_start(form) }}
-					{{ form_errors(form) }}
-					<h2>Selecciona el tipo de novedad</h2>
-					<div id="formFields">
-						{{ form_widget(form.noveltyTypeGroup) }}
-						<hr>
-						<br>
-						{% for child in form.noveltyType %}
-							{% set index = child.vars.value %}
-							<div class="{{ choices[index].grupo }}" class="noveltySelect" >
-								{{ form_widget(child) }}
+				<div class="modal-body" style="padding: 0">
+                	<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                	<div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                    	<div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Agregar novedad</div>
+                	</div>
+                	<div class="row-fluid clearfix cuerpoNovelty" style="padding: 30px; 15px;">
+                    	{{ form_start(form) }}
+						{{ form_errors(form) }}
+						<span class="seleccionar">Selecciona el tipo de novedad</span>
+						<div id="formFields">
+							{{ form_widget(form.noveltyTypeGroup,{'attr': {'class':'clearfix'}}) }}
+							<div id="subTypes" class="clearfix">
+								{% for child in form.noveltyType %}
+									{% set index = child.vars.value %}
+									<div class="{{ choices[index].grupo }}" class="noveltySelect" >
+										{{ form_widget(child) }}
+									</div>
+
+								{% endfor %}
 							</div>
-
-						{% endfor %}
-					</div>
-					{{ form_widget(form.save) }}
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					{{ form_end(form) }}
-				</div>
-				<div class="modal-footer">
-
-				</div>
-			</div>
-
+						</div>
+						<div class="row">
+							<div class="col-xs-6 text-right">
+								<button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+							</div>
+							<div class="col-xs-6 text-left">
+								<button type="submit" id="form_save" name="form[save]" class="btn btn-orange">Siguiente</button>
+								<div style="display: none">{{ form_widget(form.save) }}</div>
+							</div>
+						</div>
+						{{ form_end(form) }}
+                	</div>
+            	</div>
+        	</div>
 		</div>
 	</div>
