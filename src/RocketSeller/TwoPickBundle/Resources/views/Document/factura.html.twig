@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Factura de servicio de Symplifica</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header {
+    height: 100px;
+}
+
+.level {
+    overflow: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+.table {
+    border-style: solid;
+    margin: 10px;
+}
+
+.border {
+    border-style: solid;
+}
+
+.title {
+    text-align: center;
+    background: gray;
+}
+
+.columns {
+    overflow: auto;
+}
+
+.columns .cols {
+    float: left;
+    width: 50%;
+    text-align: justify;
+}
+
+.row {
+    overflow: auto;
+    border-bottom: solid;
+}
+
+</style>
+</head>
+<body>
+{% set local = "now"|date("d-m-y") %}
+<hr />
+<div class="level">
+    <div style="width: 33%; float: left;">
+        <p>SYMPLIFICA logo</p>
+    </div>
+    <div style="width: 34%; float: left;">
+        <small>IVA Régimen Común</small>
+        <small>No Somos Grandes Contribuyentes - No Somos Autorretenedores</small>
+        <small>Actividad Económica 7020</small>
+        <small>Resolución DIAN No. 320001302735 del 2015/08/19</small>
+        <small>Numeración Autorizada por Computador del 01 al 1000</small>
+    </div>
+    <div style="width: 33%; float: left;">
+        <p>FACTURA DE VENTA</p>
+        <p>Nº {{ data.invoiceNumber }}</p>
+    </div>
+</div>
+
+<div class="level">
+    <div style="width: 33%; float:left"><small>SYMPLIFICA S.A.S.</small></div>
+    <div style="width: 34%; float:left"><small>NIT 900.862.831-7</small></div>
+    <div style="width: 33%; float:left"><small>BOGOTÁ - COLOMBIA</small></div>
+</div>
+
+<div class="level table">
+    <div class="title"><strong>DATOS DEL CLIENTE</strong></div>
+    <div class="columns">
+        <div class="cols">
+            <p><strong>Nombre:</strong>{{ data.client.name }}</p>
+            <p><strong>{{ data.client.docType }}:</strong>{{ data.client.docNumber }}</p>
+            <p><strong>Dirección:</strong>{{ data.client.address }}</p>
+            <p><strong>Teléfono:</strong>{{ data.client.phone[0].phoneNumber }}</p>
+            <p><strong>Ciudad:</strong>{{ data.client.city }}</p>
+        </div>
+        <div class="cols">
+            <p><strong>Orden de compra:</strong>{{ data.purchaseOrder.number }}</p>
+            <p><strong>Ciudad:</strong>{{ data.purchaseOrder.city }}</p>
+            <p><strong>Fecha:</strong>{{ "now"|date('d-m-y') }}</p>
+            <p><strong>Vencimiento:</strong>{{ data.purchaseOrder.endDate }}</p>
+            <p><strong>Centro/subcentro:</strong>{{ data.purchaseOrder.center }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="level table">
+    <div class="columns">
+        <div class="row">
+            <div class="title" style="width: 55%; float: left;"><strong>DESCRIPCION</strong></div>
+            <div class="title" style="width: 15%; float: left;"><strong>CANTIDAD</strong></div>
+            <div class="title" style="width: 15%; float: left;"><strong>VR UNITARIO</strong></div>
+            <div class="title" style="width: 15%; float: left;"><strong>VALOR TOTAL</strong></div>
+        </div>
+        {% for key, item in data.items %}
+            <div class="row" style="width:100%">
+                <div class="cols" style="width:55%;">
+                    <p>{{ item.product.name }}</p>
+                </div>
+                <div class="cols" style="width:15%;">
+                    <p></p>
+                </div>
+                <div class="cols" style="width:15%;">
+                    <p>{{ item.unitValue }}</p>
+                </div>
+                <div class="cols" style="width:15%;">
+                    <p>{{ item.totalValue }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="columns">
+        <div class="cols" style="width:70%;">
+            <p>SON:</p>
+        </div>
+        <div class="cols" style="width:15%;">
+            <p><strong><small>SUB-TOTAL</small></strong></p>
+            <p><strong><small>IVA</small></strong></p>
+            <p><strong><small>RETE-FUENTE</small></strong></p>
+            <p><strong><small>TOTAL</small></strong></p>
+        </div>
+        <div class="cols" style="width:15%;">
+            <p></p>
+            <p></p>
+            <p></p>
+            <p>{{ data.purchaseOrder.total }}</p>
+        </div>
+    </div>
+    <div class="columns">
+        <small>No practicar retencion en la fuente de Renta, Según paragrafo 2, art. 4 de la ley 1429 de 2010 esta FACTURA, se asimila en todos sus efectos a un titulo valor según ley 1231 de 17 - 01 - 2008</small>
+    </div>
+</div>
+
+<div class="level">
+    <div class="table" style="width:40%; float:left; height: 100px;">
+        <small class="">Elaborado por</small>
+    </div>
+    <div class="table" style="width:40%; float:right; height: 100px;">
+        <small class="">Aceptado por:</small>
+        <small class="">Firma y sello del cliente</small>
+    </div>
+</div>
+
+<div class="level table">
+    <small>Direccion: CRA 13 Nº 93 - 68 OF 404   I  Telefono: +57 (1) 7953525   I servicio@afiliese.com</small>
+</div>
+<p>&nbsp;</p>
+</body>
+</html>
