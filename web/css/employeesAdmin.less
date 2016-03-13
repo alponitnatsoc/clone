@@ -1,0 +1,138 @@
+@import (reference) "public/bootstrap-variables.less";
+@import (reference) "public/variables.less";
+
+
+
+#employees {
+    margin: 30px 0;
+    padding-bottom: 20px;
+
+    & .employeeListItem {
+      border: 1px solid #ccc;
+      height: 70px;
+
+
+      & .employeeStatusAdd {
+        display: inline-block;
+        height: 100%;
+        line-height: 70px;
+        margin: auto;
+        vertical-align: middle;   
+        background-color: @orange;
+        text-align: center;
+      }
+
+
+      & .employeeInfo {
+        display: inline-block;
+        height: 100%;
+        line-height: 70px;
+        margin: auto;
+        vertical-align: middle;  
+        border-left: 10px solid @orange;      
+      }
+
+      & .actionButton {
+
+        background-color: #ccc;
+        height: 100%;
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+        line-height: 70px;
+        margin: auto;
+        color: @txtWhite;
+
+        & a {
+          color: @txtWhite;
+        }
+      } 
+
+      & .employeeStatus {
+        display: inline-block;
+        height: 100%;
+        line-height: 70px;
+        margin: auto;
+        vertical-align: middle;
+        color: @orange;
+
+        & .glyphicon {
+          font-size: 1.3em;
+          vertical-align: sub;
+        }
+      }
+    }
+
+    
+    .employee {
+        margin-top: 10px;
+        > div > .col-xs-12 {
+            min-height: 130px;
+            border: 1px solid #DEDFE0;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .employee_name {
+            font-weight: bold;
+            color: #314A5A;
+            font-size: 16px;
+        }
+        .employee_work_time {
+            font-size: 16px;
+            font-weight: 100;
+        }
+        .btn {
+            background-color: #00CBC9;
+            border: none;
+            &:hover {
+                box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            }
+        }
+
+        &.add {
+            > div > .col-xs-12 {
+                &:hover {
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+                }
+            }
+            a {
+                color: #DEDFE0;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .inactivo {
+            .btn {
+                background-color: #ccc;
+            }
+        }
+    }
+
+    & .wizardAddLink {
+
+    }
+
+    & .wizardAddLink a {
+      font-size: 22px;
+      color: #00cdcc;
+    }
+}
+
+
+
+
+@media only screen and (max-device-width : 360px) { 
+ 
+.basicConfirmation {
+
+  & .confirmationBlock {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+}
