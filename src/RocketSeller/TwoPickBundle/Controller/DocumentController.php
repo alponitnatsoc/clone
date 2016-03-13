@@ -152,10 +152,10 @@ class DocumentController extends Controller
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
-			
-			if (in_array($document->getMediaMedia()->getContentType(),$fileTypePermitted)) 
+
+			if (in_array($document->getMediaMedia()->getContentType(),$fileTypePermitted))
 			{
-					
+
 					$medias=$document->getMediaMedia();
 					/** @var Media $media */
 					foreach ($medias as $media) {
@@ -186,7 +186,7 @@ class DocumentController extends Controller
 					}else{
 						return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
 					}
-						
+
 					}else{
 						throw new \Exception('Formato no valido.');
 					}
@@ -499,6 +499,52 @@ class DocumentController extends Controller
 	                'employer' => $employerInfo
 	            );
 	            break;
+	        case "factura":
+	            //id de la orden de compra
+	            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrders');
+	            /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders */
+	            $purchaseOrders = $repository->find($id);
+
+	            $purchaseInfo = array(
+	                'number' => $purchaseOrders->getIdPurchaseOrders(),
+	                'city' => 'bogotá',
+	                'endDate' => null,
+	                'center' => null,
+	                'total' => $purchaseOrders->getValue()
+	            );
+
+	            $client = $purchaseOrders->getIdUser()->getPersonPerson();
+	            $clientInfo = array(
+	                'name' => $this->fullName($client->getIdPerson()),
+	                'docType' => $client->getDocumentType(),
+	                'docNumber' => $client->getDocument(),
+	                'address' => $client->getMainAddress(),
+	                'phone' => $client->getPhones()->getValues(),
+	                'city' => $client->getCity()->getName()
+	            );
+
+	            $descriptions = $purchaseOrders->getPurchaseOrderDescriptions();
+
+	            /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
+	            foreach ($descriptions as $desc) {
+	                $items[] = array(
+	                    'desc' => $desc->getDescription(),
+                        'product' => $desc->getProductProduct(),
+	                    'pays' => $desc->getPayPay(),
+	                    'status' => $desc->getPurchaseOrdersStatus(),
+	                    'totalValue' => $desc->getValue(),
+	                    'unitValue' => $desc->getProductProduct()->getPrice()
+	                );
+	                $iva = $desc->getValue() - $desc->getProductProduct()->getPrice();
+// 	                $acuIva = $iva;
+	            }
+
+	            $data = array(
+	                'invoiceNumber' => '###',
+	                'client' => $clientInfo,
+	                'purchaseOrder' => $purchaseInfo,
+	                'items' => $items
+	            );
     	    default:
     	        break;
         };

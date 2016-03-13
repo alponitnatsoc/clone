@@ -120,7 +120,7 @@ class EmployeeRestController extends FOSRestController
         $request->setMethod("GET");
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
             "employeeId" => $idEmployerHasEmployee,
-                ), array('_format' => 'json'));
+        ), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return $view->setStatusCode($insertionAnswer->getStatusCode());
         }
@@ -543,8 +543,8 @@ class EmployeeRestController extends FOSRestController
                 if ($employee == null || !$flag) {
                     $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     return $this->render(
-                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                                'employees' => $employeesData));
+                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                        'employees' => $employeesData));
                 }
             }
             $people = $employerEmployee->getEmployeeEmployee()->getPersonPerson();
@@ -577,7 +577,7 @@ class EmployeeRestController extends FOSRestController
                     $tempPhone = $phoneRepo->find($actualPhonesId[$i]);
                     if ($tempPhone->getPersonPerson()->getEmployee()->getIdEmployee() != $employee->getIdEmployee()) {
                         $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '1')),
-                                    'error' => array('wokplaces' => 'you dont have those phones')))->setStatusCode(400);
+                            'error' => array('wokplaces' => 'you dont have those phones')))->setStatusCode(400);
                         return $view;
                     }
                 } else {
@@ -663,6 +663,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(array=true, name="workTimeStart", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(array=true, name="workTimeEnd", nullable=true, strict=true, description="benefits conditions.")
      * @RequestParam(name="weekWorkableDays", nullable=true, strict=true, description="days the employee will work per week.")
+     * @RequestParam(array=true,name="weekDays", nullable=true, strict=true, description="days the employee will work per week.")
      * @RequestParam(name="employeeId", nullable=false, strict=true, description="id if exist else -1.")
      * @RequestParam(name="contractId", nullable=true, strict=true, description="id of the contract.")
      * @return View
@@ -708,8 +709,8 @@ class EmployeeRestController extends FOSRestController
                 if ($employee == null || !$flag) {
                     $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     return $this->render(
-                                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                                'employees' => $employeesData));
+                        'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                        'employees' => $employeesData));
                 }
             }
             $idContract = $paramFetcher->get("contractId");
@@ -730,9 +731,6 @@ class EmployeeRestController extends FOSRestController
                     "ulr" => ""));
                 return $view;
             }
-
-
-
 
 
             //contract repos
@@ -797,42 +795,42 @@ class EmployeeRestController extends FOSRestController
                 $contract->setEndDate($datetime);
             }
             if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
-                $actualWeekWorkableDays = $paramFetcher->get('weekWorkableDays');
+                $actualWeekWorkableDayss = $paramFetcher->get('weekWorkableDays');
+                $actualWeekWorkableDays = $paramFetcher->get('weekDays');
                 $sisben = $paramFetcher->get('sisben');
-                $contract->setWorkableDaysMonth($actualWeekWorkableDays * 4);
+                $contract->setWorkableDaysMonth($actualWeekWorkableDayss * 4);
                 $contract->setSisben($sisben);
-                $contract->setSalary($paramFetcher->get('salaryD') * $actualWeekWorkableDays * 4);
+                $contract->setSalary($paramFetcher->get('salaryD') * $actualWeekWorkableDayss * 4);
 
-                /* $workableDays = $contract->getWeekWorkableDays();
-                  foreach ($workableDays as $workableDay) {
+                $workableDays = $contract->getWeekWorkableDays();
+                foreach ($workableDays as $workableDay) {
 
-                  $flagActualRemove = true;
-                  $ifFound = null;
-                  /** @var WeekWorkableDays $workableDay
-                  foreach ($actualWeekWorkableDays as $key => $value) {
-                  if ($workableDay->getDayName() == $value) {
-                  $flagActualRemove = false;
-                  $ifFound = $key;
-                  break;
-                  }
-                  }
-                  if ($flagActualRemove) {
-                  $contract->removeWeekWorkableDay($workableDay);
-                  $em->remove($workableDay);
-                  continue;
-                  } else {
-                  unset($actualWeekWorkableDays[$ifFound]);
-                  }
-                  }
-                  foreach ($actualWeekWorkableDays as $key => $value) {
-                  $weekWorkableDay = new WeekWorkableDays();
-                  $weekWorkableDay->setContractContract($contract);
-                  $weekWorkableDay->setDayName($value);
-                  $contract->addWeekWorkableDay($weekWorkableDay);
-                  }
+                    $flagActualRemove = true;
+                    $ifFound = null;
+                    /** @var WeekWorkableDays $workableDay */
+                    foreach ($actualWeekWorkableDays as $key => $value) {
+                        if ($workableDay->getDayName() == $value) {
+                            $flagActualRemove = false;
+                            $ifFound = $key;
+                            break;
+                        }
+                    }
+                    if ($flagActualRemove) {
+                        $contract->removeWeekWorkableDay($workableDay);
+                        $em->remove($workableDay);
+                        continue;
+                    } else {
+                        unset($actualWeekWorkableDays[$ifFound]);
+                    }
+                }
+                foreach ($actualWeekWorkableDays as $key => $value) {
+                    $weekWorkableDay = new WeekWorkableDays();
+                    $weekWorkableDay->setContractContract($contract);
+                    $weekWorkableDay->setDayName($value);
+                    $contract->addWeekWorkableDay($weekWorkableDay);
+                }
 
-                  $workableDaysMonth = $paramFetcher->get('workableDaysMonth');
-                  $contract->setWorkableDaysMonth($workableDaysMonth); */
+                $contract->setWorkableDaysMonth($contract->getWeekWorkableDays()->count()*4);
             } else {
                 $contract->setSalary($paramFetcher->get('salary'));
                 $contract->setWorkableDaysMonth(30);
@@ -903,12 +901,12 @@ class EmployeeRestController extends FOSRestController
                 $view->setData(array('response' => array('idContract' => $contract->getIdContract())))->setStatusCode(200);
 
                 $this->addFlash(
-                        'notice', 'Your changes were saved!'
+                    'notice', 'Your changes were saved!'
                 );
                 return $view;
             } else {
                 $this->addFlash(
-                        'error', 'Your changes were NO saved!'
+                    'error', 'Your changes were NO saved!'
                 );
                 $view = $this->getErrorsView($errors);
                 return $view;

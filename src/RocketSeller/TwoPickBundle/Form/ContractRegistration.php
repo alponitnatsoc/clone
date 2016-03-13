@@ -159,6 +159,21 @@ class ContractRegistration extends AbstractType
                 'mapped' =>false,
                 'label'=>'Días laborales de la semana*:'
             ))
+            ->add('weekDays', 'choice', array(
+                'choices' => array(
+                    'lunes'=> 'Lunes',
+                    'martes' => 'Martes',
+                    'miercoles' => 'Miercoles',
+                    'jueves' => 'Jueves',
+                    'viernes' => 'Viernes',
+                    'sabado' => 'Sabado',
+                    'domingo' => 'Domingo',
+                ),
+                'multiple' => true,
+                'expanded' => true,
+                'mapped' =>false,
+                'label'=>'Días laborales de la semana*:'
+            ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
                 'choices' => $this->workplaces,

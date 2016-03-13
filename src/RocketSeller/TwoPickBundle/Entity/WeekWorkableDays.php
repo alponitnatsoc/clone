@@ -23,7 +23,7 @@ class WeekWorkableDays
     private $idWeekWorkableDays;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint",nullable=true)
      */
     private $dayNumber;
 
