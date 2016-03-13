@@ -285,6 +285,7 @@ use LiquidationMethodsTrait;
             throw $this->createAccessDeniedException();
         }
         $data = $this->getData();
+        dump($data);
         $novelties = array();
         if ($data) {
             foreach ($data as $key => $value) {
