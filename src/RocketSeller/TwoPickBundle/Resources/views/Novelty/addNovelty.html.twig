@@ -37,8 +37,14 @@
 				{% endfor %}
 			{% endif %}
 			{{ form_widget(form) }}
-			{{ form_widget(form.save) }}
-			{{ form_widget(form.later) }}
+			<div class="row">
+				<div class="col-xs-6 text-right">
+					{{ form_widget(form.save) }}
+				</div>
+				<div class="col-xs-6">
+					{{ form_widget(form.later) }}
+				</div>
+			</div>
 		</div>
     {{ form_end(form) }}
 	</div>
