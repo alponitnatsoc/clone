@@ -71,7 +71,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">
+                <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -248,8 +248,8 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                        <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Salvar y continuar</a>
-                        <br /><br />
+                    <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Salvar y continuar</a>
+                    <br /><br />
                 </div>
             </div>
 
@@ -406,8 +406,8 @@
                                     </div>
                                     <div class="row">
                                         <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
-                                        <br /><br />
-                                        Además, este tipo de contrato debe cancelarse 30 días antes que finalice. 
+                                            <br /><br />
+                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice. 
                                         </p>
                                     </div>
                                 </div>
@@ -528,7 +528,7 @@
                                         {{ form_label(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        <input id="ex6" type="text" data-slider-min="0" data-slider-max="200000" data-slider-step="1000" data-slider-value="{{ form.employeeHasEmployers.salaryD.vars.value }}"/>
+                                        <input id="ex6" type="text" data-slider-min="21000" data-slider-max="200000" data-slider-step="1000" data-slider-value="{{ form.employeeHasEmployers.salaryD.vars.value }}"/>
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
@@ -583,97 +583,97 @@
                                     </div>
                                 </div-->
                                 <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h3 class="modal-title">Detalles Calculadora</h3>
-                                      </div>
-                                      <div class="modal-body">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Detalles Calculadora</h3>
+                                            </div>
+                                            <div class="modal-body">
 
-                                      </div>
-                                      <div class="modal-footer">
-                                            <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 
-                                      </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                    <!--
-                    <div class="col-sm-12 col-xs-12 worktime">
-                        <div class="col-sm-6 label-group">
-                    {# form_label(form.employeeHasEmployers.workTimeStart) #}
-                </div>
-                <div class="col-sm-6">
-                    {# form_widget(form.employeeHasEmployers.workTimeStart) #}
-                </div>
-            </div>
-
-            <div class="col-sm-12 col-xs-12 worktimeEnd">
-                <div class="col-sm-6 label-group">
-                    {# form_label(form.employeeHasEmployers.workTimeEnd) #}
-                </div>
-                <div class="col-sm-6">
-                    {# form_widget(form.employeeHasEmployers.workTimeEnd) #}
-                </div>
-            </div>
-                    -->
-
-                    <!--
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-xs-12 label-group">
-                            <h3>Beneficios extralegales</h3>
-                        </div>
-                    </div>
-                    <ul id='' class="benefits" data-prototype="
-                    {% filter escape %}
-                        {{ include('RocketSellerTwoPickBundle:DataPrototypes:benefitsPrototype.html.twig', { 'form': form.employeeHasEmployers.benefits.vars.prototype|e }) }}
-                    {% endfilter %}" style="list-style: none">
-                    {% for benefit in form.employeeHasEmployers.benefits %}
-                        <li id="benefits_{{loop.index}}" class="benefitLi">
-                        {{ form_row(benefit.idContractHasBenefits) }}
-                        {{ form_row(benefit.benefitType) }}
-                        {{ form_row(benefit.amount) }}
-                        {{ form_row(benefit.periodicity) }}
-                    </li>
-                    {% endfor %}
-                </ul>
-                <div class="col-sm-12 col-xs-12">
+                <!--
+                <div class="col-sm-12 col-xs-12 worktime">
                     <div class="col-sm-6 label-group">
-                    {{ form_label(form.employeeHasEmployers.benefitsConditions) }}
-                </div>
-                <div class="col-sm-6">
-                    {{ form_widget(form.employeeHasEmployers.benefitsConditions) }}
-                </div>
+                {# form_label(form.employeeHasEmployers.workTimeStart) #}
             </div>
+            <div class="col-sm-6">
+                {# form_widget(form.employeeHasEmployers.workTimeStart) #}
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-xs-12 worktimeEnd">
+            <div class="col-sm-6 label-group">
+                {# form_label(form.employeeHasEmployers.workTimeEnd) #}
+            </div>
+            <div class="col-sm-6">
+                {# form_widget(form.employeeHasEmployers.workTimeEnd) #}
+            </div>
+        </div>
+                -->
+
+                <!--
+                <div class="col-sm-12 col-xs-12">
+                    <div class="col-xs-12 label-group">
+                        <h3>Beneficios extralegales</h3>
+                    </div>
+                </div>
+                <ul id='' class="benefits" data-prototype="
+                {% filter escape %}
+                    {{ include('RocketSellerTwoPickBundle:DataPrototypes:benefitsPrototype.html.twig', { 'form': form.employeeHasEmployers.benefits.vars.prototype|e }) }}
+                {% endfilter %}" style="list-style: none">
+                {% for benefit in form.employeeHasEmployers.benefits %}
+                    <li id="benefits_{{loop.index}}" class="benefitLi">
+                    {{ form_row(benefit.idContractHasBenefits) }}
+                    {{ form_row(benefit.benefitType) }}
+                    {{ form_row(benefit.amount) }}
+                    {{ form_row(benefit.periodicity) }}
+                </li>
+                {% endfor %}
+            </ul>
             <div class="col-sm-12 col-xs-12">
                 <div class="col-sm-6 label-group">
-                    ¿Ya cuenta con un contrato firmado?*
+                {{ form_label(form.employeeHasEmployers.benefitsConditions) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_widget(form.employeeHasEmployers.benefitsConditions) }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12">
+            <div class="col-sm-6 label-group">
+                ¿Ya cuenta con un contrato firmado?*
+            </div>
+            <div class="col-sm-1">
+                <div class="radio" style="text-align: left;">
+                    <label class="required" aria-required="true">
+                        <input id="si_tiene_contrato" type="radio" name="tiene_contrato" checked="checked"> Si
+                    </label>
                 </div>
-                <div class="col-sm-1">
-                    <div class="radio" style="text-align: left;">
-                        <label class="required" aria-required="true">
-                            <input id="si_tiene_contrato" type="radio" name="tiene_contrato" checked="checked"> Si
-                        </label>
-                    </div>
-                    <div class="radio" style="text-align: left;">
-                        <label >
-                            <input id="no_tiene_contrato" type="radio" name="tiene_contrato"> No
-                        </label>
-                    </div>
-                </div>
-                <div class="col-sm-5">
-                    <div class="collapse" id="noTarget" style="text-align: left; color: #ccc">
-                            <p><i class="fa fa-info-circle"></i> ¡Nosotros le ayudamos!</p>
-                            <p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema. <a href="#generarModal" data-toggle="modal" style="color: #00CDCC;">Generar Contrato</a></p>
-                    </div>
+                <div class="radio" style="text-align: left;">
+                    <label >
+                        <input id="no_tiene_contrato" type="radio" name="tiene_contrato"> No
+                    </label>
                 </div>
             </div>
-                    -->
+            <div class="col-sm-5">
+                <div class="collapse" id="noTarget" style="text-align: left; color: #ccc">
+                        <p><i class="fa fa-info-circle"></i> ¡Nosotros le ayudamos!</p>
+                        <p>Podemos generar el contrato con los datos ya ingresados. Una vez lo haya generado, descárguelo, revíselo y luego imprima dos (2) copias para que sean firmadas por usted y su empleado. Luego escanee o tome fotografía de cada una de las hojas del contrato y súbala al sistema. <a href="#generarModal" data-toggle="modal" style="color: #00CDCC;">Generar Contrato</a></p>
+                </div>
+            </div>
+        </div>
+                -->
 
 
             </div>
@@ -750,6 +750,24 @@
 
         {{ form_end(form) }}
     </div>
+
+
+    <!-- Modal salario minimo -->
+    <div class="modal fade" id="salarioMinimo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Advertencia salario minimo</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal TI -->
     <div class="modal fade" id="TIModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog" role="document">

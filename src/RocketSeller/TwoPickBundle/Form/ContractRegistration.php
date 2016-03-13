@@ -104,7 +104,7 @@ class ContractRegistration extends AbstractType
                 'currency'=>'COP',
                 'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
                 'required'=>false,
-                //'scale'=>0
+                'scale'=>0
             ))
             ->add('salaryD', 'money', array(
                 'currency'=>'COP',
