@@ -1,0 +1,144 @@
+@import (reference) "public/bootstrap-variables.less";
+@import (reference) "public/variables.less";
+
+
+#registrationTypeContainer {    
+  background: url(/img/registrationBackground3.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  height: 100%;
+  padding: 40px 0;
+  overflow: hidden;
+
+  & .content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    & img {
+        width: 120px;
+    }
+  }
+  & .registrationTypeTitle {
+    background-color: #00C4C5;
+    color: @txtWhite;
+    height: 60px;
+    text-align: center;
+    font-size: 26px;
+    padding: 10px 0 0;
+    font-weight: 100;
+  }
+
+  & .darkOne {
+    background-color: #008990;
+  }
+
+  & .registrationTypeOption {
+
+  }
+
+  & .registrationTypeOption:last-child {
+    
+  }  
+
+  & .registrationTypecontent {
+    background-color: @whiteBackGround;
+    padding: 20px;
+  }
+
+  & .optionPrice {
+    color: #89878B;
+    width: 100%;
+    border-bottom: 1px solid #ccc; 
+    margin: 0 0 20px;
+
+    & h3 {
+        color: @orange;
+    }
+  }
+
+  & .optionPrice {
+    color: #89878B;
+
+  }
+
+  & .optionDescription {
+    text-align: left;
+    margin: 0 0 10px;
+  }
+}
+
+.smallOrangeBox {
+    width: 450px;
+    margin: 40px auto;
+
+    & label {
+        display: none;
+    }
+
+    .smallOrangeBoxTitle {
+        background-color: @orange;
+        height: 60px;
+        text-align: center;
+        margin: 0;
+
+    }
+
+    .boxImagetitle {
+        max-width: 180px;
+        margin: 14px 0 0;
+    }
+
+    .smallOrangeBoxContent {
+        background-color: @whiteBackGround;
+        padding: 10px 40px;
+        text-align: center;
+
+        & h3 {
+            color: @txtGray;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 100;
+        }
+        & span {
+            color: @txtGray;   
+            display: block;
+            margin-bottom: 5px;
+        }
+        & .light-text {
+            color: @txtLightGray;
+            display: block;
+        }
+
+        & .txt-A1-terms {
+            color: @txtGray;
+            font-size: 12px;
+        }
+
+        & .smallDivider {
+            margin: 5px 0;
+        }
+
+        & .registrationSocialNetworks {
+            margin: 10px 0;
+            overflow: hidden;
+            width: 100%;
+        }
+    }
+
+    .smallOrangeBoxNetworks {
+        background-color: @whiteBackGround;
+    }
+}
+
+/* For the Confirmation of the Registration */
+
+
+@media only screen and (max-device-width : 360px) { 
+ 
+.smallOrangeBox {
+    width: 100%;
+}
+
+}
