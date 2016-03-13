@@ -107,7 +107,7 @@
         .blockUpData label{
             min-height: 1px;
         }
-        #pagoMembresiaFormContainer input{
+        #pagoMembresiaFormContainer input[type="text"]{
             color: #919191;
         }
         #expiry_date_month, #expiry_date_year, #cvv{
@@ -307,7 +307,7 @@
 
         <div id="infoTarjeta" class="infoTarjeta form-group">
             <div class="col-md-12 center">
-                <span style="margin-top: 20px"><h4>Información de la tarjeta de crédito*</h4></span>
+                <span style="margin-top: 20px"><h3>Información de la tarjeta de crédito*</h3></span>
                 <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
                 <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
             </div>
@@ -318,7 +318,7 @@
                             <label>Nombre en la tarjeta:</label>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="nombre" required="required">  
+                            <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">  
                         </div>
                         <!--<img src="/img/typePerson.png">-->                        
                     </div>
@@ -352,7 +352,7 @@
                                     <option value="11">11</option>
                                     <option value="12">12</option>
                                 </select>
-                                <input type="number" min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="yy" required="required">
+                                <input type="number" min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="Año" required="required">
                             </div>
                         </div>
                         <!--<img src="/img/typePerson.png">-->                        
@@ -373,7 +373,7 @@
         {% if descuento_isRefered['object']|length <=0 %}
             <div id="codigoReferido" class="codigoReferido form-group">
                 <div class="col-md-12 center">
-                    <span style="margin-top: 20px"><h4>Información de la tarjeta de crédito*</h4></span>
+                    <span style="margin-top: 20px"><h3>¿Código de referido?</h3></span>
                     <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
                     <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
                 </div>
@@ -402,58 +402,50 @@
         <input type="hidden" id="esReferido" value="{{ descuento_isRefered['object']|length }}">
         <input type="hidden" id="esReferidoPercent" value="{{ descuento_isRefered['percent'] }}">
 
-        <div id="confirmacionPago" class="confirmacionPago form-group" style="margin: 10px 0px 10px 0px">
+        <div id="confirmacionPago" class="confirmacionPago" style="margin: 10px 0px 10px 0px">
             <div class="col-md-12 center" style="margin-top: 30px">
                 <div class="col-md-12" style="margin-bottom: 20px;">
-                    <label>Confirmación de pago</label>
+                    <h4>Monto de la mensualidad</h4>
+                    <h4 style="color: #FD9224">El primer mes es gratis*</h4>
                 </div>
                 <div class="col-md-12">
-                    <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-2">
 
-                    </div>
-                    <div class="col-md-8 text-left" style="border-bottom: 1px #919191 dotted; padding-bottom: 10px;">
-                        <div class="col-md-8 center" style="margin-bottom: 10px;">
-                            <b>Producto</b>
                         </div>
-                        <div class="col-md-8 text-left">
-                            Servicio mensual Symplifica por:
-                        </div>
-                        {% for employeeData in employees %}
-                            {% set employee = employeeData['employee'] %}
-                            {% set contrato = employeeData['contrato'] %}
-                            {% set product = employeeData['product'] %}
-                            <div class="col-md-12">
-                                <div class="col-md-1">
-                                    <div class="glyphicon glyphicon-user"></div>
-                                </div>                            
-                                <div class="col-md-8">       
-                                    {{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}, 
-                                    labora {{ contrato.workableDaysMonth }} días al mes.
-                                </div>  
-                                <div class="col-md-3">
-                                    <b>$ {{ (product!=null?product.price:0)|number_format }}</b>
-                                    {% if employee.isFree > 0 %}
-                                        <span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>                                    
-                                    {% endif %}
+                        <div class="col-md-8 text-left" style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
+                            
+                            {% for employeeData in employees %}
+                                {% set employee = employeeData['employee'] %}
+                                {% set contrato = employeeData['contrato'] %}
+                                {% set product = employeeData['product'] %}
+                                <div class="col-md-12">
+                                    <div class="col-md-9">       
+                                        <span class="name">{{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}</span>
+                                        <span class="labora">Labora {{ contrato.workableDaysMonth }} días al mes.</span>
+                                    </div>  
+                                    <div class="col-md-3  text-right">
+                                        <b>$ {{ (product!=null?product.price:0)|number_format }}</b>
+                                        {% if employee.isFree > 0 %}
+                                            <span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>                                    
+                                        {% endif %}
+                                    </div>
                                 </div>
+                            {% endfor %}
+                            <div class="col-md-2">
+
                             </div>
-                        {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-2">
 
                         </div>
-                    </div>
-
-                    <div class="col-md-12">        
-                        <div class="col-md-2">
-
-                        </div>              
-                        <div class="col-md-8">
+                        <div class="col-md-8"  style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
                             {% if total_sin_descuentos > 0 %}
                                 <div class="col-md-12">
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 15px; padding-top: 5px;">
-                                        <b>SUBTOTAL:</b>
+                                    <div class="col-md-9 text-right" style="font-size: 15px; padding-top: 5px;">
+                                        <b>SUBTOTAL</b>
                                     </div>  
                                     <div class="col-md-3 text-right" style="padding-top: 5px;">
                                         <div  style="font-size: 15px;"><b>$ {{ total_sin_descuentos|number_format  }}</b></div>
@@ -463,10 +455,8 @@
                             {% endif %}
                             {% if descuento_3er['value'] and descuento_3er['value']  > 0%}
                                 <div class="col-md-12">
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
-                                        <b>Descuento por tener 3 o mas empleados:</b>
+                                    <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por tener 3 o mas empleados</b>
                                     </div>  
                                     <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
                                         <div  style="font-size: 10px;"><b>$ {{ descuento_3er['value']|number_format }}</b></div>
@@ -475,10 +465,8 @@
                             {% endif%}
                             <div class="col-md-12" id="descuento_isRefered">
                                 {% if descuento_isRefered['object'] and descuento_isRefered['value'] > 0 %}
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
-                                        <b>Descuento por ser referido:</b>
+                                    <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por ser referido</b>
                                     </div>  
                                     <div class="col-md-3 text-right" style="padding-top: 5px;">
                                         <div  style="font-size: 10px;"><b>$ {{ descuento_isRefered['value']|number_format }}</b></div>
@@ -487,10 +475,8 @@
                             </div> 
                             {% if descuento_haveRefered['object'] and descuento_haveRefered['value'] > 0 %}
                                 <div class="col-md-12">
-                                    <div class="col-md-1">
-                                    </div>                            
-                                    <div class="col-md-8 text-right" style="font-size: 10px; padding-top: 5px;">
-                                        <b>Descuento por tener {{ descuento_haveRefered['object']|length }} referido(s):</b>
+                                    <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                        <b>Descuento por tener {{ descuento_haveRefered['object']|length }} referido(s)</b>
                                     </div>  
                                     <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
                                         <div  style="font-size: 10px;"><b>$ {{ descuento_haveRefered['value']|number_format }}</b></div>
@@ -498,24 +484,18 @@
                                 </div> 
                             {% endif%}
                             <div class="col-md-12">
-                                <div class="col-md-1">
-                                </div>                            
-                                <div class="col-md-8 text-right" style="font-size: 20px; padding-top: 5px;">
-                                    <b>TOTAL:</b>
+                                <div class="col-md-9 text-right" style="font-size: 20px; padding-top: 5px;">
+                                    <b>TOTAL</b>
                                 </div>  
                                 <div class="col-md-3 text-right" style="padding-top: 5px;">
                                     <div id="divTotal" style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
                                     <input type="hidden" id="total" value="{{ total_con_descuentos }}">  
                                     <div style="font-size: 10px;">IVA incluido</div>
                                 </div>
-                            </div> 
-                        </div>
-                        <div class="col-md-2">
-
-                        </div> 
-
-                    </div>      
-                    <div class="col-md-12" style="margin: 30px 0 20px 0;">
+                            </div>
+                        </div>      
+                    </div>
+                    <div class="col-md-12 blockUpData" style="margin: 30px 0 20px 0;">
                         <input type="checkbox" id="tos" name="tos">
                         <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a> de Symplifica para el cargo mensual del valor del plan</label>                        
                     </div>
@@ -524,11 +504,11 @@
 
             <div class="row buttons center">
                 <div class="col-xs-12 center">
-                    <input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> 
-                    <input type="submit" id="sumbit" class="btn btn-default btn-orange disabled" value="Finalizar" />
+                    <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> 
+                    <input type="submit" id="sumbit" class="btn btn-orange disabled" value="Finalizar" />
                 </div>
             </div>
-            {{ form_end(form) }}
         </div>
-
-    {% endblock %}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
