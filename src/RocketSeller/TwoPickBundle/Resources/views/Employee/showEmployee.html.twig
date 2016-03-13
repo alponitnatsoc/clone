@@ -356,7 +356,6 @@
 			       		{% for payroll in payrolls %}
 			       			{% set novelties = payroll.novelties %}
 			       				{% for novelty in novelties %}
-			       					<p>{{novelty.name}}</p>
 							       	<div class="col-sm-12 row-novelty" style="text-align:center;">
 							       		<div class=" element-table col-sm-3">
 							       			{% if novelty.dateStart %}
@@ -383,10 +382,15 @@
 							       	</div>	
 			       				{% endfor %}
 			       		{% endfor %}
-			       		<div class="col-sm-12 row-add-novelty" style="text-align:center;">
+			       		<div class="col-sm-12  row-add-novelty" style="text-align:center;">	
 			       			<div class="col-sm-4 col-sm-offset-4">
-
-
+			       				<div class="col-sm-2 plus-icon">
+			       					<i class="fa fa-plus-circle fa-2x"></i>
+			       				</div>
+			       				<div class="col-sm-10 text">
+			       					<p> Agregar Novedad</p>
+			       				</div>
+			       					       				
 			       			</div>
 			       		</div>
             		</div>
