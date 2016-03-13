@@ -15,24 +15,46 @@
 
     }
 
+    .name-docs {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .personType {
+        font-weight: 200;
+    }
+
+    .employeesListEmployer .name-docs {
+        color: #314A5A;
+    }
+
+    .btnDownload, .btnUpload {
+        margin: 0 auto;
+        margin-bottom: 5px;
+    }
+
+    .titulos {
+        color: #5D5D5D;
+        font-size: 12px;
+    }
+
 </style>
 <div class="row employeesListHeader" style="border-bottom: 1px solid #E9E9E9;">
-    <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
-        <div class="col-sm-3 col-xs-12 nopadding title">
-
+    <div class="col-sm-12 col-xs-12 blockUpData titulos" style="border-bottom: none;">
+        <div class="col-sm-3 col-xs-12 title">
             Nombre
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
+        <div class="col-sm-2 col-xs-12 text-center">
             <strong>Documento</strong> <p>de Identidad</p>
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
-             <strong>Registro único tributario</strong><p>(RUT)</p> 
+        <div class="col-sm-2 col-xs-12  text-center">
+             <strong>Registro único</strong><p>tributario (RUT)</p> 
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding">
-            <strong>Contrato</strong><p>de trabajo</p>
+        <div class="col-sm-2 col-xs-12 text-center">
+            <strong>Contrato de</strong><p>trabajo <i class="glyphicon glyphicon-cloud-download"></i></p>
         </div>
-        <div class="col-sm-3 col-xs-12 nopadding">
-             <strong>Carta de Autorización</strong> <p>a Symplifica</p>
+        <div class="col-sm-3 col-xs-12 text-center">
+             <strong>Carta de Autorización</strong> <p>a Symplifica <i class="glyphicon glyphicon-cloud-download"></i></p>
         </div>
     </div>
 </div>
@@ -46,10 +68,10 @@
             <p class="personType nopadding">Empleador</p>
 
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding text-center">
+        <div class="col-sm-2 col-xs-12 text-center">
             {% if documents[0] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and documents[0]  == doc.documentTypeDocumentType.name%}
-                        <div class="col-sm-12 btnDownload">
+                        <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -59,7 +81,7 @@
                             </div>
                         </div>
                       {% else %}
-                        <div class="col-sm-12 btnUpload">
+                        <div class="btnUpload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                             </div>
@@ -70,7 +92,7 @@
                         </div>
                 {% endfor %}
             {% else %}
-                <div class="col-sm-12 btnUpload">
+                <div class="btnUpload">
                     <div class="col-sm-2 icon-btn">
                         <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                     </div>
@@ -81,11 +103,11 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding text-center">
+        <div class="col-sm-2 col-xs-12 text-center">
             <div class="upload-btn" style="text-align:left">
                 {% if documents[1] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and (documents[1]  == doc.documentTypeDocumentType.name) %}
-                        {#<div class="col-sm-12 btnDownload">
+                        {#<div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -95,7 +117,7 @@
                             </div>
                         </div>#}
 
-                        <div class="col-sm-12 btnDownload">
+                        <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -106,7 +128,7 @@
                         </div>
 
                       {% else %}
-                        <div class="col-sm-12 btnUpload">
+                        <div class="btnUpload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                             </div>
@@ -118,7 +140,7 @@
 
                 {% endfor %}
             {% else %}
-            <div class="col-sm-12 btnUpload">
+            <div class="btnUpload">
                 <div class="col-sm-2 icon-btn">
                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                 </div>
@@ -133,14 +155,14 @@
             </div>
             
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding text-center">
+        <div class="col-sm-2 col-xs-12 text-center">
             
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding text-center">
+        <div class="col-sm-3 col-xs-12 text-center">
             {% if documents[3] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and (documents[3]  == doc.documentTypeDocumentType.name) %}
 
-                    <div class="col-sm-12 btnDownload">
+                    <div class="btnDownload">
                         <div class="col-sm-2 icon-btn">
                             <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                         </div>
@@ -150,7 +172,7 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="col-sm-12 btnDownload">
+                    <div class="btnDownload">
                         <div class="col-sm-2 icon-btn">
                             <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                         </div>
@@ -159,7 +181,7 @@
                         <strong> Descargar</strong><br>Carta</a>
                         </div>
                     </div>
-                    <div class="col-sm-12 btnUpload">
+                    <div class="btnUpload">
                         <div class="col-sm-2 icon-btn">
                             <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                         </div>
@@ -170,7 +192,7 @@
                     </div>
                 {% endfor %}
             {% else %}
-                    <div class="col-sm-12 btnDownload">
+                    <div class="btnDownload">
                         <div class="col-sm-2 icon-btn">
                             <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                         </div>
@@ -179,7 +201,7 @@
                         <strong> Descargar</strong><br>Carta</a>
                         </div>
                     </div>
-                    <div class="col-sm-12 btnUpload">
+                    <div class="btnUpload">
                         <div class="col-sm-2 icon-btn">
                             <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                         </div>
@@ -204,11 +226,11 @@
                 <p class="personType nopadding">Empleado</p>
 
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding text-center">
+            <div class="col-sm-2 col-xs-12 text-center">
                 {% if documents[0] in documentsTypeByEmployee[0] %}
                     {% for doc in employeeDocs if doc.status %}
                         {% if (documents[0] == doc.documentTypeDocumentType) %}
-                            <div class="col-sm-12 btnDownload">
+                            <div class="btnDownload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                                 </div>
@@ -219,7 +241,7 @@
                             </div>
                         {% endif %}
                         {% else %}
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -230,7 +252,7 @@
                             </div>
                         {% endfor %}
                 {% else %}
-                    <div class="col-sm-12 btnUpload">
+                    <div class="btnUpload">
                         <div class="col-sm-2 icon-btn">
                             <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                         </div>
@@ -241,14 +263,14 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding text-center">
+            <div class="col-sm-2 col-xs-12 text-center">
                 
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding text-center">
+            <div class="col-sm-2 col-xs-12 text-center">
                 {% if documents[2] in documentsTypeByEmployee[0] %}
                     {% for doc in employeeDocs  if doc.status %}
                         {% if (documents[2] == doc.documentTypeDocumentType) %}
-                            <div class="col-sm-12 btnDownload">
+                            <div class="btnDownload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                                 </div>
@@ -260,7 +282,7 @@
 
                         {% endif %}
                         {% else %}
-                            <div class="col-sm-12 btnDownload">
+                            <div class="btnDownload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="download-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -269,7 +291,7 @@
                                 <strong> Descargar</strong><br>Contrato</a>
                                 </div>
                             </div>
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -281,7 +303,7 @@
                     {% endfor %}
                 {% else %}
 
-                            <div class="col-sm-12 btnDownload">
+                            <div class="btnDownload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                                 </div>
@@ -290,7 +312,7 @@
                                 <strong> Descargar</strong><br>Contrato</a>
                                 </div>
                             </div>
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -301,7 +323,7 @@
                             </div>
                 {% endif %}
             </div>
-            <div class="col-sm-2 col-xs-12 nopadding">
+            <div class="col-sm-2 col-xs-12 ">
 
             </div>
         </div>
@@ -321,10 +343,10 @@
 
             </div>
 
-                <div class="col-sm-2 col-xs-12 nopadding text-center">
+                <div class="col-sm-2 col-xs-12 text-center">
                     {% if documents[0] in documentsTypeByEmployee[i] %}
                         {% for doc in employeeDocs if (doc.status) and (documents[0] == doc.documentTypeDocumentType) %}
-                       <div class="col-sm-12 btnDownload">
+                       <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -335,7 +357,7 @@
                         </div>
                             {% else %}
 
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -346,7 +368,7 @@
                             </div>
                         {% endfor %}
                     {% else %}                    
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -360,13 +382,13 @@
 
                     {% endif %}
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding text-center">
+                <div class="col-sm-2 col-xs-12 text-center">
                    
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding text-center">
+                <div class="col-sm-2 col-xs-12 text-center">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
                         {% for doc in employeeDocs if (doc.status) and  (documents[2] == doc.documentTypeDocumentType) %}
-                        <div class="col-sm-12 btnDownload">
+                        <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -378,7 +400,7 @@
 
 
                             {% else %}
-                        <div class="col-sm-12 btnDownload">
+                        <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -387,7 +409,7 @@
                             <strong> Descargar</strong><br>Documento</a>
                             </div>
                         </div>
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -399,7 +421,7 @@
 
                         {% endfor %}
                     {% else %}
-                        <div class="col-sm-12 btnDownload">
+                        <div class="btnDownload">
                             <div class="col-sm-2 icon-btn">
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
@@ -408,7 +430,7 @@
                             <strong> Descargar</strong><br>Documento</a>
                             </div>
                         </div>
-                            <div class="col-sm-12 btnUpload">
+                            <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
                                 </div>
@@ -419,31 +441,16 @@
                             </div>
                     {% endif %}
                 </div>
-                <div class="col-sm-2 col-xs-12 nopadding">
+                <div class="col-sm-2 col-xs-12">
 
                 </div>
             </div>
         </div>
         {% endfor %}
   {% endif %}
-      <div id="myModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
-          </div>
-          <div class="modal-body" id="modal-body">
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div id="modal-body">
         </div>
-
-      </div>
     </div>
 
 
