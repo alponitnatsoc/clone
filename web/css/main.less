@@ -1583,17 +1583,20 @@ select {
     font-weight: 700;
     letter-spacing: 1px;
     font-family: @open;  
+    border: 2px solid @color_boton;
     &:active {
         opacity: 0.7;
         box-shadow: 0 8px rgba(0,0,0,0.2);
         outline: none;
         color: @darkerButtonText;
+        border: 2px solid @color_boton;
     }
     &:hover {
         color: @darkerButtonText;
         outline: none;
         background-color: @color_boton;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        border: 2px solid @color_boton;
     }
     &:focus {
         color: @darkerButtonText;
