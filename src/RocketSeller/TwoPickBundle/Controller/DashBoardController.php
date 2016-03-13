@@ -13,7 +13,7 @@ class DashBoardController extends Controller
 {
 
     /**
-     * Maneja el registro de una nueva persona con los datos básicos, 
+     * Maneja el registro de una nueva persona con los datos básicos,
      * TODO agregar todos los campos de los wireframes
      * @param el Request que manjea el form que se imprime
      * @return La vista de el formulario de la nueva persona
@@ -78,18 +78,16 @@ class DashBoardController extends Controller
             'boxStyle' => "big",
             'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
         $steps ['0'] = $step1;
+        $step2 = array(
+            'url' => $stateRegister != 100 ? "" :$this->generateUrl('manage_employees'),
+            'name' => "Datos de mis empleados",
+            'state' => $stateEmployees,
+            'paso' => 2,
+            'boxStyle' => "big",
+            'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
+        $steps ['1'] = $step2;
 
-
-        if ($stateEmployees == 100) {
-            $step2 = array(
-                'url' => $this->generateUrl('manage_employees'),
-                'name' => "Datos de mis empleados",
-                'state' => $stateEmployees,
-                'paso' => 2,
-                'boxStyle' => "big",
-                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
-            $steps ['1'] = $step2;
-
+        if ($stateRegister == 100) {
             $step3 = array(
                 'url' => $this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
                 'name' => "Agregar un nuevo Empleado?",
@@ -98,15 +96,6 @@ class DashBoardController extends Controller
                 'boxStyle' => "small",
                 'stateMessage' => "Iniciar",);
             $steps ['2'] = $step3;
-        } else {
-            $step2 = array(
-                'url' => $stateRegister != 100 ? "" : $this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
-                'name' => "Datos de los empleados",
-                'state' => $stateEmployees,
-                'paso' => 2,
-                'boxStyle' => "big",
-                'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
-            $steps ['1'] = $step2;
         }
         $step4 = array(
             'url' => $stateEmployees != 100 ? "" : $this->generateUrl('subscription_choices'),

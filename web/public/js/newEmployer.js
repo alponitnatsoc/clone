@@ -75,6 +75,30 @@ function startEmployer() {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
         addPhoneForm($collectionHolder, $newLinkLi);
+        var liWorkplace=$("#addWorkplace").prev();
+        $(liWorkplace).find('select').filter(function () {
+            return this.id.match(/department/);
+        }).change(function () {
+            var $department = $(this);
+            // ... retrieve the corresponding form.
+            var $form = $(this).closest('form');
+            // Simulate form data, but only include the selected department value.
+            var data = {};
+            data[$department.attr('name')] = $department.val();
+            var citySelectId = $department.attr("id").replace("_department", "_city");
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                method: "POST",
+                url: "/api/public/v1/cities",
+                data: {department: $department.val()}
+            }).done(function (data) {
+                $('#' + citySelectId).html(
+                    // ... with the returned one from the AJAX response.
+                    jsonToHTML(data)
+                );
+            });
+
+        });
     });
 
     // count the current form inputs we have (e.g. 2), use that as the new
@@ -439,6 +463,7 @@ function addPhoneForm($collectionHolderB, $newLinkLi) {
     var $newFormLi = $('<li class="col-sm-12"></li>').append(newForm);
     addTagFormDeleteLink($newFormLi, "lugar de trabajo");
     $newLinkLi.before($newFormLi);
+    $(newForm).find("select");
 }
 function addTagFormDeleteLink($tagFormLi, $tipo) {
     var $removeFormA = $('<a href="#" class="col-sm-5 col-xs-8 remove_phone_link" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar esta dirección de trabajo</a>');
