@@ -3,6 +3,7 @@
    ========================================================================== */
 @import "registro.css";
 @import "confirmations.css";
+@import "employeesAdmin.css";
 body {
   background-color: #f8f8f8;
 }
@@ -1647,49 +1648,6 @@ select.error {
 }
 .blue {
   color: #00CDCC;
-}
-#employees {
-  margin-top: 30px;
-  border-top: 1px solid #DEDFE0;
-  border-bottom: 1px solid #DEDFE0;
-  padding-bottom: 20px;
-}
-#employees .employee {
-  margin-top: 10px;
-}
-#employees .employee > div > .col-xs-12 {
-  min-height: 130px;
-  border: 1px solid #DEDFE0;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-#employees .employee .employee_name {
-  font-weight: bold;
-  color: #314A5A;
-  font-size: 16px;
-}
-#employees .employee .employee_work_time {
-  font-size: 16px;
-  font-weight: 100;
-}
-#employees .employee .btn {
-  background-color: #00CBC9;
-  border: none;
-}
-#employees .employee .btn:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-}
-#employees .employee.add > div > .col-xs-12:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-}
-#employees .employee.add a {
-  color: #DEDFE0;
-}
-#employees .employee.add a:hover {
-  text-decoration: none;
-}
-#employees .employee .inactivo .btn {
-  background-color: #FD9224;
 }
 .result_ajax {
   font-weight: bold;
