@@ -4,14 +4,15 @@
         <style>
             .dashboard_employer_pending_tasks {
                 display: inline-block;
-                border:1px solid #efefef;
-                background: white;
-                margin: 10px;
-                height: 300px;
-                border-radius: 0px !important;
-                padding-left: 0px !important;
-                padding-right: 0px !important;
             }
+
+            .dashboard_employer_pending_tasks > .col-xs-12 {
+                background-color: #F5F5F6;
+                border-radius: 2px;
+                min-height: 200px;
+                margin-bottom: 30px;
+            }
+
             .dashboard_employer_pending_tasks_list {
                 display: inline-block;
                 width: 100%;
@@ -21,18 +22,13 @@
 
             .panel_btn{
                 text-align: center;
-                bottom: 0px;
-                position: absolute;
                 width: 100%;
 
                 margin-bottom: 10px;
             }
             .panel-deadline{
                 text-align: center;
-                bottom: 40px;
-                position: absolute;
                 width: 100%;
-                margin-left: -15px;
                 height: 30px;
                 background-color: #efefef;
 
@@ -120,14 +116,14 @@
                 vertical-align: -webkit-baseline-middle;
             }
             .glyphicon-th-large{
-                color:#00CDCC;
+                color:#3C4B5A;
             }
             .glyphicon-th-large:hover{
-                color:#00CDCC;
+                color:#3C4B5A;
                 cursor: pointer;
             }
             .glyphicon-th-list{
-                color:#00CDCC;
+                color:#3C4B5A;
             }
             .dashboard_employer_order_by_select{
                 width: 25%;
@@ -136,7 +132,6 @@
             .dashboard_employer_contador_div{
                 padding: 5px 30px 5px 30px;
                 display: inline-block;
-                text-align: center;
             }
             .dashboard_employer_reminder{
                 display: -webkit-box;
@@ -152,19 +147,25 @@
                 border-width: 2px;
             }
             .dashboard_employer_contador_type_alert{
-                background-color: orange;
+                background-color: #BE1E2D;
                 height: 10px;
-                width: 100%;
+                width: 10px;
+                margin-top: 4px;
+                margin-right: 6px;
                 display: inline-block;
+                float: left;
             }
             .contador_logo{
                 height: 50px;
             }
             .dashboard_employer_contador_type_notification{
-                background-color: lightgreen;
+                background-color: #5D5D5D;
                 height: 10px;
-                width: 100%;
+                width: 10px;
+                margin-top: 4px;
+                margin-right: 6px;
                 display: inline-block;
+                float: left;
             }
             .dashboard_employer_contador_type_mensaje{
                 background-color: #00CDCC;
@@ -183,7 +184,7 @@
                 width: 60%;
             }
             .view{
-                margin-left: 10px;
+                margin-left: 0;
                 font-size: 15px;
             }
             .view:hover{
@@ -230,49 +231,83 @@
             .notification_contenedor{
                 display: table;
             }
+
+            #modal-body {
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+
+            .form-group {
+                text-align: center;
+            }
+
+            #add_document_save {
+                text-align: center;
+                margin-top: 40px;
+            }
         </style>
     {% endblock %}
     <title>{% block title %}Dashboard - Employer{% endblock %}</title>
     {# dump(user) #}
     {% if notifications %}
-        <h4>¡Bienvenido a tu centro de control de tareas pendientes!</h4>
-        {# dump(notifications) #}
-        <div class="dashboard_employer_head">
-            <div class="col-sm-12 dashboard_employer_contador">
-                <div class="col-sm-4 dashboard_employer_contador_div">
-                    <div class="contador_logo"> </div>
-                    <span class="dashboard_employer_contador_type_alert"></span>
-                    <span class="txthelp"><p>Alertas</p></span>
+        <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
+            <div id="" class="col-sm-12 col-xs-12 blockStep inline">
+                <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                    <img src="/img/block-inline.png" class="center-block">                    
                 </div>
-                <div class="col-sm-4 dashboard_employer_contador_div">
-                    <div class="contador_logo"> </div>
-                    <span class="dashboard_employer_contador_type_notification"></span>
-                    <span class="txthelp"><p>Notificaciones</p></span>
-                </div>
-                <div class="col-sm-4 dashboard_employer_contador_div">
-                    <div class="contador_logo"> </div>
-                    <span class="dashboard_employer_contador_type_mensaje"></span>
-                    <span class="txthelp"><p>Mensajes</p></span>
+                <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                    <div id="" class="text-left">
+                        Bienvenido a tu tablero de control
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-12 dashboard_employer_order_by">
-                <p class="txthelp col-sm-12">Ordenar por:</p>
-                <select class="col-sm-12 form-group form-control dashboard_employer_order_by_select">
-                    {% set view = {'view' : app.request.get('view')} %}
-                    <option value="{{ path('show_dashboard_employer',  view|merge( { 'orderBy': 'deadline' })) }}"
-                            {{ app.request.get('orderBy') == 'deadline'?'selected':''  }}>Fecha Límite</option>
-                    <option value="{{ path('show_dashboard_employer', view|merge( { 'orderBy': 'type' })) }}"
-                            {{ app.request.get('orderBy') == 'type'?'selected':''  }}>Tipo Tarea</option>
-                </select>
-                {% set orderBy = {'orderBy' : app.request.get('orderBy')} %}
-
-                <div class="col-sm-12">
-                    <span class="glyphicon glyphicon-th-large view">
-                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important;">Cuadricula</a>
-                    </span>
-                    <span class="glyphicon glyphicon-th-list view">
-                        <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important;">Listado</a>
-                    </span>
+        </div>
+        {# dump(notifications) #}
+        <div class="dashboard_employer_head">
+            <div class="col-sm-7" style=" font-size: 12px;">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <p class="txthelp col-sm-12">Ordenar por:</p>
+                        <select class="col-sm-12 form-group form-control dashboard_employer_order_by_select" style="width: 100%;">
+                            {% set view = {'view' : app.request.get('view')} %}
+                            <option value="{{ path('show_dashboard_employer',  view|merge( { 'orderBy': 'deadline' })) }}"
+                                    {{ app.request.get('orderBy') == 'deadline'?'selected':''  }}>Fecha Límite</option>
+                            <option value="{{ path('show_dashboard_employer', view|merge( { 'orderBy': 'type' })) }}"
+                                    {{ app.request.get('orderBy') == 'type'?'selected':''  }}>Tipo Tarea</option>
+                        </select>
+                    </div>
+                    {% set orderBy = {'orderBy' : app.request.get('orderBy')} %}
+                    <div class="col-sm-7">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p>&nbsp;</p>
+                                <span class="glyphicon glyphicon-th-large view">
+                                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important; font-size: 12px;">Cuadricula</a>
+                                </span>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>&nbsp;</p>
+                                <span class="glyphicon glyphicon-th-list view">
+                                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important; font-size: 12px;">Listado</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5" style=" font-size: 12px;">
+                <div class="row">
+                    <div class="col-sm-5 dashboard_employer_contador_div">
+                        <p>&nbsp;</p>
+                        <span class="dashboard_employer_contador_type_alert"></span>
+                        <span class="txthelp" style=" font-size: 12px;"><p>Alertas</p></span>
+                    </div>
+                    <div class="col-sm-7 dashboard_employer_contador_div">
+                        <p>&nbsp;</p>
+                        <span class="dashboard_employer_contador_type_notification"></span>
+                        <span class="txthelp" style=" font-size: 12px;"><p>Notificaciones</p></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -310,7 +345,7 @@
                             <div class="btn_list pull-right">
                                 {% if notification.accion %}
                                     {% if notification.accion|lower == "subir documento" %}
-                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</span>
+                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
                                     {% else %}
                                         <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
                                     {% endif %}
@@ -320,52 +355,44 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="panel dashboard_employer_pending_tasks col-md-3">
-                            <div class="panel-heading clear-fix">
-                                {% if notification.type  %}
-                                    <div class="label label-as-badge type_{{ notification.type }} pull-left"> </div>
-                                {% else %}
-                                    <div class="label label-as-badge label-success pull-left">!</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-12 panel-logo">
-
-                            </div>
-                            <div class="panel-body">
-                                <p class="label-group">
-                                    {{ notification.description }}
-                                </p>
-                                <div class="panel-deadline col-sm-12">
-                                {% if notification.deadline %}
-                                    {% set str_deadline = 'Fecha límite: ' %}
-                                    {% set deadline_type =  ''%}
-                                    {% set difference = date().diff(date(notification.deadline)) %}
-                                    {% if difference.invert== 1 %}
-                                        {% set deadline_type = '_alert' %}
-                                        {% set str_deadline =  str_deadline ~ '-' %}
+                        <div class="dashboard_employer_pending_tasks col-md-4">
+                            <div class="col-xs-12">
+                                <div class="panel-body">
+                                    <p class="label-group">
+                                        {{ notification.description }}
+                                    </p>
+                                    <div class="panel-deadline col-sm-12">
+                                    {% if notification.deadline %}
+                                        {% set str_deadline = 'Fecha límite: ' %}
+                                        {% set deadline_type =  ''%}
+                                        {% set difference = date().diff(date(notification.deadline)) %}
+                                        {% if difference.invert== 1 %}
+                                            {% set deadline_type = '_alert' %}
+                                            {% set str_deadline =  str_deadline ~ '-' %}
+                                        {% endif %}
+                                        {% if difference.days == 1 %}
+                                            {% set deadline_type =  '_warning' %}
+                                            {% set str_deadline =  str_deadline ~ '1 día' %}
+                                        {% else %}
+                                            {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
+                                        {% endif %}
+                                        <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
                                     {% endif %}
-                                    {% if difference.days == 1 %}
-                                        {% set deadline_type =  '_warning' %}
-                                        {% set str_deadline =  str_deadline ~ '1 día' %}
+                                </div>
+                                </div>
+
+                                <div class="panel_btn col-sm-12">
+                                    {% if notification.accion %}
+                                        {% if notification.accion|lower == "subir documento" %}
+                                            <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link">{{ notification.accion }}</span>
+                                        {% else %}
+                                            <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
+                                        {% endif %}
+
                                     {% else %}
-                                        {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
+                                        <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">View</a>
                                     {% endif %}
-                                    <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
-                                {% endif %}
-                            </div>
-                            </div>
-
-                            <div class="panel_btn col-sm-12">
-                                {% if notification.accion %}
-                                    {% if notification.accion|lower == "subir documento" %}
-                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"><i class="fa fa-upload"></i> {{ notification.accion }}</span>
-                                    {% else %}
-                                        <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">{{ notification.accion }}</a>
-                                    {% endif %}
-
-                                {% else %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default btn-block">View</a>
-                                {% endif %}
+                                </div>
                             </div>
                         </div>
                     {% endif %}
@@ -397,23 +424,8 @@
         <h4>No tienes tareas pendientes.</h4>
     {% endif %}
     <div id="myModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
-          </div>
-          <div class="modal-body" id="modal-body">
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          </div>
+        <div id="modal-body">
         </div>
-
-      </div>
     </div>
 {% endblock fos_user_content %}
 
@@ -466,7 +478,6 @@
                 event.preventDefault();
                 var uri = $(this).attr("href");
                 var html = '';
-                alert(uri);
 
 //                 alert(uri);
                 $.ajax({
@@ -481,7 +492,7 @@
                     $("#modal-body").html('');
                     
                     //$('#modal-body').replaceWith($(html).find('#main'));
-                    $('#modal-body').html($(html).find('#main'));
+                    $('#modal-body').html($(html).find('#cuerpoModal'));
 
                     $("#myModal").modal('show');
                     var files;
