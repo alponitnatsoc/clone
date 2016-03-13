@@ -331,27 +331,27 @@ employee_profile_edit:
     defaults: { _controller: RocketSellerTwoPickBundle:Employee:editProfile }
 
 employee_certificate:
-    path: /employee/certificate/{id}
+    path:       /employee/certificate/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:generateCertificate }
 
 employee_share_profile:
-    path: /employee/share/profile/{id}
+    path:       /employee/share/profile/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:shareProfile }
 
 show_certificates:
-    path:     /employee/certificate/generate
+    path:     /employer/certificate/generate
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:certificate }
 
 generate_certificate:
-    path:     /employee/certificate/generate/{idEmployee}/{idCertificate}
+    path:     /employer/certificate/generate/{idEmployee}/{idCertificate}
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generateCertificate }
 
 download_certificate_get:
-    path:     /employee/certificate/download/{idEmployee}/{idCertificate}
+    path:     /employer/certificate/download/{idEmployee}/{idCertificate}
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdfGet }
 
 download_certificate_post:
-    path:     /employee/certificate/download
+    path:     /employer/certificate/download
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:generatePdf }
 
 show_help:

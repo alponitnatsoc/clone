@@ -185,7 +185,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
+        //$url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
         //$url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         //TODO(daniel.serrano): Remove the mock URL.
         // This URL is only for testing porpouses and should be removed.
@@ -206,12 +206,12 @@ class PayrollRestController extends FOSRestController
 
         // This two lines is to remove extra text from the respose that breaks the
         // php parser.
-        $plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
-        $plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
+        //$plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
+        //$plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
 
         // This line is to put every piece into a different unico, because end_reg
         // doesn'e match the xml standard.
-        $plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
+        //$plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
 
         // TODO(daniel.serrano): Remove this debug lines.
         libxml_use_internal_errors(true);
@@ -761,8 +761,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['CON_CODIGO'] = 1; // 1 is salary, it is always our case.
         $unico['COF_VALOR'] = $parameters['value'];
-        if(isset($parameters['date_change']))
-          $unico['COF_FECHA_CAMBIO'] = $parameters['date_change'];
+        if (isset($parameters['date_change']))
+            $unico['COF_FECHA_CAMBIO'] = $parameters['date_change'];
 
         $content[] = $unico;
         $parameters = array();
@@ -1838,14 +1838,12 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getGeneralPayrollAction($employeeId, $period = null,
-                                            $month = null, $year = null,
-                                            $mockFinalLiquidation=false)
+    public function getGeneralPayrollAction($employeeId, $period = null, $month = null, $year = null, $mockFinalLiquidation = false)
     {
         // Only in tests, do not use in production!!.
         // TODO(daniel.serrano): Delete this, important!!.
-        if($mockFinalLiquidation)
-          $employeeId = $employeeId * -1;
+        if ($mockFinalLiquidation)
+            $employeeId = $employeeId * -1;
 
         $content = array();
         $unico = array();
@@ -2613,31 +2611,29 @@ class PayrollRestController extends FOSRestController
      */
     public function postNuevosPagosAction(Request $request)
     {
-         ini_set("soap.wsdl_cache_enabled", 1);
-         $opts = array(
-             //"ssl" => array("ciphers" => "RC4-SHA")
-         );
-         $consumptionsWsUrl = sprintf(\UneConstants::UNE_WS_MY_CONSUMPTION_WSDL_URL, $this->_uneHostname);
-         $client = new \SoapClient("http://52.86.183.212:8080/dssp/services/listServices",
-             array("connection_timeout" => 20,
-                 "trace" => true,
-                 "exceptions" => true,
-                 "stream_context" => stream_context_create($opts),
-                 //"login" => $login,
-                 //"password" => $pass
-         ));
+        ini_set("soap.wsdl_cache_enabled", 1);
+        $opts = array(
+                //"ssl" => array("ciphers" => "RC4-SHA")
+        );
+        $consumptionsWsUrl = sprintf(\UneConstants::UNE_WS_MY_CONSUMPTION_WSDL_URL, $this->_uneHostname);
+        $client = new \SoapClient("http://52.86.183.212:8080/dssp/services/listServices", array("connection_timeout" => 20,
+            "trace" => true,
+            "exceptions" => true,
+            "stream_context" => stream_context_create($opts),
+                //"login" => $login,
+                //"password" => $pass
+        ));
 
-         $args = array('numeroRadicado' => "111111111000111", );
+        $args = array('numeroRadicado' => "111111111000111",);
 
 
-         $res = $client->__soapCall("ConsultarEstadoRecaudo", $args);
+        $res = $client->__soapCall("ConsultarEstadoRecaudo", $args);
 
-         var_dump($res);
-         if (is_string($res)) {
-             $res = new \SimpleXMLElement($res);
-         }
+        var_dump($res);
+        if (is_string($res)) {
+            $res = new \SimpleXMLElement($res);
+        }
     }
-
 
 }
 

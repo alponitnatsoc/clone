@@ -70,6 +70,7 @@ function startSubscriptionActivate() {
     $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
         $('#credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
+            $(this).addClass('form-control');
             $(this).addClass(result.card_type.name);
             if (result.valid) {
                 return $(this).addClass('valid');

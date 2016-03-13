@@ -3,17 +3,56 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block body %}
-	<div class="container">
+	<div id="registrationTypeContainer">
 		<div class="content">
-			<h1>Felicitaciones has confirmado tu correo</h1>
-			<p>ahora debes escoger el tipo de registro que deseas hacer</p>
-			<div class="col-md-6">
-				<p>Registro normal</p>
-				<a href="{{path('edit_profile')}}" class="btn btn-registro">Iniciar</a>
+			<img src="/img/logo-oscuro.png">
+			<p>
+				Felicitaciones has confirmado tu cuenta<br />
+				ahora debes escoger el tipo de registro que deseas hacer
+			</p>
+
+			<div class="col-md-6 registrationTypeOption">
+				<div class="registrationTypeTitle ">Registro normal</div>
+				<div class="registrationTypecontent ">
+					
+					<div class="optionPrice">
+						Costo
+						<h3>$0</h3>
+					</div>
+					<div class="optionDescription">
+						Nuestro tutorial te lleva de la mano en el proceso de registro tuyo y de tus empleados.
+						<br /><br />
+						El registro dura aproximadamente 35 minutos.
+						<br /><br />
+						Puedes parar y retomarlo cuando quieras.
+						<br /><br />
+						Te damos otro mes gratis para los empleados que registres completamente en las siguientes 48 horas
+					</div>
+					<a href="{{path('edit_profile')}}" class="btn btn-orange">Empezar</a>
+				</div>
+				
+				
 			</div>
-			<div class="col-md-6">
-				<p>Registro express</p>
-				<a href="{{path('express_start')}}" class="btn btn-registro">Iniciar</a>
+			<div class="col-md-6 registrationTypeOption">
+				<div class="registrationTypeTitle darkOne">Registro express</div>
+				<div class="registrationTypecontent ">
+					
+					<div class="optionPrice">
+						Costo
+						<h3>$190.000</h3>
+					</div>
+					<div class="optionDescription">
+						Completamos el registro por tí.
+						<br /><br />
+						Completa unos datos de contacto y te  llamamos  para solicitar unos datos de tus empleados.
+						<br /><br />
+						Recibe media hora de asesoría legal respecto a  tu actual situación con los empleados que registres.
+						<br /><br />
+						Te damos otro mes gratis para los empleados que registres. 
+					</div>
+					<a href="{{path('express_start')}}" class="btn btn-orange">Empezar</a>
+				</div>
+				
 			</div>
 		</div>		
 	</div>	

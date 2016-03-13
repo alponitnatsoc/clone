@@ -1,0 +1,84 @@
+@import (reference) "public/bootstrap-variables.less";
+@import (reference) "public/variables.less";
+
+
+#registrationTypeContainer {    
+  background: url(/img/registrationBackground3.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  height: 100%;
+  padding: 40px 0 80px 0;
+  overflow: hidden;
+
+  & .content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    & img {
+        width: 120px;
+        margin-bottom: 10px;
+    }
+  }
+  & .registrationTypeTitle {
+    background-color: #00C4C5;
+    color: @txtWhite;
+    height: 60px;
+    text-align: center;
+    font-size: 26px;
+    padding: 10px 0 0;
+    font-weight: 100;
+  }
+
+  & .darkOne {
+    background-color: #008990;
+  }
+
+  & .registrationTypeOption {
+    margin-top: 20px;
+
+  }
+
+  & .registrationTypeOption:last-child {
+    
+  }  
+
+  & .registrationTypecontent {
+    background-color: @whiteBackGround;
+    padding: 20px;
+  }
+
+  & .optionPrice {
+    color: #89878B;
+    width: 100%;
+    border-bottom: 1px solid #ccc; 
+    margin: 0 0 20px;
+
+    & h3 {
+        color: @orange;
+        margin-top: 5px;
+    }
+  }
+
+  & .optionPrice {
+    color: #89878B;
+
+  }
+
+  & .optionDescription {
+    text-align: left;
+    margin: 0 0 10px;
+    font-size: 12px;
+    height: 190px;
+  }
+}
+
+
+@media only screen and (max-device-width : 360px) { 
+ 
+.smallOrangeBox {
+    width: 100%;
+}
+
+}
