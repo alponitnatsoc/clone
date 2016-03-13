@@ -176,9 +176,11 @@ class SubscriptionController extends Controller
                     $payType = $payMC->getPayTypePayType();
 
                     if ($payType->getPayrollCode() != 'EFE') {
-
-                        $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
-                                $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
+                        $paymentMethodId = $payMC->getAccountTypeAccountType();
+                        if ($paymentMethodId) {
+                            $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
+                                    $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
+                        }
                         $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
                         $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
                         $request->setMethod("POST");
@@ -199,7 +201,7 @@ class SubscriptionController extends Controller
                             "paymentMethodId" => $paymentMethodId,
                             "paymentAccountNumber" => $paymentMethodAN,
                             "paymentBankNumber" => 0, //THIS SHOULD HAVE THE NOVO ID BANK TABLE
-                            "paymentType" => $payMC->getAccountTypeAccountType()->getName(),
+                            "paymentType" => $payMC->getAccountTypeAccountType() ? $payMC->getAccountTypeAccountType()->getName() : null,
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postBeneficiary', array('_format' => 'json'));
                         if (!($insertionAnswer->getStatusCode() == 201 || $insertionAnswer->getStatusCode() == 406)) {
@@ -250,12 +252,12 @@ class SubscriptionController extends Controller
 
         if ($request->isMethod('POST')) {
 
-            /* $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-              'freeTime' => 1,
-              'all' => true
-              ), array('_format' => 'json')
-              ); */
+            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+                'freeTime' => 1,
+                'all' => true
+                    ), array('_format' => 'json')
+            );
 
             $user = $this->getUser();
             $person = $user->getPersonPerson();
