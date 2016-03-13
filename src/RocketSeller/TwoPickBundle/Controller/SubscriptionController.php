@@ -360,7 +360,8 @@ class SubscriptionController extends Controller
                     return $this->redirectToRoute("subscription_error");
                 }
             } else {
-                return $this->redirectToRoute("subscription_choices");
+                $this->addFlash('error', 'Error al insertar en novopayment');
+                return $this->redirectToRoute("subscription_error");
             }
         } else {
             return $this->redirectToRoute("subscription_choices");
