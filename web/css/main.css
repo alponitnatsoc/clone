@@ -1,6 +1,7 @@
 /* ==========================================================================
    Symplifica CSS + FTW
    ========================================================================== */
+@import "registro.css";
 body {
   background-color: #f8f8f8;
 }
@@ -1794,6 +1795,9 @@ select.error {
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding;
   background-clip: padding-box;
+}
+#pago_membresia_personType {
+  margin-top: 10px;
 }
 .employeesListEmployer,
 .firstEmployeeList,
