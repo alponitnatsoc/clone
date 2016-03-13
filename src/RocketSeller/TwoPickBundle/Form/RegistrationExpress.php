@@ -29,7 +29,7 @@ class RegistrationExpress extends AbstractType
                 'expanded' => false,
                 'property_path' => 'documentType',
                 'label' => 'Tipo de documento*',
-                'placeholder' => 'Seleccionar una opción',
+                'placeholder' => 'Tu tipo de documento',
                 'required' => true
             ))
             ->add('document', 'text', array(
@@ -42,26 +42,39 @@ class RegistrationExpress extends AbstractType
                     "data-toggle" => "tooltip", 
                     "data-placement" => "right",
                     "data-container" => "body",
-                    "title" => "Texto de ayuda"
+                    "title" => "Con esto validaremos tu información en las entidades de salud",
+                    'placeholder' => 'Número de documento',
                 )
             ))
-            ->add('names', 'text', array(
-                'constraints' => array(
-                    new NotBlank()
-                ),'label' => 'Nombres*'))
+            ->add('names', 'text', 
+                array(
+                    'constraints' => array(
+                        new NotBlank()
+                    ),
+                    "attr" => array('placeholder' => 'Tus Nombres'),
+                    'label' => 'Nombres*'
+                )
+            )
             ->add('lastName1', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Primer Apellido*'))
+                ),
+                "attr" => array('placeholder' => 'Primer apellido'),
+                'label' => 'Primer Apellido*'))
             ->add('lastName2', 'text', array(
                 'constraints' => array(
                     new NotBlank()
                 ),
                 'label' => 'Segundo Apellido',
+                "attr" => array('placeholder' => 'Segundo apellido'),
                 'required' => false
             ))
             ->add('save', 'submit', array(
                 'label' => 'Continuar',
+                'attr'  => array(
+                                'class' => 'btn register-AS1 btn-symplifica'
+                            ),
+                
             ));
             
     }

@@ -84,6 +84,94 @@
   }
 }
 
+#registrationContainer {    
+  background: url(/img/registrationBackground.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+
+.smallOrangeBox {
+    width: 450px;
+    margin: 40px auto;
+
+    & label {
+        display: none;
+    }
+
+    .smallOrangeBoxTitle {
+        background-color: @orange;
+        height: 60px;
+        text-align: center;
+        margin: 0;
+
+        & .whiteFormTitle {
+          color: @txtWhite;
+          font-size: 25px;
+          display: block;
+          margin: 10px 0 0 0;
+          font-weight: 100;
+          line-height: 59px;
+        }
+    }
+
+    .boxImagetitle {
+        max-width: 180px;
+        margin: 14px 0 0;
+    }
+
+    .smallOrangeBoxContent {
+        background-color: @whiteBackGround;
+        padding: 10px 40px;
+        text-align: center;
+        overflow: hidden;
+
+        & h3 {
+            color: @txtGray;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 100;
+        }
+        & span {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        & .glyphicon {
+            display: inline;
+            background: none;
+            vertical-align: middle;
+        }
+        & .light-text {
+            color: @txtGray;
+            display: block;
+            font-size: 16px;
+        }
+
+        & .txt-A1-terms {
+            color: @txtGray;
+            font-size: 12px;
+        }
+
+        & .smallDivider {
+            margin: 5px 0;
+        }
+
+        & .registrationSocialNetworks {
+            margin: 10px 0;
+            overflow: hidden;
+            width: 100%;
+        }
+    }
+
+    .smallOrangeBoxNetworks {
+        background-color: @whiteBackGround;
+    }
+}
+
+
 
 @media only screen and (max-device-width : 360px) { 
  

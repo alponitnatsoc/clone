@@ -3,34 +3,44 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block body %}
-	<div class="container">
-		<div class="content">
+<div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
+
+    <div class="smallOrangeBox">
+        <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
+        
+        <div class="smallOrangeBoxContent">
+            
+            <span>Completa unos cuantos datos<br />y nosotros nos encargamos del resto</span>
+
+            <span class="light-text"></span>
+            <hr class="smallDivider" />
+            
+            <form action="{{ path('express_start') }}" {{ form_enctype(form) }} method="POST" class="col-md-12 express_start">
 			
-			<form action="{{ path('express_start') }}" {{ form_enctype(form) }} method="POST" class="col-md-12 express_start">
-			
-			    <div class="form-black col-md-4">
+			    <div class="form-black ">
 			    	{{ form_row(form.names)}}	
 			    </div>
-			    <div class="col-md-4 form-black form-group">
+			    <div class="form-black form-group">
 			    	{{ form_row(form.lastName1)}}
 			    </div>
-			    <div class="col-md-4 form-black form-group">
+			    <div class="form-black form-group">
 			    	{{ form_row(form.lastName2)}}	    	
 			    </div>
 			    		    			    			    	    	
-			    <div class="form-black form-group col-md-12">
+			    <div class="form-black form-group ">
 			    	<label class="control-label required" for="app_user_registration_form_plainPassword">Telefono</label>
-			    	<input type="text" name="phone" required="required" placeholder="Telefono" class="form-control">	    	
+			    	<input type="text" name="phone" required="required" placeholder="Teléfono" class="form-control">	    	
 			    </div>
-			    <div class="form-black form-group col-md-12">
+			    <div class="form-black form-group ">
 			    	{{form_row(form.documentType)}}	    	
 			    </div>
-			    <div class="form-black form-group col-md-12">
+			    <div class="form-black form-group">
 			    	{{form_row(form.document)}}	    	
 			    </div>
 		    
 			    {{ form_end(form)}}	
 			</form>
-		</div>		
-	</div>	
+        </div>
+    </div>
+</div>
 {% endblock body %}
