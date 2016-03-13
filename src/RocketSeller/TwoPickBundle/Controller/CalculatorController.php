@@ -13,7 +13,14 @@ class CalculatorController extends Controller
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('api_public_post_calculator_submit', array('format'=>'json')))
             ->setMethod('POST')
-            ->add('tipo', 'choice',array('choices'=>array('days'=>'Por Días','complete'=>'Tiempo Completo'), 'expanded'=>true,'multiple'=>false,'label'=>'1. Por favor seleccione el tipo de empleado y la base del cálculo'))
+            ->add('tipo', 'choice', array(
+                'choices' => array(
+                    'days' => 'Por Días',
+                    'complete' => 'Tiempo Completo'
+                ),
+                'expanded'=>true,
+                'multiple'=>false,
+                'label'=>'Seleccione el tipo de empleado y la base del cálculo'))
             ->add('salarioM', 'money', array(
                 'currency'=>'COP',
                 'label'=>'Salario Mensual',
