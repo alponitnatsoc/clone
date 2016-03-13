@@ -1,9 +1,65 @@
 {% extends "::base.html.twig" %}
+{% block stylesheet %}
+{{ parent() }}
+<style>
+.calculator-block {
+    width: 100%;
+    text-align: center;
+}
+.header-cal {
+    margin: 10px;
+}
+.calculator-block form {
+    margin: 20px
+}
+.tipo-empleado .radio {
+    display: inline-block;
+}
+#registrationFormContainer .tipo-empleado .radio label {
+    font-size: 13px !important;
+}
+.tipo-empleado .radio input {
+    font-size: 13px;
+}
+.form-group {
+    overflow: auto;
+}
+.form-control {
+    float: right !important;
+    width: 40% !important;
+}
+#form-sisben {
+     display: inline-block;
+}
+#form-sisben .radio {
+     display: inline-block;
+}
+</style>
+{% endblock %}
 {% block fos_user_content %}
-<div id="registrationFormContainer">
+<div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
+    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
+        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+            <img src="/img/block-complete.png" class="center-block">
+        </div>
+        <div id="" class="col-md-10 col-xs-12 txt-AD1">
+            <div id="" class="text-left">
+                <h1>Calculadora salarial</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="registrationFormContainer" class="calculator-block">
+    <div class="header-cal">
+        <p>A continuación podrá ejecutar los cálculos necesarios para estimar la forma como debe pagar a su
+        empleado de acuerdo a lo que la ley define:</p>
+    </div>
     {{ form_start(form) }}
     {{ form_errors(form) }}
-    {{ form_row(form.tipo) }}
+    <div class="tipo-empleado">
+        {{ form_row(form.tipo) }}
+    </div>
+    <hr />
     <div class="all">
         <div class="days">
             {{ form_row(form.salarioD) }}
@@ -28,24 +84,23 @@
             {{ form_row(form.save) }}
         </div>
     </div>
-
     {{ form_widget(form) }}
     {{ form_end(form) }}
 </div>
-    <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Detalles Calculadora</h3>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalles Calculadora</h3>
+            </div>
+            <div class="modal-body">
 
-                </div>
-                <div class="modal-footer">
-                    <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+            <div class="modal-footer">
+                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock fos_user_content %}
