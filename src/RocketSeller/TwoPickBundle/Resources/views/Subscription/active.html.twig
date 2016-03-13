@@ -351,13 +351,30 @@
 
         {% if descuento_isRefered['object']|length <=0 %}
             <div id="codigoReferido" class="codigoReferido form-group">
+                <div class="col-md-12 center">
+                    <span style="margin-top: 20px"><h4>Información de la tarjeta de crédito*</h4></span>
+                    <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+                    <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
+                </div>
+                <div class="formulario col-xs-12" style="border: none;">
+                    <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 form-group col-sm-push-4">
+                                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10" placeholder="Código"  style="margin-top: 20px">
+                            </div>
+                            <!--<img src="/img/typePerson.png">-->                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--
                 <div class="col-md-12 center" style="margin-top: 20px">
                     <label>¿Cuenta con algún código de promoción?</label>
                     <span>Ingrese aquí el código promocional que recibió como usuario referido o en alguna de nuestras comunicaciones</span>
                     <input type="text" name="codigo_referido" id="codigo_referido" maxlength="10" placeholder="Código"  style="margin-top: 20px">
                     <div id="codigo_referido_estado" class="text-small"></div>
                 </div>
-            </div>
+            </div>-->
         {% endif %}
 
         <input type="hidden" id="tieneReferidos" value="{{ descuento_haveRefered['object']|length }}"> 
