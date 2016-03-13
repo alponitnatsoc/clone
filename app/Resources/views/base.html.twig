@@ -342,7 +342,9 @@
                         return data;
                     }
                     function sendAjax(url, form) {
-
+                        if(url==""){
+                            return false;
+                        }
                         $.ajax({
                             url: url,
                             type: $(form).attr('method'),
@@ -384,8 +386,10 @@
                         });
                     }
                     function addNoClick() {
-                        $(".noClick").on("click", function (e) {
-                            e.preventDefault();
+                        $(".noClick").each(function () {
+                            $(this).on("click", function (e) {
+                                e.preventDefault();
+                            })
                         });
                     }
                     function addSumbit() {
