@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: "Open Sans",Arial;
+            font-family: "Open Sans",Helvetica,Arial;
             background: #fff;
             width: 100%;
             margin: 0px;
@@ -26,26 +26,23 @@
         }
         p {
             font-size: 18px;
-            font-weight: 400;
-/*             font-weight:bold; */
+            color: #87898C;
+/*             font-weight: 400; */
         }
         p strong {
             font-weight: bold;
+            color: #5D5D5E;
+            font-size: 24px;
         }
         .headbck {
-            background: #3b4b5a;
+            background: #3C4C5A;
             display: block;
             border-bottom: 1px solid #fff;
             height: 60px;
             padding-top: 10px;
+            text-align: center;
         }
         .blockBlueCentral {
-/*             background: #00cdcc; */
-/*             display: block; */
-/*             padding: 30px 0px; */
-/*             margin: 25px 0px; */
-/*             font-size: 16px; */
-
             color:#00cdcc;
             text-decoration:none;
             display:inline-block;
@@ -60,43 +57,27 @@
             background-color:#00cdcc;
             font-size:20px;
             font-style:normal;
-/*             font-weight:bold; */
             text-align:center;
             white-space:nowrap;
             border-radius:999em
         }
-        .blockBlueCentral a {
-            color: #fff;
+        .url {
+            color: #39C0C3;
             text-decoration: none;
         }
         .imgUp {
             text-align: center;
         }
-        footer {
-            bottom: 0px;
-            width: 100%;
-            background-color: #EDEDED;
-            height: 60px;
-            display: block;
-            margin-top: 30px;
-            padding-top: 5px;
-        }
-        footer > .container {
-            margin-top: 11px;
-        }
         .container {
-            width: 980px;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
+            width: 100%;
+            text-align: center;
+/*             padding-right: 15px; */
+/*             padding-left: 15px; */
+/*             margin-right: auto; */
+/*             margin-left: auto; */
         }
         .container m {
             color: #00cdcc;
-        }
-        footer > .container > div {
-            height: 37px;
-            border-right: 1px solid #919191;
         }
         .col-sm-2, .col-sm-5 {
             float: left;
@@ -111,106 +92,53 @@
         .col-sm-5 {
             width: 70%;
         }
-        footer > .container > div.logo img {
-            margin-top: 5px;
-        }
-        footer > .container > div.links > div > a {
-            color: #333;
-            font-size: 12px;
-            text-transform: uppercase;
-            text-decoration: none;
-        }
-        footer > .container > div.social .red > a {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
         .blockBlueCentral a:hover  {
             text-decoration: underline;
         }
-        footer > .container > div.links > div {
-            padding-left: 0px;
-        }
-        footer > .container > div:last-child {
-            border: medium none;
-        }
-        footer > .container > div.social {
-            padding-top: 4px;
-        }
-        footer > .container > div.social > div {
-            float: left;
-        }
-        footer > .container > div.social .red.facebook {
-            background-position: 0px center;
-        }
-        footer > .container > div.social .red.linkedin {
-            background-position: -41px center;
-        }
-        footer > .container > div.social .red.twitter {
-            background-position: -82px center;
-        }
-        footer > .container > div.social .terminos {
-            color: #333;
-            font-size: 12px;
-        }
-        footer > .container > div.social .red {
-            width: 32px;
-            height: 32px;
-            margin-right: 9px;
+        .btn-conf {
+            margin-bottom: 30px;
+            margin-top: 15px;
+            background-color: #F79129; /* #fd9626*/
+            box-shadow: 0 2px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+            color: #fff;
+            font-weight: 700;
+/*             text-shadow: 1px 1px 1px #333; */
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 18px;
+            line-height: 1.42857143;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
     </style>
   </head>
-  <body style="font-family: sans-serif;">
+  <body style="font-family: Open Sans,Helvetica,Arial">
     <header>
         <div class="headbck">
-            <div class="container">
-                <a href=""><img src="http://www.symplifica.com/public/img/mail/logo.png" alt="Symplifica"></a>
-            </div>
+            <a href=""><img src="http://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica"></a>
         </div>
     </header>
-{#     <section>#}
-{#         <div class="imgUp" style="width: 100%">#}
-{#             <img src="http://52.91.121.67/public/img/mail/imgUpBanner1.jpg" alt="Symplifica" />#}
-{#             <img src="http://www.symplifica.com/public/img/mail/imgUpBanner2.png" alt="Symplifica"  style="width: 50%; float: left; margin: 0; padding: 0;" />#}
-{#         </div>#}
-{#     </section>#}
-    <section style="display: block">
-        <div class="container">
-{#             <h1><strong>!Ya falta muy poco!</strong></h1>#}
-            <p style="font-family: sans-serif;">Estás muy cerca de acceder a la plataforma más conveniente para
-            administrar a tus empleados.</p>
-            <p style="font-family: sans-serif;">Para finalizar tu registro, haz clic en el siguiente link:</p>
-        </div>
+    <section class="container" style="padding-top: 35px;">
+        <img src="http://www.symplifica.com/public/img/mail/new-check.png" alt="Symplifica" />
+        <p style="padding-top: 5px;">Estás muy cerca de acceder a la plataforma más
+        conveniente para administrar a tus empleados.</p>
     </section>
-    <section style="margin-left: 35%">
-        <div class="blockBlueCentral">
-            <div class="" style="font-family: sans-serif;">
-                <a href="{{ confirmationUrl }}">Confirmar email</a>
-            </div>
-        </div>
+    <section class="container" style="padding-top: 10px;">
+        <p><strong>Para ﬁnalizar tu registro</strong><br />
+        haz click en el siguiente link:</p>
     </section>
-    <section style="display: block">
-        <div class="container">
-            <p style="font-family: sans-serif;">O cópialo y pégalo en tu navegador:</p>
-            <a href="{{ confirmationUrl }}">{{ confirmationUrl }}</a>
-        </div>
+    <section class="container">
+        <button class="btn-conf" href="{{ confirmationUrl }}">Confirmar email</button>
     </section>
-    <footer>
-        <div class="container">
-            <div class="col-sm-2 logo">
-                <img src="http://www.symplifica.com/public/img/mail/logo-oscuro.png" alt="Symplifica" class="hidden-sm img-responsive"/>
-            </div>
-            <div class="col-sm-5 social">
-                <div class="red facebook" style="background-image: url(http://www.symplifica.com/public/img/mail/redes.png);"><a href="#" target="_blank"></a></div>
-                <div class="red linkedin" style="background-image: url(http://www.symplifica.com/public/img/mail/redes.png);"><a href="#" target="_blank"></a></div>
-                <div class="red twitter" style="background-image: url(http://www.symplifica.com/public/img/mail/redes.png);"><a href="#" target="_blank"></a></div>
-                <div class="terminos" style="font-family: sans-serif;">
-                    Términos y Condiciones<br />
-                    Copyright © Todos los derechos reservados Symplifica
-                </div>
-            </div>
-        </div>
-    </footer>
+    <section class="container">
+        <p><strong>ó</strong></p>
+    </section>
+    <section class="container">
+        <p>cópialo y pégalo en tu navegador</p>
+    </section>
+    <section class="container">
+        <a class="url" href="{{ confirmationUrl }}" target="_blank">{{ confirmationUrl }}</a>
+    </section>
   </body>
 </html>
 {% endblock %}

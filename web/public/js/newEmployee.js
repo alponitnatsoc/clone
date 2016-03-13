@@ -710,10 +710,19 @@ function addListeners() {
     $("#register_employee_employeeHasEmployers_salaryD").on("input", function () {
         calculator();
         formatMoney($("#totalExpensesVal"));
+        formatMoney($(this));
+        validateSalary('D');
     });
-    $("#register_employee_employeeHasEmployers_salary").on("focusout", function () {
-        validateSalary();
+    $("#register_employee_employeeHasEmployers_salary").on("input", function () {
+        validateSalary('M');
+        formatMoney($(this));
     });
+
+    calculator();
+    formatMoney($("#totalExpensesVal"));
+    formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
+    formatMoney($("#register_employee_employeeHasEmployers_salary"));
+
     $("#link_calculator").on("click", function (e) {
         e.preventDefault();
         $("#calculatorResultsModal").modal('toggle');
@@ -997,17 +1006,39 @@ function getPrice(valor) {
             .toFixed(0)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return "$ " + price;
+    return  price;
 }
-function validateSalary() {
-    salarioMinimo = $("#salarioMinimo").val();
-    if (!salarioMinimo) {
-        salarioMinimo = 689454;
+function validateSalary(type) {
+    if (type == 'M') {
+        salarioMinimo = $("#salarioMinimo").val();
+        if (!salarioMinimo) {
+            salarioMinimo = 689454;
+        }
+        salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
+        if (salarioMes < salarioMinimo) {
+            $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
+            $("#salarioMinimo").modal('show');
+            $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
+            formatMoney($("#register_employee_employeeHasEmployers_salary"));
+            return false;
+        }
     }
-    if ($("#register_employee_employeeHasEmployers_salary").val() < salarioMinimo) {
-        alert('El salario minimo legal es de ' + getPrice(salarioMinimo));
-        $("#register_employee_employeeHasEmployers_salary").val(salarioMinimo);
-        return false;
+    if (type == 'D') {
+        salarioMinimoDiario = $("#salarioMinimo").val();
+        if (!salarioMinimoDiario) {
+            salarioMinimoDiario = 21000;
+        }
+        salarioDias = (accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+        if (salarioDias < salarioMinimoDiario) {
+            $("#salarioMinimo").find('.modal-body').html('El salario minimo diario legal es de $ ' + getPrice(salarioMinimoDiario));
+            $("#salarioMinimo").modal('show');
+            $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
+            calculator();
+            formatMoney($("#totalExpensesVal"));
+            formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
+            $("#ex6").bootstrapSlider("setValue", salarioMinimoDiario);
+            return false;
+        }
     }
     return true;
 }

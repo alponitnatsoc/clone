@@ -1,0 +1,46 @@
+@import (reference) "public/bootstrap-variables.less";
+@import (reference) "public/variables.less";
+
+
+.basicConfirmation {
+
+  & .blockStep .txt-AD1 {
+    margin-top: 22px;
+  }
+
+
+  & .confirmationBlock {
+    text-align: center;
+    width: 80%;
+  }
+
+  & h3 {
+    font-weight: 700;
+  }
+
+  & h2 {
+    color: @orange;
+    margin-top: 3px;
+  }
+
+  & h4 {
+    font-weight: 100;
+    font-size: 22;
+    color: @txtGray;
+  }
+}
+
+
+@media only screen and (max-device-width : 360px) { 
+ 
+.basicConfirmation {
+
+  & .confirmationBlock {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+}
