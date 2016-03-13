@@ -438,25 +438,49 @@ class EmployeeController extends Controller
         $employee = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Employee')
                 ->find($id);
-
+        $entities = $employee->getEntities();
+        $entitiesEmployer = $employer->getEntities();
         $employerHasEmployee = $this->loadClassByArray(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $employee,
                 ), 'EmployerHasEmployee'
         );
+        $documentType = $this->loadClassByArray(array('name' => 'Contrato'), 'DocumentType');
         $contracts = $employerHasEmployee->getContracts();
         foreach ($contracts as $contract) {
             if ($contract->getState()) {
                 $activeContract = $contract;
             }
         }
-
-
+        $entidades = array();
+        $documents = $employee->getPersonPerson()->getDocs();
+        foreach ($documents as $doc) {
+            if ($doc->getDocumentTypeDocumentType() == $documentType) {
+                $contractEmployee = $doc;
+            }
+        }
+        foreach ($entities as $entity) {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="EPS")    
+            {
+                $entidades["EPS"] = $entity->getEntityEntity();
+            }elseif($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="Pension"){
+                $entidades["Pension"] = $entity->getEntityEntity();
+            }
+        }
+        foreach ($entitiesEmployer as $entity) {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="ARL") {
+                $entidades["ARL"] = $entity->getEntityEntity();
+            }elseif($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="CC Familiar"){
+                $entidades["CC"] = $entity->getEntityEntity();
+            }
+        }
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
                     'employee' => $employee,
                     'employerHasEmployee' => $employerHasEmployee,
-                    'contract' => $activeContract
+                    'contract' => $activeContract,
+                    'contractEmployee' => $contractEmployee,
+                    'entidades' => $entidades,
         ));
     }
 
