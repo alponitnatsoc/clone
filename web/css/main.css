@@ -1490,18 +1490,21 @@ select.error {
   font-weight: 700;
   letter-spacing: 1px;
   font-family: "Open Sans", Helvetica, Arial;
+  border: 2px solid #FD9224;
 }
 .btn-orange:active {
   opacity: 0.7;
   box-shadow: 0 8px rgba(0, 0, 0, 0.2);
   outline: none;
   color: #ffffff;
+  border: 2px solid #FD9224;
 }
 .btn-orange:hover {
   color: #ffffff;
   outline: none;
   background-color: #FD9224;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  border: 2px solid #FD9224;
 }
 .btn-orange:focus {
   color: #ffffff;
@@ -1990,7 +1993,17 @@ select.error {
   margin-top: 20px;
 }
 .middle-content .row-add-novelty {
+  border-radius: 5px;
+  padding-top: 20px;
+  color: #00CDCC;
+  padding-bottom: 5px;
   border: 2px dashed #f8f8f8;
+}
+.middle-content .row-add-novelty .plus-icon {
+  text-align: right;
+}
+.middle-content .row-add-novelty .text {
+  text-align: left;
 }
 #confirmacionPago .name {
   font-size: 15px;

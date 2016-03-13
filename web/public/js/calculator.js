@@ -223,8 +223,8 @@ function calculator(){
 
 }
 function addListenersCalc(){
-    $(".all").hide();
-    $(".aid").hide();
+//    $(".all").hide();
+//    $(".aid").hide();
     $("input[name='form[tipo]']").change(function(){
         var selected=$("input[name='form[tipo]']:checked").val();
         if(selected=="days"){
