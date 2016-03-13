@@ -134,43 +134,51 @@
             color: #c2c2c2;
         }
 
-            /*
-            .blockStep2 {
-                margin-top: 10px;
-                background: #3b4b5a !important;
-                background-image: none;
-                background: 0 0;
-                border: 1px solid #919191;
-                border-radius: 0;
-                box-shadow: none;
-                margin-bottom: 20px;
-                padding: 15px;
-                text-shadow: none;
-                color: #fff;
-                opacity: 0.8;
-            }
-            .blockStep2 .txt-AD1 {
-                font-family: "Open Sans";
-                font-size: 24px;
-                font-weight: 700;
-                text-transform: uppercase;
-                color: #fff;
-                white-space: normal;
-            }
+        /*
+        .blockStep2 {
+            margin-top: 10px;
+            background: #3b4b5a !important;
+            background-image: none;
+            background: 0 0;
+            border: 1px solid #919191;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 20px;
+            padding: 15px;
+            text-shadow: none;
+            color: #fff;
+            opacity: 0.8;
+        }
+        .blockStep2 .txt-AD1 {
+            font-family: "Open Sans";
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fff;
+            white-space: normal;
+        }
 
-            .blockStep2 .txt-AD1 p {
-                font-size: 14px;
-                font-family: @lato;
-                font-weight: 100;
-                margin-bottom: 0px;
-            }
-            */
-           .label-group{
+        .blockStep2 .txt-AD1 p {
+            font-size: 14px;
+            font-family: @lato;
+            font-weight: 100;
+            margin-bottom: 0px;
+        }
+        */
+        .label-group{
             text-align: right !important;
-           }
-           .form-select{
+        }
+        .form-select{
             color: yellow !important;
-           }
+        }
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
@@ -327,7 +335,7 @@
                             <label>Número tarjeta de crédito:</label>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <input type="text" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
+                            <input type="number" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
                         </div>
                         <!--<img src="/img/typePerson.png">-->                        
                     </div>
@@ -362,7 +370,7 @@
                             <label>Código de seguridad:</label>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <input type="number" class="form-control" name="cvv" id="cvv" min="0" minlength="3" maxlength="3" placeholder="123" required="required" style="float: left;">
+                            <input type="number" class="form-control" name="cvv" id="cvv" min="0" minlength="3" maxlength="4" placeholder="123" required="required" style="float: left;">
                         </div>
                         <!--<img src="/img/typePerson.png">-->                        
                     </div>
@@ -414,7 +422,7 @@
 
                         </div>
                         <div class="col-md-8 text-left" style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
-                            
+
                             {% for employeeData in employees %}
                                 {% set employee = employeeData['employee'] %}
                                 {% set contrato = employeeData['contrato'] %}
