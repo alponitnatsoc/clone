@@ -452,6 +452,7 @@ class EmployeeController extends Controller
                 $activeContract = $contract;
             }
         }
+        $contractEmployee="";
         $entidades = array();
         $documents = $employee->getPersonPerson()->getDocs();
         foreach ($documents as $doc) {
