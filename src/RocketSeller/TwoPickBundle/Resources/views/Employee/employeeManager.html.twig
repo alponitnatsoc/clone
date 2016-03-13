@@ -19,28 +19,39 @@
     </div>
     <div class="col-xs-12" id="employees">
         <div class="col-sm-12 col-xs-12">
-            <div class="row">
-                {% for employee in employees %}
-                    <div class="col-md-4 employee">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="employee_name">
-                                    <b>{{ employee.employeeEmployee.personPerson.names }}</b>
-                                </div>
-                                <div class="">
-                                    {% if status < 2 %}
-                                        <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
-                                    {% else %}
-                                        <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion definitiva</a>
-                                        /
-                                        <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+
+            {% for employee in employees %}
+                <div class="row employeeListItem">
+                    <div class="col-xs-6 employeeInfo" 
+                        style="{% if status < 2 %}border-left:10px solid #ccc{% endif %}">
+                        <b>{{ employee.employeeEmployee.personPerson.names }}</b>
+                        <a href="">
+                            Agregar Novedad
+                        </a>
                     </div>
-                {% endfor %}
-            </div>
+                    <div class="col-xs-3 employeeStatus">
+                        {% if status < 2 %}
+                            <i class="glyphicon glyphicon-remove-circle"></i> Inactivo
+                        {% else %}
+                            <i class="glyphicon glyphicon-ok-sign"></i> Activo
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-3 actionButton">
+                        {% if status < 2 %}
+                            <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
+                        {% else %}
+                            <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion</a>
+                            /
+                            <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver detalles</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}                
         </div>
+    </div>
+    <div class="col-sm-12 col-xs-12 wizardAddLink text-right">
+        <a href="/register/employee">
+            <i class="fa fa-plus-circle"></i> Agregar empleado nuevo
+        </a>
     </div>
 {% endblock fos_user_content %}
