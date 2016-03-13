@@ -25,6 +25,8 @@
         }
         .certificate{
             margin: 10px;
+            padding: 30px;
+            background-color: #efefef;
         }
     </style>
 {% endblock %}
@@ -61,7 +63,7 @@
         <div class="divSubmit center col-md-12">
             <input type="hidden" name="idEmployee" value="{{ employee.idEmployee }}"/>
             <input type="hidden" name="idCertificate" value="{{ certificate['id'] }}"/>
-            <button class="btn btn-default" type="submit">Imprimir</button>	
+            <button class="btn btn-symplifica" type="submit">Imprimir</button>	
         </div>		
     </form>
 {% endblock %}
