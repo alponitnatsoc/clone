@@ -1204,6 +1204,19 @@ ul.phones li {
 #paymentMethod .saveControl {
   display: inline-block;
 }
+#paymentMethod .paymentMethodDetail .radio input[type="radio"] {
+  margin-right: 50px!important;
+}
+#paymentMethod .paymentMethodDetail .radio label {
+  font-family: "Open Sans", Helvetica, Arial;
+  font-size: 26px;
+  color: #314A5A;
+  font-weight: bold;
+}
+#paymentMethod .paymentMethodDetail .paymentMethodImage {
+  margin: -60px 0 0 45px;
+  max-width: 40px;
+}
 .blueFormTitle {
   color: #00CDCC;
   font-family: Lato;
@@ -1243,10 +1256,6 @@ ul.phones li {
 .paymentMethodsOptions select,
 .paymentMethodsOptions input {
   width: 60%;
-}
-.paymentMethodImage {
-  margin: -60px 0 0 35px;
-  max-width: 45px;
 }
 .paymentMethodDescription {
   margin: -25px 0 0 94px;
@@ -1575,7 +1584,6 @@ select.error {
   background-color: #F7F7F7;
   color: #888A8C;
   border: none;
-  box-shadow: none!important;
   outline: none;
 }
 #contractDataWiz #contractTypeTab .btn-toggle:hover {
@@ -1584,12 +1592,26 @@ select.error {
 #contractDataWiz #contractTypeTab .btn-toggle.active {
   background-color: #3B4B5A;
   color: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 #contractDataWiz #contractTypeTab .radio {
   display: none;
 }
 #contractDataWiz #contractTypeTab #contractIndefinido {
   display: none;
+}
+#contractDataWiz #contractSalaryTab .slider-horizontal {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#contractDataWiz #contractSalaryTab .slider-horizontal .slider-selection {
+  background-image: none;
+  background-color: #00CBC9;
+}
+#contractDataWiz #contractSalaryTab .slider-horizontal .slider-handle {
+  background-image: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 #register_employer_youAre .radio:last-child label {
   color: #ddd;
