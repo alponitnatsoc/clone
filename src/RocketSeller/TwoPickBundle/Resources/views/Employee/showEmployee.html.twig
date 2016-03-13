@@ -45,7 +45,7 @@
 		        			</div>
 		        			<div class="col-sm-8">
 		        				<div class="col-sm-5">
-	        						<button class="btn btn-top-left btn-default  btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="{{ path('novelty_select') }}"/>Ingresar Novedad</button>
+	        						<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>	        						                   
 								</div>
 		        				<div class="col-sm-5">
 	        						<a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
@@ -216,17 +216,20 @@
         			</div>
         			<div class="col-sm-12 file-download-contract" >
         				<h4>Copia firmada del contrato</h4>
-        				<a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
-        					<div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
-	        					<div class="col-sm-1 icon-pdf">
-	        						<i class="fa fa-file-pdf-o fa-2x"></i>
-	        					</div>
-	        					<div class="col-sm-10" style="text-align:left;">
-	        						<p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema</p>
-	        						
-	        					</div>
-	        				</div>
-	        			</a>
+        				{% if contractEmployee %}
+	        				<a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
+	        					<div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
+		        					<div class="col-sm-1 icon-pdf">
+		        						<i class="fa fa-file-pdf-o fa-2x"></i>
+		        					</div>
+		        					<div class="col-sm-10" style="text-align:left;">
+		        						<p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema</p>
+		        						
+		        					</div>
+		        				</div>
+		        			</a>
+        				{% endif %}
+
 
         			</div>
   					<div class="col-sm-12 col-sm-offset-5">
