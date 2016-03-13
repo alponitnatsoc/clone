@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User extends BaseUser
 {
+
     /**
      * @var integer
      *
@@ -21,6 +22,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
@@ -101,6 +103,7 @@ class User extends BaseUser
      * @ORM\Column(type="smallint")
      */
     private $status = 1;
+
     /**
      * Columna utilizada para saber si el usuario requiere registro express
      * 0 false
@@ -122,6 +125,7 @@ class User extends BaseUser
      * @ORM\Column(type="smallint")
      */
     private $paymentState = 0;
+
     /**
      *
      * @var SmallIntType
@@ -136,6 +140,13 @@ class User extends BaseUser
      * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $date_created;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastPayDate;
 
     /**
      * @var string
@@ -683,5 +694,30 @@ class User extends BaseUser
     public function getExpress()
     {
         return $this->express;
+    }
+
+
+    /**
+     * Set lastPayDate
+     *
+     * @param \DateTime $lastPayDate
+     *
+     * @return User
+     */
+    public function setLastPayDate($lastPayDate)
+    {
+        $this->lastPayDate = $lastPayDate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastPayDate
+     *
+     * @return \DateTime
+     */
+    public function getLastPayDate()
+    {
+        return $this->lastPayDate;
     }
 }
