@@ -966,7 +966,7 @@ class PaymentsRestController extends FOSRestController
      * (name="email", nullable=false, strict=true, description="email.")
      * (name="companyId", nullable=false, strict=true, description="id of the company(NIT)")
      * (name="companyBranch", nullable=false, description="Company branch id, 0 by default.")
-     * (name="paymentMethodId", nullable=false, requirements="([0-9])+", description="payment method id
+     * (name="paymentMethodId", nullable=true, requirements="([0-9])+", description="payment method id
      *                                                                     (1-cash, 4 savings account, 5 checking ccount, 6-SVA)")
      * (name="PaymentAccountNumber", nullable=true, requirements="([0-9])+", description="Number of the payment account")
      * (name="PaymentBankNumber", nullable=true, requirements="([0-9])+", description="Id of the bank")
@@ -1002,8 +1002,8 @@ class PaymentsRestController extends FOSRestController
         $mandatory['email'] = true;
         $mandatory['companyId'] = true;
         $mandatory['companyBranch'] = true;
-        $regex['paymentMethodId'] = '([0-9])+';
-        $mandatory['paymentMethodId'] = true;
+        //$regex['paymentMethodId'] = '([0-9])+';
+        $mandatory['paymentMethodId'] = false;
         $regex['PaymentAccountNumber'] = '([0-9])+';
         $mandatory['PaymentAccountNumber'] = false;
         $regex['PaymentBankNumber'] = '([0-9])+';
