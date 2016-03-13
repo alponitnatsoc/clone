@@ -485,6 +485,10 @@
                 <source>Bad credentials.</source>
                 <target>Usuario o contraseña inválidos</target>
             </trans-unit>
+            <trans-unit id="user_disabled">
+                <source>User account is disabled.</source>
+                <target>El usuario no está activo</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
