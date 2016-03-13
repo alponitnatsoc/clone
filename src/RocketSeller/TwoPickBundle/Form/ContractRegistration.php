@@ -136,11 +136,17 @@ class ContractRegistration extends AbstractType
                 'label'=>'Hora fin:'
             ))*/
             ->add('startDate', 'date', array(
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
                 'label' => 'Fecha inicio de contrato*:',
                 'data' => $this->today,
                 'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
                 'label' => 'Fecha fin de contrato*:',
                 'data' => $this->todayOneYear,
                 'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+3),
