@@ -830,7 +830,7 @@ class EmployeeRestController extends FOSRestController
                     $contract->addWeekWorkableDay($weekWorkableDay);
                 }
 
-                $contract->setWorkableDaysMonth($workableDaysMonth);
+                $contract->setWorkableDaysMonth($contract->getWeekWorkableDays()->count()*4);
             } else {
                 $contract->setSalary($paramFetcher->get('salary'));
                 $contract->setWorkableDaysMonth(30);
