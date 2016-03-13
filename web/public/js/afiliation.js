@@ -22,6 +22,14 @@ function startAfiliation() {
                 }
             });
         });
+        $("input[class*='autocom']").each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Por favor seleccione una opción"
+                }
+            });
+        });
     });
     initEntitiesFields();
 
@@ -64,6 +72,19 @@ function startAfiliation() {
                 return;
             }
             pension[i++] = $(this).val();
+        });
+        $(form).find("input[name*='[wealthAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        i = 0;
+        $(form).find("input[name*='[pensionAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
         });
         i = 0;
         $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
