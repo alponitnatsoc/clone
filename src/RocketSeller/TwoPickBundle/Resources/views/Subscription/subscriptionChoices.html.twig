@@ -2,6 +2,28 @@
 {% block title %}Symplifica - Activar Suscripción{% endblock %}
 
 {% block fos_user_content %}
+    <style>
+        .noUi-horizontal {
+            height: 6px;
+            background-color: #00CBC9;
+        }
+
+        .noUi-horizontal .noUi-handle {
+            border-radius: 10px;
+            box-shadow: none;
+            width: 20px;
+            left: -10px;
+            height: 20px;
+            top: -8px;
+        }
+        .noUi-horizontal .noUi-handle:before,.noUi-horizontal .noUi-handle:after {
+            display: none;
+        }
+
+        .noUi-target {
+            box-shadow: none;
+        }
+    </style>
     {% for flash_message in app.session.flashbag.get('error') %}
         <div class="alert alert-danger flashSubscription" role="alert"> 
             {{ flash_message }}
@@ -15,7 +37,7 @@
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
                     <span class="step">Paso 3 de 4</span>                            
-                    Suscripción a Symplifica
+                    Subscripción a Symplifica
                 </div>
             </div>
         </div>
@@ -34,6 +56,7 @@
             De acuerdo a la información registrada, usted cuenta con los siguientes empleados:
         </p> 
     </div>
+    <div class="col-lg-1 result_ajax"></div>
     <form action="{{ path('subscription_confirm') }}" method="POST">  
         <div id="employees" class="col-xs-12">
             <div class="row-fluid clearfix">
@@ -50,9 +73,9 @@
                         {% set contrato = employeeData['contrato'] %}
                         {% set producto = employeeData['product'] %}
 
-                        <div class="col-md-4 col-sm-6 employee text-center {{ employee.state>0 ?'activo':'inactivo' }}">
-                            <div class="row">
-                                <div class="col-xs-12">
+                        <div class="col-md-4 col-sm-6 employee text-center">
+                            <div class="row-fluid">
+                                <div class="col-xs-12 {{ employee.state>0 ?'activo':'inactivo' }} {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }}">
                                     <div class="employee_name">
                                         <b>{{ employee.employeeEmployee.personPerson.names ~ ' ' ~ employee.employeeEmployee.personPerson.lastname1}}</b>
                                     </div>
@@ -61,7 +84,7 @@
                                         Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
                                     </div>
                                     <div>
-                                        <div class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inhabilitar':'Activar' }}</div>
+                                        <div class="btn btn-default btn-change-state-contract" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}">{{ employee.state?'Inhabilitar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +112,6 @@
         </div>
         <div class="col-xs-12">
             <div class="row">
-                <div class="col-lg-1 result_ajax"></div>
                 <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
                     <span style="font-size: 20px;">Con el número de empleados<br /> nuestro servicio tendrá un costo mensual de:</span>
                     <div class="div_price">     
@@ -114,72 +136,88 @@
     </form>
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Confirmación de inactivación de empleado</h4>
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content"><div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Confirmación de inactivación de empleado</div>
+                    </div>
+                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                        <div class="col-md-8 col-md-push-2">
+                            <p>
+                                Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de sueldo ni aportes a seguridad social así como tampoco se gestionará la información relacionada con él.
+                            </p>
+                            <p>
+                                Tenga en cuenta que debe tener como mínimo un (1) empleado activo.
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 text-right">
+                                <button type="button" class="btn btnPrevious" data-dismiss="modal">Volver atrás</button>
+                            </div>
+                            <div class="col-xs-6">
+                                <button type="button" class="btn btn-orange btn-change-state-contract-confirm">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p>
-                        Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de sueldo ni aportes a seguridad social así como tampoco se gestionará la información relacionada con él.
-                    </p>
-                    <p>
-                        Tenga en cuenta que debe tener como mínimo un (1) empleado activo.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+        </div>
     </div><!-- /.modal -->
 
     <!-- Modal Pricing Calculator-->
     <div class="modal fade" tabindex="-1" role="dialog" id="modal_price_calculator">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Cálculo del valor de la suscripción a Symplifica</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="divSlider">                        
-                        <div class="type_employee">
-                            <span class="type_time">Tiempo Parcial</span>
-                            <span class="type_time_desc">Trabaja(n) 1 a 10 días al mes</span>
-                        </div>           
-                        <div class="slider_employee" id="tiempo_parcial"></div>
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content"><div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span>&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Cálculo del valor de la suscripción a Symplifica</div>
                     </div>
-                    <div class="divSlider">                        
-                        <div class="type_employee">
-                            <span class="type_time">Medio Tiempo</span>
-                            <span class="type_time_desc">Trabaja(n) 11 a 19 días al mes</span>
-                        </div>              
-                        <div class="slider_employee" id="medio_tiempo"></div>
-                    </div>
-                    <div class="divSlider">                          
-                        <div class="type_employee">
-                            <span class="type_time">Tiempo Completo</span>
-                            <span class="type_time_desc">Trabaja(n) más de 20 días al mes</span>
-                        </div>        
-                        <div class="slider_employee" id="tiempo_completo"></div>
-                    </div>
-                    <div class="" style="display: inline-block; text-align: center; width: 100%;">
-                        Valor suscripción mensual
-                        <div class="div_price">     
-                            <div id="result_price_calc"></div>      
-                            <div id="result_discount_calc"></div>    
+                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                        <div class="col-xs-12">
+                            <div class="divSlider">                        
+                                <div class="type_employee">
+                                    <span class="type_time">Tiempo Parcial</span>
+                                    <span class="type_time_desc">Trabaja(n) 1 a 10 días al mes</span>
+                                </div>           
+                                <div class="slider_employee" id="tiempo_parcial"></div>
+                            </div>
+                            <div class="divSlider">                        
+                                <div class="type_employee">
+                                    <span class="type_time">Medio Tiempo</span>
+                                    <span class="type_time_desc">Trabaja(n) 11 a 19 días al mes</span>
+                                </div>              
+                                <div class="slider_employee" id="medio_tiempo"></div>
+                            </div>
+                            <div class="divSlider">                          
+                                <div class="type_employee">
+                                    <span class="type_time">Tiempo Completo</span>
+                                    <span class="type_time_desc">Trabaja(n) más de 20 días al mes</span>
+                                </div>        
+                                <div class="slider_employee" id="tiempo_completo"></div>
+                            </div>
+                            <div class="" style="display: inline-block; text-align: center; width: 100%;">
+                                Valor suscripción mensual
+                                <div class="div_price">     
+                                    <div id="result_price_calc"></div>      
+                                    <div id="result_discount_calc"></div>    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-6 text-right">
+                                    <button type="button" class="btn" data-dismiss="modal">Volver atrás</button>
+                                </div>
+                                <div class="col-xs-6">
+                                    <a type="button" class="btn btn-orange btn-add-employee notAjax" href="{{ path('register_employee') }}">Agregar un empleado</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-                    <a type="button" class="btn btn-default btn-add-employee notAjax" href="{{ path('register_employee') }}">Agregar un empleado</a>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+            </div>
+        </div>
     </div><!-- /.modal -->
 
 {% endblock %}

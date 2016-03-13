@@ -525,6 +525,7 @@ class DocumentController extends Controller
 
 	            $descriptions = $purchaseOrders->getPurchaseOrderDescriptions();
 
+	            $productsPrice = 0;
 	            /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
 	            foreach ($descriptions as $desc) {
 	                $items[] = array(
@@ -535,12 +536,15 @@ class DocumentController extends Controller
 	                    'totalValue' => $desc->getValue(),
 	                    'unitValue' => $desc->getProductProduct()->getPrice()
 	                );
-	                $iva = $desc->getValue() - $desc->getProductProduct()->getPrice();
-// 	                $acuIva = $iva;
+	                $productsPrice += $desc->getProductProduct()->getPrice();
 	            }
 
+	            $ivaTotal = $purchaseOrders->getValue() - $productsPrice;
+	            $purchaseInfo['iva'] = $ivaTotal;
+	            $purchaseInfo['subTotal'] = $productsPrice;
+
 	            $data = array(
-	                'invoiceNumber' => '###',
+	                'invoiceNumber' => $purchaseOrders->getInvoiceNumber(),
 	                'client' => $clientInfo,
 	                'purchaseOrder' => $purchaseInfo,
 	                'items' => $items

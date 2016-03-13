@@ -99,6 +99,7 @@
                                     <th>Número factura</th>
                                     <th>Concepto</th>
                                     <th>Valor</th>
+                                    <th>PDF</th>
                                 </tr>
                                 {% for invoice in invoices %}
                                     <tr>
@@ -106,6 +107,7 @@
                                         <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
                                         <td>{{ invoice.description }}</td>
                                         <td>{{ invoice.value }}</td>
+                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"> > Ver Archivo</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

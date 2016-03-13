@@ -16,7 +16,7 @@ class RegistrationType extends AbstractType
 
         $builder
             ->add('name', 'text', array("attr" => array('placeholder' => 'Nombres'), 'mapped' => false))
-            ->add('lastName', 'text', array("attr" => array('placeholder' => 'Apellidos'), 'mapped' => false))
+            ->add('lastName', 'text', array("attr" => array('placeholder' => 'Primer apellido'), 'mapped' => false))
             ->add('email', 'email', array('translation_domain' => 'FOSUserBundle', "attr" => array('placeholder' => 'form.email')))
             ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password'), 'translation_domain' => 'FOSUserBundle'))
             ->add('invitation', 'text', array(

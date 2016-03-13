@@ -23,17 +23,17 @@ body {
 }
 
 .table {
-    border-style: solid;
+/*     border-style: solid; */
     margin: 10px;
 }
 
 .border {
-    border-style: solid;
+/*     border-style: solid; */
 }
 
 .title {
     text-align: center;
-    background: gray;
+/*     background: gray; */
 }
 
 .columns {
@@ -48,7 +48,7 @@ body {
 
 .row {
     overflow: auto;
-    border-bottom: solid;
+/*     border-bottom: solid; */
 }
 
 </style>
@@ -135,9 +135,9 @@ body {
             <p><strong><small>TOTAL</small></strong></p>
         </div>
         <div class="cols" style="width:15%;">
-            <p></p>
-            <p></p>
-            <p></p>
+            <p>{{ data.purchaseOrder.subTotal }}</p>
+            <p>{{ data.purchaseOrder.iva }}</p>
+            <p>0</p>
             <p>{{ data.purchaseOrder.total }}</p>
         </div>
     </div>

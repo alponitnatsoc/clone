@@ -71,13 +71,22 @@ function startSubscriptionChoise() {
         calculatePrice('');
     });
 
-    var contratoid = '';
+    var url = '';
     var button = '';
+    $(".btn-change-state-contract").click(function (event) {
+        button = $(this);
+        url = button.data('href');
+        if ($(this).html() == 'Activar') {
+            ajax(button, url);
+        } else {
+            $('#modal_confirm').modal('show');
+        }
+    });
     $(".modal-content .close").hide();
     $('#modal_confirm').on('show.bs.modal', function (event) {
         //event.preventDefault();
-        button = $(event.relatedTarget);
-        contratoid = button.data('contrato-id');
+        //button = $(event.relatedTarget);
+        //url = button.data('href');
         if ($(".activo").length > 1 || $(button).html() == "Activar") {
             $(".btn-change-state-contract-confirm").show();
         } else {
@@ -89,7 +98,7 @@ function startSubscriptionChoise() {
     //});
     $(".btn-change-state-contract-confirm").on('click', function (e) {
         if ($(".activo").length > 1 || $(button).html() == "Activar") {
-            ajax(button, contratoid);
+            ajax(button, url);
         } else {
             $('#modal_confirm').modal('hide');
         }
@@ -102,6 +111,7 @@ function startSubscriptionChoise() {
             url: url,
             type: 'GET',
             beforeSend: function (xhr) {
+                $(obj).attr('disabled', true);
                 $(".btn-change-state-contract-confirm").attr('disabled', true);
             }
         }).done(function (data) {
@@ -111,23 +121,27 @@ function startSubscriptionChoise() {
             state = '';
             if (data.state == 'Inactivo') {
                 $(obj).html("Activar");
+                parent.removeClass("activo");
+                parent.addClass("inactivo");
                 if (female > 0) {
                     state = "inactivada";
                 } else if (male > 0) {
                     state = "inactivado";
+                } else {
+                    state = "inactivado";
                 }
-                parent.removeClass("activo");
-                parent.addClass("inactivo");
             }
             if (data.state == 'Activo') {
                 $(obj).html("Inhabilitar");
+                parent.removeClass("inactivo");
+                parent.addClass("activo");
                 if (female > 0) {
                     state = "activada";
                 } else if (male > 0) {
                     state = "activado";
+                } else {
+                    state = "activado";
                 }
-                parent.removeClass("inactivo");
-                parent.addClass("activo");
             }
             $('#modal_confirm').modal('hide');
             name = parent.find(".employee_name").html();
@@ -136,12 +150,14 @@ function startSubscriptionChoise() {
                 $('.result_ajax').html("").hide(1000);
             }, 2000);
             calculatePrice('');
-            $(".btn-change-state-contract-confirm").attr('disabled', false);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
             $('#modal_confirm').modal('hide');
+        }).always(function () {
+            $(obj).attr('disabled', false);
+            $(".btn-change-state-contract-confirm").attr('disabled', false);
         });
     }
     function calculatePrice(contenedor) {

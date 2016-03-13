@@ -22,7 +22,7 @@ class PagoMembresiaForm extends AbstractType
                 ->add('personType', 'choice', array(
                     'choices' => array(
                         'persona' => 'Persona',
-                        'empresa' => 'Empresa'
+                        'empresa' => 'Empresa (Muy pronto)'
                     ),
                     'multiple' => false,
                     'expanded' => true,
@@ -30,7 +30,11 @@ class PagoMembresiaForm extends AbstractType
                     //           $disabled = $key == "empresa";
                     //    return $disabled ? ['disabled' => 'disabled'] : [];
                     //},
-                    'label' => 'Usted es*',
+                    'label' => 'Eres*',
+                    'choice_attr' => function($key, $val, $index) {
+                        $disabled = $key=="empresa";
+                        return $disabled ? ['disabled' => 'disabled'] : [];
+                    },
                     'required' => true,
                     'property_path' => 'personType'
                 ))
@@ -56,9 +60,6 @@ class PagoMembresiaForm extends AbstractType
                     'property_path' => 'document'
                 ))
                 ->add('razonSocial', 'text', array(
-                    'constraints' => array(
-                        new NotBlank()
-                    ),
                     'required' => false,
                     'label' => 'Razón Social*',
                     'property_path' => 'razonSocial'
