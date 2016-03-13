@@ -191,8 +191,6 @@ class PaymentsRestController extends FOSRestController
         $mandatory['documentNumber'] = true;
         $regex['name'] = '([a-z|A-Z| ])+';
         $mandatory['name'] = true;
-        $regex['lastName'] = '([a-z|A-Z| ])+';
-        $mandatory['lastName'] = true;
         $regex['year'] = '([0-9]){4}';
         $mandatory['year'] = true;
         $regex['month'] = '([0-9]){2}';

@@ -130,6 +130,10 @@
             width: 100%
         }
 
+        #pago_membresia_personType .radio:last-child {
+            color: #c2c2c2;
+        }
+
             /*
             .blockStep2 {
                 margin-top: 10px;
@@ -216,10 +220,27 @@
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
+                                    {{ form_label(form.document) }}    
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.document) }}    
+                                </div>
+                                <!--<img src="/img/typePerson.png">-->                        
+                            </div>
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
                                     {{ form_label(form.names) }}    
                                 </div>
                                 <div class="col-sm-6 form-group">
                                     {{ form_widget(form.names) }}    
+                                </div>
+                                <!--<img src="/img/typePerson.png">-->                        
+                            </div>
+                            <div class="col-sm-12 col-xs-12 hidden">
+                                <div class="col-sm-6 label-group">
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.razonSocial) }}    
                                 </div>
                                 <!--<img src="/img/typePerson.png">-->                        
                             </div>
