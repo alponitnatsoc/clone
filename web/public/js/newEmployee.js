@@ -141,7 +141,6 @@ function startEmployee() {
             $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(year);
             $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(month + 1);
             $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(day);
-            $("#dateContract").modal("show");
         }
 
     });
@@ -159,7 +158,6 @@ function startEmployee() {
             $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(year + 1);
             $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month + 1);
             $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
-            $("#dateContract").modal("show");
         }
     });
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
@@ -1000,7 +998,7 @@ function calculator() {
 function checkDate(date) {
     var dateNow = new Date();
     if (date < dateNow) {
-        alert("La fecha no puede ser anterior a hoy");
+        $("#dateContract").modal("show");
         return false;
     }
     return true;
