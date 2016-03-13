@@ -22,7 +22,7 @@
                                 {{ form_label(form.mediaMedia.binaryContent) }}    
                             </div>
                             <div class="col-sm-6 text-left">
-                                {{ form_widget(form.mediaMedia.binaryContent) }}    
+                                {{ form_widget(form.mediaMedia.binaryContent,{'attr': {'accept':"application/pdf,image/jpg,image/png,image/tif"}}) }}    
                             </div>
                             <!--<img src="/img/typePerson.png">-->                        
                         </div>  

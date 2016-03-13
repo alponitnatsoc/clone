@@ -623,18 +623,18 @@ function addListeners() {
     var documentType = $("select[name='register_employee[person][documentType]']");
     var document = $("input[name='register_employee[person][document]']");
     var lastName1 = $("input[name='register_employee[person][lastName1]']");
-    $(documentType).blur( function () {
-        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+    $(documentType).blur(function () {
+        if (documentType.val() != "" && document.val() != "" && lastName1.val() != "") {
             inquiry();
         }
     });
-    $(document).blur( function () {
-        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+    $(document).blur(function () {
+        if (documentType.val() != "" && document.val() != "" && lastName1.val() != "") {
             inquiry();
         }
     });
-    $(lastName1).blur( function () {
-        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+    $(lastName1).blur(function () {
+        if (documentType.val() != "" && document.val() != "" && lastName1.val() != "") {
             inquiry();
         }
     });
@@ -707,14 +707,18 @@ function addListeners() {
         $('#btnToggleFijo').removeClass('active');
     });
 
+    $("#register_employee_employeeHasEmployers_salaryD").on("focusout", function () {
+        //validateSalary();
+    });
+    $("#register_employee_employeeHasEmployers_salary").on("focusout", function () {
+        //validateSalary();
+    });
     $("#register_employee_employeeHasEmployers_salaryD").on("input", function () {
         calculator();
         formatMoney($("#totalExpensesVal"));
         formatMoney($(this));
-        validateSalary('D');
     });
     $("#register_employee_employeeHasEmployers_salary").on("input", function () {
-        validateSalary('M');
         formatMoney($(this));
     });
 
@@ -1008,23 +1012,10 @@ function getPrice(valor) {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return  price;
 }
-function validateSalary(type) {
-    if (type == 'M') {
-        salarioMinimo = $("#salarioMinimo").val();
-        if (!salarioMinimo) {
-            salarioMinimo = 689454;
-        }
-        salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
-        if (salarioMes < salarioMinimo) {
-            $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
-            $("#salarioMinimo").modal('show');
-            $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
-            formatMoney($("#register_employee_employeeHasEmployers_salary"));
-            return false;
-        }
-    }
-    if (type == 'D') {
-        salarioMinimoDiario = $("#salarioMinimo").val();
+function validateSalary() {
+    var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+    if (selectedVal == " Trabajo por días") {
+        salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
             salarioMinimoDiario = 21000;
         }
@@ -1039,10 +1030,23 @@ function validateSalary(type) {
             $("#ex6").bootstrapSlider("setValue", salarioMinimoDiario);
             return false;
         }
+    } else {
+        salarioMinimo = $("#salarioMinimo").val();
+        if (!salarioMinimo) {
+            salarioMinimo = 689454;
+        }
+        salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
+        if (salarioMes < salarioMinimo) {
+            $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
+            $("#salarioMinimo").modal('show');
+            $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
+            formatMoney($("#register_employee_employeeHasEmployers_salary"));
+            return false;
+        }
     }
     return true;
 }
-function inquiry(){
+function inquiry() {
     var form = $("form");
     var documentType = $(form).find("select[name='register_employee[person][documentType]']");
     var document = $(form).find("input[name='register_employee[person][document]']");
