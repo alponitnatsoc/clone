@@ -51,6 +51,14 @@
             width: 100%;
             padding: 10px;
         }
+        #btnAddNovelty {
+            width: 100%;
+            padding: 20px 0px;
+            background: 0;
+            border: 2px dashed #FD9224;
+            color: #FD9224;
+            font-size: 21px;
+        }
     </style>
 {% endblock %}
 <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
@@ -150,12 +158,7 @@
                     </div>
                 </div>
                 {% if liquidationReason != 2 %}
-                    <div class="col-sm-12 row-add-novelty" style="text-align:center;">
-                               <div class="col-sm-4 col-sm-offset-4">
-
-
-                               </div>
-                           </div>
+                    <button type="button" id="btnAddNovelty" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle"></i> Agregar novedades</button>
                 {% endif %}
             </div>
             {% if liquidationReason == 2 %}

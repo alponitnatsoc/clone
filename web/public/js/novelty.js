@@ -2,9 +2,9 @@
  * Created by gabrielsamoma on 2/8/16.
  */
 function addNoveltySelectListener() {
-    var modBody=$("#noveltyModal").find(".modal-body");
+    var modBody=$("#noveltyModal").find(".cuerpoNovelty");
     var form=modBody.find("form");
-
+    console.log(form);
     $("#novelty_fields_date_start").on("change", function(){
 
     });
