@@ -1118,9 +1118,7 @@ table.record_properties {
     img {
     }
     .title{        
-        text-align: center;
         font-family: @open !important;
-        text-align: center;
         padding: 10px;
         font-weight: bold !important; 
     }
@@ -1128,7 +1126,6 @@ table.record_properties {
         color:#00CDCC;
     }
     div {
-        text-align: center;
         &.form-group {
             div {
                 text-align: left;
@@ -1509,32 +1506,31 @@ select {
     }
 }
 .upload-link{
-    color:@selectedMenuColor;
     text-decoration: none;
     &:active{
-        color:@selectedMenuColor;
+        color:white;
     }
     &:hover{
-        color:@selectedMenuColor;
+        color:white;
         text-decoration: none;
     }
     &:focus{
-        color:@selectedMenuColor;
+        color:white;
         text-decoration: none;
     }    
 }
 .download-link{
-    color:@blue;
+    color:@selectedMenuColor;
     text-decoration: none;
     &:active{
         color:@blue;
     }
     &:hover{
-        color:@blue;
+        color:@selectedMenuColor;
         text-decoration: none;
     }
     &:focus{
-        color:@blue;
+        color:@selectedMenuColor;
         text-decoration: none;
     } 
 }
@@ -1922,4 +1918,63 @@ select {
 
 .ui-autocomplete{position:absolute;top:100%;left:0;z-index:1000;float:left;display:none;min-width:160px;padding:4px 0;margin:2px 0 0;list-style:none;background-color:#fff;border-color:#ccc;border-color:rgba(0,0,0,.2);border-style:solid;border-width:1px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 5px 10px rgba(0,0,0,.2);-moz-box-shadow:0 5px 10px rgba(0,0,0,.2);box-shadow:0 5px 10px rgba(0,0,0,.2);-webkit-background-clip:padding-box;-moz-background-clip:padding;background-clip:padding-box}
 
+
+.employeesListEmployer , .firstEmployeeList, .employeesListEmployee{
+    padding-top:9px;
+    .name-docs{
+        color:@blue;
+    }
+    .personType{
+        font-size:10px;
+    }
+}
+.btnUpload{
+    font-size:10px;
+    text-decoration: none;
+    background-color:@selectedMenuColor;
+    color:white;
+    border-radius:4px;
+    padding-top:7px;
+    margin-bottom:5px;
+    padding-left:7px;
+    height: 35px;
+    width: 100px;
+    .icon-btn{
+        padding:0px 0px 0px 0px;
+        i{
+            font-size:20px;
+        }
+    }
+    .text-btn{
+        line-height: 90%;
+    } 
+    a{
+        color: inherit;
+    } 
+}
+.btnDownload{
+    font-size:10px;
+    text-decoration: none;
+    background-color:white;
+    color:@selectedMenuColor;
+    border-radius:4px;
+    border: 1px solid @selectedMenuColor;
+    padding-top:7px;
+    margin-bottom:5px;
+    padding-left:7px;
+    height: 35px;
+    width: 100px;
+    .icon-btn{
+        padding:0px 0px 0px 0px;
+        i{
+            font-size:20px;
+        }
+    }
+    .text-btn{
+        line-height: 90%;
+    } 
+    a{
+        color: inherit;
+    } 
+}
 

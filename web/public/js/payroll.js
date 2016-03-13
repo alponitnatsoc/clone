@@ -82,4 +82,9 @@ $(document).ready(function () {
         });
         //document.location = "/novelty/select/" + payroll;
     });
+
+    $('.view_detail').on('click', function (event) {
+
+    });
+
 });

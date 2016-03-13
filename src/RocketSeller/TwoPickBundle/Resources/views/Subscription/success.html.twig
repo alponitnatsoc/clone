@@ -5,13 +5,11 @@
     {{ parent() }}
 {% endblock stylesheet %}
 {% block fos_user_content %}
-    {% set time_free = user.status==2? 30:(user.status==3?60:0) %}
-    {% set day = user.getDateCreated|date_modify("+"~time_free~" day")|date("d") %}
-    {% set month = user.getDateCreated|date_modify("+"~time_free~" day")|date("F")|trans %}
-    {% set year = user.getDateCreated|date_modify("+"~time_free~" day")|date("Y") %}
-    {% set day_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("d") %}
-    {% set month_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("F")|trans %}
-    {% set year_pay = user.getDateCreated|date_modify("+"~(time_free+1)~" day")|date("Y") %} 
+    {% set time_free = 1 %}
+    {% set date = date|date_modify("+"~(time_free)~" month") %}
+    {% set day_pay = date|date("d") %}
+    {% set month_pay = date|date("F")|trans %}
+    {% set year_pay = date|date("Y") %} 
     <div>La suscripción fue realizada exitosamente</div>
     <div> El valor del servicio será cargado a su tarjeta de crédito a partir el  {{ day_pay }} de {{ month_pay }} de {{ year_pay }} calculado de acuerdo a la información de empleados registrada en el sistema.</div>
     <div>Podrá recibir un 20% de descuento por cada persona a la que usted refiera y adquiera alguno de nuestros paquetes de servicio usando el siguiente código:</div>

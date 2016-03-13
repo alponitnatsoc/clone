@@ -230,7 +230,7 @@ class SubscriptionController extends Controller
         $date->add(new \DateInterval('P1M'));
         $startDate = $date->format('Y-m-d');
 
-        dump($data);
+        //dump($data);
         //die;
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                     'employees' => $data['employees'],
@@ -262,7 +262,7 @@ class SubscriptionController extends Controller
             $billingAdress = $person->getBillingAddress();
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
-            dump($data);
+            //dump($data);
 
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
@@ -346,6 +346,14 @@ class SubscriptionController extends Controller
                         //dump($data);                        
                         //die;
                         $this->sendEmailPaySuccessAction();
+
+                        /* @var $user User */
+                        $user = $this->getUser();
+                        $user->setPaymentState(1);
+                        $user->setDayToPay(\date('d'));
+                        $em->persist($user);
+                        $em->flush();
+
                         return $this->redirectToRoute("subscription_success");
                     }
                     $this->addFlash('error', $responce->getContent());
@@ -362,7 +370,8 @@ class SubscriptionController extends Controller
     public function suscripcionSuccessAction(Request $request)
     {
         return $this->render('RocketSellerTwoPickBundle:Subscription:success.html.twig', array(
-                    'user' => $this->getUser()
+                    'user' => $this->getUser(),
+                    'date' => \date('Y-m-d')
         ));
     }
 
