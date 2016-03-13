@@ -19,17 +19,17 @@
 
         <div class="col-sm-12 col-xs-12 ">
 	        <ul class="nav nav-tabs nav-justified tab-header">
-	            <li class="active"><a style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-	            <li><a style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
-	            <li><a style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Beneficiarios</a></li>
-	            <li><a style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
-	            <li><a style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
-	            <li><a  style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
-	            <li><a style="font-size:10px;" data-toggle="tab" data-target="#certificates">Certificados</a></li>
+	            <li class="active"><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
+	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
+	            <li><a  class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
+	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#certificates">Certificados</a></li>
 	        </ul>
 	     </div>
 	        <div class="tab-content">
-	        	<div id="basicData" class="tabsEnabled fade in active">
+	        	<div id="basicData" class="tab-pane fade in active">
 	        		<div class="col-sm-12 col-sm-offset-4">
 
 	        		</div>
@@ -45,7 +45,7 @@
 		        			</div>
 		        			<div class="col-sm-8">
 		        				<div class="col-sm-5">
-	        						<a class="btn btn-sm btn-top-left btn-primary notAjax" onclick="addNoveltySelectListener()">Ingresar novedad</a>
+	        						<button class="btn btn-top-left btn-default  btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="{{ path('novelty_select') }}"/>Ingresar Novedad</button>
 								</div>
 		        				<div class="col-sm-5">
 	        						<a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
@@ -90,7 +90,7 @@
 	        					</li>
 	        					<li>
 	        						<p class="title"><i>Fecha de nacimiento</i></p>
-	        						<p><strong>{{ employee.personPerson.birthDate|date('m')}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
+	        						<p><strong>{{ employee.personPerson.birthDate|date('F')|trans}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
 	        					</li>
 	        					<li>
 	        						<p class="title"><i>País</i></p>
@@ -137,8 +137,8 @@
   					</div>
         		</div>
 
-            	<div id="contactData" class="tabsEnabled tab-pane">
-					<div class="col-sm-12 col-sm-offset-4">
+            	<div id="contactData" class="tab-pane">
+  					<div class="col-sm-12 col-sm-offset-4">
 
 	        		</div>
 	        		<div class="col-sm-12 top-box-employee">
@@ -153,109 +153,63 @@
 		        			</div>
 		        			<div class="col-sm-8">
 
-		        				<div class="col-sm-2 col-sm-offset-10">
-		        					{% if  not employerHasEmployee.state %}
-		        						<a class="btn  btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Activar</a>
-		        					{% else %}
-		        						<a class="btn btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Inactivar</a>
-		        					{% endif %}
-	        					</div>
+		        				<div class="col-sm-4 col-sm-offset-8">
+		        					<div class="col-sm-5">
+	        							<a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
+	        						</div>
 	        				</div>
-
-        			</div>
-        			<div class="col-sm-12 middle-box">
-        				<div class="col-sm-4 left">
-        					{% if employerHasEmployee.state %}
-        						<p><i class="fa fa-check-circle">Activo</i></p>
-        					{% else %}
-        						<p><i class="fa fa-check-cross">Inactivo</i></p>
-        					{% endif %}
-        					
-        				</div>
-        				<div class="col-sm-4 middle">
-        					<div class="col-sm-12 title" style="font-style:italic;">Vacaciones</div>
-        					<div class="col-sm-12 text-below"><strong>10 dias</strong></div>
-        					
-        				</div>
-        				<div class="col-sm-4 right">
-        					<div class="col-sm-12 title" style="font-style:italic;">Salario</div>
-        					<div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
-        				</div>
 
         			</div>
         			<div class="col-sm-12 bottom-box">
         				<div class="col-sm-4 left">
-	        				<ul class="col-sm-12">
-		        				<h4 class="col-sm-12">Datos basicos</h4>
+	        				<ul class="col-sm-12">		        				
 	        					<li>
-	        						<p class="title"><i>Estado civil</i></p>
-	        						<p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
+	        						<p class="title"><i>Tipo de empleado</i></p>
+	        						<p><strong>{{ contract.positionPosition.name }}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Fecha de nacimiento</i></p>
-	        						<p><strong>{{ employee.personPerson.birthDate|date('m')}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
+	        						<p class="title"><i>Fecha inicion de contrato</i></p>
+	        						<p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>País</i></p>
-	        						<p><strong>{{employee.personPerson.birthCountry.name}}</strong></p>
+	        						<p class="title"><i>Tipo de contrato</i></p>
+	        						<p><strong>{{contract.contractTypeContractType.name}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Departamento</i></p>
-	        						<p><strong>{{employee.personPerson.birthDepartment.name}}</strong></p>
-	        					</li>
-	        					<li>
-	        						<p class="title"><i>Ciudad</i></p>
-	        						<p><strong>{{employee.personPerson.birthCity.name}}</strong></p>
+	        						<p class="title"><i>Sueldo diario</i></p>
+	        						<p><strong>${{contract.salary}}</strong></p>
 	        					</li>
 	        				</ul>
         				</div>
         				<div class="col-sm-4 right">
-	        				<ul class="col-sm-12">
-		        				<h4 class="col-sm-12">Datos de contacto</h4>
+	        				<ul class="col-sm-12">		        				
 	        					<li>
-	        						<p class="title"><i>Dirección</i></p>
-	        						<p><strong>{{employee.personPerson.mainAddress}}</strong></p>
+	        						<p class="title"><i>Cargo</i></p>
+	        						<p><strong>{{contract.contractTypeContractType.name}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Email</i></p>
-	        						<p><strong>{{employee.personPerson.email}}</strong></p>
+	        						<p class="title"><i>Fecha fin de contrato</i></p>
+	        						<p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Teléfono</i></p>
-	        						<p><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
+	        						<p class="title"><i>Lugar de trabajo</i></p>
+	        						<p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Departamento</i></p>
-	        						<p><strong>{{employee.personPerson.department.name}}</strong></p>
-	        					</li>
-	        					<li>
-	        						<p class="title"><i>Ciudad</i></p>
-	        						<p><strong>{{employee.personPerson.city.name}}</strong></p>
+	        						<p class="title"><i>Metodo de pago</i></p>
+	        						<p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
 	        					</li>
 	        				</ul>
         				</div>
         				<div class="col-sm-4 right">
-	        				<ul class="col-sm-12">
-		        				<h4 class="col-sm-12">Datos de contacto</h4>
+	        				<ul class="col-sm-12">		        				
 	        					<li>
-	        						<p class="title"><i>Dirección</i></p>
-	        						<p><strong>{{employee.personPerson.mainAddress}}</strong></p>
+	        						<p class="title"><i>Dedicación de tiempo</i></p>
+	        						<p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
 	        					</li>
 	        					<li>
-	        						<p class="title"><i>Email</i></p>
-	        						<p><strong>{{employee.personPerson.email}}</strong></p>
-	        					</li>
-	        					<li>
-	        						<p class="title"><i>Teléfono</i></p>
-	        						<p><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
-	        					</li>
-	        					<li>
-	        						<p class="title"><i>Departamento</i></p>
-	        						<p><strong>{{employee.personPerson.department.name}}</strong></p>
-	        					</li>
-	        					<li>
-	        						<p class="title"><i>Ciudad</i></p>
-	        						<p><strong>{{employee.personPerson.city.name}}</strong></p>
+	        						<p class="title"><i>Dias laborales al mes</i></p>
+	        						<p><strong>{{contract.workableDaysMonth}}</strong></p>
 	        					</li>
 	        				</ul>
         				</div>
@@ -266,20 +220,51 @@
 
 
 
+            		</div>
+
+        		</div>
+
+            	<div id="workplacesData" class="tab-pane">
+        			<div class="col-sm-12 social-security" >
+        				<h4>Datos de seguridad social</h4>
+        				<div class="col-sm-8 col-sm-offset-2">
+        					<div class="col-sm-6 left">
+        						<p class="title"><i><strong>Eps</strong></i></p>
+        						<p class="title"><i><strong>Fondo de pensiones</strong></i></p>
+        						<p class="title"><i><strong>Arl</strong></i></p>
+        						<p class="title"><i><strong>Caja de compensación</strong></i></p>	        						
+        					</div>
+        					<div class="col-sm-6 right">
+        						<p>{{entidades["EPS"].name}}</p>        						
+        						<p>{{entidades["Pension"].name}}</p>
+        						<p>{{entidades["ARL"].name}}</p>        						
+        						<p>{{entidades["CC"].name}}</p>
+        						
+        					</div>
+        				</div>
+
+        			</div>
+        			<div class="col-sm-12 form-upper">
+        				
+        			</div>
+        			<div class="col-sm-12 form-lower">
+        				
+        			</div>
+  					<div class="col-sm-12 col-sm-offset-5">
+  						<a class="btn btn-orange notAjax" href="/register/employee/{{employee.idEmployee}}">Editar</a>
+  					</div>
+
             	</div>
-            	<div id="workplacesData" class="tabsEnabled tab-pane">
-  					<p>Beneficiarios</p>
-            	</div>
-            	<div id="noveltiesData" class="tabsEnabled tab-pane">
+            	<div id="noveltiesData" class="tab-pane">
   					<p>Novelties</p>
             	</div>
-            	<div id="payHistory" class="tabsEnabled tab-pane">
+            	<div id="payHistory" class="tab-pane">
   					<p>History</p>
             	</div>
-            	<div id="documents" class="tabsEnabled tab-pane">
+            	<div id="documents" class="tab-pane">
   					<p>Documents</p>
             	</div>
-            	<div id="certificates" class="tabsEnabled tab-pane">
+            	<div id="certificates" class="tab-pane">
   					<p>Certificates</p>
             	</div>
 	        </div>
@@ -287,4 +272,64 @@
 
         </div>
     </div>
+     <div id="modal_add_novelty_test">
+
+    </div>
+    <div class="modal fade"  role="dialog" id="modal_add_novelty">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-title_add_novelty"></h4>
+                </div>
+                <div class="modal-body" id="modal_body_add_novelty">
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>-->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Modal payroll detail-->
+    <div class="modal fade"  role="dialog" id="modal_payroll_detail">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-title_payroll_detail"></h4>
+                </div>
+                <div class="modal-body" id="modal_body_payroll_detail">
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
+                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>-->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Modal loader-->
+    <div class="modal fade"  role="dialog" id="modal_loader">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <img src="/img/loader.gif">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Modal add novelty-->
+
+   
+
+
 {% endblock fos_user_content %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/public/js/payroll.js') }}"></script>
+{% endblock %}
