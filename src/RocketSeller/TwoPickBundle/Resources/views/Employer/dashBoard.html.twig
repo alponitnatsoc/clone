@@ -7,9 +7,10 @@
             }
 
             .dashboard_employer_pending_tasks > .col-xs-12 {
+                padding-top: 20px;
+                padding-bottom: 10px;
                 background-color: #F5F5F6;
-                border-radius: 2px;
-                min-height: 200px;
+                border-radius: 5px;
                 margin-bottom: 30px;
             }
 
@@ -21,23 +22,36 @@
             }
 
             .panel_btn{
+                margin: 0 auto;
                 text-align: center;
-                width: 100%;
-
+                width: 80%;
+                background-color: #BE1E2D;
                 margin-bottom: 10px;
+                color: #000;
+                padding: 5px 5px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)!important; 
             }
             .panel-deadline{
                 text-align: center;
                 width: 100%;
-                height: 30px;
-                background-color: #efefef;
-
+                color: #f00;
             }
+
+            .label-group {
+                font-size: 13px;
+                font-weight: 200;
+                min-height: 60px;
+            }
+
+            .download-link, .download-link:hover {
+                color: #fff;
+            }
+
             .panel-title{
                 margin-left: 10px;
             }
             .type_alert{
-                background-color:orange;
+                background-color:#BE1E2D;
             }
             .type_mensaje{
                 background-color:lightskyblue;
@@ -141,6 +155,7 @@
                 font-weight: bold;
             }
             .dashboard_employer_head{
+                width: 100%;
                 padding: 10px;
                 display: -webkit-inline-box;
                 border-bottom: solid #efefef;
@@ -200,6 +215,7 @@
             .btn_list{
                 display: -webkit-inline-box;
                 vertical-align: -webkit-baseline-middle;
+                padding: 0 10px;
             }
             .deadline_list{
                 display: -webkit-inline-box;
@@ -214,9 +230,11 @@
                 display: block;
                 text-align: center;
                 padding: 20px 10px 20px 10px;
-                font-weight: bold;
-                border-top-color: black;
-                border-top-style: dotted;
+                font-weight: 200;
+                font-size: 21px;
+                color: #808284;
+                border-top-color: #efefef;
+                border-top-style: solid;
                 border-top-width: 1px;
                 border-right-color: black;
                 border-right-style: solid;
@@ -381,7 +399,7 @@
                                 </div>
                                 </div>
 
-                                <div class="panel_btn col-sm-12">
+                                <div class="panel_btn">
                                     {% if notification.accion %}
                                         {% if notification.accion|lower == "subir documento" %}
                                             <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link">{{ notification.accion }}</span>
@@ -403,20 +421,26 @@
         <div class="report_novedad">
             <a class="btn-bg btn-default" href="{{ path('manage_employees') }}">Reportar novedad</a>
         </div>#}
-        {% if(notifications) %}
+        {% set reminders = [] %}
+        {% for notification in notifications %}
+            {% if notification.type == 'reminder' %}
+                {% set reminders = reminders | merge([notification]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if(reminders|length>0) %}
             <div class="reminder_title">
-                Requerde que
+                Symplifica te recuerda que
             </div>
 
-            {% for notification in notifications %}
-                {% if notification.type == 'reminder' %}
-                    <div class="dashboard_employer_reminder col-md-6">
-                        <div class="label-as-badge label_list label-success">!</div>
-                        <div class="description_list">
-                            {{ notification.description }}
-                        </div>
+            {% for notification in reminders %}
+                <div class="dashboard_employer_reminder col-md-6">
+                    <div class="label-as-badge label_list label-success">!</div>
+                    <div class="description_list">
+                    prueba
+                        {{ notification.description }}
                     </div>
-                {% endif %}
+                </div>
             {% endfor %}
         {% endif %}
 
