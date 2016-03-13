@@ -24,8 +24,8 @@
                 <div class="row employeeListItem">
                     <div class="col-xs-6 employeeInfo" 
                         style="{% if status < 2 %}border-left:10px solid #ccc{% endif %}">
-                        <b>{{ employee.employeeEmployee.personPerson.names }}</b>
-                        <a href="">
+                        <b>{{ employee.employeeEmployee.personPerson.getFullName }}</b>&nbsp;
+                        <a href="#openNovelties" onclick="loadNovelty('/novelty/select/1')">
                             Agregar Novedad
                         </a>
                     </div>
@@ -54,4 +54,47 @@
             <i class="fa fa-plus-circle"></i> Agregar empleado nuevo
         </a>
     </div>
+
+
+
+
+
+
+
+
 {% endblock fos_user_content %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+<!--
+    function loadNovelty(url) {
+       $.ajax({
+           url: url,
+           type: 'POST',
+           data: {
+           }
+       }).done(function (data) {
+           $("#agregarNovedad").html(data);
+           $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
+               startNovelty();
+           });
+
+    //         $('#noveltyModal').modal('show');
+
+           $('#noveltyModal').modal({
+               show: false,
+               keyboard: false,
+               backdrop: 'static'
+           });
+           $('#noveltyModal').on('hidden.bs.modal', function () {
+               window.location.reload();
+           })
+           $('#noveltyModal').modal('show');
+
+       }).fail(function (jqXHR, textStatus, errorThrown) {
+           alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+       });
+    }
+//-->
+</script>
+{% endblock javascripts %}
