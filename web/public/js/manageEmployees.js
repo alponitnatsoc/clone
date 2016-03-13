@@ -18,7 +18,7 @@ function loadNovelty(url) {
         }
     }).done(function (data) {
         $("#agregarNovedad").html(data);
-        $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
+        $.getScript("/public/js/novelty.js").done(function () {
             startNovelty();
         });
 
