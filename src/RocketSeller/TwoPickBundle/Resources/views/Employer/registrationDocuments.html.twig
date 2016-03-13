@@ -20,68 +20,174 @@
     <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom: none;">
         <div class="col-sm-3 col-xs-12 nopadding title">
 
-            <i class="fa fa-user"></i> Nombre
+            Nombre
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding title">
-            <i class="fa fa-user"></i> Documento de Identidad
+        <div class="col-sm-2 col-xs-12 nopadding">
+            <strong>Documento</strong> <p>de Identidad</p>
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding title">
-            <i class="fa fa-user"></i> Registro único tributario (RUT)
+        <div class="col-sm-2 col-xs-12 nopadding">
+             <strong>Registro único tributario</strong><p>(RUT)</p> 
         </div>
-        <div class="col-sm-2 col-xs-12 nopadding title">
-            <i class="fa fa-user"></i> Contrato de trabajo
+        <div class="col-sm-2 col-xs-12 nopadding">
+            <strong>Contrato</strong><p>de trabajo</p>
         </div>
-        <div class="col-sm-3 col-xs-12 nopadding title">
-            <i class="fa fa-user"></i> Carta de Autorización a Symplifica
+        <div class="col-sm-3 col-xs-12 nopadding">
+             <strong>Carta de Autorización</strong> <p>a Symplifica</p>
         </div>
     </div>
 </div>
 <div class="row employeesListEmployer">
     {% set employerDocs = employer.docs %}
-    <div class="col-sm-12 col-xs-12 employer-row text-center" style="border-bottom: none;">
-        <div class="col-sm-3 col-xs-12 nopadding" style="text-align:right;">
-            <span>{{ employer.names }} {{ employer.lastName1}}</span>
+    <div class="col-sm-12 col-xs-12ext-center" style="border-bottom: none;">
+        <div class="col-sm-3 col-xs-12" style="text-align:left;">
+            <p class="name-docs nopadding"><strong>{{ employer.names }}</strong></p>
+
+            <p class="name-docs nopadding"><strong>{{ employer.lastName1}}</strong></p>
+            <p class="personType nopadding">Empleador</p>
+
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[0] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and documents[0]  == doc.documentTypeDocumentType.name%}
-                            <a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+                        <div class="col-sm-12 btnDownload">
+                            <div class="col-sm-2 icon-btn">
+                                <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                            </div>
+                            <div class="col-sm-8 text-btn">
+                                <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}">
+                            <strong> Descargar</strong><br>Documento</a>
+                            </div>
+                        </div>
                       {% else %}
-                            <a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}"><i class="fa fa-upload"></i> Documento</a>
+                        <div class="col-sm-12 btnUpload">
+                            <div class="col-sm-2 icon-btn">
+                                <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                            </div>
+                            <div class="col-sm-8 text-btn">
+                                <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">
+                            <strong> Cargar</strong><br>Documento</a>
+                            </div>
+                        </div>
                 {% endfor %}
             {% else %}
-                <a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
-                <i class="fa fa-upload"></i> Documento</a>
+                <div class="col-sm-12 btnUpload">
+                    <div class="col-sm-2 icon-btn">
+                        <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                    </div>
+                    <div class="col-sm-8 text-btn">
+                        <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
+                    <strong> Cargar</strong><br>Documento</a>
+                    </div>
+                </div>
             {% endif %}
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
-            {% if documents[1] in documentsTypeByEmployer %}
+            <div class="upload-btn" style="text-align:left">
+                {% if documents[1] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and (documents[1]  == doc.documentTypeDocumentType.name) %}
-                            <a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+                        {#<div class="col-sm-12 btnDownload">
+                            <div class="col-sm-2 icon-btn">
+                                <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                            </div>
+                            <div class="col-sm-8 text-btn">
+                                <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download">
+                            <strong> Descargar</strong><br>Carta</a>
+                            </div>
+                        </div>#}
+
+                        <div class="col-sm-12 btnDownload">
+                            <div class="col-sm-2 icon-btn">
+                                <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                            </div>
+                            <div class="col-sm-8 text-btn">
+                                <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}">
+                            <strong> Descargar</strong><br>Documento</a>
+                            </div>
+                        </div>
+
                       {% else %}
-                            <a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}"><i class="fa fa-upload"></i> Documento</a>
+                        <div class="col-sm-12 btnUpload">
+                            <div class="col-sm-2 icon-btn">
+                                <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                            </div>
+                            <div class="col-sm-8 text-btn">
+                                <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">
+                            <strong> Cargar</strong><br>Documento</a>
+                            </div>
+                        </div>
 
                 {% endfor %}
             {% else %}
-                <a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">
-                <i class="fa fa-upload"></i> Documento</a>
+            <div class="col-sm-12 btnUpload">
+                <div class="col-sm-2 icon-btn">
+                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                </div>
+                <div class="col-sm-8 text-btn">
+                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[1].idDocumentType}) }}">
+                <strong> Cargar</strong><br>Documento</a>
+                </div>
+            </div>
+                
+                
             {% endif %}
+            </div>
+            
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
-            No lo necesitas
+            
         </div>
         <div class="col-sm-2 col-xs-12 nopadding text-center">
             {% if documents[3] in documentsTypeByEmployer %}
                 {% for doc in employerDocs if (doc.status) and (documents[3]  == doc.documentTypeDocumentType.name) %}
-                        <a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+
+                    <div class="col-sm-12 btnDownload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employer.idPerson , 'idDocument':doc.idDocument}) }}">
+                        <strong> Descargar</strong><br>Carta</a>
+                        </div>
+                    </div>
                     {% else %}
-                        <a id="" class="download-link" href="{{ path('download_documents', {'id': employer.id, 'type': 'pdf', 'ref': 'mandato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Carta</a>
-                        <a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[3].idDocumentType}) }}"><i class="fa fa-upload"></i> Documento</a>
+                    <div class="col-sm-12 btnDownload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employer.id, 'type': 'pdf', 'ref': 'mandato'} ) }}">
+                        <strong> Descargar</strong><br>Carta</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 btnUpload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[3].idDocumentType}) }}">
+                        <strong> Cargar</strong><br>Carta</a>
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
-                <a id="" class="download-link" href="{{ path('download_documents', {'id': employer.employer.idEmployer, 'type': 'pdf', 'ref': 'mandato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Carta</a>
-                <a id="" class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[3].idDocumentType}) }}">
-                <i class="fa fa-upload"></i> Documento</a>
+                    <div class="col-sm-12 btnDownload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employer.employer.idEmployer, 'type': 'pdf', 'ref': 'mandato'} ) }}">
+                        <strong> Descargar</strong><br>Carta</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 btnUpload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employer.idPerson , 'idDocumentType':documents[3].idDocumentType}) }}">
+                        <strong> Cargar</strong><br>Carta</a>
+                        </div>
+                    </div>
             {% endif %}
         </div>
     </div>
@@ -91,43 +197,108 @@
     {% set employeeDocs = employees[0].personPerson.docs %}
     <div class="row employeesListEmployee">
         <div class="col-sm-12 col-xs-12 firstEmployeeList" style="border-bottom: none;">
-            <div class="col-sm-3 col-xs-12 nopadding" style="text-align:right;">
-                <span>{{ employees[0].personPerson.names }} {{ employees[0].personPerson.lastName1 }}</span>
+            <div class="col-sm-3 col-xs-12" style="text-align:left;">
+                <p class="name-docs nopadding"><strong>{{ employees[0].personPerson.names }}</strong></p>
+
+                <p class="name-docs nopadding"><strong>{{ employees[0].personPerson.lastName1 }}</strong></p>
+                <p class="personType nopadding">Empleado</p>
+
             </div>
             <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[0] in documentsTypeByEmployee[0] %}
                     {% for doc in employeeDocs if doc.status %}
                         {% if (documents[0] == doc.documentTypeDocumentType) %}
-                                <a class="download-link" href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
-
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                <strong> Descargar</strong><br>Documento</a>
+                                </div>
+                            </div>
                         {% endif %}
                         {% else %}
-                              <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
-                                <i class="fa fa-upload"></i> Documento</a>
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Documento</a>
+                                </div>
+                            </div>
                         {% endfor %}
                 {% else %}
-                    <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
-                    <i class="fa fa-upload"></i> Documento</a>
+                    <div class="col-sm-12 btnUpload">
+                        <div class="col-sm-2 icon-btn">
+                            <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                        </div>
+                        <div class="col-sm-8 text-btn">
+                            <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
+                        <strong> Cargar</strong><br>Documento</a>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-sm-2 col-xs-12 nopadding text-center">
-                No lo necesitas
+                
             </div>
             <div class="col-sm-2 col-xs-12 nopadding text-center">
                 {% if documents[2] in documentsTypeByEmployee[0] %}
                     {% for doc in employeeDocs  if doc.status %}
                         {% if (documents[2] == doc.documentTypeDocumentType) %}
-                                <a class="download-link" href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+
                         {% endif %}
                         {% else %}
-                            <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
-                            <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                                <i class="fa fa-upload"></i> Documento-</a>
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
                     {% endfor %}
                 {% else %}
-                    <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
-                    <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                    <i class="fa fa-upload"></i> Documento</a>
+
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[0].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[0].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Documento</a>
+                                </div>
+                            </div>
                 {% endif %}
             </div>
             <div class="col-sm-2 col-xs-12 nopadding">
@@ -147,36 +318,98 @@
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[0] in documentsTypeByEmployee[i] %}
                         {% for doc in employeeDocs if (doc.status) and (documents[0] == doc.documentTypeDocumentType) %}
-                                    <a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
                             {% else %}
-                                <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
-                                    <i class="fa fa-upload"></i> Documento</a>
+
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Documento</a>
+                                </div>
+                            </div>
                         {% endfor %}
-                    {% else %}
-                    
-                        <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
-                        <i class="fa fa-upload"></i> Documento</a>
+                    {% else %}                    
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[0].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Documento</a>
+                                </div>
+                            </div>
                     
                         
 
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
-                    No lo necesitas
+                   
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding text-center">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
                         {% for doc in employeeDocs if (doc.status) and  (documents[2] == doc.documentTypeDocumentType) %}
-                                <a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}"><i class="fa fa-cloud-download"></i> Descargar</a>
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_document', {'id': employees[i].personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
                             {% else %}
-                            <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
-                                <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
-                                    <i class="fa fa-upload"></i> Documento</a>
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+
                         {% endfor %}
                     {% else %}
-                    <a id="" class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download"></i> Descargar Contrato</a>
-                        <a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}"><i class="fa fa-upload"></i>
-                        Documento</a>
+                            <div class="col-sm-12 btnDownload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}"><i class="fa fa-cloud-download">
+                                <strong> Descargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 btnUpload">
+                                <div class="col-sm-2 icon-btn">
+                                    <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
+                                </div>
+                                <div class="col-sm-8 text-btn">
+                                    <p class="nopadding"><a class="upload-link" href="{{ path('documentos_employee', {'id': employees[i].personPerson.idPerson , 'idDocumentType':documents[2].idDocumentType}) }}">
+                                <strong> Cargar</strong><br>Contrato</a>
+                                </div>
+                            </div>
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 nopadding">
