@@ -124,6 +124,9 @@ function startSubscriptionActivate() {
                 $("#sumbit").addClass('disabled');
             }
         });
+        $('form ').on('submit', function () {
+            $("#sumbit").attr('disabled', true);
+        });
         $(".cvvHelp").on('click', function () {
             $("#cvvHelp").toggleClass('toHide');
         });

@@ -412,6 +412,11 @@
                                 });
 
                                 return true;
+                            } else if (url.indexOf("{{ path('manage_employees') }}") !== -1) {
+                                $.getScript("{{ asset('public/js/manageEmployees.js') }}").done(function () {
+                                        manageEmployees();
+                                });
+                                return true;
                             } else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
                                 $.getScript("{{ asset('public/js/editEmployer.js') }}").done(function () {
                                     startEmployerEdit();

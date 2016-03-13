@@ -293,7 +293,26 @@ class EmployeeController extends Controller
 
         if ($user) {
             if ($user->getPersonPerson()->getEmployer()) {
-                $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                $employeesData=array();
+                $ehEs=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                /** @var EmployerHasEmployee $ehE */
+                foreach ( $ehEs as  $ehE) {
+                    $contracts=$ehE->getContracts();
+                    /** @var Contract $contract */
+                    foreach ($contracts as $contract) {
+                        $acPayroll=$contract->getActivePayroll();
+                        $employeesData[]=array(
+                            "idEmployerHasEmployee"=>$ehE->getIdEmployerHasEmployee(),
+                            "idEmployee"=>$ehE->getEmployeeEmployee()->getIdEmployee(),
+                            "idPayroll"=>$acPayroll->getIdPayroll(),
+                            "state"=>$ehE->getState(),
+                            "fullName"=>$ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                            );
+                        break;
+                    }
+
+                }
+
                 $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
                 return $this->render(
                                 'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
@@ -452,6 +471,7 @@ class EmployeeController extends Controller
                 $activeContract = $contract;
             }
         }
+        $contractEmployee="";
         $entidades = array();
         $documents = $employee->getPersonPerson()->getDocs();
         foreach ($documents as $doc) {
