@@ -142,8 +142,8 @@
 <form method="post" action="{{ path('api_public_post_pay_liquidation') }}" id="formPay">
     <div class="col-sm-12 center" role="toolbar">
         <div class="col-xs-12 center">
-            <button type="button" class="btn btn-default" onclick="history.back(-1)">Volver atrás</button>
-            <button type="button" class="btn btn-default btn-orange formatValueTotal" id="btnCont2" total="{{ totalLiq }}" data-toggle="modal" data-target="#modalPayLiquidation2" >Pagar {{ totalLiq }}</button>
+            <button type="button" class="btn" onclick="history.back(-1)">Volver atrás</button>
+            <button type="button" class="btn btn-symplifica formatValueTotal" id="btnCont2" total="{{ totalLiq }}" data-toggle="modal" data-target="#modalPayLiquidation2" >Pagar {{ totalLiq }}</button>
         </div>
     </div>
 
@@ -172,8 +172,8 @@
                     <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-default btn-orange btn-pay" disabled="true">Pay</button>
+                    <button type="button" class="btn" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-symplifica btn-pay" disabled="true">Pagar</button>
                 </div>
             </div>
         </div>
@@ -205,8 +205,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick='$("form[name=addPaymentMethod]").submit();'>Save changes</button>
+                <button type="button" class="btn" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-symplifica" onclick='$("form[name=addPaymentMethod]").submit();'>Guardar</button>
             </div>
         </div>
     </div>
