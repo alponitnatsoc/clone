@@ -101,11 +101,11 @@ class EmployerController extends Controller
         $documentsTypeByEmployer = $this->documentsTypeByEmployer($person);
         $documentsTypeByEmployee = $this->documentsTypeByEmployee($employees);
         return $this->render('RocketSellerTwoPickBundle:Employer:registrationDocuments.html.twig', array(
-            'employer' => $person,
-            'documents' => $documents,
-            'employees' => $employees,
-            'documentsTypeByEmployee' => $documentsTypeByEmployee,
-            'documentsTypeByEmployer' => $documentsTypeByEmployer
+                    'employer' => $person,
+                    'documents' => $documents,
+                    'employees' => $employees,
+                    'documentsTypeByEmployee' => $documentsTypeByEmployee,
+                    'documentsTypeByEmployer' => $documentsTypeByEmployer
         ));
     }
 
@@ -133,11 +133,14 @@ class EmployerController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            /* @var $EmployerHasEmployee EmployerHasEmployee */
             $EmployerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                    ->findBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
+                    ->findOneBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
+
+            //$contrato = $EmployerHasEmployee->getContractByState(1);
 
             $contrato = $em->getRepository('RocketSellerTwoPickBundle:Contract')
-                    ->findBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 'Active'));
+                    ->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 1));
 
             switch ($idCertificate) {
                 case '1':
@@ -152,9 +155,19 @@ class EmployerController extends Controller
                     break;
                 case '2':
                     $nameCertificate = "Certificado de aportes";
+                    $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
+                                'employee' => $employee,
+                                'certificate' => $nameCertificate,
+                                'employer' => $employer)
+                            )->getContent();
                     break;
                 case '3':
                     $nameCertificate = "Certificado de ingresos y retenciones";
+                    $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
+                                'employee' => $employee,
+                                'certificate' => $nameCertificate,
+                                'employer' => $employer)
+                            )->getContent();
                     break;
                 default:
                     $nameCertificate = "Otro certificado";
@@ -181,7 +194,6 @@ class EmployerController extends Controller
             $em = $this->getDoctrine()->getManager();
             $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
                     ->findByEmployerEmployer($employer);
-
             return $this->render('RocketSellerTwoPickBundle:Employer:certificates.html.twig', array('employerHasEmployees' => $employerHasEmployees));
         }
     }
@@ -198,7 +210,7 @@ class EmployerController extends Controller
                 ->findBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
 
         $contrato = $em->getRepository('RocketSellerTwoPickBundle:Contract')
-                ->findBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 'Active'));
+                ->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 1));
 
         switch ($idCertificate) {
             case '1':
@@ -417,7 +429,7 @@ class EmployerController extends Controller
                 ->findBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
 
         $contrato = $em->getRepository('RocketSellerTwoPickBundle:Contract')
-                ->findBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 'Active'));
+                ->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 1));
 
         switch ($certificate) {
             case '1':
@@ -467,7 +479,7 @@ class EmployerController extends Controller
                 ->findBy(array('employerEmployer' => $employer, 'employeeEmployee' => $employee));
 
         $contrato = $em->getRepository('RocketSellerTwoPickBundle:Contract')
-                ->findBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 'Active'));
+                ->findOneBy(array('employerHasEmployeeEmployerHasEmployee' => $EmployerHasEmployee, 'state' => 1));
 
         switch ($idCertificate) {
             case '1':

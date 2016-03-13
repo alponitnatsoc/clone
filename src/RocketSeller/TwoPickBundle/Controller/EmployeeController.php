@@ -193,7 +193,7 @@ class EmployeeController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
-        $person=$user->getPersonPerson();
+        $person = $user->getPersonPerson();
         $employer = $user->getPersonPerson()->getEmployer();
         $employerHasEmployees = $employer->getEmployerHasEmployees();
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
@@ -357,8 +357,8 @@ class EmployeeController extends Controller
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
-        $todayPlus=new \DateTime();
-        $todayPlus->setDate(intval($todayPlus->format("Y"))+1,$todayPlus->format("m"),$todayPlus->format("d"));
+        $todayPlus = new \DateTime();
+        $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
         $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
         $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
         if ($employerHasEmployee != null) {
@@ -377,8 +377,8 @@ class EmployeeController extends Controller
                     $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
                 }
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($contract->getWorkableDaysMonth() / 4);
-                if($contract->getWorkableDaysMonth()!=null)
-                    $form->get('employeeHasEmployers')->get("salaryD")->setData(intval($contract->getSalary()/$contract->getWorkableDaysMonth()));
+                if ($contract->getWorkableDaysMonth() != null)
+                    $form->get('employeeHasEmployers')->get("salaryD")->setData(intval($contract->getSalary() / $contract->getWorkableDaysMonth()));
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }
@@ -421,35 +421,36 @@ class EmployeeController extends Controller
                     'payType' => $payType)
         );
     }
-    public function showEmployeeAction($id){
+
+    public function showEmployeeAction($id)
+    {
         $user = $this->getUser();
         $person = $user->getPersonPerson();
 
-        $employer = $this->loadClassByArray(array('personPerson'=>$person),'Employer');
+        $employer = $this->loadClassByArray(array('personPerson' => $person), 'Employer');
         $employee = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Employee')
                 ->find($id);
 
         $employerHasEmployee = $this->loadClassByArray(array(
-                'employerEmployer'=>$employer,
-                'employeeEmployee'=>$employee,
-            ),
-            'EmployerHasEmployee'
+            'employerEmployer' => $employer,
+            'employeeEmployee' => $employee,
+                ), 'EmployerHasEmployee'
         );
         $contracts = $employerHasEmployee->getContracts();
         foreach ($contracts as $contract) {
-             if ($contract->getState()) {
-                 $activeContract = $contract;
-             }
-         } 
+            if ($contract->getState()) {
+                $activeContract = $contract;
+            }
+        }
 
 
         return $this->render(
-                                'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
-                            'employee' => $employee,
-                            'employerHasEmployee'=> $employerHasEmployee,
-                            'contract' => $activeContract
-                ));
+                        'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
+                    'employee' => $employee,
+                    'employerHasEmployee' => $employerHasEmployee,
+                    'contract' => $activeContract
+        ));
     }
 
     /**
@@ -766,7 +767,7 @@ filename = "certificadoLaboral.pdf"'
         return $this->fieldNotRequired($result, $this->removeDuplicated($filled));
     }
 
-    public function employeeDocumentsAction($id,$idNotification)
+    public function employeeDocumentsAction($id, $idNotification)
     {
         $keys = array();
         $documentsPerEmployee = array();
