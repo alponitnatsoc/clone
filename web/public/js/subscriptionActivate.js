@@ -19,7 +19,7 @@ function startSubscriptionActivate() {
                 "card_name": {required: true},
                 "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
                 "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
-                "cvv": {required: true, number: true, maxlength: 3, minlength: 3, max: 999, min: 1}
+                "cvv": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
 
             },
             messages: {
@@ -53,16 +53,16 @@ function startSubscriptionActivate() {
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo año de 4 digitos",
                     minlength: "minimo año de 4 digitos",
-                    max: "año del 16 al 99",
-                    min: "año del 16 al 99"
+                    max: "año maximo 9999",
+                    min: "año minimo 2016"
                 },
                 "cvv": {
                     required: "Por favor ingrese el codigo de verificación",
                     number: "ingresa solamente dígitos",
-                    maxlength: "maximo 3 digitos",
+                    maxlength: "maximo 4 digitos",
                     minlength: "minimo 3 digitos",
                     max: "minimo 001",
-                    min: "maximo 999"
+                    min: "maximo 9999"
                 }
             }
         });
@@ -71,8 +71,8 @@ function startSubscriptionActivate() {
         $('#credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
             $(this).addClass('form-control');
-            $(this).addClass(result.card_type.name);
             if (result.valid) {
+                $(this).addClass(result.card_type.name);
                 return $(this).addClass('valid');
             } else {
                 return $(this).removeClass('valid');

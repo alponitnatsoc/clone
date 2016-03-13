@@ -56,6 +56,7 @@
             De acuerdo a la información registrada, usted cuenta con los siguientes empleados:
         </p> 
     </div>
+    <div class="col-lg-1 result_ajax"></div>
     <form action="{{ path('subscription_confirm') }}" method="POST">  
         <div id="employees" class="col-xs-12">
             <div class="row-fluid clearfix">
@@ -74,7 +75,7 @@
 
                         <div class="col-md-4 col-sm-6 employee text-center">
                             <div class="row-fluid">
-                                <div class="col-xs-12 {{ employee.state>0 ?'activo':'inactivo' }}">
+                                <div class="col-xs-12 {{ employee.state>0 ?'activo':'inactivo' }} {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }}">
                                     <div class="employee_name">
                                         <b>{{ employee.employeeEmployee.personPerson.names ~ ' ' ~ employee.employeeEmployee.personPerson.lastname1}}</b>
                                     </div>
@@ -83,7 +84,7 @@
                                         Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
                                     </div>
                                     <div>
-                                        <div class="btn btn-default btn-change-state-contract" data-contrato-id="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}" data-toggle="modal" data-target="#modal_confirm">{{ employee.state?'Inhabilitar':'Activar' }}</div>
+                                        <div class="btn btn-default btn-change-state-contract" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}">{{ employee.state?'Inhabilitar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +112,6 @@
         </div>
         <div class="col-xs-12">
             <div class="row">
-                <div class="col-lg-1 result_ajax"></div>
                 <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
                     <span style="font-size: 20px;">Con el número de empleados<br /> nuestro servicio tendrá un costo mensual de:</span>
                     <div class="div_price">     

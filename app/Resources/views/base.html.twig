@@ -53,7 +53,7 @@
                             {% set status = 0 %}
                         {% endif %}
                         <div class="txthelp">
-                            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
+                            <span><em><strong>¿Necesitas ayuda?</strong></em> <i class="fa fa-mobile"></i>01-8000-112233 · Bogotá: 411-2233</span>
                         </div>
                     </div>
                 </div>
@@ -342,7 +342,9 @@
                         return data;
                     }
                     function sendAjax(url, form) {
-
+                        if(url==""){
+                            return false;
+                        }
                         $.ajax({
                             url: url,
                             type: $(form).attr('method'),
@@ -384,8 +386,10 @@
                         });
                     }
                     function addNoClick() {
-                        $(".noClick").on("click", function (e) {
-                            e.preventDefault();
+                        $(".noClick").each(function () {
+                            $(this).on("click", function (e) {
+                                e.preventDefault();
+                            })
                         });
                     }
                     function addSumbit() {

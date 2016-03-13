@@ -52,12 +52,44 @@ class ExpressRegistrationController extends Controller
         $user = $this->getUser();
         $person = $user->getPersonPerson();
         $form = $this->createFormBuilder()
-            ->add('credit_card', 'text')
-            ->add('expiry_date_year', 'text')
-            ->add('expiry_date_month', 'text')
-            ->add('cvv', 'text')
-            ->add('name_on_card', 'text')
-            ->add('save', 'submit', array('label' => 'Submit'))
+            ->add('credit_card', 'text', array( 
+                "attr" => array(
+                    'placeholder' => 'Tu tarjeta de crédito'
+                    )
+                )
+            )
+
+            ->add('expiry_date_year', 'text', array( 
+                "attr" => array(
+                    'placeholder' => 'Año de vencimiento'
+                    )
+                )
+            )
+            ->add('expiry_date_month', 'text', array( 
+                "attr" => array(
+                    'placeholder' => 'Mes de vencimiento'
+                    )
+                )
+            )
+            ->add('cvv', 'text', array( 
+                "attr" => array(
+                    'placeholder' => 'CVV'
+                    )
+                )
+            )
+            ->add('name_on_card', 'text', array( 
+                "attr" => array(
+                    'placeholder' => 'Tu nombre en la tarjeta de crédito'
+                    )
+                )
+            )
+            ->add('save', 'submit', array(
+                'label' => 'Confirmar pago',
+                "attr" => array(
+                    'class' => 'btn register-AS1 btn-symplifica'
+                )
+                )
+            )
             ->getForm();
 
         $form->handleRequest($request);

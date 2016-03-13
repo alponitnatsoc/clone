@@ -6,44 +6,67 @@
 	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
 {% endblock stylesheets %}
 	{% block body %}
-		<div class="container">
-			<div class="content col-md-12">
-				<div class="col-md-4">
+
+
+<div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
+
+    <div class="smallOrangeBox">
+        <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
+        
+        <div class="smallOrangeBoxContent">
+            
+            <span>Ahora sólo falta tu información de pago</span>
+
+            <span class="light-text"></span>
+            <hr class="smallDivider" />
+            
 					{% if errno is defined %}
-						Not a valid Credit Card check the data again
+						Parece que tu número de tarjeta no es valido
 					{% endif %}
 				  	{{ form_start(form) }}
-					<div class="col-md-12">
+					<div class="form-black form-group">
 						{{ form_label(form.credit_card) }}
 						{{ form_errors(form.credit_card) }}
 						{{ form_widget(form.credit_card) }}
 					</div>
-					<div class="col-md-6">
-						{{ form_label(form.expiry_date_year) }}
-						{{ form_errors(form.expiry_date_year) }}
-						{{ form_widget(form.expiry_date_year) }}
+					<div>
+						<div class="form-black form-group col-sm-4">
+							{{ form_label(form.expiry_date_year) }}
+							{{ form_errors(form.expiry_date_year) }}
+							{{ form_widget(form.expiry_date_year) }}
+						</div>
+						<div class="form-black form-group col-sm-4">
+							{{ form_label(form.expiry_date_month) }}
+							{{ form_errors(form.expiry_date_month) }}
+							{{ form_widget(form.expiry_date_month) }}
+						</div>
+						<div class="form-black form-group col-sm-4">
+							{{ form_label(form.cvv) }}
+							{{ form_errors(form.cvv) }}
+							{{ form_widget(form.cvv) }}
+						</div>
 					</div>
-					<div class="col-md-6">
-						{{ form_label(form.expiry_date_month) }}
-						{{ form_errors(form.expiry_date_month) }}
-						{{ form_widget(form.expiry_date_month) }}
-					</div>
-					<div class="col-md-6">
-						{{ form_label(form.cvv) }}
-						{{ form_errors(form.cvv) }}
-						{{ form_widget(form.cvv) }}
-					</div>
-					<div class="col-md-12">
+					<div class="form-black form-group">
 						{{ form_label(form.name_on_card) }}
 						{{ form_errors(form.name_on_card) }}
 						{{ form_widget(form.name_on_card) }}
 					</div>
-					<div class="col-md-4">
+					<div class="">
 						{{ form_end(form) }}	
 					</div>		
 				</div>
 				<p class="log"></p>
-				</form>
+				{{ form_end(form)}}	
+        </div>
+    </div>
+</div>
+
+
+
+		<div class="container">
+			<div class="content col-md-12">
+				<div class="col-md-4">
+					
 			</div>
 		</div>
 		
