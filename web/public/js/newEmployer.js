@@ -400,6 +400,24 @@ function jsonToHTML(data) {
     return htmls;
 }
 function addListeners() {
+    var documentType = $("select[name='register_employee[person][documentType]']");
+    var document = $("input[name='register_employee[person][document]']");
+    var lastName1 = $("input[name='register_employee[person][lastName1]']");
+    $(documentType).blur( function () {
+        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+            checkExistance();
+        }
+    });
+    $(document).blur( function () {
+        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+            checkExistance();
+        }
+    });
+    $(lastName1).blur( function () {
+        if(documentType.val()!=""&&document.val()!=""&&lastName1.val()!=""){
+            checkExistance();
+        }
+    });
     $('select').filter(function () {
         return this.id.match(/department/);
     }).change(function () {
@@ -474,5 +492,26 @@ function addTagFormDeleteLink($tagFormLi, $tipo) {
         e.preventDefault();
         // remove the li for the tag form
         $tagFormLi.remove();
+    });
+}
+function checkExistance(){
+    var form = $("form");
+    var documentType = $(form).find("select[name='register_employee[person][documentType]']");
+    var document = $(form).find("input[name='register_employee[person][document]']");
+    var lastName1 = $(form).find("input[name='register_employee[person][lastName1]']");
+    $.ajax({
+        url: "/api/public/v1/inquiries/documents",
+        type: 'POST',
+        data: {
+            documentType: documentType.val(),
+            document: document.val(),
+            lastName1: lastName1.val(),
+        }
+    }).done(function (data) {
+
+        $("#documentExistent").modal("show");
+        sendAjax("/dashboard");
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //show the other stuf
     });
 }
