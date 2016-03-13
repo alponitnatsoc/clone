@@ -383,6 +383,14 @@ class EmployeeRestController extends FOSRestController
                 $employerEmployee->setEmployeeEmployee($employee);
                 $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
                 $employee->addEmployeeHasEmployer($employerEmployee);
+            }elseif ($id == -2) {
+                $employee = new Employee();
+                $person = $people;
+                $employee->setPersonPerson($person);
+                $employerEmployee = new EmployerHasEmployee();
+                $employerEmployee->setEmployeeEmployee($employee);
+                $employerEmployee->setEmployerEmployer($user->getPersonPerson()->getEmployer());
+                $employee->addEmployeeHasEmployer($employerEmployee);
             } else {
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
                 $employee = $repository->find($id);
