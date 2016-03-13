@@ -11,6 +11,14 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        $PayTypeRetiro = new PayType();
+        $PayTypeRetiro->setName('Daviplata');
+        $PayTypeRetiro->setDescripcion('Su empleado podrá retirar sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo.','El empleado recibirá su dinero de forma segura y usted conocerá la trazabilidad de cada transacción. El empleado NO REQUIRE CUENTA BANCARIA así como tampoco asumirá costos por transacción.<br />\nIdeal para empleados que desean tener efectivo a la mano siempre\n');
+        $PayTypeRetiro->setImage('/img/icon_servibanca.png');
+        $PayTypeRetiro->setPayrollCode('CON');
+
+        $manager->persist($PayTypeRetiro);
+
         $PayTypeTransferencia = new PayType();
         $PayTypeTransferencia->setName('Transferencia bancaria');
         $PayTypeTransferencia->setDescripcion('El empleado recibirá su dinero directamente a su cuenta bancaria.\nIdeal para empleadores que asignaron cuentas de nómina a sus empleados\n');
@@ -26,14 +34,6 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
         $PayTypeEfectivo->setPayrollCode('EFE');
 
         $manager->persist($PayTypeEfectivo);
-
-        $PayTypeRetiro = new PayType();
-        $PayTypeRetiro->setName('Daviplata');
-        $PayTypeRetiro->setDescripcion('Su empleado podrá retirar sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo.','El empleado recibirá su dinero de forma segura y usted conocerá la trazabilidad de cada transacción. El empleado NO REQUIRE CUENTA BANCARIA así como tampoco asumirá costos por transacción.<br />\nIdeal para empleados que desean tener efectivo a la mano siempre\n');
-        $PayTypeRetiro->setImage('/img/icon_servibanca.png');
-        $PayTypeRetiro->setPayrollCode('CON');
-
-        $manager->persist($PayTypeRetiro);
 
         $manager->flush();
 
