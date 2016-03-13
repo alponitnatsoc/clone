@@ -512,7 +512,7 @@
 
             <div class="row buttons center">
                 <div class="col-xs-12 center">
-                    <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> 
+                    <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/> 
                     <input type="submit" id="sumbit" class="btn btn-orange disabled" value="Finalizar" />
                 </div>
             </div>
