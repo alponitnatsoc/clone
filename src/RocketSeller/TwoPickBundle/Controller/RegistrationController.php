@@ -177,9 +177,13 @@ class RegistrationController extends BaseController
     }
     public function chooseRegisterAction()
     {
+        /** @var User $user */
         $user = $this->getUser();
-        return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
-
+        if ($user->getPersonPerson()->getEmployer() == null) {
+            return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
+        } else {
+            return $this->redirectToRoute('ajax');
+        }
     }
     // /**
     //  * Tell the user his account is now confirmed

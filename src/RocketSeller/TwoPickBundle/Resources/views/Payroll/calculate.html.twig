@@ -70,10 +70,10 @@
 
                     <div class="col-xs-12">
                         <div class="row-fluid clearfix employee">
-                            <div class="col-xs-1">
+                            {#<div class="col-xs-1">
                                 <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
-                            </div>
-                            <div class="col-xs-11">
+                            </div>#}
+                            <div class="col-xs-12">
                                 <div class="col-xs-9">
                                     <span class="name">{{ personEmployee.names }} {{ personEmployee.lastName1 }}</span>
                                 </div>
@@ -120,7 +120,7 @@
                                                     <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
                                                 {% endfor  %}
                                             </select>
-                                            <a style="vertical-align: -webkit-baseline-middle;" class="notAjax" href="{{ path('payments_method') }}">&gt; Agregar</a>
+                                            <input type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('payments_method') }}"/>
                                         </div>
 
                                     {% endif %}
@@ -137,6 +137,23 @@
                 </div>
             </div>
         </form>
+    </div>
+
+
+    <!-- Modal loader-->
+    <div class="modal fade"  role="dialog" id="modal_loader">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <img src="/img/loader.gif">
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- Modal add metodo de pago-->
+    <div id="modal_add_pay_method">
+
     </div>
 {% endblock %}
 
@@ -221,9 +238,35 @@
 
             });
 
-            $('#btnBack').click(function () {
-                console.log("click");
-                document.location = "{{ path('payroll') }}";
+            $('#addPayMethod').click(function (event) {
+                event.preventDefault();
+                url = $(this).attr('href');
+                $.ajax({
+                    url: url,
+                    //data: data,
+                    //success: success,
+                    //dataType: dataType,
+                    beforeSend: function (xhr) {
+                        $('#modal_loader').modal('show');
+                    }
+                }).done(function (data) {
+                    $('#modal_add_pay_method').html(data);
+
+
+                    //$('#modal_body_add_novelty').replaceWith($(data).find('#main')); // ... with the returned one from the AJAX response.
+                    //$('#modal-title_add_novelty').html("Reporte aquí cada hecho que esté asociado a " + employeeName + " para que sea considerado en el cálculo de su pago.");
+
+                    $('#noveltyModal').modal({
+                        show: false,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
+                }).fail(function (data) {
+                    //$("#modal_body_add_novelty").html(data);
+                }).always(function () {
+                    $('#modal_loader').modal('hide');
+                });
+                //document.location = "/novelty/select/" + payroll;
             });
         });
         var salaries = [];

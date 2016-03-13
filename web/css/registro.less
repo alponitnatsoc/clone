@@ -1,12 +1,72 @@
-@import (reference) "bootstrap-variables.less";
-@import (reference) "variables.less";
+@import (reference) "public/bootstrap-variables.less";
+@import (reference) "public/variables.less";
 
 
-#registrationContainer {    
-  background: url(/img/registrationBackground.jpg) no-repeat center center; 
+#registrationTypeContainer {    
+  background: url(/img/registrationBackground3.jpg) no-repeat center center; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
+  height: 100%;
+  padding: 40px 0;
+  overflow: hidden;
+
+  & .content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    & img {
+        width: 120px;
+    }
+  }
+  & .registrationTypeTitle {
+    background-color: #00C4C5;
+    color: @txtWhite;
+    height: 60px;
+    text-align: center;
+    font-size: 26px;
+    padding: 10px 0 0;
+    font-weight: 100;
+  }
+
+  & .darkOne {
+    background-color: #008990;
+  }
+
+  & .registrationTypeOption {
+
+  }
+
+  & .registrationTypeOption:last-child {
+    
+  }  
+
+  & .registrationTypecontent {
+    background-color: @whiteBackGround;
+    padding: 20px;
+  }
+
+  & .optionPrice {
+    color: #89878B;
+    width: 100%;
+    border-bottom: 1px solid #ccc; 
+    margin: 0 0 20px;
+
+    & h3 {
+        color: @orange;
+    }
+  }
+
+  & .optionPrice {
+    color: #89878B;
+
+  }
+
+  & .optionDescription {
+    text-align: left;
+    margin: 0 0 10px;
+  }
 }
 
 .smallOrangeBox {
@@ -73,59 +133,7 @@
 }
 
 /* For the Confirmation of the Registration */
-#postRegistrationContainer {
 
-}
-
-.topBackgroundImage {
-  background: url("/img/registrationBackground2.jpg") no-repeat center center; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  height: 100%;
-  text-align: center;
-  padding: 50px 0;
-
-
-    & h2 {
-        color: @orange;
-        font-size: 30px;
-    }
-
-    & span {
-        color: @txtWhite;
-        font-size: 24px;
-        font-weight: 100;
-    }
-}
-
-.mainText {
-    text-align: center;
-    padding: 40px;
-
-    & h3 {
-        font-size: 22px;
-        font-style: normal;
-        font-weight: 100;
-    }
-
-    & span {
-        font-size: 16px;
-        font-weight: 100;
-    }
-}
-
-.subText {
-    text-align: center;
-    background-color: @topmid-color;
-    padding: 40px;
-
-    & h3 {
-        font-size: 22px;
-        font-style: normal;
-        font-weight: 100;
-    }
-}
 
 @media only screen and (max-device-width : 360px) { 
  
