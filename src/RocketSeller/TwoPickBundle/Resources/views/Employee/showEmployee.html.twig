@@ -334,7 +334,63 @@
 
             	</div>
             	<div id="noveltiesData" class="tab-pane">
-  					<p>Novelties</p>
+            		<div class="col-sm-12 middle-content">
+	            		<div class="content col-sm-6 col-sm-offset-3">
+        				<h4>Novedades reportadas al día de hoy</h4>
+			       	</div>
+			       	<div class="col-sm-12" style="text-align:center;">
+			       		<div class="col-sm-3">
+			       			<p><strong>Fecha inicio</strong></p>
+			       		</div>
+			       		<div class="col-sm-3">
+			       			<p><strong>Fecha fin</strong></p>
+			       		</div>
+			       		<div class="col-sm-3">
+			       			<p><strong>Estado</strong></p>
+			       		</div>
+			       		<div class="col-sm-3">
+			       			<p><strong>Detalle</strong></p>
+			       		</div>
+			       	</div>			       	
+			       	{% set payrolls = contract.payrolls %}
+			       		{% for payroll in payrolls %}
+			       			{% set novelties = payroll.novelties %}
+			       				{% for novelty in novelties %}
+			       					<p>{{novelty.name}}</p>
+							       	<div class="col-sm-12 row-novelty" style="text-align:center;">
+							       		<div class=" element-table col-sm-3">
+							       			{% if novelty.dateStart %}
+							       				<p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
+							       			{% else %}
+							       				<p><strong>-</strong></p>
+							       			{% endif %}
+							       			
+							       		</div>
+							       		<div class="element-table col-sm-3">
+							       			{% if novelty.dateEnd %}
+							       				<p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
+							       			{% else %}
+							       				<p><strong>-</strong></p>
+							       			{% endif %}
+							       		</div>
+							       		<div class="element-table col-sm-3">
+							       			<p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
+							       		</div>
+
+							       		<div class="element-detail col-sm-3">
+							       			<p><strong>Detalle</strong></p>
+							       		</div>
+							       	</div>	
+			       				{% endfor %}
+			       		{% endfor %}
+			       		<div class="col-sm-12 row-add-novelty" style="text-align:center;">
+			       			<div class="col-sm-4 col-sm-offset-4">
+
+
+			       			</div>
+			       		</div>
+            		</div>
+
             	</div>
             	<div id="payHistory" class="tab-pane">
   					<p>History</p>

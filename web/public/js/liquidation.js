@@ -57,7 +57,7 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
 
     var frequency = form.find("input[name='rocketseller_twopickbundle_liquidation[frequency]']").val();
 
-    $("#liquidationValue").html("*")
+    $("#liquidationValue").html("$")
 
     $.ajax({
         url: url,
@@ -74,10 +74,17 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
             retirementCause: form.find("input[name='rocketseller_twopickbundle_liquidation[liquidationReason]']:checked").val()
         }
     }).done(function (data) {
-        $("#liquidationValue").prepend(data["totalLiq"]["total"]);
-        formatMoney($("#liquidationValue"));
+        $("#liquidationValue").html(getPrice(data["totalLiq"]["total"]));
         $("#liquidation-newstep1").removeAttr("disabled");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
     });
 });
+
+function getPrice(valor) {
+    price = parseFloat(valor.toString().replace(/,/g, ""))
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return "$ " + price;
+}
