@@ -1966,6 +1966,32 @@ select.error {
   color: #FD9224;
   border-color: #FD9224;
 }
+.middle-content {
+  border-top: 2px solid #f8f8f8;
+}
+.middle-content .row-novelty {
+  border: 2px solid #f8f8f8;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding-right: 0px;
+}
+.middle-content .element-table {
+  border-right: 2px solid #f8f8f8;
+  height: 60px;
+}
+.middle-content .element-table p {
+  margin-top: 20px;
+}
+.middle-content .element-detail {
+  background-color: #f8f8f8;
+  height: 60px;
+}
+.middle-content .element-detail p {
+  margin-top: 20px;
+}
+.middle-content .row-add-novelty {
+  border: 2px dashed #f8f8f8;
+}
 #confirmacionPago .name {
   font-size: 15px;
   font-weight: 200;
