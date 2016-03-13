@@ -34,81 +34,98 @@
         .liq-container {
             border-bottom: solid #efefef;
             padding: 10px;
-            display: -webkit-inline-box;
         }
     </style>
 {% endblock %}
-    <h2 class="center">La liquidación fue calculada exitosamente</h2>
-    <div class="employee_head_liquidation">
-        <div class="col-sm-12 employee_data">
-            <div class="col-sm-3 employee_data_info">
-                <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
-                <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
-                <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
-            </div>
-            <div class="col-sm-3 employee_data_info">
-                <p><strong>Tipo contrato</strong></p>
-                <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
-            </div>
-            <div class="col-sm-3 employee_data_info">
-                <p><strong>Duración contrato</strong></p>
-                <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
-            </div>
-            <div class="col-sm-3 employee_data_info">
-                <p><strong>Salario</strong></p>
-                <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
+    <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
+    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
+        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+            <img src="/img/block-complete.png" class="center-block">                    
+        </div>
+        <div id="" class="col-md-10 col-xs-12 txt-AD1">
+            <div id="" class="text-left">
+                <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Concepto</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th><strong>Deducciones</strong></th>
-                    <th></th>
-                </tr>
-                {% for ded in deducciones %}
+</div>
+    <h2 class="center">La liquidación fue calculada exitosamente</h2>
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><strong>{{ employeeInfo.name }}</strong><br />{{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="employee_head_liquidation" style="width: 100%;">
+            <div class="col-sm-12 employee_data">
+                <div class="row">
+                    <div class="col-sm-3 employee_data_info">
+                        <span class="txthelp text-left"><h5 class="text-left">Documento</h5><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}<br />{{ employeeInfo.docExpeditionPlace }}</p></span>
+                    </div>
+                    <div class="col-sm-3 employee_data_info">
+                        <span class="txthelp"><h5>Tipo de contrato</h5><p>{{ contractInfo.contractType }}</p></span>
+                    </div>
+                    <div class="col-sm-3 employee_data_info">
+                        <span class="txthelp"><h5>Duración contrato</h5><p>{{ contractInfo.contractPeriod }}</p></span>
+                    </div>
+                    <div class="col-sm-3 employee_data_info">
+                        <span class="txthelp"><h5>Salario</h5><p>${{ contractInfo.salary|number_format }}</p></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ ded.novelty.name }}</td>
-                        <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                        <th>Concepto</th>
+                        <th>Valor</th>
                     </tr>
-                {% endfor %}
-                <tr class="info">
-                    <td><strong>Total deducciones</strong></td>
-                    <td><strong class="formatValue">{{ totalDeducciones }}</strong></td>
-                </tr>
+                </thead>
+                <tbody>
                     <tr>
-                        <th><strong>Devengos</strong></th>
+                        <th><strong>Deducciones</strong></th>
                         <th></th>
                     </tr>
-                {% for dev in devengos %}
-                    <tr>
-                        <td>{{ dev.novelty.name }}</td>
-                        <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                    {% for ded in deducciones %}
+                        <tr>
+                            <td>{{ ded.novelty.name }}</td>
+                            <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="info">
+                        <td><strong>Total deducciones</strong></td>
+                        <td><strong class="formatValue">{{ totalDeducciones }}</strong></td>
                     </tr>
-                {% endfor %}
-                <tr class="info">
-                    <td><strong>Total devengos</strong></td>
-                    <td><strong class="formatValue">{{ totalDevengos }}</strong></td>
-                </tr>
-                <tr class="info">
-                    <td><strong>Valor de la liquidación</strong></td>
-                    <td id="totLiq"><strong class="formatValue">{{ totalLiq }}</strong></td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr class="warning">
-                    <td class="text-center"><strong>Valor a pagar</strong></td>
-                    <td><strong class="formatValue">{{ totalLiq }}</strong></td>
-                </tr>
-            </tfoot>
-        </table>
+                        <tr>
+                            <th><strong>Devengos</strong></th>
+                            <th></th>
+                        </tr>
+                    {% for dev in devengos %}
+                        <tr>
+                            <td>{{ dev.novelty.name }}</td>
+                            <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="info">
+                        <td><strong>Total devengos</strong></td>
+                        <td><strong class="formatValue">{{ totalDevengos }}</strong></td>
+                    </tr>
+                    <tr class="info">
+                        <td><strong>Valor de la liquidación</strong></td>
+                        <td id="totLiq"><strong class="formatValue">{{ totalLiq }}</strong></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="warning">
+                        <td class="text-center"><strong>Valor a pagar</strong></td>
+                        <td><strong class="formatValue">{{ totalLiq }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 
     <div class="col-sm-12">
