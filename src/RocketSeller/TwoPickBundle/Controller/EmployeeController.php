@@ -376,6 +376,13 @@ class EmployeeController extends Controller
                 if ($payType != null) {
                     $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
                 }
+                $weekWDs = $currentContract->getWeekWorkableDays();
+                /** @var WeekWorkableDays $weekWD */
+                $arrayWWD = array();
+                foreach ($weekWDs as $weekWD) {
+                    $arrayWWD[] = $weekWD->getDayName();
+                }
+                $form->get('employeeHasEmployers')->get("weekDays")->setData($arrayWWD);
                 $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($contract->getWorkableDaysMonth() / 4);
                 if($contract->getWorkableDaysMonth()!=null)
                     $form->get('employeeHasEmployers')->get("salaryD")->setData(intval($contract->getSalary()/$contract->getWorkableDaysMonth()));

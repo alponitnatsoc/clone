@@ -504,6 +504,7 @@ function startEmployee() {
 
         var idsBenef = [], amountBenef = [], periodicityBenef = [], weekWorkableDaysIds = [], benefType = [];
         var flagValid = true;
+
         var i = 0;
         /*
          $(form).find("ul.benefits input[name*='idContractHasBenefits']").each(function () {
@@ -516,10 +517,6 @@ function startEmployee() {
          return;
          }
          benefType[i++] = $(this).val();
-         });
-         i = 0;
-         $(form).find("[name='register_employee[employeeHasEmployers][weekWorkableDays][]']:checked").each(function () {
-         weekWorkableDaysIds[i++] = $(this).val();
          });
          i = 0;
          $(form).find("ul.benefits input[name*='amount']").each(function () {
@@ -538,6 +535,11 @@ function startEmployee() {
          periodicityBenef[i++] = $(this).val();
          });
          */
+
+        i = 0;
+        $(form).find("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
+            weekWorkableDaysIds[i++] = $(this).val();
+        });
         var salary = $(form).find("input[name='register_employee[employeeHasEmployers][salary]']");
         /*if (!(validator.element(salary))) {
          //alert("Llenaste algunos campos incorrectamente");
@@ -574,6 +576,7 @@ function startEmployee() {
                 employeeId: $(form).find("input[name='register_employee[idEmployee]']").val(),
                 startDate: $("#register_employee_employeeHasEmployers_startDate").val(),
                 endDate: $("#register_employee_employeeHasEmployers_endDate").val(),
+                weekDays: weekWorkableDaysIds,
                 //workableDaysMonth: $(form).find("select[name='register_employee[employeeHasEmployers][workableDaysMonth]']").val(),
                 //workTimeStart: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][hour]']").val(),
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeStart][minute]']").val()},

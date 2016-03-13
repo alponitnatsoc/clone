@@ -517,6 +517,15 @@
 
                                 <div class="col-sm-12 col-xs-12 days">
                                     <div class="col-sm-6 label-group">
+                                        {{ form_label(form.employeeHasEmployers.weekDays) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.employeeHasEmployers.weekDays) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-xs-12 days">
+                                    <div class="col-sm-6 label-group">
                                         {{ form_label(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
