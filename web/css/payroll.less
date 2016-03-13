@@ -115,13 +115,32 @@
         .details  {
             padding-top: 30px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid #ccc;
+        }
+
+        & .calculateHeader {
+            text-align: center;
+            width: 90%;
+
+            & h2 {
+                margin: 20px 0 20px 0;
+                font-size: 20px;
+            }
+
+            & h3 {
+                margin: 0; 
+                font-size: 18px;
+                font-weight: 100;
+                color: #666;
+            }
         }
 
         .employee {
             padding-top: 20px;
             padding-bottom: 20px;
-            border-bottom: 1px dotted #000;
+            border: 1px solid #ccc;
+            border-left: 13px solid #FD9224;
+            margin: 20px 0;
             .name {
                 font-size: 16px;
                 margin: 0;
@@ -152,7 +171,7 @@
                 }
                 > div {
                     @media (min-width: 992px) {
-                        border-right: 1px dotted #000;
+                        border-right: 1px dotted #ccc;
                     }
                     &:last-child {
                         border: none;
@@ -177,12 +196,12 @@
         .details  {
             padding-top: 30px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid #ccc;
         }
 
         .employee {
             margin-top: 20px;
-            border: 1px solid #000;
+            border: 1px solid #ccc;
             margin-bottom: 15px;
             padding-top: 10px;
             padding-bottom: 10px;
@@ -209,7 +228,7 @@
                 > div {
                     &:first-child {
                         @media (min-width: 992px) {
-                            border-right: 1px dotted #000;
+                            border-right: 1px dotted #ccc;
                         }
                     }
                 }
@@ -221,8 +240,8 @@
                 >div {
                     padding-top: 20px;
                     padding-bottom: 20px;
-                    border-top: 1px dotted #000;
-                    border-bottom: 1px dotted #000;
+                    border-top: 1px dotted #ccc;
+                    border-bottom: 1px dotted #ccc;
                 }
             }
 
