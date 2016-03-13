@@ -444,9 +444,19 @@ class EmployerController extends Controller
                 break;
             case '2':
                 $cert = "Certificado de aportes";
+                $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
+                            'employee' => $employee,
+                            'certificate' => $cert,
+                            'employer' => $employer)
+                        )->getContent();
                 break;
             case '3':
                 $cert = "Certificado de ingresos y retenciones";
+                $content = $this->render('RocketSellerTwoPickBundle:Employer:certificadoDefault.html.twig', array(
+                            'employee' => $employee,
+                            'certificate' => $cert,
+                            'employer' => $employer)
+                        )->getContent();
                 break;
             default:
                 $cert = "Otro certificado";
