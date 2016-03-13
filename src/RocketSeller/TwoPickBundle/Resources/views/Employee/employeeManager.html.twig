@@ -17,20 +17,24 @@
             </div>
         </a>
     </div>
+    <div id="agregarNovedad"></div>
     <div class="col-xs-12" id="employees">
         <div class="col-sm-12 col-xs-12">
 
             {% for employee in employees %}
+                {% set employeeStatus= employee.state %}
                 <div class="row employeeListItem">
                     <div class="col-xs-6 employeeInfo" 
-                        style="{% if status < 2 %}border-left:10px solid #ccc{% endif %}">
-                        <b>{{ employee.employeeEmployee.personPerson.getFullName }}</b>&nbsp;
-                        <a href="#openNovelties" onclick="loadNovelty('/novelty/select/1')">
-                            Agregar Novedad
-                        </a>
+                        style="{% if employeeStatus != 1 %}border-left:10px solid #ccc{% endif %}">
+                        <b>{{ employee.fullName }}</b>&nbsp;
+                        {% if employeeStatus == 1 %}
+                            <a class="notAjax addNovelty" href="/novelty/select/{{ employee.idPayroll }}">
+                                Agregar Novedad
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-xs-3 employeeStatus">
-                        {% if status < 2 %}
+                        {% if employeeStatus != 1 %}
                             <i class="glyphicon glyphicon-remove-circle"></i> Inactivo
                         {% else %}
                             <i class="glyphicon glyphicon-ok-sign"></i> Activo
@@ -38,11 +42,11 @@
                     </div>
                     <div class="col-xs-3 actionButton">
                         {% if status < 2 %}
-                            <a href="/register/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Editar</a>
+                            <a href="/register/employee/{{employee.idEmployee}}">Editar</a>
                         {% else %}
                             <a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion</a>
                             /
-                            <a href="/manage/employee/{{employee.getEmployeeEmployee.getIdEmployee()}}">Ver detalles</a>
+                            <a href="/manage/employee/{{employee.idEmployee}}">Ver detalles</a>
                         {% endif %}
                     </div>
                 </div>
@@ -63,38 +67,3 @@
 
 
 {% endblock fos_user_content %}
-{% block javascripts %}
-{{ parent() }}
-<script type="text/javascript">
-<!--
-    function loadNovelty(url) {
-       $.ajax({
-           url: url,
-           type: 'POST',
-           data: {
-           }
-       }).done(function (data) {
-           $("#agregarNovedad").html(data);
-           $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
-               startNovelty();
-           });
-
-    //         $('#noveltyModal').modal('show');
-
-           $('#noveltyModal').modal({
-               show: false,
-               keyboard: false,
-               backdrop: 'static'
-           });
-           $('#noveltyModal').on('hidden.bs.modal', function () {
-               window.location.reload();
-           })
-           $('#noveltyModal').modal('show');
-
-       }).fail(function (jqXHR, textStatus, errorThrown) {
-           alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-       });
-    }
-//-->
-</script>
-{% endblock javascripts %}

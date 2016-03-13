@@ -29,12 +29,10 @@ function addNoveltySelectListener() {
         }).done(function(data){
             var innerForm=$(data).find("#formForm")
             if(innerForm.find("form").length==0){
-                console.log(data);
                 modBody.html(
                     "<p><h3>Novedad Creada Exitosamente</h3></p>"
                 );
             }else{
-                console.log(data);
                 var error=$(data).find("#error");
                 if(error.length!=0){
                     alert(error.html());
