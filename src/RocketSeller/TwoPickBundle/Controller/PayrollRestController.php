@@ -208,11 +208,9 @@ class PayrollRestController extends FOSRestController
         // php parser.
         //$plain_text = preg_replace('/(\<LogProceso\>((\n)|.)*(\<ERRORQ\>))/', "<LogProceso><ERRORQ>", $plain_text);
         //$plain_text = preg_replace('/(\<MensajeRetorno>(?!\<)((\n)|.)*(\<ERRORQ\>))/', "<MensajeRetorno><ERRORQ>", $plain_text);
-
         // This line is to put every piece into a different unico, because end_reg
         // doesn'e match the xml standard.
         //$plain_text = preg_replace('/\<END_REG\>\<\/END_REG\>/', "</UNICO><UNICO>", $plain_text);
-
         // TODO(daniel.serrano): Remove this debug lines.
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string(utf8_encode($plain_text), "SimpleXMLElement", LIBXML_NOCDATA);

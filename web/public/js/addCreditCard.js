@@ -1,210 +1,70 @@
-function startSubscriptionChoise() {
-    var tiempo_parcialSlider, medio_tiempoSlider, tiempo_completoSlider;
-    $(document).ready(function () {
-
-        tiempo_parcialSlider = document.getElementById('tiempo_parcial');
-        noUiSlider.create(tiempo_parcialSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        tiempo_parcialSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_parcialSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_parcialSlider.noUiSlider.set($(".activo .trabajo_por_dias").length);
-
-        medio_tiempoSlider = document.getElementById('medio_tiempo');
-        noUiSlider.create(medio_tiempoSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        medio_tiempoSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        medio_tiempoSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        medio_tiempoSlider.noUiSlider.set($(".activo .medio_tiempo").length);
-
-        tiempo_completoSlider = document.getElementById('tiempo_completo');
-        noUiSlider.create(tiempo_completoSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        tiempo_completoSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_completoSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_completoSlider.noUiSlider.set($(".activo .tiempo_completo").length);
-
-        calculatePrice('');
-    });
-
-    var url = '';
-    var button = '';
-    $(".btn-change-state-contract").click(function (event) {
-        button = $(this);
-        url = button.data('href');
-        if ($(this).html() == 'Activar') {
-            ajax(button, url);
-        } else {
-            $('#modal_confirm').modal('show');
-        }
-    });
-    $(".modal-content .close").hide();
-    $('#modal_confirm').on('show.bs.modal', function (event) {
-        //event.preventDefault();
-        //button = $(event.relatedTarget);
-        //url = button.data('href');
-        if ($(".activo").length > 1 || $(button).html() == "Activar") {
-            $(".btn-change-state-contract-confirm").show();
-        } else {
-            $(".btn-change-state-contract-confirm").hide();
-        }
-    });
-    //$(".btn-change-state-contract").on('click', function (e) {
-    //    $('#modal_confirm').modal('show');
-    //});
-    $(".btn-change-state-contract-confirm").on('click', function (e) {
-        if ($(".activo").length > 1 || $(button).html() == "Activar") {
-            ajax(button, url);
-        } else {
-            $('#modal_confirm').modal('hide');
-        }
-    });
-    //$("#open_pricing_calc").on('click', function (e) {
-    //    $('#modal_price_calculator').modal('show');
-    //});
-    function ajax(obj, url) {
+function startAddCreditCard() {
+    $("#btn-addCreditCard").on('click', function (event) {
+        event.preventDefault();
+        url = $(this).attr('href');
         $.ajax({
             url: url,
-            type: 'GET',
+            type: 'POST',
+            data: $('form').serialize(),
             beforeSend: function (xhr) {
-                $(obj).attr('disabled', true);
-                $(".btn-change-state-contract-confirm").attr('disabled', true);
+                $(".btn-addCreditCard").html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Guardando...');
+                $(".btn-addCreditCard").attr('disabled', true);
+                $("#divError").hide();
+                $("#divSuccess").hide();
             }
         }).done(function (data) {
-            parent = $(obj).parent().parent();
-            female = parent.find(".female").length;
-            male = parent.find(".male").length;
-            state = '';
-            if (data.state == 'Inactivo') {
-                $(obj).html("Activar");
-                parent.removeClass("activo");
-                parent.addClass("inactivo");
-                if (female > 0) {
-                    state = "inactivada";
-                } else if (male > 0) {
-                    state = "inactivado";
-                } else {
-                    state = "inactivado";
-                }
-            }
-            if (data.state == 'Activo') {
-                $(obj).html("Inhabilitar");
-                parent.removeClass("inactivo");
-                parent.addClass("activo");
-                if (female > 0) {
-                    state = "activada";
-                } else if (male > 0) {
-                    state = "activado";
-                } else {
-                    state = "activado";
-                }
-            }
-            $('#modal_confirm').modal('hide');
-            name = parent.find(".employee_name").html();
-            $('.result_ajax').html(name + " fue " + state + " exitosamente.").show(1000);
-            setTimeout(function () {
-                $('.result_ajax').html("").hide(1000);
-            }, 2000);
-            calculatePrice('');
+            $("#divSuccess").html('Tarjeta de credito agregada correctamente');
+            $("#divSuccess").show();
+            //$(".btn-addCreditCard").hide();
+            //$(".btn-exit").show();
+            ajaxUpdateListPaymentMethods();
+            //console.log(data);
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
-            $('#modal_confirm').modal('hide');
+            $("#divError").html(jqXHR.responseJSON.error.exception[0].message);
+            $("#divError").show();
+            $(".btn-addCreditCard").removeAttr('disabled');
+            //console.log(jqXHR.responseJSON.error.exception[0].message);
+            //console.log(jqXHR);
+            //console.log(textStatus);
+            //console.log(errorThrown);
         }).always(function () {
-            $(obj).attr('disabled', false);
-            $(".btn-change-state-contract-confirm").attr('disabled', false);
+            $(".btn-addCreditCard").html('Guardar');
+            //$(".btn-addCreditCard").removeAttr('disabled');
         });
-    }
-    function calculatePrice(contenedor) {
-        var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0;
-        var descuento_html = '';
-        var descuento = 0;
-        var subtotal = 0;
-        var total = 0;
-        if (contenedor == '_calc') {
-            Tiempo_Completo = tiempo_completoSlider ? parseInt(tiempo_completoSlider.noUiSlider.get()) : 0;
-            Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
-            Trabajo_por_días = tiempo_parcialSlider ? parseInt(tiempo_parcialSlider.noUiSlider.get()) : 0;
-        } else {
-            Tiempo_Completo = $(".activo .tiempo_completo").length;
-            Medio_tiempo = $(".activo .medio_tiempo").length;
-            Trabajo_por_días = $(".activo .trabajo_por_dias").length;
-        }
-        console.log("Tiempo_Completo:" + Tiempo_Completo);
-        console.log("Medio_tiempo:" + Medio_tiempo);
-        console.log("Trabajo_por_días:" + Trabajo_por_días);
-        if (Tiempo_Completo > 0) {
-            total = total + (Tiempo_Completo * $("#PS3").val());
-        }
-        if (Medio_tiempo > 0) {
-            total = total + (Medio_tiempo * $("#PS2").val());
-        }
-        if (Trabajo_por_días > 0) {
-            total = total + (Trabajo_por_días * $("#PS1").val());
-        }
-
-        if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_días) >= 3) {
-            descuento = (total * $("#descuento_percent").val());
-            descuento_html = "El descuento del " + ($("#descuento_percent").val() * 100) + "% por valor de " + getPrice(descuento) + " ya fue aplicado.";
-            $("#result_discount" + contenedor).html(descuento_html);
-        } else {
-            descuento = 0;
-            $("#result_discount" + contenedor).html('');
-        }
-
-        $("#result_price" + contenedor).html(getPrice(total - descuento));
-    }
-    function getPrice(valor) {
-        price = parseFloat(valor.toString().replace(/,/g, ""))
-                .toFixed(0)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return "$ " + price;
-    }
+    });
+    $(".btn-exit").on('click', function () {
+        $("#modal_add_credit_card").modal('hide');
+    });
 }
 
+function ajaxUpdateListPaymentMethods() {
+    $.ajax({
+        url: url_update_list,
+        type: 'GET',
+        beforeSend: function (xhr) {
+            $(".btn-addCreditCard").html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Guardando...');
+            //$(".btn-addCreditCard").attr('disabled', true);
+            //$("#divError").hide();
+            //$("#divSuccess").hide();
+        }
+    }).done(function (data) {
+        $("#divSuccess").html('Listado de tarjetas actualizado');
+        $("#divSuccess").show();
+        $(".btn-addCreditCard").hide();
+        $(".btn-exit").show();
+        updateListPaymentMethods(data);
+        //$("#divSuccess").html('Tarjeta de credito agregada correctamente');
+        //$(".btn-addCreditCard").hide();
+        //$(".btn-exit").show();
+        //console.log(data);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //$("#divError").html(jqXHR.responseJSON.error.exception[0].message);
+        //$("#divError").show();
+        //console.log(jqXHR.responseJSON.error.exception[0].message);
+        //console.log(jqXHR);
+        //console.log(textStatus);
+        //console.log(errorThrown);
+    }).always(function () {
+        //$(".btn-addCreditCard").removeAttr('disabled');
+    });
+}

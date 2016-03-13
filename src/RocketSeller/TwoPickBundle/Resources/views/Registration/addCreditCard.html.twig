@@ -1,43 +1,131 @@
-{% extends "::base.html.twig" %}
+
 {% block fos_user_content %}
-{% block stylesheets %}
-	{{ parent() }}
-	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
-{% endblock stylesheets %}
-	<div class="col-md-4">
-		{% if errno is defined %}
-			Not a valid Credit Card check the data again
-		{% endif %}
-	  	{{ form_start(form) }}
-		<div class="col-md-12">
-			{{ form_label(form.credit_card) }}
-			{{ form_errors(form.credit_card) }}
-			{{ form_widget(form.credit_card) }}
-		</div>
-		<div class="col-md-6">
-			{{ form_label(form.expiry_date_year) }}
-			{{ form_errors(form.expiry_date_year) }}
-			{{ form_widget(form.expiry_date_year) }}
-		</div>
-		<div class="col-md-6">
-			{{ form_label(form.expiry_date_month) }}
-			{{ form_errors(form.expiry_date_month) }}
-			{{ form_widget(form.expiry_date_month) }}
-		</div>
-		<div class="col-md-6">
-			{{ form_label(form.cvv) }}
-			{{ form_errors(form.cvv) }}
-			{{ form_widget(form.cvv) }}
-		</div>
-		<div class="col-md-12">
-			{{ form_label(form.name_on_card) }}
-			{{ form_errors(form.name_on_card) }}
-			{{ form_widget(form.name_on_card) }}
-		</div>
-		<div class="col-md-4">
-			{{ form_end(form) }}	
-		</div>		
-	</div>
-	<p class="log"></p>
-	</form>
+    {% block stylesheets %}
+
+        <style type="text/css">
+            .form-group input, .form-group textarea, .form-horizontal input, .form-horizontal textarea {
+                color: black;
+            }
+            input[type='number'] {
+                -moz-appearance:textfield;
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+            .alert-danger{
+                padding: 10px;  
+                display: none;
+            }
+            .alert-success{
+                padding: 10px;     
+                display: none;
+            }
+            .btn-exit{
+                display: none;
+            }
+            .glyphicon-refresh-animate {
+                -animation: spin .7s infinite linear;
+                -webkit-animation: spin2 .7s infinite linear;
+            }
+
+            @-webkit-keyframes spin2 {
+                from { -webkit-transform: rotate(0deg);}
+                to { -webkit-transform: rotate(360deg);}
+            }
+
+            @keyframes spin {
+                from { transform: scale(1) rotate(0deg);}
+                to { transform: scale(1) rotate(360deg);}
+            }
+        </style>
+    {% endblock stylesheets %}
+    <div class="modal fade"  role="dialog" id="modal_add_credit_card">
+        <div class="modal-dialog">
+            <div class="modal-content"> 
+                <div id="divError" class="alert-danger text-center">
+                    {% if errno is defined %}
+                        {{ errno }}
+                    {% endif %}
+                </div>
+                <div id="divSuccess" class="alert-success text-center">
+                    {% if success is defined %}
+                        {{ success }}
+                    {% endif %}
+                </div>
+                <form action="{{ path('api_public_post_add_credit_card') }}" method="POST">
+                    <div id="infoTarjeta" class="infoTarjeta form-group">
+                        <div class="formulario col-xs-12" style="border: none;">
+                            <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        <label>Nombre en la tarjeta:</label>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">  
+                                    </div>
+                                    <!--<img src="/img/typePerson.png">-->                        
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        <label>Número tarjeta de crédito:</label>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <input type="number" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
+                                    </div>
+                                    <!--<img src="/img/typePerson.png">-->                        
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        <label>Fecha de vencimiento:</label>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <div class="form-inline">
+                                            <select id="expiry_date_month" name="expiry_date_month" class="form-control" required="required">
+                                                <option value="">Mes</option>
+                                                <option value="01">1</option>
+                                                <option value="02">2</option>
+                                                <option value="03">3</option>
+                                                <option value="04">4</option>
+                                                <option value="05">5</option>
+                                                <option value="06">6</option>
+                                                <option value="07">7</option>
+                                                <option value="08">8</option>
+                                                <option value="09">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                            <input type="number" min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="Año" required="required">
+                                        </div>
+                                    </div>
+                                    <!--<img src="/img/typePerson.png">-->                        
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        <label>Código de seguridad:</label>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <input type="number" class="form-control" name="cvv" id="cvv" min="0" minlength="3" maxlength="4" placeholder="123" required="required" style="float: left;">
+                                    </div>                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button id="btn-addCreditCard" class="btn btn-default btn-orange btn-addCreditCard" href="{{ path('api_public_post_add_credit_card') }}" value="Guardar">Guardar</button>                            
+                            <button id="btn-exit" class="btn btn-default btn-orange btn-exit" value="Salir">Salir</button>
+                        </div>                        
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 {% endblock fos_user_content %}
+
+{% block javascripts %}
+    <script>
+        var url_update_list = "{{ path('api_public_get_client_list_paymentmethods',{'documentNumber':user.personPerson.document}) }}";
+    </script>
+{% endblock %}

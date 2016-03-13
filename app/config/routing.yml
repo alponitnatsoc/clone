@@ -129,7 +129,9 @@ novelty_fields:
     defaults:  { _controller: RocketSellerTwoPickBundle:Novelty:noveltyTypeFields}
     requirements:
         noveltyId:     \d+
-
+add_credit_card:
+    path:      /employer/add/creditCard
+    defaults:  { _controller: RocketSellerTwoPickBundle:PaymentMethod:addCreditCard}
 register_employee:
     path:      /register/employee/{id}/{tab}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:newEmployee, id: -1, tab: 1}
