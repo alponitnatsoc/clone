@@ -21,7 +21,7 @@ class RegistrationType extends AbstractType
             ->add('plainPassword','password', array("attr" => array('placeholder' => 'form.password'), 'translation_domain' => 'FOSUserBundle'))
             ->add('invitation', 'text', array(
                         "attr" => array(
-                            'placeholder' => '¿Tienes un código de referido?'
+                            'placeholder' => 'Ingresa un código de referido'
                         ),
                         'mapped' => false,
                         'property_path' => 'invitation',

@@ -67,7 +67,7 @@ $(document).ready(function () {
             }
         }).done(function (data) {
             //$('#modal_body_add_novelty').html($(data).find('#main'));
-            $('#modal_body_payroll_detail').replaceWith($(data).find('#main')); // ... with the returned one from the AJAX response.
+            $('#modal_body_payroll_detail').html($(data).find('#main')); // ... with the returned one from the AJAX response.
             $('#modal-title_payroll_detail').html("Detalle de la liquidación: " + employeeName);
             $('#modal_payroll_detail').modal('show');
 

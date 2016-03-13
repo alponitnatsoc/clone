@@ -306,7 +306,7 @@ class SubscriptionController extends Controller
                 $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
                 if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
                     $this->addFlash('error', $postAddCreditCard->getContent());
-                    return $this->redirectToRoute("subscription_choices");
+                    return $this->redirectToRoute("subscription_error");
                     //throw $this->createNotFoundException($data->getContent());
                 } else {
                     $data = $this->getData($this->getUser()->getPersonPerson()->getEmployer(), true);

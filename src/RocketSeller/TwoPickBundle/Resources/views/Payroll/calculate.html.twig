@@ -7,7 +7,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">                    
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -46,7 +46,7 @@
                 <span id="totalEmployees">{{ dataNomina|length }}</span>
             </div>
         </div>
-        
+
         <form method="post" action="{{ path('payroll_confirm') }}" id="formPay">
             <div class="row">
                 {% for key,data in dataNomina %}
@@ -109,7 +109,7 @@
                                                     <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
                                                 {% endfor  %}
                                             </select>
-                                            <input type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('payments_method') }}"/>
+                                            <input type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}"/>                                            
                                         </div>
 
                                     {% endif %}
@@ -239,16 +239,11 @@
                         $('#modal_loader').modal('show');
                     }
                 }).done(function (data) {
+                    //$('#modal_add_pay_method').html($(data).find("#main"));
                     $('#modal_add_pay_method').html(data);
-
-
-                    //$('#modal_body_add_novelty').replaceWith($(data).find('#main')); // ... with the returned one from the AJAX response.
-                    //$('#modal-title_add_novelty').html("Reporte aquí cada hecho que esté asociado a " + employeeName + " para que sea considerado en el cálculo de su pago.");
-
-                    $('#noveltyModal').modal({
-                        show: false,
-                        keyboard: false,
-                        backdrop: 'static'
+                    $('#modal_add_credit_card').modal('show');
+                    $.getScript("/public/js/addCreditCard.js").done(function () {
+                        startAddCreditCard();
                     });
                 }).fail(function (data) {
                     //$("#modal_body_add_novelty").html(data);
@@ -292,6 +287,10 @@
 
                 $('#btnPay').val("Pagar " + numeral(total).format('$ 0,0'));
                 $('#btnPay').prop('disabled', i == 0 || total == 0);
+            }
+            function updateListPaymentMethods(data) {
+                console.log(data);
+                alert('updateListPaymentMethods');
             }
     </script>
 {% endblock %}
