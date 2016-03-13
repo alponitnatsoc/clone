@@ -27,7 +27,7 @@
                     <div class="col-xs-6 employeeInfo" 
                         style="{% if employeeStatus != 1 %}border-left:10px solid #ccc{% endif %}">
                         <b>{{ employee.fullName }}</b>&nbsp;
-                        {% if employeeStatus == 1 %}
+                        {% if employeeStatus == 1 and status >= 2 %}
                             <a class="notAjax addNovelty" href="/novelty/select/{{ employee.idPayroll }}">
                                 Agregar Novedad
                             </a>
