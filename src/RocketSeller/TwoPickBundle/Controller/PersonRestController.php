@@ -431,24 +431,32 @@ class PersonRestController extends FOSRestController
                 'lastName2' => $person->getLastName2(),
                 'civilStatus' => $person->getCivilStatus(),
                 'gender' => $person->getGender(),
-                'documentExpeditionDate' => array(
+                'documentExpeditionDate' => $person->getDocumentExpeditionDate()?array(
                     'year'=>$person->getDocumentExpeditionDate()->format("Y"),
                     'month'=>intval($person->getDocumentExpeditionDate()->format("m")),
-                    'day'=>intval($person->getDocumentExpeditionDate()->format("d")),),
+                    'day'=>intval($person->getDocumentExpeditionDate()->format("d")),):array(
+                    'year'=>"",
+                    'month'=>"",
+                    'day'=>"",
+                ),
                 'documentExpeditionPlace' => $person->getDocumentExpeditionPlace(),
-                'birthDate' => array(
+                'birthDate' => $person->getBirthDate()?array(
                     'year'=>$person->getBirthDate()->format("Y"),
                     'month'=>intval($person->getBirthDate()->format("m")),
-                    'day'=>intval($person->getBirthDate()->format("d")),),
-                'birthCountry' => $person->getBirthCountry(),
-                'birthDepartment' => $person->getBirthDepartment(),
-                'birthCity' => $person->getBirthCity(),
+                    'day'=>intval($person->getBirthDate()->format("d")),):array(
+                    'year'=>"",
+                    'month'=>"",
+                    'day'=>"",
+                ),
+                'birthCountry' => $person->getBirthCountry()?:"",
+                'birthDepartment' => $person->getBirthDepartment()?:"",
+                'birthCity' => $person->getBirthCity()?:"",
                 'mainAddress' => $person->getMainAddress(),
                 'department' => $person->getDepartment(),
                 'email' => $person->getEmail(),
                 'city' => $person->getCity(),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
-                'idEmployee' => $person->getEmployee()->getIdEmployee()
+                'idEmployee' => $person->getEmployee()?$person->getEmployee()->getIdEmployee():"-2"
             ))->setStatusCode(200);
             return $view;
         } else {

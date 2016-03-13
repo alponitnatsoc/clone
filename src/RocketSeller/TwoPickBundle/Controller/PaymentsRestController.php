@@ -79,9 +79,9 @@ class PaymentsRestController extends FOSRestController
         $client = new Client(['http_errors' => false]);
         $sslParams = array('cert' => ['/home/ubuntu/.ssh/myKeystore.pem', 'N0v0payment']);
         //$client->setDefaultOption('verify', '/home/ubuntu/.ssh/MyKeystore.pem');
-        /*$request = $client->get('', array(), array(
-            'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
-        ));*/
+        /* $request = $client->get('', array(), array(
+          'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
+          )); */
         // $url_request = $this->container->getParameter('novo_payments_url') ;
         // URL used for test porpouses, the line above should be used in production.
         if (isset($_SERVER['SERVER_NAME']) && in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1'))) {
@@ -100,7 +100,7 @@ class PaymentsRestController extends FOSRestController
             'headers' => $headers,
             'json' => $parameters,
             'timeout' => $timeout,
-            //'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
+                //'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
         );
         try {
             if ($action == "post") {
@@ -113,7 +113,7 @@ class PaymentsRestController extends FOSRestController
                 $response = $client->put($url_request, $options, $sslParams);
             }
         } catch (Exception $e) {
-
+            
         }
         $view = View::create();
         $view->setStatusCode($response->getStatusCode());
@@ -700,7 +700,7 @@ class PaymentsRestController extends FOSRestController
      * (name="accountNumber", nullable=false, requirements="([0-9])+", strict=true, description="account number.")
      * (name="expirationYear", nullable=false, requirements="([0-9]){4}", strict=true, description="expiration year.")
      * (name="expirationMonth", nullable=false, requirements="([0-9]){2}", strict=true, description="expiration month.")
-     * (name="codeCheck", nullable=false, requirements="([0-9]){3}", strict=true, description="code check.")
+     * (name="codeCheck", nullable=false, requirements="([0-9]){3,4}", strict=true, description="code check.")
      *
      * @return View
      */
@@ -722,7 +722,7 @@ class PaymentsRestController extends FOSRestController
         $mandatory['expirationYear'] = true;
         $regex['expirationMonth'] = '([0-9]){2}';
         $mandatory['expirationMonth'] = true;
-        $regex['codeCheck'] = '([0-9]){3}';
+        $regex['codeCheck'] = '([0-9]){3,4}';
         $mandatory['codeCheck'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);

@@ -42,7 +42,7 @@ Director Symplifica
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: "Open Sans", Arial;
+            font-family: "Open Sans",Helvetica,Arial;
             background: #fff;
             width: 100%;
             margin: 0px;
@@ -60,22 +60,12 @@ Director Symplifica
             font-weight: bold;
         }
         .headbck {
-            background: #3b4b5a;
+            background: #3C4C5A;
             display: block;
             border-bottom: 1px solid #fff;
             height: 60px;
             padding-top: 10px;
-        }
-        .blockBlueCentral, .blockGreenCentral {
-            background: #00cdcc;
-            display: block;
-            padding: 30px 0px;
-            margin: 25px 0px;
-            font-size: 16px;
-        }
-        .blockBlueCentral a {
-            color: #fff;
-            text-decoration: none;
+            text-align: center;
         }
         .blockGreenCentral {
             background: #3b4b5a;
@@ -88,9 +78,6 @@ Director Symplifica
         }
         .imgUp {
             text-align: center;
-        }
-        .contentSection {
-            margin-left: 180px;
         }
         .contentSection .code {
             font-size: 48px;
@@ -112,24 +99,13 @@ Director Symplifica
         .boxSquareIcon img {
             border: 2px solid #9dedec;
         }
-        footer {
-            bottom: 0px;
-            width: 100%;
-            background-color: #EDEDED;
-            height: 60px;
-            display: block;
-            margin-top: 30px;
-            padding-top: 5px;
-        }
-        footer > .container {
-            margin-top: 11px;
-        }
         .container {
-            width: 980px;
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
+            width: 100%;
+            text-align: center;
+/*             padding-right: 15px; */
+/*             padding-left: 15px; */
+/*             margin-right: auto; */
+/*             margin-left: auto; */
         }
         .container ul li {
             list-style: none;
@@ -140,10 +116,6 @@ Director Symplifica
         }
         .container m {
             color: #00cdcc;
-        }
-        footer > .container > div {
-            height: 37px;
-            border-right: 1px solid #919191;
         }
         .col-sm-2, .col-sm-5 {
             float: left;
@@ -158,169 +130,92 @@ Director Symplifica
         .col-sm-5 {
             width: 70%;
         }
-        footer > .container > div.logo img {
-            margin-top: 5px;
-        }
-        footer > .container > div.links > div > a {
-            color: #333;
-            font-size: 12px;
-            text-transform: uppercase;
-            text-decoration: none;
-        }
-        footer > .container > div.social .red > a {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-        .blockBlueCentral a:hover  {
-            text-decoration: underline;
-        }
-        footer > .container > div.links > div {
-            padding-left: 0px;
-        }
-        footer > .container > div:last-child {
-            border: medium none;
-        }
-        footer > .container > div.social {
-            padding-top: 4px;
-        }
-        footer > .container > div.social > div {
-            float: left;
-        }
-        footer > .container > div.social .red.facebook {
-            background-position: 0px center;
-        }
-        footer > .container > div.social .red.linkedin {
-            background-position: -41px center;
-        }
-        footer > .container > div.social .red.twitter {
-            background-position: -82px center;
-        }
-        footer > .container > div.social .terminos {
-            color: #333;
-            font-size: 12px;
-        }
-        footer > .container > div.social .red {
-            width: 32px;
-            height: 32px;
-            margin-right: 9px;
-            background-image: url("http://www.symplifica.com/public/img/mail/redes.png");
-        }
     </style>
   </head>
-  <body style="font-family: sans-serif;">
+  <body style="font-family: Open Sans,Helvetica,Arial;">
     <header>
         <div class="headbck">
-            <div class="container">
-                <a href=""><img src="http://www.symplifica.com/public/img/mail/logo.png" alt="Symplifica"></a>
-            </div>
+            <a href="http://www.symplifica.com" target="_blank"><img src="http://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica" /></a>
         </div>
     </header>
-    <section>
-        <div class="imgUp">
-            <img src="http://www.symplifica.com/public/img/mail/imgUpBanner3.jpg" alt="Symplifica" />
-        </div>
+{#     <section>#}
+{#         <div class="imgUp">#}
+{#             <img src="http://www.symplifica.com/public/img/mail/imgUpBanner3.jpg" alt="Symplifica" />#}
+{#         </div>#}
+{#     </section>#}
+    <section class="container" style="padding-top: 35px;">
+        <img src="http://www.symplifica.com/public/img/mail/new-check.png" alt="Symplifica" />
     </section>
-    <section>
-        <div class="container">
-            <h1><strong style="font-family: sans-serif;">¡Bienvenido!</strong></h1>
-            <p style="font-family: sans-serif;">A partir de ahora cuentas con acceso a todas las herramientas de Symplifica.</p>
-            <ul style="font-family: sans-serif;">
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png">Guía práctica para la contratación</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png">Afiliación rápida de empleados y del empleador a las entidades de la Seguridad Social</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png">Liquidación y pago de nómina y aportes en pocos pasos</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png">Registro documental histórico de la relación laboral</li>
+    <section class="container">
+        <div style="width: 50%; display: inline-block;">
+            <h1><strong>¡Bienvenido!</strong></h1>
+            <p>A partir de ahora cuentas con acceso a todas las herramientas de Symplifica.</p>
+            <ul style="text-align: justify">
+                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Guía práctica para la contratación</li>
+                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Afiliación rápida de empleados y del empleador a las entidades de la Seguridad Social</li>
+                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Liquidación y pago de nómina y aportes en pocos pasos</li>
+                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Registro documental histórico de la relación laboral</li>
             </ul>
         </div>
     </section>
-    <section>
-        <div class="blockGreenCentral">
-            <!--
-            <div class="boxSquareIcon">
-                <img src="http://www.symplifica.com/public/img/mail/square1.png">
-            </div>
-            -->
-            <div class="container">
-                <div class="contentSection" style="font-family: sans-serif;">
-                    <p>Symplifica <m><strong>te obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
+    <section class="container blockGreenCentral">
+        <div class="contentSection">
+            <p>Symplifica <m><strong>te obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
 
-                    {% if codigoReferidos %}
+            {% if codigoReferidos %}
+                <p>Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</p>
+                <span class="code"><strong>{{ codigoReferidos }}</strong></span>
+                <p>¡Compártelo con tus amigos y obtén los beneficios!</p>
+                {% set fbURL %}
+                https://www.facebook.com/dialog/share?
+                app_id=145634995501895
+                &display=popup
+                &href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+                {# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
+                &caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+                &title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+                &description=Symplifica
+                {% endset %}
 
-                    <p>Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</p>
-                    <span class="code"><strong>{{ codigoReferidos }}</strong></span>
-                    <p>¡Compártelo con tus amigos y obtén los beneficios!</p>
-{% set fbURL %}
-https://www.facebook.com/dialog/share?
-app_id=145634995501895
-&display=popup
-&href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
-&caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&description=Symplifica
-{% endset %}
+                {% set twURL %}
+                https://twitter.com/intent/tweet?
+                text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+                &url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+                &via=symplifica
+                &source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+                {% endset %}
 
-{% set twURL %}
-https://twitter.com/intent/tweet?
-text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-&via=symplifica
-&source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{% endset %}
+                {% set gURL %}
+                https://plus.google.com/share?
+                url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+                &t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+                {% endset %}
 
-{% set gURL %}
-https://plus.google.com/share?
-url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-&t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-{% endset %}
-
-{% set emailURL %}
-mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{% endset %}
-                    <span class="socials">
-                        <a href="{{ fbURL }}">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-face.png">
-                        </a>
-                        <a href="{{ twURL }}">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-twitter.png">
-                        </a>
-                        <a href="{{ gURL }}">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-googleplus.png">
-                        </a>
-                        <a href="{{ emailURL }}">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-mail.png">
-                        </a>
-                    </span>
-
-                    {% endif %}
-
-                </div>
-            </div>
+                {% set emailURL %}
+                mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+                {% endset %}
+                <span class="socials">
+                    <a href="{{ fbURL }}" target="_blank">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-face.png" />
+                    </a>
+                    <a href="{{ twURL }}" target="_blank">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-twitter.png" />
+                    </a>
+                    <a href="{{ gURL }}" target="_blank">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-googleplus.png" />
+                    </a>
+                    <a href="{{ emailURL }}" target="_blank">
+                        <img src="http://www.symplifica.com/public/img/mail/icon-mail.png" />
+                    </a>
+                </span>
+            {% endif %}
         </div>
     </section>
-    <section>
-        <div class="container" style="font-family: sans-serif;">
-            <p>Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor aún, minizaremos al máximo el riesgo de eventualidades a futuro.</p>
-            <p>Atentamente</p>
-            <span><strong>CAMILO MÉNDEZ</strong><br /><em style="display:block">Director Symplifica</em></span>
-        </div>
+    <section class="container">
+        <p>Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor aún, minizaremos al máximo el riesgo de eventualidades a futuro.</p>
+        <p>Atentamente</p>
+        <span><strong>CAMILO MÉNDEZ</strong><br /><em style="display:block">Director Symplifica</em></span>
     </section>
-    <footer>
-        <div class="container">
-            <div class="col-sm-2 logo">
-                <img src="http://www.symplifica.com/public/img/mail/logo-oscuro.png" alt="Symplifica" class="hidden-sm img-responsive"/>
-            </div>
-            <div class="col-sm-5 social">
-                <div class="red facebook"><a href="#" target="_blank"></a></div>
-                <div class="red linkedin"><a href="#" target="_blank"></a></div>
-                <div class="red twitter"><a href="#" target="_blank"></a></div>
-                <div class="terminos" style="font-family: sans-serif;">
-                    Términos y Condiciones<br />
-                    Copyright © Todos los derechos reservados Symplifica
-                </div>
-            </div>
-        </div>
-    </footer>
   </body>
 </html>
 {% endblock %}
