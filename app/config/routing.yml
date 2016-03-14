@@ -168,7 +168,13 @@ payroll_voucher:
 payroll_voucher_to_pdf:
     path: /payroll/voucher/to_pdf/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucherToPdf}
-
+payroll_error:
+    path:     /payroll/error
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollError }
+payroll_success:
+    path:     /payroll/success
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollSuccess }
+    
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
