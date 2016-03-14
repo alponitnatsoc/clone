@@ -1,11 +1,11 @@
 {% extends "::base.html.twig" %}
 {% block title %}Symplifica - Activar Suscripción{% endblock %}
 {% set day = startDate|date("d") %}
-        {% set month = startDate|date("F")|trans %}
-        {% set year = startDate|date("Y") %}
-        {% set day_pay = startDate|date("d") %}
-        {% set month_pay = startDate|date("F")|trans %}
-        {% set year_pay = startDate|date("Y") %}   
+{% set month = startDate|date("F")|trans %}
+{% set year = startDate|date("Y") %}
+{% set day_pay = startDate|date("d") %}
+{% set month_pay = startDate|date("F")|trans %}
+{% set year_pay = startDate|date("Y") %}   
 {% block stylesheet %}
     {{ parent() }}
     <style type="text/css">
@@ -442,7 +442,7 @@
                 </div>
                 <div class="col-xs-12 center">
                     <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/> 
-                    <input type="submit" id="sumbit" class="btn btn-orange disabled" value="Finalizar" />
+                    <input type="submit" id="sumbit" class="btn btn-orange " value="Finalizar" disabled/>
                 </div>
             </div>
         </div>
