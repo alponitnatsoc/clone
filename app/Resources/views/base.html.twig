@@ -335,9 +335,11 @@
 
                     });
                     function errorHandleTry(data) {
-                        if (typeof data.responseJSON["url"] != 'undefined') {
-                            window.location.href = data.responseJSON["url"];
-                            data = false;
+                        if (typeof data.responseJSON!= 'undefined'){
+                            if (typeof data.responseJSON["url"] != 'undefined') {
+                                window.location.href = data.responseJSON["url"];
+                                data = false;
+                            }
                         }
                         return data;
                     }
@@ -351,7 +353,7 @@
                             data: $(form).serializeArray(),
                             statusCode: {
                                 500: function () {
-                                    alert("Lo sentimos pero estamos teniendo problemas con esta funcionalidad, por favor intenta de nuevo más tarde.");
+                                    $("#errorModal").modal("show");
                                 }
                             }
                         }).done(function (data) {
@@ -373,7 +375,7 @@
                             }
                         }).fail(function (jqXHR, textStatus, errorThrown) {
                             if (jqXHR == errorHandleTry(jqXHR)) {
-                                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+                                $("#errorModal").modal("show");
                             }
                         });
                     }
@@ -601,6 +603,32 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Error</div>
+                        </div>
+                        <div class="row-fluid clearfix" style="padding: 30px 15px;">
+                            <div class="row" >
+                                <div class="col-md-8 col-md-push-2">
+                                    Perdón, algo salió mal. Un equipo de monos altamente capacitados ha sido enviado para hacer frente a esta situación
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-xs-12 text-center">
+                                    <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
