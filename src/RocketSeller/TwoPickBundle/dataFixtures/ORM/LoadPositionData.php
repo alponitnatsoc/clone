@@ -23,7 +23,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $PositionVarios = new Position();
         $PositionVarios->setName('Oficios Varios');
-        $PositionVarios->setPayrollCoverageCode('2'); // Code 1.044
+        $PositionVarios->setPayrollCoverageCode('1'); // Code 0.522
         $manager->persist($PositionVarios);
 
         $PositionOtros = new Position();
@@ -33,22 +33,22 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $ninera = new Position();
         $ninera->setName('Niñera');
-        $ninera->setPayrollCoverageCode(''); // Code 4.35
+        $ninera->setPayrollCoverageCode('1'); // Code 0.522
         $manager->persist($ninera);
 
         $enfermera = new Position();
         $enfermera->setName('Enfermera');
-        $enfermera->setPayrollCoverageCode(''); // Code 4.35
+        $enfermera->setPayrollCoverageCode('1'); // Code 0.522
         $manager->persist($enfermera);
 
         $mayordomo = new Position();
         $mayordomo->setName('Mayordomo');
-        $mayordomo->setPayrollCoverageCode(''); // Code 4.35
+        $mayordomo->setPayrollCoverageCode('3'); // Code 2.436
         $manager->persist($mayordomo);
 
         $amaLlaves = new Position();
         $amaLlaves->setName('Ama de Llaves ');
-        $amaLlaves->setPayrollCoverageCode(''); // Code 4.35
+        $amaLlaves->setPayrollCoverageCode('1'); // Code 0.522
         $manager->persist($amaLlaves);
 
         $manager->flush();

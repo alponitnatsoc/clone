@@ -119,13 +119,17 @@ function startSubscriptionActivate() {
         });
         $("#tos").on('change', function () {
             if ($(this).is(":checked")) {
-                $("#sumbit").removeClass('disabled');
+                $("#sumbit").attr('disabled', false);
             } else {
-                $("#sumbit").addClass('disabled');
+                $("#sumbit").attr('disabled', true);
             }
         });
-        $('form ').on('submit', function () {
-            $("#sumbit").attr('disabled', true);
+        $('form').on('submit', function () {
+            if ($('form').valid()) {
+                $("#sumbit").attr('disabled', true);
+            } else {
+                $("#sumbit").attr('disabled', false);
+            }
         });
         $(".cvvHelp").on('click', function () {
             $("#cvvHelp").toggleClass('toHide');
