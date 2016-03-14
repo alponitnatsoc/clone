@@ -113,8 +113,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button id="btn-addCreditCard" class="btn btn-default btn-orange btn-addCreditCard" href="{{ path('api_public_post_add_credit_card') }}" value="Guardar">Guardar</button>                            
-                            <button id="btn-exit" class="btn btn-default btn-orange btn-exit" value="Salir">Salir</button>
+                            <span id="btn-addCreditCard" class="btn btn-default btn-orange btn-addCreditCard">Guardar</span>  
                         </div>                        
                     </div>
                 </form>
@@ -126,6 +125,7 @@
 
 {% block javascripts %}
     <script>
+        var url_add_credit_card = "{{ path('api_public_post_add_credit_card') }}";
         var url_update_list = "{{ path('api_public_get_client_list_paymentmethods',{'documentNumber':user.personPerson.document}) }}";
     </script>
 {% endblock %}
