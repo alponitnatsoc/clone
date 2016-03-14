@@ -48,7 +48,7 @@
             <strong>Documento</strong> <p>de Identidad</p>
         </div>
         <div class="col-sm-2 col-xs-12  text-center">
-             <strong>Registro único</strong><p>tributario (RUT)</p> 
+             <strong>Registro único</strong><p>tributario (RUT)</p>
         </div>
         <div class="col-sm-2 col-xs-12 text-center">
             <strong>Contrato de</strong><p>trabajo <i class="glyphicon glyphicon-cloud-download"></i></p>
@@ -149,14 +149,14 @@
                 <strong> Cargar</strong><br>Documento</a>
                 </div>
             </div>
-                
-                
+
+
             {% endif %}
             </div>
-            
+
         </div>
         <div class="col-sm-2 col-xs-12 text-center">
-            
+
         </div>
         <div class="col-sm-3 col-xs-12 text-center">
             {% if documents[3] in documentsTypeByEmployer %}
@@ -264,7 +264,7 @@
                 {% endif %}
             </div>
             <div class="col-sm-2 col-xs-12 text-center">
-                
+
             </div>
             <div class="col-sm-2 col-xs-12 text-center">
                 {% if documents[2] in documentsTypeByEmployee[0] %}
@@ -367,7 +367,7 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    {% else %}                    
+                    {% else %}
                             <div class="btnUpload">
                                 <div class="col-sm-2 icon-btn">
                                     <p class="upload-link"><i class="glyphicon glyphicon-cloud-upload"></i></p>
@@ -377,13 +377,13 @@
                                 <strong> Cargar</strong><br>Documento</a>
                                 </div>
                             </div>
-                    
-                        
+
+
 
                     {% endif %}
                 </div>
                 <div class="col-sm-2 col-xs-12 text-center">
-                   
+
                 </div>
                 <div class="col-sm-2 col-xs-12 text-center">
                     {% if documents[2] in documentsTypeByEmployee[i] %}
@@ -405,7 +405,7 @@
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
                             <div class="col-sm-8 text-btn">
-                                <p class="nopadding"><a class="download-link" href="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
+                                <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
                             <strong> Descargar</strong><br>Documento</a>
                             </div>
                         </div>
@@ -426,7 +426,7 @@
                                 <p class="download-link"><i class="glyphicon glyphicon-cloud-download"></i></p>
                             </div>
                             <div class="col-sm-8 text-btn">
-                                <p class="nopadding"><a class="download-link" href="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
+                                <p class="nopadding"><a class="download-link" href="{{ path('download_documents', {'id': employees[i].idContract[0].idContract, 'type': 'pdf', 'ref': 'contrato'} ) }}">
                             <strong> Descargar</strong><br>Documento</a>
                             </div>
                         </div>
