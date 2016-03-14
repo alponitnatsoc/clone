@@ -96,7 +96,6 @@ function startAfiliation() {
         });
 
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
             return;
         }
 
