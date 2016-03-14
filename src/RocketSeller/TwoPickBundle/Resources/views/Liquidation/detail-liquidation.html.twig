@@ -175,27 +175,29 @@
                 <div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0; text-align: center;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">La suma total para pago corresponde a</div>
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 24px; text-align: justify;">{{ totalLiq }}</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 24px;">La suma total para pago corresponde a</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">{{ totalLiq }}</div>
                     </div>
                     <div class="row-fluid clearfix" style="padding: 30px 15px;">
-                        <div id="paymethods">
+                        <div id="paymethods" style="text-align: center;">
+                            <p style="font-size: 20px">Selecciona un método de pago:</p>
                         {% for key,paymentMethod in paymentMethods %}
                             {% set data = paymentMethod["payment-type"] %}
                             <div>
-                                <strong>{{ key }}: </strong>
-                            </div>
-                            <div>
-                                {{ paymentMethod['method-id'] }}
-                                <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required /> {{ paymentMethod['account'] }}<br>
+                                <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required />Tarjeta terminada en: {{ paymentMethod['account'] }}<br>
                             </div>
                         {% endfor  %}
                         </div>
-                        <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar otro método de pago</a>
-                        <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+                        <div style="text-align: center;">
+                            <a href="#myModalAddPaymentMethod2" class="notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2" style="tex-align: center;">&gt; Agregar otro método de pago</a>
+                        </div>
+                        <label id="lbl_chkAccept" for="chkAccept" style="text-align: center; margin-top: 25px;">
+                            <input type="checkbox" class="chkAccept" id="chkAccept"/>
+                            <small>Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</small>
+                        </label>
                     </div>
                 </div>
-                <div class="modal-footer" style="margin-top: 30px; text-align: center;">
+                <div class="modal-footer" style="text-align: center;">
                     <button type="button" class="btn btnPrevious" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-orange btn-pay" disabled="true">Pagar</button>
                 </div>
@@ -208,12 +210,16 @@
 <div id="myModalAddPaymentMethod2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Agregar un nuevo método de pago</h4>
-            </div>
+{#             <div class="modal-header">#}
+{#                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#                 <h4 class="modal-title">Agregar un nuevo método de pago</h4>#}
+{#             </div>#}
             <!-- dialog body -->
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0; text-align: center;">
+                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 24px;">Agregar un nuevo método de pago</div>
+                </div>
                 <form name="addPaymentMethod" method="post" action="{{ path('api_public_post_add_credit_card') }}">
                     <label class="control-label required" for="form_credit_card">Credit card</label>
                     <input type="text" id="form_credit_card" name="form[credit_card]" required="required" class="form-control">
@@ -228,8 +234,8 @@
                     <input type="hidden" id="form_document" name="form_document" value="{{ employer.document }}" />
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-dismiss="modal">Cancelar</button>
+            <div class="modal-footer" style="text-align: center;">
+                <button type="button" class="btn btnPrevious" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-symplifica" onclick='$("form[name=addPaymentMethod]").submit();'>Guardar</button>
             </div>
         </div>
@@ -328,11 +334,8 @@
                 $.each( data['payment-methods'], function( key, value ) {
 
                     html = "<div>" +
-                        "<strong> " + key + ": </strong>" +
-                        "</div>" +
-                        "<div>" + value['method-id'] +
                         "<input type='radio' name='paymentMethodLiq' value='" + value['method-id'] + "' required />" +
-                        value['account'] + "<br>" +
+                        "Tarjeta terminada en: " + value['account'] + "<br>" +
                     "</div>";
 
                     $('#modalPayLiquidation2').find(".modal-body #paymethods").append(html);
