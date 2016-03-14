@@ -158,7 +158,7 @@
                                         <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
+                                        <a {% if status < 2 %} class="noClick notAjax" href="" {% else %} class="notAjax" href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                         <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
@@ -314,7 +314,7 @@
                             sendAjax(href);
                         });
                     } else {
-                        $(".body-container a:not(#main a)").on("click", function (e) {
+                        $(".body-container a:not(#main a)").not(".notAjax").on("click", function (e) {
                             e.preventDefault();
                             var href = $(this).attr('href');
                             history.pushState({}, '', href);
