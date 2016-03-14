@@ -3,6 +3,181 @@
     {% block stylesheets %}
 
         <style type="text/css">
+            .text-small{
+                font-size: 10px;
+            }
+            span{
+                overflow: visible;
+            }
+            .infoFacturacion{
+                text-align: center;
+            }
+            .infoFacturacion label{
+                font-weight: normal;
+            }
+            /*.infoTarjeta input[type="text"] {
+                background-color: #fff;
+                border: 1px solid #e5e5e5;
+                color: #333;
+                display: block;
+                font-size: 18px;
+                height: 32px;
+                padding: 0 5px;
+                width: 275px;
+                -moz-box-sizing: content-box;
+                -webkit-box-sizing: content-box;
+            }*/
+
+            .form-inline input[type="number"] {
+                height: 46px;
+                margin-left: 10px;
+                padding: 6px 12px;
+                padding-right: 2px;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+            }
+            .infoTarjeta #credit_card {
+                background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+                background-position: 2px -117px, 233px -55px;
+                background-size: 120px 361px, 120px 361px;
+                background-repeat: no-repeat;
+                padding-left: 54px;
+                /*width: 225px;*/
+            }
+            .infoTarjeta #credit_card.visa {
+                background-position: 2px -159px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.visa_electron {
+                background-position: 2px -201px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.mastercard {
+                background-position: 2px -243px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.maestro {
+                background-position: 2px -285px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.discover {
+                background-position: 2px -327px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.amex {
+                background-position: 2px -327px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.diners_club_carte_blanche {
+                background-position: 2px -327px, 260px -61px;
+            }
+            .infoTarjeta #credit_card.valid.visa {
+                background-position: 2px -159px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.visa_electron {
+                background-position: 2px -201px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.mastercard {
+                background-position: 2px -243px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.maestro {
+                background-position: 2px -285px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.discover {
+                background-position: 2px -327px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.amex {
+                background-position: 2px -327px, 233px -82px;
+            }
+            .infoTarjeta #credit_card.valid.diners_club_carte_blanche {
+                background-position: 2px -327px, 233px -82px;
+            }
+            .toHide{
+                display: none;
+            }
+            .blockUpData .radio {
+                width: 50%;
+                display: inline-flex;
+            }
+            .blockUpData label{
+                min-height: 1px;
+            }
+            #pagoMembresiaFormContainer input[type="text"],#pagoMembresiaFormContainer input[type="number"]{
+                color: #919191;
+            }
+            #expiry_date_month, #expiry_date_year, #cvv{
+                width: 70px;
+            }
+            .cvvHelp{
+                display: inline-block;
+                padding: 10px;
+            }
+            .cvvHelp:hover{
+                cursor: pointer;
+            }
+            .codigo_referido_valido{
+                color: green;
+            }
+            .codigo_referido_invalido{
+                color: red;
+            }
+            .form-group select{            
+                width: 100%
+            }
+
+            #pago_membresia_personType .radio:last-child {
+                color: #c2c2c2;
+            }
+
+            /*
+            .blockStep2 {
+                margin-top: 10px;
+                background: #3b4b5a !important;
+                background-image: none;
+                background: 0 0;
+                border: 1px solid #919191;
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 20px;
+                padding: 15px;
+                text-shadow: none;
+                color: #fff;
+                opacity: 0.8;
+            }
+            .blockStep2 .txt-AD1 {
+                font-family: "Open Sans";
+                font-size: 24px;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: #fff;
+                white-space: normal;
+            }
+    
+            .blockStep2 .txt-AD1 p {
+                font-size: 14px;
+                font-family: @lato;
+                font-weight: 100;
+                margin-bottom: 0px;
+            }
+            */
+            .label-group{
+                text-align: right !important;
+            }
+            .form-select{
+                color: yellow !important;
+            }
+            input[type='number'] {
+                -moz-appearance:textfield;
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
             .form-group input, .form-group textarea, .form-horizontal input, .form-horizontal textarea {
                 color: black;
             }
@@ -54,33 +229,33 @@
                         {{ success }}
                     {% endif %}
                 </div>
-                <form action="{{ path('api_public_post_add_credit_card') }}" method="POST">
+                <form name="formAddCreditCard" action="{{ path('api_public_post_add_credit_card') }}" method="POST">
                     <div id="infoTarjeta" class="infoTarjeta form-group">
                         <div class="formulario col-xs-12" style="border: none;">
-                            <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                            <div class="col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
                                 <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 label-group">
                                         <label>Nombre en la tarjeta:</label>
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 form-group">
                                         <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">  
                                     </div>
                                     <!--<img src="/img/typePerson.png">-->                        
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 label-group">
                                         <label>Número tarjeta de crédito:</label>
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 form-group">
                                         <input type="number" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
                                     </div>
                                     <!--<img src="/img/typePerson.png">-->                        
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 label-group">
                                         <label>Fecha de vencimiento:</label>
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 form-group">
                                         <div class="form-inline">
                                             <select id="expiry_date_month" name="expiry_date_month" class="form-control" required="required">
                                                 <option value="">Mes</option>
@@ -103,10 +278,10 @@
                                     <!--<img src="/img/typePerson.png">-->                        
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
+                                    <div class="col-sm-5 label-group">
                                         <label>Código de seguridad:</label>
                                     </div>
-                                    <div class="col-sm-6 form-group">
+                                    <div class="col-sm-7 form-group">
                                         <input type="number" class="form-control" name="cvv" id="cvv" min="0" minlength="3" maxlength="4" placeholder="123" required="required" style="float: left;">
                                     </div>                   
                                 </div>

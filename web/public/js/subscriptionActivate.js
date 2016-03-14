@@ -16,7 +16,7 @@ function startSubscriptionActivate() {
                 "pago_membresia[address]": {required: true},
                 "pago_membresia[phone]": {required: true, number: true},
                 "credit_card": {required: true, number: true, min: 1},
-                "card_name": {required: true},
+                "name_on_card": {required: true},
                 "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
                 "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
                 "cvv": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
@@ -39,7 +39,7 @@ function startSubscriptionActivate() {
                     min: ""
 
                 },
-                "card_name": {required: "Por favor ingrese el numero de la tarjeta"},
+                "cname_on_card": {required: "Por favor ingrese el numero de la tarjeta"},
                 "expiry_date_month": {
                     required: "Por favor ingrese el mes de vencimiento",
                     number: "ingresa solamente dígitos",
