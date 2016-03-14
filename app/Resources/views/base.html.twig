@@ -314,7 +314,7 @@
                             sendAjax(href);
                         });
                     } else {
-                        $(".body-container a:not(#main a)").on("click", function (e) {
+                        $(".body-container a:not(#main a)").not(".notAjax").on("click", function (e) {
                             e.preventDefault();
                             var href = $(this).attr('href');
                             history.pushState({}, '', href);
