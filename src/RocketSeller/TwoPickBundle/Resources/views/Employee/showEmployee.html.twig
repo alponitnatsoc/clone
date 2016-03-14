@@ -474,13 +474,18 @@
 				        						<i class="fa fa-file-pdf-o fa-2x"></i>
 				        					</div>
 				        					<div class="col-sm-12 title-doc">
-				        						
+				        						<p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
 				        					</div>
 				        					<div class="col-sm-12">
-				        						
+				        						<p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
 				        					</div>
-		  									<p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
-		  									<p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+				        					<div class="panel_btn_action">
+            	        						<a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                					Ver documento
+                            					</a>
+                                            </div>
+		  									
+		  									
 		  								</div>
 		  								{% endif %}
 
