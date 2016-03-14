@@ -77,11 +77,11 @@ class SubscriptionController extends Controller
                 $employees[$keyEmployee]['contrato'] = $contract;
                 $employees[$keyEmployee]['employee'] = $employee;
                 $employees[$keyEmployee]['product']['object'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
-                if ($employee->getIsFree() > 0) {
-                    $employees[$keyEmployee]['product']['price'] = 0;
-                } else {
-                    $employees[$keyEmployee]['product']['price'] = $employees[$keyEmployee]['product']['object']->getPrice();
-                }
+                //if ($employee->getIsFree() > 0) {
+                $employees[$keyEmployee]['product']['price'] = 0;
+                // } else {
+                $employees[$keyEmployee]['product']['price'] = $employees[$keyEmployee]['product']['object']->getPrice();
+                // }
                 $total_sin_descuentos += $employees[$keyEmployee]['product']['price'];
                 break;
             }
@@ -227,6 +227,14 @@ class SubscriptionController extends Controller
         }
         /* @var $user User */
         $user = $this->getUser();
+
+        $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
+            'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
+            'freeTime' => 1,
+            'all' => true
+                ), array('_format' => 'json')
+        );
+
         $data = $this->getData($user->getPersonPerson()->getEmployer(), false);
         $date = new \DateTime();
         $date->add(new \DateInterval('P1M'));
@@ -256,12 +264,6 @@ class SubscriptionController extends Controller
 
         if ($request->isMethod('POST')) {
 
-            /* $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-              'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-              'freeTime' => 1,
-              'all' => true
-              ), array('_format' => 'json')
-              ); */
 
             $user = $this->getUser();
             $person = $user->getPersonPerson();

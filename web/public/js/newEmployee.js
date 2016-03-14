@@ -501,13 +501,14 @@ function startEmployee() {
             //alert("Llenaste algunos campos incorrectamente");
             return;
         }
-
+        if (!validateSalary()) {
+            return false;
+        }
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
             beforeSend: function (xhr) {
-                if (!validateSalary())
-                    return false;
+
             },
             data: {
                 //employeeType: employeeType.val(),
@@ -584,29 +585,29 @@ function jsonToHTML(data) {
     return htmls;
 }
 function jsonCalcToHTML(data) {
-    var htmls = "<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
-            "<ul class='lista_listo'>";
-    htmls += "<li>Costo total para el empleador: " + Math.floor(data.totalExpenses) + "</li>";
-    htmls += "<li>Ingreso neto para el empleado: " + Math.floor(data.totalIncome) + "</li>";
-    htmls += "<li>Diario Gastos: " + Math.floor(data.dailyExpenses) + "</li>";
-    htmls += "<li>Diario Ingreso: " + Math.floor(data.dailyIncome) + "</li>";
-    htmls += "</ul>";
-    htmls += "<h2 class='modal-title'>Detalles:</h2>" +
-            "<ul class='lista_listo'>";
-    htmls += "<li>Gastos Empleador EPS: " + Math.floor(data.EPSEmployerCal) + "</li>";
-    htmls += "<li>Gastos Empleador Pensión: " + Math.floor(data.PensEmployerCal) + "</li>";
-    htmls += "<li>Gastos Empleado ARL: " + Math.floor(data.arlCal) + "</li>";
-    htmls += "<li>Gastos Empleado Cesantias: " + Math.floor(data.cesCal) + "</li>";
-    htmls += "<li>Gastos Empleado Intereses/cesantias: " + Math.floor(data.taxCesCal) + "</li>";
-    htmls += "<li>Gastos Empleado Caja Comp: " + Math.floor(data.cajaCal) + "</li>";
-    htmls += "<li>Gastos Empleado Vacaciones: " + Math.floor(data.vacationsCal) + "</li>";
-    htmls += "<li>Gastos Auxilio de Trasnporte: " + Math.floor(data.transportCal) + "</li>";
-    htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + Math.floor(data.dotationCal) + "</li>";
-    htmls += "<li>Gastos SENA: " + Math.floor(data.senaCal) + "</li>";
-    htmls += "<li>Gastos ICBF: " + Math.floor(data.icbfCal) + "</li>";
-    htmls += "<li>Gastos Empleado EPS: " + Math.floor(data.EPSEmployeeCal) + "</li>";
-    htmls += "<li>Gastos Empleado Pensión: " + Math.floor(data.PensEmployeeCal) + "</li>";
-    htmls += "</ul>";
+    var htmls="<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
+        "<ul class='lista_listo clearfix'>";
+    htmls+="<li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>"+getPrice(Math.floor(data.totalExpenses))+"</span></li>";
+    htmls+="<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>"+getPrice(Math.floor(data.totalIncome))+"</span></li>";
+    htmls+="<li class='col-sm-6'><span class='cifra'>"+getPrice(Math.floor(data.dailyExpenses))+"</span></li>";
+    htmls+="<li class='col-sm-6'><span class='cifra'>"+getPrice(Math.floor(data.dailyIncome))+"</span></li>";
+    htmls+="</ul>";
+    htmls+="<h2 class='modal-title'>Detalles:</h2>" +
+        "<ul class='lista_listo_detalle'>";
+    htmls+="<li>Gastos Empleador EPS: "+getPrice(Math.floor(data.EPSEmployerCal))+"</li>";
+    htmls+="<li>Gastos Empleador Pensión: "+getPrice(Math.floor(data.PensEmployerCal))+"</li>";
+    htmls+="<li>Gastos Empleado ARL: "+getPrice(Math.floor(data.arlCal))+"</li>";
+    htmls+="<li>Gastos Empleado Cesantias: "+getPrice(Math.floor(data.cesCal))+"</li>";
+    htmls+="<li>Gastos Empleado Intereses/cesantias: "+getPrice(Math.floor(data.taxCesCal))+"</li>";
+    htmls+="<li>Gastos Empleado Caja Comp: "+getPrice(Math.floor(data.cajaCal))+"</li>";
+    htmls+="<li>Gastos Empleado Vacaciones: "+getPrice(Math.floor(data.vacationsCal))+"</li>";
+    htmls+="<li>Gastos Auxilio de Trasnporte: "+getPrice(Math.floor(data.transportCal))+"</li>";
+    htmls+="<li>Gastos Dotacion/150000 pesos trimestre: "+getPrice(Math.floor(data.dotationCal))+"</li>";
+    htmls+="<li>Gastos SENA: "+getPrice(Math.floor(data.senaCal))+"</li>";
+    htmls+="<li>Gastos ICBF: "+getPrice(Math.floor(data.icbfCal))+"</li>";
+    htmls+="<li>Gastos Empleado EPS: "+getPrice(Math.floor(data.EPSEmployeeCal))+"</li>";
+    htmls+="<li>Gastos Empleado Pensión: "+getPrice(Math.floor(data.PensEmployeeCal))+"</li>";
+    htmls+="</ul>";
     return htmls;
 }
 
