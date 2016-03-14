@@ -406,21 +406,31 @@
 
             	</div>
             	<div id="payHistory" class="tab-pane">
-            		<div class="col-sm-12">
-            			<div class="col-sm-4">
-            				
+            		<div class="col-sm-12 payment-content">
+            			<div class="col-sm-4 search-box">
+							<h4>Buscar por:</h4>
+
+							<div class="col-sm-12 form-group form-black input form-dummy">
+								<p class="title"><i><strong>Fecha</strong></i></p>	                            <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
+	                        </div>
+	                        <div class="col-sm-12 form-group form-black input form-dummy">
+								<p class="title"><i><strong>Valor</strong></i></p>	                            <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
+	                        </div>
+	                        <div class="col-sm-12 search-button">
+	                        	<a class="btn btn-orange notAjax" href="">Buscar</a>
+	                        </div>
             			</div>
             			<div class="col-sm-8">
             				<div class="col-sm-12">
             					<h3><strong>Pagos efectuados al día de hoy</strong></h3>
             					<div class="col-sm-6">
-            						<p>Total pagado:$60000000</p>
+            						<p>Total pagado: $60000000</p>
             					</div>
             					<div class="col-sm-6">
             						<p>Total pagos: {{ payrolls|length}}</p>
             					</div>
             				</div>
-            				<div class="col-sm-12">
+            				<div class="col-sm-12 table-title">
             					 <div class="col-sm-4">
             					 	<p><strong>Fecha</strong></p>
             					 </div>
@@ -432,17 +442,13 @@
             					 </div>
              				</div>
             			{% for payroll in payrolls %}
-            				<div class="col-sm-12">
-            					<div class="col-sm-4">
+            				<div class="col-sm-12 row-payment">
+            					<div class="element col-sm-4">
             						<p>{{payroll.month}}/{{payroll.year}}</p>
             					</div>
-            					<div class="col-sm-4">
-
-            						{% if payroll.purchaseOrdersDescription|length > 0 %}
-            							<p>{{ payroll.purchaseOrdersDescription[0].name }}</p>
-            						{% endif %}
+            					<div class="element col-sm-4">            							<p>${{ contract.salary }}</p>
             					</div>
-            					<div class="col-sm-4">
+            					<div class="detail-element col-sm-4">
             						<p>Ver detalles</p>
             					</div>
             						
@@ -453,7 +459,37 @@
             		</div>            	
             	</div>
             	<div id="documents" class="tab-pane">
-  					<p>Documents</p>
+  					<div class="documents col-sm-12">
+  						<div class="documents-title col-sm-12">
+  							<h4>Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
+  						</div>
+  						<dir class="col-sm-12 documents-content">
+
+  							{% set docs = employee.personPerson.docs %}
+  								{% if docs|length > 0 %}
+		  							{% for doc in docs %}
+		  								{% if doc.mediaMedia %}
+		  								<div class=" element col-sm-3">
+		  									<div class="col-sm-12 icon-pdf">
+				        						<i class="fa fa-file-pdf-o fa-2x"></i>
+				        					</div>
+				        					<div class="col-sm-12 title-doc">
+				        						
+				        					</div>
+				        					<div class="col-sm-12">
+				        						
+				        					</div>
+		  									<p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
+		  									<p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+		  								</div>
+		  								{% endif %}
+
+
+
+		  							{% endfor %}
+  								{% endif %}
+  						</dir>
+  					</div>
             	</div>
             	<div id="certificates" class="tab-pane">
   					<p>Certificates</p>
