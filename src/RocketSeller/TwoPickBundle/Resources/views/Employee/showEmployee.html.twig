@@ -25,7 +25,6 @@
 	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
 	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
 	            <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
-	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#certificates">Certificados</a></li>
 	        </ul>
 	     </div>
 	        <div class="tab-content">
@@ -474,13 +473,18 @@
 				        						<i class="fa fa-file-pdf-o fa-2x"></i>
 				        					</div>
 				        					<div class="col-sm-12 title-doc">
-				        						
+				        						<p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
 				        					</div>
 				        					<div class="col-sm-12">
-				        						
+				        						<p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
 				        					</div>
-		  									<p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
-		  									<p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+				        					<div class="panel_btn_action">
+            	        						<a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">
+                                					Ver documento
+                            					</a>
+                                            </div>
+		  									
+		  									
 		  								</div>
 		  								{% endif %}
 
@@ -490,9 +494,6 @@
   								{% endif %}
   						</dir>
   					</div>
-            	</div>
-            	<div id="certificates" class="tab-pane">
-  					<p>Certificates</p>
             	</div>
 	        </div>
 

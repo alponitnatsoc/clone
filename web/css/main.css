@@ -2175,12 +2175,25 @@ select.error {
   height: 500px;
 }
 .documents .documents-title {
+  padding-top: 20px;
   border-top: 1px solid #f8f8f8;
 }
+.documents .documents-content {
+  color: #3C4B5A;
+  border-top: 1px solid #f8f8f8;
+  padding-top: 20px;
+}
 .documents .documents-content .element {
+  padding-top: 60px;
   text-align: center;
   margin-right: 5px;
   border: 2px solid #f8f8f8;
   border-radius: 5px;
   height: 250px;
+}
+.documents .documents-content .btn-docs {
+  background-color: #919191;
+  color: white;
+  margin-bottom: -110px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
 }
