@@ -88,7 +88,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * 
+     *
      * @param string $id EmployerHasEmployee
      * @return EmployerHasEmployee
      */
@@ -232,7 +232,7 @@ class EmployeeController extends Controller
             /** @var EmployerHasEmployee $eHE */
             foreach ($employerHasEmployees as $eHE) {
                 if ($eHE->getIdEmployerHasEmployee() == $employee->get('idEmployerHasEmployee')->getData()) {
-                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
+                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames() . " " .$eHE->getEmployeeEmployee()->getPersonPerson()->getLastName1());
                     $eHEEntities = $eHE->getEmployeeEmployee()->getEntities();
                     if ($eHE->getEmployeeEmployee()->getAskBeneficiary()) {
                         $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
@@ -480,7 +480,7 @@ class EmployeeController extends Controller
             }
         }
         foreach ($entities as $entity) {
-            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="EPS")    
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="EPS")
             {
                 $entidades["EPS"] = $entity->getEntityEntity();
             }elseif($entity->getEntityEntity()->getEntityTypeEntityType()->getName()=="Pension"){
@@ -526,7 +526,7 @@ class EmployeeController extends Controller
                 throw $this->createNotFoundException('Unable to find Beneficiaries.');
             }
         } else {
-            
+
         }
     }
 
@@ -742,7 +742,7 @@ filename = "certificadoLaboral.pdf"'
         return $documentsByBeneficiary;
     }
 
-    //se eliminan los documentos repetidos por empleado 
+    //se eliminan los documentos repetidos por empleado
     public function removeDuplicated($beneficiaryDocs)
     {
         $nonRepeated = array();
