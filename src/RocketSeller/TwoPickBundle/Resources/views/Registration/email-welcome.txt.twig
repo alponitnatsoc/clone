@@ -156,34 +156,34 @@ Director Symplifica
                 <p style="color: #fff;
             font-weight: bold;
             font-size: 18px;">¡Compártelo con tus amigos y obtén los beneficios!</p>
-                {% set fbURL %}
-                https://www.facebook.com/dialog/share?
-                app_id=145634995501895
-                &display=popup
-                &href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-                {# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
-                &caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-                &title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-                &description=Symplifica
-                {% endset %}
+{% set fbURL %}
+https://www.facebook.com/dialog/share?
+app_id=145634995501895
+&display=popup
+&href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
+&caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&description=Symplifica
+{% endset %}
 
-                {% set twURL %}
-                https://twitter.com/intent/tweet?
-                text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-                &url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-                &via=symplifica
-                &source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-                {% endset %}
+{% set twURL %}
+https://twitter.com/intent/tweet?
+text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+&url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+&via=symplifica
+&source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{% endset %}
 
-                {% set gURL %}
-                https://plus.google.com/share?
-                url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-                &t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-                {% endset %}
+{% set gURL %}
+https://plus.google.com/share?
+url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+&t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
+{% endset %}
 
-                {% set emailURL %}
-                mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-                {% endset %}
+{% set emailURL %}
+mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
+{% endset %}
                 <span class="socials" style="display: inline-block; margin-right: 15px;">
                     <a href="{{ fbURL }}" target="_blank">
                         <img src="http://www.symplifica.com/public/img/mail/icon-face.png" />
