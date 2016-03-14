@@ -98,22 +98,19 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-11">
-                                    {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}
-
-                                        <div class="col-xs-3" style="display: -webkit-inline-box;vertical-align: middle;">
-                                            <strong>Medio de pago: </strong>
-                                        </div>
-                                        <div class="col-xs-7" style="display: -webkit-inline-box;vertical-align: middle;">
-                                            <select name="paymentMethod[{{ idPayroll }}]" class="form-control paymentMethod" required="required">
-                                                {% for paymentMethod in paymentMethods %}
-                                                    <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
-                                                {% endfor  %}
-                                            </select>
-                                        </div>
-                                        <div class="col-xs-1" style="display: -webkit-inline-box;vertical-align: middle;">
-                                            <span type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}">Agregar</span>                                   
-                                        </div>
-                                    {% endif %}
+                                    <div class="col-xs-3" style="display: -webkit-inline-box;vertical-align: middle;">
+                                        <strong>Medio de pago: </strong>
+                                    </div>
+                                    <div class="col-xs-7" style="display: -webkit-inline-box;vertical-align: middle;">
+                                        <select name="paymentMethod[{{ idPayroll }}]" class="form-control paymentMethod" required="required">
+                                            {% for paymentMethod in paymentMethods %}
+                                                <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
+                                            {% endfor  %}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-1" style="display: -webkit-inline-box;vertical-align: middle;">
+                                        <span type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}">Agregar</span>                                   
+                                    </div>
 
                                 </div>
                             </div>

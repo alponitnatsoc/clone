@@ -15,6 +15,11 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 
 class BasicPersonRegistration extends AbstractType
 {
+
+    private $dateToday;
+    function __construct(){
+        $this->dateToday= new DateTime();
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -63,7 +68,7 @@ class BasicPersonRegistration extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'years' => range(2015,1900),
+                'years' => range(intval($this->dateToday->format("Y"))-15,1900),
                 'constraints' => array(
                     new NotBlank()
                 ),'label' => 'Fecha de Nacimiento*'))

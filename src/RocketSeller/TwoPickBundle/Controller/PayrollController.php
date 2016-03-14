@@ -362,41 +362,73 @@ use LiquidationMethodsTrait;
                             $total += ($value['totalLiquidation']['total']);
                         }
                     }
-                    $data[$key]['paymentMethod'] = $paymentMethod[$key];
+                    if (isset($paymentMethod[$key])) {
+                        $data[$key]['paymentMethod'] = $paymentMethod[$key];
+                    } else {
+                        $data[$key]['paymentMethod'] = 'efectivo';
+                    }
                 }
+                $purchaseOrders = $this->pagarNomina($data, $total);
+                $responce = null;
+                foreach ($purchaseOrders as $key => $purchaseOrder) {
+                    $responce = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), array('_format' => 'json'));
+                }
+                if (!empty($responce) && $responce !== null) {
+                    //dump($responce);
+                    //die;
+                    $data2 = json_decode($responce->getContent(), true);
+                    if ($responce->getStatusCode() == Response::HTTP_OK) {
+                        $this->addFlash('success', $data2);
+                        $this->redirectToRoute('payroll_success', array());
 
-                if ($this->pagarNomina($data, $total)) {
-                    return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                                'dataNomina' => $data,
-                                'total' => $total
-                    ));
-                } else {
-                    return $this->redirectToRoute('payroll');
+                        //$this->redirect($this->generateUrl('payroll_success'), 301);
+                        //$this->sendEmailPaySuccessAction();
+                        return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
+                                    'dataNomina' => $data,
+                                    'total' => $total
+                        ));
+                    }
+                    $this->addFlash('error', $responce->getContent());
+                    return $this->redirectToRoute("payroll_error");
                 }
+                $this->addFlash('error', 'Error RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder');
+                return $this->redirectToRoute("payroll_error");
             } else {
-                return $this->redirectToRoute("payroll");
+                $this->addFlash('error', $data);
+                return $this->redirectToRoute('payroll_error');
             }
         } else {
             return $this->redirectToRoute("payroll");
         }
     }
 
+    public function payrollSuccessAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
+                    'dataNomina' => $data,
+                    'total' => $total
+        ));
+    }
+
     private function dataByPaymethod($dataNomina)
     {
         $responce = array();
+        dump($dataNomina);
         foreach ($dataNomina as $idPayroll => $data) {
-            $responce[$data['paymentMethod']][$idPayroll]['idPayroll'] = $idPayroll;
+            if (isset($data['paymentMethod'])) {
+                $responce[$data['paymentMethod']][$idPayroll]['idPayroll'] = $idPayroll;
 
-            $responce[$data['paymentMethod']][$idPayroll]['PILA'] = $data['PILA']['total'];
+                $responce[$data['paymentMethod']][$idPayroll]['PILA'] = $data['PILA']['total'];
 
-            /* @var $payMethod PayMethod */
-            $payMethod = $data['payMethod'];
-            if (strtolower($payMethod->getPayTypePayType()->getName()) == 'en efectivo') {
-                $responce[$data['paymentMethod']][$idPayroll]['nomina'] = 0;
-                $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['PILA']['total'];
-            } else {
-                $responce[$data['paymentMethod']][$idPayroll]['nomina'] = $data['totalLiquidation']['total'];
-                $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['totalLiquidation']['total'] + $data['PILA']['total'];
+                /* @var $payMethod PayMethod */
+                $payMethod = $data['payMethod'];
+                if (strtolower($payMethod->getPayTypePayType()->getName()) == 'en efectivo') {
+                    $responce[$data['paymentMethod']][$idPayroll]['nomina'] = 0;
+                    $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['PILA']['total'];
+                } else {
+                    $responce[$data['paymentMethod']][$idPayroll]['nomina'] = $data['totalLiquidation']['total'];
+                    $responce[$data['paymentMethod']][$idPayroll]['total'] = $data['totalLiquidation']['total'] + $data['PILA']['total'];
+                }
             }
         }
         foreach ($responce as $paymentMethodId => $data) {
@@ -414,32 +446,22 @@ use LiquidationMethodsTrait;
         $response = $mensaje = false;
         $em = $this->getDoctrine()->getManager();
         $byPaymethod = $this->dataByPaymethod($dataNomina);
+        $purchaseOrderArray = array();
         foreach ($byPaymethod as $paymentMethodId => $dataPayroll) {
-            $purchaseOrderResponse = $this->createPurchaseOrder($paymentMethodId, $dataPayroll['total']);
             /* @var $purchaseOrder PurchaseOrders */
-            $purchaseOrder = $purchaseOrderResponse['purchaseOrder'];
-            if ($purchaseOrderResponse['response']) {
+            $purchaseOrder = $this->createPurchaseOrder($paymentMethodId, $dataPayroll['total']);
+            if ($purchaseOrder) {
                 foreach ($dataPayroll as $idPayroll => $dataTotales) {
                     if ($idPayroll != 'total') {
-                        $purchaseOrderDetail = $this->createPurchaseOrderDetail($purchaseOrder, $dataNomina[$idPayroll], $dataTotales);
-                        if ($purchaseOrderDetail) {
-                            $response = true;
-                        } else {
-                            $response = false;
-                        }
+                        $purchaseOrder = $this->createPurchaseOrderDetail($purchaseOrder, $dataNomina[$idPayroll], $dataTotales);
                     }
                 }
-                //tax 
-                $response = true;
-            } else {
-                $response = false;
+                $em->persist($purchaseOrder);
+                $em->flush();
+                $purchaseOrderArray[] = $purchaseOrder;
             }
-            $em->persist($purchaseOrder);
         }
-
-        $em->flush();
-
-        return $response;
+        return $purchaseOrderArray;
     }
 
     /**
@@ -450,54 +472,18 @@ use LiquidationMethodsTrait;
     private function createPurchaseOrder($methodId, $totalAmount)
     {
         $em = $this->getDoctrine()->getManager();
-
         $purchaseOrder = new PurchaseOrders();
         $purchaseOrder->setIdUser($this->getUser());
         $purchaseOrder->setName('Pago Nomina');
         $purchaseOrder->setValue((floatval($totalAmount)));
         $purchaseOrder->setPayMethodId($methodId);
-
+        $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
+        /** @var $purchaseOrdersStatus PurchaseOrdersStatus */
+        $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
+        $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
         $em->persist($purchaseOrder);
         $em->flush(); //para obtener el id que se debe enviar a novopay
-
-        $request = new Request();
-        $request->setMethod('POST');
-        $request->request->set('documentNumber', $this->getUser()->getPersonPerson()->getDocument());
-        $request->request->set('MethodId', $methodId);
-        $request->request->set('totalAmount', $totalAmount);
-        $request->request->set('taxAmount', 0);
-        $request->request->set('taxBase', 0);
-        $request->request->set('commissionAmount', 0);
-        $request->request->set('commissionBase', 0);
-        $request->request->set('chargeMode', 2);
-        $request->request->set('chargeId', $purchaseOrder->getIdPurchaseOrders());
-
-        $paymentAprovalResponse = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('request' => $request), array('_format' => 'json'));
-
-        $paymentAproval = json_decode($paymentAprovalResponse->getContent(), true);
-
-        if (isset($paymentAproval['charge-rc'])) {
-            $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-            /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
-            $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => $paymentAproval['charge-rc']));
-            $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
-
-            $em->persist($purchaseOrder);
-            $em->flush(); //guardar el resultado de novopay
-        } else {
-            $purchaseOrdersStatus = false;
-        }
-
-        if ($paymentAprovalResponse->getStatusCode() == Response::HTTP_CREATED && $purchaseOrdersStatus->getName() == 'Aprobado') {
-            return array('response' => true, 'purchaseOrder' => $purchaseOrder, 'paymentAproval' => $paymentAproval);
-        } else {
-            if ($purchaseOrdersStatus) {
-                $this->addFlash('error', '<b>' . $purchaseOrdersStatus->getDescription() . '</b>, No se pudo realizar el pago!');
-            } else {
-                $this->addFlash('error', 'No se pudo realizar el pago!');
-            }
-            return array('response' => false, 'purchaseOrder' => $purchaseOrder, 'paymentAproval' => $paymentAproval);
-        }
+        return $purchaseOrder;
     }
 
     /**
@@ -509,6 +495,7 @@ use LiquidationMethodsTrait;
     private function createPurchaseOrderDetail(PurchaseOrders $purchaseOrder, $dataNomina, $dataTotales)
     {
         $em = $this->getDoctrine()->getManager();
+        $purchaseOrderDescription = null;
         foreach ($dataTotales as $key => $amount) {
             if ((strtolower($key) == "pila" || strtolower($key) == "nomina") && ($amount != 0)) {
 
@@ -532,70 +519,21 @@ use LiquidationMethodsTrait;
                     $purchaseOrderDescription->setDescription('Pago Nomina Empleado');
                 }
                 $purchaseOrderDescription->setProductProduct($product);
-                $purchaseOrderDescription->setTaxTax(null);
                 $purchaseOrderDescription->setValue($amount);
 
                 $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-                /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
-                $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => 'S1'));
+                /** @var $purchaseOrdersStatus PurchaseOrdersStatus */
+                $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('name' => 'Pendiente'));
                 $purchaseOrderDescription->setPurchaseOrdersStatus($purchaseOrdersStatus);
-
-                $request = new Request();
-                $request->setMethod('POST');
-                $request->request->set('documentNumber', $this->getUser()->getPersonPerson()->getDocument());
-                $request->request->set('chargeId', $purchaseOrder->getIdPurchaseOrders());
-                $request->request->set('beneficiaryId', $beneficiaryId);
-                $request->request->set('beneficiaryAmount', $amount);
-
-                if (strtolower($key) == "pila") {
-                    $request->request->set('dispersionType', 2);
-                } else {
-                    $request->request->set('dispersionType', 1);
-                }
-
-                $paymentResponse = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPayment', array('request' => $request), array('_format' => 'json'));
-
-                $payment = json_decode($paymentResponse->getContent(), true);
-
-                if (isset($payment['transfer-id'])) {
-                    /* @var $payPay Pay */
-                    $payPay = $this->createPay($purchaseOrderDescription, $dataNomina, $dataTotales, $payment['transfer-id']);
-                    $purchaseOrderDescription->addPayPay($payPay);
-                    $em->persist($payPay);
-                }
 
                 $purchaseOrder->addPurchaseOrderDescription($purchaseOrderDescription);
                 $em->persist($purchaseOrderDescription);
                 $em->persist($purchaseOrder);
-
-                if (in_array($paymentResponse->getStatusCode(), array(Response::HTTP_CREATED, Response::HTTP_ACCEPTED, Response::HTTP_OK))) {
-                    $response = true;
-                } else {
-                    $response = false;
-                }
             }
         }
 
         $em->flush();
-        return $response;
-    }
-
-    private function createPay(PurchaseOrdersDescription $purchaseOrderDescription, $dataNomina, $dataTotales, $transfer_id)
-    {
-        $pago = new Pay();
-        $pago->setIdDispercionNovo($transfer_id);
-        $pago->setMessage("");
-        $pago->setPayMethodPayMethod($dataNomina['payMethod']);
-        $pago->setPurchaseOrdersDescription($purchaseOrderDescription);
-        $pago->setStatus('Pendiente');
-        $pago->setUserIdUser($this->getUser());
-
-        $purchaseOrdersStatusRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrdersStatus');
-        /* @var $purchaseOrdersStatus PurchaseOrdersStatus */
-        $purchaseOrdersStatus = $purchaseOrdersStatusRepo->findOneBy(array('idNovoPay' => 'S1'));
-        $pago->setPurchaseOrdersStatusPurchaseOrdersStatus($purchaseOrdersStatus);
-
-        return $pago;
+        return $purchaseOrder;
     }
 
     public function detailAction($idPayroll, Request $request)
@@ -658,6 +596,13 @@ use LiquidationMethodsTrait;
         header('Content-Transfer-Encoding: binary');
         header('Accept-Ranges: bytes');
         @readfile($file);
+    }
+
+    public function payrollErrorAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Payroll:error.html.twig', array(
+                    'user' => $this->getUser()
+        ));
     }
 
 }
