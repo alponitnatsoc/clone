@@ -235,6 +235,14 @@
                 </div>
                 <div id="docsMatrix" class="tab-pane fade in {%   if tab==3 %}active{% endif %}">
 
+
+                    <div id='' class='col-xs-12'>
+                        <div class="">
+                            <div class="">
+                                {{ render(controller('RocketSeller\TwoPickBundle:Employer:registrationDocuments')) }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-12 col-xs-12 block-Intro">
                         <p>Para que puedas empezar a disfrutar Symplifica y nosotros podamos empezar a trabajar por tí, necesitamos que cargues los siguientes documentos.</p>
                         <p>Es mucho más facil cargar estos documentos desde nuestra aplicación tomando tan sólo una foto de los documentos.</p>
@@ -252,13 +260,6 @@
                         </div>
                     </div>
                     <br /><br />
-                    <div id='' class='col-xs-12'>
-                        <div class="">
-                            <div class="">
-                                {{ render(controller('RocketSeller\TwoPickBundle:Employer:registrationDocuments')) }}
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-sm-12 col-xs-12 center" style="margin-top: 30px;">
                         <a class="btn btn-primary btnPrevious" > Anterior</a>
                         <div class="saveControl"><button type="submit" id="register_social_security_save" name="register_social_security[save]" class="btn btn-orange">Guardar</button><div style="display: none;">{{ form_row(form.save) }}</div></div>
