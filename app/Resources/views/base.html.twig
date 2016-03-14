@@ -158,7 +158,7 @@
                                         <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('payroll') }}"{% endif %}>Pago a empleados</a>
+                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                         <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
