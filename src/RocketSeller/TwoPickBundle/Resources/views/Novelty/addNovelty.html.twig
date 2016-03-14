@@ -36,13 +36,16 @@
 					</div>
 				{% endfor %}
 			{% endif %}
+			<div style="display: none">{{ form_widget(form.save) }}</div>
+
 			{{ form_widget(form) }}
+
 			<div class="row">
 				<div class="col-xs-6 text-right">
-					{{ form_widget(form.save) }}
+					<button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
 				</div>
-				<div class="col-xs-6">
-					{{ form_widget(form.later) }}
+				<div class="col-xs-6 text-left">
+					<button type="submit" id="form_save" name="form[save]" class="btn btn-orange">Siguiente</button>
 				</div>
 			</div>
 		</div>

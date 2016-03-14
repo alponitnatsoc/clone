@@ -89,9 +89,6 @@ class NoveltyForm extends AbstractType
         }
         $builder->add('save', 'submit', array(
             'label' => 'Crear',));
-        $builder->add('later', 'submit', array(
-            'label' => 'Llenar Luego',));
-
 
     }
 

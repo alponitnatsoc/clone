@@ -157,7 +157,7 @@ class NoveltyController extends Controller {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($payRol);
             $em->flush();
-            if ($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form)) {
+            if ( !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
                 $user = $this->getUser();
                 $notification = $notification=$this->createNotification(null,1,null,"","Faltan llenar algunos datos de la novedad " . $novelty->getName(),"Novedad Incompleta","Completar","alert",$user->getPersonPerson());
@@ -193,7 +193,7 @@ class NoveltyController extends Controller {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($novelty);
             $em->flush();
-            if (!($form->get('later')->isClicked() || !$this->checkNoveltyFulfilment($novelty, $form))) {
+            if (!$this->checkNoveltyFulfilment($novelty, $form)) {
                 if ($notificationReferenced != -1) {
                     $user = $this->getUser();
                     $notificationRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Notification");

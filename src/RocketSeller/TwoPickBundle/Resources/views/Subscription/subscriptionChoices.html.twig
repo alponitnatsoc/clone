@@ -23,6 +23,22 @@
         .noUi-target {
             box-shadow: none;
         }
+        #employees{
+            margin: 0px;
+            padding: 0px;
+            padding-bottom:  30px;
+            border-bottom: 1px solid #E6E7E8;
+        }
+        .timeCommitmentTimeCommitment{
+            font-size: small;
+            font-weight: 100;
+            color: lightslategray;
+        }
+        .labora{
+            font-size: smaller;
+            font-weight: 100;
+            color: lightslategray;
+        }
     </style>
     {% for flash_message in app.session.flashbag.get('error') %}
         <div class="alert alert-danger flashSubscription" role="alert"> 
@@ -43,29 +59,20 @@
         </div>
     </div>
     <div class="col-xs-12 text-center">
-        {% set day = startDate|date("d") %}
-        {% set month = startDate|date("F")|trans %}
-        {% set year = startDate|date("Y") %}
-        {% set day_pay = startDate|date("d") %}
-        {% set month_pay = startDate|date("F")|trans %}
-        {% set year_pay = startDate|date("Y") %}   
-        <p>
-            En este momento cuenta con SERVICIO GRATUITO hasta el {{ day }} de {{ month }} de {{ year }}. Sin embargo ya puede llevar a cabo la activación de la suscripción al servicio de Symplifica.
-        </p>
-        <p>
-            De acuerdo a la información registrada, usted cuenta con los siguientes empleados:
+        <p style="padding: 20px; color:#00acd6; border-bottom: 1px solid #E6E7E8;">
+            Has registrado los siguientes empleados
         </p> 
     </div>
+    {% set day = startDate|date("d") %}
+    {% set month = startDate|date("F")|trans %}
+    {% set year = startDate|date("Y") %}
+    {% set day_pay = startDate|date("d") %}
+    {% set month_pay = startDate|date("F")|trans %}
+    {% set year_pay = startDate|date("Y") %}   
     <div class="col-lg-1 result_ajax"></div>
     <form action="{{ path('subscription_confirm') }}" method="POST">  
         <div id="employees" class="col-xs-12">
             <div class="row-fluid clearfix">
-                <input type="hidden" id="descuento_percent" value="{{ descuento_3er['percent'] }}"/>  
-                <input type="hidden" id="descuento_value" value="{{ descuento_3er['value'] }}"/>      
-                {% for key, producto in productos %}
-                    <input type="hidden" id="{{ producto.simpleName }}" value="{{ producto.price }}"/>
-                    <input type="hidden" id="{{ producto.simpleName }}_IVA" value="{{ producto.taxTax.value }}"/>
-                {% endfor %}
                 <div class="col-md-12 text-center">
                     {% for employeeData in employees %}
 
@@ -100,25 +107,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {#<div class="row">
                     <div class="col-xs-12 text-center">
                         <div style="text-align: center; margin-top: 20px; font-weight: bold">
                             <span id="open_pricing_calc" data-toggle="modal" data-target="#modal_price_calculator">Calcule el valor de suscripción</span>
                         </div>
                         <span style="color: #B0B2B5">Calcula cuánto sería el valor de la suscripción mensual si ingresas más empleados</span>
                     </div>
-                </div>
+                </div>#}
             </div>
         </div>
         <div class="col-md-12 center" style="margin-top: 30px">
             <div class="col-md-12" style="margin-bottom: 20px;">
-                <h4>Monto de la mensualidad</h4>
-                <h4 style="color: #FD9224">El primer mes es gratis*</h4>
+                <h4><b>Subscripción Mensual</b></h4>
             </div>
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
-
                     </div>
                     <div class="col-md-8 text-left" style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
 
@@ -126,16 +131,14 @@
                             {% set employee = employeeData['employee'] %}
                             {% set contrato = employeeData['contrato'] %}
                             {% set product = employeeData['product'] %}
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="padding-bottom: 10px;">
                                 <div class="col-md-9">       
-                                    <span class="name">{{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}</span>
+                                    <span class="name"><b>{{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}</b></span>                                    
+                                    <span class="timeCommitmentTimeCommitment">Empleado {{ (contrato.timeCommitmentTimeCommitment.name) }}.</span>
                                     <span class="labora">Labora {{ contrato.workableDaysMonth }} días al mes.</span>
                                 </div>  
                                 <div class="col-md-3  text-right">
-                                    <b>$ {{ (product!=null?product.price:0)|number_format }}</b>
-                                    {% if employee.isFree > 0 %}
-                                        <span style="font-size: 10px;">{{ employee.isFree?"(* promo sin costo "~employee.isFree~" mes)":"" }}</span>                                    
-                                    {% endif %}
+                                    <b>$ {{ (product!=null?product.price:0)|number_format }}{{ employee.isFree?"*":"" }}</b>                                    
                                 </div>
                             </div>
                         {% endfor %}
@@ -144,6 +147,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-md-2">
 
@@ -204,13 +209,26 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 text-center" style=" padding: 0px 20px 20px 20px; border-bottom: 1px solid #E6E7E8;">
+            <h4 style="color: #FD9224"><b>EL PRIMER MES ES GRATIS</b></h4>
+            <h4 style="color: #FD9224"><b>Recibe otro mes gratis</b> si antes de 48 horas cargas<br>los documentos solicitados al fínal del registro.</h4>
+        </div>
+
+
         <div class="col-xs-12">
             <div class="row">
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align: center; margin: 20px;">
                     <input type="submit" class="btn btn-orange" value="Continuar con el pago"/>
                 </div>
             </div>
         </div>
+
+        <input type="hidden" id="descuento_percent" value="{{ descuento_3er['percent'] }}"/>  
+        <input type="hidden" id="descuento_value" value="{{ descuento_3er['value'] }}"/>      
+        {% for key, producto in productos %}
+            <input type="hidden" id="{{ producto.simpleName }}" value="{{ producto.price }}"/>
+            <input type="hidden" id="{{ producto.simpleName }}_IVA" value="{{ producto.taxTax.value }}"/>
+        {% endfor %}
     </form>
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">
