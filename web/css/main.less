@@ -134,7 +134,7 @@ span {
     box-shadow: none;
 }
 
-.btnPrevious,#novelty_fields_later {
+.btnPrevious {
     background-color: #fff!important;
     color: #fd9626;
     border: 1px solid #fd9626;
@@ -143,7 +143,21 @@ span {
     text-shadow: none !important;
 }
 
-.btnPrevious:hover,#novelty_fields_later:hover {
+#novelty_fields_later {
+    background-color: #fff!important;
+    color: #fd9626;
+    border: 1px solid #fd9626;
+    margin-top: 0;
+    background-image: none !important;
+    text-shadow: none !important;
+}
+
+.btnPrevious:hover{
+    color: #fd9626;
+    border: 1px solid #fd9626;
+}
+
+#novelty_fields_later:hover {
     color: #fd9626;
     border: 1px solid #fd9626;
 }
@@ -1583,7 +1597,7 @@ select {
 }
 
 
-.btn-orange, #novelty_fields_save {
+.btn-orange {
     text-transform: none;
     background-color: @color_boton;
     box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -1592,20 +1606,49 @@ select {
     font-weight: 700;
     letter-spacing: 1px;
     font-family: @open;  
-    border: 2px solid @color_boton;
     &:active {
         opacity: 0.7;
         box-shadow: 0 8px rgba(0,0,0,0.2);
         outline: none;
         color: @darkerButtonText;
-        border: 2px solid @color_boton;
     }
     &:hover {
         color: @darkerButtonText;
         outline: none;
         background-color: @color_boton;
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-        border: 2px solid @color_boton;
+    }
+    &:focus {
+        color: @darkerButtonText;
+        outline: none!important;
+    }
+    &.disabled {
+        opacity: 1;
+        background-color: @color_boton_disabled;
+        color: #efc394;
+    }
+}
+
+#novelty_fields_save {
+    text-transform: none;
+    background-color: @color_boton;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: @darkerButtonText;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-family: @open;  
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: @darkerButtonText;
+    }
+    &:hover {
+        color: @darkerButtonText;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     }
     &:focus {
         color: @darkerButtonText;

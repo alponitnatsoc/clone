@@ -62,7 +62,7 @@ class PaymentMethodController extends Controller
 
     public function addCreditCardAction(Request $request)
     {
-        dump($this->getUser());
+        //dump($this->getUser());
         return $this->render('RocketSellerTwoPickBundle:Registration:addCreditCard.html.twig', array(
                     'user' => $this->getUser()
         ));
