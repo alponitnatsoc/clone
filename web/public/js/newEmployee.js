@@ -662,10 +662,14 @@ function addListeners() {
             });
         }
     });
-    $("#register_employee_employeeHasEmployers_weekWorkableDays").on("change", function () {
+    $("#register_employee_employeeHasEmployers_weekDays").on("change", function () {
+        var i=0;
+        $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
+            i++;
+        });
+        $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
         calculator();
         formatMoney($("#totalExpensesVal"));
-
     });
     $("#register_employee_employeeHasEmployers_indefinite").on("click", function () {
         $("#register_employee_employeeHasEmployers_contractType option").each(function () {
@@ -829,7 +833,7 @@ function calculator() {
     var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
     var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
     var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
-    var numberOfDays = parseFloat($("#register_employee_employeeHasEmployers_weekWorkableDays").val()) * 4;
+    var numberOfDays = $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
     var aid = 0;
     var aidD = 0;
     var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
@@ -951,44 +955,48 @@ function calculator() {
         totalIncome = (salaryM + transportCal - EPSEmployerCal - PensEmployerCal);
 
     }
-
-    if (salaryD == 0) {
-
-        totalExpenses = 0;
-        totalIncome = 0;
-        EPSEmployerCal = 0;
-        EPSEmployeeCal = 0;
-        PensEmployeeCal = 0;
-        PensEmployerCal = 0;
-        transportCal = 0;
-        cesCal = 0;
-        taxCesCal = 0;
-        dotationCal = 0;
-        vacationsCal = 0;
-        arlCal = 0;
-        cajaCal = 0;
-        senaCal = 0;
-        icbfCal = 0;
-        base = 0;
-    }
     var resposne = [];
-    resposne['totalExpenses'] = totalExpenses;
-    resposne['dailyExpenses'] = totalExpenses / numberOfDays;
-    resposne['dailyIncome'] = totalIncome / numberOfDays;
-    resposne['EPSEmployerCal'] = EPSEmployerCal;
-    resposne['EPSEmployeeCal'] = EPSEmployeeCal;
-    resposne['PensEmployerCal'] = PensEmployerCal;
-    resposne['PensEmployeeCal'] = PensEmployeeCal;
-    resposne['arlCal'] = arlCal;
-    resposne['cesCal'] = cesCal;
-    resposne['taxCesCal'] = taxCesCal;
-    resposne['cajaCal'] = cajaCal;
-    resposne['vacationsCal'] = vacationsCal;
-    resposne['transportCal'] = transportCal;
-    resposne['dotationCal'] = dotationCal;
-    resposne['senaCal'] = senaCal;
-    resposne['icbfCal'] = icbfCal;
-    resposne['totalIncome'] = totalIncome;
+
+    if (salaryD == 0||numberOfDays==null||numberOfDays==0) {
+
+        resposne['totalExpenses'] = 0;
+        resposne['dailyExpenses'] = 0;
+        resposne['dailyIncome'] = 0;
+        resposne['EPSEmployerCal'] = 0;
+        resposne['EPSEmployeeCal'] = 0;
+        resposne['PensEmployerCal'] = 0;
+        resposne['PensEmployeeCal'] = 0;
+        resposne['arlCal'] = 0;
+        resposne['cesCal'] = 0;
+        resposne['taxCesCal'] = 0;
+        resposne['cajaCal'] = 0;
+        resposne['vacationsCal'] = 0;
+        resposne['transportCal'] = 0;
+        resposne['dotationCal'] = 0;
+        resposne['senaCal'] = 0;
+        resposne['icbfCal'] = 0;
+        resposne['totalIncome'] = 0;
+    }else{
+        totalExpenses=0
+        resposne['totalExpenses'] = totalExpenses;
+        resposne['dailyExpenses'] = totalExpenses / numberOfDays;
+        resposne['dailyIncome'] = totalIncome / numberOfDays;
+        resposne['EPSEmployerCal'] = EPSEmployerCal;
+        resposne['EPSEmployeeCal'] = EPSEmployeeCal;
+        resposne['PensEmployerCal'] = PensEmployerCal;
+        resposne['PensEmployeeCal'] = PensEmployeeCal;
+        resposne['arlCal'] = arlCal;
+        resposne['cesCal'] = cesCal;
+        resposne['taxCesCal'] = taxCesCal;
+        resposne['cajaCal'] = cajaCal;
+        resposne['vacationsCal'] = vacationsCal;
+        resposne['transportCal'] = transportCal;
+        resposne['dotationCal'] = dotationCal;
+        resposne['senaCal'] = senaCal;
+        resposne['icbfCal'] = icbfCal;
+        resposne['totalIncome'] = totalIncome;
+    }
+
     var htmlRes = jsonCalcToHTML(resposne);
     $("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
