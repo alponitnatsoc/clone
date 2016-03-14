@@ -6,6 +6,7 @@
     width: 100%;
     text-align: center;
 }
+
 .header-cal {
     margin: 10px;
 }
@@ -13,26 +14,61 @@
     margin: 20px
 }
 .tipo-empleado .radio {
-    display: inline-block;
+
+}
+
+#registrationFormContainer {
+    width: 90%;
+    margin: 0 auto;
 }
 #registrationFormContainer .tipo-empleado .radio label {
-    font-size: 13px !important;
+    font-size: 14px !important;
+}
+#registrationFormContainer .radio  {
+    float: left;
+    margin: 10px 0 0;
+    width: 50%;
+
 }
 .tipo-empleado .radio input {
     font-size: 13px;
 }
 .form-group {
-    overflow: auto;
+    overflow: hidden;
 }
+#form_sisben .radio, #form_auxilio .radio, #form_transporte .radio {
+    float: left;
+    overflow: hidden;
+    width: 90px;
+}
+.dual {
+    overflow: hidden;
+    margin:0 0 10px 0;
+
+}
+.dual label {
+    display: block;
+    float: left;
+    width: 45%;
+    margin-right: 30px;
+    text-align: right;
+}
+
+.dual .input-group, {
+
+}
+.dual select.form-control {
+    width: 50%;
+}
+
 .form-control {
-    float: right !important;
-    width: 40% !important;
+    
 }
 #form-sisben {
-     display: inline-block;
+     
 }
 #form-sisben .radio {
-     display: inline-block;
+     
 }
 </style>
 {% endblock %}
@@ -44,7 +80,7 @@
         </div>
         <div id="" class="col-md-10 col-xs-12 txt-AD1">
             <div id="" class="text-left">
-                <h1>Calculadora salarial</h1>
+                Calculadora salarial
             </div>
         </div>
     </div>
@@ -61,18 +97,18 @@
     </div>
     <hr />
     <div class="all">
-        <div class="days">
+        <div class="days dual">
             {{ form_row(form.salarioD) }}
         </div>
-        <div class="complete">
+        <div class="complete dual">
             {{ form_row(form.salarioM) }}
         </div>
 
-        <div class="days">
+        <div class="days dual">
             {{ form_row(form.numberOfDays) }}
             {{ form_row(form.sisben) }}
         </div>
-        <div class="common">
+        <div class="common dual">
             {{ form_row(form.transporte) }}
 
             {{ form_row(form.auxilio) }}

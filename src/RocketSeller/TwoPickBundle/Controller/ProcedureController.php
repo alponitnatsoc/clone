@@ -262,10 +262,10 @@ class ProcedureController extends Controller
      */
     public function testValidateAction()
     {
-    		$id_employer =21;
-    		$id_procedure_type = 3;
+    		$id_employer =1;
+    		$id_procedure_type = 1;
     		$priority = 1;
-    		$id_user = 36;
+    		$id_user = 1;
     		$id_contrato = 1; //preguntar para que el contrato?
     		$employees = array(
     			array(

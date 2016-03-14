@@ -24,7 +24,7 @@ $(document).ready(function () {
             }
         }).done(function (data) {
             $('#modal_add_novelty_test').html(data);
-            $.getScript("public/js/novelty.js").done(function () {
+            $.getScript("/public/js/novelty.js").done(function () {
                 startNovelty();
             });
 

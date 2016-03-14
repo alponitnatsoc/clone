@@ -100,18 +100,19 @@
                                 <div class="col-xs-11">
                                     {% if (data['payMethod'].payTypePayType.name|lower == 'en efectivo' and data['PILA']['total'] != 0) or (data['payMethod'].payTypePayType.name|lower != 'en efectivo')  %}
 
-                                        <div style="display: -webkit-inline-box;">
+                                        <div class="col-xs-3" style="display: -webkit-inline-box;vertical-align: middle;">
                                             <strong>Medio de pago: </strong>
                                         </div>
-                                        <div style="display: -webkit-inline-box;vertical-align: middle;">
-                                            <select name="paymentMethod[{{ idPayroll }}]" class="form-control" required="required">
+                                        <div class="col-xs-7" style="display: -webkit-inline-box;vertical-align: middle;">
+                                            <select name="paymentMethod[{{ idPayroll }}]" class="form-control paymentMethod" required="required">
                                                 {% for paymentMethod in paymentMethods %}
                                                     <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
                                                 {% endfor  %}
                                             </select>
-                                            <input type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}"/>                                            
                                         </div>
-
+                                        <div class="col-xs-1" style="display: -webkit-inline-box;vertical-align: middle;">
+                                            <span type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}">Agregar</span>                                   
+                                        </div>
                                     {% endif %}
 
                                 </div>
@@ -130,11 +131,10 @@
 
 
     <!-- Modal loader-->
-    <div class="modal fade"  role="dialog" id="modal_loader">
+    <div class="modal fade" role="dialog" id="modal_loader">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content text-center">
                 <img src="/img/loader.gif">
-
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -180,13 +180,11 @@
         $(document).ready(function () {
 
             updateValues();
-
             $('#btnPay').click(function () {
                 var total = 0;
                 $('.employee .pay').each(function (index, element) {
                     if ($(element)[0].checked) {
                         total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-
                     }
                 });
                 var dialog = bootbox.dialog({
@@ -218,15 +216,12 @@
                         }
                     }
                 });
-
                 $(dialog.find('.btn-pay')[0]).prop('disabled', true);
                 $(dialog.find('.chkAccept')).change(function (e) {
                     $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
                 });
                 $("#btnPay").prop('disabled', true);
-
             });
-
             $('#addPayMethod').click(function (event) {
                 event.preventDefault();
                 url = $(this).attr('href');
@@ -241,6 +236,13 @@
                 }).done(function (data) {
                     //$('#modal_add_pay_method').html($(data).find("#main"));
                     $('#modal_add_pay_method').html(data);
+
+                    $('#modal_add_credit_card').modal({
+                        show: false,
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
+
                     $('#modal_add_credit_card').modal('show');
                     $.getScript("/public/js/addCreditCard.js").done(function () {
                         startAddCreditCard();
@@ -255,7 +257,6 @@
         });
         var salaries = [];
         var aportes = [];
-
         {% for key,data in dataNomina %}
             {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
                 salaries[{{data['idPayroll']}}] = 0;
@@ -270,7 +271,6 @@
             {% endif %}
         {% endfor %}
                     $('.employee .pay').on('change', updateValues);
-
             function updateValues() {
                 var i = 0;
                 var total = 0;
@@ -278,19 +278,25 @@
                     if ($(element)[0].checked) {
                         i++;
                         total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-
                     }
                 });
-
                 $('#totalPay').html(numeral(total).format('$ 0,0'));
                 $('#totalEmployees').html(i);
-
                 $('#btnPay').val("Pagar " + numeral(total).format('$ 0,0'));
                 $('#btnPay').prop('disabled', i == 0 || total == 0);
             }
             function updateListPaymentMethods(data) {
-                console.log(data);
-                alert('updateListPaymentMethods');
+                //console.log(data);
+                $(".paymentMethod").each(function () {
+                    $(this).html(jsonToSelect(data));
+                });
+            }
+            function jsonToSelect(data) {
+                html = '';
+                $.each(data['payment-methods'], function (key, obj) {
+                    html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
+                });
+                return html;
             }
     </script>
 {% endblock %}

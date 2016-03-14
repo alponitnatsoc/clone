@@ -238,8 +238,12 @@ class SubscriptionController extends Controller
                     'employees' => $data['employees'],
                     'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
                     'total' => $data['total_sin_descuentos'],
+                    'total_sin_descuentos' => $data['total_sin_descuentos'],
                     'descuento_3er' => $data['descuento_3er'],
+                    'descuento_isRefered' => $data['descuento_isRefered'],
+                    'total_con_descuentos' => $data['total_con_descuentos'],
                     'user' => $user,
+                    'descuento_haveRefered' => $data['descuento_haveRefered'],
                     'startDate' => $startDate
         ));
     }
@@ -265,7 +269,9 @@ class SubscriptionController extends Controller
             $data = $this->getData($user->getPersonPerson()->getEmployer(), true);
 
             //dump($data);
-
+            $date = new \DateTime();
+        $date->add(new \DateInterval('P1M'));
+        $startDate = $date->format('Y-m-d');
             $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
                 'action' => $this->generateUrl('subscription_pay'),
                 'method' => 'POST',
@@ -280,7 +286,8 @@ class SubscriptionController extends Controller
                         'total_con_descuentos' => $data['total_con_descuentos'],
                         'descuento_3er' => $data['descuento_3er'],
                         'descuento_isRefered' => $data['descuento_isRefered'],
-                        'descuento_haveRefered' => $data['descuento_haveRefered']
+                        'descuento_haveRefered' => $data['descuento_haveRefered'],
+                        'startDate' => $startDate
             ));
         } else {
             return $this->redirectToRoute("subscription_choices");
