@@ -1,4 +1,67 @@
 function startAddCreditCard() {
+    var validator;
+    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+        validator = $("form[name='formAddCreditCard']").validate({
+//onfocusout: true,
+            rules: {
+                "credit_card": {required: true, number: true, min: 1},
+                "name_on_card": {required: true},
+                "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
+                "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                "cvv": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
+
+            },
+            messages: {
+                "credit_card": {
+                    required: "Por favor ingrese el numero de la tarjeta",
+                    number: "ingresa solamente dígitos",
+                    maxlength: "maximo 16 digitos",
+                    minlength: "minimo 16 digitos",
+                    min: ""
+
+                },
+                "name_on_card": {required: "Por favor ingrese el nombre de la tarjeta"},
+                "expiry_date_month": {
+                    required: "Por favor ingrese el mes de vencimiento",
+                    number: "ingresa solamente dígitos",
+                    maxlength: "maximo mes de 2 digitos",
+                    minlength: "minimo mes de 1 digitos",
+                    max: "mes del 01 al 12",
+                    min: "mes del 01 al 12"
+                },
+                "expiry_date_year": {
+                    required: "Por favor ingrese el año de vencimiento",
+                    number: "ingresa solamente dígitos",
+                    maxlength: "maximo año de 4 digitos",
+                    minlength: "minimo año de 4 digitos",
+                    max: "año maximo 9999",
+                    min: "año minimo 2016"
+                },
+                "cvv": {
+                    required: "Por favor ingrese el codigo de verificación",
+                    number: "ingresa solamente dígitos",
+                    maxlength: "maximo 4 digitos",
+                    minlength: "minimo 3 digitos",
+                    max: "minimo 001",
+                    min: "maximo 9999"
+                }
+            }
+        });
+    });
+
+    $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
+        $('#credit_card').validateCreditCard(function (result) {
+            $(this).removeClass();
+            $(this).addClass('form-control');
+            if (result.valid) {
+                $(this).addClass(result.card_type.name);
+                return $(this).addClass('valid');
+            } else {
+                return $(this).removeClass('valid');
+            }
+        });
+    });
+
     $("#btn-addCreditCard").on('click', function (event) {
         event.preventDefault();
         if ($("#btn-addCreditCard").html() == 'Salir') {
