@@ -220,19 +220,21 @@
                 <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0; text-align: center;">
                     <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 24px;">Agregar un nuevo método de pago</div>
                 </div>
-                <form name="addPaymentMethod" method="post" action="{{ path('api_public_post_add_credit_card') }}">
-                    <label class="control-label required" for="form_credit_card">Credit card</label>
-                    <input type="text" id="form_credit_card" name="form[credit_card]" required="required" class="form-control">
-                    <label class="control-label required" for="form_expiry_date_year">Expiry date year</label>
-                    <input type="text" id="form_expiry_date_year" name="form[expiry_date_year]" required="required" class="form-control">
-                    <label class="control-label required" for="form_expiry_date_month">Expiry date month</label>
-                    <input type="text" id="form_expiry_date_month" name="form[expiry_date_month]" required="required" class="form-control">
-                    <label class="control-label required" for="form_cvv">Cvv</label>
-                    <input type="text" id="form_cvv" name="form[cvv]" required="required" class="form-control">
-                    <label class="control-label required" for="form_name_on_card">Name on card</label>
-                    <input type="text" id="form_name_on_card" name="form[name_on_card]" required="required" class="form-control">
-                    <input type="hidden" id="form_document" name="form_document" value="{{ employer.document }}" />
-                </form>
+                <div class="row-fluid clearfix" style="padding: 30px 15px;">
+                    <form name="addPaymentMethod" method="post" action="{{ path('api_public_post_add_credit_card') }}">
+                        <label class="control-label required" for="form_credit_card">Credit card</label>
+                        <input type="text" id="form_credit_card" name="form[credit_card]" required="required" class="form-control">
+                        <label class="control-label required" for="form_expiry_date_year">Expiry date year</label>
+                        <input type="text" id="form_expiry_date_year" name="form[expiry_date_year]" required="required" class="form-control">
+                        <label class="control-label required" for="form_expiry_date_month">Expiry date month</label>
+                        <input type="text" id="form_expiry_date_month" name="form[expiry_date_month]" required="required" class="form-control">
+                        <label class="control-label required" for="form_cvv">Cvv</label>
+                        <input type="text" id="form_cvv" name="form[cvv]" required="required" class="form-control">
+                        <label class="control-label required" for="form_name_on_card">Name on card</label>
+                        <input type="text" id="form_name_on_card" name="form[name_on_card]" required="required" class="form-control">
+                        <input type="hidden" id="form_document" name="form_document" value="{{ employer.document }}" />
+                    </form>
+                </div>
             </div>
             <div class="modal-footer" style="text-align: center;">
                 <button type="button" class="btn btnPrevious" data-dismiss="modal">Cancelar</button>
@@ -253,6 +255,10 @@
             $('#formPay').on("submit", function(e) {
                 e.preventDefault();
                 var form = $('#formPay');
+
+//                 if (!form.valid()) {
+//                     return;
+//                 }
 
                 var url = form.attr('action');
 
@@ -286,6 +292,9 @@
                 e.preventDefault();
 
                 form = $(this);
+                if (!form.valid()) {
+                    return;
+                }
                 var url = form.attr('action');
                 $.ajax({
                     url: url,
