@@ -40,7 +40,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
     <div id="" class="col-sm-12 col-xs-12 blockStep inline">
         <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-            <img src="/img/block-complete.png" class="center-block">                    
+            <img src="/img/block-complete.png" class="center-block">
         </div>
         <div id="" class="col-md-10 col-xs-12 txt-AD1">
             <div id="" class="text-left">
@@ -167,30 +167,37 @@
     <div id="modalPayLiquidation2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">La suma total para pago corresponde a </h4>
-                    <h2 class="formatValue">{{ totalLiq }}</h2>
-                </div>
-                <div class="modal-body">
-                    <div id="paymethods">
-                    {% for key,paymentMethod in paymentMethods %}
-                        {% set data = paymentMethod["payment-type"] %}
-                        <div>
-                            <strong>{{ key }}: </strong>
-                        </div>
-                        <div>
-                            {{ paymentMethod['method-id'] }}
-                            <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required /> {{ paymentMethod['account'] }}<br>
-                        </div>
-                    {% endfor  %}
+{#                 <div class="modal-header text-center">#}
+{#                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#                     <h4 class="modal-title">La suma total para pago corresponde a </h4>#}
+{#                     <h2 class="formatValue">{{ totalLiq }}</h2>#}
+{#                 </div>#}
+                <div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0; text-align: center;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">La suma total para pago corresponde a</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 24px; text-align: justify;">{{ totalLiq }}</div>
                     </div>
-                    <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar otro método de pago</a>
-                    <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+                    <div class="row-fluid clearfix" style="padding: 30px 15px;">
+                        <div id="paymethods">
+                        {% for key,paymentMethod in paymentMethods %}
+                            {% set data = paymentMethod["payment-type"] %}
+                            <div>
+                                <strong>{{ key }}: </strong>
+                            </div>
+                            <div>
+                                {{ paymentMethod['method-id'] }}
+                                <input type="radio" name="paymentMethodLiq" value="{{ paymentMethod['method-id'] }}" required /> {{ paymentMethod['account'] }}<br>
+                            </div>
+                        {% endfor  %}
+                        </div>
+                        <a href="#myModalAddPaymentMethod2" class="btn notAjax" data-toggle="modal" data-target="#myModalAddPaymentMethod2">&gt; Agregar otro método de pago</a>
+                        <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-symplifica btn-pay" disabled="true">Pagar</button>
+                <div class="modal-footer" style="margin-top: 30px; text-align: center;">
+                    <button type="button" class="btn btnPrevious" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-orange btn-pay" disabled="true">Pagar</button>
                 </div>
             </div>
         </div>
