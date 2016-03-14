@@ -501,13 +501,14 @@ function startEmployee() {
             //alert("Llenaste algunos campos incorrectamente");
             return;
         }
-
+        if (!validateSalary()) {
+            return false;
+        }
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
             beforeSend: function (xhr) {
-                if (!validateSalary())
-                    return false;
+
             },
             data: {
                 //employeeType: employeeType.val(),
