@@ -617,6 +617,12 @@ class LiquidationController extends Controller
             'id_liq' => $id
         );
 
+        // Inactivar empleado
+        $em = $this->getDoctrine()->getManager();
+        $employerHasEmployee = $liquidation->getEmployerHasEmployee()->setState(0);
+        $em->persist($employerHasEmployee);
+        $em->flush();
+
         return $this->render("RocketSellerTwoPickBundle:Liquidation:pay-liquidation-confirm.html.twig",
             $viewData
         );
