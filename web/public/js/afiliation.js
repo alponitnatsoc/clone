@@ -111,7 +111,6 @@ function startAfiliation() {
 //            }
             data: form.serialize()
         }).done(function (data) {
-            console.log(data);
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
@@ -263,6 +262,10 @@ function startAfiliation() {
             });
 
         });
+        var severances = $("select[name='register_social_security[severances]']");
+        var arl = $("select[name='register_social_security[arl]']");
+        $("#register_social_security_severancesAC").val($(severances).children("option:selected").text());
+        $("#register_social_security_arlAC").val($(arl).children("option:selected").text());
 
     }
 }
