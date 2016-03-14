@@ -335,10 +335,11 @@
                 url: '/api/public/v1/clients/' + documentNumber + '/list/paymentmethods',
                 type: 'GET',
             }).done(function (data) {
-                $('#modalPayLiquidation2').find(".modal-body").prepend("Metodo de pago agregado con exito");
+                $('#modalPayLiquidation2').find(".modal-body .row-fluid").prepend("Metodo de pago agregado con exito");
                 $('#myModalAddPaymentMethod2').modal('toggle');
 
                 $('#modalPayLiquidation2').find(".modal-body #paymethods").empty();
+                $('#modalPayLiquidation2').find(".modal-body #paymethods").prepend('<p style="font-size: 20px">Selecciona un método de pago:</p>');
 
                 $.each( data['payment-methods'], function( key, value ) {
 
