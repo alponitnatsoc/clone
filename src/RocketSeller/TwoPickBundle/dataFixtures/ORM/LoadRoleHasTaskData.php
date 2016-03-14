@@ -27,6 +27,7 @@ class LoadRoleHasTaskData extends AbstractFixture implements OrderedFixtureInter
         $RoleTaskExportBack = new RoleHasTask();
 		$RoleTaskExportBack->setRoleRole($this->getReference('backoffice-role'));
 		$RoleTaskExportBack->setTaskTask($this->getReference('export-docs-task'));
+        $manager->persist($RoleTaskExportBack);
         $manager->flush();
 
         $this->addReference('role-back-task-export', $RoleTaskExportBack);

@@ -19,13 +19,13 @@
 
         <div class="col-sm-12 col-xs-12 ">
 	        <ul class="nav nav-tabs nav-justified tab-header">
-	            <li class="active"><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
-	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
-	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
-	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
-	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
-	            <li><a  class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
-	            <li><a class="tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#certificates">Certificados</a></li>
+	            <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
+	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
+	            <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
+	            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#certificates">Certificados</a></li>
 	        </ul>
 	     </div>
 	        <div class="tab-content">
@@ -45,7 +45,10 @@
 		        			</div>
 		        			<div class="col-sm-8">
 		        				<div class="col-sm-5">
-	        						<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>	        						                   
+	        						{#<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>	  #}
+	        						<a class="btn btn-top-left notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
+                                		Agregar Novedad
+                            		</a>      						                   
 								</div>
 		        				<div class="col-sm-5">
 	        						<a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
@@ -391,7 +394,10 @@
 			       					<i class="fa fa-plus-circle fa-2x"></i>
 			       				</div>
 			       				<div class="col-sm-10 text">
-			       					<p> Agregar Novedad</p>
+			       					
+			       					<a class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
+                                		Agregar Novedad
+                            		</a> 
 			       				</div>
 			       					       				
 			       			</div>
@@ -400,7 +406,51 @@
 
             	</div>
             	<div id="payHistory" class="tab-pane">
-  					<p>History</p>
+            		<div class="col-sm-12">
+            			<div class="col-sm-4">
+            				
+            			</div>
+            			<div class="col-sm-8">
+            				<div class="col-sm-12">
+            					<h3><strong>Pagos efectuados al día de hoy</strong></h3>
+            					<div class="col-sm-6">
+            						<p>Total pagado:$60000000</p>
+            					</div>
+            					<div class="col-sm-6">
+            						<p>Total pagos: {{ payrolls|length}}</p>
+            					</div>
+            				</div>
+            				<div class="col-sm-12">
+            					 <div class="col-sm-4">
+            					 	<p><strong>Fecha</strong></p>
+            					 </div>
+            					 <div class="col-sm-4">
+            					 	<p><strong>Valor</strong></p>
+            					 </div>
+            					 <div class="col-sm-4">
+            					 	<p><strong>Detalle</strong></p>
+            					 </div>
+             				</div>
+            			{% for payroll in payrolls %}
+            				<div class="col-sm-12">
+            					<div class="col-sm-4">
+            						<p>{{payroll.month}}/{{payroll.year}}</p>
+            					</div>
+            					<div class="col-sm-4">
+
+            						{% if payroll.purchaseOrdersDescription|length > 0 %}
+            							<p>{{ payroll.purchaseOrdersDescription[0].name }}</p>
+            						{% endif %}
+            					</div>
+            					<div class="col-sm-4">
+            						<p>Ver detalles</p>
+            					</div>
+            						
+            				</div>
+            			{% endfor %}
+            			</div>
+
+            		</div>            	
             	</div>
             	<div id="documents" class="tab-pane">
   					<p>Documents</p>
@@ -413,58 +463,9 @@
 
         </div>
     </div>
-     <div id="modal_add_novelty_test">
-
+    <div id="agregarNovedad">
+    	
     </div>
-    <div class="modal fade"  role="dialog" id="modal_add_novelty">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-title_add_novelty"></h4>
-                </div>
-                <div class="modal-body" id="modal_body_add_novelty">
-                </div>
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>-->
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-
-    <!-- Modal payroll detail-->
-    <div class="modal fade"  role="dialog" id="modal_payroll_detail">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-title_payroll_detail"></h4>
-                </div>
-                <div class="modal-body" id="modal_body_payroll_detail">
-                </div>
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Volver atrás</button>
-                    <button type="button" class="btn btn-default btn-change-state-contract-confirm">Confirmar</button>-->
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-
-    <!-- Modal loader-->
-    <div class="modal fade"  role="dialog" id="modal_loader">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <img src="/img/loader.gif">
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-
-    <!-- Modal add novelty-->
 
    
 
@@ -472,5 +473,11 @@
 {% endblock fos_user_content %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('/public/js/payroll.js') }}"></script>
+    <script src="{{ asset('/public/js/manageEmployees.js') }}"></script>
+    <script>
+    $(document).ready(function(){
+    	manageEmployees();
+    });
+
+    </script>
 {% endblock %}
