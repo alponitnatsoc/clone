@@ -834,6 +834,9 @@ function calculator() {
     var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
     var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
     var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+    if(salaryD==""){
+        salaryD=0;
+    }
     var numberOfDays = $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
     var aid = 0;
     var aidD = 0;
@@ -959,7 +962,7 @@ function calculator() {
     var resposne = [];
 
     if (salaryD == 0||numberOfDays==null||numberOfDays==0) {
-
+        totalExpenses=0;
         resposne['totalExpenses'] = 0;
         resposne['dailyExpenses'] = 0;
         resposne['dailyIncome'] = 0;
@@ -978,7 +981,6 @@ function calculator() {
         resposne['icbfCal'] = 0;
         resposne['totalIncome'] = 0;
     }else{
-        totalExpenses=0
         resposne['totalExpenses'] = totalExpenses;
         resposne['dailyExpenses'] = totalExpenses / numberOfDays;
         resposne['dailyIncome'] = totalIncome / numberOfDays;
