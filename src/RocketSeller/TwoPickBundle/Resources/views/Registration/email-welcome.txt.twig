@@ -47,11 +47,13 @@ Director Symplifica
             width: 100%;
             margin: 0px;
             padding: 0px;
-            color: #4B4B4B;
+/*             color: #4B4B4B; */
+            color: #5D5D5E;
         }
         h1 {
             font-size: 32px;
         }
+
         p, ul {
             font-size: 18px;
             font-weight: 400;
@@ -61,6 +63,7 @@ Director Symplifica
             color: #5D5D5E;
 /*             font-size: 24px; */
         }
+
         .headbck {
             background: #3C4C5A;
             display: block;
@@ -106,9 +109,20 @@ Director Symplifica
         }
     </style>
   </head>
-  <body style="font-family: Open Sans,Helvetica,Arial; color: #5D5D5E;">
+  <body style='font-family: "Open Sans",Helvetica,Arial;
+            background: #fff;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+/*             color: #4B4B4B; */
+            color: #5D5D5E;'>
     <header>
-        <div class="headbck">
+        <div class="headbck" style="background: #3C4C5A;
+            display: block;
+            border-bottom: 1px solid #fff;
+            height: 60px;
+            padding-top: 10px;
+            text-align: center;">
             <a href="http://www.symplifica.com" target="_blank"><img src="http://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica" /></a>
         </div>
     </header>
@@ -117,7 +131,7 @@ Director Symplifica
     </section>
     <section class="container">
         <div style="display: inline-block; color: #5D5D5E;">
-            <h1><strong>¡Bienvenido!</strong></h1>
+            <h1 style="font-size: 32px;"><strong>¡Bienvenido!</strong></h1>
             <p style="color: #5D5D5E;">A partir de ahora cuentas con acceso a todas las herramientas de Symplifica.</p>
             <ul style="text-align: justify; color: #5D5D5E;">
                 <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Guía práctica para la contratación</li>
@@ -127,14 +141,21 @@ Director Symplifica
             </ul>
         </div>
     </section>
-    <section class="container blockGreenCentral">
+    <section class="container blockGreenCentral" style="background: #3b4b5a; position: relative; width: 100%; text-align: center;">
         <div class="contentSection">
-            <p>Symplifica <m><strong>te obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
+            <p style="color: #fff;
+            font-weight: bold;
+            font-size: 18px;">Symplifica <m><strong>te obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
 
             {% if codigoReferidos %}
-                <p>Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</p>
-                <span class="code"><strong>{{ codigoReferidos }}</strong></span>
-                <p>¡Compártelo con tus amigos y obtén los beneficios!</p>
+                <p style="color: #fff;
+            font-weight: bold;
+            font-size: 18px;">Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</p>
+                <span class="code" style="font-size: 48px;
+            color: #00CDCC;"><strong>{{ codigoReferidos }}</strong></span>
+                <p style="color: #fff;
+            font-weight: bold;
+            font-size: 18px;">¡Compártelo con tus amigos y obtén los beneficios!</p>
                 {% set fbURL %}
                 https://www.facebook.com/dialog/share?
                 app_id=145634995501895
@@ -163,7 +184,7 @@ Director Symplifica
                 {% set emailURL %}
                 mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
                 {% endset %}
-                <span class="socials">
+                <span class="socials" style="display: inline-block; margin-right: 15px;">
                     <a href="{{ fbURL }}" target="_blank">
                         <img src="http://www.symplifica.com/public/img/mail/icon-face.png" />
                     </a>
