@@ -232,7 +232,8 @@ class EmployeeController extends Controller
             /** @var EmployerHasEmployee $eHE */
             foreach ($employerHasEmployees as $eHE) {
                 if ($eHE->getIdEmployerHasEmployee() == $employee->get('idEmployerHasEmployee')->getData()) {
-                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames() . " " .$eHE->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
+                    $employee->get('lastNameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getLastName1());
                     $eHEEntities = $eHE->getEmployeeEmployee()->getEntities();
                     if ($eHE->getEmployeeEmployee()->getAskBeneficiary()) {
                         $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
@@ -330,9 +331,11 @@ class EmployeeController extends Controller
 
     /**
      * Maneja el formulario de un nuevo empleado
-     * @param el Request y el Id del empleado, si lo desean editar
+     * @param $id
+     * @param $tab
      * @return La vista de el formulario de la nuevo empleado
-     * */
+     * @internal param Request $el y el Id del empleado, si lo desean editar
+     */
     public function newEmployeeAction($id, $tab)
     {
         /** @var User $user */

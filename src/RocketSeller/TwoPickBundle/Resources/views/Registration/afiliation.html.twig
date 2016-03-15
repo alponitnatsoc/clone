@@ -130,10 +130,13 @@
                             {% endif %}
                             <div class="col-sm-12 col-xs-12 blockUpData">
                                 <div class="col-sm-3 col-xs-12">
-                                    {{ form_row(employee.nameEmployee) }}
+                                    {{ employee.nameEmployee.vars.data }}
+                                    {{ employee.lastNameEmployee.vars.data }}
                                 </div>
                                 <div class="col-sm-3 col-xs-12">
                                     <div class="hidden">
+                                        {{ form_row(employee.nameEmployee) }}
+                                        {{ form_row(employee.lastNameEmployee) }}
                                         {{ form_row(employee.wealth) }}
                                     </div>
                                     {{ form_row(employee.wealthAC,{'value' : wname}) }}

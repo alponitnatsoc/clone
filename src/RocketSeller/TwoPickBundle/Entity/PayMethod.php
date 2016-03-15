@@ -82,6 +82,11 @@ class PayMethod
     private $cellPhone;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $hasIt;
+
+    /**
      * Set idPayMethod
      *
      * @param integer $idPayMethod
@@ -281,4 +286,29 @@ class PayMethod
         return $this->frequencyFrequency;
     }
 
+
+
+    /**
+     * Set hasIt
+     *
+     * @param boolean $hasIt
+     *
+     * @return PayMethod
+     */
+    public function setHasIt($hasIt)
+    {
+        $this->hasIt = $hasIt;
+
+        return $this;
+    }
+
+    /**
+     * Get hasIt
+     *
+     * @return boolean
+     */
+    public function getHasIt()
+    {
+        return $this->hasIt;
+    }
 }

@@ -25,6 +25,12 @@ class EntitiesPick extends AbstractType
                 'disabled'=>true,
                 'label'=>' '
             ))
+            ->add('lastNameEmployee', 'text', array(
+                'mapped' => false,
+                'read_only'=>true,
+                'disabled'=>true,
+                'label'=>' '
+            ))
             ->add('wealth', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->wealthEntities,

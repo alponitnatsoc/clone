@@ -220,6 +220,9 @@ function startEmployee() {
             $('#putFields_' + payTypeChecked.val()).html(
                     // ... with the returned one from the AJAX response.
                     $(data).find('#formFields'));
+            if($(payTypeChecked).parent().text()==" Daviplata"){
+                payMethodListener();
+            }
         });
     }
 
@@ -229,16 +232,17 @@ function startEmployee() {
             url: '/pay/method/fields/' + payMethod.val(),
             type: 'GET'
         }).done(function (data) {
-            $('#putFields_' + payMethod.val()).html(
+            var $putFields=$('#putFields_' + payMethod.val()).html(
                     // ... with the returned one from the AJAX response.
                     $(data).find('#formFields'));
             $('#putFields_' + payTypeChecked.val()).html("");
+            if($(payMethod).parent().text()==" Daviplata"){
+                payMethodListener();
+            }
             payTypeChecked = payMethod;
 
         });
     });
-
-
 
     $("form").on("submit", function (e) {
         e.preventDefault();
@@ -1095,4 +1099,26 @@ function inquiry() {
     }).fail(function (jqXHR, textStatus, errorThrown) {
         //show the other stuf
     });
+}
+function payMethodListener(){
+    var $hasIt=$("#method_type_fields_hasIt");
+    if(!$hasIt.parent().hasClass("formFieldsNo")) {
+        $hasIt.parent().addClass("formFieldsNo");
+        $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+            $(this).hide();
+        });
+        $hasIt.on("change", function () {
+            var selectedVal = $(this).val();
+            if (selectedVal == 1) {
+                $hasIt.parent().parent().find(".form-group").each(function () {
+                    $(this).show();
+                })
+            } else {
+
+                $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+                    $(this).hide();
+                });
+                $("#noDaviplata").modal("show");            }
+        });
+    }
 }

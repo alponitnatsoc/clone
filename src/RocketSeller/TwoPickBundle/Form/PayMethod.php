@@ -31,6 +31,21 @@ class PayMethod extends AbstractType
                         'label' =>$field->getLabel(),
                         'placeholder' => 'Selecciona una opción'
                     ));
+            }elseif($field->getDataType()=="choice"){
+                $builder
+                    ->add($field->getColumnName(), $field->getDataType(), array(
+                        'choices' => array(
+                            1 => 'Si',
+                            0 => 'No'
+                        ),
+                        'multiple' => false,
+                        'expanded' => false,
+                        'label' =>$field->getLabel(),
+                        'placeholder' =>"Seleccione una Opción",
+                        'constraints' => array(
+                            new NotBlank()
+                        )
+                    ));
             }else{
                 $builder
                     ->add($field->getColumnName(), $field->getDataType(), array(
