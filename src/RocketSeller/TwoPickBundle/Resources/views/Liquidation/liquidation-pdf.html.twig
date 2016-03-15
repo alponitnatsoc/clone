@@ -5,42 +5,80 @@
 <meta charset="utf-8" />
 <style>
 body {
-    height: 842px;
-    width: 595px;
+    height: 792px;
+    width: 612px;
     /* to centre page on screen*/
     margin-left: auto;
     margin-right: auto;
+}
+
+.col-sm-3 {
+    width: 25%;
+    display: inline-block;
+    float: left;
+}
+
+.level {
+    width: 100%;
+    overflow: auto;
+    text-align: justify;
+}
+
+.col-sm-4 {
+    width: 33%;
+    overflow:auto;
+    float: left;
+    text-align: center;
+}
+
+.table-responsive {
+    border: 1px solid #ddd;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+}
+
+.table-footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+.formatValue {
+    text-align: center;
 }
 </style>
 <head>
 <body>
 <hr />
-<p>&nbsp;</p>
 {# {% set local = "now"|date("d-m-y") %}#}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: justify;">
-<div class="employee_head_liquidation">
-    <div class="col-sm-12 employee_data">
-        <div class="col-sm-3 employee_data_info">
-            <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
-            <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
-            <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
-        </div>
-        <div class="col-sm-3 employee_data_info">
-            <p><strong>Tipo contrato</strong></p>
-            <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
-        </div>
-        <div class="col-sm-3 employee_data_info">
-            <p><strong>Duración contrato</strong></p>
-            <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
-        </div>
-        <div class="col-sm-3 employee_data_info">
-            <p><strong>Salario</strong></p>
-            <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
-        </div>
+<p style="text-align: center; font-size: 26px; font-weight: 700;">LIQUIDACIÓN DEFINITIVA</p>
+<div class="employee_head_liquidation level" style="text-align: center;">
+    <div class="col-sm-3 employee_data_info">
+        <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+        <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
+        <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
+    </div>
+    <div class="col-sm-3 employee_data_info">
+        <p><strong>Tipo contrato</strong></p>
+        <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
+    </div>
+    <div class="col-sm-3 employee_data_info">
+        <p><strong>Duración contrato</strong></p>
+        <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
+    </div>
+    <div class="col-sm-3 employee_data_info">
+        <p><strong>Salario</strong></p>
+        <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
     </div>
 </div>
-<div class="col-sm-12">
+<div class="col-sm-12 level">
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -51,42 +89,39 @@ body {
             </thead>
             <tbody>
                 <tr>
-                    <th><strong>Deducciones</strong></th>
+                    <th style="text-align: center;"><strong>Deducciones</strong></th>
                     <th></th>
                 </tr>
-    {#             {% set totalLiq = 0 %}#}
                 {% for ded in deducciones %}
                     <tr>
                         <td>{{ ded.novelty.name }}</td>
                         <td class="formatValue">{{ ded.liq.NOMI_VALOR_LOCAL }}</td>
                     </tr>
-    {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
                     <td><strong>Total deducciones</strong></td>
-                    <td><strong class="formatValue">{{ totalDeducciones }}</strong></td>
+                    <td style="text-align: center;"><strong class="formatValue">{{ totalDeducciones }}</strong></td>
                 </tr>
-                    <tr>
-                        <th><strong>Devengos</strong></th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th style="text-align: center;"><strong>Devengos</strong></th>
+                    <th></th>
+                </tr>
                 {% for dev in devengos %}
                     <tr>
                         <td>{{ dev.novelty.name }}</td>
                         <td class="formatValue">{{ dev.liq.NOMI_VALOR_LOCAL }}</td>
                     </tr>
-    {#                 {% set totalLiq = totalLiq + liquidation.NOMI_VALOR_LOCAL %}#}
                 {% endfor %}
                 <tr class="info">
                     <td><strong>Total devengos</strong></td>
-                    <td><strong class="formatValue">{{ totalDevengos }}</strong></td>
+                    <td style="text-align: center;"><strong class="formatValue">{{ totalDevengos }}</strong></td>
                 </tr>
                 <tr class="info">
                     <td><strong>Valor de la liquidación</strong></td>
                     <td id="totLiq"><strong class="formatValue">{{ totalLiq }}</strong></td>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="table-footer">
                 <tr class="warning">
                     <td class="text-center"><strong>Valor a pagar</strong></td>
                     <td><strong class="formatValue">{{ totalLiq }}</strong></td>
@@ -95,7 +130,7 @@ body {
         </table>
     </div>
 </div>
-<div class="col-sm-12">
+<div class="col-sm-12 level">
     <h4><strong>Se hace constar:</strong></h4>
     <span class="txthelp"><strong>1.</strong> Que el empleador ha incorporado en la presente liquidación los importes
     correspondientes a salarios, horas extras, descansos compensatorios, cesantías, vacaciones,
@@ -108,7 +143,7 @@ body {
     y el empleado, quienes declaran estar a paz y salvo por todo concepto.</span>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12 level" style="margin-top: 20px">
     <div class="col-sm-4">
         <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
         <span>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</span>
@@ -120,7 +155,8 @@ body {
         <span>Empleador</span>
     </div>
     <div class="col-sm-4">
-        Powered by Logo Symplifica
+    <small><i>Powered by</i></small>
+        <img src="/img/logo.png" class="img-responsive" alt="Symplifica" />
     </div>
 </div>
 </p>
