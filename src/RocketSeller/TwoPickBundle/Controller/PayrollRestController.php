@@ -1882,6 +1882,46 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Gets liquidation external entities, this is useful to know how much does
+     * the employer has to pay.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets liquidation external entities, this is useful to
+     *                  know how much does the employer has to pay.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     *
+     * @return View
+     */
+    public function getExternalEntitiesLiquidationAction($employeeId)
+    {
+        $content = array();
+        $unico = array();
+
+        $unico['EMP_CODIGO'] = $employeeId;
+
+        $content[] = $unico;
+        $parameters = array();
+
+        $parameters['inInexCod'] = '619';
+        $parameters['clXMLSolic'] = $this->createXml($content, 619, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+
+    /**
      * Gets the general payroll history.<br/>
      *
      * @ApiDoc(
