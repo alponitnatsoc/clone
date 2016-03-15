@@ -34,32 +34,11 @@ class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInt
         $payMethodFields->setPayTypePayType($PayTypeTransferencia);
         $manager->persist($payMethodFields);
         $payMethodFields=new PayMethodFields();
-        $payMethodFields->setColumnName("frequencyFrequency");
-        $payMethodFields->setDataType("Frequency");
-        $payMethodFields->setLabel('Frecuencia');
-        $payMethodFields->setPayTypePayType($PayTypeTransferencia);
-        $manager->persist($payMethodFields);
-        $payMethodFields=new PayMethodFields();
         $payMethodFields->setColumnName("bankBank");
         $payMethodFields->setDataType("Bank");
         $payMethodFields->setLabel('Banco');
         $payMethodFields->setPayTypePayType($PayTypeTransferencia);
         $manager->persist($payMethodFields);
-
-        $payMethodFields=new PayMethodFields();
-        $payMethodFields->setColumnName("frequencyFrequency");
-        $payMethodFields->setDataType("Frequency");
-        $payMethodFields->setLabel('Frecuencia');
-        $payMethodFields->setPayTypePayType($PayTypeEfectivo);
-        $manager->persist($payMethodFields);
-
-        $payMethodFields=new PayMethodFields();
-        $payMethodFields->setColumnName("frequencyFrequency");
-        $payMethodFields->setDataType("Frequency");
-        $payMethodFields->setLabel('Frecuencia');
-        $payMethodFields->setPayTypePayType($PayTypeRetiro);
-        $manager->persist($payMethodFields);
-
         $payMethodFields=new PayMethodFields();
         $payMethodFields->setColumnName("cellphone");
         $payMethodFields->setDataType("number");
