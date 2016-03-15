@@ -101,7 +101,7 @@ class PaymentsRestController extends FOSRestController
             'json' => $parameters,
             'timeout' => $timeout,
             //'verify' => '/home/ubuntu/.ssh/myKeystore.pem'
-            'cert' => ['/home/ubuntu/.ssh/myKeystore.pem', 'N0v0payment']
+            'cert' => ['/home/myKeystore.pem', 'N0v0payment']
         );
         try {
             if ($action == "post") {
