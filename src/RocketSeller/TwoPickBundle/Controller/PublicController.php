@@ -11,7 +11,7 @@ class PublicController extends Controller
         if (empty($user)) {
             return $this->render('RocketSellerTwoPickBundle:Public:home.html.twig');
         } else {
-            return $this->redirectToRoute('show_dashboard');
+            return $this->redirectToRoute('choose_registration');
         }
         
     }

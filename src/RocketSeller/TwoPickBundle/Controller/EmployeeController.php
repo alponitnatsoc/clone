@@ -305,7 +305,7 @@ class EmployeeController extends Controller
                         $employeesData[]=array(
                             "idEmployerHasEmployee"=>$ehE->getIdEmployerHasEmployee(),
                             "idEmployee"=>$ehE->getEmployeeEmployee()->getIdEmployee(),
-                            "idPayroll"=>$acPayroll->getIdPayroll(),
+                            "idPayroll"=>$acPayroll?$acPayroll->getIdPayroll():"",
                             "state"=>$ehE->getState(),
                             "fullName"=>$ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
                             );

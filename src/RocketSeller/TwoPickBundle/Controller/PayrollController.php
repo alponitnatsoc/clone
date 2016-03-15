@@ -46,7 +46,7 @@ use LiquidationMethodsTrait;
             $em = $this->getDoctrine()->getManager();
 
             if ($period == null && $month == null && $year == null) {
-                $frequencyPay = $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
+                $frequencyPay = $contract->getFrequencyFrequency()->getPayrollCode();
                 /* @var $startDate date */
                 $startDate = $contract->getStartDate();
                 $day = $startDate->format('d');

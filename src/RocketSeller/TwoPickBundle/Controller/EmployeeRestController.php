@@ -146,9 +146,10 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
-     * @RequestParam(name="frequencyId", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="frequencyId", nullable=false, strict=true, description="workplace department.")
      * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="hasIt", nullable=true, strict=true, description="workplace department.")
      * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
      * @RequestParam(name="idEmployer", nullable=false, strict=true, description="id of the contract.")
      * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
@@ -198,7 +199,6 @@ class EmployeeRestController extends FOSRestController
             $payMethod->setAccountNumber("");
             $payMethod->setBankBank(null);
             $payMethod->setAccountTypeAccountType(null);
-            $payMethod->setFrequencyFrequency(null);
             $payMethod->setPayTypePayType(null);
         } else {
             $payMethod = new PayMethod();
@@ -243,16 +243,12 @@ class EmployeeRestController extends FOSRestController
             $payMethod->setAccountTypeAccountType($tempAccountType);
         }
 
-        if ($paramFetcher->get('frequencyId')) {
-            /** @var Frequency $tempFrequency */
-            $tempFrequency = $frequencyRepo->find($paramFetcher->get('frequencyId'));
-            if ($tempFrequency == null) {
-                $view->setStatusCode(404)->setHeader("error", "The frequencyId ID " . $paramFetcher->get('frequencyId') . " is invalid");
-                return $view;
-            }
-            $payMethod->setFrequencyFrequency($tempFrequency);
-        }
 
+        $hasIt = $paramFetcher->get("hasIt");
+        if ($hasIt!=null) {
+            $payMethod->setHasIt($hasIt);
+        }
+        //TODO ADD HAS IT
         // add the user to pay
         // URL used for test porpouses, the line above should be used in production.
         $url_request = "http://localhost:8002/api/public/v1/clients";
@@ -282,6 +278,13 @@ class EmployeeRestController extends FOSRestController
         //if the CC data is null then add notification to add it
 
         $contract->setPayMethodPayMethod($payMethod);
+        /** @var Frequency $tempFrequency */
+        $tempFrequency = $frequencyRepo->find($paramFetcher->get('frequencyId'));
+        if ($tempFrequency == null) {
+            $view->setStatusCode(404)->setHeader("error", "The frequencyId ID " . $paramFetcher->get('frequencyId') . " is invalid");
+            return $view;
+        }
+        $contract->setFrequencyFrequency($tempFrequency);
 
 
         //Final Entity Validation
@@ -294,6 +297,9 @@ class EmployeeRestController extends FOSRestController
             }
             $em->persist($contract);
             $em->flush();
+            if(!$hasIt){
+                $this->createNotification($user->getPersonPerson(),"Crear Cuenta DaviPlata","/daviplata/".$contract->getPayMethodPayMethod()->getIdPayMethod(),"Crear Daviplata");
+            }
             //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
             $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
                 'idContract' => $contract->getIdContract(),
@@ -303,14 +309,6 @@ class EmployeeRestController extends FOSRestController
                 'year' => null
             ));
             $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
-            //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
-            $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
-                'idContract' => $contract->getIdContract(),
-                'deleteActivePayroll' => true,
-                'period' => null,
-                'month' => null,
-                'year' => null
-            ));
             return $view;
         } else {
             $view = $this->getErrorsView($errors);
@@ -1121,7 +1119,7 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function createNotification($person, $descripcion, $url)
+    private function createNotification($person, $descripcion, $url,$action="Subir documento")
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
@@ -1129,7 +1127,7 @@ class EmployeeRestController extends FOSRestController
         $notification->setType('alert');
         $notification->setDescription($descripcion);
         $notification->setRelatedLink($url);
-        $notification->setAccion('Subir documento');
+        $notification->setAccion($action);
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
         $em->flush();

@@ -198,6 +198,15 @@ class ContractRegistration extends AbstractType
                 'expanded' => true,
                 'mapped' => false,
                 'label'=>' '
+            ))
+            ->add('frequencyFrequency', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Frequency',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'label'=>'Frecuencia de Págo',
+                'required'=> true,
+                'placeholder'=>'Selecione una opción'
             ));
     }
 

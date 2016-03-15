@@ -24,6 +24,15 @@ class Contract
     private $idContract;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Frequency
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Frequency")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="frequency_id_frequency", referencedColumnName="id_frequency", nullable=TRUE)
+     * })
+     */
+    private $frequencyFrequency;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee", inversedBy="contracts")
      * @ORM\JoinColumns({
@@ -793,6 +802,30 @@ class Contract
         $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
         $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
         $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set frequencyFrequency
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency
+     *
+     * @return PayMethod
+     */
+    public function setFrequencyFrequency(\RocketSeller\TwoPickBundle\Entity\Frequency $frequencyFrequency = null)
+    {
+        $this->frequencyFrequency = $frequencyFrequency;
+
+        return $this;
+    }
+
+    /**
+     * Get frequencyFrequency
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Frequency
+     */
+    public function getFrequencyFrequency()
+    {
+        return $this->frequencyFrequency;
     }
 
 }

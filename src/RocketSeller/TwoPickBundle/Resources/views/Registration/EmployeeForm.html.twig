@@ -695,6 +695,9 @@
                     </div>
                     <div class="formulario col-xs-12" style="border-top: none;">
                         <div class="col-sm-10 col-xs-12 col-sm-push-1">
+                            <h3 class="blueFormTitle">Frecuencia de pago *</h3>
+                            <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja cada cuanto tiempo se le van a realizar los calculos de nómina</div>
+                            {{ form_widget(form.employeeHasEmployers.frequencyFrequency) }}
                             <h3 class="blueFormTitle">Destino del pago *</h3>
                             <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja el modelo de pago de la nómina para su empleado</div>
                             {% for child in form.employeeHasEmployers.payMethod %}

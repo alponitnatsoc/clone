@@ -30,7 +30,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][position]": "required",
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
-                "register_employee[employeeHasEmployers][payMethod]": "required"/*,
+                "register_employee[employeeHasEmployers][payMethod]": "required",
+                "register_employee[employeeHasEmployers][frequencyFrequency]": "required"/*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
                  "register_employee[expiry_date]": "required",
@@ -59,7 +60,8 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
-                "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción"/*,
+                "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción"/*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
                  "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
@@ -268,9 +270,10 @@ function startEmployee() {
                 payTypeId: $(form).find("input[name='register_employee[employeeHasEmployers][payMethod]']:checked").val(),
                 bankId: $(form).find("select[name='method_type_fields[bankBank]']").val(),
                 accountTypeId: $(form).find("select[name='method_type_fields[accountTypeAccountType]']").val(),
-                frequencyId: $(form).find("select[name='method_type_fields[frequencyFrequency]']").val(),
+                frequencyId: $(form).find("select[name='register_employee[employeeHasEmployers][frequencyFrequency]']").val(),
                 accountNumber: $(form).find("input[name='method_type_fields[accountNumber]']").val(),
                 cellphone: $(form).find("input[name='method_type_fields[cellphone]']").val(),
+                hasIt: $(form).find("select[name='method_type_fields[hasIt]']").val(),
                 contractId: $(form).find("input[name='register_employee[idContract]']").val(),
             }
         }).done(function (data) {
@@ -1104,9 +1107,17 @@ function payMethodListener(){
     var $hasIt=$("#method_type_fields_hasIt");
     if(!$hasIt.parent().hasClass("formFieldsNo")) {
         $hasIt.parent().addClass("formFieldsNo");
-        $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
-            $(this).hide();
-        });
+        var selectedVal = $hasIt.val();
+        if (selectedVal == 0) {
+            $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+                $(this).hide();
+            });
+        } else {
+            $("#noDaviplata").modal("show");
+            $hasIt.parent().parent().find(".form-group").each(function () {
+                $(this).show();
+            })
+        }
         $hasIt.on("change", function () {
             var selectedVal = $(this).val();
             if (selectedVal == 1) {
@@ -1118,7 +1129,8 @@ function payMethodListener(){
                 $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
                     $(this).hide();
                 });
-                $("#noDaviplata").modal("show");            }
+                $("#noDaviplata").modal("show");
+            }
         });
     }
 }
