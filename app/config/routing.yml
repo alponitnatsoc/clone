@@ -99,9 +99,14 @@ documents_upload:
 show_notifications:
     path:   /notifications
     defaults: {_controller: RocketSellerTwoPickBundle:Notification:index }
+
 change_status_notification:
     path:   /notifications/change/{idNotification}/{status}
     defaults: {_controller: RocketSellerTwoPickBundle:Notification:changeStatus }
+
+daviplata_guide:
+    path:   /daviplata/{payMethodId}/method/{idNotification}
+    defaults: {_controller: RocketSellerTwoPickBundle:Employee:daviplataShow }
 
 show_notifications_employer:
     path:   /notifications/employer

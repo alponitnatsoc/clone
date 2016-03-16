@@ -409,6 +409,12 @@
                                 });
 
                                 return true;
+                            } else if (url.indexOf("/daviplata/") !== -1) {
+                                $.getScript("{{ asset('public/js/daviplata.js') }}").done(function () {
+                                    startDaviplata();
+                                });
+
+                                return true;
                             } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
                                 $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
                                     startEmployee();

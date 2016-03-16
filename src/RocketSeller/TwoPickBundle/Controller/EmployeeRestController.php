@@ -298,7 +298,18 @@ class EmployeeRestController extends FOSRestController
             $em->persist($contract);
             $em->flush();
             if(!$hasIt){
-                $this->createNotification($user->getPersonPerson(),"Crear Cuenta DaviPlata","/daviplata/".$contract->getPayMethodPayMethod()->getIdPayMethod(),"Crear Daviplata");
+                $notification = new Notification();
+                $notification->setPersonPerson($user->getPersonPerson());
+                $notification->setStatus(1);
+                $notification->setType('alert');
+                $notification->setDescription("Crear Cuenta DaviPlata");
+                $notification->setAccion("Crear Daviplata");
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($notification);
+                $em->flush();
+                $notification->setRelatedLink($this->generateUrl("daviplata_guide",array("idNotification"=>$notification->getId(),"payMethodId"=>$contract->getPayMethodPayMethod()->getIdPayMethod())));
+                $em->persist($notification);
+                $em->flush();
             }
             //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
             $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(
