@@ -152,28 +152,28 @@
                                         </div>
                                     {% endif %}
                                     <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago a empleados</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago a empleados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'reports' %}activeMenu{% endif %} well well-lg separador">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href=""{% endif %}>Reportes</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Reportes</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_calculator_form' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_calculator_form') }}"{% endif %}>Calculadora salarial</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'setup' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href=""{% endif %}>Configuración</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Configuración</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                        <a {% if status < 2 %} class="noClick" href="" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
+                                        <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
                                     </div>
 
                                 </div>
@@ -193,7 +193,7 @@
                                                 <div class="col-sm-12 col-xs-12">
                                                     <h4>{{app.user.getPersonPerson().getNames()}}</h4>
                                                     <div class="pull-right">
-                                                        <span id="profile" style="display: inline"> <a {% if status < 2 %} class="noClick" href="" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                        <span id="profile" style="display: inline"> <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi cuenta</a></span> | <span id="logout" style="display: inline" id="logout" ><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -251,7 +251,7 @@
             </script>
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script>window.jQuery || document.write('<script src="{{ asset('js/vendor/jquery-1.11.2.min.js') }}"><\/script>')</script>
-            <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+{#             <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>#}
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
             <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script>
             <script src="{{ asset('public/js/accounting.min.js') }}"></script>
@@ -322,170 +322,169 @@
                         });
                         #}
                     }
-                {# ajax que maneja los requests #}
-                        $(window).on("popstate", function (e) {
-                            sendAjax(location.href);
-                        });
-                        // Simple ajax url manager
-                        var redirector = getParameterByName('redirector');
-                        //console.log(redirector);
-                        if (redirector) {
-                            sendAjax(redirector);
-                        }
-                        addNoClick();
-
+//                  ajax que maneja los requests
+                    $(window).on("popstate", function (e) {
+                        sendAjax(location.href);
                     });
-                    function errorHandleTry(data) {
-                        if (typeof data.responseJSON!= 'undefined'){
-                            if (typeof data.responseJSON["url"] != 'undefined') {
-                                window.location.href = data.responseJSON["url"];
-                                data = false;
-                            }
-                        }
-                        return data;
+                    // Simple ajax url manager
+                    var redirector = getParameterByName('redirector');
+                    //console.log(redirector);
+                    if (redirector) {
+                        sendAjax(redirector);
                     }
-                    function sendAjax(url, form) {
-                        if(url==""){
-                            return false;
+//                  addNoClick();
+
+                });
+                function errorHandleTry(data) {
+                    if (typeof data.responseJSON!= 'undefined'){
+                        if (typeof data.responseJSON["url"] != 'undefined') {
+                            window.location.href = data.responseJSON["url"];
+                            data = false;
                         }
-                        $.ajax({
-                            url: url,
-                            type: $(form).attr('method'),
-                            data: $(form).serializeArray(),
-                            statusCode: {
-                                500: function () {
-                                    $("#errorModal").modal("show");
-                                }
-                            }
-                        }).done(function (data) {
-                            window.scrollTo(0, 0);
-                            if (data["url"] != null) {
-                                console.log(data["url"]);
-                                sendAjax(data["url"]);
-                            } else {
-                                $('#main').replaceWith(
-                                        // ... with the returned one from the AJAX response.
-                                        $(data).find('#main'));
-                                addClick();
-                                if (!jsLoader(url)) {
-                                    addSumbit();
-                                }
-                                // This thing is not working, we should check this later
-                                //var currentPage = document.location;
-                                //document.location = currentPage + "?redirector=" + url;
-                            }
-                        }).fail(function (jqXHR, textStatus, errorThrown) {
-                            if (jqXHR == errorHandleTry(jqXHR)) {
+                    }
+                    return data;
+                }
+                function sendAjax(url, form) {
+                    if(url==""){
+                        return false;
+                    }
+                    $.ajax({
+                        url: url,
+                        type: $(form).attr('method'),
+                        data: $(form).serializeArray(),
+                        statusCode: {
+                            500: function () {
                                 $("#errorModal").modal("show");
                             }
-                        });
-                    }
-                    function addClick() {
-                        $("#main").find(".nav-link").on("click", function (e) {
-                            e.preventDefault();
-                            var href = $(this).attr('href');
-                            history.pushState({}, '', href);
-                            sendAjax(href);
-                        });
-                    }
-                    function addNoClick() {
-                        $(".noClick").each(function () {
-                            $(this).on("click", function (e) {
-                                e.preventDefault();
-                            })
-                        });
-                    }
-                    function addSumbit() {
-                        $("form").on("submit", function (e) {
-                            e.preventDefault();
-                            sendAjax($(this).attr('action'), $(this));
-                        });
-                    }
-                    function jsLoader(url) {
-                        if (typeof url !== 'undefined') {
-                            if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/newEmployer.js') }}").done(function () {
-                                    startEmployer();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
-                                    startEmployee();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('manage_employees') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/manageEmployees.js') }}").done(function () {
-                                        manageEmployees();
-                                });
-                                return true;
-                            } else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/editEmployer.js') }}").done(function () {
-                                    startEmployerEdit();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('show_calculator_form') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
-                                    calculatorCalculate();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('matrix_choose') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/afiliation.js') }}").done(function () {
-                                    startAfiliation();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('payments_method') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/paymentMethod.js') }}").done(function () {
-                                    startPayment();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
-                                    startNovelty();
-                                });
-
-                                return true;
-                            } else if (url.indexOf("{{ path('show_user') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/myAccount.js') }}").done(function () {
-                                    startMyAccount();
-                                });
-
-                                return true;
-                            } else if (url.lastIndexOf("{{ path('subscription_choices') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/subscriptionChoise.js') }}").done(function () {
-                                    startSubscriptionChoise();
-                                });
-
-                                return true;
-                            } else if (url.lastIndexOf("{{ path('subscription_confirm') }}") !== -1) {
-                                $.getScript("{{ asset('public/js/subscriptionActivate.js') }}").done(function () {
-                                    startSubscriptionActivate();
-                                });
-
-                                return true;
-                            } else if (url.lastIndexOf("/liquidations/final") !== -1) {
-                                $.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
-                                    validateLiqForm();
-                                });
-
-                                return true;
+                        }
+                    }).done(function (data) {
+                        window.scrollTo(0, 0);
+                        if (data["url"] != null) {
+                            console.log(data["url"]);
+                            sendAjax(data["url"]);
+                        } else {
+                            $('#main').replaceWith(
+                                    // ... with the returned one from the AJAX response.
+                                    $(data).find('#main'));
+                            addClick();
+                            if (!jsLoader(url)) {
+                                addSumbit();
                             }
-                            return false;
+                            // This thing is not working, we should check this later
+                            //var currentPage = document.location;
+                            //document.location = currentPage + "?redirector=" + url;
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR == errorHandleTry(jqXHR)) {
+                            $("#errorModal").modal("show");
+                        }
+                    });
+                }
+                function addClick() {
+                    $("#main").find(".nav-link").on("click", function (e) {
+                        e.preventDefault();
+                        var href = $(this).attr('href');
+                        history.pushState({}, '', href);
+                        sendAjax(href);
+                    });
+                }
+//                 function addNoClick() {
+//                         $(".noClick").each(function () {
+//                     $(".noClick").on("click", function (e) {
+//                         e.preventDefault();
+//                     })
+//                         });
+//                 }
+                function addSumbit() {
+                    $("form").on("submit", function (e) {
+                        e.preventDefault();
+                        sendAjax($(this).attr('action'), $(this));
+                    });
+                }
+                function jsLoader(url) {
+                    if (typeof url !== 'undefined') {
+                        if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/newEmployer.js') }}").done(function () {
+                                startEmployer();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('register_employee') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/newEmployee.js') }}").done(function () {
+                                startEmployee();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('manage_employees') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/manageEmployees.js') }}").done(function () {
+                                    manageEmployees();
+                            });
+                            return true;
+                        } else if (url.indexOf("{{ path('edit_employer') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/editEmployer.js') }}").done(function () {
+                                startEmployerEdit();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('show_calculator_form') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
+                                calculatorCalculate();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('matrix_choose') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/afiliation.js') }}").done(function () {
+                                startAfiliation();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('payments_method') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/paymentMethod.js') }}").done(function () {
+                                startPayment();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('novelty_select') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/novelty.js') }}").done(function () {
+                                startNovelty();
+                            });
+
+                            return true;
+                        } else if (url.indexOf("{{ path('show_user') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/myAccount.js') }}").done(function () {
+                                startMyAccount();
+                            });
+
+                            return true;
+                        } else if (url.lastIndexOf("{{ path('subscription_choices') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/subscriptionChoise.js') }}").done(function () {
+                                startSubscriptionChoise();
+                            });
+
+                            return true;
+                        } else if (url.lastIndexOf("{{ path('subscription_confirm') }}") !== -1) {
+                            $.getScript("{{ asset('public/js/subscriptionActivate.js') }}").done(function () {
+                                startSubscriptionActivate();
+                            });
+
+                            return true;
+                        } else if (url.lastIndexOf("/liquidations/final") !== -1) {
+                            $.getScript("{{ asset('public/js/liquidation.js') }}").done(function () {
+                                validateLiqForm();
+                            });
+
+                            return true;
                         }
                         return false;
                     }
-                    function getParameterByName(name) {
-                        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                                results = regex.exec(location.search);
-                        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-                    }
-
+                    return false;
+                }
+                function getParameterByName(name) {
+                    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                            results = regex.exec(location.search);
+                    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+                }
             </script>
             <!-- End Ajax scripts -->
             <!-- begin olark code -->
@@ -564,7 +563,10 @@
             </script>
             <script>
                 $(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
+                    var options = {
+                        trigger: 'hover'
+                    };
+                    $('[data-toggle="tooltip"]').tooltip(options);
                 })
             </script>
             <!-- end olark code -->
@@ -596,7 +598,6 @@
                             <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                                 <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¿Olvidaste tu contraseña?</div>
                             </div>
-
                             <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                                 <div class="col-md-8 col-md-push-2">
                                     <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te permita resetear la contraseña</p>
@@ -608,7 +609,6 @@
                 </div>
             </div>
         </div>
-
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
@@ -629,7 +629,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
