@@ -32,32 +32,32 @@
                                         <a href="{{ path('employee_dashboard',{'id':employee.idEmployee}) }}">Inicio</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                                        <a href="{{ path('employee_profile',{'id':employee.idEmployee}) }}">Mis Datos</a>                                        
-                                    </div> 
+                                        <a href="{{ path('employee_profile',{'id':employee.idEmployee}) }}">Mis Datos</a>
+                                    </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('employee_certificate',{'id':employee.idEmployee}) }}">Certificados</a>
-                                    </div> 
+                                    </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('employee_share_profile',{'id':employee.idEmployee}) }}">Compartir perfil</a>
-                                    </div>                                      
+                                    </div>
                                 </div>
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
                         	<div class="col-md-12" >
-                        		<h2>Compartir mi perfil</h2>                        		
+                        		<h2>Compartir mi perfil</h2>
                         		<p>Comparte tu perfil para que más empleadores conozcan de ti.</p>
                         	</div>
-                            <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('employee_share_profile',{'id': employee.idEmployee})}}">		
+                            <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('employee_share_profile',{'id': employee.idEmployee})}}">
 						        <div class="col-md-2"></div>
 						        <div class="form-black form-group col-md-12">
 						            <label class="col-md-12" for="sel1">Correo electronico</label>
                                     <input class="col-md-8" type="email" name="email" id="email">
-						            		  	
+
 						        </div>
 						        <div class="col-md-2"></div>
-						        <div class="col-md-12" style="text-align:center;">						            
-                                    <button type="button" class="btn btn-default submit-button loading" onclick="javascript:shareProfile($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>	
+						        <div class="col-md-12" style="text-align:center;">
+                                    <button type="button" class="btn btn-default submit-button loading" onclick="javascript:shareProfile($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar" id="boton_enviar">Enviar &gt;</button>
 						        </div>
 
 						    </form>
@@ -76,7 +76,7 @@
                         <div class="col-sm-4"><a href="#">Inicio</a></div>
                         <div class="col-sm-4"><a href="#">Mis Datos</a></div>
                         <div class="col-sm-4"><a href="{{ path('_nosotros') }}">Certificados</a></div>
-                        <div class="col-sm-4"><a href="{{ path('show_help') }}">Compartir Perfil</a></div>                        
+                        <div class="col-sm-4"><a href="{{ path('show_help') }}">Compartir Perfil</a></div>
 
                     </div>
                     <div class="col-sm-5 social">
@@ -143,7 +143,7 @@
                          email : email,
                          name : email
                      };
-                     $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
+                     $.post("/api/public/v1/sends/emails/templates", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
                      .done();
                  }).fail(function(data){
                      console.log('He fallado')

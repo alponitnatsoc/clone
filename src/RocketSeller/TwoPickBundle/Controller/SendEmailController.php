@@ -9,7 +9,7 @@ class SendEmailController extends Controller
     public function testSendEmailAction() {
 
         return $this->render("RocketSellerTwoPickBundle:SendEmail:post-send.html.twig", array(
-            'sendEmailSerivice' => $this->generateUrl("api_public_post_send_email")
+            'sendEmailSerivice' => $this->generateUrl("api_public_post_send_email_template")
         ));
     }
 
