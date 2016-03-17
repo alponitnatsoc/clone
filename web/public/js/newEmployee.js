@@ -1120,6 +1120,6 @@ function infoNuevoContrato(from, to, template, event) {
     }).done(function (data) {
         btn.button('complete');
         $('#siNuevoContrato').modal('toggle');
-        $('#contractNav > .active').next('li').find('a').trigger('click');
+        $('#formNav > .active').next('li').find('a').trigger('click');
     });
 }
