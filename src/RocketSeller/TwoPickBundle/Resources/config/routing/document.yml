@@ -1,6 +1,6 @@
 download_documents:
-    path:     /downloads/{ref}/{id}/{type}
-    defaults: { _controller: "RocketSellerTwoPickBundle:Document:downloadDocuments" }
+    path:     /downloads/{ref}/{id}/{type}/{attach}
+    defaults: { _controller: "RocketSellerTwoPickBundle:Document:downloadDocuments", attach:null }
     requirements:
         id: \d+
         type: (pdf|html)

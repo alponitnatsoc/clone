@@ -26,6 +26,7 @@ use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DocumentController extends Controller
 {
@@ -300,7 +301,7 @@ class DocumentController extends Controller
 	    return $response;
 	}
 
-	public function downloadDocumentsAction($ref, $id, $type)
+	public function downloadDocumentsAction($ref, $id, $type, $attach)
 	{
         switch ($ref){
     	    case "contrato":
@@ -566,6 +567,31 @@ class DocumentController extends Controller
     	        $html = $this->renderView($template, array(
     	            'data' => $data
     	        ));
+
+    	        if ($attach) {
+    	            if (isset($data["invoiceNumber"]) && $data["invoiceNumber"] != null ) {
+            	        $data["invoiceNumber"] = 123;
+            	        $docName = $data['client']['docNumber'] . "-" . $data["invoiceNumber"] . ".pdf";
+    	            } else {
+    	                $docName = $data['client']['docNumber'] . "-" . $data['purchaseOrder']['number'] . ".pdf";
+    	            }
+        	        $path = $this->get('kernel')->getRootDir(). "/../web/public/docs/tmp/invoices/" . $docName;
+
+        	        if (!file_exists($path)) {
+
+        	             $this->get('knp_snappy.pdf')->generateFromHtml(
+        	                $this->renderView(
+        	                    $template, array(
+        	                        'data' => $data
+        	                    )
+    	                    ),
+        	                $path
+    	                );
+        	        }
+
+        	        return new JsonResponse(array("name-path" => $docName));
+    	        }
+
                 return new Response(
                     $this->get('knp_snappy.pdf')->getOutputFromHtml($html),
                     200,
