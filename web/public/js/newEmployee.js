@@ -448,6 +448,9 @@ function startEmployee() {
             }
         }).done(function (data) {
             $('#formNav > .active').next('li').find('a').trigger('click');
+            if($("#register_employee_employeeHasEmployers_contractType").val()=="2"){
+                $("#contractIndefiniteModal").modal("toggle");
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);

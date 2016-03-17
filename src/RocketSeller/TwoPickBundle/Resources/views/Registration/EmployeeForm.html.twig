@@ -69,7 +69,7 @@
         </style>
     {% endblock %}
     <div class="col-sm-12 col-xs-12 align-Resp">
-        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
+        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
                 <img src="/img/block-inline.png" class="center-block">
             </div>
@@ -94,11 +94,11 @@
         {{ form_start(form) }}
 
         <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li {%   if tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab">Existencia</a></li>
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
+            <li {%   if tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab"></a>Existencia</li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de Contacto</li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
 
         </ul>
 
@@ -892,6 +892,23 @@
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-8 col-md-push-2">
                             El documento ingresado ya existe los datos serán llenados automaticamente
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal no -->
+    <div class="modal fade" id="contractIndefiniteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content"><div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">El peridodo de prueba</div>
+                    </div>
+                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                        <div class="col-md-8 col-md-push-2">
+                            El periodo de prueba consiste en X meses en los que el empleador tiene la posiblididad de....
                         </div>
                     </div>
                 </div>
