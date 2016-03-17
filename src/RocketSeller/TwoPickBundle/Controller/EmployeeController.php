@@ -21,6 +21,7 @@ use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
 use RocketSeller\TwoPickBundle\Form\AffiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\AfiliationEmployerEmployee;
 use RocketSeller\TwoPickBundle\Form\EmployeeBeneficiaryRegistration;
+use RocketSeller\TwoPickBundle\Form\PayMethod;
 use RocketSeller\TwoPickBundle\Form\PersonEmployeeRegistration;
 use RocketSeller\TwoPickBundle\Form\EmployeeProfileEdit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -344,6 +345,7 @@ class EmployeeController extends Controller
         $employerHasEmployee = null;
         if ($id == -1) {
             $employee = new Employee();
+            $tab=0;
         } else {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
             //verify if the Id exists or it belongs to the logged user

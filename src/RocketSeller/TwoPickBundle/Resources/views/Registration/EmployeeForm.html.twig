@@ -94,14 +94,52 @@
         {{ form_start(form) }}
 
         <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de Contacto</li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
+            <li {%   if tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab">Existencia</a></li>
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de Contacto</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod">Método de pago</a></li>
 
         </ul>
 
         <div class="tab-content">
+            <div id="newOrOldTab" class="tab-pane fade in{%   if tab==0 %} active {% endif %}">
+                <div class="innerForm">
+                    <div class="title">
+                        <h2>
+                            Bienvenido a nuestro <br /><span>asistente de contratación de empleado</span>
+                        </h2>
+                    </div>
+                    <div id="existentQuestion">
+                        <p class="text-center typeQuestion">¿Tu empleado es nuevo o <br />ya se encuentra trabajando contigo?</p>
+
+                        <div class="row">
+                            <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.new) }}</div>
+                            <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.existent) }}</div>
+                        </div>
+                    </div>
+                    <div id="existentDataToShow">
+                        <div class="row">
+                            <ul class="col-md-10 col-md-push-1">
+                                <li>Para darte de alta en Symplifica debes generar un nuevo contrato con tu empleado.</li>
+                                <li>Este contrato reemplazará cualquier contrato o acuerdo anterior.</li>
+                                <li>Esto no significa que las obligaciones o deberes como empleador que adquiriste en el pasado queden cerradas.</li>
+                                <li>Esto es un mecanismo que usamos para generar un corte y poder garantizar que de aca en adelante estas haciendo las cosas bien.</li>
+                                <li>Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica.</li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <p class="text-center typeQuestion">¿Estas de acuerdo en generar un nuevo contrato con tu empleado?</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 col-md-push-1">
+                                <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.yesExistent) }}</div>
+                                <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.noExistent) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
                 <div class="formulario col-xs-12" style="border-bottom: none;">
                     <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
@@ -323,53 +361,13 @@
                 <div class="col-md-10 col-md-push-1">
                     <div id="contractDataWiz">
                         <ul id="contractNav" class="nav nav-tabs nav-justified">
-                            <li class="active" ><a data-toggle="tab" data-target="#newOrOldTab"></a></li>
-                            <li><a data-toggle="tab" data-target="#contractTypeTab"></a></li>
+                            <li class="active" ><a data-toggle="tab" data-target="#contractTypeTab"></a></li>
                             <li><a data-toggle="tab" data-target="#employeeContractTypeTab"></a></li>
                             <li><a data-toggle="tab" data-target="#contractSalaryTab"></a></li>
                         </ul>
                         <div class="tab-content">
-                            <div id="newOrOldTab" class="tab-pane fade in active">
-                                <div class="innerForm">
-                                    <div class="title">
-                                        <h2>
-                                            Bienvenido a nuestro <br /><span>asistente de contratación de empleado</span>
-                                        </h2>
-                                    </div>
-                                    <div id="existentQuestion">
-                                        <p class="text-center typeQuestion">¿Tu empleado es nuevo o <br />ya se encuentra trabajando contigo?</p>
 
-                                        <div class="row">
-                                            <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.new) }}</div>
-                                            <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.existent) }}</div>
-                                        </div>
-                                    </div>
-                                    <div id="existentDataToShow">
-                                        <div class="row">
-                                            <ul class="col-md-10 col-md-push-1">
-                                                <li>Para darte de alta en Symplifica debes generar un nuevo contrato con tu empleado.</li>
-                                                <li>Este contrato reemplazará cualquier contrato o acuerdo anterior.</li>
-                                                <li>Esto no significa que las obligaciones o deberes como empleador que adquiriste en el pasado queden cerradas.</li>
-                                                <li>Esto es un mecanismo que usamos para generar un corte y poder garantizar que de aca en adelante estas haciendo las cosas bien.</li>
-                                                <li>Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica.</li>
-                                            </ul>
-                                        </div>
-                                        <div class="row">
-                                            <p class="text-center typeQuestion">¿Estas de acuerdo en generar un nuevo contrato con tu empleado?</p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-10 col-md-push-1">
-                                                <div class="col-xs-6 text-right">{{ form_row(form.employeeHasEmployers.yesExistent) }}</div>
-                                                <div class="col-xs-6">{{ form_row(form.employeeHasEmployers.noExistent) }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 text-center"><a class="btn btn-primary btnPrevious-form btnPrevious" >Anterior</a></div>
-                                </div>
-                            </div>
-                            <div id="contractTypeTab" class="tab-pane fade in">
+                            <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <p class="text-center typeQuestion">Escoge el tipo de contrato que más se ajusta a tus requerimientos</p>
                                 </div>
@@ -447,8 +445,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a></div>
-                                    <div class="col-xs-6"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
+                                    <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-form btnPrevious">Anterior</a></div>
+                                    <div class="col-xs-6 text-left"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
                                 </div>
 
                             </div>

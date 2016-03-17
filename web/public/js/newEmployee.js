@@ -694,10 +694,10 @@ function addListeners() {
         $("#existentDataToShow").show();
     });
     $("#register_employee_employeeHasEmployers_new").on("click", function () {
-        $('#contractNav > .active').next('li').find('a').trigger('click');
+        $('#formNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_yesExistent").on("click", function () {
-        $('#contractNav > .active').next('li').find('a').trigger('click');
+        $('#formNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function () {
         $('#noNuevoContrato').modal();
