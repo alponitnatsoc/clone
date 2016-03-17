@@ -70,6 +70,9 @@ export_documents_person:
 make_afiliation:
     path:     /backoffice/afiliation/person/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:makeAfiliation }
+complete_employee:
+    path:     /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }    
 routes:
     path:     /routes
     defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }

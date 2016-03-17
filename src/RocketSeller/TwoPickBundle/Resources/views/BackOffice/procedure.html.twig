@@ -73,7 +73,7 @@
 						{% elseif action.status|lower == "iniciado" %}
 							<tr>
 			  			{% endif %}  			
-							<td>{{ action.ActionTypeActionType.name }}</td>
+							<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 							<td>{{ action.personPerson.names }}</td>
 							<td>
 								{% if action.entityEntity %}
@@ -145,6 +145,14 @@
 							{% endif %}
 						{% endfor %}
 					</table>
+				</div>
+				<div class="col-sm-12">
+					
+
+					{% for employerHasEmployee in employerHasEmployees %}
+						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}<a href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}">Terminado</a> </p>
+
+					{% endfor %}
 				</div>				       	
 	        </div>
 	    </div>

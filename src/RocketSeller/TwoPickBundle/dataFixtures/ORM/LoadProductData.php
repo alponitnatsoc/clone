@@ -42,7 +42,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
         $product = new Product();
         $product->setName('Pago Registro express symplifica');
         $product->setDescription('El pago de symplifica que hace el usuario para adquirir los servicios de registro express');
-        $product->setPrice(floatval('275000'));
+        $product->setPrice(floatval('159600'));
         $product->setSimpleName('PRE');
         $product->setTaxTax($this->getReference('tax-iva'));
         $product->setValidity(null);
