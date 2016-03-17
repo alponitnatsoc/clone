@@ -674,7 +674,8 @@ function addListeners() {
         $('#formNav > .active').next('li').find('a').trigger('click');
     });
     $("#register_employee_employeeHasEmployers_yesExistent").on("click", function () {
-        $('#formNav > .active').next('li').find('a').trigger('click');
+//        $('#formNav > .active').next('li').find('a').trigger('click');
+        $('#siNuevoContrato').modal();
     });
     $("#register_employee_employeeHasEmployers_noExistent").on("click", function () {
         $('#noNuevoContrato').modal();
@@ -1098,4 +1099,23 @@ function payMethodListener() {
             }
         });
     }
+}
+
+function infoNuevoContrato(from, to, template, event) {
+    var btn = event;
+    btn.button('loading');
+
+    $.ajax({
+        method: "POST",
+        url: "/api/public/v1/sends/emails",
+        data: {
+            from: from,
+            to: to,
+            template: template
+        }
+    }).done(function (data) {
+        btn.button('complete');
+        $('#siNuevoContrato').modal('toggle');
+        $('#contractNav > .active').next('li').find('a').trigger('click');
+    });
 }
