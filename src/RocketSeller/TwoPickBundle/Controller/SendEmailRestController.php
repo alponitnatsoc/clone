@@ -8,9 +8,9 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\HttpFoundation\Request;
 
 use Mandrill;
-use Solarium\Core\Client\Request;
 
 class SendEmailRestController extends FOSRestController
 {
@@ -19,7 +19,7 @@ class SendEmailRestController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Metodo que se utiliza para actualizar el numero de la factura en una orden de compra.",
+     *   description = ".",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors"
@@ -39,8 +39,9 @@ class SendEmailRestController extends FOSRestController
      *
      * @throws Mandrill_Error
      * @return \FOS\RestBundle\View\View
+     *
      */
-    public function postSendEmailAction(ParamFetcher $paramFetcher) {
+    public function postSendEmailTemplateAction(ParamFetcher $paramFetcher) {
 
         $template_name = ($paramFetcher->get("template_name"))?:"New Symplifica";
         $subject = ($paramFetcher->get("subject"))?:"Email enviado a *|USER|*";
@@ -168,6 +169,48 @@ class SendEmailRestController extends FOSRestController
 
         $view = View::create();
         $view->setData($result)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Enviar template .twig por email
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Servicio para enviar un template .twig ",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param Request $request
+     * Rest Parameters:
+     * (name="to", nullable=true, description="donde se envía el correo.")
+     * (name="from", nullable=true, description="quien envía el correo.")
+     * (name="template", nullable=true, description="template .twig a enviar por email.")
+     * (name="attach", nullable=true, description="path del archivo que se quiere adjuntar al correo"
+     *
+     * @return \FOS\RestBundle\View\View
+     */
+    public function postSendEmailAction(Request $request)
+    {
+        $params = $request->request->all();
+        /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
+        $smailer = $this->get('symplifica.mailer.twig_swift');
+
+        $from = $params["from"];
+        $to = $params["to"];
+        $template = $params["template"]; //"RocketSellerTwoPickBundle:Liquidation:send-email.txt.twig"
+//         $attach = $params["attach"];
+        $attach = null;
+
+        $send = $smailer->sendEmail($this->getUser(), $template, $from, $to, $attach);
+        if ($send) {
+        }
+
+        $view = View::create();
+        $view->setData($send)->setStatusCode(200);
         return $view;
     }
 

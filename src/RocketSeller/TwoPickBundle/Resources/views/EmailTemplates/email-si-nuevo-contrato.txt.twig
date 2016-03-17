@@ -1,0 +1,96 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}Información para terminar el contrato anterior con su empleado{% endautoescape %}{% endblock %}
+{% block body_text %}
+{% autoescape false %}
+&#161;Hola&#33;
+Estos son los pasos para terminar el contrato que tienes vigente con tu empleado y así puedas crear uno nuevo en Symplifica
+{% endautoescape %}
+{% endblock %}
+{% block body_html %}
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+    <title>Symplifica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Open Sans",Helvetica,Arial;
+            background: #fff;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            color: #4B4B4B;
+        }
+        p {
+            font-size: 18px;
+            color: #87898C;
+/*             font-weight: 400; */
+        }
+        p strong {
+            font-weight: bold;
+            color: #5D5D5E;
+            font-size: 24px;
+        }
+        .headbck {
+            background: #3C4C5A;
+            display: block;
+            border-bottom: 1px solid #fff;
+            height: 60px;
+            padding-top: 10px;
+            text-align: center;
+        }
+        .url {
+            color: #39C0C3;
+            text-decoration: none;
+        }
+        .container {
+            width: 100%;
+            text-align: center;
+/*             padding-right: 15px; */
+/*             padding-left: 15px; */
+/*             margin-right: auto; */
+/*             margin-left: auto; */
+        }
+        .btn-conf {
+            margin-bottom: 30px;
+            margin-top: 15px;
+            background-color: #F79129; /* #fd9626*/
+            box-shadow: 0 2px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+            color: #fff;
+            font-weight: 700;
+/*             text-shadow: 1px 1px 1px #333; */
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 18px;
+            line-height: 1.42857143;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+    </style>
+  </head>
+  <body style='font-family: "Open Sans",Helvetica,Arial;
+            background: #fff;
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            color: #5D5D5E;'>
+    <header>
+        <div class="headbck" style="background: #3C4C5A;
+            display: block;
+            border-bottom: 1px solid #fff;
+            height: 60px;
+            padding-top: 10px;
+            text-align: center;">
+            <a href="http://www.symplifica.com" target="_blank"><img src="https://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica" /></a>
+        </div>
+    </header>
+    <section class="container" style="padding-top: 35px; width: 100%; text-align: center;">
+        <p style="padding-top: 5px; font-size: 18px;
+            color: #87898C;">Hola {{ user.personPerson.names }}</p>
+        <p style="text-align: justify;">Haz decidido terminar el contrato que tienes vigente con tu empleado para crear uno nuevo tal como te lo indicamos.</p>
+        <p style="text-align: justify;">Estos son los pasos que debes realizar para llevar este proceso de la mejor forma posible y envitar inconvenientes en el futuro</p>
+    </section>
+  </body>
+</html>
+{% endblock %}

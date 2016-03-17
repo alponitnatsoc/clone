@@ -133,7 +133,7 @@
                  email : email,
                  name : email
              };
-             $.post("/api/public/v1/sends/emails", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
+             $.post("/api/public/v1/sends/emails/templates", {template_name: "Welcome Suscripcion Landing", "to[0]": a, subject: "Bienvenido a Symplifica"})
              .done();
          }).fail(function(data){
              console.log('He fallado')

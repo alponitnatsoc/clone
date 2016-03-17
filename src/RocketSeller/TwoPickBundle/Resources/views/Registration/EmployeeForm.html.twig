@@ -126,6 +126,7 @@
                                 <li>Esto no significa que las obligaciones o deberes como empleador que adquiriste en el pasado queden cerradas.</li>
                                 <li>Esto es un mecanismo que usamos para generar un corte y poder garantizar que de aca en adelante estas haciendo las cosas bien.</li>
                                 <li>Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica.</li>
+                                <li>Te enviaremos un correo electrónico con la información necesaria para que puedas finalizar el contrato previo con tu empleado y así generar el nuevo contrato como te suguiere Symplifica</li>
                             </ul>
                         </div>
                         <div class="row">
@@ -403,7 +404,7 @@
                                     <div class="row">
                                         <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
                                             <br /><br />
-                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice. 
+                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
                                         </p>
                                     </div>
                                 </div>
@@ -535,7 +536,7 @@
                                     <div class="col-sm-6 form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">COP </span>
-                                            <input type="text" id="totalExpensesVal" class="form-control">    
+                                            <input type="text" id="totalExpensesVal" class="form-control">
                                         </div>
                                         <div style="text-align: right">
                                             <a id="link_calculator" href="" class="notAjax">Mostrar detalles</a>
@@ -826,6 +827,37 @@
                             Sentimos no poder ayudarte. Si tienes dudas por favor revisa nuestra sección de <a href="/preguntas-frecuentes" target="_blank">ayuda</a> o <a href="mailto:contacto@symplifica.com?subject=Duda sobre generación del nuevo contrato">contáctanos</a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal si nuevo contrato -->
+    <div class="modal fade" id="siNuevoContrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Vas a generar un nuevo contrato con tu empleado</div>
+                    </div>
+                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                        <div class="col-md-8 col-md-push-2">
+                            Te enviaremos un correo electrónico con la información necesaria para terminar el contrato anterior
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                        {%  set userEmail = app.user.email %}
+                    {% else %}
+                        {% set userEmail = null %}
+                    {% endif %}
+                    <button
+                        type="button" class="btn btn-orange loading"
+                        onclick="javascript:infoNuevoContrato('servicioalcliente@symplifica.com', '{{ userEmail }}', 'RocketSellerTwoPickBundle:EmailTemplates:email-si-nuevo-contrato.txt.twig', $(this))"
+                        data-loading-text="Enviando..." data-complete-text="Cerrar"
+                        >Entendido</button>
                 </div>
             </div>
         </div>
