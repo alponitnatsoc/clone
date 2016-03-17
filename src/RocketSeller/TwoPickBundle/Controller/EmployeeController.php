@@ -419,7 +419,7 @@ class EmployeeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
             'form' => $form->createView(),
             'tab' => $tab,
-            'choices' => $choices,
+            'choices' => $choices
         ));
     }
 

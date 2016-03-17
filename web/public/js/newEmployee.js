@@ -1105,6 +1105,10 @@ function infoNuevoContrato(from, to, template, event) {
     var btn = event;
     btn.button('loading');
 
+    if (!to) {
+        return false;
+    }
+
     $.ajax({
         method: "POST",
         url: "/api/public/v1/sends/emails",

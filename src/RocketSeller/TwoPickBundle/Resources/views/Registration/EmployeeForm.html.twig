@@ -848,9 +848,14 @@
                     </div>
                 </div>
                 <div class="modal-footer center">
+                    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                        {%  set userEmail = app.user.email %}
+                    {% else %}
+                        {% set userEmail = null %}
+                    {% endif %}
                     <button
                         type="button" class="btn btn-orange loading"
-                        onclick="javascript:infoNuevoContrato('plinio.romero@symplifica.com', 'plinio.romero@symplifica.com', 'RocketSellerTwoPickBundle:EmailTemplates:email-si-nuevo-contrato.txt.twig', $(this))"
+                        onclick="javascript:infoNuevoContrato('servicioalcliente@symplifica.com', '{{ userEmail }}', 'RocketSellerTwoPickBundle:EmailTemplates:email-si-nuevo-contrato.txt.twig', $(this))"
                         data-loading-text="Enviando..." data-complete-text="Cerrar"
                         >Entendido</button>
                 </div>
