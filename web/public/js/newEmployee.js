@@ -1,4 +1,3 @@
-
 /**
  * Created by gabrielsamoma on 11/11/15.
  */
@@ -40,7 +39,10 @@ function startEmployee() {
             },
             messages: {
                 "register_employee[person][documentType]": "Por favor selecciona un tipo de documento",
-                "register_employee[person][document]": {required: "Por favor ingresa un documento", number: "ingresa solamente dígitos"},
+                "register_employee[person][document]": {
+                    required: "Por favor ingresa un documento",
+                    number: "ingresa solamente dígitos"
+                },
                 "register_employee[person][names]": "Por favor ingresa el nombre",
                 "register_employee[person][lastName1]": "Por favor ingresa el primer apellido",
                 "register_employee[person][mainAddress]": "Por favor ingresa una dirección",
@@ -133,7 +135,7 @@ function startEmployee() {
                 $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
                 parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,
                 $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
-                ))) {
+            ))) {
 
             var datenow = new Date();
             var year = datenow.getFullYear();
@@ -151,7 +153,7 @@ function startEmployee() {
                 $(this).find("#register_employee_employeeHasEmployers_endDate_year").val(),
                 parseInt($(this).find("#register_employee_employeeHasEmployers_endDate_month").val()) - 1,
                 $(this).find("#register_employee_employeeHasEmployers_endDate_day").val()
-                ))) {
+            ))) {
             var datenow = new Date();
             var year = datenow.getFullYear();
             var month = datenow.getMonth();
@@ -185,27 +187,36 @@ function startEmployee() {
             $('#TIModal').modal('toggle');
         }
     });
+    $('#btnToggleFijo').click(function () {
+        $("#register_employee_employeeHasEmployers_contractType").val("1")
+        $(".definite").each(function () {
+            $(this).show();
+        });
+        $('#contractIndefinido').hide();
+        $('#contractFijo').show();
+        $(this).addClass('active');
+        $('#btnToggleIndefinido').removeClass('active');
+    });
+
+    $('#btnToggleIndefinido').click(function () {
+        $("#register_employee_employeeHasEmployers_contractType").val("2")
+        $(".definite").each(function () {
+            $(this).hide();
+        });
+        $('#contractIndefinido').show();
+        $('#contractFijo').hide();
+        $(this).addClass('active');
+        $('#btnToggleFijo').removeClass('active');
+    });
     var contractType = $("#register_employee_employeeHasEmployers_contractType");
-    /*contractType.change(function () {
-     var selectedVal = $(this).find("option:selected").text();
-     if (selectedVal == "Término fijo") {
-     $(".definite").each(function () {
-     $(this).show();
-     });
-     } else {
-     $(".definite").each(function () {
-     $(this).hide();
-     });
-     }
-     });*/
     selectedVal = $(contractType).find("option:selected").text();
     if (selectedVal == "Término fijo") {
-        $("#register_employee_employeeHasEmployers_existentNew_0").attr("checked", true);
+        $("#btnToggleFijo").trigger("click");
         $(".definite").each(function () {
             $(this).show();
         });
     } else {
-        $("#register_employee_employeeHasEmployers_existentNew_1").attr("checked", true);
+        $("#btnToggleIndefinido").trigger("click");
         $(".definite").each(function () {
             $(this).hide();
         });
@@ -220,9 +231,9 @@ function startEmployee() {
             type: 'GET'
         }).done(function (data) {
             $('#putFields_' + payTypeChecked.val()).html(
-                    // ... with the returned one from the AJAX response.
-                    $(data).find('#formFields'));
-            if($(payTypeChecked).parent().text()==" Daviplata"){
+                // ... with the returned one from the AJAX response.
+                $(data).find('#formFields'));
+            if ($(payTypeChecked).parent().text() == " Daviplata") {
                 payMethodListener();
             }
         });
@@ -234,11 +245,11 @@ function startEmployee() {
             url: '/pay/method/fields/' + payMethod.val(),
             type: 'GET'
         }).done(function (data) {
-            var $putFields=$('#putFields_' + payMethod.val()).html(
-                    // ... with the returned one from the AJAX response.
-                    $(data).find('#formFields'));
+            var $putFields = $('#putFields_' + payMethod.val()).html(
+                // ... with the returned one from the AJAX response.
+                $(data).find('#formFields'));
             $('#putFields_' + payTypeChecked.val()).html("");
-            if($(payMethod).parent().text()==" Daviplata"){
+            if ($(payMethod).parent().text() == " Daviplata") {
                 payMethodListener();
             }
             payTypeChecked = payMethod;
@@ -592,29 +603,29 @@ function jsonToHTML(data) {
     return htmls;
 }
 function jsonCalcToHTML(data) {
-    var htmls="<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
+    var htmls = "<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
         "<ul class='lista_listo clearfix'>";
-    htmls+="<li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>"+getPrice(Math.floor(data.totalExpenses))+"</span></li>";
-    htmls+="<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>"+getPrice(Math.floor(data.totalIncome))+"</span></li>";
-    htmls+="<li class='col-sm-6'><span class='cifra'>"+getPrice(Math.floor(data.dailyExpenses))+"</span></li>";
-    htmls+="<li class='col-sm-6'><span class='cifra'>"+getPrice(Math.floor(data.dailyIncome))+"</span></li>";
-    htmls+="</ul>";
-    htmls+="<h2 class='modal-title'>Detalles:</h2>" +
+    htmls += "<li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>" + getPrice(Math.floor(data.totalExpenses)) + "</span></li>";
+    htmls += "<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>" + getPrice(Math.floor(data.totalIncome)) + "</span></li>";
+    htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyExpenses)) + "</span></li>";
+    htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyIncome)) + "</span></li>";
+    htmls += "</ul>";
+    htmls += "<h2 class='modal-title'>Detalles:</h2>" +
         "<ul class='lista_listo_detalle'>";
-    htmls+="<li>Gastos Empleador EPS: "+getPrice(Math.floor(data.EPSEmployerCal))+"</li>";
-    htmls+="<li>Gastos Empleador Pensión: "+getPrice(Math.floor(data.PensEmployerCal))+"</li>";
-    htmls+="<li>Gastos Empleado ARL: "+getPrice(Math.floor(data.arlCal))+"</li>";
-    htmls+="<li>Gastos Empleado Cesantias: "+getPrice(Math.floor(data.cesCal))+"</li>";
-    htmls+="<li>Gastos Empleado Intereses/cesantias: "+getPrice(Math.floor(data.taxCesCal))+"</li>";
-    htmls+="<li>Gastos Empleado Caja Comp: "+getPrice(Math.floor(data.cajaCal))+"</li>";
-    htmls+="<li>Gastos Empleado Vacaciones: "+getPrice(Math.floor(data.vacationsCal))+"</li>";
-    htmls+="<li>Gastos Auxilio de Trasnporte: "+getPrice(Math.floor(data.transportCal))+"</li>";
-    htmls+="<li>Gastos Dotacion/150000 pesos trimestre: "+getPrice(Math.floor(data.dotationCal))+"</li>";
-    htmls+="<li>Gastos SENA: "+getPrice(Math.floor(data.senaCal))+"</li>";
-    htmls+="<li>Gastos ICBF: "+getPrice(Math.floor(data.icbfCal))+"</li>";
-    htmls+="<li>Gastos Empleado EPS: "+getPrice(Math.floor(data.EPSEmployeeCal))+"</li>";
-    htmls+="<li>Gastos Empleado Pensión: "+getPrice(Math.floor(data.PensEmployeeCal))+"</li>";
-    htmls+="</ul>";
+    htmls += "<li>Gastos Empleador EPS: " + getPrice(Math.floor(data.EPSEmployerCal)) + "</li>";
+    htmls += "<li>Gastos Empleador Pensión: " + getPrice(Math.floor(data.PensEmployerCal)) + "</li>";
+    htmls += "<li>Gastos Empleado ARL: " + getPrice(Math.floor(data.arlCal)) + "</li>";
+    htmls += "<li>Gastos Empleado Cesantias: " + getPrice(Math.floor(data.cesCal)) + "</li>";
+    htmls += "<li>Gastos Empleado Intereses/cesantias: " + getPrice(Math.floor(data.taxCesCal)) + "</li>";
+    htmls += "<li>Gastos Empleado Caja Comp: " + getPrice(Math.floor(data.cajaCal)) + "</li>";
+    htmls += "<li>Gastos Empleado Vacaciones: " + getPrice(Math.floor(data.vacationsCal)) + "</li>";
+    htmls += "<li>Gastos Auxilio de Trasnporte: " + getPrice(Math.floor(data.transportCal)) + "</li>";
+    htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + getPrice(Math.floor(data.dotationCal)) + "</li>";
+    htmls += "<li>Gastos SENA: " + getPrice(Math.floor(data.senaCal)) + "</li>";
+    htmls += "<li>Gastos ICBF: " + getPrice(Math.floor(data.icbfCal)) + "</li>";
+    htmls += "<li>Gastos Empleado EPS: " + getPrice(Math.floor(data.EPSEmployeeCal)) + "</li>";
+    htmls += "<li>Gastos Empleado Pensión: " + getPrice(Math.floor(data.PensEmployeeCal)) + "</li>";
+    htmls += "</ul>";
     return htmls;
 }
 
@@ -644,50 +655,16 @@ function addListeners() {
             inquiry();
         }
     });
-    $("input[name='register_employee[employeeHasEmployers][existentNew]']").on("change", function () {
-        if ($("input[name='register_employee[employeeHasEmployers][existentNew]']:checked").val() == "1") {
-            $("#register_employee_employeeHasEmployers_contractType").find("option").each(function () {
-                if ($(this).text() == "Término fijo") {
-                    $(this).attr('selected', 'selected');
-                    $(".definite").each(function () {
-                        $(this).show();
-                    });
-                    $('#contractIndefinido').hide();
-                    $('#contractFijo').show();
-                }
-            });
-        } else {
-            $("#register_employee_employeeHasEmployers_contractType option").each(function () {
-                if ($(this).text() == "Término indefinido") {
-                    $(this).attr('selected', 'selected');
-                    $(".definite").each(function () {
-                        $(this).hide();
-                    });
-                    console.log("Test");
-                    $('#contractIndefinido').show();
-                    $('#contractFijo').hide();
-                }
-            });
-        }
-    });
+
+
     $("#register_employee_employeeHasEmployers_weekDays").on("change", function () {
-        var i=0;
+        var i = 0;
         $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
             i++;
         });
         $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
         calculator();
         formatMoney($("#totalExpensesVal"));
-    });
-    $("#register_employee_employeeHasEmployers_indefinite").on("click", function () {
-        $("#register_employee_employeeHasEmployers_contractType option").each(function () {
-            if ($(this).text() == "Término indefinido") {
-                $(this).attr('selected', 'selected');
-                $(".definite").each(function () {
-                    $(this).hide();
-                });
-            }
-        });
     });
     $("#register_employee_employeeHasEmployers_existent").on("click", function () {
         $('#existentQuestion').hide();
@@ -703,18 +680,6 @@ function addListeners() {
         $('#noNuevoContrato').modal();
 //        history.pushState("","","/manage/employees");
 //        sendAjax("/manage/employees")
-    });
-
-    $('#btnToggleFijo').click(function () {
-        $('#register_employee_employeeHasEmployers_existentNew_0').trigger('click');
-        $(this).addClass('active');
-        $('#btnToggleIndefinido').removeClass('active');
-    });
-
-    $('#btnToggleIndefinido').click(function () {
-        $('#register_employee_employeeHasEmployers_existentNew_1').trigger('click');
-        $(this).addClass('active');
-        $('#btnToggleFijo').removeClass('active');
     });
 
     $("#register_employee_employeeHasEmployers_salaryD").on("focusout", function () {
@@ -758,9 +723,9 @@ function addListeners() {
             data: {department: $department.val()}
         }).done(function (data) {
             $('#' + citySelectId).html(
-                    // ... with the returned one from the AJAX response.
-                    jsonToHTML(data)
-                    );
+                // ... with the returned one from the AJAX response.
+                jsonToHTML(data)
+            );
         });
     });
     $('select').filter(function () {
@@ -780,9 +745,9 @@ function addListeners() {
             data: {department: $department.val()}
         }).done(function (data) {
             $('#' + citySelectId).html(
-                    // ... with the returned one from the AJAX response.
-                    jsonToHTML(data)
-                    );
+                // ... with the returned one from the AJAX response.
+                jsonToHTML(data)
+            );
         });
     });
 }
@@ -841,8 +806,8 @@ function calculator() {
     var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
     var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
     var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
-    if(salaryD==""){
-        salaryD=0;
+    if (salaryD == "") {
+        salaryD = 0;
     }
     var numberOfDays = $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
     var aid = 0;
@@ -968,8 +933,8 @@ function calculator() {
     }
     var resposne = [];
 
-    if (salaryD == 0||numberOfDays==null||numberOfDays==0) {
-        totalExpenses=0;
+    if (salaryD == 0 || numberOfDays == null || numberOfDays == 0) {
+        totalExpenses = 0;
         resposne['totalExpenses'] = 0;
         resposne['dailyExpenses'] = 0;
         resposne['dailyIncome'] = 0;
@@ -987,7 +952,7 @@ function calculator() {
         resposne['senaCal'] = 0;
         resposne['icbfCal'] = 0;
         resposne['totalIncome'] = 0;
-    }else{
+    } else {
         resposne['totalExpenses'] = totalExpenses;
         resposne['dailyExpenses'] = totalExpenses / numberOfDays;
         resposne['dailyIncome'] = totalIncome / numberOfDays;
@@ -1023,10 +988,10 @@ function checkDate(date) {
 }
 function getPrice(valor) {
     price = parseFloat(valor.toString().replace(/,/g, ""))
-            .toFixed(0)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return  price;
+        .toFixed(0)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return price;
 }
 function validateSalary() {
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
@@ -1103,9 +1068,9 @@ function inquiry() {
         //show the other stuf
     });
 }
-function payMethodListener(){
-    var $hasIt=$("#method_type_fields_hasIt");
-    if(!$hasIt.parent().hasClass("formFieldsNo")) {
+function payMethodListener() {
+    var $hasIt = $("#method_type_fields_hasIt");
+    if (!$hasIt.parent().hasClass("formFieldsNo")) {
         $hasIt.parent().addClass("formFieldsNo");
         var selectedVal = $hasIt.val();
         if (selectedVal == 0) {

@@ -413,6 +413,7 @@ class EmployeeController extends Controller
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }
+
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(

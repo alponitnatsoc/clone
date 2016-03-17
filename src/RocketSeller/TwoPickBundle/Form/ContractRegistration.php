@@ -41,21 +41,10 @@ class ContractRegistration extends AbstractType
             ->add('noExistent', 'button', array(
                 'label' => 'No',
             ))
-            ->add('existentNew', 'choice', array(
-                'choices' => array(
-                     1=> 'Término Fijo',
-                     0=> 'Término Indefinido',
-                ),
-                'multiple' => false,
-                'mapped' => false,
-                'expanded' => true,
-                'label'=>'¿El empleado pertenece al SISBÉN?*',
-                'required' => true,
-            ))
             ->add('sisben', 'choice', array(
                 'choices' => array(
                      1=> 'Si',
-                     0=> 'No',
+                     -1=> 'No',
                 ),
                 'multiple' => false,
                 'expanded' => true,
@@ -78,6 +67,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'contractTypeContractType',
+                'placeholder' => ' ',
                 'label'=>'Tipo de contrato*',
                 'required' => true
             ))

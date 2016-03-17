@@ -85,12 +85,12 @@ class Contract
     private $state = 1;
 
     /**
-     * @ORM\Column(type="boolean", nullable=TRUE)
+     * @ORM\Column(type="smallint", nullable=TRUE)
      */
-    private $sisben = 1;
+    private $sisben;
 
     /**
-     * @ORM\Column(type="boolean", nullable=TRUE)
+     * @ORM\Column(type="smallint", nullable=TRUE)
      */
     private $transportAid;
 
@@ -709,55 +709,6 @@ class Contract
         return $this->activePayroll;
     }
 
-
-
-    /**
-     * Set sisben
-     *
-     * @param boolean $sisben
-     *
-     * @return Contract
-     */
-    public function setSisben($sisben)
-    {
-        $this->sisben = $sisben;
-
-        return $this;
-    }
-
-    /**
-     * Get sisben
-     *
-     * @return boolean
-     */
-    public function getSisben()
-    {
-        return $this->sisben;
-    }
-
-    /**
-     * Set transportAid
-     *
-     * @param boolean $transportAid
-     *
-     * @return Contract
-     */
-    public function setTransportAid($transportAid)
-    {
-        $this->transportAid = $transportAid;
-
-        return $this;
-    }
-
-    /**
-     * Get transportAid
-     *
-     * @return boolean
-     */
-    public function getTransportAid()
-    {
-        return $this->transportAid;
-    }
     /**
      * Add weekWorkableDay
      *
@@ -828,4 +779,52 @@ class Contract
         return $this->frequencyFrequency;
     }
 
+
+    /**
+     * Set sisben
+     *
+     * @param integer $sisben
+     *
+     * @return Contract
+     */
+    public function setSisben($sisben)
+    {
+        $this->sisben = $sisben;
+
+        return $this;
+    }
+
+    /**
+     * Get sisben
+     *
+     * @return integer
+     */
+    public function getSisben()
+    {
+        return $this->sisben;
+    }
+
+    /**
+     * Set transportAid
+     *
+     * @param integer $transportAid
+     *
+     * @return Contract
+     */
+    public function setTransportAid($transportAid)
+    {
+        $this->transportAid = $transportAid;
+
+        return $this;
+    }
+
+    /**
+     * Get transportAid
+     *
+     * @return integer
+     */
+    public function getTransportAid()
+    {
+        return $this->transportAid;
+    }
 }
