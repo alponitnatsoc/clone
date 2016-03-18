@@ -470,6 +470,7 @@ class PayrollRestController extends FOSRestController
      *   (name="contract_number", nullable=true, requirements="([0-9])+", strict=true, description="Employee contract number.")
      *   (name="last_contract_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Last work contract termination day, only termnio indefinido(format: DD-MM-YYYY).")
      *   (name="worked_hours_day", nullable=false, requirements="([0-9])+", strict=true, description="Number of hours worked on a day.")
+     *   (name="worked_days_week", nullable=false, requirements="([0-9])+", strict=true, description="Number of days worked in a week.")
      *   (name="payment_method", nullable=false, requirements="(CHE|CON|EFE)", strict=true, description="Code of payment method(CHE, CON, EFE). This code can be obtained using the table pay_type, field payroll_code.")
      *   (name="liquidation_type", nullable=false, requirements="(J|M|Q)", strict=true, description="Liquidation type, (J daily, M monthly, Q every two weeks). This code can obtained using the table frequency field payroll_code.")
      *   (name="contract_type", nullable=false, requirements="([0-9])", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
@@ -507,6 +508,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['last_contract_end_date'] = false;
         $regex['worked_hours_day'] = '([0-9])+';
         $mandatory['worked_hours_day'] = true;
+        $regex['worked_days_week'] = '([0-9])+';
+        $mandatory['worked_days_week'] = true;
         $regex['payment_method'] = '(CHE|CON|EFE)';
         $mandatory['payment_method'] = true;
         $regex['liquidation_type'] = '(J|M|Q)';
@@ -544,6 +547,7 @@ class PayrollRestController extends FOSRestController
         $unico['RECIBE_AUX_TRA'] = $parameters['transport_aux'];
         $unico['EMP_SOCIEDAD'] = $parameters['society'];
         $unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly.
+        $unico['DIAS_LABOR_SEM'] = $parameters['worked_days_week'];
 
         $content[] = $unico;
         $parameters = array();
@@ -1906,7 +1910,7 @@ class PayrollRestController extends FOSRestController
         $content = array();
         $unico = array();
 
-        $unico['EMP_CODIGO'] = $employeeId;
+        $unico['EMPCODIGO'] = $employeeId;
 
         $content[] = $unico;
         $parameters = array();
@@ -2555,7 +2559,7 @@ class PayrollRestController extends FOSRestController
 
 
         $unico['COD_PROC'] = 100; // payroll liquidation is always 100.
-        $unico['USUARIO'] = ''; // Empty by default.
+        $unico['USUARIO'] = 'SRHADMIN'; // Empty by default.
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['TIP_EJEC'] = $parameters['execution_type'];
 
