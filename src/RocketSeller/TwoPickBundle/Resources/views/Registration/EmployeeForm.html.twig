@@ -530,7 +530,17 @@
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-xs-12 days">
+                                <div class="col-sm-12 col-xs-12 complete">
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.employeeHasEmployers.salary) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <input id="ex7" type="text" data-slider-min="689454" data-slider-max="10000000" data-slider-step="10000" data-slider-value="{{ form.employeeHasEmployers.salary.vars.value }}"/>
+                                        {{ form_widget(form.employeeHasEmployers.salary) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
                                         <label>El costo mensual de este empleado es:</label>
                                     </div>
@@ -541,17 +551,6 @@
                                         </div>
                                         <div style="text-align: right">
                                             <a id="link_calculator" href="" class="notAjax">Mostrar detalles</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-xs-12 complete">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.salary) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.salary) }}
-                                        <div style="text-align: right">
-                                            <a id="link_calculator" href="{{ path('show_calculator_form') }}" class="nav-link">Calculadora Salarial</a>
                                         </div>
                                     </div>
                                 </div>
