@@ -256,6 +256,32 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $NoveltySalary->setNaturaleza('DEV');
         $manager->persist($NoveltySalary);
 
+        $NoveltyInabilitySpending = new NoveltyType();
+        $NoveltyInabilitySpending->setName('Gasto de incapacidad');
+        $NoveltyInabilitySpending->setPayrollCode('20');
+        $NoveltyInabilitySpending->setPeriod('dia');
+        $NoveltyInabilitySpending->setGrupo('no_show');
+        $NoveltyInabilitySpending->setNaturaleza('DEV');
+        $manager->persist($NoveltyInabilitySpending);
+
+        $NoveltyInabilityAdjust = new NoveltyType();
+        $NoveltyInabilityAdjust->setName('Ajuste de incapacidad');
+        $NoveltyInabilityAdjust->setPayrollCode('21');
+        $NoveltyInabilityAdjust->setPeriod('dia');
+        $NoveltyInabilityAdjust->setGrupo('no_show');
+        $NoveltyInabilityAdjust->setNaturaleza('DEV');
+        $manager->persist($NoveltyInabilityAdjust);
+
+        $NoveltyRetention = new NoveltyType();
+        $NoveltyRetention->setName('Retención en la fuente');
+        $NoveltyRetention->setPayrollCode('3005');
+        $NoveltyRetention->setPeriod('dia');
+        $NoveltyRetention->setGrupo('no_show');
+        $NoveltyRetention->setNaturaleza('DED');
+        $manager->persist($NoveltyRetention);
+
+        // This are novelties that are not in the SQL DB.
+
         $llegadaTarde = new NoveltyType();
         $llegadaTarde->setName('Llegada tarde');
         $llegadaTarde->setGrupo('llamado_atencion');
@@ -317,6 +343,9 @@ class LoadNoveltyTypeData extends AbstractFixture implements OrderedFixtureInter
         $this->addReference('novelty-severance-interests', $NoveltySeveranceInterests);
         $this->addReference('novelty-compensation', $NoveltyCompensation);
         $this->addReference('novelty-salary', $NoveltySalary);
+        $this->addReference('novelty-inability-spending', $NoveltyInabilitySpending);
+        $this->addReference('novelty-inability-adjust', $NoveltyInabilityAdjust);
+        $this->addReference('novelty-retention', $NoveltyRetention);
 
         //llamado_atencion
         $this->addReference('novelty-llegada-tarde', $llegadaTarde);

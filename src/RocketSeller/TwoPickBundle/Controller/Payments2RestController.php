@@ -269,7 +269,7 @@ class Payments2RestController extends FOSRestController
      * (name="accountNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Global account
      *                                                  number of the employeer, this is the employer primary key in the system.")
      * (name="documentEmployer", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the employer.")
-     * (name="documentTypeEmployer", nullable=false, requirements="(CC|NIT)", strict=true, description="Document type of the employer")
+     * (name="documentTypeEmployer", nullable=false, requirements="(CC|cc|nit|NIT)", strict=true, description="Document type of the employer")
      * (name="documentEmployee", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the employee.")
      * (name="documentTypeEmployee", nullable=false, requirements="(CC|NIT)", strict=true, description="Document tpe of the employee.")
      * (name="employeeName", nullable=false, requirements="(.)*", strict=true, description="Name of the employee.")
@@ -294,11 +294,11 @@ class Payments2RestController extends FOSRestController
         $mandatory['accountNumber'] = true;
         $regex['documentEmployer'] = '([0-9|-]| )+';
         $mandatory['documentEmployer'] = true;
-        $regex['documentTypeEmployer'] = '(CC|NIT)';
+        $regex['documentTypeEmployer'] = '(CC|cc|nit|NIT)';
         $mandatory['documentTypeEmployer'] = true;
         $regex['documentEmployee'] = '([0-9|-]| )+';
         $mandatory['documentEmployee'] = true;
-        $regex['documentTypeEmployee'] = '(CC|NIT)';
+        $regex['documentTypeEmployee'] = '(CC|cc|nit|NIT)';
         $mandatory['documentTypeEmployee'] = true;
         $regex['employeeName'] = '(.)*';
         $mandatory['employeeName'] = true;
@@ -316,6 +316,20 @@ class Payments2RestController extends FOSRestController
         $mandatory['employeeAddress'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
+
+        // Fix the format of document type.
+        if($parameters['documentTypeEmployer'] == 'cc' || $parameters['documentTypeEmployer'] == 'CC') {
+          $parameters['documentTypeEmployer'] = 'CEDULA';
+        }
+        if($parameters['documentTypeEmployer'] == 'nit') {
+          $parameters['documentTypeEmployer'] = 'NIT';
+        }
+        if($parameters['documentTypeEmployee'] == 'cc' || $parameters['documentTypeEmployee'] == 'CC') {
+          $parameters['documentTypeEmployee'] = 'CEDULA';
+        }
+        if($parameters['documentTypeEmployee'] == 'nit') {
+          $parameters['documentTypeEmployee'] = 'NIT';
+        }
 
         $parameters_fixed = array();
         $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];

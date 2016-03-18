@@ -1,1 +1,232 @@
-{% include "FOSUserBundle:Registration:register_express_content.html.twig" %}
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css">
+        #app_user_express_registration_credit_card_credit_card {
+            background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+            background-position: 2px -117px, 233px -55px;
+            background-size: 120px 361px, 120px 361px;
+            background-repeat: no-repeat;
+            padding-left: 54px;
+            /*width: 225px;*/
+        }
+        #app_user_express_registration_credit_card_credit_card.visa {
+            background-position: 2px -159px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.visa_electron {
+            background-position: 2px -201px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.mastercard {
+            background-position: 2px -243px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.maestro {
+            background-position: 2px -285px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.discover {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.amex {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.diners_club_carte_blanche {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.visa {
+            background-position: 2px -159px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.visa_electron {
+            background-position: 2px -201px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.mastercard {
+            background-position: 2px -243px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.maestro {
+            background-position: 2px -285px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.discover {
+            background-position: 2px -327px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.amex {
+            background-position: 2px -327px, 233px -82px;
+        }
+        #app_user_express_registration_credit_card_credit_card.valid.diners_club_carte_blanche {
+            background-position: 2px -327px, 233px -82px;
+        }
+
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+    </style>
+{% endblock stylesheet %}
+{% block body %}
+    <div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
+
+        <div class="smallOrangeBox">
+            <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
+
+            <div class="smallOrangeBoxContent">
+
+                <span>Completa unos cuantos datos<br />y nosotros nos encargamos del resto</span>
+
+                <span class="light-text"></span>
+                <hr class="smallDivider" />
+
+                <div id='registrationExpressFormContainer' class='col-md-12 express_start'>
+                    {{ form_errors(form) }}
+                    {{ form_start(form) }}
+
+                    <div class="form-black ">
+                        {{ form_row(form.names)}}	
+                    </div>
+                    <div class="form-black form-group">
+                        {{ form_row(form.lastName1)}}
+                    </div>
+                    <div class="form-black form-group">
+                        {{ form_row(form.lastName2)}}	    	
+                    </div>
+
+                    <div class="form-black form-group ">
+                        {{form_row(form.phone.phoneNumber)}}	    	
+                    </div>
+                    <div class="form-black form-group ">
+                        {{form_row(form.documentType)}}	    	
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.document)}}	    	
+                    </div>
+
+                    <span class="light-text"></span>
+                    <hr class="smallDivider" />
+
+                    <span>Ahora sólo falta tu información de pago</span>
+
+                    <span class="light-text"></span>
+                    <hr class="smallDivider" />
+
+                    <div class="form-black form-group">
+                        {{form_row(form.credit_card.credit_card)}}	    	
+                    </div>
+
+                    <div class="form-black form-group">
+                        {{form_row(form.credit_card.name_on_card)}}	    	
+                    </div>
+
+                    <div class="form-black form-group">
+                        <div class="col-md-4">
+                            {{form_row(form.credit_card.expiry_date_year)}}	
+                        </div>
+                        <div class="col-md-4">
+                            {{form_row(form.credit_card.expiry_date_month)}}
+                        </div>
+                        <div class="col-md-4">
+                            {{form_row(form.credit_card.cvv)}}
+                        </div>    	
+                    </div>
+
+                </div>
+
+                <span class="light-text"></span>
+                <hr class="smallDivider" />
+
+                <div class="form-black form-group">
+                    {{form_row(form.save)}}		    	
+                </div> 
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var validator = null;
+            $.getScript("/public/js/jquery.validate.min.js").done(function () {
+                validator = $("form[name='app_user_express_registration']").validate({
+                    //onfocusout: true,
+                    rules: {
+                        "app_user_express_registration[names]": {required: true},
+                        "app_user_express_registration[lastName1]": {required: true},
+                        "app_user_express_registration[lastName2]": {required: true},
+                        "app_user_express_registration[phone][phoneNumber]": {required: true},
+                        "app_user_express_registration[documentType]": {required: true},
+                        "app_user_express_registration[document]": {required: true},
+                        "app_user_express_registration[credit_card][credit_card]": {required: true, number: true, min: 1, maxlength: 19},
+                        "app_user_express_registration[credit_card][name_on_card]": {required: true},
+                        "app_user_express_registration[credit_card][expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
+                        "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                        "app_user_express_registration[credit_card][cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
+
+                    },
+                    messages: {
+                        "app_user_express_registration[names]": {required: "Por favor ingresa un nombre"},
+                        "app_user_express_registration[lastName1]": {required: "Por favor ingresa un apellido"},
+                        "app_user_express_registration[lastName2]": {required: "Por favor ingresa un apellido"},
+                        "app_user_express_registration[phone][phoneNumber]": {required: "Por favor ingresa un telefono"},
+                        "app_user_express_registration[documentType]": {required: "Por favor selecciona un tipo documento"},
+                        "app_user_express_registration[document]": {required: "Por favor ingresa un documento"},
+                        "app_user_express_registration[credit_card][credit_card]": {
+                            required: "Por favor ingrese el numero de la tarjeta",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo 19 digitos",
+                            minlength: "minimo 1 digitos",
+                            min: "minimo 1 digitos"
+
+                        },
+                        "app_user_express_registration[credit_card][name_on_card]": {required: "Por favor ingrese el nombre que hay en la tarjeta"},
+                        "app_user_express_registration[credit_card][expiry_date_month]": {
+                            required: "Por favor seleccione el mes de vencimiento",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo mes de 2 digitos",
+                            minlength: "minimo mes de 1 digitos",
+                            max: "mes del 01 al 12",
+                            min: "mes del 01 al 12"
+                        },
+                        "app_user_express_registration[credit_card][expiry_date_year]": {
+                            required: "Por favor ingrese el año de vencimiento",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo año de 4 digitos",
+                            minlength: "minimo año de 4 digitos",
+                            max: "año maximo 9999",
+                            min: "año minimo 2016"
+                        },
+                        "app_user_express_registration[credit_card][cvv]": {
+                            required: "Por favor ingrese el codigo de verificación",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo 4 digitos",
+                            minlength: "minimo 3 digitos",
+                            max: "minimo 001",
+                            min: "maximo 9999"
+                        }
+                    }
+                });
+            });
+            $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
+                $('#app_user_express_registration_credit_card_credit_card').validateCreditCard(function (result) {
+                    $(this).removeClass();
+                    $(this).addClass('form-control');
+                    if (result.valid) {
+                        $(this).addClass(result.card_type.name);
+                        return $(this).addClass('valid');
+                    } else {
+                        return $(this).removeClass('valid');
+                    }
+                });
+            });
+            $('form').on('submit', function (event) {
+                if (validator.form()) {
+                    return false;
+                }
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

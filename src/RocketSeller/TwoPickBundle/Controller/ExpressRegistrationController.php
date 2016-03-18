@@ -23,6 +23,7 @@ use RocketSeller\TwoPickBundle\Form\BasicEmployeePersonRegistration;
 
 class ExpressRegistrationController extends Controller
 {
+
     public function expressPaymentAction()
     {
         //$user = $this->getDoctrine()
@@ -33,148 +34,144 @@ class ExpressRegistrationController extends Controller
         $person = $user->getPersonPerson();
         $format = array('_format' => 'json');
         $response = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:getPayment', array(
-                'id' => $idUser                
-            ),
-            $format
+            'id' => $idUser
+                ), $format
         );
-        if ($response->getStatusCode()==201) {
+        if ($response->getStatusCode() == 201) {
             //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
             return $this->redirectToRoute('express_payment_add');
-
-        }else{
+        } else {
             dump($response);
             exit();
         }
-        
-        
     }
-    public function addCreditCardAction(Request $request){       
+
+    public function addCreditCardAction(Request $request)
+    {
         $user = $this->getUser();
         $person = $user->getPersonPerson();
         $form = $this->createFormBuilder()
-            ->add('credit_card', 'text', array( 
-                "attr" => array(
-                    'placeholder' => 'Tu tarjeta de crédito'
+                ->add('credit_card', 'text', array(
+                    "attr" => array(
+                        'placeholder' => 'Tu tarjeta de crédito'
                     )
+                        )
                 )
-            )
-
-            ->add('expiry_date_year', 'text', array( 
-                "attr" => array(
-                    'placeholder' => 'Año de vencimiento'
+                ->add('expiry_date_year', 'text', array(
+                    "attr" => array(
+                        'placeholder' => 'Año de vencimiento'
                     )
+                        )
                 )
-            )
-            ->add('expiry_date_month', 'text', array( 
-                "attr" => array(
-                    'placeholder' => 'Mes de vencimiento'
+                ->add('expiry_date_month', 'text', array(
+                    "attr" => array(
+                        'placeholder' => 'Mes de vencimiento'
                     )
+                        )
                 )
-            )
-            ->add('cvv', 'text', array( 
-                "attr" => array(
-                    'placeholder' => 'CVV'
+                ->add('cvv', 'text', array(
+                    "attr" => array(
+                        'placeholder' => 'CVV'
                     )
+                        )
                 )
-            )
-            ->add('name_on_card', 'text', array( 
-                "attr" => array(
-                    'placeholder' => 'Tu nombre en la tarjeta de crédito'
+                ->add('name_on_card', 'text', array(
+                    "attr" => array(
+                        'placeholder' => 'Tu nombre en la tarjeta de crédito'
                     )
+                        )
                 )
-            )
-            ->add('save', 'submit', array(
-                'label' => 'Confirmar pago',
-                "attr" => array(
-                    'class' => 'btn register-AS1 btn-symplifica'
+                ->add('save', 'submit', array(
+                    'label' => 'Confirmar pago',
+                    "attr" => array(
+                        'class' => 'btn register-AS1 btn-symplifica'
+                    )
+                        )
                 )
-                )
-            )
-            ->getForm();
+                ->getForm();
 
         $form->handleRequest($request);
-            if ($form->isValid()) {
+        if ($form->isValid()) {
             $user = $this->getUser();
             /** @var Person $person */
-            $person=$user->getPersonPerson();
+            $person = $user->getPersonPerson();
             $data = $form->getData();
 
             //TODO NovoPayment
             $request->setMethod("POST");
             $request->request->add(array(
-                "documentType"=>$person->getDocumentType(),
-                "documentNumber"=>$person->getDocument(),
-                "credit_card"=>$form->get("credit_card")->getData(),
-                "expiry_date_year"=>$form->get("expiry_date_year")->getData(),
-                "expiry_date_month"=>$form->get("expiry_date_month")->getData(),
-                "cvv"=>$form->get("cvv")->getData(),
+                "documentType" => $person->getDocumentType(),
+                "documentNumber" => $person->getDocument(),
+                "credit_card" => $form->get("credit_card")->getData(),
+                "expiry_date_year" => $form->get("expiry_date_year")->getData(),
+                "expiry_date_month" => $form->get("expiry_date_month")->getData(),
+                "cvv" => $form->get("cvv")->getData(),
             ));
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
-            $response = json_decode($insertionAnswer->getContent());            
-            $methodId = $response->{'response'}->{'method-id'};            
-            if($insertionAnswer->getStatusCode()!=201){
+            $response = json_decode($insertionAnswer->getContent());
+            $methodId = $response->{'response'}->{'method-id'};
+            if ($insertionAnswer->getStatusCode() != 201) {
                 return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
-                    'form' => $form->createView(),
-                    'errno' => "Not a valid Credit Card check the data again"
+                            'form' => $form->createView(),
+                            'errno' => "Not a valid Credit Card check the data again"
                 ));
             }
 
-            /*return $this->render('RocketSellerTwoPickBundle:Registration:cardSuccess.html.twig', array(
-                'data' => $data,
-                ));*/
+            /* return $this->render('RocketSellerTwoPickBundle:Registration:cardSuccess.html.twig', array(
+              'data' => $data,
+              )); */
             //return $this->redirectToRoute('express_pay_start',array('id'=>$methodId));
-            return $this->startExpressPayAction($methodId); 
+            return $this->startExpressPayAction($methodId);
         }
-            return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
-                'form' => $form->createView(),
+        return $this->render('RocketSellerTwoPickBundle:Registration:expressPaymentMethod.html.twig', array(
+                    'form' => $form->createView(),
         ));
     }
-    public function startExpressPayAction($id){
+
+    public function startExpressPayAction($id)
+    {
         $user = $this->getUser();
         $product = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:Product')
-        ->findOneBySimpleName("PRE");
-        
-        $totalValue = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
-        return $this->render('RocketSellerTwoPickBundle:Registration:payRegisterExpress.html.twig', 
-            array(
-                'product' => $product,
-                'totalValue'=> $totalValue,
-                'methodId' =>$id
-                )
-            );
+                ->getRepository('RocketSellerTwoPickBundle:Product')
+                ->findOneBySimpleName("PRE");
 
+        $totalValue = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
+        return $this->render('RocketSellerTwoPickBundle:Registration:payRegisterExpress.html.twig', array(
+                    'product' => $product,
+                    'totalValue' => $totalValue,
+                    'methodId' => $id
+                        )
+        );
     }
 
-    public function payRegisterExpressAction($id){
-        
+    public function payRegisterExpressAction($id)
+    {
+
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
-        $format = array('_format'=>'json');
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:postPayRegisterExpress', array('id' => $user->getId(),'idPayMethod'=>$id),$format);
+        $format = array('_format' => 'json');
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:postPayRegisterExpress', array('id' => $user->getId(), 'idPayMethod' => $id), $format);
 
-        if ($insertionAnswer->getStatusCode()==200) {           
+        if ($insertionAnswer->getStatusCode() == 200) {
             return $this->redirectToRoute('express_success');
-        }elseif ($insertionAnswer == 404) {
+        } elseif ($insertionAnswer == 404) {
             dump("Procesando");
             exit();
-        }else{
+        } else {
             dump($insertionAnswer);
             exit();
         }
-        
-        
-
     }
+
     public function successExpressAction()
     {
         $user = $this->getUser();
         $role = $this->getDoctrine()
-        ->getRepository('RocketSellerTwoPickBundle:Role')
-        ->findByName("ROLE_BACK_OFFICE");
-        
+                ->getRepository('RocketSellerTwoPickBundle:Role')
+                ->findByName("ROLE_BACK_OFFICE");
+
         $notification = new Notification();
         $notification->setPersonPerson($user->getPersonPerson());
         $notification->setType("Registro express");
@@ -186,91 +183,89 @@ class ExpressRegistrationController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:Registration:expressSuccess.html.twig');
     }
+
     public function menuEmployerAction($id)
     {
         $suma = 0;
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
-        $user  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
-        $employer  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
-        if (sizeof($employer[0]->getEmployerHasEmployees())>0) {
+        $user = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
+        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
+        if (sizeof($employer[0]->getEmployerHasEmployees()) > 0) {
             foreach ($employer[0]->getEmployerHasEmployees() as $employerHasEmployee) {
-                $suma += $employerHasEmployee->getEmployeeEmployee()->getRegisterState();                
+                $suma += $employerHasEmployee->getEmployeeEmployee()->getRegisterState();
             }
-            
-            $promedio = $suma/sizeof($employer[0]->getEmployerHasEmployees());
-        }else{
+
+            $promedio = $suma / sizeof($employer[0]->getEmployerHasEmployees());
+        } else {
             $promedio = -1;
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:menuEmployer.html.twig',array('employer'=>$employer[0],'employeesState'=>$promedio)); 
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:menuEmployer.html.twig', array('employer' => $employer[0], 'employeesState' => $promedio));
     }
+
     public function registrationAction($id, Request $request)
-    {   
+    {
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
-        $user  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
-        $employer  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
+        $user = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
+        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
         $workplace = new Workplace();
         $employer[0]->addWorkplace($workplace);
 
         if (!$person) {
-          throw $this->createNotFoundException(
-                  'No news found for id ' . $id
-          );
+            throw $this->createNotFoundException(
+                    'No news found for id ' . $id
+            );
         }
-        $form = $this->createForm(new EmployerRegistration(),$employer[0]);
+        $form = $this->createForm(new EmployerRegistration(), $employer[0]);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {                    
-            $employer[0]->setRegisterState(100);                    
+        if ($form->isValid()) {
+            $employer[0]->setRegisterState(100);
             $em->flush();
-            return $this->redirectToRoute('back_employer_menu',array('id'=>$employer[0]->getPersonPerson()->getIdPerson()));
+            return $this->redirectToRoute('back_employer_menu', array('id' => $employer[0]->getPersonPerson()->getIdPerson()));
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:BackOffice:startExpressRegister.html.twig',
-            array('form' => $form->createView())
+                        'RocketSellerTwoPickBundle:BackOffice:startExpressRegister.html.twig', array('form' => $form->createView())
         );
     }
-    public function employeeCreateAction($id,$idEmployee, Request $request)
+
+    public function employeeCreateAction($id, $idEmployee, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $personEmployer = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
-        $user[0]  = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($personEmployer);
-        $employerSearch  = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($personEmployer);
-        $employer = $employerSearch[0];        
+        $user[0] = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($personEmployer);
+        $employerSearch = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($personEmployer);
+        $employer = $employerSearch[0];
         $workplaces = $employer->getWorkplaces();
         if ($idEmployee == -1) {
             $employerHasEmployee = new EmployerHasEmployee();
             $contract = new Contract();
             $employerHasEmployee->addContract($contract);
-            $employee = new Employee();                    
-            $person = new Person();                        
-            $phone = new Phone();            
+            $employee = new Employee();
+            $person = new Person();
+            $phone = new Phone();
             $person->addPhone($phone);
-            $employee->setPersonPerson($person);            
+            $employee->setPersonPerson($person);
         }
-        $form = $this->createForm(new BasicEmployeePersonRegistration(),$person);
+        $form = $this->createForm(new BasicEmployeePersonRegistration(), $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $employee->setRegisterState(20);            
-            $em->persist($employee);                                                        
+            $employee->setRegisterState(20);
+            $em->persist($employee);
             $em->flush();
             $employerHasEmployee->setEmployerEmployer($employer);
             $employerHasEmployee->setEmployeeEmployee($employee);
             $em->persist($employerHasEmployee);
             $em->flush();
 
-            return $this->redirectToRoute('back_employer_menu',array('id'=>$employer->getPersonPerson()->getIdPerson()));
+            return $this->redirectToRoute('back_employer_menu', array('id' => $employer->getPersonPerson()->getIdPerson()));
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:BackOffice:ExpressEmployeeRegister.html.twig',
-            array('form' => $form->createView())
+                        'RocketSellerTwoPickBundle:BackOffice:ExpressEmployeeRegister.html.twig', array('form' => $form->createView())
         );
-
-        
-
     }
 
 }

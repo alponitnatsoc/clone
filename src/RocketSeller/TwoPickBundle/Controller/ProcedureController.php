@@ -28,9 +28,48 @@ class ProcedureController extends Controller
     }
     public function procedureByIdAction($procedureId)
     {
-    	$procedure = $this->loadClassById($procedureId,'RealProcedure');    	
-    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',array('procedure'=>$procedure));
+    	$procedure = $this->loadClassById($procedureId,'RealProcedure');
+    	$employer = $procedure->getEmployerEmployer();
+    	$employerHasEmployees =  $employer->getEmployerHasEmployees();
+    	$actionComplete = array();
+		//aqui voy  	
+    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',	array('procedure'=>$procedure,
+    					'employerHasEmployees'=>$employerHasEmployees,
+    					
+    		));
 
+    }
+    public function checkActionCompletation($idPerson)
+    {	
+    	$person = $this->loadClassById($idPerson,'Person');
+    	$actions = $this->getdoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Action')
+		->findByPersonPerson($person);
+
+		return $personAction;
+
+    }
+    public function changeEmployeeStatusAction($procedureId,$idEmployerHasEmployee)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,'EmployerHasEmployee');
+    	$person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+    	$actions = $this->getdoctrine()
+		->getRepository('RocketSellerTwoPickBundle:Action')
+		->findByPersonPerson($person);
+		$actionsIncomplete = array();
+		foreach ($actions as $action) {
+			if ($action->getStatus() != "Completado") {
+				array_push($actionsIncomplete,$action);
+			}
+		}
+		$employerHasEmployee->setState(3);
+			$em->persist($employerHasEmployee);
+			$em->flush();
+			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));	
+		
+		
+    	
     }
 
     public function procedureAction($employerId,$idProcedureType)
@@ -262,8 +301,8 @@ class ProcedureController extends Controller
      */
     public function testValidateAction()
     {
-    		$id_employer =1;
-    		$id_procedure_type = 1;
+    		$id_employer =26;
+    		$id_procedure_type = 3;
     		$priority = 1;
     		$id_user = 1;
     		$id_contrato = 1; //preguntar para que el contrato?

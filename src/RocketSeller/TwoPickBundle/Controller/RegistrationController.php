@@ -163,11 +163,11 @@ class RegistrationController extends BaseController
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
         $userManager->updateUser($user);
         if (null === $response = $event->getResponse()) {
-            /*if ($user->getExpress()) {
-                $url = $this->generateUrl('express_payment');   
-            }else{
-                $url = $this->generateUrl('edit_profile');
-            }*/
+            /* if ($user->getExpress()) {
+              $url = $this->generateUrl('express_payment');
+              }else{
+              $url = $this->generateUrl('edit_profile');
+              } */
 
             $url = $this->generateUrl('choose_registration');
             $response = new RedirectResponse($url);
@@ -175,6 +175,7 @@ class RegistrationController extends BaseController
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
         return $response;
     }
+
     public function chooseRegisterAction()
     {
         /** @var User $user */
@@ -185,6 +186,7 @@ class RegistrationController extends BaseController
             return $this->redirectToRoute('ajax');
         }
     }
+
     // /**
     //  * Tell the user his account is now confirmed
     //  */
@@ -216,19 +218,25 @@ class RegistrationController extends BaseController
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new RegistrationExpress());
+
+
         $person = $user->getPersonPerson();
-        $form->setData($person);
+
+        $form = $this->createForm(new RegistrationExpress(), $person, array(
+            'action' => $this->generateUrl('express_start'),
+            'method' => 'POST',
+        ));
+        //$form->setData($person);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            
+            //dump($request);
             $person->setDocumentType($form->get("documentType")->getData());
             $person->setDocument($form->get("document")->getData());
             $person->setLastName1($form->get("lastName1")->getData());
             $person->setLastName2($form->get("lastName2")->getData());
-            $employer = new Employer();            
-            $phone = new Phone();            
+            $employer = new Employer();
+            $phone = new Phone();
             $phone->setPhoneNumber($request->get("phone"));
             $person->addPhone($phone);
             $person->setNames($form->get("names")->getData());
@@ -249,8 +257,10 @@ class RegistrationController extends BaseController
 
             //return $this->render('RocketSellerTwoPickBundle:Registration:checkEmail.html.twig');
         }
+        //dump($request);
         return $this->render('FOSUserBundle:Registration:expressRegistration.html.twig', array(
                     'form' => $form->createView()
         ));
-    }    
+    }
+
 }

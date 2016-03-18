@@ -327,6 +327,8 @@ class PaymentMethodRestController extends FOSRestController
                 }
                 $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
                 $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $invoiceNumber = $this->getInvoiceNumber();
+                $purchaseOrder->setInvoiceNumber($invoiceNumber);
                 $em->persist($purchaseOrder);
                 $pay = new Pay();
                 $pay->setUserIdUser($user);
@@ -340,4 +342,21 @@ class PaymentMethodRestController extends FOSRestController
         }
     }
 
+    private function getInvoiceNumber()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $configRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config");
+        /** @var \RocketSeller\TwoPickBundle\Entity\Config $ufg */
+        $ufg = $configRepo->findOneBy(array(
+            'name' => 'ufg'
+        ));
+
+        $newInvoiceNumber = $ufg->getValue()+1;
+
+        $ufg->setValue($newInvoiceNumber);
+        $em->persist($ufg);
+        $em->flush();
+
+        return $newInvoiceNumber;
+    }
 }

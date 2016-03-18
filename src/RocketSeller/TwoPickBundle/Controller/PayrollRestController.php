@@ -1097,9 +1097,9 @@ class PayrollRestController extends FOSRestController
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
      *    (name="novelty_concept_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the concept as provided by SQL, it can be found in the table novelty_type, under payroll_code")
      *    (name="novelty_value", nullable=true, requirements="([0-9])+(.[0-9]+)?", description="Value in COP of the novelty, is optional")
-     *    (name="unity_numbers", nullable=true, requirements="([0-9])+", strict=true, description="Number of units of the novelty, it can be in hours or days, depending on the novelty.")
+     *    (name="unity_numbers", nullable=false, requirements="([0-9])+", strict=true, description="Number of units of the novelty, it can be in hours or days, depending on the novelty.")
      *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
-     *    (name="novelty_end_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+     *    (name="novelty_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
      *
      * @return View
      */
@@ -1470,7 +1470,7 @@ class PayrollRestController extends FOSRestController
      *    (name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL, it can be found on the table novelty_type, under payroll_code, there is a column  absenteeism_or_novelty, to get if it can be used here.")
      *    (name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
      *    (name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="End day the absenteeism starts(format: DD-MM-YYYY)")
-     *    (name="absenteeism_units", nullable=false, requirements="([0-9])+", description="Number of units, can be hours or days")
+     *    (name="absenteeism_units", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
      *    (name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
      *
      * @return View
@@ -1490,9 +1490,9 @@ class PayrollRestController extends FOSRestController
         $regex['absenteeism_start_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['absenteeism_start_date'] = true;
         $regex['absenteeism_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
-        $mandatory['absenteeism_end_date'] = true;
+        $mandatory['absenteeism_end_date'] = false;
         $regex['absenteeism_units'] = '([0-9])+';
-        $mandatory['absenteeism_units'] = true;
+        $mandatory['absenteeism_units'] = false;
         $regex['absenteeism_state'] = '(ACT|CAN)';
         $mandatory['absenteeism_state'] = false;
 
@@ -2624,55 +2624,6 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
-
-    /**
-     * Executes the vacations liquidation process.<br/>
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Executes the contributions liquidation process.",
-     *   statusCodes = {
-     *     200 = "OK",
-     *     400 = "Bad Request",
-     *     401 = "Unauthorized",
-     *     404 = "Not Found"
-     *   }
-     * )
-     *
-     * @param Request $request.
-     * Rest Parameters:
-     *
-     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
-     *
-     * @return View
-     */
-    public function postNuevosPagosAction(Request $request)
-    {
-        ini_set("soap.wsdl_cache_enabled", 1);
-        $opts = array(
-                //"ssl" => array("ciphers" => "RC4-SHA")
-        );
-        $consumptionsWsUrl = sprintf(\UneConstants::UNE_WS_MY_CONSUMPTION_WSDL_URL, $this->_uneHostname);
-        $client = new \SoapClient("http://52.86.183.212:8080/dssp/services/listServices", array("connection_timeout" => 20,
-            "trace" => true,
-            "exceptions" => true,
-            "stream_context" => stream_context_create($opts),
-                //"login" => $login,
-                //"password" => $pass
-        ));
-
-        $args = array('numeroRadicado' => "111111111000111",);
-
-
-        $res = $client->__soapCall("ConsultarEstadoRecaudo", $args);
-
-        var_dump($res);
-        if (is_string($res)) {
-            $res = new \SimpleXMLElement($res);
-        }
-    }
-
 }
 
 ?>
