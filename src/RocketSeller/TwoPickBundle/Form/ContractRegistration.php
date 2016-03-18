@@ -197,7 +197,9 @@ class ContractRegistration extends AbstractType
                 'label'=>'Frecuencia de Págo',
                 'required'=> true,
                 'placeholder'=>'Selecione una opción'
-            ));
+            ))
+            ->add('workplace', new WorkPlaceRegistration(), array(
+                'mapped' => false));
     }
 
     public function configureOptions(OptionsResolver $resolver)

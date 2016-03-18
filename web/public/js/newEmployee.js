@@ -317,7 +317,9 @@ function startEmployee() {
     var $collectionHolderB;
     var $collectionHolderW;
     $("#toHide").children().hide();
-    var $addBenefitLink = $('<a href="#" class="col-md-4 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo beneficio</a>');
+    var $addBenefitLink =
+        $('<a href="#" class="col-md-4 add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;">' +
+            '<i class="fa fa-plus-circle" style="color:#00cdcc;"></i> Adicionar nuevo beneficio</a>');
     var $newLinkLi = $('<li></li>').append($addBenefitLink);
     // Get the ul that holds the collection of benefits
     $collectionHolderB = $('ul.benefits');
@@ -658,6 +660,37 @@ function addListeners() {
             inquiry();
         }
     });
+    $("#addWorplace").on("click", function (e) {
+        e.preventDefault();
+        $("#newWorkplaceModal").modal("show");
+    });
+    $("#saveWorplaceModal").on("click", function (e) {
+        e.preventDefault();
+        var nameW=$("#register_employee_employeeHasEmployers_workplace_name");
+        var addW=$("#register_employee_employeeHasEmployers_workplace_mainAddress");
+        var cityId=$("#register_employee_employeeHasEmployers_workplace_city");
+        var deptId=$("#register_employee_employeeHasEmployers_workplace_department");
+        $.ajax({
+            url: $(this).attr('href'),
+            type: "POST",
+            data: {
+                workName: nameW.val(),
+                workMainAddress: addW.val(),
+                workCity: cityId.val(),
+                workDepartment: deptId.val(),
+            }
+        }).done(function (data) {
+            $("#newWorkplaceModal").modal("hide");
+            $("#register_employee_employeeHasEmployers_workplaces").append($('<option>', {
+                value: data["idWorkplace"],
+                text: nameW.val()
+            }));
+        }).fail(function (data, textStatus, errorThrown) {
+            if (jqXHR == errorHandleTry(jqXHR)) {
+                $("#errorModal").modal("show");
+            }
+        });
+    });
 
 
     $("#register_employee_employeeHasEmployers_weekDays").on("change", function () {
@@ -859,7 +892,9 @@ function calculator() {
                 base = smmlv;
             }
 
-            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer + PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
+                PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
+                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             PensEmployerCal = PensEmployer * base;
@@ -897,7 +932,9 @@ function calculator() {
                 cajaCal = caja * base;
             }
             //then calculate arl ces and the rest
-            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer + arl + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
+            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer + arl
+                + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
+                * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             arlCal = arl * base;
@@ -918,7 +955,8 @@ function calculator() {
             transportAid = 0;
         }
 
-        totalExpenses = salaryM + aidD + transportAid + dotation + ((EPSEmployer + PensEmployer + arl + caja + vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid));
+        totalExpenses = salaryM + aidD + transportAid + dotation + ((EPSEmployer + PensEmployer + arl + caja +
+            vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid));
         EPSEmployerCal = EPSEmployer * (salaryM + aidD);
         EPSEmployeeCal = EPSEmployee * (salaryM + aidD);
         PensEmployerCal = PensEmployer * (salaryM + aidD);

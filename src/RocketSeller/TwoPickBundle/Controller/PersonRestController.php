@@ -48,14 +48,14 @@ class PersonRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $people */
-        $people =$user->getPersonPerson();
-        $employer=$people->getEmployer();
-        if ($employer==null) {
-            $employer=new Employer();
+        $people = $user->getPersonPerson();
+        $employer = $people->getEmployer();
+        if ($employer == null) {
+            $employer = new Employer();
             $people->setEmployer($employer);
         }
 
@@ -66,7 +66,7 @@ class PersonRestController extends FOSRestController
             $people->setLastName2($paramFetcher->get('lastName2'));
             $people->setDocument($paramFetcher->get('document'));
             $people->setDocumentType($paramFetcher->get('documentType'));
-            if($paramFetcher->get('youAre')!=null){
+            if ($paramFetcher->get('youAre') != null) {
                 $employer->setEmployerType($paramFetcher->get('youAre'));
             }
             $datetime = new DateTime();
@@ -79,7 +79,7 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                if($employer->getRegisterState()<33)
+                if ($employer->getRegisterState() < 33)
                     $employer->setRegisterState(33);
                 $em->persist($employer);
                 $em->persist($people);
@@ -92,6 +92,7 @@ class PersonRestController extends FOSRestController
             }
         }
     }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -118,63 +119,63 @@ class PersonRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $people */
-        $people =$user->getPersonPerson();
-        $employer=$people->getEmployer();
+        $people = $user->getPersonPerson();
+        $employer = $people->getEmployer();
 
         //all the data is valid
         if (true) {
-            if($employer->getRegisterState()<33){
-                $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
-                    'error'=>array('form'=>'please fill all the fields')))->setStatusCode(403);
+            if ($employer->getRegisterState() < 33) {
+                $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '1')),
+                    'error' => array('form' => 'please fill all the fields')))->setStatusCode(403);
                 return $view;
             }
             $people->setMainAddress($paramFetcher->get('mainAddress'));
-            $phoneRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
-            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
-            $actualPhonesId=$paramFetcher->get('phonesIds');
-            $actualPhonesAdd=$paramFetcher->get('phones');
+            $phoneRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Phone');
+            $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $actualPhonesId = $paramFetcher->get('phonesIds');
+            $actualPhonesAdd = $paramFetcher->get('phones');
             $people->setCity($cityRepo->find($paramFetcher->get('city')));
 
             $people->setDepartment($depRepo->find($paramFetcher->get('department')));
             $em = $this->getDoctrine()->getManager();
 
-            $actualPhones= new ArrayCollection();
-            for($i=0;$i<count($actualPhonesAdd);$i++){
-                $tempPhone=null;
-                if($actualPhonesId[$i]!=""){
+            $actualPhones = new ArrayCollection();
+            for ($i = 0; $i < count($actualPhonesAdd); $i++) {
+                $tempPhone = null;
+                if ($actualPhonesId[$i] != "") {
                     /** @var Phone $tempPhone */
-                    $tempPhone=$phoneRepo->find($actualPhonesId[$i]);
-                    if($tempPhone->getPersonPerson()->getEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
-                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
-                            'error'=>array('wokplaces'=>'you dont have those phones')))->setStatusCode(400);
+                    $tempPhone = $phoneRepo->find($actualPhonesId[$i]);
+                    if ($tempPhone->getPersonPerson()->getEmployer()->getIdEmployer() != $employer->getIdEmployer()) {
+                        $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '1')),
+                            'error' => array('wokplaces' => 'you dont have those phones')))->setStatusCode(400);
                         return $view;
                     }
 
-                }else{
-                    $tempPhone=new Phone();
+                } else {
+                    $tempPhone = new Phone();
                 }
                 $tempPhone->setPhoneNumber($actualPhonesAdd[$i]);
                 $actualPhones->add($tempPhone);
             }
             $phones = $people->getPhones();
             /** @var Phone $phone */
-            foreach($phones as $phone){
+            foreach ($phones as $phone) {
                 /** @var Phone $actPhone */
-                $flag=false;
-                foreach($actualPhones as $actPhone){
-                    if($phone->getIdPhone()==$actPhone->getIdPhone()){
-                        $flag=true;
-                        $phone=$actPhone;
+                $flag = false;
+                foreach ($actualPhones as $actPhone) {
+                    if ($phone->getIdPhone() == $actPhone->getIdPhone()) {
+                        $flag = true;
+                        $phone = $actPhone;
                         $actualPhones->removeElement($actPhone);
                         continue;
                     }
                 }
-                if(!$flag){
+                if (!$flag) {
                     $phone->setPersonPerson(null);
                     $em->persist($phone);
                     $em->remove($phone);
@@ -182,22 +183,22 @@ class PersonRestController extends FOSRestController
                     $phones->removeElement($phone);
                 }
             }
-            foreach($actualPhones as $phone){
+            foreach ($actualPhones as $phone) {
                 $people->addPhone($phone);
             }
 
             $view = View::create();
             $errors = $this->get('validator')->validate($user, array('Update'));
-            if($people->getCity()==null){
-                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
-                    'error'=>array('department'=>'not valid city')))->setStatusCode(404);
+            if ($people->getCity() == null) {
+                $view->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '2')),
+                    'error' => array('department' => 'not valid city')))->setStatusCode(404);
             }
-            if($people->getDepartment()==null){
-                $view->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
-                    'error'=>array('department'=>'not valid department')) )->setStatusCode(404);
+            if ($people->getDepartment() == null) {
+                $view->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '2')),
+                    'error' => array('department' => 'not valid department')))->setStatusCode(404);
             }
             if (count($errors) == 0) {
-                if($employer->getRegisterState()==33)
+                if ($employer->getRegisterState() == 33)
                     $employer->setRegisterState(66);
                 $em->persist($employer);
                 $em->persist($people);
@@ -210,6 +211,60 @@ class PersonRestController extends FOSRestController
             }
         }
     }
+
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="workName", nullable=false, strict=true, description="workplace name.")
+     * @RequestParam(name="workMainAddress", nullable=false, strict=true, description="main workplace Address.")
+     * @RequestParam(name="workCity", nullable=false, strict=true, description="workplace city.")
+     * @RequestParam(name="workDepartment", nullable=false, strict=true, description="workplace department.")     * @return View
+     * @return View
+     */
+    public function postAddWorkplaceAction(ParamFetcher $paramFetcher)
+    {
+        $view = View::create();
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Person $people */
+        $people = $user->getPersonPerson();
+        $employer = $people->getEmployer();
+        $actualWorkplacesName = $paramFetcher->get('workName');
+        $actualWorkplacesAdd = $paramFetcher->get('workMainAddress');
+        $actualWorkplacesCity = $paramFetcher->get('workCity');
+        $actualWorkplacesDept = $paramFetcher->get('workDepartment');
+
+        $em = $this->getDoctrine()->getManager();
+        $cityRepo = $em->getRepository('RocketSellerTwoPickBundle:City');
+        $depRepo = $em->getRepository('RocketSellerTwoPickBundle:Department');
+        $tempWorkplace = new Workplace();
+
+        $tempWorkplace->setName($actualWorkplacesName);
+        $tempWorkplace->setMainAddress($actualWorkplacesAdd);
+        $tempWorkplace->setCity($cityRepo->find($actualWorkplacesCity));
+        $tempWorkplace->setDepartment($depRepo->find($actualWorkplacesDept));
+        $employer->addWorkplace($tempWorkplace);
+        $em->persist($employer);
+        $em->flush();
+        return $view->setStatusCode(200)->setData(array("idWorkplace"=>$tempWorkplace->getIdWorkplace()));
+
+    }
+
     /**
      * Create a Person from the submitted data.<br/>
      *
@@ -236,48 +291,48 @@ class PersonRestController extends FOSRestController
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
-            return $view->setStatusCode(401)->setData(array("error"=>array("login"=>"El usuario no está logeado"),"url"=>$this->generateUrl("fos_user_security_login")));
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         /** @var User $user */
-        $user=$this->getUser();
+        $user = $this->getUser();
         /** @var Person $people */
-        $people =$user->getPersonPerson();
-        $employer=$people->getEmployer();
+        $people = $user->getPersonPerson();
+        $employer = $people->getEmployer();
 
         //all the data is valid
         if (true) {
-            if($employer->getRegisterState()<66){
-                $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'1')),
-                    'error'=>array('form'=>'please fill all the fields')))->setStatusCode(403);
+            if ($employer->getRegisterState() < 66) {
+                $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '1')),
+                    'error' => array('form' => 'please fill all the fields')))->setStatusCode(403);
                 return $view;
             }
-            $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-            $depRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
-            $workRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
+            $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+            $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+            $workRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Workplace');
 
             $em = $this->getDoctrine()->getManager();
-            if($paramFetcher->get("sameWorkHouse")!=null){
+            if ($paramFetcher->get("sameWorkHouse") != null) {
                 $employer->setSameWorkHouse($paramFetcher->get("sameWorkHouse"));
             }
-            $actualWorkplacesId=$paramFetcher->get('workId');
+            $actualWorkplacesId = $paramFetcher->get('workId');
             $actualWorkplacesName = $paramFetcher->get('workName');
-            $actualWorkplacesAdd=$paramFetcher->get('workMainAddress');
-            $actualWorkplacesCity=$paramFetcher->get('workCity');
-            $actualWorkplacesDept=$paramFetcher->get('workDepartment');
-            $actualWorkplaces= new ArrayCollection();
-            for($i=0;$i<count($actualWorkplacesAdd);$i++){
-                $tempWorkplace=null;
-                if($actualWorkplacesId[$i]!=""){
+            $actualWorkplacesAdd = $paramFetcher->get('workMainAddress');
+            $actualWorkplacesCity = $paramFetcher->get('workCity');
+            $actualWorkplacesDept = $paramFetcher->get('workDepartment');
+            $actualWorkplaces = new ArrayCollection();
+            for ($i = 0; $i < count($actualWorkplacesAdd); $i++) {
+                $tempWorkplace = null;
+                if ($actualWorkplacesId[$i] != "") {
                     /** @var Workplace $tempWorkplace */
-                    $tempWorkplace=$workRepo->find($actualWorkplacesId[$i]);
-                    if($tempWorkplace->getEmployerEmployer()->getIdEmployer()!=$employer->getIdEmployer()){
-                        $view = View::create()->setData(array('url'=>$this->generateUrl('edit_profile', array('step'=>'2')),
-                            'error'=>array('wokplaces'=>'you dont have those workplaces')))->setStatusCode(400);
+                    $tempWorkplace = $workRepo->find($actualWorkplacesId[$i]);
+                    if ($tempWorkplace->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer()) {
+                        $view = View::create()->setData(array('url' => $this->generateUrl('edit_profile', array('step' => '2')),
+                            'error' => array('wokplaces' => 'you dont have those workplaces')))->setStatusCode(400);
                         return $view;
                     }
 
-                }else{
-                    $tempWorkplace=new Workplace();
+                } else {
+                    $tempWorkplace = new Workplace();
                 }
                 $tempWorkplace->setName($actualWorkplacesName[$i]);
                 $tempWorkplace->setMainAddress($actualWorkplacesAdd[$i]);
@@ -287,18 +342,18 @@ class PersonRestController extends FOSRestController
             }
             $workplaces = $employer->getWorkplaces();
             /** @var Workplace $work */
-            foreach($workplaces as $work){
+            foreach ($workplaces as $work) {
                 /** @var Workplace $actWork */
-                $flag=false;
-                foreach($actualWorkplaces as $actWork){
-                    if($work->getIdWorkplace()==$actWork->getIdWorkplace()){
-                        $flag=true;
-                        $work=$actWork;
+                $flag = false;
+                foreach ($actualWorkplaces as $actWork) {
+                    if ($work->getIdWorkplace() == $actWork->getIdWorkplace()) {
+                        $flag = true;
+                        $work = $actWork;
                         $actualWorkplaces->removeElement($actWork);
                         continue;
                     }
                 }
-                if(!$flag){
+                if (!$flag) {
                     $work->setEmployerEmployer(null);
                     $em->persist($work);
                     $em->remove($work);
@@ -306,7 +361,7 @@ class PersonRestController extends FOSRestController
                     $workplaces->removeElement($work);
                 }
             }
-            foreach($actualWorkplaces as $work){
+            foreach ($actualWorkplaces as $work) {
                 $employer->addWorkplace($work);
             }
 
@@ -315,7 +370,7 @@ class PersonRestController extends FOSRestController
             $errors = $this->get('validator')->validate($user, array('Update'));
 
             if (count($errors) == 0) {
-                if($employer->getRegisterState()==66){/*
+                if ($employer->getRegisterState() == 66) {/*
                     $nowDate=new DateTime();
                     if(($user->getDateCreated()->diff($nowDate)->h)<48){
                         $response = $this->forward('RocketSellerTwoPickBundle:UserRest:postUpdateUserStatusTest', array('id'=>$user->getId(),'status'=>3));
@@ -328,10 +383,10 @@ class PersonRestController extends FOSRestController
                 }
                 $em->persist($user);
                 $em->flush();
-                if($employer->getEmployerHasEmployees()->count()==0){
-                    $view->setData(array('url'=>$this->generateUrl('register_employee', array('id'=>-1,'tab'=>1))) )->setStatusCode(200);
-                }else{
-                    $view->setData(array('url'=>$this->generateUrl('show_dashboard')) )->setStatusCode(200);
+                if ($employer->getEmployerHasEmployees()->count() == 0) {
+                    $view->setData(array('url' => $this->generateUrl('register_employee', array('id' => -1, 'tab' => 1))))->setStatusCode(200);
+                } else {
+                    $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
                 }
                 return $view;
             } else {
@@ -340,6 +395,7 @@ class PersonRestController extends FOSRestController
             }
         }
     }
+
     /**
      * Get the cities of a department.<br/>
      *
@@ -360,8 +416,8 @@ class PersonRestController extends FOSRestController
      */
     public function postCitiesAction(ParamFetcher $paramFetcher)
     {
-        $idDepartment=$paramFetcher->get('department');
-        $cityRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+        $idDepartment = $paramFetcher->get('department');
+        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
         $query = $cityRepo->createQueryBuilder('c')
             ->where('c.departmentDepartment = :department')
             ->setParameter('department', $idDepartment)
@@ -369,14 +425,14 @@ class PersonRestController extends FOSRestController
             ->getQuery();
 
 
-        $cities= $query->getResult();
+        $cities = $query->getResult();
         $view = View::create();
 
-        if ( count($cities)!= 0) {
+        if (count($cities) != 0) {
             $view->setData($cities)->setStatusCode(200);
             return $view;
         } else {
-            $view->setStatusCode(404)->setHeader("error","Department does't exist");
+            $view->setStatusCode(404)->setHeader("error", "Department does't exist");
             return $view;
         }
     }
@@ -404,15 +460,15 @@ class PersonRestController extends FOSRestController
     public function postInquiryDocumentAction(ParamFetcher $paramFetcher)
     {
         $view = View::create();
-        if($this->getUser()==null){
-            $view->setStatusCode(403)->setHeader("error","You are not allowed to get information");
+        if ($this->getUser() == null) {
+            $view->setStatusCode(403)->setHeader("error", "You are not allowed to get information");
             return $view;
         }
 
-        $documentType=$paramFetcher->get('documentType');
-        $document=$paramFetcher->get('document');
-        $personRepo=$this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
-        /** @var QueryBuilder  $query */
+        $documentType = $paramFetcher->get('documentType');
+        $document = $paramFetcher->get('document');
+        $personRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+        /** @var QueryBuilder $query */
         $query = $personRepo->createQueryBuilder('c')
             ->where('c.documentType = :documentType AND c.document = :document')
             ->setParameter('documentType', $documentType)
@@ -421,46 +477,46 @@ class PersonRestController extends FOSRestController
 
 
         /** @var Person $person */
-        $person= $query->setMaxResults(1)->getOneOrNullResult();
+        $person = $query->setMaxResults(1)->getOneOrNullResult();
 
 
-        if ( $person!=null) {
+        if ($person != null) {
 
             $view->setData(array(
                 'names' => $person->getNames(),
                 'lastName2' => $person->getLastName2(),
                 'civilStatus' => $person->getCivilStatus(),
                 'gender' => $person->getGender(),
-                'documentExpeditionDate' => $person->getDocumentExpeditionDate()?array(
-                    'year'=>$person->getDocumentExpeditionDate()->format("Y"),
-                    'month'=>intval($person->getDocumentExpeditionDate()->format("m")),
-                    'day'=>intval($person->getDocumentExpeditionDate()->format("d")),):array(
-                    'year'=>"",
-                    'month'=>"",
-                    'day'=>"",
+                'documentExpeditionDate' => $person->getDocumentExpeditionDate() ? array(
+                    'year' => $person->getDocumentExpeditionDate()->format("Y"),
+                    'month' => intval($person->getDocumentExpeditionDate()->format("m")),
+                    'day' => intval($person->getDocumentExpeditionDate()->format("d")),) : array(
+                    'year' => "",
+                    'month' => "",
+                    'day' => "",
                 ),
                 'documentExpeditionPlace' => $person->getDocumentExpeditionPlace(),
-                'birthDate' => $person->getBirthDate()?array(
-                    'year'=>$person->getBirthDate()->format("Y"),
-                    'month'=>intval($person->getBirthDate()->format("m")),
-                    'day'=>intval($person->getBirthDate()->format("d")),):array(
-                    'year'=>"",
-                    'month'=>"",
-                    'day'=>"",
+                'birthDate' => $person->getBirthDate() ? array(
+                    'year' => $person->getBirthDate()->format("Y"),
+                    'month' => intval($person->getBirthDate()->format("m")),
+                    'day' => intval($person->getBirthDate()->format("d")),) : array(
+                    'year' => "",
+                    'month' => "",
+                    'day' => "",
                 ),
-                'birthCountry' => $person->getBirthCountry()?:"",
-                'birthDepartment' => $person->getBirthDepartment()?:"",
-                'birthCity' => $person->getBirthCity()?:"",
+                'birthCountry' => $person->getBirthCountry() ?: "",
+                'birthDepartment' => $person->getBirthDepartment() ?: "",
+                'birthCity' => $person->getBirthCity() ?: "",
                 'mainAddress' => $person->getMainAddress(),
                 'department' => $person->getDepartment(),
                 'email' => $person->getEmail(),
                 'city' => $person->getCity(),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
-                'idEmployee' => $person->getEmployee()?$person->getEmployee()->getIdEmployee():"-2"
+                'idEmployee' => $person->getEmployee() ? $person->getEmployee()->getIdEmployee() : "-2"
             ))->setStatusCode(200);
             return $view;
         } else {
-            $view->setStatusCode(404)->setHeader("error","The person does not exist");
+            $view->setStatusCode(404)->setHeader("error", "The person does not exist");
             return $view;
         }
     }
@@ -489,4 +545,5 @@ class PersonRestController extends FOSRestController
 
 
 }
+
 ?>

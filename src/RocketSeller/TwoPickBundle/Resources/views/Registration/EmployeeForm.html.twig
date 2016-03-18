@@ -487,6 +487,7 @@
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
                                         </div>
+                                        <a id="addWorplace">Agregar lugar de trabajo</a>
                                     </div>
                                     <div class="col-sm-12 col-xs-12 remember">
                                         <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
@@ -671,7 +672,71 @@
             </div>
         </div>
                 -->
+                {% set workplace= form.employeeHasEmployers.workplace %}
+                <!-- Modal no -->
+                <div class="modal fade" id="newWorkplaceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body" style="padding: 0">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Agrega un nuevo lugar de trabajo</div>
+                                </div>
+                                <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                                    <div class="col-md-8 col-md-push-2">
+                                        <div class="row">
+                                                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        {{ form_row(workplace.id) }}
+                                                        <div class="col-sm-6 label-group">
+                                                            {{ form_label(workplace.name) }}
+                                                        </div>
+                                                        <div class="col-sm-6 form-group input">
+                                                            {{ form_widget(workplace.name) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <div class="col-sm-6 label-group">
+                                                            {{ form_label(workplace.mainAddress) }}
+                                                        </div>
+                                                        <div class="col-sm-6 form-group input">
+                                                            {{ form_widget(workplace.mainAddress) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="col-sm-6 label-group">
+                                                            {{ form_label(workplace.department)}}
+                                                        </div>
+                                                        <div class="col-sm-6 form-group">
+                                                            {{ form_widget(workplace.department)}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="col-sm-6 label-group">
+                                                            {{ form_label(workplace.city) }}
+                                                        </div>
+                                                        <div class="col-sm-6 form-group">
+                                                            {{ form_widget(workplace.city) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 text-right">
+                                                <a class="btn btn-primary btnPrevious-form btnPrevious">Cerrar</a>
+                                            </div>
+                                            <div class="col-sm-6 text-left">
+                                                <a id="saveWorplaceModal" class="btn btn-orange" href="{{ path("api_public_post_add_workplace") }}">Guardar</a>
+                                            </div>
 
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
             <div id="paymentMethod" class="tab-pane fade in {%   if tab==4 %} active {% endif %}">
@@ -933,4 +998,5 @@
             </div>
         </div>
     </div>
+
 {% endblock fos_user_content %}
