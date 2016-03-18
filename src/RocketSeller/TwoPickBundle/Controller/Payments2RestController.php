@@ -148,7 +148,7 @@ class Payments2RestController extends FOSRestController
      *
      * (name="accountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Global account
      *                                                  number of the employeer, this is the employer primary key in the system.")
-     * (name="bankCode", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Code of the bank, can be found int he table Bank.")
+     * (name="bankCode", nullable=false, requirements="(([0-9|-]| )+|(GS|PL))", strict=true, description="Code of the bank, can be found int he table Bank.")
      * (name="accountType", nullable=false, requirements="(AH|CC)", strict=true, description="Checking or saving account.")
      * (name="bankAccountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Number of the bank account.")
      * (name="autorizationDocumentName", nullable=false, requirements="(.)*", strict=true, description="Name of the file of the letter authorizing symplifica.")
@@ -158,7 +158,6 @@ class Payments2RestController extends FOSRestController
      */
     public function postRegisterBankAccountAction(Request $request)
     {
-        // This is the asigned path by NovoPayment to this action.
         $path = "RegistrarCuentaBancaria";
         $parameters = $request->request->all();
         $regex = array();
@@ -166,7 +165,7 @@ class Payments2RestController extends FOSRestController
         // Set all the parameters info.
         $regex['accountNumber'] = '([0-9|-]| )+';
         $mandatory['accountNumber'] = true;
-        $regex['bankCode'] = '([0-9|-]| )+';
+        $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL))';
         $mandatory['bankCode'] = true;
         $regex['accountType'] = '(AH|CC)';
         $mandatory['accountType'] = true;
@@ -212,7 +211,7 @@ class Payments2RestController extends FOSRestController
      *
      * (name="accountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Global account
      *                                                  number of the employeer, this is the employer primary key in the system.")
-     * (name="bankCode", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Code of the bank, can be found int he table Bank.")
+     * (name="bankCode", nullable=false, requirements="(([0-9|-]| )+|(GS|PL))", strict=true, description="Code of the bank, can be found int he table Bank.")
      * (name="accountType", nullable=false, requirements="(AH|CC)", strict=true, description="Checking or saving account.")
      * (name="bankAccountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Number of the bank account.")
      *
@@ -220,7 +219,6 @@ class Payments2RestController extends FOSRestController
      */
     public function deleteRemoveBankAccountAction(Request $request)
     {
-        // This is the asigned path by NovoPayment to this action.
         $path = "EliminarCuentaBancaria";
         $parameters = $request->request->all();
         $regex = array();
@@ -228,7 +226,7 @@ class Payments2RestController extends FOSRestController
         // Set all the parameters info.
         $regex['accountNumber'] = '([0-9|-]| )+';
         $mandatory['accountNumber'] = true;
-        $regex['bankCode'] = '([0-9|-]| )+';
+        $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL))';
         $mandatory['bankCode'] = true;
         $regex['accountType'] = '(AH|CC)';
         $mandatory['accountType'] = true;
@@ -284,7 +282,6 @@ class Payments2RestController extends FOSRestController
      */
     public function postRegisterBeneficiaryAction(Request $request)
     {
-        // This is the asigned path by NovoPayment to this action.
         $path = "RegistrarBeneficiario";
         $parameters = $request->request->all();
         $regex = array();
@@ -354,7 +351,283 @@ class Payments2RestController extends FOSRestController
         return $responseView;
     }
 
+    /**
+     * Deletes a beneficiary of an employer.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Deletes a beneficiary of an employer.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="accountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Global account
+     *                                                  number of the employeer, this is the employer primary key in the system.")
+     * (name="documentEmployee", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the employee.")
+     * (name="documentTypeEmployee", nullable=false, requirements="(CC|NIT)", strict=true, description="Document tpe of the employee.")
+     *
+     * @return View
+     */
+    public function deleteRemoveBeneficiaryAction(Request $request)
+    {
+        $path = "EliminarBeneficiario";
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['accountNumber'] = '([0-9|-]| )+';
+        $mandatory['accountNumber'] = true;
+        $regex['documentEmployee'] = '([0-9|-]| )+';
+        $mandatory['documentEmployee'] = true;
+        $regex['documentTypeEmployee'] = '(CC|cc|nit|NIT)';
+        $mandatory['documentTypeEmployee'] = true;
 
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        if($parameters['documentTypeEmployee'] == 'cc' || $parameters['documentTypeEmployee'] == 'CC') {
+          $parameters['documentTypeEmployee'] = 'CEDULA';
+        }
+        if($parameters['documentTypeEmployee'] == 'nit') {
+          $parameters['documentTypeEmployee'] = 'NIT';
+        }
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
+        $parameters_fixed['tipoDocumentoBeneficiario'] = $parameters['documentTypeEmployee'];
+        $parameters_fixed['numeroDocumentoBeneficiario'] = $parameters['documentEmployee'];
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "EliminarBeneficiario");
+
+        return $responseView;
+    }
+
+    /**
+     * Gets the payment methods of an employer.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the payment methods of an employer.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Int $accountNumber Global account number of the employeer.
+     *
+     * @return View
+     */
+    public function getEmployerPaymentMethodsAction($accountNumber)
+    {
+        $path = "ConsultarFuentesPago";
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $accountNumber;
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarFuentesPago");
+
+        return $responseView;
+    }
+
+    /**
+     * Registers a new beneficiary of an employer, this is an employee.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Registers a new beneficiary of an employer, this is an employee.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="accountNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Global account
+     *                                                  number of the employeer, this is the employer primary key in the system.")
+     * (name="accountId", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Internal account number.")
+     * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?", strict=true, description="value of the transaction.")
+     *
+     * @return View
+     */
+    public function postClientGscPaymentAction(Request $request)
+    {
+        $path = "SolicitarRecaudo";
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['accountNumber'] = '([0-9|-]| )+';
+        $mandatory['accountNumber'] = true;
+        $regex['accountId'] = '([0-9|-]| )+';
+        $mandatory['accountId'] = true;
+        $regex['value'] = '[0-9]+(\.[0-9]+)?';
+        $mandatory['value'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
+        $parameters_fixed['idCuenta'] = $parameters['accountId'];
+        $parameters_fixed['valor'] = $parameters['value'];
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "SolicitarRecaudo");
+
+        return $responseView;
+    }
+
+    /**
+     * Gets the payment state.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the payment state.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Int $radicatedNumber Radicated number when the payment was made.
+     *
+     * @return View
+     */
+    public function getPaymentStateAction($radicatedNumber)
+    {
+        $path = "ConsultarEstadoRecaudo";
+
+        $parameters_fixed = array();
+        $parameters_fixed['numeroRadicado'] = $radicatedNumber;
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoRecaudo");
+
+        return $responseView;
+    }
+
+    /**
+     * Registers a new dispersion.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Registers a new dispersion",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="accountNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Global account
+     *                                                  number of the employeer, this is the employer primary key in the system.")
+     * (name="documentTypeEmployee", nullable=false, requirements="(CC|cc|nit|NIT)", strict=true, description="Document type of the employee.")
+     * (name="documentEmployee", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the employee.")
+     * (name="bankCode", nullable=false, requirements="(([0-9|-]| )+|(GS|PL))", strict=true, description="Code of the bank of the employee. This can be obtained in the beneficiary.")
+     * (name="accountType", nullable=false, requirements="(AH|CC|EN)", strict=true, description="Account type of the employee savings checking.")
+     * (name="accountNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Account number of the employee, real number not internal.")
+     * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?", strict=true, description="value of the transaction.")
+     *
+     * @return View
+     */
+    public function postRegisterDispersionAction(Request $request)
+    {
+        $path = "RegistrarOrdenPago";
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['accountNumber'] = '([0-9|-]| )+';
+        $mandatory['accountNumber'] = true;
+        $regex['documentTypeEmployee'] = '(CC|cc|nit|NIT)';
+        $mandatory['documentTypeEmployee'] = true;
+        $regex['documentEmployee'] = '([0-9|-]| )+';
+        $mandatory['documentEmployee'] = true;
+        $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL))';
+        $mandatory['bankCode'] = true;
+        $regex['accountType'] = '(AH|CC|EN)';
+        $mandatory['accountType'] = true;
+        $regex['accountNumber'] = '([0-9|-]| )+';
+        $mandatory['accountNumber'] = true;
+        $regex['value'] = '[0-9]+(\.[0-9]+)?';
+        $mandatory['value'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        if($parameters['documentTypeEmployee'] == 'cc' || $parameters['documentTypeEmployee'] == 'CC') {
+          $parameters['documentTypeEmployee'] = 'CEDULA';
+        }
+        if($parameters['documentTypeEmployee'] == 'nit') {
+          $parameters['documentTypeEmployee'] = 'NIT';
+        }
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
+        $parameters_fixed['tipoDocumentoBeneficiario'] = $parameters['documentTypeEmployee'];
+        $parameters_fixed['numeroDocumentoBeneficiario'] = $parameters['documentEmployee'];
+        $parameters_fixed['codBanco'] = $parameters['bankCode'];
+        $parameters_fixed['tipoCuenta'] = $parameters['accountType'];
+        $parameters_fixed['numeroCuenta'] = $parameters['accountNumber'];
+        $parameters_fixed['valor'] = $parameters['value'];
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "RegistrarOrdenPago");
+
+        return $responseView;
+    }
+
+    /**
+     * Gets the dispersion state.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the dispersion state.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Int $radicatedNumber radicated number when the dispersion was made.
+     *
+     * @return View
+     */
+    public function getDispersionStateAction($radicatedNumber)
+    {
+        $path = "ConsultarEstadoPago";
+
+        $parameters_fixed = array();
+        $parameters_fixed['numeroRadicado'] = $radicatedNumber;
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "ConsultarEstadoPago");
+
+        return $responseView;
+    }
 }
 
 ?>
