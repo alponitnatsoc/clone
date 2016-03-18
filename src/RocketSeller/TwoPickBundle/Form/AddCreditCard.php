@@ -20,13 +20,15 @@ class AddCreditCard extends AbstractType
                     "attr" => array(
                         'placeholder' => 'Tu tarjeta de crédito',
                         'title' => 'Tu tarjeta de crédito'
-                    )
+                    ),
+                    'required' => true
                 ))
                 ->add('expiry_date_year', 'integer', array(
                     "attr" => array(
                         'placeholder' => 'Año de vencimiento',
                         'title' => 'Año de vencimiento'
-                    )
+                    ),
+                    'required' => true
                 ))
                 /* ->add('expiry_date', 'date', array(
                   'placeholder' => array(
@@ -57,19 +59,23 @@ class AddCreditCard extends AbstractType
                     "attr" => array(
                         'placeholder' => 'Mes de vencimiento',
                         'title' => 'Mes de vencimiento'
-                    )
+                    ),
+                    'required' => true
                 ))
                 ->add('cvv', 'integer', array(
                     "attr" => array(
                         'placeholder' => 'CVV',
                         'title' => 'CVV'
-                    )
+                    ),
+                    'required' => true
                 ))
                 ->add('name_on_card', 'text', array(
                     "attr" => array(
                         'placeholder' => 'Tu nombre en la tarjeta de crédito',
                         'title' => 'Tu nombre en la tarjeta de crédito'
-        )));
+                    ),
+                    'required' => true
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

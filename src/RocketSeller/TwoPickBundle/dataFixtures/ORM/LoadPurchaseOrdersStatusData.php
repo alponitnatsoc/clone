@@ -35,6 +35,13 @@ class LoadPurchaseOrdersStatusData extends AbstractFixture implements OrderedFix
         $PurchaseOrdersStatus->setDescription('Aprobando');
         $PurchaseOrdersStatus->setIdNovoPay('S4');
         $manager->persist($PurchaseOrdersStatus);
+        
+
+        $PurchaseOrdersStatus = new PurchaseOrdersStatus();
+        $PurchaseOrdersStatus->setName('Pendiente por Pago');
+        $PurchaseOrdersStatus->setDescription('Pendiente');
+        $PurchaseOrdersStatus->setIdNovoPay('P1');
+        $manager->persist($PurchaseOrdersStatus);
 
         $PurchaseOrdersStatusAprobado = new PurchaseOrdersStatus();
         $PurchaseOrdersStatusAprobado->setName('Aprobado');

@@ -161,7 +161,27 @@
                         "app_user_express_registration[document]": {required: true},
                         "app_user_express_registration[credit_card][credit_card]": {required: true, number: true, min: 1, maxlength: 19},
                         "app_user_express_registration[credit_card][name_on_card]": {required: true},
-                        "app_user_express_registration[credit_card][expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: 1},
+                        "app_user_express_registration[credit_card][expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                                // min needs a parameter passed to it
+                                param: function () {
+                                    var date = new Date();
+                                    var year = date.getFullYear();
+                                    var month = date.getMonth() + 2;
+                                    if ($("#app_user_express_registration_credit_card_expiry_date_year").val() == year) {
+                                        return month;
+                                    }
+                                    return 1;
+                                },
+                                depends: function (element) {
+                                    var date = new Date();
+                                    var year = date.getFullYear();
+                                    var month = date.getMonth() + 2;
+                                    if ($("#app_user_express_registration_credit_card_expiry_date_year").val() == year) {
+                                        return ($("#app_user_express_registration_credit_card_expiry_date_month").val() < month);
+                                    }
+                                    return false;
+                                }
+                            }},
                         "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
                         "app_user_express_registration[credit_card][cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
 
@@ -188,7 +208,19 @@
                             maxlength: "maximo mes de 2 digitos",
                             minlength: "minimo mes de 1 digitos",
                             max: "mes del 01 al 12",
-                            min: "mes del 01 al 12"
+                            min: function () {
+                                var date = new Date();
+                                var year = date.getFullYear();
+                                var month = date.getMonth() + 1;
+                                if ($("#app_user_express_registration_credit_card_expiry_date_year").val() == year) {
+                                    if ($("#app_user_express_registration_credit_card_expiry_date_month").val() == month) {
+                                        return "Tarjeta vence este mes";
+                                    } else if ($("#app_user_express_registration_credit_card_expiry_date_month").val() < month) {
+                                        return "Tarjeta vencida";
+                                    }
+                                }
+                                return "mes del 01 al 12";
+                            }
                         },
                         "app_user_express_registration[credit_card][expiry_date_year]": {
                             required: "Por favor ingrese el año de vencimiento",
@@ -225,7 +257,7 @@
                 if (validator.form()) {
                     return false;
                 }
-                return false;
+                //return false;
             });
         });
     </script>

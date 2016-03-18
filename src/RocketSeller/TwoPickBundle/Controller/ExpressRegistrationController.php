@@ -135,8 +135,8 @@ class ExpressRegistrationController extends Controller
         $product = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Product')
                 ->findOneBySimpleName("PRE");
-
-        $totalValue = $product->getPrice() * (1 + $product->getTaxTax()->getValue());
+        $tax = ($product->getTaxTax() != null) ? $product->getTaxTax()->getValue() : 0;
+        $totalValue = $product->getPrice() * (1 + $tax);
         return $this->render('RocketSellerTwoPickBundle:Registration:payRegisterExpress.html.twig', array(
                     'product' => $product,
                     'totalValue' => $totalValue,
