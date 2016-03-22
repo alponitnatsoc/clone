@@ -332,11 +332,16 @@ class DocumentController extends Controller
     	        );
 
 
-    	        $interno = $contract->getTransportAid();
     	        $position = $contract->getPositionPosition()->getName();
     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
 
     	        $ref .= "-" . $positionCode;
+
+    	        $interno = $contract->getTransportAid();
+
+    	        if ($interno) {
+    	            $ref .= "-interno";
+    	        }
 
     	        $contractType = $contract->getContractTypeContractType()->getName();
 
