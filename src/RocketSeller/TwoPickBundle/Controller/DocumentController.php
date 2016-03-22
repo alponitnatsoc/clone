@@ -305,6 +305,7 @@ class DocumentController extends Controller
 	{
         switch ($ref){
     	    case "contrato":
+    	        $ref = "contracts/" . $ref;
     	        // id del contrato
     	        /** @var Contract $contract */
     	        $contract = $this->contractDetail($id);
@@ -326,12 +327,16 @@ class DocumentController extends Controller
     	            'name' => $this->fullName($employerPerson->getIdPerson()),
     	            'docType' => $employerPerson->getDocumentType(),
     	            'docNumber' => $employerPerson->getDocument(),
-                    'tel' => $employerPerson->getPhones()->getValues()[0]
+                    'tel' => $employerPerson->getPhones()->getValues()[0],
+    	            'email' => $employerPerson->getEmail()
     	        );
 
 
     	        $interno = $contract->getTransportAid();
     	        $position = $contract->getPositionPosition()->getName();
+    	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
+
+    	        $ref .= "-" . $positionCode;
 
     	        $contractType = $contract->getContractTypeContractType()->getName();
 
@@ -361,7 +366,7 @@ class DocumentController extends Controller
     	            "startDate" => $startDate,
     	            "position" => $position,
     	            "salary" => $contract->getSalary(),
-    	            "frequency" => $contract->getPayMethodPayMethod()->getFrequencyFrequency()->getName(),
+    	            "frequency" => $contract->getFrequencyFrequency()->getName(),
     	            "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
     	            "interno" => $interno,
     	            "contractType" => $contractType,
