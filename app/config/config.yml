@@ -43,6 +43,7 @@ twig:
         resources: ['bootstrap_3_layout.html.twig', 'SonataMediaBundle:Form:media_widgets.html.twig']
     globals:
         fos_csrf_provider: "@form.csrf_provider"
+        symplifica_info: "%symplifica_info%"
 
 
 # Assetic Configuration
