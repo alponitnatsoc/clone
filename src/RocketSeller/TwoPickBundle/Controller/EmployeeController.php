@@ -339,6 +339,10 @@ class EmployeeController extends Controller
      */
     public function newEmployeeAction($id, $tab)
     {
+
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
         /** @var User $user */
         $user = $this->getUser();
         $employee = null;

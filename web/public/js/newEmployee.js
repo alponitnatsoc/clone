@@ -667,6 +667,11 @@ function addListeners() {
             inquiry();
         }
     });
+    $("input[name='register_employee[employeeHasEmployers][transportAid]']").on("change", function () {
+        calculator();
+        formatMoney($("#totalExpensesVal"));
+        formatMoney($("#register_employee_employeeHasEmployers_salary"));
+    });
     $("#addWorplace").on("click", function (e) {
         e.preventDefault();
         $("#newWorkplaceModal").modal("show");
@@ -739,8 +744,9 @@ function addListeners() {
         formatMoney($(this));
     });
     $("#register_employee_employeeHasEmployers_salary").on("input", function () {
-        formatMoney($(this));
-    });
+        calculator();
+        formatMoney($("#totalExpensesVal"));
+        formatMoney($(this));    });
 
     calculator();
     formatMoney($("#totalExpensesVal"));
@@ -853,6 +859,8 @@ function calculator() {
     var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
     if (salaryD == "") {
         salaryD = 0;
+    }if (salaryM == "") {
+        salaryM = 0;
     }
     var numberOfDays = 30;
     var aid = 0;
@@ -885,13 +893,13 @@ function calculator() {
         aidD = 0;
     }
     if (type == "days") {
-        transport = 0;
+        transport = 1;
         if (transport == 1) {
             salaryD -= transportAidDaily;
         }
         //if it overpass the SMMLV calculates as a full time job  or
         //if does not belongs to SISBEN
-        if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv || sisben == 0) {
+        if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv || sisben == -1) {
             if (((salaryD + transportAidDaily + aidD) * numberOfDays) > smmlv) {
                 base = (salaryD + aidD) * numberOfDays;
             } else {
@@ -984,7 +992,7 @@ function calculator() {
     }
     var resposne = [];
 
-    if (salaryD == 0 || numberOfDays == null || numberOfDays == 0) {
+    if ((type == "days"&&(salaryD == 0 || numberOfDays == null || numberOfDays == 0))||(type != "days"&&(salaryM<=0))) {
         totalExpenses = 0;
         resposne['totalExpenses'] = 0;
         resposne['dailyExpenses'] = 0;
