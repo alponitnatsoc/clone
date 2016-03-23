@@ -331,12 +331,21 @@ class DocumentController extends Controller
     	            'email' => $employerPerson->getEmail()
     	        );
 
-
-    	        $interno = $contract->getTransportAid();
     	        $position = $contract->getPositionPosition()->getName();
     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
 
     	        $ref .= "-" . $positionCode;
+
+    	        $interno = $contract->getTransportAid();
+
+    	        if ($interno) {
+    	            $ref .= "-interno";
+    	        }
+
+    	        $timeCommitmentCode = $contract->getTimeCommitmentTimeCommitment()->getCode();
+    	        if ($timeCommitmentCode == "XD") {
+    	            $ref .= "-xdias";
+    	        }
 
     	        $contractType = $contract->getContractTypeContractType()->getName();
 
@@ -375,7 +384,9 @@ class DocumentController extends Controller
 	                "years" => $years,
 	                "months" => $months,
 	                "years_months" => $years_months,
-    	            "days" => $days
+    	            "days" => $days,
+    	            "workDays" => $contract->getWeekWorkableDays()->getValues(),
+    	            "nWorkDays" => $contract->getWorkableDaysMonth()
     	        );
 
     	        $data = array(
