@@ -25,7 +25,10 @@ class TimeCommitment
      */
     private $name;
 
-
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $code;
 
     /**
      * Get idTimeCommitment
@@ -59,5 +62,29 @@ class TimeCommitment
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return TimeCommitment
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }

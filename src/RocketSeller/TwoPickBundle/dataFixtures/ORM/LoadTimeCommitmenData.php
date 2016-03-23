@@ -12,15 +12,17 @@ class LoadTimeCommitmentData extends AbstractFixture implements OrderedFixtureIn
     public function load(ObjectManager $manager)
     {
         $TimeCommitmentCompleto = new TimeCommitment();
-        $TimeCommitmentCompleto->setName('Tiempo Completo');        
+        $TimeCommitmentCompleto->setName('Tiempo Completo');
+        $TimeCommitmentCompleto->setCode("TC");
         $manager->persist($TimeCommitmentCompleto);
         /*
         $TimeCommitmentMedio = new TimeCommitment();
-        $TimeCommitmentMedio->setName('Medio Tiempo');        
+        $TimeCommitmentMedio->setName('Medio Tiempo');
         $manager->persist($TimeCommitmentMedio);*/
 
         $timeCommitmentDias = new TimeCommitment();
-        $timeCommitmentDias->setName('Trabajo por días');        
+        $timeCommitmentDias->setName('Trabajo por días');
+        $timeCommitmentDias->setCode("XD");
         $manager->persist($timeCommitmentDias);
 
         $manager->flush();
@@ -36,4 +38,3 @@ class LoadTimeCommitmentData extends AbstractFixture implements OrderedFixtureIn
         return 8;
     }
 }
-    
