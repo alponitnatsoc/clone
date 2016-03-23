@@ -72,6 +72,10 @@ manage_employees:
     path:      /manage/employees
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageEmployees }
 
+remove_employee:
+    path:      /remove/employee/{idEhe}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:removeEmployee }
+
 manage_employee:
     path:      /manage/employee/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:showEmployee }

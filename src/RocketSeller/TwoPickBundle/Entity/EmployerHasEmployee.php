@@ -54,7 +54,7 @@ class EmployerHasEmployee
     /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
-    private $state = 1;
+    private $state = 0;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)

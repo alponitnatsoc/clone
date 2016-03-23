@@ -299,6 +299,8 @@ class EmployeeController extends Controller
                 $ehEs = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 /** @var EmployerHasEmployee $ehE */
                 foreach ($ehEs as $ehE) {
+                    if($ehE->getState()==-1)
+                        continue;
                     $contracts = $ehE->getContracts();
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
@@ -309,6 +311,7 @@ class EmployeeController extends Controller
                             "idPayroll" => $acPayroll ? $acPayroll->getIdPayroll() : "",
                             "state" => $ehE->getState(),
                             "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                            "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
                         );
                         break;
                     }
@@ -928,6 +931,29 @@ filename = "certificadoLaboral.pdf"'
         return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig',
             array('form' => $form->createView())
         );
+    }
+
+    public function removeEmployeeAction($idEhe)
+    {
+
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user= $this->getUser();
+        $employer=$user->getPersonPerson()->getEmployer();
+        $eheRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $realEhe */
+        $realEhe=$eheRepo->find($idEhe);
+        if($realEhe==null||$realEhe->getEmployerEmployer()->getIdEmployer()!=$employer->getIdEmployer()||$realEhe->getState()==1){
+            return ;
+        }
+        $realEhe->setState(-1);
+        $em->persist($realEhe);
+        $em->flush();
+
+        return $this->redirectToRoute("manage_employees");
     }
 
 }
