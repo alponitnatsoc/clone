@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS</title>
+<meta charset="utf-8" />
+<style>
+body {
+    height: 792px;
+    width: 612px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ol { */
+/*   margin:0 0 1.5em; */
+/*   padding:0; */
+/*   counter-reset:item; */
+/* } */
+
+/* ol>li { */
+/*   margin:0; */
+/*   padding:0 0 0 2em; */
+/*   text-indent:-2em; */
+/*   list-style-type:none; */
+/*   counter-increment:item; */
+/* } */
+
+/* ol>li:before { */
+/*   display:inline-block; */
+/*   width:1.5em; */
+/*   padding-right:0.5em; */
+/*   font-weight:bold; */
+/*   text-align:right; */
+/*   content:counter(item) "."; */
+/* } */
+</style>
+<head>
+<body>
+<p>&nbsp;</p>
+{% set local = "now"|date("d-m-y") %}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS</strong></p>
+<p>&nbsp;</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered" width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;">
+        <tbody>
+            <tr height="25px">
+                <td>Nombre del empleador:</td>
+                <td>{{ data.employer.name }}</td>
+            </tr>
+            <tr height="25px">
+                <td>{{ data.employer.docType }}</td>
+                <td>{{ data.employer.docNumber }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Lugar de o sitio de trabajo:</td>
+                <td>{{ data.contract.workplace }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Teléfono</td>
+                <td>{{ data.employer.tel.phoneNumber }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Nombre del trabajador(a):</td>
+                <td>{{ data.employee.name }}</td>
+            </tr>
+            <tr height="25px">
+                <td>{{ data.employee.docType }}</td>
+                <td>{{ data.employee.docNumber }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Lugar de residencia:</td>
+                <td>{{ data.employee.residencia }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Teléfono:</td>
+                <td>{{ data.employee.tel.phoneNumber }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Fecha de inicio labores:</td>
+                <td>{{ data.contract.startDate|localizeddate('long', 'none', local) }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Fecha finalización labores:</td>
+                <td>{{ data.contract.endDate|localizeddate('long', 'none', local) }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Término del contrato:</td>
+                <td>{{ data.contract.contractType }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Salario diario:</td>
+                <td>{{ data.contract.salary/data.contract.nWorkDays }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Cargo a desempeñar:</td>
+                <td>{{ data.contract.position }}</td>
+            </tr>
+            <tr height="25px">
+                <td>Número del contrato</td>
+                <td>{{ data.contract.numero }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
+<p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
+labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CONTRATO
+LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS, el cual se regirá por las siguientes cláusulas:</p>
+
+<p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
+residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
+prestación de la labor sin necesidad de elaborar un otro si o cláusula adicional.</p>
+
+<p style="text-align: justify;"><strong>SEGUNDA: </strong>OBJETO: El TRABAJADOR se compromete para con EL EMPLEADOR a prestarle sus servicios personales y
+exclusivos en el desempeño de todas las funciones inherentes al cargo de {{ data.contract.position }} y en las labores anexas y complementarias que se
+originen en la naturaleza del cargo contratado, todo de conformidad con las órdenes e instrucciones que le imparta EL EMPLEADOR o sus representantes.</p>
+
+<p style="text-align: justify;"><strong>TERCERA: </strong>La labor aquí contratada la prestará EL TRABAJADOR a favor del EMPLEADOR poniendo toda su capacidad
+normal de trabajo, la cual se desarrollará en el lugar de residencia del EMPLEADOR o en los lugares o sitios que para tal efecto le indique o asigne EL
+EMPLEADOR de acuerdo con las necesidades del trabajo, la naturaleza de la labor contratada y el servicio que presta EL TRABAJADOR.  Igualmente, EL TRABAJADOR
+acepta cualquier orden de traslado que se le imparta para desempeñar otro cargo o función en el mismo establecimiento o fuera de él, aún en ciudad distinta a la
+del lugar donde fue contratado, declarando que está en disponibilidad de hacerlo.  Además de las obligaciones inherentes al cargo contratado, TRABAJADOR se
+obliga: 1. mantener en perfecto estado de limpieza la casa de habitación de EL EMPLEADOR; 2.  lavar la ropa y elementos que se le indiquen; 3. planchar;
+cocinar; atender a las personas que habitan en la casa y a las personas que les visiten; 4. efectuar las compras que se le indiquen y en general cumplir con
+todas las órdenes e instrucciones que le imparta; 5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+a EL EMPLEADOR, los cuales son los
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de
+sus funciones 6. A cumplir a cabalidad con las órdenes e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo
+que las demás obligaciones, prohibiciones e instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros, 
+de todo lo que llegue a su conocimiento por cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su
+carácter reservado y de que pueda causar perjuicios al Empleador; 8. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le
+entregue el Empleador exclusivamente para los fines que le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo
+el deterioro natural por el uso; 9. Guardar rigurosamente la moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la
+residencia 10. Comunicar oportunamente a EL EMPLEADOR las observaciones que estime conducentes a evitarle daños y perjuicios. 11. Prestar la colaboración
+posible en casos de siniestro o de riesgo inminente que afecten o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las
+medidas preventivas higiénicas prescritas por el médico designado por EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado
+las instrucciones y órdenes preventivas de accidentes y/o enfermedades laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el
+Empleador. 14.Las demás establecidas en la ley laboral.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO </strong>El incumplimiento de las anteriores obligaciones, prohibiciones y deberes se califica como falta
+grave.</p>
+
+<p style="text-align: justify;"><strong>CUARTA: </strong>ELEMENTOS DE TRABAJO: Los recursos que sean puestos a disposición de EL TRABAJADOR por EL EMPLEADOR
+para el desarrollo de su cargo y sus funciones, son para el uso exclusivo de éste, para el desarrollo de su cargo y sus funciones. La utilización de dichos
+recursos para asuntos personales queda prohibida y será considerada como falta grave.</p>
+
+{# <p style="text-align: justify;"><strong>QUINTA: </strong>JORNADA DE TRABAJO: EL TRABAJADOR se obliga a cumplir una jornada de Cuarenta y Ocho (48) horas semanales, en#}
+{# los turnos y dentro las horas señaladas por EL EMPLEADOR, pudiendo este hacer ajustes o cambios de horario cuando lo estime conveniente de conformidad con#}
+{# las necesidades del cargo.</p>#}
+
+{# <p style="text-align: justify;">Por el acuerdo expreso o tácito de las partes, podrán repartirse las horas de la jornada ordinaria en la forma prevista en el#}
+{# artículo 164 del Código Sustantivo del Trabajo, modificado por el artículo 23 de la ley 50/90, teniendo en cuenta que los tiempos de descanso entre las#}
+{# secciones de la jornada no se computan dentro de la misma, según el artículo 167 del Código Sustantivo del Trabajo. De igual manera, las partes podrán acordar#}
+{# que se preste el servicio en los turnos de jornada flexible de 48 horas, las cuales podrán repartirse de manera variable durante la respectiva semana y podrá#}
+{# ser de un mínimo de cuatro (4) horas continuas, y hasta diez (10) horas diarias sin lugar a ningún recargo por trabajo suplementario, cuando el número de#}
+{# horas de trabajo no exceda el promedio de cuarenta y ocho (48) horas semanales dentro de la jornada.</p>#}
+
+<p style="text-align: justify;"><strong>QUINTA: </strong>TÉRMINO DEL CONTRATO: El término de duración de este contrato es de {{ data.contract.years_months }}
+meses, {{ data.contract.days }} días, contados a partir del {{ data.contract.startDate|localizeddate('long', 'none', local) }}. Por lo anterior el contrato se
+prolongará hasta el {{ data.contract.endDate|localizeddate('long', 'none', local) }}. Se entenderá prorrogado automáticamente por un periodo igual a la inicial,
+si ninguna de las partes da a conocer a la otra su intención de no renovarlo con treinta (30) días de anticipación a la fecha del vencimiento inicial o sus
+prórrogas.</p>
+
+<p style="text-align: justify;"><strong>SEXTA: </strong>PERIODO DE PRUEBA: El periodo de prueba será igual a la quinta parte del término señalado para
+el presente contrato, el cual no podrá ser superior a dos meses y, por consiguiente, cualquiera de las partes EMPLEADOR o TRABAJADOR podrá darlo por terminado
+en cualquier momento durante dicho período, en forma unilateral, de conformidad con el artículo 80 del Código Sustantivo del Trabajo, sin que genere
+indemnización alguna.</p>
+
+<p style="text-align: justify;"><strong>SEPTIMA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: Son justas causas para dar por terminado
+el presente contrato de trabajo, el incumplimiento a cualquiera de las obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351
+de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas que para el efecto se califican como graves: a) La violación grave por parte de EL
+TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL
+EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el
+sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara
+justificación; e) La no asistencia a una sesión completa de la jornada de trabajo, o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o
+caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
+trabajo con justa causa.</p>
+
+<p style="text-align: justify;"><strong>OCTAVA: </strong>EL TRABAJADOR se obliga a laborar los
+
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+
+ de cada semana.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Las PARTES pueden modificar los días y las horas señaladas en la presente cláusula, siempre que
+exista previo acuerdo entre los días que se va a prestar el servicio.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Todo trabajo suplementario o de horas extras debe ser previamente y en forma escrita autorizado
+por EL EMPLEADOR.</p>
+
+<p style="text-align: justify;"><strong>NOVENA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
+diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
+de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Las partes expresamente acuerdan que lo que reciba el trabajador o llegue a recibir en el futuro,
+adicional a su salario ordinario, ya sean beneficios extralegales o auxilios habituales u ocasionales,  tales como el transporte o subsidios para el transporte,
+auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
+en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
+
+<p style="text-align: justify;"><strong>DECIMA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los beneficios
+contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se encuentra
+vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente completo, para
+todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o por días.</p>
+
+<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
+
+<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
+que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
+entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por
+escrito (hoja de vida, formatos, etc.) con ocasión de los procesos de selección y durante su vinculación como empleado (a) del EMPLEADOR. De otra parte, EL
+TRABAJADOR se compromete a respetar y aplicar la política de tratamiento de datos personales de EL EMPLEADOR. Todo lo anterior, teniendo en cuenta lo siguiente</p>
+
+<p style="text-align: justify;">EL TRABAJADOR reconoce que fue informado de manera clara, previa y expresa de lo siguiente:
+
+<ol type="A" style="text-align: justify;">
+
+    <li>Tratamiento y finalidad: Los datos que se recolectan serán tratados de manera leal y lícita para todo lo relacionado con cuestiones laborales de orden
+    legal o contractual. En virtud de lo anterior, El EMPLEADOR Y SYMPLIFICA SAS utilizarán los datos personales del TRABAJADOR para los siguientes fines:
+    (1) Dar cumplimiento a las leyes como, entre otras, de derecho laboral, seguridad social, pensiones, riesgos profesionales, cajas de compensación familiar
+    (Sistema Integral de Seguridad Social) e impuestos; (2) Cumplir las instrucciones de las autoridades judiciales y administrativas competentes.</li>
+
+    <li>Datos de identificación y contacto del responsable del tratamiento: (1) Nombre del EMPLEADOR: {{ data.employer.name }}.; Dirección electrónica:
+    {{ data.employer.email }}; (3) Teléfono: {{ data.employer.tel.phoneNumber }}.:(1) Nombre del TERCERO: SYMPLIFICA SAS.; Dirección electrónica:
+    {{ symplifica_info.email }}; (3) Teléfono: {{ symplifica_info.tel }}.</li>
+
+    <li>Derechos del titular del dato: Como titular de los datos personales, EL TRABAJADOR tiene como derechos los previstos particularmente en el artículo
+    8 de la ley 1581 de 2012, los cuales ha leído previamente.</li>
+
+</ol>
+
+</p>
+
+<p style="text-align: justify;">PARÁGRAFO: EL TRABAJADOR autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR y a SYMPLIFICA SAS para
+que recolecte y trate sus datos personales (incluidos los sensibles) para la finalidad indicada en el literal a) de laparte I de la presente cláusula. Por lo
+tanto, EL EMPLEADOR y SYMPLIFICA SAS podrá realizar todos los usos necesarios para alcanzar dicha finalidad, como, entre otros, los siguientes:
+    <ol type="A" style="text-align: justify;">
+
+        <li>Efectuar las actividades necesarias requeridas en la etapa precontractual, contractual y pos contractual con EL EMPLEADOR Y SYMPLIFICA SAS.</li>
+
+        <li>Acceder y consultar los datos personales del TRABAJADOR (privados, semiprivados, sensibles o reservados) que reposen o estén contenidos en bases
+        de datos o archivos de cualquier Entidad Pública o Privada ya sea nacional, internacional o extranjera.</li>
+
+        <li>Contactar al TRABAJADOR directamente o a través de terceros.</li>
+
+        <li>Realizar directamente el tratamiento de los datos personales del TRABAJADOR o a través de un encargado del tratamiento, ubicado en Colombia o
+        cualquier otro país, a quien EL TRABAJADOR autoriza se le suministre sus datos personales necesaria según el caso, para que realice el tratamiento
+        en nombre de El EMPLEADOR.</li>
+
+        <li>Suministrar, compartir, enviar o entregar los datos personales del TRABAJADOR a sus empresas filiales, subsidiarias, vinculadas ubicadas en Colombia
+        o cualquier otro país. En este último caso, EL TRABAJADOR autoriza explícita e inequívocamente la transferencia internacional de datos que sea necesaria
+        para dicho efecto.</li>
+    </ol>
+</p>
+
+<p style="text-align: justify;">Las partes aclaran que entre EL TRABAJADOR y SYMPLIFICA SAS no existe relación laboral ni de cualquier otro tipo, pues éste
+último sólo es el encargado de manejar los datos señalados en el presente artículo.</p>
+
+<p style="text-align: justify;">Se firma por las partes, el {{ "now"|localizeddate('none', 'none', local, null, "'día 'd 'del mes de' MMMM 'del año' Y") }}.</p>
+
+<p>&nbsp;</p>
+
+<div style="width: 50%; float: left;">
+    <p>Empleador</p>
+
+
+    _____________________________________
+</div>
+<div style="width: 50%; float: left;">
+    <p>Trabajador</p>
+
+
+    _____________________________________
+</div>
+
+</body>
+</html>
