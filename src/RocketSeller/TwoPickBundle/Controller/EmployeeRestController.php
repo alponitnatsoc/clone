@@ -414,6 +414,8 @@ class EmployeeRestController extends FOSRestController
                 /** @var EmployerHasEmployee $ee */
                 foreach ($employee->getEmployeeHasEmployers() as $ee) {
                     if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                        if($ee->getState()==-1)
+                            $ee->setState(0);
                         $employerEmployee = $ee;
                         $flag = true;
                         break;

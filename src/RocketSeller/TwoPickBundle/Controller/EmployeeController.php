@@ -299,9 +299,20 @@ class EmployeeController extends Controller
                 $ehEs = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 /** @var EmployerHasEmployee $ehE */
                 foreach ($ehEs as $ehE) {
-                    if($ehE->getState()==-1)
+                    if($ehE->getState()==-1){
                         continue;
+                    }
                     $contracts = $ehE->getContracts();
+                    if($contracts->count()==0){
+                        $employeesData[] = array(
+                            "idEmployerHasEmployee" => $ehE->getIdEmployerHasEmployee(),
+                            "idEmployee" => $ehE->getEmployeeEmployee()->getIdEmployee(),
+                            "idPayroll" =>  "",
+                            "state" => $ehE->getState(),
+                            "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                            "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
+                        );
+                    }
                     /** @var Contract $contract */
                     foreach ($contracts as $contract) {
                         $acPayroll = $contract->getActivePayroll();
