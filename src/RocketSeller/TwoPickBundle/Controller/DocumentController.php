@@ -335,18 +335,17 @@ class DocumentController extends Controller
 //     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
     	        $identBy = $contract->getPositionPosition()->getIdentBy();
 
-    	        if ($identBy == "m") { // Si el cargo es mayordomo
-    	            $ref .= "-m";
-    	        }
-
     	        $interno = $contract->getTransportAid();
 
     	        if ($interno) {
+    	            if ($identBy == "m") { // Si el cargo es mayordomo
+    	                $ref .= "-m";
+    	            }
     	            $ref .= "-interno";
     	        }
 
     	        $timeCommitmentCode = $contract->getTimeCommitmentTimeCommitment()->getCode();
-    	        if ($timeCommitmentCode == "XD") {
+    	        if ($timeCommitmentCode == "XD") { // Si el contrato es por dias
     	            $ref .= "-xdias";
     	        }
 
