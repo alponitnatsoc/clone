@@ -22,7 +22,25 @@
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
-
+    <div class="col-sm-12 col-xs-12 align-Resp">
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline">
+            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                <img src="/img/block-inline.png" class="center-block">                    
+            </div>
+            <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                <div id="" class="text-left">
+                    <span class="step">Paso 3 de 4</span>                            
+                    Subscripción a Symplifica
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul id="formNav" class="nav nav-tabs nav-justified">
+        {% set tab = 2 %}
+        <li {%   if tab is defined and tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab"></a>Validar</li>
+        <li {%   if tab is defined and tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Confirmar</li>
+        <li {%   if tab is defined and tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Finalizar</li>
+    </ul>
     <div class="media">
         <div class="media-left">
             <span class="glyphicon glyphicon-remove-circle fa-2x"></span>

@@ -279,7 +279,7 @@ class SubscriptionController extends Controller
                 'method' => 'POST',
             ));
 
-            return $this->render('RocketSellerTwoPickBundle:Subscription:active.html.twig', array(
+            return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionConfirm.html.twig', array(
                         'form' => $form->createView(),
                         'employer' => $person,
                         'employees' => $data['employees'],
@@ -381,7 +381,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionSuccessAction(Request $request)
     {
-        return $this->render('RocketSellerTwoPickBundle:Subscription:success.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
                     'user' => $this->getUser(),
                     'date' => \date('Y-m-d')
         ));
@@ -389,7 +389,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionErrorAction(Request $request)
     {
-        return $this->render('RocketSellerTwoPickBundle:Subscription:error.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionError.html.twig', array(
                     'user' => $this->getUser()
         ));
     }
