@@ -11,10 +11,11 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 {
     public function load(ObjectManager $manager)
     {
-        $PositionDomestica = new Position();
-        $PositionDomestica->setName('Empleada(o) domestico');
-        $PositionDomestica->setPayrollCoverageCode('1'); // Code 0.522.
-        $manager->persist($PositionDomestica);
+        $domestico = new Position();
+        $domestico->setName('Empleada(o) domestico');
+        $domestico->setPayrollCoverageCode('1'); // Code 0.522.
+        $domestico->setIdentBy("ed");
+        $manager->persist($domestico);
 
 //         $PositionJardinero = new Position();
 //         $PositionJardinero->setName('Jardinero(a)');
@@ -26,24 +27,28 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 //         $PositionVarios->setPayrollCoverageCode('1'); // Code 0.522
 //         $manager->persist($PositionVarios);
 
-        $PositionOtros = new Position();
-        $PositionOtros->setName('Conductor(a)');
-        $PositionOtros->setPayrollCoverageCode('4'); // Code 4.35
-        $manager->persist($PositionOtros);
+        $conductor = new Position();
+        $conductor->setName('Conductor(a)');
+        $conductor->setPayrollCoverageCode('4'); // Code 4.35
+        $conductor->setIdentBy("c");
+        $manager->persist($conductor);
 
         $ninera = new Position();
         $ninera->setName('Niñero(a)');
         $ninera->setPayrollCoverageCode('1'); // Code 0.522
+        $ninera->setIdentBy("n");
         $manager->persist($ninera);
 
         $enfermera = new Position();
         $enfermera->setName('Enfermero(a)');
         $enfermera->setPayrollCoverageCode('1'); // Code 0.522
+        $enfermera->setIdentBy("e");
         $manager->persist($enfermera);
 
         $mayordomo = new Position();
         $mayordomo->setName('Mayordomo');
         $mayordomo->setPayrollCoverageCode('3'); // Code 2.436
+        $mayordomo->setIdentBy("m");
         $manager->persist($mayordomo);
 
 //         $amaLlaves = new Position();
@@ -53,10 +58,10 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $manager->flush();
 
-        $this->addReference('position-domestico', $PositionDomestica);
+        $this->addReference('position-domestico', $domestico);
 //         $this->addReference('position-jardinero', $PositionJardinero);
 //         $this->addReference('position-varios', $PositionVarios);
-        $this->addReference('position-otros', $PositionOtros);
+        $this->addReference('position-otros', $conductor);
         $this->addReference('position-ninera', $ninera);
         $this->addReference('position-enfermera', $enfermera);
         $this->addReference('position-mayordomo', $mayordomo);

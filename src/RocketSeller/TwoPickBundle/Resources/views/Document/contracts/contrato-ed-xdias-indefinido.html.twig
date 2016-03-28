@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO INTERNO</title>
+<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -40,7 +40,7 @@ body {
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO INTERNO</strong></p>
+<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO</strong></p>
 <p>&nbsp;</p>
 
 <div class="table-responsive">
@@ -83,12 +83,16 @@ body {
                 <td>{{ data.contract.startDate|localizeddate('long', 'none', local) }}</td>
             </tr>
             <tr height="25px">
+                <td>No. Días a la semana en que va a trabajar: </td>
+                <td>{{ data.contract.nWorkDays }}</td>
+            </tr>
+            <tr height="25px">
                 <td>Término del contrato:</td>
                 <td>{{ data.contract.contractType }}</td>
             </tr>
             <tr height="25px">
-                <td>Salario mensual o quincenal:</td>
-                <td>{{ data.contract.salary }}</td>
+                <td>Salario diario:</td>
+                <td>{{ data.contract.salary/data.contract.nWorkDays }}</td>
             </tr>
             <tr height="25px">
                 <td>Cargo a desempeñar:</td>
@@ -104,8 +108,9 @@ body {
 
 {# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
-labora en los servicios domésticos, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CONTRATO LABORAL DE TRABAJO DE SERVICIO
-DOMÉSTICO INTERNO, el cual se regirá por las siguientes cláusulas:</p>
+labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CCONTRATO
+LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO, el cual se regirá por las siguientes cláusulas:</p>
+
 <p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
 residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
 prestación de la labor sin necesidad de elaborar un otro si o cláusula adicional.</p>
@@ -119,20 +124,53 @@ normal de trabajo, la cual se desarrollará en el lugar de residencia del EMPLEA
 EMPLEADOR de acuerdo con las necesidades del trabajo, la naturaleza de la labor contratada y el servicio que presta EL TRABAJADOR.  Igualmente, EL TRABAJADOR
 acepta cualquier orden de traslado que se le imparta para desempeñar otro cargo o función en el mismo establecimiento o fuera de él, aún en ciudad distinta a la
 del lugar donde fue contratado, declarando que está en disponibilidad de hacerlo.  Además de las obligaciones inherentes al cargo contratado, TRABAJADOR se
-obliga: 1. mantener en perfecto estado de limpieza la casa de habitación de EL EMPLEADOR; 2.  lavar la ropa y elementos que se le indiquen; 3. planchar;
-cocinar; atender a las personas que habitan en la casa y a las personas que les visiten; 4. efectuar las compras que se le indiquen y en general cumplir con
-todas las órdenes e instrucciones que le imparta; 5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
-a EL EMPLEADOR, no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 6. A cumplir a cabalidad con las órdenes e
-instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
-instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros,  de todo lo que llegue a su conocimiento por
-cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar
-perjuicios al Empleador; 8. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los
-fines que le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 9. Guardar rigurosamente
-la moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 10. Comunicar oportunamente a EL EMPLEADOR las
+obliga: {{ data.contract.obligations }}
+{% if data.contract.identBy in ["n", "e"] %}
+6. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+a EL EMPLEADOR, los cuales son los
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 7. A cumplir a cabalidad con las
+órdenes e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
+instrucciones del Empleador; 8. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros, de todo lo que llegue a su conocimiento por
+cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar perjuicios
+al Empleador; 9. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los fines que
+le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 10. Guardar rigurosamente la
+moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 11. Comunicar oportunamente a EL EMPLEADOR las
+observaciones que estime conducentes a evitarle daños y perjuicios. 12. Prestar la colaboración posible en casos de siniestro o de riesgo inminente que afecten
+o amenacen a las personas o los elementos del EMPLEADOR o la residencia 13. Observar las medidas preventivas higiénicas prescritas por el médico designado por
+EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
+laborales. 14. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 15. Las demás establecidas en la ley laboral.
+{% else %}
+5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+a EL EMPLEADOR, los cuales son los
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 6. A cumplir a cabalidad con las
+órdenes e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
+instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros, de todo lo que llegue a su conocimiento por
+cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar perjuicios
+al Empleador; 8. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los fines que
+le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 9. Guardar rigurosamente la
+moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 10. Comunicar oportunamente a EL EMPLEADOR las
 observaciones que estime conducentes a evitarle daños y perjuicios. 11. Prestar la colaboración posible en casos de siniestro o de riesgo inminente que afecten
-o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las medidas preventivas higiénicas prescritas por el médico designado
-por EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
-laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14.Las demás establecidas en la ley laboral.</p>
+o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las medidas preventivas higiénicas prescritas por el médico designado por
+EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
+laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14. Las demás establecidas en la ley laboral.
+{% endif %}
+</p>
 
 <p style="text-align: justify;"><strong>PARÁGRAFO </strong>El incumplimiento de las anteriores obligaciones, prohibiciones y deberes se califica como falta
 grave.</p>
@@ -141,15 +179,21 @@ grave.</p>
 para el desarrollo de su cargo y sus funciones, son para el uso exclusivo de éste, para el desarrollo de su cargo y sus funciones. La utilización de dichos
 recursos para asuntos personales queda prohibida y será considerada como falta grave.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO: </strong>Teniendo en cuenta que EL TRABAJADOR residirá en el lugar de trabajo, EL EMPLEADOR le suministrará
-una vivienda con los siguientes implementos y servicios públicos: cama, energía eléctrica y agua, lo cual no constituye salario para ningún efecto legal de
-acuerdo con lo establecido en el art 15 de la ley 50 de 1990. De igual manera, como la vivienda se suministra en virtud del presente contrato de trabajo, EL
-TRABAJADOR está obligado a restituirla a EL EMPLEADOR el día de la terminación del contrato laboral. EL TRABAJADOR deberá cuidar y mantener la vivienda
-suministrada y no podrá adelantar mejoras o adecuaciones sin la autorización escrita de EL EMPLEADOR.</p>
+{# <p style="text-align: justify;"><strong>QUINTA: </strong>JORNADA DE TRABAJO: EL TRABAJADOR se obliga a cumplir una jornada de Cuarenta y Ocho (48) horas#}
+{# semanales, en los turnos y dentro las horas señaladas por EL EMPLEADOR, pudiendo este hacer ajustes o cambios de horario cuando lo estime conveniente de#}
+{# conformidad con las necesidades del cargo.</p>#}
 
-<p style="text-align: justify;"><strong>QUINTA: </strong>JORNADA DE TRABAJO: Teniendo en cuenta que el TRABAJADOR residirá en el lugar de trabajo, se encuentra
-excluido de la regulación sobre la jornada máxima legal de trabajo, de acuerdo con lo establecido en el artículo 162 del CST. EL TRABAJADOR tendrá derecho al
-descanso obligatorio remunerado los días domingos y festivos.</p>
+{# <p style="text-align: justify;">Por el acuerdo expreso o tácito de las partes, podrán repartirse las horas de la jornada ordinaria en la forma prevista en el#}
+{# artículo 164 del Código Sustantivo del Trabajo, modificado por el artículo 23 de la ley 50/90, teniendo en cuenta que los tiempos de descanso entre las#}
+{# secciones de la jornada no se computan dentro de la misma, según el artículo 167 del Código Sustantivo del Trabajo. De igual manera, las partes podrán acordar#}
+{# que se preste el servicio en los turnos de jornada flexible de 48 horas, las cuales podrán repartirse de manera variable durante la respectiva semana y podrá#}
+{# ser de un mínimo de cuatro (4) horas continuas, y hasta diez (10) horas diarias sin lugar a ningún recargo por trabajo suplementario, cuando el número de#}
+{# horas de trabajo no exceda el promedio de cuarenta y ocho (48) horas semanales dentro de la jornada.</p>#}
+
+<p style="text-align: justify;"><strong>QUINTA: </strong>OBLIGACIONES DEL TRABAJADOR: El trabajador dependiente por su parte, prestará los servicios domésticos
+en el domicilio del empleador, o en el sitio que corresponda por cambio del mismo, mientras se encuentre en ejecución el presente contrato, en la jornada de
+trabajo establecida por EL EMPLEADOR, para lo cual utilizará su mejor ánimo y voluntad, cuidando los objetos y elementos entregados y obedeciendo las órdenes
+que le imparta el empleador, relacionados con las funciones inherentes a su trabajo.</p>
 
 <p style="text-align: justify;"><strong>SEXTA: </strong>DURACIÓN DEL CONTRATO: El presente contrato de trabajo se ha pactado a término indefinido, no obstante,
 tendrá vigencia mientras subsistan las causas que le dieron origen de acuerdo a las disposiciones legales que sobre el particular se establezcan. De igual
@@ -171,36 +215,46 @@ o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o cas
 <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
 trabajo con justa causa.</p>
 
-<p style="text-align: justify;"><strong>NOVENA: </strong>SALARIO: EL EMPLEADOR reconocerá y pagará como retribución por el trabajo desempeñado de EL TRABAJADOR,
-un Salario Ordinario Básico Mensual por la suma de {{ data.contract.salary }}, pagadero por quincenas vencidas o de manera mensual, según determine
-EL EMPLEADOR dentro del cual se encuentra incluida la remuneración de los descansos dominicales y festivos de que tratan los Capítulos I, II y III del Título
-VII del Código Sustantivo del Trabajo.</p>
+<p style="text-align: justify;"><strong>NOVENA: </strong>EL TRABAJADOR se obliga a laborar los
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+de cada semana.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
+<p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
+diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
+de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo.</p>
+
+<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Toda remuneración variable que llegue a recibir EL TRABAJADOR se entenderá distribuida así:
 El 82.5% que remunera la labor ordinaria y el 17.5% restante que remunera el descanso en días dominicales o festivos.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>En los términos del artículo 128 del código sustantivo del trabajo las partes establecen
-expresamente que no son salario y no lo constituyen para ningún efecto legal los beneficios o auxilios acordados u otorgados en forma extralegal por el
-EMPLEADOR como la alimentación, habitación o vestuario en los casos en que EL EMPLEADOR por razón del trabajo le asigne a EL TRABAJADOR, lavado de ropas
-u otro servicio de cualquier naturaleza que EL EMPLEADOR dé al TRABAJADOR  ni los viáticos que sean dados como medio de transporte y gastos de representación.
-Igualmente pactan que no constituyen salarios las primas extralegales, bonificaciones, gratificaciones ocasionales, la participación de utilidades, los
-excedentes de las empresas de economía solidaria ni lo que recibe el TRABAJADOR  en dinero o en especie ni para su beneficio, ni para enriquecer su patrimonio,
-sino para desempeñar a cabalidad su funciones; pactan también que no son salarios las herramientas, ni los elementos de trabajo que reciba el TRABAJADOR,
-ni las prestaciones sociales de que tratan los títulos VIII y IX de CST.</p>
+<p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Las partes expresamente acuerdan que lo que reciba el trabajador o llegue a recibir en el futuro,
+adicional a su salario ordinario, ya sean beneficios extralegales o auxilios habituales u ocasionales,  tales como el transporte o subsidios para el transporte,
+auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
+en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 3: </strong>Teniendo en cuenta que el trabajador habitará en el lugar de trabajo, las partes son conscientes
-y así lo hacen saber, que no habrá lugar a cancelar ningún valor por concepto de auxilio de transporte legal, toda vez que no se presentan los presupuestos
-fácticos que dicho auxilio prevé.</p>
+<p style="text-align: justify;"><strong>PARÁGRAFO 4: </strong>Si el empleador tiene afiliada a la trabajadora del servicio doméstico en las empresas promotoras
+de pensiones, ARL y Caja de Compensación Familiar, con los beneficios que otorga el Decreto 2616 de 2013 en sus artículos 5 al 9, para efectos de tener que
+adecuar el valor de cotización mínima semanal o la que corresponda, según la tabla de aportes a cargo del empleador en cada sistema y según los días laborados,
+deberá reportar el cambio a través de la Planilla Asistida PILA.</p>
 
-<p style="text-align: justify;"><strong>DECIMA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
-legal de acuerdo con lo dispuesto en el art 128 del CST modificado por el art 15 de la ley 50 de 1990 la vivienda, los elementos que se encuentran en ella,
-los servicios públicos, los auxilios o beneficios económicos, la alimentación, vestuario y habitación o por cualquier otro concepto que el empleador reconozca
-a EL TRABAJADOR o a su familia en forma ocasional o habitual como cualquier otro pago efectuado por mera liberalidad.</p>
+<p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los
+beneficios contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se
+encuentra vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente
+completo, para todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o
+por días.</p>
 
-<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+<p style="text-align: justify;"><strong>DECIMA SEGUNDA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
 contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
 
-<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+<p style="text-align: justify;"><strong>DECIMA TERCERA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
 autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
 que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
 entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por

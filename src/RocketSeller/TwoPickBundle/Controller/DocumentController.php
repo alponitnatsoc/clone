@@ -332,9 +332,16 @@ class DocumentController extends Controller
     	        );
 
     	        $position = $contract->getPositionPosition()->getName();
-    	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
+//     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
+    	        $identBy = $contract->getPositionPosition()->getIdentBy();
 
-    	        $ref .= "-" . $positionCode;
+    	        if (in_array($identBy, array("ed", "n", "e"))) {
+    	            $ref .= "-ed";
+    	        } else if ($identBy == "c") {
+    	            $ref .= "-c";
+    	        } else if ($identBy == "m") {
+    	            $ref .= "-m";
+    	        }
 
     	        $interno = $contract->getTransportAid();
 
@@ -386,7 +393,9 @@ class DocumentController extends Controller
 	                "years_months" => $years_months,
     	            "days" => $days,
     	            "workDays" => $contract->getWeekWorkableDays()->getValues(),
-    	            "nWorkDays" => $contract->getWorkableDaysMonth()
+    	            "nWorkDays" => $contract->getWorkableDaysMonth(),
+    	            "obligations" => $contract->getPositionPosition()->getObligations(),
+    	            "identBy" => $identBy
     	        );
 
     	        $data = array(
