@@ -91,6 +91,36 @@ class LoadConfigData extends AbstractFixture implements OrderedFixtureInterface
             $manager->flush();
             unset($config);
         }
+
+        if (!isset($configData['ufg'])) {
+            $config = new Config();
+            $config->setName('ufg');
+            $config->setValue('0');
+            $config->setDescripcion('Último consecutivo de factura generado');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
+
+        if (!isset($configData['cif'])) {
+            $config = new Config();
+            $config->setName('cif');
+            $config->setValue('1');
+            $config->setDescripcion('Número en el que comienza el rango para facturar');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
+
+        if (!isset($configData['cff'])) {
+            $config = new Config();
+            $config->setName('cff');
+            $config->setValue('1000');
+            $config->setDescripcion('Número límite del rango para facturar');
+            $manager->persist($config);
+            $manager->flush();
+            unset($config);
+        }
         //$this->addReference('config', $config);
     }
 
