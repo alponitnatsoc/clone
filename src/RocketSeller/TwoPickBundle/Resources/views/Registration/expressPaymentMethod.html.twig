@@ -1,77 +1,230 @@
 {% extends "::base.html.twig" %}
-{% block sidebar %}{% endblock %}
-{% block fos_user_content %}
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
+    {{ parent() }}
+
+    <style type="text/css">
+        #add_credit_card_credit_card{
+            background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+            background-position: 2px -117px, 233px -55px;
+            background-size: 120px 361px, 120px 361px;
+            background-repeat: no-repeat;
+            padding-left: 54px;
+            /*width: 225px;*/
+        }
+        #add_credit_card_credit_card.visa {
+            background-position: 2px -159px, 260px -61px;
+        }
+        #add_credit_card_credit_card.visa_electron {
+            background-position: 2px -201px, 260px -61px;
+        }
+        #add_credit_card_credit_card.mastercard {
+            background-position: 2px -243px, 260px -61px;
+        }
+        #add_credit_card_credit_card.maestro {
+            background-position: 2px -285px, 260px -61px;
+        }
+        #add_credit_card_credit_card.discover {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #add_credit_card_credit_card.amex {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #add_credit_card_credit_card.diners_club_carte_blanche {
+            background-position: 2px -327px, 260px -61px;
+        }
+        #add_credit_card_credit_card.valid.visa {
+            background-position: 2px -159px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.visa_electron {
+            background-position: 2px -201px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.mastercard {
+            background-position: 2px -243px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.maestro {
+            background-position: 2px -285px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.discover {
+            background-position: 2px -327px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.amex {
+            background-position: 2px -327px, 233px -82px;
+        }
+        #add_credit_card_credit_card.valid.diners_club_carte_blanche {
+            background-position: 2px -327px, 233px -82px;
+        }
+
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+    </style>
 {% endblock stylesheets %}
-	{% block body %}
+
+{% block body %}
 
 
-<div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
+    <div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
 
-    <div class="smallOrangeBox">
-        <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
-        
-        <div class="smallOrangeBoxContent">
-            
-            <span>Ahora sólo falta tu información de pago</span>
+        <div class="smallOrangeBox">
+            <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
 
-            <span class="light-text"></span>
-            <hr class="smallDivider" />
-            
-					{% if errno is defined %}
-						Parece que tu número de tarjeta no es valido
-					{% endif %}
-				  	{{ form_start(form) }}
-					<div class="form-black form-group">
-						{{ form_label(form.credit_card) }}
-						{{ form_errors(form.credit_card) }}
-						{{ form_widget(form.credit_card) }}
-					</div>
-					<div>
-						<div class="form-black form-group col-sm-4">
-							{{ form_label(form.expiry_date_year) }}
-							{{ form_errors(form.expiry_date_year) }}
-							{{ form_widget(form.expiry_date_year) }}
-						</div>
-						<div class="form-black form-group col-sm-4">
-							{{ form_label(form.expiry_date_month) }}
-							{{ form_errors(form.expiry_date_month) }}
-							{{ form_widget(form.expiry_date_month) }}
-						</div>
-						<div class="form-black form-group col-sm-4">
-							{{ form_label(form.cvv) }}
-							{{ form_errors(form.cvv) }}
-							{{ form_widget(form.cvv) }}
-						</div>
-					</div>
-					<div class="form-black form-group">
-						{{ form_label(form.name_on_card) }}
-						{{ form_errors(form.name_on_card) }}
-						{{ form_widget(form.name_on_card) }}
-					</div>
-					<div class="">
-						{{ form_end(form) }}	
-					</div>		
-				</div>
-				<p class="log"></p>
-				{{ form_end(form)}}	
+            <div class="smallOrangeBoxContent">
+                {% if errno is defined %}
+                    <span class="alert alert-danger">   
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
+                    </span>
+                {% endif %}
+                <span>Ahora sólo falta tu información de pago</span>
+
+                <span class="light-text"></span>
+                <hr class="smallDivider" />
+
+                <div id='registrationExpressFormContainer' class='col-md-12 express_start'>
+
+                    {{ form_start(form) }}
+                    <div class="form-black form-group">
+                        {{form_row(form.credit_card)}}	    	
+                    </div>
+
+                    <div class="form-black form-group">
+                        {{form_row(form.name_on_card)}}	    	
+                    </div>
+
+                    <div class="form-black form-group">
+                        <div class="col-md-4">
+                            {{form_row(form.expiry_date_year)}}	
+                        </div>
+                        <div class="col-md-4">
+                            {{form_row(form.expiry_date_month)}}
+                        </div>
+                        <div class="col-md-4">
+                            {{form_row(form.cvv)}}
+                        </div>    	
+                    </div>
+                    {{ form_end(form) }}
+                </div>	
+                <div class="form-black form-group">
+                    {{form_row(form.save)}}		    	
+                </div> 
+            </div>
+            <p class="log"></p>	
         </div>
     </div>
 </div>
 
 
+{% endblock %}
 
-		<div class="container">
-			<div class="content col-md-12">
-				<div class="col-md-4">
-					
-			</div>
-		</div>
-		
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
 
+            var validator = null;
+            $.getScript("/public/js/jquery.validate.min.js").done(function () {
+                validator = $("form[name='add_credit_card']").validate({
+                    //onfocusout: true,
+                    rules: {
+                        "add_credit_card[credit_card]": {required: true, number: true, min: 1, maxlength: 19},
+                        "add_credit_card[name_on_card]": {required: true},
+                        "add_credit_card[expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                                // min needs a parameter passed to it
+                                param: function () {
+                                    var date = new Date();
+                                    var year = date.getFullYear();
+                                    var month = date.getMonth() + 2;
+                                    if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
+                                        return month;
+                                    }
+                                    return 1;
+                                },
+                                depends: function (element) {
+                                    var date = new Date();
+                                    var year = date.getFullYear();
+                                    var month = date.getMonth() + 2;
+                                    if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
+                                        return ($("#add_credit_card_credit_card_expiry_date_month").val() < month);
+                                    }
+                                    return false;
+                                }
+                            }},
+                        "add_credit_card[expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                        "add_credit_card[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
 
+                    },
+                    messages: {
+                        "add_credit_card[credit_card]": {
+                            required: "Por favor ingrese el numero de la tarjeta",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo 19 digitos",
+                            minlength: "minimo 1 digitos",
+                            min: "minimo 1 digitos"
 
-	{% endblock %}
-{% endblock fos_user_content %}
+                        },
+                        "add_credit_card[name_on_card]": {required: "Por favor ingrese el nombre que hay en la tarjeta"},
+                        "add_credit_card[expiry_date_month]": {
+                            required: "Por favor seleccione el mes de vencimiento",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo mes de 2 digitos",
+                            minlength: "minimo mes de 1 digitos",
+                            max: "mes del 01 al 12",
+                            min: function () {
+                                var date = new Date();
+                                var year = date.getFullYear();
+                                var month = date.getMonth() + 1;
+                                if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
+                                    if ($("#add_credit_card_credit_card_expiry_date_month").val() == month) {
+                                        return "Tarjeta vence este mes";
+                                    } else if ($("#add_credit_card_credit_card_expiry_date_month").val() < month) {
+                                        return "Tarjeta vencida";
+                                    }
+                                }
+                                return "mes del 01 al 12";
+                            }
+                        },
+                        "add_credit_card[expiry_date_year]": {
+                            required: "Por favor ingrese el año de vencimiento",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo año de 4 digitos",
+                            minlength: "minimo año de 4 digitos",
+                            max: "año maximo 9999",
+                            min: "año minimo 2016"
+                        },
+                        "add_credit_card[cvv]": {
+                            required: "Por favor ingrese el codigo de verificación",
+                            number: "ingresa solamente dígitos",
+                            maxlength: "maximo 4 digitos",
+                            minlength: "minimo 3 digitos",
+                            max: "minimo 001",
+                            min: "maximo 9999"
+                        }
+                    }
+                });
+            });
+            $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
+                $('#add_credit_card_credit_card').validateCreditCard(function (result) {
+                    $(this).removeClass();
+                    $(this).addClass('form-control');
+                    if (result.valid) {
+                        $(this).addClass(result.card_type.name);
+                        return $(this).addClass('valid');
+                    } else {
+                        return $(this).removeClass('valid');
+                    }
+                    alert(result);
+                });
+            });
+            $('form').on('submit', function (event) {
+                if (!validator.form()) {
+                    return false;
+                }
+                //return false;
+            });
+        });
+    </script>
+{% endblock %}
