@@ -36,3 +36,8 @@ parameters:
     from_email_sender_name_registration: Registro Symplifica
     from_email_address_resetting: resetting@symplifica.com
     from_email_sender_name_resetting: Resetting Symplifica
+    
+    symplifica_info:
+       tel: 7958927
+       email: servicioalcliente@symplifica.com
+       representante: Camilo Méndez
