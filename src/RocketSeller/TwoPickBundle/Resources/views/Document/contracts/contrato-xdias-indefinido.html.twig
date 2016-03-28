@@ -1,7 +1,11 @@
+{% set titleContract = "CONTRATO DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO" %}
+{% if data.contract.identBy == "e" %}
+{% set titleContract = "CONTRATO DE TRABAJO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO" %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS</title>
+<title>{{ titleContract }}</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -40,7 +44,7 @@ body {
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS</strong></p>
+<p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
 <div class="table-responsive">
@@ -83,10 +87,6 @@ body {
                 <td>{{ data.contract.startDate|localizeddate('long', 'none', local) }}</td>
             </tr>
             <tr height="25px">
-                <td>Fecha finalización labores:</td>
-                <td>{{ data.contract.endDate|localizeddate('long', 'none', local) }}</td>
-            </tr>
-            <tr height="25px">
                 <td>No. Días a la semana en que va a trabajar: </td>
                 <td>{{ data.contract.nWorkDays }}</td>
             </tr>
@@ -112,8 +112,8 @@ body {
 
 {# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
-labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CONTRATO
-LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PARCIAL FIJO PARA PERIODOS INFERIORES A UN MES O POR DIAS, el cual se regirá por las siguientes cláusulas:</p>
+labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, 
+el cual se regirá por las siguientes cláusulas:</p>
 
 <p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
 residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
@@ -183,9 +183,9 @@ grave.</p>
 para el desarrollo de su cargo y sus funciones, son para el uso exclusivo de éste, para el desarrollo de su cargo y sus funciones. La utilización de dichos
 recursos para asuntos personales queda prohibida y será considerada como falta grave.</p>
 
-{# <p style="text-align: justify;"><strong>QUINTA: </strong>JORNADA DE TRABAJO: EL TRABAJADOR se obliga a cumplir una jornada de Cuarenta y Ocho (48) horas semanales, en#}
-{# los turnos y dentro las horas señaladas por EL EMPLEADOR, pudiendo este hacer ajustes o cambios de horario cuando lo estime conveniente de conformidad con#}
-{# las necesidades del cargo.</p>#}
+{# <p style="text-align: justify;"><strong>QUINTA: </strong>JORNADA DE TRABAJO: EL TRABAJADOR se obliga a cumplir una jornada de Cuarenta y Ocho (48) horas#}
+{# semanales, en los turnos y dentro las horas señaladas por EL EMPLEADOR, pudiendo este hacer ajustes o cambios de horario cuando lo estime conveniente de#}
+{# conformidad con las necesidades del cargo.</p>#}
 
 {# <p style="text-align: justify;">Por el acuerdo expreso o tácito de las partes, podrán repartirse las horas de la jornada ordinaria en la forma prevista en el#}
 {# artículo 164 del Código Sustantivo del Trabajo, modificado por el artículo 23 de la ley 50/90, teniendo en cuenta que los tiempos de descanso entre las#}
@@ -194,30 +194,32 @@ recursos para asuntos personales queda prohibida y será considerada como falta 
 {# ser de un mínimo de cuatro (4) horas continuas, y hasta diez (10) horas diarias sin lugar a ningún recargo por trabajo suplementario, cuando el número de#}
 {# horas de trabajo no exceda el promedio de cuarenta y ocho (48) horas semanales dentro de la jornada.</p>#}
 
-<p style="text-align: justify;"><strong>QUINTA: </strong>TÉRMINO DEL CONTRATO: El término de duración de este contrato es de {{ data.contract.years_months }}
-meses, {{ data.contract.days }} días, contados a partir del {{ data.contract.startDate|localizeddate('long', 'none', local) }}. Por lo anterior el contrato se
-prolongará hasta el {{ data.contract.endDate|localizeddate('long', 'none', local) }}. Se entenderá prorrogado automáticamente por un periodo igual a la inicial,
-si ninguna de las partes da a conocer a la otra su intención de no renovarlo con treinta (30) días de anticipación a la fecha del vencimiento inicial o sus
-prórrogas.</p>
+<p style="text-align: justify;"><strong>QUINTA: </strong>OBLIGACIONES DEL TRABAJADOR: El trabajador dependiente por su parte, prestará los servicios domésticos
+en el domicilio del empleador, o en el sitio que corresponda por cambio del mismo, mientras se encuentre en ejecución el presente contrato, en la jornada de
+trabajo establecida por EL EMPLEADOR, para lo cual utilizará su mejor ánimo y voluntad, cuidando los objetos y elementos entregados y obedeciendo las órdenes
+que le imparta el empleador, relacionados con las funciones inherentes a su trabajo.</p>
 
-<p style="text-align: justify;"><strong>SEXTA: </strong>PERIODO DE PRUEBA: El periodo de prueba será igual a la quinta parte del término señalado para
-el presente contrato, el cual no podrá ser superior a dos meses y, por consiguiente, cualquiera de las partes EMPLEADOR o TRABAJADOR podrá darlo por terminado
-en cualquier momento durante dicho período, en forma unilateral, de conformidad con el artículo 80 del Código Sustantivo del Trabajo, sin que genere
-indemnización alguna.</p>
+<p style="text-align: justify;"><strong>SEXTA: </strong>DURACIÓN DEL CONTRATO: El presente contrato de trabajo se ha pactado a término indefinido, no obstante,
+tendrá vigencia mientras subsistan las causas que le dieron origen de acuerdo a las disposiciones legales que sobre el particular se establezcan. De igual
+forma terminará por las causas contempladas en las leyes, reglamentos, en el presente contrato y en general de cualquier documento emanado de la voluntad del
+EMPLEADOR.</p>
 
-<p style="text-align: justify;"><strong>SEPTIMA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: Son justas causas para dar por terminado
-el presente contrato de trabajo, el incumplimiento a cualquiera de las obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351
-de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas que para el efecto se califican como graves: a) La violación grave por parte de EL
-TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL
-EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el
-sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara
-justificación; e) La no asistencia a una sesión completa de la jornada de trabajo, o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o
-caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
+<p style="text-align: justify;"><strong>SEPTIMA: </strong>PERIODO DE PRUEBA: Acuerdan las partes fijar como periodo de prueba los primeros dos (2) meses
+calendario de labor, a partir de la vigencia del presente contrato laboral. Durante este periodo las partes pueden dar por terminado unilateralmente el
+contrato sin necesidad de pagar indemnización alguna excepto la del no pago de liquidación de prestaciones sociales.</p>
+
+<p style="text-align: justify;"><strong>OCTAVA: </strong>JUSTAS CAUSAS PARA DAR POR TERMINADO EL PRESENTE CONTRATO: El incumplimiento a cualquiera de las
+obligaciones aquí establecidas, así como las previstas en el Artículo 7º del Decreto 2351 de 1.965 y además por parte del de EL EMPLEADOR las siguientes faltas
+que para el efecto se califican como graves: a) La violación grave por parte de EL TRABAJADOR de cualquiera de  sus obligaciones legales, contractuales o
+reglamentarias; b) La no asistencia al trabajo, sin excusa suficiente a juicio de EL EMPLEADOR, por dos veces dentro de un mismo mes calendario; c) El hecho
+que EL TRABAJADOR llegue embriagado al trabajo o ingiera bebidas embriagantes en el sitio de trabajo, aún por la primera vez; d) El hecho de que EL TRABAJADOR
+abandone el sitio de trabajo sin el permiso de EL EMPLEADOR o sin una clara justificación; e) La no asistencia a una sesión completa de la jornada de trabajo,
+o más, sin excusa suficiente a juicio de EL  EMPLEADOR salvo fuerza mayor o caso fortuito. f) el incumplimiento de las órdenes dadas por el empleador.</p>
 
 <p style="text-align: justify;"><strong>PARÁGRAFO: </strong>La violación de dichas obligaciones y prohibiciones dará lugar a la terminación del contrato de
 trabajo con justa causa.</p>
 
-<p style="text-align: justify;"><strong>OCTAVA: </strong>EL TRABAJADOR se obliga a laborar los
+<p style="text-align: justify;"><strong>NOVENA: </strong>EL TRABAJADOR se obliga a laborar los
 {% for day in data.contract.workDays %}
     {% if loop.last %}
         y
@@ -228,13 +230,7 @@ trabajo con justa causa.</p>
 {% endfor %}
 de cada semana.</p>
 
-<p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Las PARTES pueden modificar los días y las horas señaladas en la presente cláusula, siempre que
-exista previo acuerdo entre los días que se va a prestar el servicio.</p>
-
-<p style="text-align: justify;"><strong>PARÁGRAFO 2: </strong>Todo trabajo suplementario o de horas extras debe ser previamente y en forma escrita autorizado
-por EL EMPLEADOR.</p>
-
-<p style="text-align: justify;"><strong>NOVENA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
+<p style="text-align: justify;"><strong>DECIMA: </strong>SALARIO: EL EMPLEADOR pagará al TRABAJADOR como remuneración por los servicios prestados, el salario
 diario de {{ data.contract.salary/data.contract.nWorkDays }} por cada día laborado; pagaderos de manera {{ data.contract.frequency }}.</p>
 
 <p style="text-align: justify;"><strong>PARÁGRAFO 1: </strong>Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos
@@ -248,15 +244,21 @@ adicional a su salario ordinario, ya sean beneficios extralegales o auxilios hab
 auxilio de alimentación, auxilio de alojamiento o habitación, bonificaciones  por  mera liberalidad, primas extralegales y cualquier otro beneficio extralegal,
 en dinero o en especie, no constituye salario para ningún efecto legal, de conformidad con lo establecido en el artículo 15 de la Ley 50 de 1990.</p>
 
-<p style="text-align: justify;"><strong>DECIMA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los beneficios
-contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se encuentra
-vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente completo, para
-todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o por días.</p>
+<p style="text-align: justify;"><strong>PARÁGRAFO 4: </strong>Si el empleador tiene afiliada a la trabajadora del servicio doméstico en las empresas promotoras
+de pensiones, ARL y Caja de Compensación Familiar, con los beneficios que otorga el Decreto 2616 de 2013 en sus artículos 5 al 9, para efectos de tener que
+adecuar el valor de cotización mínima semanal o la que corresponda, según la tabla de aportes a cargo del empleador en cada sistema y según los días laborados,
+deberá reportar el cambio a través de la Planilla Asistida PILA.</p>
 
-<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+<p style="text-align: justify;"><strong>DECIMA PRIMERA: </strong>BENEFICIARIOS DE LA COTIZACIÓN POR SEMANAS: Como requisito fundamental para acceder a los
+beneficios contemplados en el Decreto 2616 de 2013, EL TRABAJADOR deberá estar vinculado al régimen subsidiado en salud. Si EL TRABAJADOR dependiente se
+encuentra vinculado en el régimen contributivo a través de EPS, los porcentajes de cotización se harán con base en el salario mínimo legal mensual vigente
+completo, para todos los sistemas, es decir para salud, pensión, Riesgos Laborales, y Caja de Compensación Familiar, así labore en periodos inferiores al mes o
+por días.</p>
+
+<p style="text-align: justify;"><strong>DECIMA SEGUNDA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
 contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
 
-<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+<p style="text-align: justify;"><strong>DECIMA TERCERA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
 autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
 que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
 entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por

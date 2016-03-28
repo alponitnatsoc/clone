@@ -335,11 +335,7 @@ class DocumentController extends Controller
 //     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
     	        $identBy = $contract->getPositionPosition()->getIdentBy();
 
-    	        if (in_array($identBy, array("ed", "n", "e"))) {
-    	            $ref .= "-ed";
-    	        } else if ($identBy == "c") {
-    	            $ref .= "-c";
-    	        } else if ($identBy == "m") {
+    	        if ($identBy == "m") { // Si el cargo es mayordomo
     	            $ref .= "-m";
     	        }
 

@@ -1,7 +1,11 @@
+{% set titleContract = "CONTRATO DE TRABAJO SERVICIO DOMÉSTICO FIJO" %}
+{% if data.contract.identBy == "e" %}
+{% set titleContract = "CONTRATO DE TRABAJO FIJO" %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO FIJO</title>
+<title>{{ titleContract }}</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -40,7 +44,7 @@ body {
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO FIJO</strong></p>
+<p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
 <div class="table-responsive">
@@ -108,8 +112,9 @@ body {
 
 {# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
-labora en los servicios domésticos, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CONTRATO LABORAL DE TRABAJO DE SERVICIO
-DOMÉSTICO FIJO, el cual se regirá por las siguientes cláusulas:</p>
+labora en los servicios domésticos, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, el cual se regirá por
+las siguientes cláusulas:</p>
+
 <p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
 residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
 prestación de la labor sin necesidad de elaborar un otro si o cláusula adicional.</p>
@@ -124,7 +129,7 @@ EMPLEADOR de acuerdo con las necesidades del trabajo, la naturaleza de la labor 
 acepta cualquier orden de traslado que se le imparta para desempeñar otro cargo o función en el mismo establecimiento o fuera de él, aún en ciudad distinta a la
 del lugar donde fue contratado, declarando que está en disponibilidad de hacerlo.  Además de las obligaciones inherentes al cargo contratado, TRABAJADOR se
 obliga: {{ data.contract.obligations }}
-{% if identBy in ["n", "e"] %}
+{% if data.contract.identBy in ["n", "e"] %}
 6. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
 a EL EMPLEADOR, no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 7. A cumplir a cabalidad con las órdenes e
 instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
