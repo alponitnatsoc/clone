@@ -71,7 +71,7 @@ class DashBoardController extends Controller
 
 
         $step1 = array(
-            'url' => $this->generateUrl('edit_profile'),
+            'url' => $paymentState==1?"":$this->generateUrl('edit_profile'),
             'name' => "Mis datos como empleador",
             'state' => $stateRegister,
             'paso' => 1,
@@ -79,7 +79,7 @@ class DashBoardController extends Controller
             'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
         $steps ['0'] = $step1;
         $step2 = array(
-            'url' => $stateRegister != 100 ? "" :$this->generateUrl('manage_employees'),
+            'url' => $paymentState==1? "" :($stateRegister != 100 ? "" :$this->generateUrl('manage_employees')),
             'name' => "Datos de mis empleados",
             'state' => $stateEmployees,
             'paso' => 2,
@@ -87,7 +87,7 @@ class DashBoardController extends Controller
             'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
         $steps ['1'] = $step2;
 
-        if ($stateRegister == 100) {
+        if ($stateRegister == 100&&$paymentState!=1) {
             $step3 = array(
                 'url' => $this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
                 'name' => "Agregar un nuevo Empleado?",
@@ -98,7 +98,7 @@ class DashBoardController extends Controller
             $steps ['2'] = $step3;
         }
         $step4 = array(
-            'url' => $stateEmployees != 100 ? "" : $this->generateUrl('subscription_choices'),
+            'url' => $paymentState==1?"":($stateEmployees != 100 ? "" : $this->generateUrl('subscription_choices')),
             'name' => "Subscripción a Symplifica",
             'paso' => 3,
             'state' => $paymentState ? 100 : 0,

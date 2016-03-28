@@ -8,6 +8,14 @@ function manageEmployees(){
             var href=$(this).attr("href");
             loadNovelty(href);
         });
+    });
+    $(".removeEmployee").on("click", function (e) {
+            e.preventDefault();
+            $("#deleteModal").modal("show");
+            $("#btn-erase").attr("href",$(this).attr("href"));
+    });
+    $("#btn-erase").on("click", function (e) {
+        $(this).text("Borrando...");
     })
 }
 function loadNovelty(url) {
