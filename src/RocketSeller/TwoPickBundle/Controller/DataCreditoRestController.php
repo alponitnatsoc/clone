@@ -72,19 +72,19 @@ class DataCreditoRestController extends FOSRestController
      * @param Maximum number of seconds before giving up $timeout
      * @return View with the json response from the payments server.
      */
-    public function callApi($parameters, $timeout = 10)
+    public function callApi($parameters, $path, $timeout = 10)
     {
         ini_set("soap.wsdl_cache_enabled", 1);
         $opts = array(
             //"ssl" => array("ciphers" => "RC4-SHA")
         );
         //$client = new \SoapClient("http://172.24.14.29:8080/localizacion2/services/ServicioLocalizacion2?wsdl",
-        $client = new \SoapClient("http://52.73.111.160:8080/localizacion2/services/ServicioLocalizacion2?wsdl",
+        $client = new \SoapClient($path . "?wsdl",
           array("connection_timeout" => $timeout,
               "trace" => true,
               "exceptions" => true,
               "stream_context" => stream_context_create($opts),
-              'location'      => "http://52.73.111.160:8080/localizacion2/services/ServicioLocalizacion2",
+              'location'      => $path,
               //"login" => $login,
               //"password" => $pass
         ));
@@ -173,7 +173,7 @@ class DataCreditoRestController extends FOSRestController
         $this->validateParamters($parameters, $regex, $mandatory);
 
         /** @var View $responseView */
-        $responseView = $this->callApi($parameters);
+        $responseView = $this->callApi($parameters, "http://52.73.111.160:8080/localizacion2/services/ServicioLocalizacion2");
 
         return $responseView;
     }
