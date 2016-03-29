@@ -184,7 +184,12 @@
                                     return false;
                                 }
                             }},
-                        "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                        "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
+                                param: function () {
+                                    var date = new Date();
+                                    return date.getFullYear();
+                                }
+                            }},
                         "app_user_express_registration[credit_card][cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
 
                     },
