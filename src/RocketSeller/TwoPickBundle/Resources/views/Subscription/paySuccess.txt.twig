@@ -6,235 +6,51 @@
     {% endautoescape %}
 {% endblock %}
 {% block body_html %}
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Symplifica</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                body {
-                    font-family: "Open Sans", Arial;
-                    background: #fff;
-                    width: 100%;
-                    margin: 0px;
-                    padding: 0px;
-                    color: #4B4B4B;
-                }
-                h1 {
-                    font-size: 32px;
-                }
-                p, ul {
-                    font-size: 18px;
-                    font-weight: 400;
-                }
-                p strong {
-                    font-weight: bold;
-                }
-                .headbck {
-                    background: #3b4b5a;
-                    display: block;
-                    border-bottom: 1px solid #fff;
-                    height: 60px;
-                    padding-top: 10px;
-                }
-                .blockBlueCentral, .blockGreenCentral {
-                    background: #00cdcc;
-                    display: block;
-                    padding: 30px 0px;
-                    margin: 25px 0px;
-                    font-size: 16px;
-                }
-                .blockBlueCentral a {
-                    color: #fff;
-                    text-decoration: none;
-                }
-                .blockGreenCentral {
-                    background: #3b4b5a;
-                    position: relative;
-                }
-                .blockGreenCentral p {
-                    color: #fff;
-                    font-weight: bold;
-                    font-size: 18px;
-                }
-                .imgUp {
-                    text-align: center;
-                }
-                .contentSection {
-                    margin-left: 180px;
-                }
-                .contentSection .code {
-                    font-size: 48px;
-                    color: #00CDCC;
-                }
-                .contentSection .socials a img {
-                    display: inline-block;
-                    margin-right: 15px;
-                }
-                .boxSquareIcon {
-                    background: #00cfcc;
-                    width: 102px;
-                    height: 102px;
-                    padding: 25px;
-                    text-align: center;
-                    margin-left: 120px;
-                    position: absolute;
-                }
-                .boxSquareIcon img {
-                    border: 2px solid #9dedec;
-                }
-                footer {
-                    bottom: 0px;
-                    width: 100%;
-                    background-color: #EDEDED;
-                    height: 60px;
-                    display: block;
-                    margin-top: 30px;
-                    padding-top: 5px;
-                }
-                footer > .container {
-                    margin-top: 11px;
-                }
-                .container {
-                    width: 980px;
-                    padding-right: 15px;
-                    padding-left: 15px;
-                    margin-right: auto;
-                    margin-left: auto;
-                }
-                .container ul li {
-                    list-style: none;
-                    margin-bottom: 10px;
-                }
-                .container ul li img {
-                    margin-right: 15px;
-                }
-                .container m {
-                    color: #00cdcc;
-                }
-                footer > .container > div {
-                    height: 37px;
-                    border-right: 1px solid #919191;
-                }
-                .col-sm-2, .col-sm-5 {
-                    float: left;
-                    position: relative;
-                    min-height: 1px;
-                    padding-right: 15px;
-                    padding-left: 15px;
-                }
-                .col-sm-2 {
-                    width: 20%;
-                }
-                .col-sm-5 {
-                    width: 70%;
-                }
-                footer > .container > div.logo img {
-                    margin-top: 5px;
-                }
-                footer > .container > div.links > div > a {
-                    color: #333;
-                    font-size: 12px;
-                    text-transform: uppercase;
-                    text-decoration: none;
-                }
-                footer > .container > div.social .red > a {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                }
-                .blockBlueCentral a:hover  {
-                    text-decoration: underline;
-                }
-                footer > .container > div.links > div {
-                    padding-left: 0px;
-                }
-                footer > .container > div:last-child {
-                    border: medium none;
-                }
-                footer > .container > div.social {
-                    padding-top: 4px;
-                }
-                footer > .container > div.social > div {
-                    float: left;
-                }
-                footer > .container > div.social .red.facebook {
-                    background-position: 0px center;
-                }
-                footer > .container > div.social .red.linkedin {
-                    background-position: -41px center;
-                }
-                footer > .container > div.social .red.twitter {
-                    background-position: -82px center;
-                }
-                footer > .container > div.social .terminos {
-                    color: #333;
-                    font-size: 12px;
-                }
-                footer > .container > div.social .red {
-                    width: 32px;
-                    height: 32px;
-                    margin-right: 9px;
-                    background-image: url("http://www.symplifica.com/public/img/mail/redes.png");
-                }
-            </style>
-        </head>
-        <body style="font-family: sans-serif;">
-            <header>
-                <div class="headbck">
-                    <div class="container">
-                        <a href=""><img src="http://www.symplifica.com/public/img/mail/logo.png" alt="Symplifica"></a>
-                    </div>
-                </div>
-            </header>
-            <section>
-                <div class="imgUp">
-                    <img src="http://www.symplifica.com/public/img/mail/imgUpBanner3.jpg" alt="Symplifica" />
-                </div>
-            </section>
-            <section>
-                <div class="container">
-                    <h1><strong style="font-family: sans-serif;">¡Pago Symplifica!</strong></h1>                    
-                </div>
-            </section>
-            <section>
-                <div class="blockGreenCentral">
-                    <!--
-                    <div class="boxSquareIcon">
-                        <img src="http://www.symplifica.com/public/img/mail/square1.png">
-                    </div>
-                    -->
-                    <div class="container">
-                        <div class="contentSection" style="font-family: sans-serif;">
-                            <h1><strong style="font-family: sans-serif;">¡Pago realizado con exito!</strong></h1>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <div class="container" style="font-family: sans-serif;">
-                    <p>Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor aún, minizaremos al máximo el riesgo de eventualidades a futuro.</p>
-                    <p>Atentamente</p>
-                    <span><strong>CAMILO MÉNDEZ</strong><br /><em style="display:block">Director Symplifica</em></span>
-                </div>
-            </section>
-            <footer>
-                <div class="container">
-                    <div class="col-sm-2 logo">
-                        <img src="http://www.symplifica.com/public/img/mail/logo-oscuro.png" alt="Symplifica" class="hidden-sm img-responsive"/>
-                    </div>
-                    <div class="col-sm-5 social">
-                        <div class="red facebook"><a href="#" target="_blank"></a></div>
-                        <div class="red linkedin"><a href="#" target="_blank"></a></div>
-                        <div class="red twitter"><a href="#" target="_blank"></a></div>
-                        <div class="terminos" style="font-family: sans-serif;">
-                            Términos y Condiciones<br />
-                            Copyright © Todos los derechos reservados Symplifica
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </body>
-    </html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+<title>Documento sin título</title>
+<style type="text/css">
+  @media only screen and (max-width: 480px) {
+    table {width: 100% !important}
+  }
+</style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        <tr><!--------------------------------------------header----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+        </tr><!--------------------------------------------fin header----------------------------------->
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td align="center">
+                            <img src="https://symplifica.com/public/img/mail/check.png" alt="check" />
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 25px;color:#5D5D5D">
+                            ¡Pago de suscripción exitoso!
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px;color:#858789">
+                            Puedes descargar la factura que viene adjunta a este correo en formato PDF que corresponde al pago de este periodo
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr><!--------------------------------------------footer----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+        </tr><!--------------------------------------------fin footer----------------------------------->
+    </table>
+</body>
+</html>
 {% endblock %}
