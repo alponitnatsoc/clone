@@ -1,8 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block subject %}
-{% autoescape false %}
-{{ 'resetting.email.subject'|trans }}
-{% endautoescape %}
+{% autoescape false %}{{ 'resetting.email.subject'|trans }}{% endautoescape %}
 {% endblock %}
 {% block body_text %}
 {% autoescape false %}
@@ -47,7 +45,7 @@
               <td style="padding: 10px 10px 20px 10px; text-align: center">
                 <div style="color:#75BEC1;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Hola!</div>
                 <br />
-                <div style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
+                <div style="font-size: 30px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; margin: 0 auto;">
                   {{ user.personPerson.names }}
                 </div><br /><br /><br />
                 <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5E5E">Para restablecer tu contraseña</div>
@@ -55,7 +53,7 @@
                 <div style="text-align: center; font-size: 15px; font-family: 'Open Sans', sans-serif; font-weight: 600; font-style: italic; color: #DF9036">
                     <a href="{{ confirmationUrl }}" target="_blank">{{ confirmationUrl }}</a>
                 </div><br /><br />
-                <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; width: 70%; margin: 0 auto">
+                <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; color: #858688; margin: 0 auto">
                   Atentamente,<br />
                   El equipo Symplifica
                 </div>
