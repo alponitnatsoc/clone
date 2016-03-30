@@ -127,7 +127,7 @@ class NoveltyController extends Controller {
         }
         $requiredFields = $noveltyType->getRequiredFields();
 
-        $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll))), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
+        $form = $this->createForm(new NoveltyForm($requiredFields, /*$hasDocuments*/ false,$this->generateUrl("novelty_add",array("noveltyTypeId"=>$noveltyType->getIdNoveltyType(),"idPayroll"=>$idPayroll)),$idPayroll), $novelty);// This is because Camilo wanted that its simple to the user to create novelties
         $form->handleRequest($request);
         if ($form->isValid()) {
             //check if novelty date start is valid
@@ -142,9 +142,10 @@ class NoveltyController extends Controller {
                     ));
                 }
             }
+            //si es una novedad de vacaciones
             if($novelty->getNoveltyTypeNoveltyType()->getPayrollCode()==145){
                 $request->setMethod("GET");
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDays',array(
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract',array(
                     "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
                     "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
                     "contractId"=>$payRol->getContractContract()->getIdContract()

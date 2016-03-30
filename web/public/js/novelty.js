@@ -4,7 +4,52 @@
 function addNoveltySelectListener() {
     var modBody=$("#noveltyModal").find(".cuerpoNovelty");
     var form=modBody.find("form");
-    console.log(form);
+    if($("#novelty_fields_noveltyType").find("option:selected").text()=="Vacaciones"){
+        $("#novelty_fields_date_start").on("change", function(){
+            var $dateStart=$(this);
+            var $dateEnd=$("#novelty_fields_date_end");
+            if(checkDates($dateStart)&&checkDates($dateEnd)){
+                if(!($("#daysAmountText").length)){
+                    var p = "<p id='daysAmountText'>Número de días a tomar entre las fechas escogidas: <div id='daysAmount'></div> </p>";
+                    $("#novelty_fields").append(p);
+                }
+                $.ajax( {
+                    type: "GET",
+                    url: "/api/public/v1/valids/"+$dateStart.find("select[name*='year']").val()+"-"
+                    +$dateStart.find("select[name*='month']").val()+"-"+$dateStart.find("select[name*='day']").val()+
+                    "/vacations/"+$dateEnd.find("select[name*='year']").val()+"-"
+                    +$dateEnd.find("select[name*='month']").val()+"-"+$dateEnd.find("select[name*='day']").val()+
+                    "/days/-1/contracts/"+$(form).find("#novelty_fields_idPayroll").val(),
+                }).done(function(data){
+                    $("#daysAmount").html(data["days"]);
+                }).fail(function(x,y,z){
+
+                });
+            }
+        });
+        $("#novelty_fields_date_end").on("change", function(){
+            var $dateEnd=$(this);
+            var $dateStart=$("#novelty_fields_date_start");
+            if(checkDates($dateStart)&&checkDates($dateEnd)){
+                if(!($("#daysAmountText").length)){
+                    var p = "<p id='daysAmountText'>Número de días a tomar entre las fechas escogidas: <div id='daysAmount'></div> </p>";
+                    $("#novelty_fields").append(p);
+                }
+                $.ajax( {
+                    type: "GET",
+                    url: "/api/public/v1/valids/"+$dateStart.find("select[name*='year']").val()+"-"
+                    +$dateStart.find("select[name*='month']").val()+"-"+$dateStart.find("select[name*='day']").val()+
+                    "/vacations/"+$dateEnd.find("select[name*='year']").val()+"-"
+                    +$dateEnd.find("select[name*='month']").val()+"-"+$dateEnd.find("select[name*='day']").val()+
+                    "/days/-1/contracts/"+$(form).find("#novelty_fields_idPayroll").val(),
+                }).done(function(data){
+                    $("#daysAmount").html(data["days"]);
+                }).fail(function(x,y,z){
+
+                });
+            }
+        });
+    }
     $("#novelty_fields_date_start").on("change", function(){
 
     });
@@ -14,13 +59,8 @@ function addNoveltySelectListener() {
     form.submit(function (e) {
         e.preventDefault();
         var value=form.find("input[name='form[noveltyType]']:checked").val();
-        var valueText=form.find("input[name='form[noveltyType]']:checked").parent().text();
         if($("#novelty_fields_noveltyType").val() !=null){
             value="";
-        }
-        if(valueText ==" Vacaciones"){
-            //calculate days
-            $("#novelty_fields_date_start")
         }
         $.ajax( {
             type: "POST",
@@ -44,6 +84,15 @@ function addNoveltySelectListener() {
             }
         });
     });
+}
+function checkDates(date){
+    var year=$(date).find("select[name*='year']");
+    var month=$(date).find("select[name*='month']");
+    var day=$(date).find("select[name*='day']");
+    if(year.val()==""||month.val()==""||day.val()==""){
+        return false;
+    }
+    return true;
 }
 function startNovelty(){
     hideAll();

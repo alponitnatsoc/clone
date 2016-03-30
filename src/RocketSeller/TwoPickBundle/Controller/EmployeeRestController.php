@@ -846,6 +846,32 @@ class EmployeeRestController extends FOSRestController
                     $weekWorkableDay = new WeekWorkableDays();
                     $weekWorkableDay->setContractContract($contract);
                     $weekWorkableDay->setDayName($value);
+                    $dayNumber=0;
+                    switch ($value){
+                        case "lunes":
+                            $dayNumber=1;
+                            break;
+                        case "martes":
+                            $dayNumber=2;
+                            break;
+                        case "miercoles":
+                            $dayNumber=3;
+                            break;
+                        case "jueves":
+                            $dayNumber=4;
+                            break;
+                        case "viernes":
+                            $dayNumber=5;
+                            break;
+                        case "sabado":
+                            $dayNumber=6;
+                            break;
+                        case "domingo":
+                            $dayNumber=0;
+                            break;
+                    }
+                    if($value=="lunes")
+                    $weekWorkableDay->setDayNumber($dayNumber);
                     $contract->addWeekWorkableDay($weekWorkableDay);
                 }
 

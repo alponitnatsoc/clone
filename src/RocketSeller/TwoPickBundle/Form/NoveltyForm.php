@@ -22,11 +22,13 @@ class NoveltyForm extends AbstractType
     private $hasDocuments;
     private $url;
     private $today;
-    function __construct($fields,$hasDocuments,$url=null){
+    private $payrollId;
+    function __construct($fields,$hasDocuments,$url=null,$payrollId=null){
         $this->url=$url;
         $this->fields=$fields;
         $this->hasDocuments=$hasDocuments;
         $this->today=new DateTime();
+        $this->payrollId=$payrollId;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -87,7 +89,11 @@ class NoveltyForm extends AbstractType
                 }
             }
         }
-        $builder->add('save', 'submit', array(
+        $builder
+            ->add('idPayroll', 'hidden', array(
+                'data' => $this->payrollId,
+                'mapped'=>false))
+            ->add('save', 'submit', array(
             'label' => 'Crear',));
 
     }

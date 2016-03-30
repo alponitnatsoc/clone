@@ -6,9 +6,11 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
+use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\WeekWorkableDays;
@@ -103,15 +105,26 @@ class NoveltyRestController extends FOSRestController
      *
      * @param $dateStart
      * @param $dateEnd
-     * @param $contractId
+     * @param int $contractId
+     * @param int $payrollId
+     * @Route(defaults={"contractId"="-1","payrollId"="-1"})
+     *
      * @return View
      */
-    public function getValidVacationDaysAction($dateStart, $dateEnd,$contractId)
+    public function getValidVacationDaysContractAction($dateStart, $dateEnd,$contractId,$payrollId)
     {
         $em=$this->getDoctrine()->getManager();
-        $contractRepo=$em->getRepository("RocketSellerTwoPickBundle:Contract");
-        /** @var Contract $realContract */
-        $realContract=$contractRepo->find($contractId);
+        if($contractId==-1){
+            $payrollRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+            /** @var Payroll $realPayroll */
+            $realPayroll=$payrollRepo->find($payrollId);
+            $realContract=$realPayroll->getContractContract();
+        }else{
+            $contractRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
+            /** @var Contract $realContract */
+            $realContract=$contractRepo->find($contractId);
+        }
+
         $wkd=array();
         if($realContract->getTimeCommitmentTimeCommitment()->getName()=="Tiempo Completo"){
             $wkd[6]=true;
@@ -133,17 +146,19 @@ class NoveltyRestController extends FOSRestController
         $interval=$dateRStart->diff($dateREnd);
         $answer=0;
         $numberDays=$interval->format("%a");
+        $days=[];
         for($i=0;$i<$numberDays;$i++){
             $dateToCheck=new DateTime();
             $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
 
             if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
                 $answer++;
+                $days[]=$dateToCheck->format("Y-m-d");
             }
 
         }
         $view = View::create();
-        $view->setStatusCode(200)->setData(array("days"=>$answer));
+        $view->setStatusCode(200)->setData(array("days"=>$answer,"dateToCheck"=>$days,"wkd"=>$wkd));
 
         return $view;
     }
