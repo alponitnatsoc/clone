@@ -92,6 +92,14 @@ function startEmployee() {
                 }
             });
         });
+        $("input[class*='autocom']").each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Por favor seleccione una opción"
+                }
+            });
+        });
     });
     $('.btnPrevious-form').click(function () {
         $('#formNav > .active').prev('li').find('a').trigger('click');
@@ -288,9 +296,7 @@ function startEmployee() {
                 contractId: $(form).find("input[name='register_employee[idContract]']").val(),
             }
         }).done(function (data) {
-            console.log(data["url"]);
-            history.pushState("", "", data["url"]);
-            sendAjax(data["url"]);
+            $('#formNav > .active').next('li').find('a').trigger('click');
         }).fail(function (data, textStatus, errorThrown) {
             if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -351,6 +357,65 @@ function startEmployee() {
     $('#btn-inquiry').click(function (e) {
         e.preventDefault();
         inquiry();
+    });
+    $('#btn-entities').click(function (e) {
+        e.preventDefault();
+        var form = $("form");
+        var i = 0;
+        var flagValid = true;
+        $(form).find("select[name*='[wealth]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("select[name*='[pension]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("input[name*='[wealthAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("input[name*='[pensionAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
+        if (!flagValid) {
+            return;
+        }
+
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                idContract: $("input[name='register_employee[idContract]']").val(),
+                beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
+                pension: $("#register_employee_entities_pension").val(),
+                wealth:  $("#register_employee_entities_wealth").val(),
+                idEmployee: $("#register_employee_idEmployee").val()
+            }
+        }).done(function (data) {
+            history.pushState("", "", data["url"]);
+            sendAjax(data["url"]);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
+        });
     });
     $('#btn-1').click(function (e) {
         e.preventDefault();
@@ -648,6 +713,19 @@ function addListeners() {
         calculator("m");
         formatMoney($("#totalExpensesVal"));
         formatMoney($("#register_employee_employeeHasEmployers_salary"));
+    });
+    initEntitiesFields();
+
+    $(".hidden").each(function () {
+        $(this).hide();
+    });
+
+    $("#chkAcept").on('click', function () {
+        if ($(this).is(':checked')) {
+            $("#btn-entities").removeClass('disabled');
+        } else {
+            $("#btn-entities").addClass('disabled');
+        }
     });
     var documentType = $("select[name='register_employee[person][documentType]']");
     var document = $("input[name='register_employee[person][document]']");
@@ -1180,4 +1258,63 @@ function infoNuevoContrato(from, to, template, event) {
         $('#siNuevoContrato').modal('toggle');
         $('#formNav > .active').next('li').find('a').trigger('click');
     });
+}
+function initEntitiesFields(){
+    var dataPen=[];
+    $("#register_employee_entities_pension").find("> option").each(function() {
+        dataPen.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomP").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataPen, request.term);
+
+                response(results.slice(0, 5));
+            },
+            minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+    });
+    var dataWe=[];
+    $("#register_employee_entities_wealth").find("> option").each(function() {
+        dataWe.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomW").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataWe, request.term);
+
+                response(results.slice(0, 5));
+            },                minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+
 }

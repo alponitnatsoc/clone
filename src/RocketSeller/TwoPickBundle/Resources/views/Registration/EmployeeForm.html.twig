@@ -99,6 +99,7 @@
             <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de Contacto</li>
             <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
             <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
+            <li {%   if tab==5 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities"></a>Entidades del empleado</li>
 
         </ul>
 
@@ -787,24 +788,80 @@
                                 <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Salvar</button>
                                 <!--<div class="saveControl">{{ form_row(form.save) }}</div>-->
                             </div>
-                            <div id="toHide">
 
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.employeeHasEmployers.contractType) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.employeeHasEmployers.contractType) }}
-                                    </div>
-                                </div>
-                                {{ form_widget(form) }}
-
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div id="employeeEntities" class="tab-pane fade in {%   if tab==5 %}active{% endif %}">
+                {# render the task's only field: description #}
+                <div class="forma clearfix">
+                    <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="title text-center">Salud</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="title text-center">Pensión</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="title text-center">¿Registrará beneficiarios?</div>
+                        </div>
+                    </div>
+
+                        {% if form.entities.wealth.vars.data.name is defined %}
+                            {% set wname = form.entities.wealth.vars.data.name %}
+                        {% else %}
+                            {% set wname = "" %}
+                        {% endif %}
+                        {% if form.entities.pension.vars.data.name is defined %}
+                            {% set pname = form.entities.pension.vars.data.name %}
+                        {% else %}
+                            {% set pname = "" %}
+                        {% endif %}
+                        <div class="col-sm-12 col-xs-12 blockUpData">
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="hidden">
+                                    {{ form_row(form.entities.wealth) }}
+                                </div>
+                                {{ form_row(form.entities.wealthAC,{'value' : wname}) }}
+                            </div>
+                            <div class="wrapper">
+                                <div class="hidden">
+                                    {{ form_row(form.entities.pension) }}
+                                </div>
+                                <div class="col-sm-4 col-xs-12">
+                                    {{ form_row(form.entities.pensionAC,{'value' : pname}) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                {{ form_row(form.entities.beneficiaries) }}
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
+                    <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a id="btn-entities" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-orange disabled" >Confirmar información</a>
+                    <br></br>
+                    <br></br>
+                </div>
+                <div id="toHide">
+
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="col-sm-6 label-group">
+                            {{ form_label(form.employeeHasEmployers.contractType) }}
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            {{ form_widget(form.employeeHasEmployers.contractType) }}
+                        </div>
+                    </div>
+                    {{ form_widget(form) }}
+                </div>
+
+
+            </div>
 
 
 

@@ -300,15 +300,15 @@ class EmployeeController extends Controller
                 $ehEs = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 /** @var EmployerHasEmployee $ehE */
                 foreach ($ehEs as $ehE) {
-                    if($ehE->getState()==-1){
+                    if ($ehE->getState() == -1) {
                         continue;
                     }
                     $contracts = $ehE->getContracts();
-                    if($contracts->count()==0){
+                    if ($contracts->count() == 0) {
                         $employeesData[] = array(
                             "idEmployerHasEmployee" => $ehE->getIdEmployerHasEmployee(),
                             "idEmployee" => $ehE->getEmployeeEmployee()->getIdEmployee(),
-                            "idPayroll" =>  "",
+                            "idPayroll" => "",
                             "state" => $ehE->getState(),
                             "fullName" => $ehE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
                             "stateRegister" => $ehE->getEmployeeEmployee()->getRegisterState(),
@@ -364,7 +364,7 @@ class EmployeeController extends Controller
         $employerHasEmployee = null;
         if ($id == -1) {
             $employee = new Employee();
-            $tab=0;
+            $tab = 0;
         } else {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
             //verify if the Id exists or it belongs to the logged user
@@ -396,10 +396,46 @@ class EmployeeController extends Controller
         if ($tempPerson->getPhones()->count() == 0) {
             $tempPerson->addPhone(new Phone());
         }
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces), $employee, array(
+        $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
+        $entityTypes = $entityTypeRepo->findAll();
+        $configData = $this->getConfigData();
+        $pensions = null;
+        $eps = null;
+
+
+        /** @var EntityType $entityType */
+        foreach ($entityTypes as $entityType) {
+            if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
+                $eps = $entityType->getEntities();
+            }
+            if ($entityType->getName() == (isset($configData['Pension']) ? $configData['Pension'] : "Pension")) {
+                $pensions = $entityType->getEntities();
+            }
+        }
+        dump($eps->count());
+        dump($pensions->count());
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces,$eps,$pensions), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
+        $employeeForm = $form->get('entities');
+        $eHEEntities = $employee->getEntities();
+        if ($employee->getAskBeneficiary()) {
+            $employeeForm->get('beneficiaries')->setData($employee->getAskBeneficiary());
+        } else {
+            $employeeForm->get('beneficiaries')->setData('-1');
+        }
+        if ($eHEEntities&&$eHEEntities->count() != 0) {
+            /** @var EmployeeHasEntity $enti */
+            foreach ($eHEEntities as $enti) {
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
+                    $employeeForm->get('wealth')->setData($enti->getEntityEntity());
+                }
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
+                    $employeeForm->get('pension')->setData($enti->getEntityEntity());
+                }
+            }
+        }
         $todayPlus = new \DateTime();
         $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
         $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
@@ -896,7 +932,7 @@ filename = "certificadoLaboral.pdf"'
         return $docs;
     }
 
-    public function daviplataShowAction($payMethodId,$idNotification,Request $request)
+    public function daviplataShowAction($payMethodId, $idNotification, Request $request)
     {
 
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -904,15 +940,15 @@ filename = "certificadoLaboral.pdf"'
         }
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('daviplata_guide', array("payMethodId"=>$payMethodId,"idNotification"=>$idNotification),array('format'=>'json')))
+            ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
             ->setMethod('POST')
             ->add('create', 'submit', array('label' => 'Crear Cuenta Daviplata'))
-            ->add("cellphone","number", array('label'=>"Numero Celular"))
+            ->add("cellphone", "number", array('label' => "Numero Celular"))
             ->add('save', 'submit', array('label' => 'Guardar Daviplata'))
             ->add('discard', 'submit', array('label' => 'Descartar notificación'))
             ->getForm();
         $form->handleRequest($request);
-        if($form->isValid()) {
+        if ($form->isValid()) {
 
             if ($form->get("discard")->isClicked()) {
                 $notifRepo = $em->getRepository("RocketSellerTwoPickBundle:Notification");
@@ -924,10 +960,10 @@ filename = "certificadoLaboral.pdf"'
 
                 return $this->redirectToRoute("show_dashboard");
             }
-            if ($form->get("cellphone")->getData()!=0) {
-                $methodRepo=$em->getRepository("RocketSellerTwoPickBundle:PayMethod");
+            if ($form->get("cellphone")->getData() != 0) {
+                $methodRepo = $em->getRepository("RocketSellerTwoPickBundle:PayMethod");
                 /** @var \RocketSeller\TwoPickBundle\Entity\PayMethod $paym */
-                $paym=$methodRepo->find($payMethodId);
+                $paym = $methodRepo->find($payMethodId);
                 $paym->setCellPhone($form->get("cellphone")->getData());
                 $em->persist($paym);
                 $em->flush();
@@ -956,13 +992,13 @@ filename = "certificadoLaboral.pdf"'
         }
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
-        $user= $this->getUser();
-        $employer=$user->getPersonPerson()->getEmployer();
-        $eheRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        $user = $this->getUser();
+        $employer = $user->getPersonPerson()->getEmployer();
+        $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var EmployerHasEmployee $realEhe */
-        $realEhe=$eheRepo->find($idEhe);
-        if($realEhe==null||$realEhe->getEmployerEmployer()->getIdEmployer()!=$employer->getIdEmployer()||$realEhe->getState()==1){
-            return ;
+        $realEhe = $eheRepo->find($idEhe);
+        if ($realEhe == null || $realEhe->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer() || $realEhe->getState() == 1) {
+            return;
         }
         $realEhe->setState(-1);
         $em->persist($realEhe);

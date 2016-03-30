@@ -17,9 +17,13 @@ use RocketSeller\TwoPickBundle\Form\ContractRegistration;
 
 class PersonEmployeeRegistration extends AbstractType
 {
+    private $wealthEntities;
+    private $pensionEntities;
     private $idEmployee;
     private $workplaces;
-    function __construct($idEmployee,$workplaces){
+    function __construct($idEmployee,$workplaces,$wealthEntities,$pensionEntities){
+        $this->wealthEntities=$wealthEntities;
+        $this->pensionEntities=$pensionEntities;
         $this->idEmployee=$idEmployee;
         $this->workplaces=$workplaces;
     }
@@ -41,6 +45,8 @@ class PersonEmployeeRegistration extends AbstractType
             ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))
             ->add('employeeHasEmployers', new ContractRegistration($this->workplaces), array(
+                'mapped' => false))
+            ->add('entities',  new EntitiesPick($this->wealthEntities,$this->pensionEntities), array(
                 'mapped' => false))
             ->add('save', 'submit', array(
                 'label' => 'Guardar'

@@ -19,18 +19,6 @@ class EntitiesPick extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nameEmployee', 'text', array(
-                'mapped' => false,
-                'read_only'=>true,
-                'disabled'=>true,
-                'label'=>' '
-            ))
-            ->add('lastNameEmployee', 'text', array(
-                'mapped' => false,
-                'read_only'=>true,
-                'disabled'=>true,
-                'label'=>' '
-            ))
             ->add('wealth', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->wealthEntities,
@@ -68,14 +56,12 @@ class EntitiesPick extends AbstractType
                 'mapped' => false,
                 'label'=>' ',
                 'required' => true
-            ))
-            ->add('idEmployerHasEmployee', 'hidden');
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee'
         ));
     }
 

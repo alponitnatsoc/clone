@@ -1187,12 +1187,11 @@ class EmployeeRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="idEmployer", nullable=true, strict=true, description="employee type.")
-     * @RequestParam(array=true, name="idEmployerHasEmployee", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="pension", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
+     * @RequestParam(name="idContract", nullable=true, strict=true, description="employee type.")
+     * @RequestParam(name="idEmployee", nullable=false, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="pension", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="wealth", nullable=true, strict=true, description="benefits of the employee.")
      * @return View
      */
     public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
@@ -1210,91 +1209,78 @@ class EmployeeRestController extends FOSRestController
             return $view;
         }
 
-        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
-        $employerHasEmployeeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee');
+        $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
         $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
-
-        $register_social_security = $paramFetcher->get("register_social_security");
-        /** @var Employer $realEmployer */
-        $realEmployer = $employerRepo->find($register_social_security['idEmployer']);
-        if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
-            $view = View::create();
-            $view->setData(array('error' => array('user' => 'not the logged user')))->setStatusCode(403);
-            return $view;
-        }
+        $realEmployer=$user->getPersonPerson()->getEmployer();
 
         $flag = false;
-        $employerHasEmployees = $register_social_security['employerHasEmployees'];
-        $realEmployerHasEmployees = $realEmployer->getEmployerHasEmployees();
+        /** @var Entity $tempPens */
+        $tempPens = $entityRepo->find($paramFetcher->get('pension'));
 
-        foreach ($employerHasEmployees as $employerHasEmployee) {
+        /** @var Entity $tempWealth */
+        $tempWealth = $entityRepo->find($paramFetcher->get('wealth'));
 
-            /** @var EmployerHasEmployee $realEmployerHasEmployee */
-            $realEmployerHasEmployee = $employerHasEmployeeRepo->find($employerHasEmployee['idEmployerHasEmployee']);
-            if ($realEmployerHasEmployees->contains($realEmployerHasEmployee)) {
+        $beneficiarie = $paramFetcher->get('beneficiaries');
 
-                /** @var Entity $tempPens */
-                $tempPens = $entityRepo->find($employerHasEmployee['pension']);
+        if ($tempPens == null || $tempWealth == null) {
+            $view = View::create();
+            $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
+            return $view;
+        }
+        /** @var Contract $contract */
+        $contract=$contractRepo->find($paramFetcher->get("idContract"));
 
-                /** @var Entity $tempWealth */
-                $tempWealth = $entityRepo->find($employerHasEmployee['wealth']);
+        $realEmployerHasEmployee=$contract->getEmployerHasEmployeeEmployerHasEmployee();
+        if ($realEmployerHasEmployee->getEmployerEmployer()->getIdEmployer()==$realEmployer->getIdEmployer()) {
+            $realEmployee=$realEmployerHasEmployee->getEmployeeEmployee();
+        } else {
+            $view = View::create();
+            $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
+            return $view;
+        }
+        $realEmployeeEnt = $realEmployee->getEntities();
+        $em = $this->getDoctrine()->getManager();
 
-                $beneficiarie = $employerHasEmployee['beneficiaries'];
+        if ($realEmployeeEnt->count() == 0) {
 
-                if ($tempPens == null || $tempWealth == null) {
-                    $view = View::create();
-                    $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
-                    return $view;
+            $employeeHasEntityPens = new EmployeeHasEntity();
+            $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
+            $employeeHasEntityPens->setEntityEntity($tempPens);
+            $realEmployee->addEntity($employeeHasEntityPens);
+            $em->persist($employeeHasEntityPens);
+
+            $employeeHasEntityWealth = new EmployeeHasEntity();
+            $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
+            $employeeHasEntityWealth->setEntityEntity($tempWealth);
+            $realEmployee->addEntity($employeeHasEntityWealth);
+            $em->persist($employeeHasEntityWealth);
+
+            $realEmployee->setAskBeneficiary($beneficiarie);
+            $em->persist($realEmployee);
+
+            $em->flush();
+            $flag=true;
+        } else {
+            /** @var EmployeeHasEntity $rEE */
+            foreach ($realEmployeeEnt as $rEE) {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "EPS") {
+                    $rEE->setEntityEntity($tempWealth);
+                    $em->persist($rEE);
                 }
-                $realEmployee = $realEmployerHasEmployee->getEmployeeEmployee();
-                $realEmployeeEnt = $realEmployee->getEntities();
-                $em = $this->getDoctrine()->getManager();
-
-                if ($realEmployeeEnt->count() == 0) {
-
-                    $employeeHasEntityPens = new EmployeeHasEntity();
-                    $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
-                    $employeeHasEntityPens->setEntityEntity($tempPens);
-                    $realEmployee->addEntity($employeeHasEntityPens);
-                    $em->persist($employeeHasEntityPens);
-
-                    $employeeHasEntityWealth = new EmployeeHasEntity();
-                    $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
-                    $employeeHasEntityWealth->setEntityEntity($tempWealth);
-                    $realEmployee->addEntity($employeeHasEntityWealth);
-                    $em->persist($employeeHasEntityWealth);
-
-                    $realEmployee->setAskBeneficiary($beneficiarie);
-                    $em->persist($realEmployee);
-
-                    $em->flush();
-                } else {
-                    /** @var EmployeeHasEntity $rEE */
-                    foreach ($realEmployeeEnt as $rEE) {
-                        if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "EPS") {
-                            $rEE->setEntityEntity($tempWealth);
-                            $em->persist($rEE);
-                        }
-                        if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Pension") {
-                            $rEE->setEntityEntity($tempPens);
-                            $em->persist($rEE);
-                        }
-                    }
-                    $realEmployee->setAskBeneficiary($beneficiarie);
-                    $em->persist($realEmployee);
-                    $em->flush();
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Pension") {
+                    $rEE->setEntityEntity($tempPens);
+                    $em->persist($rEE);
                 }
-                $flag = true;
-            } else {
-                $view = View::create();
-                $view->setData(array('error' => array('employee' => 'do not contain')))->setStatusCode(401);
-                return $view;
             }
+            $realEmployee->setAskBeneficiary($beneficiarie);
+            $em->persist($realEmployee);
+            $em->flush();
+            $flag=true;
         }
 
         if ($flag) {
             $view = View::create();
-            $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
+            $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
             return $view;
         } else {
             $view = View::create();
