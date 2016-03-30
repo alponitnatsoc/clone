@@ -30,7 +30,10 @@ class Beneficiary
      */
     private $personPerson;
 
-
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $disability;
 
     /**
      * Set idBeneficiary
@@ -78,5 +81,29 @@ class Beneficiary
     public function getPersonPerson()
     {
         return $this->personPerson;
+    }
+
+    /**
+     * Set disability
+     *
+     * @param integer $disability
+     *
+     * @return Beneficiary
+     */
+    public function setDisability($disability)
+    {
+        $this->disability = $disability;
+
+        return $this;
+    }
+
+    /**
+     * Get disability
+     *
+     * @return integer
+     */
+    public function getDisability()
+    {
+        return $this->disability;
     }
 }

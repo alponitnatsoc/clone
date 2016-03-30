@@ -45,8 +45,15 @@ class ProcedureController extends Controller
     	$actions = $this->getdoctrine()
 		->getRepository('RocketSellerTwoPickBundle:Action')
 		->findByPersonPerson($person);
+		$actionsState = true;
 
-		return $personAction;
+		foreach ($actions as $action) {
+			if ($action->getStatus() != "Completado") {
+				$actionsState = false;
+			}
+		}
+
+		return $actionsState;
 
     }
     public function changeEmployeeStatusAction($procedureId,$idEmployerHasEmployee)
@@ -58,15 +65,27 @@ class ProcedureController extends Controller
 		->getRepository('RocketSellerTwoPickBundle:Action')
 		->findByPersonPerson($person);
 		$actionsIncomplete = array();
-		foreach ($actions as $action) {
+		/*foreach ($actions as $action) {
 			if ($action->getStatus() != "Completado") {
 				array_push($actionsIncomplete,$action);
 			}
-		}
-		$employerHasEmployee->setState(3);
+		}*/
+		$stateActions = $this->checkActionCompletation($person->getIdPerson());
+		if ($stateActions) {
+			$employerHasEmployee->setState(3);
 			$em->persist($employerHasEmployee);
 			$em->flush();
+
+			$this->addFlash('success', 'Exito al terminar los tramites del empleado');
 			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));	
+		}else{
+
+			$this->addFlash('error', 'No has terminado las vueltas del empleado');
+			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
+			
+		}
+		
+
 		
 		
     	
@@ -122,7 +141,8 @@ class ProcedureController extends Controller
 	            $em->flush();
              	$procedure->addAction($action);
 			}
-         	foreach ($employerHasEmployees as $employerHasEmployee) {         		
+         	foreach ($employerHasEmployees as $employerHasEmployee) {
+         	//agregar la validacion del estado del employee          		
 					$action = new Action();	            
 		            $action->setStatus('Nuevo');
 		            $action->setRealProcedureRealProcedure($procedure);

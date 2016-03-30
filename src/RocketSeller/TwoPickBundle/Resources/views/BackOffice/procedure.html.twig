@@ -41,14 +41,16 @@
 	            {% endblock %}
 	        </div>
 			<div id="main" class="col-sm-9">
+
+
 	            <p>Tramite No: {{ procedure.idProcedure }}</p>
-	<p>Person in charge: 
-		{% if procedure.userUser %}
-			{{ procedure.userUser.username }}
-		{% else %}
-			Nadie 
-		{% endif %}
-		</p>
+			<p>Person in charge: 
+				{% if procedure.userUser %}
+					{{ procedure.userUser.username }}
+				{% else %}
+					Nadie 
+				{% endif %}
+			</p>
 		<div class="procedure-container">
 			<table style="width:100%">
 				  <tr>
@@ -148,9 +150,25 @@
 				</div>
 				<div class="col-sm-12">
 					
+					<p style="background-color:red;">																											{% for flashMessage in app.session.flashbag.get('error') %}
 
+			   				{{ flashMessage }}
+
+						{% endfor %}
+					</p>
+					<p style="background-color:green;">																											{% for flashMessage in app.session.flashbag.get('success') %}
+
+			   				{{ flashMessage }}
+
+						{% endfor %}
+					</p>
 					{% for employerHasEmployee in employerHasEmployees %}
-						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}<a href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}">Terminado</a> </p>
+						{% if employerHasEmployee.state == 3 %}
+							<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}Terminado</p>
+						{% else %}
+							<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}<a href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}">Terminar</a> </p>
+						{% endif %}
+						
 
 					{% endfor %}
 				</div>				       	
