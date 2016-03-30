@@ -7,62 +7,68 @@
 {% endblock %}
 {% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
-    <title>Registro Symplifica</title>
-    <style type="text/css">
-      body {margin: 10px 0; padding: 0 10px; background: #F9F2E7; font-size: 13px;}
-      table {border-collapse: collapse;}
-      td {font-family: arial, sans-serif; color: #333333;}
-      @media only screen and (max-width: 480px) {
-        body,table,td,p,a,li,blockquote {
-          -webkit-text-size-adjust:none !important;
-        }
-        table {width: 100% !important}
-        .responsive-image img {
-          height: auto !important;
-          max-width: 50% !important;
-          width: 50% !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr>
-        <td>
-          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
-            <tr>
-              {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
-            </tr>
-            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
-            <tr>
-              <td style="padding: 10px 10px 20px 10px; text-align: center">
-                <div><img src="https://symplifica.com/public/img/mail/check.png" /></div><br />
-                <div style="font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 600; font-style: italic; color: #858688; width: 70%; margin: 0 auto">
-                  Estás muy cerca de acceder a la plataforma más conveniente para administrar a tus empleados.
-                </div>
-                <br /><br />
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 600; color:#5D5D5D; font-size: 20px">Para finalizar tu registro</div>
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 600; color:#858789; font-size: 15px; font-style: italic">haz clic en el siguiente link:</div><br /><br />
-                <a href="{{ confirmationUrl }}" target="_blank" style="text-decoration:none"><div style="background:#DF9036; height: 35px; font-size:14px; width: 170px; margin: 0 auto; color:#FFFFFF;font-family: 'Open Sans', sans-serif; font-weight: 600; padding: 10px 0 0 0">Confirmar correo</div></a><br /><br />
-                <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; color:#858789; font-size: 20px">ó cópialo y pégalo en tu navegador</div><br /><br />
-                <div style="font-size: 15px; font-family: 'Open Sans', sans-serif; font-weight: 600; font-style: italic; color: #DF9036; width: 70%; margin: 0 auto">
-                  {{ confirmationUrl }}
-                </div>
-              </td>
-            </tr>
-            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
-            <tr>
-              {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
-            </tr>
-          </table>
-        </td>
-      </tr>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+<title>Registro Symplifica</title>
+</head>
+<body style="margin: 0; padding: 0;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        <tr>
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+        </tr>
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td align="center">
+                            <img src="check.png" alt="check" />
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-style:italic; font-size: 20px;color:#858789">
+                            Estás muy cerca de acceder a la plataforma más conveniente para administrar a tus empleados.
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 25px;color:#5D5D5D">
+                            Para finalizar tu registro
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-style:italic; font-size: 20px;color:#858789">
+                            haz clic en el siguiente link:
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 20px;color:#FFFFFF;">
+                            <a href="{{ confirmationUrl }}" target="_blank" style="text-decoration:none"><span style="display:block; width:180px; height:35px; background: #DF9036; padding: 5px 0 0 0">Confirmar email</span></a>
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-style:italic; font-size: 20px;color:#858789">
+                            ó cópialo y pégalo en tu navegador
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 600; font-style:italic; font-size: 20px;color:#DF9036">
+                            {{ confirmationUrl }}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+        </tr>
     </table>
-  </body>
+</body>
 </html>
 {% endblock %}
