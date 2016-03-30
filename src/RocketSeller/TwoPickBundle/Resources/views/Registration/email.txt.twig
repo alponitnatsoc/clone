@@ -36,9 +36,7 @@
         <td>
           <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
             <tr>
-              <td bgcolor="#424C59" style="font-size: 0; line-height: 0; padding: 0 10px;" height="80" align="center" class="responsive-image">
-                <img src="https://symplifica.com/public/img/mail/logo-email.png" alt="symplifica" />
-              </td>
+              {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
             </tr>
             <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
             <tr>
@@ -59,24 +57,7 @@
             </tr>
             <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
             <tr>
-              <td bgcolor="#485465">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                  <tr>
-                    <td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
-                    <a target="_blank" href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="https://symplifica.com/public/img/mail/face.png" /></a>
-                    <a target="_blank" href="https://twitter.com/symplifica_?lang=en"><img src="https://symplifica.com/public/img/mail/link.png" /></a>
-                    <a target="_blank" href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="https://symplifica.com/public/img/mail/twe.png" /></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <br>
-                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
-                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
-                    </td>
-                  </tr>
-                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
-                </table>
-              </td>
+              {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
             </tr>
           </table>
         </td>
