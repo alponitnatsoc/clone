@@ -1,7 +1,11 @@
+{% set titleContract = "CONTRATO DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO" %}
+{% if data.contract.identBy == "e" %}
+{% set titleContract = "CONTRATO DE TRABAJO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO" %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO</title>
+<title>{{ titleContract }}</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -40,7 +44,7 @@ body {
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO</strong></p>
+<p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
 <div class="table-responsive">
@@ -108,8 +112,8 @@ body {
 
 {# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
-labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CCONTRATO
-LABORAL DE TRABAJO SERVICIO DOMÉSTICO TIEMPO PACIAL PARA PERIODOS INFERIORES A UN MES O POR DIAS INDEFINIDO, el cual se regirá por las siguientes cláusulas:</p>
+labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, 
+el cual se regirá por las siguientes cláusulas:</p>
 
 <p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
 residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
@@ -124,9 +128,9 @@ normal de trabajo, la cual se desarrollará en el lugar de residencia del EMPLEA
 EMPLEADOR de acuerdo con las necesidades del trabajo, la naturaleza de la labor contratada y el servicio que presta EL TRABAJADOR.  Igualmente, EL TRABAJADOR
 acepta cualquier orden de traslado que se le imparta para desempeñar otro cargo o función en el mismo establecimiento o fuera de él, aún en ciudad distinta a la
 del lugar donde fue contratado, declarando que está en disponibilidad de hacerlo.  Además de las obligaciones inherentes al cargo contratado, TRABAJADOR se
-obliga: 1. mantener en perfecto estado de limpieza la casa de habitación de EL EMPLEADOR; 2.  lavar la ropa y elementos que se le indiquen; 3. planchar;
-cocinar; atender a las personas que habitan en la casa y a las personas que les visiten; 4. efectuar las compras que se le indiquen y en general cumplir con
-todas las órdenes e instrucciones que le imparta; 5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+obliga: {{ data.contract.obligations }}
+{% if data.contract.identBy in ["n", "e"] %}
+6. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
 a EL EMPLEADOR, los cuales son los
 {% for day in data.contract.workDays %}
     {% if loop.last %}
@@ -136,17 +140,41 @@ a EL EMPLEADOR, los cuales son los
     {% endif %}
     {{ day.dayName }}
 {% endfor %}
-de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 6. A cumplir a cabalidad con las órdenes
-e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
-instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros,  de todo lo que llegue a su conocimiento por
-cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar
-perjuicios al Empleador; 8. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los
-fines que le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 9. Guardar rigurosamente
-la moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 10. Comunicar oportunamente a EL EMPLEADOR las
+de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 7. A cumplir a cabalidad con las
+órdenes e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
+instrucciones del Empleador; 8. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros, de todo lo que llegue a su conocimiento por
+cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar perjuicios
+al Empleador; 9. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los fines que
+le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 10. Guardar rigurosamente la
+moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 11. Comunicar oportunamente a EL EMPLEADOR las
+observaciones que estime conducentes a evitarle daños y perjuicios. 12. Prestar la colaboración posible en casos de siniestro o de riesgo inminente que afecten
+o amenacen a las personas o los elementos del EMPLEADOR o la residencia 13. Observar las medidas preventivas higiénicas prescritas por el médico designado por
+EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
+laborales. 14. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 15. Las demás establecidas en la ley laboral.
+{% else %}
+5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+a EL EMPLEADOR, los cuales son los
+{% for day in data.contract.workDays %}
+    {% if loop.last %}
+        y
+    {% elseif not loop.first %}
+        ,
+    {% endif %}
+    {{ day.dayName }}
+{% endfor %}
+de cada semana y a no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 6. A cumplir a cabalidad con las
+órdenes e instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
+instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros, de todo lo que llegue a su conocimiento por
+cualquier medio ya sea por razones de su oficio o por su relación con EL EMPLEADOR, independientemente de su carácter reservado y de que pueda causar perjuicios
+al Empleador; 8. A utilizar los enseres, útiles, herramientas, instrumentos y demás elementos que le entregue el Empleador exclusivamente para los fines que
+le fueron suministrados y a mantenerlos, conservarlos y restituirlos  en buen estado, salvo el deterioro natural por el uso; 9. Guardar rigurosamente la
+moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o se encuentren en la residencia 10. Comunicar oportunamente a EL EMPLEADOR las
 observaciones que estime conducentes a evitarle daños y perjuicios. 11. Prestar la colaboración posible en casos de siniestro o de riesgo inminente que afecten
-o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las medidas preventivas higiénicas prescritas por el médico designado
-por EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
-laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14.Las demás establecidas en la ley laboral.</p>
+o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las medidas preventivas higiénicas prescritas por el médico designado por
+EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
+laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14. Las demás establecidas en la ley laboral.
+{% endif %}
+</p>
 
 <p style="text-align: justify;"><strong>PARÁGRAFO </strong>El incumplimiento de las anteriores obligaciones, prohibiciones y deberes se califica como falta
 grave.</p>

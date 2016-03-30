@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SubscriptionController extends Controller
 {
 
-    private function findPriceByNumDays($productos, $days)
+    private function findProductByNumDays($productos, $days)
     {
         if ($days > 0 && $days <= 10) {
             $key = 'PS1';
@@ -60,15 +60,20 @@ class SubscriptionController extends Controller
                 ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
 
         $employees = array();
-        $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = 0;
+        $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = $contInactivos = 0;
         $descuento_3er = isset($config['D3E']) ? $config['D3E'] : 0.1;
         $descuento_isRefered = isset($config['DIR']) ? $config['DIR'] : 0.2;
         $descuento_haveRefered = isset($config['DHR']) ? $config['DHR'] : 0.2;
         foreach ($employerHasEmployee as $keyEmployee => $employee) {
+
             if ($activeEmployee) {
                 if ($employee->getState() == 0) {
                     continue;
                 }
+            }
+
+            if ($employee->getState() == 0) {
+                $contInactivos++;
             }
 
             $contracts = $employee->getContractByState(true);
@@ -76,28 +81,31 @@ class SubscriptionController extends Controller
             foreach ($contracts as $keyContract => $contract) {
                 $employees[$keyEmployee]['contrato'] = $contract;
                 $employees[$keyEmployee]['employee'] = $employee;
-                $employees[$keyEmployee]['product']['object'] = $this->findPriceByNumDays($productos, ($contract->getWorkableDaysMonth()));
-                //if ($employee->getIsFree() > 0) {
-                $employees[$keyEmployee]['product']['price'] = 0;
-                // } else {
-                $employees[$keyEmployee]['product']['price'] = $employees[$keyEmployee]['product']['object']->getPrice();
-                // }
+                $employees[$keyEmployee]['product']['object'] = $this->findProductByNumDays($productos, $contract->getWorkableDaysMonth());
+                $tax = ($employees[$keyEmployee]['product']['object']->getTaxTax() != null) ? $employees[$keyEmployee]['product']['object']->getTaxTax()->getValue() : 0;
+                $employees[$keyEmployee]['product']['price'] = ceil($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
+                $employees[$keyEmployee]['product']['price_con_descuentos'] = ceil($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
+                //$employees[$keyEmployee]['product']['neto'] = ($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
+                //$employees[$keyEmployee]['product']['ceil'] = ceil($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
+                //$employees[$keyEmployee]['product']['floor'] = floor($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
+                //$employees[$keyEmployee]['product']['round_up'] = round($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax), 0, PHP_ROUND_HALF_UP);
+                //$employees[$keyEmployee]['product']['round_down'] = round($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax), 0, PHP_ROUND_HALF_DOWN);
                 $total_sin_descuentos += $employees[$keyEmployee]['product']['price'];
                 break;
             }
         }
         if (count($employees) >= 3) {
-            $valor_descuento_3er = round($total_sin_descuentos * $descuento_3er);
+            $valor_descuento_3er = ceil($total_sin_descuentos * $descuento_3er);
             $employees = $this->updateProductPrice($employees, $descuento_3er);
         }
         $userIsRefered = $this->userIsRefered();
         if ($userIsRefered) {
-            $valor_descuento_isRefered = round($total_sin_descuentos * $descuento_isRefered);
+            $valor_descuento_isRefered = ceil($total_sin_descuentos * $descuento_isRefered);
             $employees = $this->updateProductPrice($employees, $descuento_isRefered);
         }
         $userHaveValidRefered = $this->userHaveValidRefered();
         if ($userHaveValidRefered) {
-            $valor_descuento_haveRefered = round($total_sin_descuentos * (count($userHaveValidRefered) * $descuento_haveRefered));
+            $valor_descuento_haveRefered = ceil($total_sin_descuentos * (count($userHaveValidRefered) * $descuento_haveRefered));
             $employees = $this->updateProductPrice($employees, $descuento_haveRefered);
         }
 
@@ -120,7 +128,7 @@ class SubscriptionController extends Controller
     private function updateProductPrice($employees, $descuentoPercent)
     {
         foreach ($employees as $key => $employe) {
-            $employees[$key]['product']['price'] = $employe['product']['price'] - ($employe['product']['price'] * $descuentoPercent);
+            $employees[$key]['product']['price_con_descuentos'] = $employe['product']['price_con_descuentos'] - ($employe['product']['price_con_descuentos'] * $descuentoPercent);
         }
         return $employees;
     }
@@ -250,8 +258,8 @@ class SubscriptionController extends Controller
                     'descuento_3er' => $data['descuento_3er'],
                     'descuento_isRefered' => $data['descuento_isRefered'],
                     'total_con_descuentos' => $data['total_con_descuentos'],
-                    'user' => $user,
                     'descuento_haveRefered' => $data['descuento_haveRefered'],
+                    'user' => $user,
                     'startDate' => $startDate
         ));
     }
@@ -279,7 +287,7 @@ class SubscriptionController extends Controller
                 'method' => 'POST',
             ));
 
-            return $this->render('RocketSellerTwoPickBundle:Subscription:active.html.twig', array(
+            return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionConfirm.html.twig', array(
                         'form' => $form->createView(),
                         'employer' => $person,
                         'employees' => $data['employees'],
@@ -381,7 +389,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionSuccessAction(Request $request)
     {
-        return $this->render('RocketSellerTwoPickBundle:Subscription:success.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
                     'user' => $this->getUser(),
                     'date' => \date('Y-m-d')
         ));
@@ -389,7 +397,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionErrorAction(Request $request)
     {
-        return $this->render('RocketSellerTwoPickBundle:Subscription:error.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionError.html.twig', array(
                     'user' => $this->getUser()
         ));
     }

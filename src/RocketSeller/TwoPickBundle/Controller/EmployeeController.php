@@ -120,6 +120,7 @@ class EmployeeController extends Controller
         } else {
             $beneficiary = new Beneficiary();
             $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
+
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $employeeBeneficiary = new EmployeeHasBeneficiary();
@@ -131,7 +132,7 @@ class EmployeeController extends Controller
                 $em->flush();
                 $em->persist($employeeBeneficiary);
                 $em->flush();
-                return $this->redirectToRoute('manage_employees');
+                return $this->redirectToRoute('show_dashboard');
             }
             return $this->render(
                 'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig', array('form' => $form->createView())
@@ -517,6 +518,8 @@ class EmployeeController extends Controller
                 $entidades["CC"] = $entity->getEntityEntity();
             }
         }
+        $beneficiary = new Beneficiary();
+        $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
         return $this->render(
             'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
             'employee' => $employee,
@@ -524,6 +527,7 @@ class EmployeeController extends Controller
             'contract' => $activeContract,
             'contractEmployee' => $contractEmployee,
             'entidades' => $entidades,
+            'form' => $form->createView()
         ));
     }
 

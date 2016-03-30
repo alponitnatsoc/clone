@@ -54,6 +54,10 @@ ht_payment_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:HighTechRest"
     name_prefix: api_public_
+datacredito_rest:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:DataCreditoRest"
+    name_prefix: api_public_
 refered_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:ReferredRest"

@@ -1,83 +1,83 @@
 function startSubscriptionChoise() {
     var tiempo_parcialSlider, medio_tiempoSlider, tiempo_completoSlider;
     $(document).ready(function () {
-
-        tiempo_parcialSlider = document.getElementById('tiempo_parcial');
-        noUiSlider.create(tiempo_parcialSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        tiempo_parcialSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_parcialSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_parcialSlider.noUiSlider.set($(".activo .trabajo_por_dias").length);
-
-        medio_tiempoSlider = document.getElementById('medio_tiempo');
-        noUiSlider.create(medio_tiempoSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        medio_tiempoSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        medio_tiempoSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        medio_tiempoSlider.noUiSlider.set($(".activo .medio_tiempo").length);
-
-        tiempo_completoSlider = document.getElementById('tiempo_completo');
-        noUiSlider.create(tiempo_completoSlider, {
-            start: 0,
-            step: 1,
-            range: {
-                min: 0,
-                max: 5
-            },
-            pips: {
-                mode: 'values',
-                values: [0, 1, 2, 3, 4, 5],
-                density: 100
-            }
-        });
-        tiempo_completoSlider.noUiSlider.on('set', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_completoSlider.noUiSlider.on('change', function () {
-            calculatePrice("_calc");
-        });
-        tiempo_completoSlider.noUiSlider.set($(".activo .tiempo_completo").length);
-
+        /*
+         tiempo_parcialSlider = document.getElementById('tiempo_parcial');
+         noUiSlider.create(tiempo_parcialSlider, {
+         start: 0,
+         step: 1,
+         range: {
+         min: 0,
+         max: 5
+         },
+         pips: {
+         mode: 'values',
+         values: [0, 1, 2, 3, 4, 5],
+         density: 100
+         }
+         });
+         tiempo_parcialSlider.noUiSlider.on('set', function () {
+         calculatePrice("_calc");
+         });
+         tiempo_parcialSlider.noUiSlider.on('change', function () {
+         calculatePrice("_calc");
+         });
+         tiempo_parcialSlider.noUiSlider.set($(".activo .trabajo_por_dias").length);
+         
+         medio_tiempoSlider = document.getElementById('medio_tiempo');
+         noUiSlider.create(medio_tiempoSlider, {
+         start: 0,
+         step: 1,
+         range: {
+         min: 0,
+         max: 5
+         },
+         pips: {
+         mode: 'values',
+         values: [0, 1, 2, 3, 4, 5],
+         density: 100
+         }
+         });
+         medio_tiempoSlider.noUiSlider.on('set', function () {
+         calculatePrice("_calc");
+         });
+         medio_tiempoSlider.noUiSlider.on('change', function () {
+         calculatePrice("_calc");
+         });
+         medio_tiempoSlider.noUiSlider.set($(".activo .medio_tiempo").length);
+         
+         tiempo_completoSlider = document.getElementById('tiempo_completo');
+         noUiSlider.create(tiempo_completoSlider, {
+         start: 0,
+         step: 1,
+         range: {
+         min: 0,
+         max: 5
+         },
+         pips: {
+         mode: 'values',
+         values: [0, 1, 2, 3, 4, 5],
+         density: 100
+         }
+         });
+         tiempo_completoSlider.noUiSlider.on('set', function () {
+         calculatePrice("_calc");
+         });
+         tiempo_completoSlider.noUiSlider.on('change', function () {
+         calculatePrice("_calc");
+         });
+         tiempo_completoSlider.noUiSlider.set($(".activo .tiempo_completo").length);
+         */
         calculatePrice('');
     });
 
     var url = '';
     var button = '';
+    var employee_id = '';
     $(".btn-change-state-contract").click(function (event) {
         button = $(this);
-        url = button.data('href');
-        if ($(this).html() == 'Activar') {
-            ajax(button, url);
+        if (button.html() == 'Activar') {
+            ajax(button);
         } else {
             $('#modal_confirm').modal('show');
         }
@@ -98,7 +98,7 @@ function startSubscriptionChoise() {
     //});
     $(".btn-change-state-contract-confirm").on('click', function (e) {
         if ($(".activo").length > 1 || $(button).html() == "Activar") {
-            ajax(button, url);
+            ajax(button);
         } else {
             $('#modal_confirm').modal('hide');
         }
@@ -106,21 +106,23 @@ function startSubscriptionChoise() {
     //$("#open_pricing_calc").on('click', function (e) {
     //    $('#modal_price_calculator').modal('show');
     //});
-    function ajax(obj, url) {
+    function ajax(button) {
+        url = button.data('href');
+        employee_id = button.data('id');
         $.ajax({
             url: url,
             type: 'GET',
             beforeSend: function (xhr) {
-                $(obj).attr('disabled', true);
+                $(button).attr('disabled', true);
                 $(".btn-change-state-contract-confirm").attr('disabled', true);
             }
         }).done(function (data) {
-            parent = $(obj).parent().parent();
+            parent = $(button).parent().parent();
             female = parent.find(".female").length;
             male = parent.find(".male").length;
             state = '';
             if (data.state == 'Inactivo') {
-                $(obj).html("Activar");
+                $(button).html("Activar");
                 parent.removeClass("activo");
                 parent.addClass("inactivo");
                 if (female > 0) {
@@ -130,9 +132,12 @@ function startSubscriptionChoise() {
                 } else {
                     state = "inactivado";
                 }
-            }
-            if (data.state == 'Activo') {
-                $(obj).html("Inhabilitar");
+                //$('#' + employee_id).hide();
+                setTimeout(function () {
+                    $('#' + employee_id).hide(1000);
+                }, 1000);
+            } else if (data.state == 'Activo') {
+                $(button).html("Inhabilitar");
                 parent.removeClass("inactivo");
                 parent.addClass("activo");
                 if (female > 0) {
@@ -142,13 +147,18 @@ function startSubscriptionChoise() {
                 } else {
                     state = "activado";
                 }
+                //$('#' + employee_id).show();
+                setTimeout(function () {
+                    $('#' + employee_id).show(1000);
+                }, 1000);
             }
             $('#modal_confirm').modal('hide');
             name = parent.find(".employee_name").html();
             $('.result_ajax').html(name + " fue " + state + " exitosamente.").show(1000);
             setTimeout(function () {
-                $('.result_ajax').html("").hide(1000);
+                $('.result_ajax').html("").hide(2000);
             }, 2000);
+
             calculatePrice('');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -156,16 +166,15 @@ function startSubscriptionChoise() {
             console.log(errorThrown);
             $('#modal_confirm').modal('hide');
         }).always(function () {
-            $(obj).attr('disabled', false);
+            $(button).attr('disabled', false);
             $(".btn-change-state-contract-confirm").attr('disabled', false);
         });
     }
     function calculatePrice(contenedor) {
         var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0;
-        var descuento_html = '';
-        var descuento = 0;
-        var subtotal = 0;
+        var descuento_3er = descuento_isRefered = descuento_haveRefered = 0;
         var total = 0;
+        var subtotal = 0;
         if (contenedor == '_calc') {
             Tiempo_Completo = tiempo_completoSlider ? parseInt(tiempo_completoSlider.noUiSlider.get()) : 0;
             Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
@@ -175,29 +184,47 @@ function startSubscriptionChoise() {
             Medio_tiempo = $(".activo .medio_tiempo").length;
             Trabajo_por_días = $(".activo .trabajo_por_dias").length;
         }
-        console.log("Tiempo_Completo:" + Tiempo_Completo);
-        console.log("Medio_tiempo:" + Medio_tiempo);
-        console.log("Trabajo_por_días:" + Trabajo_por_días);
+        //console.log("Tiempo_Completo:" + Tiempo_Completo);
+        //console.log("Medio_tiempo:" + Medio_tiempo);
+        //console.log("Trabajo_por_días:" + Trabajo_por_días);
         if (Tiempo_Completo > 0) {
-            total = total + (Tiempo_Completo * $("#PS3").val());
+            PS3 = parseFloat($("#PS3").val());
+            PS3_IVA = 1 + parseFloat($("#PS3_IVA").val());
+            subtotal = Math.ceil(subtotal + (Tiempo_Completo * (PS3 * PS3_IVA)));
         }
         if (Medio_tiempo > 0) {
-            total = total + (Medio_tiempo * $("#PS2").val());
+            PS2 = parseFloat($("#PS2").val());
+            PS2_IVA = 1 + parseFloat($("#PS2_IVA").val());
+            subtotal = Math.ceil(subtotal + (Medio_tiempo * (PS2 * PS2_IVA)));
         }
         if (Trabajo_por_días > 0) {
-            total = total + (Trabajo_por_días * $("#PS1").val());
+            PS1 = parseFloat($("#PS1").val());
+            PS1_IVA = 1 + parseFloat($("#PS1_IVA").val());
+            subtotal = Math.ceil(subtotal + (Trabajo_por_días * (PS1 * PS1_IVA)));
         }
+        total = subtotal;
+        $("#divSubtotal").html(getPrice(subtotal));
 
         if ((Tiempo_Completo + Medio_tiempo + Trabajo_por_días) >= 3) {
-            descuento = (total * $("#descuento_percent").val());
-            descuento_html = "El descuento del " + ($("#descuento_percent").val() * 100) + "% por valor de " + getPrice(descuento) + " ya fue aplicado.";
-            $("#result_discount" + contenedor).html(descuento_html);
+            descuento_3er = Math.ceil(subtotal * parseFloat($("#descuento_3er_percent").val()));
         } else {
-            descuento = 0;
-            $("#result_discount" + contenedor).html('');
+            descuento_3er = 0;
+        }
+        $("#divDescuento_3er").html(getPrice(descuento_3er));
+        if ($("#descuento_isRefered_value").val() > 0) {
+            descuento_isRefered = Math.ceil(subtotal * parseFloat($("#descuento_isRefered_percent").val()));
+            $("#divDescuento_isRefered").html(getPrice(descuento_isRefered));
+            $("#descuento_isRefered_value").val(descuento_isRefered);
         }
 
-        $("#result_price" + contenedor).html(getPrice(total - descuento));
+        if ($("#descuento_haveRefered_value").val() > 0) {
+            descuento_haveRefered = Math.ceil(subtotal * parseFloat($("#descuento_haveRefered_percent").val()));
+            $("#divDescuento_haveRefered").html(getPrice(descuento_haveRefered));
+            $("#descuento_haveRefered_value").val(descuento_haveRefered);
+        }
+
+        total = subtotal - (descuento_3er + descuento_isRefered + descuento_haveRefered);
+        $("#result_price" + contenedor).html(getPrice(total));
     }
     function getPrice(valor) {
         price = parseFloat(valor.toString().replace(/,/g, ""))

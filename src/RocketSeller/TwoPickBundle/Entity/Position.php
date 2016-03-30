@@ -30,13 +30,20 @@ class Position
      */
     private $payroll_coverage_code;
 
-
     /**
      * @ORM\OneToMany(targetEntity="CalculatorConstraints", mappedBy="positionPosition")
      */
     private $constraints;
 
+    /**
+     * @ORM\Column(type="text", length=500, nullable=TRUE)
+     */
+    private $obligations;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=TRUE)
+     */
+    private $identBy;
 
     /**
      * Get idPosition
@@ -136,5 +143,53 @@ class Position
     public function getPayrollCoverageCode()
     {
         return $this->payroll_coverage_code;
+    }
+
+    /**
+     * Set obligations
+     *
+     * @param string $obligations
+     *
+     * @return Position
+     */
+    public function setObligations($obligations)
+    {
+        $this->obligations = $obligations;
+
+        return $this;
+    }
+
+    /**
+     * Get obligations
+     *
+     * @return string
+     */
+    public function getObligations()
+    {
+        return $this->obligations;
+    }
+
+    /**
+     * Set identBy
+     *
+     * @param string $identBy
+     *
+     * @return Position
+     */
+    public function setIdentBy($identBy)
+    {
+        $this->identBy = $identBy;
+
+        return $this;
+    }
+
+    /**
+     * Get identBy
+     *
+     * @return string
+     */
+    public function getIdentBy()
+    {
+        return $this->identBy;
     }
 }

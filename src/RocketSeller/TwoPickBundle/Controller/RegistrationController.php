@@ -219,7 +219,7 @@ class RegistrationController extends BaseController
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-
+        /* @var $person Person */
         $person = $user->getPersonPerson();
 
         $form = $this->createForm(new RegistrationExpress(), $person, array(
@@ -229,38 +229,99 @@ class RegistrationController extends BaseController
         //$form->setData($person);
 
         $form->handleRequest($request);
+        $errno = null;
         if ($form->isValid()) {
-            //dump($request);
-            $person->setDocumentType($form->get("documentType")->getData());
-            $person->setDocument($form->get("document")->getData());
-            $person->setLastName1($form->get("lastName1")->getData());
-            $person->setLastName2($form->get("lastName2")->getData());
-            $employer = new Employer();
-            $phone = new Phone();
-            $phone->setPhoneNumber($request->get("phone"));
-            $person->addPhone($phone);
-            $person->setNames($form->get("names")->getData());
-            $employer->setPersonPerson($person);
-            $em->persist($person);
-            $employer->setEmployerType("Persona");
-            $employer->setRegisterState(10);
-            $employer->setRegisterExpress(1);
-            $em->persist($employer);
-            $em->flush();
-            $user->setExpress(1);
-            $em->persist($user);
-            $em->flush();
+            //dump($form->get("phone")->getData()->getPhoneNumber());
+            if ($person->getDocumentType() == null) {
+                $person->setDocumentType($form->get("documentType")->getData());
+                $person->setDocument($form->get("document")->getData());
+                $person->setLastName1($form->get("lastName1")->getData());
+                $person->setLastName2($form->get("lastName2")->getData());
+                $employer = new Employer();
+                $phone = new Phone();
+                $phone->setPhoneNumber($form->get("phone")->getData()->getPhoneNumber());
+                $person->addPhone($phone);
+                $person->setNames($form->get("names")->getData());
+                $employer->setPersonPerson($person);
+                $em->persist($person);
+                $employer->setEmployerType("Persona");
+                $employer->setRegisterState(10);
+                $employer->setRegisterExpress(1);
+                $em->persist($employer);
+                $em->flush();
+                $user->setExpress(1);
+                $em->persist($user);
+                $em->flush();
+            }
 
-            $url = $this->generateUrl('express_payment');
-            $response = new RedirectResponse($url);
-            return $response;
+            //$url = $this->generateUrl('express_payment');
+            //$response = new RedirectResponse($url);
+            //return $response;
+            //return $this->redirectToRoute('express_payment');
+            if ($this->addClient($user)) {
+                $methodId = $this->addCreditCard($request);
+                if ($methodId) {
+                    return $this->redirectToRoute('express_pay_start', array('methodId' => $methodId));
 
-            //return $this->render('RocketSellerTwoPickBundle:Registration:checkEmail.html.twig');
+                    //return $this->forward('RocketSellerTwoPickBundle:ExpressRegistration:startExpressPay', array('methodId' => $methodId));
+                } else {
+                    //return $this->redirectToRoute('express_payment_add');
+                    $errno = "Por favor verifique la información de la tarjeta de credito";
+                }
+            } else {
+                $errno = "Error al crear cliente";
+            }
         }
-        //dump($request);
         return $this->render('FOSUserBundle:Registration:expressRegistration.html.twig', array(
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'errno' => $errno
         ));
+    }
+
+    private function addClient(User $user)
+    {
+        $format = array('_format' => 'json');
+        $response = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:getPayment', array(
+            'id' => $user->getId()
+                ), $format
+        );
+        if ($response->getStatusCode() == 201) {
+            return true;
+        }
+        return false;
+    }
+
+    private function addCreditCard(Request $request)
+    {
+        $user = $this->getUser();
+        /** @var Person $person */
+        $person = $user->getPersonPerson();
+        //dump($request);
+        $credit_card = $request->request->get('app_user_express_registration')['credit_card'];
+        //dump($credit_card);
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "documentType" => $person->getDocumentType(),
+            "documentNumber" => $person->getDocument(),
+            "credit_card" => $credit_card['credit_card'],
+            "expiry_date_year" => $credit_card['expiry_date_year'],
+            "expiry_date_month" => $credit_card['expiry_date_month'],
+            "cvv" => $credit_card['cvv'],
+        ));
+
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
+        $response = json_decode($insertionAnswer->getContent());
+        //dump($response);
+        if (isset($response->{'response'}->{'method-id'})) {
+            $methodId = $response->{'response'}->{'method-id'};
+            if ($insertionAnswer->getStatusCode() != 201) {
+                return false;
+            }
+            return $methodId;
+        } else {
+            $this->addFlash('error', $response->error->exception[0]->message);
+            return false;
+        }
     }
 
 }

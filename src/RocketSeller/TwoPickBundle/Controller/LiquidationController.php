@@ -619,7 +619,7 @@ class LiquidationController extends Controller
 
         // Inactivar empleado
         $em = $this->getDoctrine()->getManager();
-        $employerHasEmployee = $liquidation->getEmployerHasEmployee()->setState(0);
+        $employerHasEmployee = $liquidation->getEmployerHasEmployee()->setState(-1);
         $em->persist($employerHasEmployee);
         $em->flush();
 

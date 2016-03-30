@@ -38,7 +38,7 @@ class RegistrationExpress extends AbstractType
                     'placeholder' => 'Tu tipo de documento',
                     'required' => true
                 ))
-                ->add('document', 'integer', array(
+                ->add('document', 'text', array(
                     'constraints' => array(
                         new NotBlank()
                     ),

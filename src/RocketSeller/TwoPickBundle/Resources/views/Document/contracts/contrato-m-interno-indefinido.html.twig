@@ -1,7 +1,8 @@
+{% set titleContract = "CONTRATO DE TRABAJO SERVICIO DOMÉSTICO INTERNO" %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO INTERNO</title>
+<title>{{ titleContract }}</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -40,7 +41,7 @@ body {
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p style="text-align: center;"><strong>CONTRATO LABORAL DE TRABAJO SERVICIO DOMÉSTICO INTERNO</strong></p>
+<p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
 <div class="table-responsive">
@@ -104,8 +105,9 @@ body {
 
 {# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
-labora en los servicios domésticos, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente CONTRATO LABORAL DE TRABAJO DE SERVICIO
-DOMÉSTICO INTERNO, el cual se regirá por las siguientes cláusulas:</p>
+labora en los servicios domésticos, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, el cual se regirá por
+las siguientes cláusulas:</p>
+
 <p style="text-align: justify;"><strong>PRIMERA: </strong>LUGAR DEL CONTRATO: El trabajador desarrollará el objeto del contrato de servicio doméstico en la
 residencia del empleador. En caso que el empleador cambie de domicilio dentro de la misma ciudad, el contrato se entenderá modificado respecto al sitio de
 prestación de la labor sin necesidad de elaborar un otro si o cláusula adicional.</p>
@@ -119,9 +121,7 @@ normal de trabajo, la cual se desarrollará en el lugar de residencia del EMPLEA
 EMPLEADOR de acuerdo con las necesidades del trabajo, la naturaleza de la labor contratada y el servicio que presta EL TRABAJADOR.  Igualmente, EL TRABAJADOR
 acepta cualquier orden de traslado que se le imparta para desempeñar otro cargo o función en el mismo establecimiento o fuera de él, aún en ciudad distinta a la
 del lugar donde fue contratado, declarando que está en disponibilidad de hacerlo.  Además de las obligaciones inherentes al cargo contratado, TRABAJADOR se
-obliga: 1. mantener en perfecto estado de limpieza la casa de habitación de EL EMPLEADOR; 2.  lavar la ropa y elementos que se le indiquen; 3. planchar;
-cocinar; atender a las personas que habitan en la casa y a las personas que les visiten; 4. efectuar las compras que se le indiquen y en general cumplir con
-todas las órdenes e instrucciones que le imparta; 5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
+obliga: {{ data.contract.obligations }} 5. A no prestar servicios  dependientes a otros empleadores en los días en que esta deba prestar sus servicios
 a EL EMPLEADOR, no realizar servicios independientes dentro de las  horas destinadas al cumplimiento de sus funciones 6. A cumplir a cabalidad con las órdenes e
 instrucciones que de manera general o particular le imparta el Empleador o sus representantes, lo mismo que las demás obligaciones, prohibiciones e
 instrucciones del Empleador; 7. A guardar  estricta reserva y por lo tanto no lo podrá dar a conocer a terceros,  de todo lo que llegue a su conocimiento por
@@ -132,7 +132,8 @@ la moral en las relaciones con EL EMPLEADOR  y las demás personas que habiten o
 observaciones que estime conducentes a evitarle daños y perjuicios. 11. Prestar la colaboración posible en casos de siniestro o de riesgo inminente que afecten
 o amenacen a las personas o los elementos del EMPLEADOR o la residencia 12. Observar las medidas preventivas higiénicas prescritas por el médico designado
 por EL EMPLEADOR o por las autoridades del ramo, y observar con suma diligencia y cuidado las instrucciones y órdenes preventivas de accidentes y/o enfermedades
-laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14.Las demás establecidas en la ley laboral.</p>
+laborales. 13. Cumplir estrictamente con los horarios de ingreso determinados por el Empleador. 14. Las demás establecidas en la ley laboral.
+</p>
 
 <p style="text-align: justify;"><strong>PARÁGRAFO </strong>El incumplimiento de las anteriores obligaciones, prohibiciones y deberes se califica como falta
 grave.</p>
@@ -192,15 +193,26 @@ ni las prestaciones sociales de que tratan los títulos VIII y IX de CST.</p>
 y así lo hacen saber, que no habrá lugar a cancelar ningún valor por concepto de auxilio de transporte legal, toda vez que no se presentan los presupuestos
 fácticos que dicho auxilio prevé.</p>
 
-<p style="text-align: justify;"><strong>DECIMA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
+<p style="text-align: justify;"><strong>DECIMA: </strong>VIVIENDA: Teniendo en cuenta que EL TRABAJADOR residirá en el lugar de trabajo, EL EMPLEADOR
+le suministrará una vivienda en {{ data.contract.workplace }} con los siguientes implementos y servicios públicos básicos, lo cual no constituye salario
+para ningún efecto legal de acuerdo con lo establecido en el art 15 de la ley 50 de 1990. De igual manera, como la vivienda se suministra en virtud del presente
+contrato de trabajo, EL TRABAJADOR está obligado a restituirla a EL EMPLEADOR el día de la terminación del contrato laboral. EL TRABAJADOR deberá cuidar y
+mantener la vivienda suministrada, la cual sólo podrá ser destinada para su habitación y la de su familia próxima (cónyuge o compañera permanente, hijos y
+padres). No podrá adelantar mejoras o adecuaciones sin la autorización escrita de EL EMPLEADOR.</p>
+
+<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>FAMILIA DEL TRABAJADOR: La relación laboral que se pacta en el presente escrito es únicamente
+entre EL EMPLEADOR y el Trabajador, por lo que se deja expresa constancia que si bien este último habitará en el lugar de prestación de servicios junto con su
+familia, éstos no prestan ningún servicio para la compañía y por ende no mantienen relación laboral o de cualquier otra índole con la misma.</p>
+
+<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>EXCLUSION SALARIAL: Las partes acuerdan que no tendrá carácter salarial para ningún efecto
 legal de acuerdo con lo dispuesto en el art 128 del CST modificado por el art 15 de la ley 50 de 1990 la vivienda, los elementos que se encuentran en ella,
 los servicios públicos, los auxilios o beneficios económicos, la alimentación, vestuario y habitación o por cualquier otro concepto que el empleador reconozca
 a EL TRABAJADOR o a su familia en forma ocasional o habitual como cualquier otro pago efectuado por mera liberalidad.</p>
 
-<p style="text-align: justify;"><strong>DECIMA PRIMERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
+<p style="text-align: justify;"><strong>DECIMA TERCERA:</strong>EFECTOS: El presente contrato reemplaza y por lo tanto, deja sin valor y efecto, cualquier otro
 contrato verbal o escrito, que se hubiera celebrado entre las partes con anterioridad.</p>
 
-<p style="text-align: justify;"><strong>DECIMA SEGUNDA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
+<p style="text-align: justify;"><strong>DECIMA CUARTA: </strong>AUTORIZACIÓN DE TRATAMIENTO DE DATOS PERSONALES Y POLÍTICA DE INFORMACIÓN PERSONAL: EL TRABAJADOR
 autoriza de manera previa, explícita, inequívoca e informada a EL EMPLEADOR para que recolecte y trate sus datos personales para fines laborales por el tiempo
 que sea necesario para alcanzar dicha finalidad o el máximo legal permitido. Así mismo, esta autorización se extiende al tercero denominado SYMPLIFICA SAS,
 entidad también encargada del manejo de los datos personales para fines laborales. Esta autorización comprende la información que suministro verbalmente o por

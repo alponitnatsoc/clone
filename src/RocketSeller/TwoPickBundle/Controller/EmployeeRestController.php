@@ -1424,6 +1424,28 @@ class EmployeeRestController extends FOSRestController
             }
         }
     }
+    /**
+     * Create a Beneficiary from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idContract", nullable=false, strict=true, description="the id of the contract")
+     * @return View
+     */
+    public function postNewBeneficiary(ParamFetcher $paramFetcher)
+    {
+
+    }
 
     /**
      * Get the validation errors

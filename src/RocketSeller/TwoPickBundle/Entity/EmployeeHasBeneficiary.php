@@ -49,6 +49,12 @@ class EmployeeHasBeneficiary
     private $beneficiaryBeneficiary;
 
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $relation;
+
+
 
     /**
      * Set idEmployeeHasBeneficiary
@@ -144,5 +150,29 @@ class EmployeeHasBeneficiary
     public function getBeneficiaryBeneficiary()
     {
         return $this->beneficiaryBeneficiary;
+    }
+
+    /**
+     * Set relation
+     *
+     * @param string $relation
+     *
+     * @return EmployeeHasBeneficiary
+     */
+    public function setRelation($relation)
+    {
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    /**
+     * Get relation
+     *
+     * @return string
+     */
+    public function getRelation()
+    {
+        return $this->relation;
     }
 }

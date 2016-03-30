@@ -72,7 +72,11 @@
             <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Registro Express</span></div>
 
             <div class="smallOrangeBoxContent">
-
+                {% if errno is defined %}
+                    <span class="alert alert-danger">   
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
+                    </span>
+                {% endif %}
                 <span>Completa unos cuantos datos<br />y nosotros nos encargamos del resto</span>
 
                 <span class="light-text"></span>
@@ -82,7 +86,7 @@
                     {{ form_errors(form) }}
                     {{ form_start(form) }}
 
-                    <div class="form-black ">
+                    <div class="form-black form-group">
                         {{ form_row(form.names)}}	
                     </div>
                     <div class="form-black form-group">
@@ -130,14 +134,11 @@
                         </div>    	
                     </div>
 
+                    <div class="form-black form-group">
+                        {{form_row(form.save)}}		    	
+                    </div> 
+                    {{ form_end(form) }}
                 </div>
-
-                <span class="light-text"></span>
-                <hr class="smallDivider" />
-
-                <div class="form-black form-group">
-                    {{form_row(form.save)}}		    	
-                </div> 
 
             </div>
         </div>
@@ -148,6 +149,7 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#app_user_express_registration_phone_phoneNumber").attr('placeholder', 'Celular');
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
                 validator = $("form[name='app_user_express_registration']").validate({
@@ -182,7 +184,12 @@
                                     return false;
                                 }
                             }},
-                        "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                        "app_user_express_registration[credit_card][expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
+                                param: function () {
+                                    var date = new Date();
+                                    return date.getFullYear();
+                                }
+                            }},
                         "app_user_express_registration[credit_card][cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1}
 
                     },
@@ -254,7 +261,7 @@
                 });
             });
             $('form').on('submit', function (event) {
-                if (validator.form()) {
+                if (!validator.form()) {
                     return false;
                 }
                 //return false;

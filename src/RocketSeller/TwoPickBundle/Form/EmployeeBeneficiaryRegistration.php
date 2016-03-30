@@ -19,10 +19,12 @@ class EmployeeBeneficiaryRegistration extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('person', new BasicPersonRegistration(), array(
+            ->add('personPerson', new BasicPersonRegistration(), array(
+                'property_path' => 'personPerson'))
+            ->add('personExtra', new PersonExtraData(), array(
                 'property_path' => 'personPerson'))
             ->add('save', 'submit', array(
-                'label' => 'Create',
+                'label' => 'Guardar y continuar'
             ));
     }
 

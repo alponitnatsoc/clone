@@ -332,18 +332,20 @@ class DocumentController extends Controller
     	        );
 
     	        $position = $contract->getPositionPosition()->getName();
-    	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
-
-    	        $ref .= "-" . $positionCode;
+//     	        $positionCode = $contract->getPositionPosition()->getPayrollCoverageCode();
+    	        $identBy = $contract->getPositionPosition()->getIdentBy();
 
     	        $interno = $contract->getTransportAid();
 
     	        if ($interno) {
+    	            if ($identBy == "m") { // Si el cargo es mayordomo
+    	                $ref .= "-m";
+    	            }
     	            $ref .= "-interno";
     	        }
 
     	        $timeCommitmentCode = $contract->getTimeCommitmentTimeCommitment()->getCode();
-    	        if ($timeCommitmentCode == "XD") {
+    	        if ($timeCommitmentCode == "XD") { // Si el contrato es por dias
     	            $ref .= "-xdias";
     	        }
 
@@ -386,7 +388,9 @@ class DocumentController extends Controller
 	                "years_months" => $years_months,
     	            "days" => $days,
     	            "workDays" => $contract->getWeekWorkableDays()->getValues(),
-    	            "nWorkDays" => $contract->getWorkableDaysMonth()
+    	            "nWorkDays" => $contract->getWorkableDaysMonth(),
+    	            "obligations" => $contract->getPositionPosition()->getObligations(),
+    	            "identBy" => $identBy
     	        );
 
     	        $data = array(

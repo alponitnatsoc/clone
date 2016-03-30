@@ -40,11 +40,13 @@
             color: lightslategray;
         }
     </style>
+    {#
     {% for flash_message in app.session.flashbag.get('error') %}
         <div class="alert alert-danger flashSubscription" role="alert"> 
             {{ flash_message }}
         </div>
     {% endfor %}
+    #}
     <div class="col-sm-12 col-xs-12 align-Resp">
         <div id="" class="col-sm-12 col-xs-12 blockStep inline">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
@@ -58,6 +60,14 @@
             </div>
         </div>
     </div>
+
+    <ul id="formNav" class="nav nav-tabs nav-justified">
+        {% set tab = 0 %}
+        <li {%   if tab is defined and tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab"></a>Validar</li>
+        <li {%   if tab is defined and tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Confirmar</li>
+        <li {%   if tab is defined and tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Finalizar</li>
+    </ul>
+
     <div class="col-xs-12 text-center">
         <p style="padding: 20px; color:#00acd6; border-bottom: 1px solid #E6E7E8;">
             Has registrado los siguientes empleados
@@ -70,6 +80,7 @@
     {% set month_pay = startDate|date("F")|trans %}
     {% set year_pay = startDate|date("Y") %}   
     <div class="col-lg-1 result_ajax"></div>
+
     <form action="{{ path('subscription_confirm') }}" method="POST">  
         <div id="employees" class="col-xs-12">
             <div class="row-fluid clearfix">
@@ -91,7 +102,7 @@
                                         Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
                                     </div>
                                     <div>
-                                        <div class="btn btn-default btn-change-state-contract" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}">{{ employee.state?'Inhabilitar':'Activar' }}</div>
+                                        <div class="btn btn-default btn-change-state-contract" data-id="employee_{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}">{{ employee.state?'Inhabilitar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -127,17 +138,18 @@
                     </div>
                     <div class="col-md-8 text-left" style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
 
-                        {% for employeeData in employees %}
+                        {% for employeeData in employees %}                            
                             {% set employee = employeeData['employee'] %}
                             {% set contrato = employeeData['contrato'] %}
                             {% set product = employeeData['product'] %}
-                            <div class="col-md-12" style="padding-bottom: 10px;">
+                            {% set status = employee.state %}
+                            <div id="employee_{{ employee.idEmployerHasEmployee }}" style="padding-bottom: 10px; display: {{ status!=0?:'none' }}">
                                 <div class="col-md-9">       
                                     <span class="name"><b>{{ employee.employeeEmployee.personPerson.names ~' '~ employee.employeeEmployee.personPerson.lastName1 }}</b></span>                                    
                                     <span class="timeCommitmentTimeCommitment">Empleado {{ (contrato.timeCommitmentTimeCommitment.name) }}.</span>
                                     <span class="labora">Labora {{ contrato.workableDaysMonth }} días al mes.</span>
                                 </div>  
-                                <div class="col-md-3  text-right">
+                                <div class="col-md-3  text-right">                                    
                                     <b>$ {{ (product!=null?product.price:0)|number_format }}{{ employee.isFree?"*":"" }}</b>                                    
                                 </div>
                             </div>
@@ -154,53 +166,51 @@
 
                     </div>
                     <div class="col-md-8"  style="border-bottom: 1px #E6E7E8 solid; padding-bottom: 10px;">
-                        {% if total_sin_descuentos > 0 %}
-                            <div class="col-md-12">
-                                <div class="col-md-9 text-right" style="font-size: 15px; padding-top: 5px;">
-                                    <b>SUBTOTAL</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    <div  style="font-size: 15px;"><b>$ {{ total_sin_descuentos|number_format  }}</b></div>
-                                    <input type="hidden" id="subtotal" value="{{ total_sin_descuentos }}">  
-                                </div>
-                            </div> 
-                        {% endif %}
-                        {% if descuento_3er['value'] and descuento_3er['value']  > 0%}
-                            <div class="col-md-12">
-                                <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
-                                    <b>Descuento por tener 3 o mas empleados</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
-                                    <div  style="font-size: 10px;"><b>$ {{ descuento_3er['value']|number_format }}</b></div>
-                                </div>
-                            </div> 
-                        {% endif%}
-                        <div class="col-md-12" id="descuento_isRefered">
-                            {% if descuento_isRefered['object'] and descuento_isRefered['value'] > 0 %}
-                                <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
-                                    <b>Descuento por ser referido</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                    <div  style="font-size: 10px;"><b>$ {{ descuento_isRefered['value']|number_format }}</b></div>
-                                </div>
-                            {% endif%}
+                        <div class="col-md-12">
+                            <div class="col-md-9 text-right" style="font-size: 15px; padding-top: 5px;">
+                                <b>SUBTOTAL</b>
+                            </div>  
+                            <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                <div  id="divSubtotal" style="font-size: 15px; font-weight: bold">$ {{ total_sin_descuentos|number_format  }}</div>
+                                <input type="hidden" id="subtotal" value="{{ total_sin_descuentos }}">  
+                            </div>
                         </div> 
-                        {% if descuento_haveRefered['object'] and descuento_haveRefered['value'] > 0 %}
-                            <div class="col-md-12">
-                                <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
-                                    <b>Descuento por tener {{ descuento_haveRefered['object']|length }} referido(s)</b>
-                                </div>  
-                                <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
-                                    <div  style="font-size: 10px;"><b>$ {{ descuento_haveRefered['value']|number_format }}</b></div>
-                                </div>
-                            </div> 
-                        {% endif%}
+                        <div class="col-md-12">
+                            <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                <b>Descuento por tener 3 o mas empleados</b>
+                            </div>  
+                            <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
+                                <div  id="divDescuento_3er" style="font-size: 10px; font-weight: bold">$ {{ descuento_3er['value']|number_format }}</div>
+                                <input type="hidden" id="descuento_3er_value" value="{{  descuento_3er['value'] }}">  
+                                <input type="hidden" id="descuento_3er_percent" value="{{  descuento_3er['percent'] }}">  
+                            </div>
+                        </div> 
+                        <div class="col-md-12">
+                            <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                <b>Descuento por ser referido</b>
+                            </div>  
+                            <div class="col-md-3 text-right" style="padding-top: 5px;">
+                                <div id="divDescuento_isRefered" style="font-size: 10px; font-weight: bold">$ {{ descuento_isRefered['value']|number_format }}</div>
+                                <input type="hidden" id="descuento_isRefered_value" value="{{ descuento_isRefered['value'] }}">  
+                                <input type="hidden" id="descuento_isRefered_percent" value="{{ descuento_isRefered['percent'] }}">  
+                            </div>
+                        </div> 
+                        <div class="col-md-12">
+                            <div class="col-md-9 text-right" style="font-size: 10px; padding-top: 5px;">
+                                <b>Descuento por tener {{ descuento_haveRefered['object']|length }} referido(s)</b>
+                            </div>  
+                            <div class="col-md-3 text-right" style="padding-top: 5px;">                                       
+                                <div id="divDescuento_haveRefered" style="font-size: 10px; font-weight: bold">$ {{ descuento_haveRefered['value']|number_format }}</div>
+                                <input type="hidden" id="descuento_haveRefered_value" value="{{ descuento_haveRefered['value'] }}">  
+                                <input type="hidden" id="descuento_haveRefered_percent" value="{{ descuento_haveRefered['percent'] }}">  
+                            </div>
+                        </div> 
                         <div class="col-md-12">
                             <div class="col-md-9 text-right" style="font-size: 20px; padding-top: 5px;">
                                 <b>TOTAL</b>
                             </div>  
                             <div class="col-md-3 text-right" style="padding-top: 5px;">
-                                <div id="divTotal" style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
+                                <div id="result_price" style="font-size: 20px;"><b>$ {{ (total_con_descuentos)|number_format  }}</b></div>
                                 <input type="hidden" id="total" value="{{ total_con_descuentos }}">  
                                 <div style="font-size: 10px;">IVA incluido</div>
                             </div>
@@ -210,7 +220,7 @@
             </div>
         </div>
         <div class="col-xs-12 text-center" style=" padding: 0px 20px 20px 20px; border-bottom: 1px solid #E6E7E8;">
-            <h4 style="color: #FD9224"><b>EL PRIMER MES ES GRATIS</b></h4>
+            <h4 style="color: #FD9224"><b>* EL PRIMER MES ES GRATIS</b></h4>
             <h4 style="color: #FD9224"><b>Recibe otro mes gratis</b> si antes de 48 horas cargas<br>los documentos solicitados al fínal del registro.</h4>
         </div>
 
@@ -221,10 +231,7 @@
                     <input type="submit" class="btn btn-orange" value="Continuar con el pago"/>
                 </div>
             </div>
-        </div>
-
-        <input type="hidden" id="descuento_percent" value="{{ descuento_3er['percent'] }}"/>  
-        <input type="hidden" id="descuento_value" value="{{ descuento_3er['value'] }}"/>      
+        </div>     
         {% for key, producto in productos %}
             <input type="hidden" id="{{ producto.simpleName }}" value="{{ producto.price }}"/>
             <input type="hidden" id="{{ producto.simpleName }}_IVA" value="{{ producto.taxTax.value }}"/>

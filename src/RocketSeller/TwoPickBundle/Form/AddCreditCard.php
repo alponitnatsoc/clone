@@ -16,7 +16,13 @@ class AddCreditCard extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('credit_card', 'integer', array(
+        if (isset($options['action'])) {
+            $builder->setAction($options['action']);
+        }
+        if (isset($options['method'])) {
+            $builder->setMethod($options['method']);
+        }
+        $builder->add('credit_card', 'text', array(
                     "attr" => array(
                         'placeholder' => 'Tu tarjeta de crédito',
                         'title' => 'Tu tarjeta de crédito'
@@ -76,6 +82,12 @@ class AddCreditCard extends AbstractType
                     ),
                     'required' => true
         ));
+        /* ->add('save', 'submit', array(
+          'label' => 'Continuar',
+          'attr' => array(
+          'class' => 'btn register-AS1 btn-symplifica'
+          ),
+          )); */
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -87,7 +99,7 @@ class AddCreditCard extends AbstractType
 
     public function getName()
     {
-        return 'app_user_add_credit_card';
+        return 'add_credit_card';
     }
 
 }

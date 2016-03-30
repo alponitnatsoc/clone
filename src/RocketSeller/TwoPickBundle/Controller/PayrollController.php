@@ -219,7 +219,7 @@ use LiquidationMethodsTrait;
 
         /* @var $employerHasEmployee EmployerHasEmployee */
         foreach ($employerHasEmployees as $employerHasEmployee) {
-            if ($employerHasEmployee->getState() > 0) {
+            if ($employerHasEmployee->getState() > 0 && $employerHasEmployee->getState() === 3) {
                 $contracts = $employerHasEmployee->getContracts();
                 /* @var $contract Contract */
                 foreach ($contracts as $contract) {
