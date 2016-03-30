@@ -34,178 +34,158 @@ Director Symplifica
 {% endautoescape %}
 {% endblock %}
 {% block body_html %}
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-  <meta charset="utf-8">
-    <title>Symplifica</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: "Open Sans",Helvetica,Arial;
-            background: #fff;
-            width: 100%;
-            margin: 0px;
-            padding: 0px;
-/*             color: #4B4B4B; */
-            color: #5D5D5E;
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+    <title>Bienvenido Symplifica</title>
+    <style type="text/css">
+      body {margin: 10px 0; padding: 0 10px; background: #F9F2E7; font-size: 13px;}
+      table {border-collapse: collapse;}
+      td {font-family: arial, sans-serif; color: #333333;}
+      @media only screen and (max-width: 480px) {
+        body,table,td,p,a,li,blockquote {
+          -webkit-text-size-adjust:none !important;
         }
-        h1 {
-            font-size: 32px;
-        }
+        table {width: 100% !important}
 
-        p, ul {
-            font-size: 18px;
-            font-weight: 400;
+        .responsive-image img {
+          height: auto !important;
+          max-width: 50% !important;
+          width: 50% !important;
         }
-        p strong {
-            font-weight: bold;
-            color: #5D5D5E;
-/*             font-size: 24px; */
-        }
-
-        .headbck {
-            background: #3C4C5A;
-            display: block;
-            border-bottom: 1px solid #fff;
-            height: 60px;
-            padding-top: 10px;
-            text-align: center;
-        }
-        .blockGreenCentral {
-            background: #3b4b5a;
-            position: relative;
-        }
-        .blockGreenCentral p {
-            color: #fff;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .contentSection .code {
-            font-size: 48px;
-            color: #00CDCC;
-        }
-        .contentSection .socials a img {
-            display: inline-block;
-            margin-right: 15px;
-        }
-        .container {
-            width: 100%;
-            text-align: center;
-/*             padding-right: 15px; */
-/*             padding-left: 15px; */
-/*             margin-right: auto; */
-/*             margin-left: auto; */
-        }
-        .container ul li {
-            list-style: none;
-            margin-bottom: 10px;
-        }
-        .container ul li img {
-            margin-right: 15px;
-        }
-        .container m strong {
-            color: #00cdcc;
-        }
+      }
     </style>
   </head>
-  <body style='font-family: "Open Sans",Helvetica,Arial;
-            background: #fff;
-            width: 100%;
-            margin: 0px;
-            padding: 0px;
-/*             color: #4B4B4B; */
-            color: #5D5D5E;'>
-    <header>
-        <div class="headbck" style="background: #3C4C5A;
-            display: block;
-            border-bottom: 1px solid #fff;
-            height: 60px;
-            padding-top: 10px;
-            text-align: center;">
-            <a href="http://www.symplifica.com" target="_blank"><img src="http://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica" /></a>
-        </div>
-    </header>
-    <section class="container" style="padding-top: 35px;">
-        <img src="http://www.symplifica.com/public/img/mail/new-check.png" alt="Symplifica" />
-    </section>
-    <section class="container">
-        <div style="display: inline-block; color: #5D5D5E;">
-            <h1 style="font-size: 32px;"><strong>¡Bienvenido!</strong></h1>
-            <p style="color: #5D5D5E;">A partir de ahora cuentas con acceso a todas las herramientas de Symplifica.</p>
-            <ul style="text-align: justify; color: #5D5D5E;">
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Guía práctica para la contratación</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Afiliación rápida de empleados y del empleador a las entidades de la Seguridad Social</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Liquidación y pago de nómina y aportes en pocos pasos</li>
-                <li><img src="http://www.symplifica.com/public/img/mail/icon-checking.png" />Registro documental histórico de la relación laboral</li>
-            </ul>
-        </div>
-    </section>
-    <section class="container blockGreenCentral" style="background: #3b4b5a; position: relative; width: 100%; text-align: center;">
-        <div class="contentSection">
-            <p style="color: #fff;
-            font-weight: bold;
-            font-size: 18px;">Symplifica <m><strong>te obsequia desde hoy UN MES</strong></m> de servicio completo, terminando el día {{ fechaFin }}</p>
-
-            {% if codigoReferidos %}
-                <p style="color: #fff;
-            font-weight: bold;
-            font-size: 18px;">Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</p>
-                <span class="code" style="font-size: 48px;
-            color: #00CDCC;"><strong>{{ codigoReferidos }}</strong></span>
-                <p style="color: #fff;
-            font-weight: bold;
-            font-size: 18px;">¡Compártelo con tus amigos y obtén los beneficios!</p>
-{% set fbURL %}
-https://www.facebook.com/dialog/share?
-app_id=145634995501895
-&display=popup
-&href={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
-&caption=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&title=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&description=Symplifica
-{% endset %}
-
-{% set twURL %}
-https://twitter.com/intent/tweet?
-text=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-&url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-&via=symplifica
-&source={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{% endset %}
-
-{% set gURL %}
-https://plus.google.com/share?
-url={{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-&t=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento
-{% endset %}
-
-{% set emailURL %}
-mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ codigoReferidos }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": codigoReferidos})) }}
-{% endset %}
-                <span class="socials" style="display: inline-block; margin-right: 15px;">
-                    <a href="{{ fbURL }}" target="_blank">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-face.png" />
-                    </a>
-                    <a href="{{ twURL }}" target="_blank">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-twitter.png" />
-                    </a>
-                    <a href="{{ gURL }}" target="_blank">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-googleplus.png" />
-                    </a>
-                    <a href="{{ emailURL }}" target="_blank">
-                        <img src="http://www.symplifica.com/public/img/mail/icon-mail.png" />
-                    </a>
-                </span>
-            {% endif %}
-        </div>
-    </section>
-    <section class="container" style="color: #5D5D5E;">
-        <p>Gracias por contar con nosotros, estamos seguros que simplificaremos lo que hasta ahora era un proceso complejo y mejor aún, minizaremos al máximo el riesgo de eventualidades a futuro.</p>
-        <p>Atentamente</p>
-        <span><strong>CAMILO MÉNDEZ</strong><br /><em style="display:block">Director Symplifica</em></span>
-    </section>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="640" bgcolor="#FFFFFF">
+            <tr>
+              <td bgcolor="#424C59" style="font-size: 0; line-height: 0; padding: 0 10px;" height="80" align="center" class="responsive-image">
+                <img src="https://symplifica.com/public/img/mail/logo-email.png" alt="symplifica" />
+              </td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr>
+            <tr>
+              <td style="padding: 10px 10px 20px 10px; text-align: center">
+                <div style="color:#5D5D5D;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Bienvenido!</div>
+                <br /><br />
+                <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 600; color: #858688; width: 70%; margin: 0 auto">
+                  A partir de ahora cuentas con acceso a todas las herramientas de Symplifica.
+                </div>
+                <br /><br /><br />
+                <div style="text-align: left; font-size: 17px; font-family: 'Open Sans', sans-serif; font-weight: 300; font-style: italic; color: #858688; padding: 0 60px;">
+                    <span style="color: #DF9136">&#10003 </span> Guía práctica para la contratación.<br />
+<span style="color: #DF9136">&#10003 </span> Afiliación rápida de empleados y del empleador a las entidades de la Seguridad Social.<br />
+<span style="color: #DF9136">&#10003 </span> Liquidación y pago de nómina y aportes en pocos pasos.<br />
+<span style="color: #DF9136">&#10003 </span> Registro documental histórico de la relación laboral.<br />
+                </div><br />
+              </td>
+            </tr>
+            <tr style="background: #F7F7F7; text-align: center">
+                <td>
+                    <br/><br/><br/>
+                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px; color: #87868A">Symplifica te recomienda</div><br/>
+                    <div style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 17px; width: 70%; margin: 0 auto; color: #87868A">Para mayor facilidad en el registro te recomendamos tener a la mano los siguientes documentos e información.</div><br/>
+                </td>
+            </tr>
+            <tr style="background: #F7F7F7">
+              <td style="padding: 30px 10px">
+                <table border="1" bordercolor="#D7D8D9" cellpadding="0" cellspacing="0" align="left" width="100%">
+                  <tr>
+                    <td class="responsive-image img" style="font-size: 15px; font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0 10px 0 10px; background: #DF9136; height: 35px; color: #FFF" align="center">Para empleador</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del documento de identidad</div>
+                    </td>
+                  </tr>
+                  <tr>
+                   <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del RUT</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de contacto</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Entidades de seguridad social seleccionadas (ARL y caja de compesación)</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta)</div>
+                    </td>
+                  </tr>
+                </table>
+                <table border="1" bordercolor="#D7D8D9" cellpadding="0" cellspacing="0" align="right" width="100%">
+                  <tr>
+                    <td class="responsive-image img" style="font-size: 15px;font-family: 'Open Sans', sans-serif; font-weight: 700; padding: 0 10px 0 10px; background: #DF9136; height: 35px; color: #FFF" align="center">Para empleados</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183; font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Copia del documento de identidad</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos de contacto</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight: 300;">Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora)</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px 10px;text-align: center">
+                      <div style="color: #808183;font-style: italic; font-size: 16px; font-family: 'Open Sans', sans-serif; font-weight:300;">Entidades de seguridad social seleccionadas (EPS y fondo de pensiones)</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+                <td><br/><br/><div style="margin: 0 auto;font-size: 20px;font-family: 'Open Sans', sans-serif; font-weight: 700; color: #74BEC0; text-align: center; width: 85%">Symplifica te obsequia desde hoy UN MES de servicio completo, terminando el día {{ fechaFin }}.</div><br /><br/></td>
+            </tr>
+            <tr>
+                <td><div style="font-size: 20px;font-family: 'Open Sans', sans-serif; font-weight: 300; margin: 0 auto; color: #74BEC0; text-align: center; width: 85%">Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:</div><br /><br/></td>
+            </tr>
+            <tr>
+                <td><div style="margin: 0 auto;font-size: 45px;font-family: 'Open Sans', sans-serif; font-weight: 700; color: #5D5D5D; text-align: center">{{ codigoReferidos }}</div></td>
+            </tr>
+            <tr><td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td></tr>
+            <tr>
+              <td bgcolor="#485465">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="text-align:center; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                  <tr>
+                    <td style="color: #fff; font-family: 'Open Sans', sans-serif; font-weight: 300;">Siguenos
+                    <a target="_blank" href="https://www.facebook.com/Symplifica-1538503439800792/timeline"><img src="https://symplifica.com/public/img/mail/face.png" /></a>
+                    <a target="_blank" href="https://twitter.com/symplifica_?lang=en"><img src="https://symplifica.com/public/img/mail/link.png" /></a>
+                    <a target="_blank" href="https://www.linkedin.com/company/symplifica?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"><img src="https://symplifica.com/public/img/mail/twe.png" /></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <br>
+                    <td style="padding: 0 10px; color: #FFFFFF; font-family: 'Open Sans', sans-serif; font-weight: 300;">
+                      Términos y Condiciones I Copyright © Todos los derechos reservados Sympliﬁca
+                    </td>
+                  </tr>
+                  <tr><td style="font-size: 0; line-height: 0;" height="15">&nbsp;</td></tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
 {% endblock %}
