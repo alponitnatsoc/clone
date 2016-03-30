@@ -100,7 +100,8 @@ class UserController extends Controller
                         break;
                     }
                 }
-                $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
+//                 $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
+                $liquidationType = $actContract->getFrequencyFrequency()->getPayrollCode();
                 if($liquidationType=="J")
                     $liquidationType="M";
                 $endDate=$actContract->getEndDate();
