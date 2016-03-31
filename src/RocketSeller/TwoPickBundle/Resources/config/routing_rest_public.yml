@@ -110,3 +110,8 @@ payment_express_register:
     type: rest
     resource: "RocketSellerTwoPickBundle:ExpressRegistrationRest"
     name_prefix: api_public_
+subscription_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:SubscriptionRest"
+    name_prefix: api_public_
+
