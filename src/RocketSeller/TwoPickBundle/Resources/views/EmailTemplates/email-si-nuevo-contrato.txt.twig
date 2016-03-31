@@ -7,90 +7,62 @@ Estos son los pasos para terminar el contrato que tienes vigente con tu empleado
 {% endautoescape %}
 {% endblock %}
 {% block body_html %}
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-    <title>Symplifica</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: "Open Sans",Helvetica,Arial;
-            background: #fff;
-            width: 100%;
-            margin: 0px;
-            padding: 0px;
-            color: #4B4B4B;
-        }
-        p {
-            font-size: 18px;
-            color: #87898C;
-/*             font-weight: 400; */
-        }
-        p strong {
-            font-weight: bold;
-            color: #5D5D5E;
-            font-size: 24px;
-        }
-        .headbck {
-            background: #3C4C5A;
-            display: block;
-            border-bottom: 1px solid #fff;
-            height: 60px;
-            padding-top: 10px;
-            text-align: center;
-        }
-        .url {
-            color: #39C0C3;
-            text-decoration: none;
-        }
-        .container {
-            width: 100%;
-            text-align: center;
-/*             padding-right: 15px; */
-/*             padding-left: 15px; */
-/*             margin-right: auto; */
-/*             margin-left: auto; */
-        }
-        .btn-conf {
-            margin-bottom: 30px;
-            margin-top: 15px;
-            background-color: #F79129; /* #fd9626*/
-            box-shadow: 0 2px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
-            color: #fff;
-            font-weight: 700;
-/*             text-shadow: 1px 1px 1px #333; */
-            display: inline-block;
-            padding: 6px 12px;
-            font-size: 18px;
-            line-height: 1.42857143;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
-    </style>
-  </head>
-  <body style='font-family: "Open Sans",Helvetica,Arial;
-            background: #fff;
-            width: 100%;
-            margin: 0px;
-            padding: 0px;
-            color: #5D5D5E;'>
-    <header>
-        <div class="headbck" style="background: #3C4C5A;
-            display: block;
-            border-bottom: 1px solid #fff;
-            height: 60px;
-            padding-top: 10px;
-            text-align: center;">
-            <a href="http://www.symplifica.com" target="_blank"><img src="https://www.symplifica.com/public/img/mail/new-icono-symplifica.png" alt="Symplifica" /></a>
-        </div>
-    </header>
-    <section class="container" style="padding-top: 35px; width: 100%; text-align: center;">
-        <p style="padding-top: 5px; font-size: 18px;
-            color: #87898C;">Hola {{ user.personPerson.names }}</p>
-        <p style="text-align: justify;">Haz decidido terminar el contrato que tienes vigente con tu empleado para crear uno nuevo tal como te lo indicamos.</p>
-        <p style="text-align: justify;">Estos son los pasos que debes realizar para llevar este proceso de la mejor forma posible y envitar inconvenientes en el futuro</p>
-    </section>
-  </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+<title>Documento sin título</title>
+<style type="text/css">
+  @media only screen and (max-width: 480px) {
+    table {width: 100% !important}
+  }
+</style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        <tr><!--------------------------------------------header----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+        </tr><!--------------------------------------------fin header----------------------------------->
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 25px;color:#75BEC1">
+                            !Hola¡
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-style:italic; font-size: 20px;color:#858789">
+                            {{ user.personPerson.names }}
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 17px;color:#5D5D5D">
+                            Haz decidido terminar el contrato que tienes vigente con tu empleado para crear uno nuevo tal como te lo indicamos.<br><br>
+Estos son los pasos que debes realizar para llevar este proceso de la mejor forma posible y envitar inconvenientes en el futuro
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-style:italic; font-size: 20px;color:#858789">
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:<br><br>
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:<br><br>
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:<br><br>
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:<br><br>
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:<br><br>
+                            <span style="color: #FD9224">&#10003;</span> Haz clic en el siguiente link:
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr><!--------------------------------------------footer----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+        </tr><!--------------------------------------------fin footer----------------------------------->
+    </table>
+</body>
 </html>
 {% endblock %}
