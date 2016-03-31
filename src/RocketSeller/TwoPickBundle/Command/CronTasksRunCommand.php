@@ -9,13 +9,14 @@ use Symfony\Component\Console\Input\StringInput;
 
 class CronTasksRunCommand extends ContainerAwareCommand
 {
+
     private $output;
 
     protected function configure()
     {
         $this
-            ->setName('crontasks:run')
-            ->setDescription('Runs Cron Tasks if needed')
+                ->setName('crontasks:run')
+                ->setDescription('Runs Cron Tasks if needed')
         ;
     }
 
@@ -39,21 +40,27 @@ class CronTasksRunCommand extends ContainerAwareCommand
             if ($run) {
                 $output->writeln(sprintf('Running Cron Task <info>%s</info>', $crontask));
 
-                // Set $lastrun for this crontask
-                $crontask->setLastRun(new \DateTime());
-
                 try {
                     $commands = $crontask->getCommands();
-                    foreach ($commands as $command) {
-                        $output->writeln(sprintf('Executing command <comment>%s</comment>...', $command));
 
+                    if (!is_array($commands)) {
+                        $commands2[] = $commands;
+                    } else {
+                        $commands2 = $commands;
+                    }
+
+                    foreach ($commands2 as $command) {
+                        $output->writeln(sprintf('Executing command <comment>%s</comment>...', $command));
                         // Run the command
-                        $this->runCommand($command);
+                        $result = $this->runCommand($command);
+
+                        // Set $lastrun for this crontask
+                        $crontask->setLastRun(new \DateTime());
                     }
 
                     $output->writeln('<info>SUCCESS</info>');
                 } catch (\Exception $e) {
-                    $output->writeln('<error>ERROR</error>');
+                    $output->writeln(sprintf('<error>ERROR=> %s</error>', $e->getMessage()));
                 }
 
                 // Persist crontask
@@ -80,7 +87,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
 
         // Send all output to the console
         $returnCode = $command->run($input, $this->output);
-
         return $returnCode != 0;
     }
+
 }
