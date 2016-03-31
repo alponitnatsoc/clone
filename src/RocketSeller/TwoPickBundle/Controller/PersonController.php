@@ -1,5 +1,7 @@
 <?php 
 namespace RocketSeller\TwoPickBundle\Controller;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\EntityType;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -50,13 +52,39 @@ class PersonController extends Controller
             $phone=new Phone();
             $people->addPhone($phone);
         }
+        $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
+        $entityTypes = $entityTypeRepo->findAll();
+        $severances = null;
+        $arls = null;
 
-        $form = $this->createForm(new EmployerRegistration(), $employer, array(
+
+        /** @var EntityType $entityType */
+        foreach ($entityTypes as $entityType) {
+            if ($entityType->getName() == (isset($configData['ARL']) ? $configData['ARL'] : "ARL")) {
+                $arls = $entityType->getEntities();
+            }
+            if ($entityType->getName() == (isset($configData['CC Familiar']) ? $configData['CC Familiar'] : "CC Familiar")) {
+                $severances = $entityType->getEntities();
+            }
+        }
+
+        $form = $this->createForm(new EmployerRegistration($severances,$arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
             'method' => 'POST',
         ));
 
-
+        $empEntities = $employer->getEntities();
+        if ($empEntities->count() != 0) {
+            /** @var EmployerHasEntity $enti */
+            foreach ($empEntities as $enti) {
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
+                    $form->get('arl')->setData($enti->getEntityEntity());
+                }
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
+                    $form->get('severances')->setData($enti->getEntityEntity());
+                }
+            }
+        }
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
             array('form' => $form->createView())

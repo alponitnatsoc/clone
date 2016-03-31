@@ -78,6 +78,7 @@
             <li class="active"><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
             <li><a data-toggle="tab" data-target="#contactData"></a>Datos de contacto</li>
             <li><a data-toggle="tab" data-target="#workplacesData"></a>Lugares de trabajo</li>
+            <li><a data-toggle="tab" data-target="#employerEntities"></a>Tus entidades</li>
         </ul>
 
         <div class="tab-content">
@@ -284,6 +285,68 @@
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
                     <br /><br />
+                </div>
+            </div>
+            <div id="employerEntities" class="tab-pane fade in">
+                <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
+                    <div class="col-sm-12 col-xs-12 text-center">
+                        <p>
+                            Escoge la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales estas afiliado o te afiliarás como empleador. Symplifica no hace cambios de entidades.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom:none;">
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-12">
+                                    {{ form_label(form.severances,null,{'label_attr': {'class': 'title'}})}}
+                                </div>
+                                {% if employee.severances.vars.data.name is defined %}
+                                    {% set sname = employee.severances.vars.data.name %}
+                                {% else %}
+                                    {% set sname = "" %}
+                                {% endif %}
+                                {% if employee.arl.vars.data.name is defined %}
+                                    {% set aname = employee.arl.vars.data.name %}
+                                {% else %}
+                                    {% set aname = "" %}
+                                {% endif %}
+                                <div class="wrapper">
+                                    <div class="hidden">
+                                        {{ form_row(form.severances) }}
+                                    </div>
+                                    <div class="col-xs-12">
+                                        {{ form_row(form.severancesAC,{'value' : sname}) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <div class="col-sm-12">
+                                    {{ form_label(form.arl,null,{'label_attr': {'class': 'title'}})}}
+                                </div>
+                                <div class="wrapper">
+                                    <div class="hidden">
+                                        {{ form_row(form.arl) }}
+                                    </div>
+                                    <div class="col-xs-12">
+                                        {{ form_row(form.arlAC,{'value' : aname}) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 remember">
+                            <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-sm-12 col-xs-12 center">
+                    <a class="btn btnPrevious" >Anterior</a>
+                    <a id="btn-save-entities" href="{{ path('api_public_post_matrix_choose_submit_step2') }}" class="btn btn-orange" >Siguiente</a>
                 </div>
             </div>
         </div>

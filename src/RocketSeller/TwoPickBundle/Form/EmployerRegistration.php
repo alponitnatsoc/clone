@@ -14,7 +14,12 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 
 class EmployerRegistration extends AbstractType
 {
-
+    private $severancesEntities;
+    private $arlEntities;
+    function __construct($severancesEntities,$arlEntities){
+        $this->severancesEntities=$severancesEntities;
+        $this->arlEntities=$arlEntities;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -55,6 +60,35 @@ class EmployerRegistration extends AbstractType
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false
+            ))
+            ->add('severances', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->severancesEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Caja de Compensación Familiar*',
+                'required' => true
+            ))
+
+            ->add('arl', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->arlEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Administradora de Riesgos Labolares*',
+                'required' => true
+            ))
+            ->add('severancesAC', 'text', array(
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true,
+                'attr'=>array("class"=>'autocomS')
+            ))
+            ->add('arlAC', 'text', array(
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true,
+                'attr'=>array("class"=>'autocomA')
             ))
             ->add('save', 'submit', array(
                 'label' => 'Salvar',

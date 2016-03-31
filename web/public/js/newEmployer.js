@@ -57,6 +57,14 @@ function startEmployer() {
                 }
             });
         });
+        $("input[class*='autocom']").each(function () {
+            $(this).rules("add", {
+                required: true,
+                messages: {
+                    required: "Por favor seleccione una opción"
+                }
+            });
+        });
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
@@ -106,6 +114,47 @@ function startEmployer() {
     //el cambio de tabs entre el formulario de registro
     $('.btnPrevious').click(function () {
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+    });
+    $('#btn-save-entities').click(function (e) {
+        e.preventDefault();
+        var form = $("form");
+
+        var severances = $(form).find("select[name='register_social_security[severances]']");
+        var arl = $(form).find("select[name='register_social_security[arl]']");
+        if (!(validator.element(severances) && validator.element(arl))) {
+            alert("Llenaste algunos campos incorrectamente");
+            return;
+        }
+
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            //Todo AQUI VOY
+            data: {
+                idEmployer: 			$(form).find("input[name='register_social_security[idEmployer]']").val(),
+                severances: 			$(form).find("select[name='register_social_security[severances]']").val(),
+                arl: 					$(form).find("select[name='register_social_security[arl]']").val(),
+                economicalActivity: 	$(form).find("input[name='register_social_security[economicalActivity]']").val(),
+            }
+        }).done(function (data) {
+            if (data["url"] != null) {
+                console.log(data["url"]);
+                history.pushState("","",data["url"]);
+                redirUri = data["url"];
+            } else {
+                $('#main').replaceWith(
+                    // ... with the returned one from the AJAX response.
+                    $(data).find('#main'));
+                addClick();
+                if (!jsLoader(url)) {
+                    addSumbit();
+                }
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            if(jqXHR==errorHandleTry(jqXHR)){
+                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+            }
+        });
     });
     $('#btn-inquiry').click(function (e) {
         e.preventDefault();
@@ -364,19 +413,8 @@ function startEmployer() {
             },
             statusCode: {
                 200: function (data) {
-                    if (data["url"] != null) {
-                        console.log(data["url"]);
-                        history.pushState("","",data["url"]);
-                        redirUri = data["url"];
-                    } else {
-                        $('#main').replaceWith(
-                                // ... with the returned one from the AJAX response.
-                                $(data).find('#main'));
-                        addClick();
-                        if (!jsLoader(url)) {
-                            addSumbit();
-                        }
-                    }
+                    $('.nav-tabs > .active').next('li').find('a').trigger('click');
+
                 }
 
             }
@@ -471,6 +509,7 @@ function addListeners() {
         $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
 
     }
+    initEntitiesEmployerFields();
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -514,4 +553,68 @@ function checkExistance(){
     }).fail(function (jqXHR, textStatus, errorThrown) {
         //show the other stuf
     });
+}
+function initEntitiesEmployerFields(){
+    var dataSev=[];
+    $("#register_employer_severances").find("> option").each(function() {
+        dataSev.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomS").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataSev, request.term);
+
+                response(results.slice(0, 5));
+            },                minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+    var dataArl=[];
+    $("#register_employer_arl").find("> option").each(function() {
+        dataArl.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomA").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataArl, request.term);
+
+                response(results.slice(0, 5));
+            },
+            minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+    var severances = $("#register_employer_severances");
+    var arl = $("#register_employer_arl");
+    $("#register_employer_severancesAC").val($(severances).children("option:selected").text());
+    $("#register_employer_arlAC").val($(arl).children("option:selected").text());
+
 }

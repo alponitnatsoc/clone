@@ -412,8 +412,6 @@ class EmployeeController extends Controller
                 $pensions = $entityType->getEntities();
             }
         }
-        dump($eps->count());
-        dump($pensions->count());
         $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces,$eps,$pensions), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',

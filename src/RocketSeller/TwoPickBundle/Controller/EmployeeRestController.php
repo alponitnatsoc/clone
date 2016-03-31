@@ -1308,7 +1308,6 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
-     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      * @return View
      */
     public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher)
@@ -1372,7 +1371,7 @@ class EmployeeRestController extends FOSRestController
             $em->flush();
         }
 
-        return $view->setData(array('response' => array('message' => 'added')))->setStatusCode(200);
+        return $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
     }
 
     /**
