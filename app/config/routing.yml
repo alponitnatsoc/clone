@@ -7,7 +7,7 @@ registration_confirmed_start:
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerConfirmedStart}
 matrix_choose:
     path:      /matrix/choose/{tab}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose, tab: 1}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:matrixChoose, tab: 3}
 testzip:
     path:      /export/user/documents
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:exportDocuments}
