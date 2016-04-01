@@ -68,6 +68,7 @@ function startEmployer() {
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
+    var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
     var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');

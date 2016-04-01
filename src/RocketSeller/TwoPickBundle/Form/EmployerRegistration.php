@@ -61,16 +61,16 @@ class EmployerRegistration extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false
             ))
-            ->add('severances', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Entity',
-                'choices' => $this->severancesEntities,
-                'choice_label' =>'name',
-                'placeholder'=>"",
-                'mapped' => false,
-                'label'=>'Caja de Compensación Familiar*',
-                'required' => true
-            ))
+            ->add('severances', 'collection', array(
+                'type' => new CajaPick($this->severancesEntities),
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'property_path' => 'entities',
+                'label'=>'Caja de compensación Familiar*',
 
+
+            ))
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arlEntities,
@@ -79,12 +79,6 @@ class EmployerRegistration extends AbstractType
                 'mapped' => false,
                 'label'=>'Administradora de Riesgos Labolares*',
                 'required' => true
-            ))
-            ->add('severancesAC', 'text', array(
-                'mapped' => false,
-                'label'=>' ',
-                'required' => true,
-                'attr'=>array("class"=>'autocomS')
             ))
             ->add('arlAC', 'text', array(
                 'mapped' => false,

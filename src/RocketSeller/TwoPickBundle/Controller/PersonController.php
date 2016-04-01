@@ -74,6 +74,7 @@ class PersonController extends Controller
         ));
 
         $empEntities = $employer->getEntities();
+        $actualSeverances= new ArrayCollection();
         if ($empEntities&&$empEntities->count() != 0) {
             /** @var EmployerHasEntity $enti */
             foreach ($empEntities as $enti) {
@@ -81,10 +82,12 @@ class PersonController extends Controller
                     $form->get('arl')->setData($enti->getEntityEntity());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
-                    $form->get('severances')->setData($enti->getEntityEntity());
+                    $actualSeverances->add($enti);
                 }
             }
         }
+        $form->get('severances')->setData($actualSeverances);
+
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:newPerson.html.twig',
             array('form' => $form->createView())

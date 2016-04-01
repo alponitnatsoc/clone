@@ -75,10 +75,10 @@
         {{ form_start(form) }}
 
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
-            <li><a data-toggle="tab" data-target="#contactData"></a>Datos de contacto</li>
-            <li><a data-toggle="tab" data-target="#workplacesData"></a>Lugares de trabajo</li>
-            <li><a data-toggle="tab" data-target="#employerEntities"></a>Tus entidades</li>
+            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
+            <li><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
         </ul>
 
         <div class="tab-content">
@@ -297,7 +297,7 @@
 
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom:none;">
-                            <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-12">
                                     {{ form_label(form.severances,null,{'label_attr': {'class': 'title'}})}}
                                 </div>
@@ -311,18 +311,26 @@
                                 {% else %}
                                     {% set aname = "" %}
                                 {% endif %}
-                                <div class="wrapper">
-                                    <div class="hidden">
-                                        {{ form_row(form.severances) }}
-                                    </div>
-                                    <div class="col-xs-12">
-                                        {{ form_row(form.severancesAC,{'value' : sname}) }}
-                                    </div>
-                                </div>
                                 <div class="col-sm-12 form-group">
+                                    <ul class="severances" data-prototype="{{ form_widget(form.severances.vars.prototype)|e }}">
+                                        {% for caja in form.severances %}
+                                            {% if caja.vars.data.entityEntity.name is defined %}
+                                                {% set sname = caja.vars.data.entityEntity.name %}
+                                            {% else %}
+                                                {% set sname = "" %}
+                                            {% endif %}
+                                            <li>
+                                                {{ form_row(caja.idEmployerHasEntity) }}
+                                                <div class="hidden">
+                                                    {{ form_row(caja.severances) }}
+                                                </div>
+                                                {{ form_row(caja.severancesAC,{'value' : sname}) }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-xs-12">
+                            <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-12">
                                     {{ form_label(form.arl,null,{'label_attr': {'class': 'title'}})}}
                                 </div>
