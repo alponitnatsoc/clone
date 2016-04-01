@@ -3,7 +3,9 @@
 namespace RocketSeller\TwoPickBundle\Form;
 
 use DateTime;
+use RocketSeller\TwoPickBundle\Entity\ContractType;
 use RocketSeller\TwoPickBundle\Entity\PayType;
+use RocketSeller\TwoPickBundle\Entity\TimeCommitment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -17,13 +19,26 @@ use RocketSeller\TwoPickBundle\Entity\Department;
 
 class ContractRegistration extends AbstractType
 {
+    private $timeCommitments;
     private $workplaces;
     private $today;
     private $todayOneYear;
-    function __construct($workplaces){
+    function __construct($workplaces,$timeCommitments){
+        $this->timeCommitments=$timeCommitments;
         $this->today= new DateTime();
         $this->todayOneYear= new DateTime((intval($this->today->format("Y"))+1)."-".$this->today->format("m")."-".$this->today->format("d"));
         $this->workplaces=$workplaces;
+    }
+    private function getChoicesContractType()
+    {
+        $dataArray= array();
+        // some logic here using $this->em
+        // it should return key-value array, example:
+        /** @var ContractType $TM */
+        foreach ($this->timeCommitments as $TM) {
+            $dataArray[$TM->getPayrollCode()]=$TM->getName();
+        }
+        return $dataArray;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -61,12 +76,11 @@ class ContractRegistration extends AbstractType
                 'label'=>'¿Residirá en el lugar de trabajo?',
                 'required' => true,
             ))
-            ->add('contractType', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:ContractType',
-                'property' => 'name',
+            ->add('contractType', 'choice', array(
+                'choices'=>$this->getChoicesContractType(),
                 'multiple' => false,
                 'expanded' => false,
-                'property_path' => 'contractTypeContractType',
+                'mapped'=> false,
                 'placeholder' => ' ',
                 'label'=>'Tipo de contrato*',
                 'required' => true

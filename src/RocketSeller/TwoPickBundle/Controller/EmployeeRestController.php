@@ -764,7 +764,7 @@ class EmployeeRestController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
 
             /** @var ContractType $tempContractType */
-            $tempContractType = $contractTypeRepo->find($paramFetcher->get('contractType'));
+            $tempContractType = $contractTypeRepo->findOneBy(array("payroll_code"=>$paramFetcher->get('contractType')));
             if ($tempContractType == null) {
                 $view->setStatusCode(404)->setHeader("error", "The contractType ID " . $paramFetcher->get('contractType') . " is invalid");
                 return $view;

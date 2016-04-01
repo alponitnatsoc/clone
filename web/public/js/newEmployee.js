@@ -196,7 +196,7 @@ function startEmployee() {
         }
     });
     $('#btnToggleFijo').click(function () {
-        $("#register_employee_employeeHasEmployers_contractType").val("1")
+        $("#register_employee_employeeHasEmployers_contractType").val("2")
         $(".definite").each(function () {
             $(this).show();
         });
@@ -207,7 +207,7 @@ function startEmployee() {
     });
 
     $('#btnToggleIndefinido').click(function () {
-        $("#register_employee_employeeHasEmployers_contractType").val("2")
+        $("#register_employee_employeeHasEmployers_contractType").val("1")
         $(".definite").each(function () {
             $(this).hide();
         });

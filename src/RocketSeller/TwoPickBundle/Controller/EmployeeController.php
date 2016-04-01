@@ -340,7 +340,8 @@ class EmployeeController extends Controller
                 $pensions = $entityType->getEntities();
             }
         }
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces,$eps,$pensions), $employee, array(
+        $timeCommitments=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces,$eps,$pensions,$timeCommitments), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
@@ -377,6 +378,7 @@ class EmployeeController extends Controller
                 }
 
                 $form->get('employeeHasEmployers')->setData($currentContract);
+                $form->get('employeeHasEmployers')->get("contractType")->setData($currentContract->getContractTypeContractType()->getPayrollCode());
                 $payType = $contract->getPayMethodPayMethod();
                 if ($payType != null) {
                     $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
