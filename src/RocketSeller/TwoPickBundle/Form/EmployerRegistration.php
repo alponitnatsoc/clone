@@ -65,6 +65,7 @@ class EmployerRegistration extends AbstractType
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
+                'placeholder'=>"",
                 'mapped' => false,
                 'label'=>'Caja de Compensación Familiar*',
                 'required' => true
@@ -74,6 +75,7 @@ class EmployerRegistration extends AbstractType
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arlEntities,
                 'choice_label' =>'name',
+                'placeholder'=>"",
                 'mapped' => false,
                 'label'=>'Administradora de Riesgos Labolares*',
                 'required' => true
@@ -91,7 +93,7 @@ class EmployerRegistration extends AbstractType
                 'attr'=>array("class"=>'autocomA')
             ))
             ->add('save', 'submit', array(
-                'label' => 'Salvar',
+                'label' => 'Guardar y continuar',
                 'attr'   =>  array(
                 'class'   => 'btn btn-orange')
             ));

@@ -1304,7 +1304,6 @@ class EmployeeRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
@@ -1325,21 +1324,17 @@ class EmployeeRestController extends FOSRestController
             return $view->setData(array('error' => array('User' => 'user not logged')))->setStatusCode(403);
         }
 
-        $register_social_security = $paramFetcher->get("register_social_security");
-
-        $idEmployer = $register_social_security['idEmployer'];
-        $employerRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
         $entityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity');
         /** @var Employer $realEmployer */
-        $realEmployer = $employerRepo->find($idEmployer);
+        $realEmployer = $user->getPersonPerson()->getEmployer();
         if ($user->getPersonPerson()->getEmployer() != $realEmployer) {
             return $view->setData(array('error' => array('Employer' => 'not the loged employer')))->setStatusCode(403);
         }
-        $realEmployer->setEconomicalActivity($register_social_security['economicalActivity']);
+        $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity')?:2435);
         /** @var Entity $realArl */
-        $realArl = $entityRepo->find($register_social_security['arl']);
+        $realArl = $entityRepo->find($paramFetcher->get('arl'));
         /** @var Entity $realSeverances */
-        $realSeverances = $entityRepo->find($register_social_security['severances']);
+        $realSeverances = $entityRepo->find($paramFetcher->get('severances'));
         if ($realSeverances == null || $realArl == null) {
             return $view->setData(array('error' => array('Entity' => 'Entities Not found')))->setStatusCode(404);
         }

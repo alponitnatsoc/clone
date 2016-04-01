@@ -74,7 +74,7 @@ class PersonController extends Controller
         ));
 
         $empEntities = $employer->getEntities();
-        if ($empEntities->count() != 0) {
+        if ($empEntities&&$empEntities->count() != 0) {
             /** @var EmployerHasEntity $enti */
             foreach ($empEntities as $enti) {
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {

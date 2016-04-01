@@ -198,87 +198,15 @@ class EmployeeController extends Controller
         $person = $user->getPersonPerson();
         $employer = $user->getPersonPerson()->getEmployer();
         $employerHasEmployees = $employer->getEmployerHasEmployees();
-        $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
-        $entityTypes = $entityTypeRepo->findAll();
-        $configData = $this->getConfigData();
-        $pensions = null;
-        $eps = null;
-        $severances = null;
-        $arls = null;
 
-
-        /** @var EntityType $entityType */
-        foreach ($entityTypes as $entityType) {
-            if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
-                $eps = $entityType->getEntities();
-            }
-            if ($entityType->getName() == (isset($configData['ARL']) ? $configData['ARL'] : "ARL")) {
-                $arls = $entityType->getEntities();
-            }
-            if ($entityType->getName() == (isset($configData['Pension']) ? $configData['Pension'] : "Pension")) {
-                $pensions = $entityType->getEntities();
-            }
-            if ($entityType->getName() == (isset($configData['CC Familiar']) ? $configData['CC Familiar'] : "CC Familiar")) {
-                $severances = $entityType->getEntities();
-            }
-        }
-        if ($employer->getEconomicalActivity() == null) {
-            $employer->setEconomicalActivity(isset($configData['RUT Actividad Economica']) ? $configData['RUT Actividad Economica'] : "2435");
-        }
-        $form = $this->createForm(new AffiliationEmployerEmployee($eps, $pensions, $severances, $arls), $employer, array(
+        $form = $this->createForm(new AffiliationEmployerEmployee(), $employer, array(
             'action' => $this->generateUrl('api_public_post_matrix_choose_submit'),
             'method' => 'POST',
         ));
-        $employees = $form->get('employerHasEmployees');
-        foreach ($employees as $employee) {
-            /** @var EmployerHasEmployee $eHE */
-            foreach ($employerHasEmployees as $eHE) {
-                if ($eHE->getIdEmployerHasEmployee() == $employee->get('idEmployerHasEmployee')->getData()) {
-                    $employee->get('nameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getNames());
-                    $employee->get('lastNameEmployee')->setData($eHE->getEmployeeEmployee()->getPersonPerson()->getLastName1());
-                    $eHEEntities = $eHE->getEmployeeEmployee()->getEntities();
-                    if ($eHE->getEmployeeEmployee()->getAskBeneficiary()) {
-                        $employee->get('beneficiaries')->setData($eHE->getEmployeeEmployee()->getAskBeneficiary());
-                    } else {
-                        $employee->get('beneficiaries')->setData('-1');
-                    }
-                    if ($eHEEntities->count() != 0) {
-                        /** @var EmployeeHasEntity $enti */
-                        foreach ($eHEEntities as $enti) {
-                            if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
-                                $employee->get('wealth')->setData($enti->getEntityEntity());
-                            }
-                            if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
-                                $employee->get('pension')->setData($enti->getEntityEntity());
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        $empEntities = $employer->getEntities();
-        if ($empEntities->count() != 0) {
-            /** @var EmployerHasEntity $enti */
-            foreach ($empEntities as $enti) {
-                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARL") {
-                    $form->get('arl')->setData($enti->getEntityEntity());
-                }
-                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "CC Familiar") {
-                    $form->get('severances')->setData($enti->getEntityEntity());
-                }
-            }
-        }
-        $personEmployer = $employer->getPersonPerson();
-        $employerFullName = $personEmployer->getNames() . " " . $personEmployer->getLastName1() . " " . $personEmployer->getLastName2();
 
         return $this->render(
             'RocketSellerTwoPickBundle:Registration:afiliation.html.twig', array(
                 'form' => $form->createView(),
-                'numberOfEmployees' => $employerHasEmployees->count(),
-                'employerName' => $employerFullName,
-                'employerDocument' => $personEmployer->getDocument(),
-                'employerDocumentType' => $personEmployer->getDocumentType(),
                 'tab' => $tab)
         );
     }

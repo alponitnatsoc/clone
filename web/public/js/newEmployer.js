@@ -115,25 +115,25 @@ function startEmployer() {
     $('.btnPrevious').click(function () {
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
     });
+    var redirUri = "";
     $('#btn-save-entities').click(function (e) {
         e.preventDefault();
         var form = $("form");
 
-        var severances = $(form).find("select[name='register_social_security[severances]']");
-        var arl = $(form).find("select[name='register_social_security[arl]']");
-        if (!(validator.element(severances) && validator.element(arl))) {
-            alert("Llenaste algunos campos incorrectamente");
+        var severances = $(form).find("#register_employer_severances");
+        var arl = $(form).find("#register_employer_arl");
+        var severancesAC = $(form).find("#register_employer_severancesAC");
+        var arlAC = $(form).find("#register_employer_arlAC");
+        if (!(validator.element(severances) && validator.element(arl) && validator.element(severancesAC) && validator.element(arlAC))) {
             return;
         }
-
+        $('#createdModal').modal('toggle');
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
-            //Todo AQUI VOY
             data: {
-                idEmployer: 			$(form).find("input[name='register_social_security[idEmployer]']").val(),
-                severances: 			$(form).find("select[name='register_social_security[severances]']").val(),
-                arl: 					$(form).find("select[name='register_social_security[arl]']").val(),
+                severances: 			severances.val(),
+                arl: 					arl.val(),
                 economicalActivity: 	$(form).find("input[name='register_social_security[economicalActivity]']").val(),
             }
         }).done(function (data) {
@@ -154,6 +154,9 @@ function startEmployer() {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
+        });
+        $("#employerDismiss").on('click', function () {
+            sendAjax(redirUri);
         });
     });
     $('#btn-inquiry').click(function (e) {
@@ -252,7 +255,6 @@ function startEmployer() {
             phones[i++] = $(this).val();
         });
         if (!flagValid) {
-            alert("Llenaste algunos campos incorrectamente");
             return;
         }
         $.ajax({
@@ -333,7 +335,6 @@ function startEmployer() {
      addListeners();
      }
      });*/
-    var redirUri = "";
     $("form").on("submit", function (e) {
         e.preventDefault();
 
@@ -399,7 +400,6 @@ function startEmployer() {
 
         var sameWorkHouse = $(form).find("input[name='register_employer[sameWorkHouse]']");
 
-        $('#createdModal').modal('toggle');
         $.ajax({
             url: form.attr('action'),
             type: $(form).attr('method'),
@@ -410,22 +410,14 @@ function startEmployer() {
                 workMainAddress: addresses,
                 workCity: citys,
                 workDepartment: departments
-            },
-            statusCode: {
-                200: function (data) {
-                    $('.nav-tabs > .active').next('li').find('a').trigger('click');
-
-                }
-
             }
+        }).done(function (data) {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
-    });
-    $("#employerDismiss").on('click', function () {
-        sendAjax(redirUri);
     });
 }
 

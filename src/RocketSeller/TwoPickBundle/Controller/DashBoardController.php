@@ -59,11 +59,9 @@ class DashBoardController extends Controller
                     }
                     $stateEmployees+=$value->getEmployeeEmployee()->getRegisterState();
                     if ($value->getEmployeeEmployee()->getEntities()->count() != 0) {
-                        $stateAfiliation+=$minUnit;
                     }
                 }
                 if ($employer->getEntities()->count() > 0) {
-                    $stateAfiliation+=$minUnit;
                 }
                 $stateEmployees = $stateEmployees / $numEmployees;
             }
@@ -79,7 +77,7 @@ class DashBoardController extends Controller
             'stateMessage' => $stateRegister != 100 ? "Iniciar" : "Editar",);
         $steps ['0'] = $step1;
         $step2 = array(
-            'url' => $paymentState==1? "" :($stateRegister != 100 ? "" :$this->generateUrl('manage_employees')),
+            'url' => $paymentState==1? "" :($stateRegister != 100 ? "" :($stateEmployees==0?$this->generateUrl('register_employee', array('id' => -1)):$this->generateUrl('manage_employees'))),
             'name' => "Datos de mis empleados",
             'state' => $stateEmployees,
             'paso' => 2,
@@ -87,9 +85,9 @@ class DashBoardController extends Controller
             'stateMessage' => $stateEmployees != 100 ? "Iniciar" : "Editar",);
         $steps ['1'] = $step2;
 
-        if ($stateRegister == 100&&$paymentState!=1) {
+        if ($stateEmployees == 100&&$paymentState!=1) {
             $step3 = array(
-                'url' => $this->generateUrl('register_employee', array('id' => $idCurrentEmployee)),
+                'url' => $this->generateUrl('register_employee', array('id' => -1)),
                 'name' => "Agregar un nuevo Empleado?",
                 'state' => 0,
                 'paso' => 2,

@@ -14,16 +14,6 @@ use Symfony\Component\Form\FormEvents;
 
 class AffiliationEmployerEmployee extends AbstractType
 {
-    private $wealthEntities;
-    private $pensionEntities;
-    private $severancesEntities;
-    private $arlEntities;
-    function __construct($wealthEntities,$pensionEntities,$severancesEntities,$arlEntities){
-        $this->wealthEntities=$wealthEntities;
-        $this->pensionEntities=$pensionEntities;
-        $this->severancesEntities=$severancesEntities;
-        $this->arlEntities=$arlEntities;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,42 +21,6 @@ class AffiliationEmployerEmployee extends AbstractType
             ->setAction($options['action'])
             ->setMethod($options['method'])
             ->add('idEmployer', 'hidden')
-            ->add('economicalActivity', 'hidden')
-            ->add('employerHasEmployees', 'collection', array(
-                'type' => new EntitiesPick($this->wealthEntities,$this->pensionEntities),
-                'allow_add'    => false,
-                'allow_delete' => false,
-                'by_reference' => false
-            ))
-            ->add('severances', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Entity',
-                'choices' => $this->severancesEntities,
-                'choice_label' =>'name',
-                'mapped' => false,
-                'label'=>'Caja de Compensación Familiar*',
-                'required' => true
-            ))
-
-            ->add('arl', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Entity',
-                'choices' => $this->arlEntities,
-                'choice_label' =>'name',
-                'mapped' => false,
-                'label'=>'Administradora de Riesgos Labolares*',
-                'required' => true
-            ))
-            ->add('severancesAC', 'text', array(
-                'mapped' => false,
-                'label'=>' ',
-                'required' => true,
-                'attr'=>array("class"=>'autocomS')
-            ))
-            ->add('arlAC', 'text', array(
-                'mapped' => false,
-                'label'=>' ',
-                'required' => true,
-                'attr'=>array("class"=>'autocomA')
-            ))
             ->add('save', 'submit', array(
                 'label' => 'Guardar',
                 'attr'   =>  array(
