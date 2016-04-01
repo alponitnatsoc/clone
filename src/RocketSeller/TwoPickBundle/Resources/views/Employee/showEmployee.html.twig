@@ -241,20 +241,20 @@
                     <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
                     <div class="col-sm-6 form-group form-black input form-dummy">
                         <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
-                        <select id="benefType" class="form-control valid" onchange="myFunction()">
+                        <select id="benefType" name="relation" class="form-control valid" onchange="myFunction()">
                             <option value="" selected="true" >Seleccionar una opción</option>            
-                            <option value="Co">Cónyuge</option>            
-                            <option value="Hi">Hijo</option>            
-                            <option value="He">Hermano</option>
-                            <option value="Pa">Padre</option>
+                            <option value="Cónyugue">Cónyuge</option>            
+                            <option value="Hijo">Hijo</option>            
+                            <option value="Hermano">Hermano</option>
+                            <option value="Padre">Padre</option>
                         </select>
                     </div>
                     <p id="demo"></p>
                     <div class="col-sm-6 form-group form-black input form-dummy">
                         <p class="title"><i><strong>Tiene discapacidad?</strong></i></p> 
                         <div style="text-align:left;">
-                            <input type="radio" name="discapacidad" value="True"> Si
-                        <input type="radio" name="discapacidad" value="False"> No
+                            <input type="radio" name="disability" value="1"> Si
+                            <input type="radio" name="disability" value="0"> No
                         </div>
                         
                     </div>
@@ -266,34 +266,52 @@
                     
                     <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
 
-                    {{form_row(form.personPerson.names)}}
-                    
-                    {{form_row(form.personPerson.lastName1)}}
-
-                    {{form_row(form.personPerson.lastName2)}}
-
-                    {{form_row(form.personExtra.civilStatus)}}
-
-                    {{form_row(form.personPerson.documentType)}}
-
-                    {{form_row(form.personPerson.document)}}
-                    
-                    {{form_row(form.personPerson.birthDate)}}
-
-
-
-                    
+                    <div class="form-black form-group">
+                        {{form_row(form.names)}}         
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.lastName1)}}        
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.lastName2)}}        
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.civilStatus)}}        
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.documentType)}}       
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.document)}}       
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.birthDate)}}       
+                    </div>                    
                 </div>
                 <div class="col-sm-12">
                     <div class="content col-sm-6 col-sm-offset-3">
                         <h4>Ubicación</h4>
-                        {{form_row(form.personPerson.mainAddress)}}
-                        {{form_row(form.personPerson.department)}}
-                        {{form_row(form.personPerson.city)}}
-                        {{form_row(form.save)}}
+                        <div class="form-black form-group">
+                            {{form_row(form.mainAddress)}}       
+                        </div>
+                        <div class="form-black form-group">
+                            {{form_row(form.department)}}     
+                        </div> 
+                        <div class="form-black form-group">
+                            {{form_row(form.city)}}       
+                        </div>       
+                        <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
+                        <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
+                        <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">                                         
+                        <div class="col-sm-12 col-xs-12 center">
+                            <span  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit">Salvar y continuar</span>
+                            <br><br>
+                        </div>
                     </div>
                 </div>
                 {{ form_end(form)}}
+                
+
             </div>
             <div class="col-sm-12 buttons-box">
                 <div class="col-sm-8 col-sm-offset-2">
@@ -457,10 +475,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('/public/js/manageEmployees.js') }}"></script>
+    <script src="{{ asset('/public/js/newBeneficiary.js') }}"></script>
     <script>
     $(document).ready(function(){
         manageEmployees();
-        
+        addBeneficiary();        
     });
 
     </script>

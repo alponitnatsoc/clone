@@ -26,6 +26,8 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Beneficiary;
+use RocketSeller\TwoPickBundle\Entity\employeeHasBeneficiary;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
@@ -1419,12 +1421,70 @@ class EmployeeRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="idContract", nullable=false, strict=true, description="the id of the contract")
+     * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="document", nullable=false, strict=true, description="document.")
+     * @RequestParam(name="names", nullable=false,  strict=true, description="names.")
+     * @RequestParam(name="lastName1", nullable=false,  strict=true, description="last Name 1.")
+     * @RequestParam(name="lastName2", nullable=false,  strict=true, description="last Name 2.")
+     * @RequestParam(name="year", nullable=false, strict=true, description="year of birth.")
+     * @RequestParam(name="month", nullable=false, strict=true, description="month of birth.")
+     * @RequestParam(name="day", nullable=false, strict=true, description="day of birth.")
+     * @RequestParam(name="civilStatus", nullable=false, strict=true, description="the civil status of the employee")
+     * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(name="department", nullable=false, strict=true, description="department.")
+     * @RequestParam(name="city", nullable=false, strict=true, description="city.")
+     * @RequestParam(name="idEmployee", nullable=false, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="relation", nullable=false, strict=true, description="employee relationship with beneficiary")
+     * @RequestParam(name="disability", nullable=false, strict=true, description="disability")
+     * @RequestParam(name="eps", nullable=false, strict=true, description="eps id")
+     * @RequestParam(name="cc", nullable=false, strict=true, description="caja de compensacion id")
+
      * @return View
      */
-    public function postNewBeneficiary(ParamFetcher $paramFetcher)
+    public function postNewBeneficiaryAction(ParamFetcher $paramFetcher)
     {
+        
+        $em = $this->getDoctrine()->getManager();
+        $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+        $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employee')->find($paramFetcher->get('idEmployee'));
+        $entities = array();
+        $eps = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity')->find($paramFetcher->get('eps'));
+        array_push($entities, $eps);
+        $cc = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity')->find($paramFetcher->get('cc'));
+        array_push($entities, $cc);
+        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+        $tempBDep = $depRepo->find($paramFetcher->get('department'));
+        $tempBCity = $cityRepo->find($paramFetcher->get('city'));
+        $person = new Person();
+        $person->setNames($paramFetcher->get("names"));
+        $person->setLastName1($paramFetcher->get("lastName1"));
+        $person->setLastName2($paramFetcher->get("lastName2"));
+        $datetime = new DateTime();
+        $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
+        $person->setBirthDate($datetime);
+        $person->setCivilStatus($paramFetcher->get("civilStatus"));
+        $person->setMainAddress($paramFetcher->get("mainAddress"));
+        $person->setDepartment($tempBDep);
+        $person->setCity($tempBCity);
+        $beneficiary = new Beneficiary();
+        $beneficiary->setDisability($paramFetcher->get('disability'));
+        $beneficiary->setPersonPerson($person);
+        foreach ($entities as $ent) {
+            $employeeHasBeneficiary = new employeeHasBeneficiary();
+            $employeeHasBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+            $employeeHasBeneficiary->setEmployeeEmployee($employee);
+            $employeeHasBeneficiary->setEntityEntity($ent);
+            $employeeHasBeneficiary->setRelation($paramFetcher->get('relation'));
+            $em->persist($beneficiary);
+            $em->persist($person);
+            $em->persist($employeeHasBeneficiary);
+            $em->flush();
+        }
 
+        $view = View::create();
+        $view->setStatusCode(200);
+
+        return $view;
     }
 
     /**

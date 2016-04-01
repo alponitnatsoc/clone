@@ -482,8 +482,8 @@ class EmployeeController extends Controller
                 $entidades["CC"] = $entity->getEntityEntity();
             }
         }
-        $beneficiary = new Beneficiary();
-        $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
+        $person = new Person();
+        $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $person);
         return $this->render(
             'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
             'employee' => $employee,
