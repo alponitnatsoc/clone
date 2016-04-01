@@ -61,6 +61,30 @@ class DataCreditoRestController extends FOSRestController
         }
     }
 
+public function fixArrayLocalizacion($array, &$new_array) {
+    foreach($array as $key => $val) {
+        if($key == '@attributes') {
+            // Conta is in case the field is called @attribute.
+            $conta = 2;
+            foreach($val as $i => $j) {
+              if($i != '@attributes')
+                $new_array[$i] = $j;
+              else
+                $new_array[$conta] = $j;
+              $conta ++;
+            }
+            } else {
+            if(is_array($val)){
+              $temp = array();
+              $this->fixArrayLocalizacion($val, $temp);
+              $new_array[$key] = $temp;
+            }else{
+              $new_array[$key] = $val;
+            }
+        }
+    }
+}
+
     /**
      * Calls the payments api, it receives the headers and the parameters and
      * makes a call using an absolute path, and returns a view with the Json or
@@ -99,12 +123,14 @@ class DataCreditoRestController extends FOSRestController
         //$args = array('datosValidacion' => $request, 'paramProducto'=>'2940', 'producto'=>'007', 'canal'=>'001');
 
         $res = $client->consultarDatosLocalizacion2($request);
-
+        //die($res);
         // Transform xml to array in the next 4 lines.
         $xml = simplexml_load_string($res, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
-        $array = json_decode($json,TRUE);
-        $array = $array["@attributes"];
+        $array2 = json_decode($json,TRUE);
+        //$array = $array["@attributes"];
+        $array = array();
+        $this->fixArrayLocalizacion($array2, $array);
 
         $view = View::create();
         $errorCode = 200;
@@ -154,7 +180,7 @@ class DataCreditoRestController extends FOSRestController
     * @param Maximum number of seconds before giving up $timeout
     * @return View with the json response from the payments server.
     */
-   public function callApiIdentificacion($parameters, $path, $methodName,$request,$timeout = 10)
+   public function callApiIdentificacion($parameters, $path, $methodName,$request,$differentCall=false,$timeout = 10)
    {
        ini_set("soap.wsdl_cache_enabled", 1);
        $opts = array(
@@ -177,8 +203,11 @@ class DataCreditoRestController extends FOSRestController
        $paramProducto = '2940';
        $producto = '007';
        $canal = '001';
-
-       $res = $client->__soapCall($methodName, array($paramProducto, $producto, $canal, $request));
+       $res=null;
+       if(!$differentCall)
+         $res = $client->__soapCall($methodName, array($paramProducto, $producto, $canal, $request));
+       else
+         $res = $client->__soapCall($methodName, array($producto, $paramProducto, $request));
 
        // Transform xml to array in the next 3 lines.
        $xml = simplexml_load_string($res, "SimpleXMLElement", LIBXML_NOCDATA);
@@ -218,7 +247,9 @@ class DataCreditoRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $documentNumber The id of the client in the payments system.
+     * @param Int $documentNumber The document number of the client.
+     * @param String $documentNumber The document type of the client.
+     * @param Int $surname The last name of the client.
      *
      * @return View
      */
@@ -264,7 +295,8 @@ class DataCreditoRestController extends FOSRestController
 
     /**
      * Get the validation for the questions in the datacredito process.
-     * This process has to be called prior to the 
+     * This process has to be called prior to the get questions method to get
+     * the id.
      * Servicio identificacion<br/>
      *
      * @ApiDoc(
@@ -278,7 +310,10 @@ class DataCreditoRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $documentNumber The id of the client in the payments system.
+     * @param Int $documentNumber The document number of the client.
+     * @param String $identificationType The type of the document.
+     * @param String $surname The last name of the client.
+     * @param Int $names The first and middle name of the client.
      *
      * @return View
      */
@@ -348,7 +383,9 @@ class DataCreditoRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $documentNumber The id of the client in the payments system.
+     * @param Int $documentNumber The document number of the client.
+     * @param String $identificationType The type of the document.
+     * @param Int $registerValidation The id gotten on the validation method, in the field: regValidacion.
      *
      * @return View
      */
@@ -384,7 +421,6 @@ class DataCreditoRestController extends FOSRestController
         $regex['regValidacion'] = '[0-9]+';
         $mandatory['regValidacion'] = true;
 
-
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $request = '<?xml version="1.0" encoding="UTF-8"?>
@@ -394,6 +430,90 @@ class DataCreditoRestController extends FOSRestController
 
         /** @var View $responseView */
         $responseView = $this->callApiIdentificacion($parameters, "http://52.73.111.160:8080/idws2/services/ServicioIdentificacion", 'preguntas', $request);
+
+        return $responseView;
+    }
+
+
+    /**
+     * Verifies the answers to the questions, even though this is a get method,
+     * we are going to be using a request object instead of regular parameters,
+     * because it allows us to use arrays as parameters<br/>.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Verifies the answers to the questions, even though this
+     *                  is a get method, we are going to be using a request
+     *                  object instead of regular parameters, because it allows
+     *                  us to use arrays as parameters.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="documentNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the client.")
+     * (name="documentType", nullable=false, requirements="(cc|CC|nit|NIT|1|2|3|4)", strict=true, description="Document type of the client.")
+     * (name="idQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner, it is returned in the questions method in the field: id.")
+     * (name="regQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner regitery, it is returned int he questions method in the field: registro.")
+     * (name="answers", nullable=false, requirements="", strict=true, description="This is an array containing the answers to the questions it must be in the form:
+     *                                                                             ["id_question"=>"id_answer"].")
+     *
+     * @return View
+     */
+    public function getClientIdentificationServiceExperianVerifyPreguntasAction(Request $request)
+    {
+        $parameters = array();
+        $regex = array();
+        $mandatory = array();
+        $parameters = $request->query->all();
+
+        // Set all the parameters info.
+        $regex['documentNumber'] = '([0-9|-]| )+';
+        $mandatory['documentNumber'] = true;
+        $regex['documentType'] = '(cc|CC|nit|NIT|1|2|3|4)';
+        $mandatory['documentType'] = true;
+        $regex['idQuestions'] = '[0-9]+';
+        $mandatory['idQuestions'] = true;
+        $regex['regQuestions'] = '[0-9]+';
+        $mandatory['regQuestions'] = true;
+        $mandatory['answers'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        // Adapt the document type to our standars.
+        if($parameters['documentType'] == "cc" ||
+           $parameters['documentType'] == "CC" ) {
+             $parameters['documentType'] = 1;
+        }
+        if($parameters['documentType'] == "nit" ||
+          $parameters['documentType'] == "NIT" ) {
+            $parameters['documentType'] = 2;
+        }
+        if($parameters['documentType'] == "ce" ||
+          $parameters['documentType'] == "CE" ) {
+            $parameters['documentType'] = 4;
+        }
+
+
+
+        $request = '<?xml version="1.0" encoding="UTF-8"?>
+        <Respuestas idCuestionario="' . $parameters['idQuestions'] .'" regCuestionario="' . $parameters['regQuestions']  . '">
+        <Identificacion numero="' . $parameters['documentNumber'] .'" tipo="' . $parameters['documentType'] . '" />';
+
+        // We add all the answers and questions to the xml.
+        foreach($parameters['answers'] as $key=>$value) {
+          $request .= '<Respuesta idPregunta="' . $key . '" idRespuesta="' . $value . '" />';
+        }
+        $request .= '</Respuestas>';
+        //die(print_r($request));
+        /** @var View $responseView */
+        $responseView = $this->callApiIdentificacion($parameters, "http://52.73.111.160:8080/idws2/services/ServicioIdentificacion", 'verificar', $request, true);
 
         return $responseView;
     }
