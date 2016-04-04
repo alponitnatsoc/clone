@@ -996,27 +996,17 @@ class EmployeeRestController extends FOSRestController
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         $flag = false;
-        $save = $this->saveMatrixChooseSubmitStep1($paramFetcher);
-        if ($save->getData('response')['response']['message'] == 'added') {
-            $save2 = $this->saveMatrixChooseSubmitStep2($paramFetcher);
-            if ($save2->getData('response')['response']['message'] == 'added') {
-                $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
-                if ($save3->getData('response')['response']['message'] == 'added') {
-                    /** @var User $user */
-                    $user = $this->getUser();
-                    $user->setStatus(2);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($user);
-                    $em->flush();
-                    $flag = true;
-                } else {
-                    return $save3;
-                }
-            } else {
-                return $save2;
-            }
+        $save3 = $this->saveMatrixChooseSubmitStep3($paramFetcher);
+        if ($save3->getData('response')['response']['message'] == 'added') {
+            /** @var User $user */
+            $user = $this->getUser();
+            $user->setStatus(2);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $flag = true;
         } else {
-            return $save;
+            return $save3;
         }
 
         if ($flag) {
