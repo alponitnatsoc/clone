@@ -86,6 +86,10 @@ payroll_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRest"
     name_prefix: api_plublic_
+pila_csv_services:
+    type: rest
+    resource: "RocketSellerTwoPickBundle:PilaPlainTextRest"
+    name_prefix: api_plublic_
 payroll_services_test:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRestTest"
@@ -114,4 +118,3 @@ subscription_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:SubscriptionRest"
     name_prefix: api_public_
-
