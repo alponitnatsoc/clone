@@ -25,13 +25,12 @@ class SubscriptionController extends Controller
         $user = $this->getUser();
 
         $day = $this->getDaysSince($user->getLastPayDate(), date_create(date('Y-m-d')));
-        //echo $day->m;
-
-        $date = new \DateTime();
-        $date->add(new \DateInterval('P1M'));
-        $startDate = $date->format('Y-m-d');
 
         if (($day->d >= 28) || ($day->m >= 1)) {
+
+            $date = new \DateTime();
+            $date->add(new \DateInterval('P1M'));
+            $startDate = $date->format('Y-m-d');
 
             $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
                 'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
@@ -42,9 +41,6 @@ class SubscriptionController extends Controller
 
             $data = $this->getSubscriptionCost($user, false);
 
-
-            //dump($data);
-            //die;
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                         'employees' => $data['employees'],
                         'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
@@ -58,6 +54,10 @@ class SubscriptionController extends Controller
                         'startDate' => $startDate
             ));
         } else {
+
+            $date = new \DateTime(date_format($user->getLastPayDate(), "Y-m-d H:i:s"));
+            $date->add(new \DateInterval('P1M'));
+            $startDate = $date->format('Y-m-d');
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionNoPay.html.twig', array(
                         'user' => $user,
@@ -73,7 +73,6 @@ class SubscriptionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
-
 
             $user = $this->getUser();
             $person = $user->getPersonPerson();
