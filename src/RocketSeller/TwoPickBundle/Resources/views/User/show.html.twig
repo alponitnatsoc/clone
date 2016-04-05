@@ -10,9 +10,12 @@
             <li class="active">
                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#basicDataTab">Datos básicos</a>
             </li>
-            <li>
-                <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#passwordTab">Cambiar contraseña</a>
-            </li>
+            {% if flag ==true %}
+                <li>
+                    <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#passwordTab">Cambiar contraseña</a>
+                </li>
+            {% endif %}
+
             <li>
                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#facturacionTab">Resumen de facturación</a>
             </li>
@@ -39,16 +42,16 @@
                 </div>
                 {{ form_end(form) }}
             </div>
-            <div id="passwordTab" class="tab-pane fade in">
-                <div class="col-sm-12 col-xs-12 center">
-                    {% if flag ==true %}
-{#                         <a class="notAjax button btn btn-default" href="/profile/change-password">Cambiar contraseña</a>#}
-                        {{ render(controller('RocketSellerTwoPickBundle:ChangePassword:changePassword')) }}
-                    {% else %}
-                        <h2>Tu te acedes con una red social</h2>
-                    {% endif %}
+            {% if flag ==true %}
+                <div id="passwordTab" class="tab-pane fade in">
+                    <div class="col-sm-12 col-xs-12 center">
+    {#                         <a class="notAjax button btn btn-default" href="/profile/change-password">Cambiar contraseña</a>#}
+                            {{ render(controller('RocketSellerTwoPickBundle:ChangePassword:changePassword')) }}
+                            <h2>Tu te acedes con una red social</h2>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
+
             <div id="facturacionTab" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12">
                     <h3>Facturación</h3>
