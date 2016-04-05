@@ -50,11 +50,11 @@ class PilaPlainTextRestController extends FOSRestController
     }
 
     /**
-     * Get the balance of a client.(6.1)<br/>
+     * Get the csv file to register the employer in the pila.<br/>
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Get the balance of a client.",
+     *   description = "Get the csv file to register the employer in the pila.",
      *   statusCodes = {
      *     200 = "OK",
      *     400 = "Bad Request",
@@ -64,9 +64,8 @@ class PilaPlainTextRestController extends FOSRestController
      * )
      *
      * @param Int $documentNumber The id of the client in the payments system.
-     * @param Int $beneficiaryId The id of the beneficiary of the client.
      *
-     * @return View
+     * @return String
      */
     public function getPlainTextCsvAction($documentNumber)
     {
@@ -128,8 +127,185 @@ class PilaPlainTextRestController extends FOSRestController
       $res .= ',';
       $res .= 'S'; // Doesn't pay parafiscales.
       die($res);
+
+      return $res;
     }
 
+    public function getSalary($document)
+    {
+        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var $ehEs EmployerHasEmployee */
+        $ehEs = $personRepo->findOneBy(array('idEmployerHasEmployee' => $document));
+        if ($ehEs == null)
+            return 0;
+        if ($ehEs->getState() == 1) {
+            $contracts = $ehEs->getContracts();
+            /** @var $contract Contract */
+            foreach ($contracts as $contract) {
+                if ($contract->getState() == 1) {
+                    return $contract->getSalary();
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public function aporta($employee) {
+      $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
+      /** @var $NoveltyType NoveltyType  */
+      $ehe = $eheRepository->findBy(array('employeeEmployee' => $employee));
+      foreach($ehe as $i) {
+        $entity = $i->getEntityEntity();
+        // If is AFP and doesn't pay.
+        if($entity->getIdEntity() == 3 && $entity->getPayrollCode() == 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    public function codigoEntidad($employee, $entity_code) {
+        $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
+        /** @var $NoveltyType NoveltyType  */
+        $ehe = $eheRepository->findBy(array('employeeEmployee' => $employee));
+        foreach($ehe as $i) {
+          $entity = $i->getEntityEntity();
+          // If is AFP and doesn't pay.
+          if($entity->getEntityTypeEntityType()->getIdEntityType() == $entity_code) {
+            return $entity->getPilaCode();
+          }
+        }
+        return false;
+    }
+
+    public function codigoEntidadEmployer($employer, $entity_code) {
+        $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEntity");
+        /** @var $NoveltyType NoveltyType  */
+        $ehe = $eheRepository->findBy(array('employerEmployer' => $employer));
+        foreach($ehe as $i) {
+          $entity = $i->getEntityEntity();
+          // If is AFP and doesn't pay.
+          if($entity->getEntityTypeEntityType()->getIdEntityType() == $entity_code) {
+            return $entity->getPilaCode();
+          }
+        }
+        return false;
+    }
+
+    public function coverageCode($employee) {
+        $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
+        /** @var $NoveltyType NoveltyType  */
+        $ehe = $personRepo->findBy(array('employee_id_employee' => $employee));
+        foreach($ehe as $i) {
+          $entity = $i->getEntityEntity();
+          // If is AFP and doesn't pay.
+          if($entity->getIdEntity() == $entity) {
+            return $entity->getPilaCode();
+          }
+        }
+        return false;
+    }
+
+    public function getArlCode($document)
+    {
+        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var $ehEs EmployerHasEmployee */
+        $ehEs = $personRepo->findOneBy(array('idEmployerHasEmployee' => $document));
+        if ($ehEs == null)
+            return '';
+        if ($ehEs->getState() == 1) {
+            $contracts = $ehEs->getContracts();
+            /** @var $contract Contract */
+            foreach ($contracts as $contract) {
+                if ($contract->getState() == 1) {
+                    return $contract->getPositionPosition()->getPayrollCoverageCode();
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the csv file to register the employee_id in the pila.<br/>     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get the csv file to register the employee_id in the
+     *                  pila",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $documentNumber The id of the client in the payments system.
+     * @return String
+     */
+    public function getPlainTextCsvEmployeeAction($idEmployee)
+    {
+      $employeeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employee");
+      $employee = $employeeRepo->findOneBy(array('idEmployee' => $idEmployee));
+
+      $person = $employee->getPersonPerson();
+
+      $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+      $ehe = $eheRepo->findOneBy(array('employeeEmployee' => $idEmployee));
+      $idEmployerHasEmployee = $ehe->getIdEmployerHasEmployee();
+      $idEmployer = $ehe->getEmployerEmployer()->getIdEmployer();
+      $names = explode(' ', $person->getNames());
+      $nit = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
+
+      $res = '';
+      $res .= $nit;//Nit empleador.
+      $res .= ',';
+      $res .= $person->getDocumentType();
+      $res .= ',';
+      $res .= $person->getDocument();
+      $res .= ',';
+      $res .= $names[0];
+      $res .= ',';
+      $res .= count($names) > 1 ? $names[0] : ''; // In case of no middle name.
+      $res .= ',';
+      $res .= $person->getLastName1();
+      $res .= ',';
+      $res .= $person->getLastName2();
+      $res .= ',';
+      $res .= $this->getSalary($idEmployerHasEmployee);
+      $res .= ',';
+      $res .= $this->getSalary($idEmployerHasEmployee);
+      $res .= ',';
+      $res .= '02'; // Tipo cotizante.
+      $res .= ',';
+      $res .= $this->aporta($idEmployee) ? '00' : '04';
+      $res .= ',';
+      $res .= $person->getDepartment()->getName();
+      $res .= ',';
+      $res .= $person->getCity()->getName();
+      $res .= ',';
+      $res .= $this->codigoEntidad($idEmployee, 1) | ''; // 1 is eps.
+      $res .= ',';
+      $res .= $this->codigoEntidad($idEmployee, 3) | ''; // 3 is afp.
+      $res .= ',';
+      $res .= ''; // Work center, not needed.
+      $res .= ',';
+      $res .= ''; // AFP fee class.
+      $res .= ',';
+      $res .= $this->getArlCode($idEmployerHasEmployee);
+      $res .= ',';
+      $res .= $this->codigoEntidadEmployer($idEmployer, 4) | ''; // 4 is ccf.
+      $res .= ',';
+      $res .= '4%'; // Tarifa CCF.
+      $res .= ',,,,,,,'; // SENA, ICBF, live abroad and aditional UPC*3.
+      $res .= 'S'; // Exonerated parafiscales.
+      $res .= ',';
+      $res .= $this->codigoEntidadEmployer($idEmployer, 2) | ''; // 2 is arl.
+
+      die($res);
+      return $res;
+    }
 }
 
 ?>
