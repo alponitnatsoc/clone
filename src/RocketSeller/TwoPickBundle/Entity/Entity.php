@@ -64,6 +64,11 @@ class Entity
     private $payroll_code;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=TRUE)
+     */
+    private $pila_code;
+
+    /**
      * Set idEntity
      *
      * @param integer $idEntity
@@ -234,6 +239,31 @@ class Entity
     {
         return $this->payroll_code;
     }
+
+    /**
+     * Set pila code
+     *
+     * @param string $pila_code
+     *
+     * @return PayType
+     */
+    public function setPilaCode($pila_code)
+    {
+        $this->pila_code = $pila_code;
+
+        return $this;
+    }
+
+    /**
+     * Get pila code
+     *
+     * @return string
+     */
+    public function getPilaCode()
+    {
+        return $this->pila_code;
+    }
+
 
     /**
      * Add action

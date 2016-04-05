@@ -48,7 +48,7 @@ class EmployeeController extends Controller
         $entities = $em->getRepository('RocketSellerTwoPickBundle:Employee')->findAll();
 
         return $this->render('RocketSellerTwoPickBundle:Employee:index.html.twig', array(
-            'entities' => $entities,
+                    'entities' => $entities,
         ));
     }
 
@@ -67,7 +67,7 @@ class EmployeeController extends Controller
         }
 
         return $this->render('RocketSellerTwoPickBundle:Employee:show.html.twig', array(
-            'entity' => $entity,
+                    'entity' => $entity,
         ));
     }
 
@@ -109,13 +109,13 @@ class EmployeeController extends Controller
     {
         if (is_null($entity)) {
             $entities = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
-                ->findByEmployeeEmployee($employee);
+                    ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+                    ->findByEmployeeEmployee($employee);
             return $this->render(
-                'RocketSellerTwoPickBundle:Registration:addBeneficiarySelectEntity.html.twig', array(
-                    'entities' => $entities,
-                    'employee' => $employee
-                )
+                            'RocketSellerTwoPickBundle:Registration:addBeneficiarySelectEntity.html.twig', array(
+                        'entities' => $entities,
+                        'employee' => $employee
+                            )
             );
         } else {
             $beneficiary = new Beneficiary();
@@ -135,7 +135,7 @@ class EmployeeController extends Controller
                 return $this->redirectToRoute('show_dashboard');
             }
             return $this->render(
-                'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig', array('form' => $form->createView())
+                            'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig', array('form' => $form->createView())
             );
         }
     }
@@ -149,14 +149,14 @@ class EmployeeController extends Controller
     {
         if (is_null($beneficiary)) {
             $beneficiaries = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
-                ->findByEmployeeEmployee($employee);
+                    ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+                    ->findByEmployeeEmployee($employee);
 
             return $this->render(
-                'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig', array(
-                    'beneficiaries' => $beneficiaries,
-                    'employee' => $employee
-                )
+                            'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig', array(
+                        'beneficiaries' => $beneficiaries,
+                        'employee' => $employee
+                            )
             );
         } else {
             $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $beneficiary);
@@ -173,7 +173,7 @@ class EmployeeController extends Controller
                 return $this->redirectToRoute('manage_employees');
             }
             return $this->render(
-                'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig', array('form' => $form->createView())
+                            'RocketSellerTwoPickBundle:Registration:addBeneficiary.html.twig', array('form' => $form->createView())
             );
         }
     }
@@ -204,10 +204,11 @@ class EmployeeController extends Controller
             'method' => 'POST',
         ));
 
-        return $this->render(
-            'RocketSellerTwoPickBundle:Registration:afiliation.html.twig', array(
-                'form' => $form->createView(),
-                'tab' => $tab)
+        return $this->render('RocketSellerTwoPickBundle:Registration:afiliation.html.twig', array(
+                    'form' => $form->createView(),
+                    'employer' => $employer,
+                    'employerHasEmployees' => $employerHasEmployees,
+                    'tab' => $tab)
         );
     }
 
@@ -255,15 +256,14 @@ class EmployeeController extends Controller
                         );
                         break;
                     }
-
                 }
 
                 $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
                 return $this->render(
-                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                    'employees' => $employeesData,
-                    'user' => $user,
-                    'registerState' => $registerState
+                                'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                            'employees' => $employeesData,
+                            'user' => $user,
+                            'registerState' => $registerState
                 ));
             } else {
                 return $this->redirectToRoute('ajax');
@@ -311,8 +311,8 @@ class EmployeeController extends Controller
             if ($employee == null || !$flag) {
                 $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 return $this->render(
-                    'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
-                    'employees' => $employeesData));
+                                'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
+                            'employees' => $employeesData));
             }
         }
         $userWorkplaces = $user->getPersonPerson()->getEmployer()->getWorkplaces();
@@ -340,8 +340,8 @@ class EmployeeController extends Controller
                 $pensions = $entityType->getEntities();
             }
         }
-        $timeCommitments=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces,$eps,$pensions,$timeCommitments), $employee, array(
+        $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions, $timeCommitments), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
@@ -352,7 +352,7 @@ class EmployeeController extends Controller
         } else {
             $employeeForm->get('beneficiaries')->setData('-1');
         }
-        if ($eHEEntities&&$eHEEntities->count() != 0) {
+        if ($eHEEntities && $eHEEntities->count() != 0) {
             /** @var EmployeeHasEntity $enti */
             foreach ($eHEEntities as $enti) {
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
@@ -400,9 +400,9 @@ class EmployeeController extends Controller
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
         return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
-            'form' => $form->createView(),
-            'tab' => $tab,
-            'choices' => $choices
+                    'form' => $form->createView(),
+                    'tab' => $tab,
+                    'choices' => $choices
         ));
     }
 
@@ -432,8 +432,8 @@ class EmployeeController extends Controller
             $form = $this->createForm(new PayMethod($fields), $contract->getPayMethodPayMethod());
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
-                'payType' => $payType)
+                        'RocketSellerTwoPickBundle:Registration:payTypeFormRender.html.twig', array('form' => $form->createView(),
+                    'payType' => $payType)
         );
     }
 
@@ -444,14 +444,14 @@ class EmployeeController extends Controller
 
         $employer = $this->loadClassByArray(array('personPerson' => $person), 'Employer');
         $employee = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Employee')
-            ->find($id);
+                ->getRepository('RocketSellerTwoPickBundle:Employee')
+                ->find($id);
         $entities = $employee->getEntities();
         $entitiesEmployer = $employer->getEntities();
         $employerHasEmployee = $this->loadClassByArray(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $employee,
-        ), 'EmployerHasEmployee'
+                ), 'EmployerHasEmployee'
         );
         $documentType = $this->loadClassByArray(array('name' => 'Contrato'), 'DocumentType');
         $contracts = $employerHasEmployee->getContracts();
@@ -485,13 +485,13 @@ class EmployeeController extends Controller
         $person = new Person();
         $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $person);
         return $this->render(
-            'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
-            'employee' => $employee,
-            'employerHasEmployee' => $employerHasEmployee,
-            'contract' => $activeContract,
-            'contractEmployee' => $contractEmployee,
-            'entidades' => $entidades,
-            'form' => $form->createView()
+                        'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
+                    'employee' => $employee,
+                    'employerHasEmployee' => $employerHasEmployee,
+                    'contract' => $activeContract,
+                    'contractEmployee' => $contractEmployee,
+                    'entidades' => $entidades,
+                    'form' => $form->createView()
         ));
     }
 
@@ -502,22 +502,22 @@ class EmployeeController extends Controller
     public function showBeneficiaryAction($id)
     {
         $employee = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Employee')
-            ->find($id);
+                ->getRepository('RocketSellerTwoPickBundle:Employee')
+                ->find($id);
         if ($employee) {
             $beneficiaries = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
-                ->findByEmployeeEmployee($employee);
+                    ->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
+                    ->findByEmployeeEmployee($employee);
             if ($beneficiaries) {
                 return $this->render(
-                    'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig', array('beneficiaries' => $beneficiaries,
-                    'employee' => $employee
+                                'RocketSellerTwoPickBundle:Employee:employeeBeneficiary.html.twig', array('beneficiaries' => $beneficiaries,
+                            'employee' => $employee
                 ));
             } else {
                 throw $this->createNotFoundException('Unable to find Beneficiaries.');
             }
         } else {
-
+            
         }
     }
 
@@ -547,7 +547,7 @@ class EmployeeController extends Controller
                 $twilio = $this->get('twilio.api');
 
                 $twilio->account->messages->sendMessage(
-                    "+19562671001", "+57" . $cellphone, "Hola este es tu codigo de autenticación: " . $code
+                        "+19562671001", "+57" . $cellphone, "Hola este es tu codigo de autenticación: " . $code
                 );
                 $em->flush($employee);
                 return $this->render('RocketSellerTwoPickBundle:Employee:loginEmployee2.html.twig', array('employee' => $employee, 'sendPhone' => $sendPhone)
@@ -593,7 +593,7 @@ class EmployeeController extends Controller
             return $this->redirectToRoute('employee_dashboard', array('id' => $employee->getIdEmployee()));
         }
         return $this->render(
-            'RocketSellerTwoPickBundle:Employee:editProfile.html.twig', array('form' => $form->createView())
+                        'RocketSellerTwoPickBundle:Employee:editProfile.html.twig', array('form' => $form->createView())
         );
     }
 
@@ -609,7 +609,7 @@ class EmployeeController extends Controller
             $send = $smailer->sendEmail($this->getUser(), "FOSUserBundle:Invitation:email.txt.twig", "from.email@com.co", $toEmail);
         } else {
             return $this->render(
-                'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig', array('employee' => $employee));
+                            'RocketSellerTwoPickBundle:Employee:shareProfile.html.twig', array('employee' => $employee));
         }
     }
 
@@ -623,7 +623,7 @@ class EmployeeController extends Controller
             $employerHasEmployee = $this->loadClassByArray(array(
                 'employeeEmployee' => $employee,
                 'employerEmployer' => $employer
-            ), 'employerHasEmployee');
+                    ), 'employerHasEmployee');
             $contratos = $employerHasEmployee->getContracts();
             if ($contratos) {
                 foreach ($contratos as $contrato) {
@@ -635,11 +635,11 @@ class EmployeeController extends Controller
                             'contract' => $contract
                         ));
                         return new Response(
-                            $this->get('knp_snappy.pdf')->getOutputFromHtml($html), 200, array(
-                                'Content-Type' => 'application/pdf',
-                                'Content-Disposition' => 'attachment;
+                                $this->get('knp_snappy.pdf')->getOutputFromHtml($html), 200, array(
+                            'Content-Type' => 'application/pdf',
+                            'Content-Disposition' => 'attachment;
 filename = "certificadoLaboral.pdf"'
-                            )
+                                )
                         );
                     }
                 }
@@ -649,7 +649,7 @@ filename = "certificadoLaboral.pdf"'
             }
         } else {
             return $this->render(
-                'RocketSellerTwoPickBundle:Employee:certificate.html.twig', array('employee' => $employee));
+                            'RocketSellerTwoPickBundle:Employee:certificate.html.twig', array('employee' => $employee));
         }
     }
 
@@ -670,16 +670,16 @@ filename = "certificadoLaboral.pdf"'
     public function loadClassByArray($array, $entity)
     {
         $loadedClass = $this->getdoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:' . $entity)
-            ->findOneBy($array);
+                ->getRepository('RocketSellerTwoPickBundle:' . $entity)
+                ->findOneBy($array);
         return $loadedClass;
     }
 
     public function loadClassById($parameter, $entity)
     {
         $loadedClass = $this->getdoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:' . $entity)
-            ->find($parameter);
+                ->getRepository('RocketSellerTwoPickBundle:' . $entity)
+                ->find($parameter);
         return $loadedClass;
     }
 
@@ -693,12 +693,12 @@ filename = "certificadoLaboral.pdf"'
         $result = array();
         $em = $this->getDoctrine()->getManager();
         $employee = $em->getRepository('RocketSellerTwoPickBundle:Employee')
-            ->find($employee);
+                ->find($employee);
         $employeeHasBeneficiaries = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')
-            ->findByEmployeeEmployee($employee);
+                ->findByEmployeeEmployee($employee);
         foreach ($employeeHasBeneficiaries as $employeeHasBeneficiary) {
             $entitiesDocuments = $em->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
-                ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
+                    ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
             foreach ($entitiesDocuments as $document) {
                 array_push($documentTypeByEntity, $document);
                 array_push($documentTypeAll, $document);
@@ -723,7 +723,7 @@ filename = "certificadoLaboral.pdf"'
             $person = $beneficiary->getPersonPerson();
             $em = $this->getDoctrine()->getManager();
             $documents = $em->getRepository('RocketSellerTwoPickBundle:Document')
-                ->findByPersonPerson($person);
+                    ->findByPersonPerson($person);
             foreach ($documents as $document) {
                 array_push($docs, $document->getDocumentTypeDocumentType());
             }
@@ -777,7 +777,7 @@ filename = "certificadoLaboral.pdf"'
         $benefDocs = array();
         $em = $this->getDoctrine()->getManager();
         $entitiesHasDocumentType = $em->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
-            ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
+                ->findByEntityEntity($employeeHasBeneficiary->getEntityEntity());
         foreach ($entitiesHasDocumentType as $entityHasDocumentType) {
             array_push($benefDocs, $entityHasDocumentType->getDocumentTypeDocumentType());
         }
@@ -814,21 +814,21 @@ filename = "certificadoLaboral.pdf"'
         $keys = array();
         $documentsPerEmployee = array();
         $person = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Person')
-            ->find($id);
+                ->getRepository('RocketSellerTwoPickBundle:Person')
+                ->find($id);
         $documentsEmployee = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Document')
-            ->findByPersonPerson($person);
+                ->getRepository('RocketSellerTwoPickBundle:Document')
+                ->findByPersonPerson($person);
         $employee = $this->loadClassByArray(array('personPerson' => $person), 'Employee');
         $employeeHasEntities = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
-            ->findByEmployeeEmployee($employee);
+                ->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity')
+                ->findByEmployeeEmployee($employee);
         $documentTypeByEmployee = array();
         foreach ($employeeHasEntities as $employeeHasEntity) {
             $entity = $employeeHasEntity->getEntityEntity();
             $entityHasDocumentsType = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
-                ->findByEntityEntity($entity);
+                    ->getRepository('RocketSellerTwoPickBundle:EntityHasDocumentType')
+                    ->findByEntityEntity($entity);
             foreach ($entityHasDocumentsType as $entityHasDocumentType) {
                 array_push($documentTypeByEmployee, $entityHasDocumentType->getDocumentTypeDocumentType());
             }
@@ -868,13 +868,13 @@ filename = "certificadoLaboral.pdf"'
         }
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
-            ->setMethod('POST')
-            ->add('create', 'submit', array('label' => 'Crear Cuenta Daviplata'))
-            ->add("cellphone", "number", array('label' => "Numero Celular"))
-            ->add('save', 'submit', array('label' => 'Guardar Daviplata'))
-            ->add('discard', 'submit', array('label' => 'Descartar notificación'))
-            ->getForm();
+                ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
+                ->setMethod('POST')
+                ->add('create', 'submit', array('label' => 'Crear Cuenta Daviplata'))
+                ->add("cellphone", "number", array('label' => "Numero Celular"))
+                ->add('save', 'submit', array('label' => 'Guardar Daviplata'))
+                ->add('discard', 'submit', array('label' => 'Descartar notificación'))
+                ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
 
@@ -896,19 +896,16 @@ filename = "certificadoLaboral.pdf"'
                 $em->persist($paym);
                 $em->flush();
 
-                return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig',
-                    array('form' => $form->createView())
+                return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
                 );
             }
             if ($form->get("create")->isClicked()) {
-                return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig',
-                    array('form' => $form->createView())
+                return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
                 );
             }
         }
 
-        return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig',
-            array('form' => $form->createView())
+        return $this->render('RocketSellerTwoPickBundle:Daviplata:daviplata.html.twig', array('form' => $form->createView())
         );
     }
 
