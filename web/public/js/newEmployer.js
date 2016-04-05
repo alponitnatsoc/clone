@@ -68,17 +68,21 @@ function startEmployer() {
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
-    var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
+    var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar otra caja de compensación</span></a>');
     var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
+    var $newLinkSeveranceLi = $('<li class="col-md-12 text-center" id="addSeverance"></li>').append($addSeveranceLink);
     var $collectionHolder;
     $collectionHolderPhones = $('ul.phones');
+    var $collectionHolderSeverances = $('ul.severances');
     $collectionHolder = $('ul.workplaces');
 
     $collectionHolder.find('li').each(function () {
         addTagFormDeleteLink($(this), "lugar de trabajo");
     });
     $collectionHolder.append($newLinkLi);
+    $collectionHolderSeverances.append($newLinkSeveranceLi);
     $collectionHolder.data('index', ($collectionHolder.find(':input').length) / 5);
+    $collectionHolderSeverances.data('index', ($collectionHolderSeverances.find(':input').length) / 3);
 
     $addPhoneLink.on('click', function (e) {
         // prevent the link from creating a "#" on the URL
@@ -109,6 +113,11 @@ function startEmployer() {
 
         });
     });
+    $addSeveranceLink.on('click', function (e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        addSeveranceForm($collectionHolderSeverances, $newLinkSeveranceLi);
+    });
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
@@ -121,11 +130,27 @@ function startEmployer() {
         e.preventDefault();
         var form = $("form");
 
-        var severances = $(form).find("#register_employer_severances");
+        var severances = [];
         var arl = $(form).find("#register_employer_arl");
-        var severancesAC = $(form).find("#register_employer_severancesAC");
         var arlAC = $(form).find("#register_employer_arlAC");
-        if (!(validator.element(severances) && validator.element(arl) && validator.element(severancesAC) && validator.element(arlAC))) {
+        var i = 0;
+        var flagValid = true;
+        $(form).find("input[name*='register_employer[severances]']").not("[type='hidden']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+            }
+        });
+        i = 0;
+        $(form).find("select[name*='register_employer[severances]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+            }
+            severances[i++] = $(this).val();
+        });
+        if (!flagValid) {
+            return;
+        }
+        if (!( validator.element(arl)  && validator.element(arlAC))) {
             return;
         }
         $('#createdModal').modal('toggle');
@@ -133,7 +158,7 @@ function startEmployer() {
             url: $(this).attr('href'),
             type: 'POST',
             data: {
-                severances: 			severances.val(),
+                severances: 			severances,
                 arl: 					arl.val(),
                 economicalActivity: 	$(form).find("input[name='register_social_security[economicalActivity]']").val(),
             }
@@ -515,6 +540,27 @@ function addPhoneForm($collectionHolderB, $newLinkLi) {
     $newLinkLi.before($newFormLi);
     $(newForm).find("select");
 }
+function addSeveranceForm($collectionHolderB, $newLinkLi) {
+    var prototype = $collectionHolderB.data('prototype');
+    var index = $collectionHolderB.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $collectionHolderB.data('index', index + 1);
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+    var dataSev=[];
+    $(newForm).find("select").find("> option").each(function() {
+        dataSev.push({'label':this.text,'value':this.value});
+    });
+    var $actualInsertion=$newLinkLi.prev().find("input[name*='register_employer[severances]']").not("[type='hidden']");
+    console.log($actualInsertion);
+    addAutoComplete($actualInsertion, dataSev);
+    $actualInsertion.rules("add", {
+        required: true,
+        messages: {
+            required: "Por favor seleccione una opción"
+        }
+    });
+}
 function addTagFormDeleteLink($tagFormLi, $tipo) {
     var $removeFormA = $('<a href="#" class="col-sm-5 col-xs-8 remove_phone_link" style="padding:10px;color:#fd5c5c;text-decoration: none;"><i class="fa fa-minus-circle " style="color:#fd5c5c;max-width: 30px;"></i> Eliminar esta dirección de trabajo</a>');
     $tagFormLi.append($removeFormA);
@@ -547,67 +593,44 @@ function checkExistance(){
         //show the other stuf
     });
 }
+function addAutoComplete(autoTo, data){
+    $(autoTo).autocomplete({
+        source: function(request, response) {
+            var results = $.ui.autocomplete.filter(data, request.term);
+
+            response(results.slice(0, 5));
+        },                minLength: 0,
+        select: function(event, ui) {
+            event.preventDefault();
+            $(this).val(ui.item.label);
+            $($(this).parent()).parent().find("select").val(ui.item.value);
+        },
+        focus: function(event, ui) {
+            event.preventDefault();
+            $(this).val(ui.item.label);
+
+        }
+    });
+    $(autoTo).on("focus",function () {
+        $(autoTo).autocomplete("search", $(autoTo).val());
+    });
+}
 function initEntitiesEmployerFields(){
     var dataSev=[];
-    $("#register_employer_severances").find("> option").each(function() {
+    $("#register_employer_severances_0_severances").find("> option").each(function() {
         dataSev.push({'label':this.text,'value':this.value});
     });
     $(".autocomS").each(function () {
-        var autoTo=$(this);
-        $(this).autocomplete({
-            source: function(request, response) {
-                var results = $.ui.autocomplete.filter(dataSev, request.term);
-
-                response(results.slice(0, 5));
-            },                minLength: 0,
-            select: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
-            },
-            focus: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-
-            }
-        });
-        $(this).on("focus",function () {
-            $(autoTo).autocomplete("search", $(autoTo).val());
-        });
-
+        addAutoComplete($(this), dataSev);
     });
     var dataArl=[];
     $("#register_employer_arl").find("> option").each(function() {
         dataArl.push({'label':this.text,'value':this.value});
     });
     $(".autocomA").each(function () {
-        var autoTo=$(this);
-        $(this).autocomplete({
-            source: function(request, response) {
-                var results = $.ui.autocomplete.filter(dataArl, request.term);
-
-                response(results.slice(0, 5));
-            },
-            minLength: 0,
-            select: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
-            },
-            focus: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-
-            }
-        });
-        $(this).on("focus",function () {
-            $(autoTo).autocomplete("search", $(autoTo).val());
-        });
-
+        addAutoComplete($(this),dataArl);
     });
-    var severances = $("#register_employer_severances");
     var arl = $("#register_employer_arl");
-    $("#register_employer_severancesAC").val($(severances).children("option:selected").text());
     $("#register_employer_arlAC").val($(arl).children("option:selected").text());
 
 }

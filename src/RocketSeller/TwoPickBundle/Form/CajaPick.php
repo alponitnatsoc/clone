@@ -23,7 +23,7 @@ class CajaPick extends AbstractType
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
                 'placeholder'=>"",
-                'mapped' => false,
+                'property_path' => 'entityEntity',
                 'label'=>'Caja de Compensación Familiar*',
                 'required' => true
             ))

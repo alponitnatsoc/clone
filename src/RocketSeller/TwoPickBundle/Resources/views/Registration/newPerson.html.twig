@@ -312,7 +312,10 @@
                                     {% set aname = "" %}
                                 {% endif %}
                                 <div class="col-sm-12 form-group">
-                                    <ul class="severances" data-prototype="{{ form_widget(form.severances.vars.prototype)|e }}">
+                                    <ul class="severances" data-prototype="
+                        {% filter escape %}
+                            {{ include('RocketSellerTwoPickBundle:DataPrototypes:severancesPrototype.html.twig', { 'form': form.severances.vars.prototype|e }) }}
+                        {% endfilter %} "  style="list-style: none">
                                         {% for caja in form.severances %}
                                             {% if caja.vars.data.entityEntity.name is defined %}
                                                 {% set sname = caja.vars.data.entityEntity.name %}

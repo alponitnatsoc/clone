@@ -1,0 +1,6 @@
+{% set sname = "" %}
+{{ form_row(form.idEmployerHasEntity) }}
+<div class="hidden">
+    {{ form_row(form.severances) }}
+</div>
+{{ form_row(form.severancesAC,{'value' : sname}) }}

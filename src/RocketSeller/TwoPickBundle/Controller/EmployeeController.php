@@ -582,7 +582,7 @@ class EmployeeController extends Controller
         $employee = $this->loadClassByArray(array("personPerson" => $person), "Employee");
         if (!$person) {
             throw $this->createNotFoundException(
-                'No news found for id ' . $id
+                'No news found for id ' . $idPerson
             );
         }
         $form = $this->createForm(new EmployeeProfileEdit(), $person);

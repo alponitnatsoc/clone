@@ -977,14 +977,6 @@ class EmployeeRestController extends FOSRestController
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      *
-     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="employee type.")
-     * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
-     * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
-     * @RequestParam(name="economicalActivity", nullable=false, strict=true, description="employee type.")
-     * @RequestParam(array=true, name="idEmployerHasEmployee", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="pension", nullable=true, strict=true, description="benefits of the employee.")
-     * @RequestParam(array=true, name="wealth", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
      *
      * @return View
@@ -1296,7 +1288,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="severances", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(array=true, name="severances", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
      * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
      * @return View
@@ -1325,33 +1317,54 @@ class EmployeeRestController extends FOSRestController
         $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity')?:2435);
         /** @var Entity $realArl */
         $realArl = $entityRepo->find($paramFetcher->get('arl'));
-        /** @var Entity $realSeverances */
-        $realSeverances = $entityRepo->find($paramFetcher->get('severances'));
+        $realSeverances = new ArrayCollection();
+        $severances=$paramFetcher->get('severances');
+        foreach ($severances as $sever) {
+            $realSeverances->add($entityRepo->find($sever));
+        }
+
         if ($realSeverances == null || $realArl == null) {
             return $view->setData(array('error' => array('Entity' => 'Entities Not found')))->setStatusCode(404);
         }
         $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
 
-        if ($realEmployerEnt->count() == 0) {
-            $realArlHasEmployer = new EmployerHasEntity();
-            $realArlHasEmployer->setEntityEntity($realArl);
-            $realArlHasEmployer->setEmployerEmployer($realEmployer);
-            $realEmployer->addEntity($realArlHasEmployer);
-            $realSevereancesHasEmployer = new EmployerHasEntity();
-            $realSevereancesHasEmployer->setEntityEntity($realSeverances);
-            $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
-            $realEmployer->addEntity($realSevereancesHasEmployer);
-            $em->persist($realEmployer);
-            $em->flush();
-        } else {
+
+        if ($realEmployerEnt->count() < $realSeverances->count()+1) {
+            $counter=0;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "ARL") {
+                if($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="AFP"){
                     $rEE->setEntityEntity($realArl);
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "CC Familiar") {
-                    $rEE->setEntityEntity($realSeverances);
+                if($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="PARAFISCAL"){
+                    $rEE->setEntityEntity($realSeverances->get($counter));
+                    $counter++;
+                }
+            }
+            if($counter<$realSeverances->count()){
+                for($i=$counter;$i<$realSeverances->count();$i++){
+                    $realSevereancesHasEmployer = new EmployerHasEntity();
+                    $realSevereancesHasEmployer->setEntityEntity($realSeverances->get($i));
+                    $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
+                    $realEmployer->addEntity($realSevereancesHasEmployer);
+                }
+                $em->persist($realEmployer);
+                $em->flush();
+            }
+
+
+        } else {
+            $counter=0;
+            /** @var EmployerHasEntity $rEE */
+            foreach ($realEmployerEnt as $rEE) {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="AFP") {
+                    $rEE->setEntityEntity($realArl);
+                }
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="PARAFISCAL") {
+                    $rEE->setEntityEntity($realSeverances->get($counter));
+                    $counter++;
+
                 }
             }
             $em->persist($realEmployer);
