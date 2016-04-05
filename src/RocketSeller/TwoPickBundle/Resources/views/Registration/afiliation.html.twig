@@ -99,7 +99,6 @@
             <div class="tab-content">
                 <div id="docsMatrix" class="tab-pane fade in {%   if tab==3 %}active{% endif %}">
 
-
                     <div id='' class='col-xs-12'>
                         <div class="">
                             <div class="">
@@ -130,6 +129,9 @@
                     </div>
                 </div>
 
+                {% for employee in employerHasEmployees %}
+                    <input type="hidden" name="register_social_security[employerHasEmployees][]" value="{{employee.idEmployerHasEmployee}}"/>
+                {% endfor %}
 
             </div>
         </div>
@@ -140,29 +142,29 @@
     {{ parent() }}
     <script>
         $(document).ready(function () {
-            $(".upload-link").hover(function() {
-                    $(this).css('cursor','pointer');
-                }, function() {
-                    $(this).css('cursor','auto');
+            $(".upload-link").hover(function () {
+                $(this).css('cursor', 'pointer');
+            }, function () {
+                $(this).css('cursor', 'auto');
             });
-            $(".donwload-link").hover(function() {
-                    $(this).css('cursor','pointer');
-                }, function() {
-                    $(this).css('cursor','auto');
+            $(".donwload-link").hover(function () {
+                $(this).css('cursor', 'pointer');
+            }, function () {
+                $(this).css('cursor', 'auto');
             });
-            $(".upload-link").on('click',function(event){
+            $(".upload-link").on('click', function (event) {
                 event.preventDefault();
                 var uri = $(this).attr("href");
 
 //                 alert(uri);
                 $.ajax({
-                     //method: "POST",
-                     url: uri,
-                     //(data: $('form[name="pago_membresia"]').serialize(),
-                     beforeSend: function (xhr) {
+                    //method: "POST",
+                    url: uri,
+                    //(data: $('form[name="pago_membresia"]').serialize(),
+                    beforeSend: function (xhr) {
 
-                     }
-                 }).done(function (data) {
+                    }
+                }).done(function (data) {
                     //$("#modal-body").html(data);
                     $('#modal-body').html($(data).find('#cuerpoModal'));
                     $("#myModal").modal('show');
@@ -173,13 +175,13 @@
                     // Grab the files and set them to our variable
                     function prepareUpload(event)
                     {
-                      files = event.target.files;
+                        files = event.target.files;
                     }
-                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                     console.log(jqXHR);
-                     console.log(textStatus);
-                     console.log(errorThrown);
-                 });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                });
 
             });
 
