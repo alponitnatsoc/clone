@@ -19,7 +19,8 @@ use DateTime;
 //use GuzzleHttp\Psr7\Request;
 //use Guzzle\Http\Client;
 use GuzzleHttp\Client;
-use EightPoints\Bundle\GuzzleBundle;
+use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
+use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 
 /**
  * Contains all the web services to call the payroll system.
@@ -34,6 +35,8 @@ use EightPoints\Bundle\GuzzleBundle;
  */
 class PayrollRestController extends FOSRestController
 {
+    use LiquidationMethodsTrait;
+    use NoveltyTypeMethodsTrait;
 
     public function validateParamters($parameters, $regex, $mandatory)
     {
@@ -185,10 +188,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
-        //$url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
-        //TODO(daniel.serrano): Remove the mock URL.
-        // This URL is only for testing porpouses and should be removed.
+        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
 
         $response = null;
         $options = array(
@@ -2628,6 +2628,61 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
-}
 
-?>
+    /**
+     * Process to liquidate the payroll at the end of the month
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Process to liquidate the payroll at the end of the month",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @return View
+     */
+    public function getAutoLiquidatePayrollAction()
+    {
+        $view = View::create();
+        $format = array('_format' => 'json');
+
+        $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+        $month = date("m");
+        $payrolls = $payrollEntity->findBy(array("month" => $month));
+//         $result = count($payrolls);
+
+        /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
+        foreach($payrolls as $payroll) {
+            $pod = $payroll->getPurchaseOrdersDescription();
+
+            if (count($pod) == 0) {
+                $idEhE = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
+//                 Crear orden de compra
+//                 Liquidacion en SQL
+//                 $period = 4;
+//                 $response = $this->getGeneralPayrollAction($idEhE, $period);
+                $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+                        'employeeId' => $idEhE
+                    ),
+                    $format
+                );
+
+                $result = json_decode($response->getContent(), true);
+                $total[] = $this->totalLiquidation($result);
+                // Generar notificacion
+                // Enviar correo
+            }
+        }
+
+//         $result .= count($pod);
+
+        $view->setStatusCode(200);
+
+        $view->setData($total);
+        return $view;
+    }
+}
