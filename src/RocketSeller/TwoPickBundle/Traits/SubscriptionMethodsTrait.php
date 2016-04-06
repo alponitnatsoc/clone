@@ -243,9 +243,12 @@ trait SubscriptionMethodsTrait
 
     protected function getDaysSince($sinceDate, $toDate)
     {
-        $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));
-        $dEnd = new \DateTime(date_format($toDate, 'Y-m-d'));
-        $dDiff = $dStart->diff($dEnd);
+        $dDiff = true;
+        if ($sinceDate !== null && $toDate !== null) {
+            $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));
+            $dEnd = new \DateTime(date_format($toDate, 'Y-m-d'));
+            $dDiff = $dStart->diff($dEnd);
+        }
         return $dDiff;
     }
 

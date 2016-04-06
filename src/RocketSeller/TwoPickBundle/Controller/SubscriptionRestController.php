@@ -48,8 +48,7 @@ class SubscriptionRestController extends FOSRestController
     private function paySubscriptionUser(User $user)
     {
         $day = $this->getDaysSince($user->getLastPayDate(), date_create(date('Y-m-d')));
-        //echo $day->m;
-        if (($day->d >= 28) || ($day->m >= 1)) {
+        if ($day === true || ($day->d >= 28) || ($day->m >= 1)) {
             if ($this->createPurchaceOrder($user)) {
                 return true;
             }
