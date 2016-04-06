@@ -21,14 +21,14 @@ class PayrollController extends Controller
 
     /**
      * Crear Payroll para el contrato
-     * 
+     *
      * @param String $idContract
      * @param Boolean $deleteActivePayroll para indicar que se elimina el payroll activo
      * @param String $period
      * @param String $month
      * @param String $year
      * @return Payroll
-     * 
+     *
      */
     public function createPayrollToContractAction($idContract, $deleteActivePayroll = false, $period = null, $month = null, $year = null)
     {
@@ -330,7 +330,7 @@ class PayrollController extends Controller
     }
 
     /**
-     * 
+     *
      * @param type $total
      * @return PurchaseOrders
      */
@@ -352,7 +352,7 @@ class PayrollController extends Controller
     }
 
     /**
-     * 
+     *
      * @param type $dataNomina
      * @param type $dataTotales
      * @return PurchaseOrdersDescription
