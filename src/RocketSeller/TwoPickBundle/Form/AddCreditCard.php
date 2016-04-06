@@ -81,8 +81,34 @@ class AddCreditCard extends AbstractType
                         'title' => 'Tu nombre en la tarjeta de crédito'
                     ),
                     'required' => true
-        ));
-        /* ->add('save', 'submit', array(
+        ))
+        ->add('documentType', 'choice', array(
+                'choices' => array(
+                    'CC'   => 'Cédula de ciudadanía',
+                    'CE' => 'Cedula de extranjería',
+                    'TI' => 'Tarjeta de identidad'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'label' => 'Tipo de documento*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('document', 'text', array(
+                'label' => 'Número de documento*',
+                "attr" => array(
+                    "data-toggle" => "tooltip", 
+                    "data-placement" => "right",
+                    "data-container" => "body",
+                    "title" => "Texto de ayuda"
+                )
+            ))
+            ->add('phoneNumber', 'text', array(
+                    'label' => 'Telefono'
+                )
+                    
+                );
+         /*->add('save', 'submit', array(
           'label' => 'Continuar',
           'attr' => array(
           'class' => 'btn register-AS1 btn-symplifica'

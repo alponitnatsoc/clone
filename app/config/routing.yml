@@ -10,10 +10,14 @@ legal:
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:legal} 
 legal_assist:
     path:      /legal-assist
-    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:index } 
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:index }
+legal_payment:
+    path:      /legal-payment
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPayment } 
 change_flag:
     path:      /change-flag
     defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:changeFlag} 
+
 
 registration_confirmed_start:
     path:      /registration/confirmed/start
