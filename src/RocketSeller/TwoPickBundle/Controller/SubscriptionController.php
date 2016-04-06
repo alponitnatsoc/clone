@@ -26,7 +26,7 @@ class SubscriptionController extends Controller
 
         $day = $this->getDaysSince($user->getLastPayDate(), date_create(date('Y-m-d')));
 
-        if (($day->d >= 28) || ($day->m >= 1)) {
+        if ($day === true || ($day->d >= 28) || ($day->m >= 1)) {
 
             $date = new \DateTime();
             $date->add(new \DateInterval('P1M'));
