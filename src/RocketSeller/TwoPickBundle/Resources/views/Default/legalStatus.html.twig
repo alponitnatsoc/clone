@@ -30,7 +30,7 @@
 			</form>
     		<div class="col-sm-12"> 
 				<div class="col-sm-6" style="text-align: right;">
-					<a class="btn btn-orange notAjax" href="/welcome">Anterior</a>
+					<span class="btn btn-orange notAjax" href="/welcome">Anterior</span>
 				</div>
 				<div class="col-sm-6">
 					<span class="btn btn-orange notAjax" href="" onclick="done()">Continuar</span>
@@ -41,6 +41,7 @@
 	</div>
 {% endblock %}
 {% block javascripts %}
+    {{ parent() }}
 	<script>
 	var flag = true;
 	function validate() {
