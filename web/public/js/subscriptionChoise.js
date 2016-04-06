@@ -222,7 +222,11 @@ function startSubscriptionChoise() {
             $("#divDescuento_haveRefered").html(getPrice(descuento_haveRefered));
             $("#descuento_haveRefered_value").val(descuento_haveRefered);
         }
-
+        if (total == 0) {
+            $("input[type=submit]").attr('disabled', true);
+        } else {
+            $("input[type=submit]").attr('disabled', false);
+        }
         total = subtotal - (descuento_3er + descuento_isRefered + descuento_haveRefered);
         $("#result_price" + contenedor).html(getPrice(total));
     }
