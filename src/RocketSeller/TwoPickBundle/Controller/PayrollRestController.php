@@ -185,10 +185,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://localhost:8001/api/public/v1/mock/sql/default";
-        //$url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
-        //TODO(daniel.serrano): Remove the mock URL.
-        // This URL is only for testing porpouses and should be removed.
+        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
 
         $response = null;
         $options = array(
@@ -476,6 +473,7 @@ class PayrollRestController extends FOSRestController
      *   (name="contract_type", nullable=false, requirements="([0-9])", strict=true, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
      *   (name="transport_aux", nullable=false, requirements="(S|N)", strict=true, description="Weather or not it needs transportation help. Its just a flag SQL looks for it legaly.")
      *   (name="society", nullable=false, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
+     *   (name="payroll_type", nullable=false, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
      *
      * @return View
      */
@@ -508,8 +506,6 @@ class PayrollRestController extends FOSRestController
         $mandatory['last_contract_end_date'] = false;
         $regex['worked_hours_day'] = '([0-9])+';
         $mandatory['worked_hours_day'] = true;
-        $regex['worked_days_week'] = '([0-9])+';
-        $mandatory['worked_days_week'] = true;
         $regex['payment_method'] = '(CHE|CON|EFE)';
         $mandatory['payment_method'] = true;
         $regex['liquidation_type'] = '(J|M|Q)';
@@ -521,6 +517,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['transport_aux'] = true;
         $regex['society'] = '(.)*';
         $mandatory['society'] = true;
+        $regex['payroll_type'] = '4|6|1';
+        $mandatory['payroll_type'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -546,8 +544,8 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_TIPO_CONTRATO'] = $parameters['contract_type'];
         $unico['RECIBE_AUX_TRA'] = $parameters['transport_aux'];
         $unico['EMP_SOCIEDAD'] = $parameters['society'];
-        $unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly.
-        $unico['DIAS_LABOR_SEM'] = $parameters['worked_days_week'];
+        //$unico['EMP_TIPO_SALARIO'] = 1; // Meaning monthly. SQL removed this.
+        $unico['EMP_TIPO_NOMINA'] = $parameters['payroll_type'];
 
         $content[] = $unico;
         $parameters = array();
@@ -596,6 +594,7 @@ class PayrollRestController extends FOSRestController
      *   (name="contract_type", nullable=true, requirements="([0-9])", strict=false, description="Contract type of the employee, this can be found in the table contract_type, field payroll_code.")
      *   (name="transport_aux", nullable=true, requirements="(S|N)", strict=false, description="Weather or not it needs transportation help, if empty it uses the law.")
      *   (name="society", nullable=true, requirements="(.)*", strict=true, description="Id of the society(id of the employeer).")
+     *   (name="payroll_type", nullable=false, requirements="4|6|1", strict=true, description="Payroll type, 4 for full time 6 part time 1 regular payroll.")
      *
      * @return View
      */
@@ -642,6 +641,9 @@ class PayrollRestController extends FOSRestController
         $mandatory['transport_aux'] = false;
         $regex['society'] = '(.)*';
         $mandatory['society'] = false;
+        $regex['payroll_type'] = '4|6|1';
+        $mandatory['payroll_type'] = false;
+
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -667,6 +669,7 @@ class PayrollRestController extends FOSRestController
         $unico['EMP_TIPO_SALARIO'] = isset($parameters['salary_type']) ? $parameters['salary_type'] : $info['EMP_TIPO_SALARIO'];
         $unico['RECIBE_AUX_TRA'] = isset($parameters['transport_aux']) ? $parameters['transport_aux'] : $info['RECIBE_AUX_TRA'];
         $unico['EMP_SOCIEDAD'] = isset($parameters['society']) ? $parameters['society'] : $info['EMP_SOCIEDAD'];
+        $unico['EMP_TIPO_NOMINA'] = isset($parameters['payroll_type']) ? $parameters['payroll_type'] : $info['EMP_TIPO_NOMINA'];
 
         if (isset($info['EMP_TIPO_CONTRATO']))
             $unico['EMP_TIPO_CONTRATO'] = isset($parameters['contract_type']) ? $parameters['contract_type'] : $info['EMP_TIPO_CONTRATO'];
@@ -1104,6 +1107,7 @@ class PayrollRestController extends FOSRestController
      *    (name="unity_numbers", nullable=false, requirements="([0-9])+", strict=true, description="Number of units of the novelty, it can be in hours or days, depending on the novelty.")
      *    (name="novelty_start_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty starts(format: DD-MM-YYYY)")
      *    (name="novelty_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the novelty ends(format: DD-MM-YYYY)")
+     *    (name="novelty_base", nullable=false, requirements="([0-9])+(.[0-9]+)?", strict=true, description="Only to be sent for reporting a day in part time.")
      *
      * @return View
      */
@@ -1128,6 +1132,8 @@ class PayrollRestController extends FOSRestController
         $mandatory['novelty_start_date'] = false;
         $regex['novelty_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['novelty_end_date'] = false;
+        $regex['novelty_base'] = '([0-9])+(.[0-9]+)?';
+        $mandatory['novelty_base'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -1144,6 +1150,7 @@ class PayrollRestController extends FOSRestController
         $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
         $unico['COD_PROC'] = '1'; // Always process as payroll.
         $unico['USUARIO'] = 'SRHADMIN'; // This may change in the future.
+        $unico['NOV_BASE'] = isset($parameters['novelty_base']) ? $parameters['novelty_base'] : "";
 
         $content[] = $unico;
         $parameters = array();
@@ -1474,7 +1481,6 @@ class PayrollRestController extends FOSRestController
      *    (name="absenteeism_type_id", nullable=false, requirements="([0-9])+", strict=true, description="Code of the type of absenteeism as provided by SQL, it can be found on the table novelty_type, under payroll_code, there is a column  absenteeism_or_novelty, to get if it can be used here.")
      *    (name="absenteeism_start_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="Day the absenteeism starts(format: DD-MM-YYYY)")
      *    (name="absenteeism_end_date", nullable=false, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="End day the absenteeism starts(format: DD-MM-YYYY)")
-     *    (name="absenteeism_units", nullable=true, requirements="([0-9])+", description="Number of units, can be hours or days")
      *    (name="absenteeism_state", nullable=true, requirements="(ACT|CAN)", strict=true, description="State of the absenteeism ACT active or CAN cancelled")
      *
      * @return View
@@ -1495,8 +1501,6 @@ class PayrollRestController extends FOSRestController
         $mandatory['absenteeism_start_date'] = true;
         $regex['absenteeism_end_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
         $mandatory['absenteeism_end_date'] = false;
-        $regex['absenteeism_units'] = '([0-9])+';
-        $mandatory['absenteeism_units'] = false;
         $regex['absenteeism_state'] = '(ACT|CAN)';
         $mandatory['absenteeism_state'] = false;
 
@@ -1510,7 +1514,6 @@ class PayrollRestController extends FOSRestController
         $unico['TAUS_CODIGO'] = $parameters['absenteeism_type_id'];
         $unico['AUS_FECHA_INICIAL'] = $parameters['absenteeism_start_date'];
         $unico['AUS_FECHA_FINAL'] = $parameters['absenteeism_end_date'];
-        $unico['AUS_UNIDADES'] = $parameters['absenteeism_units'];
         $unico['AUS_ESTADO'] = isset($parameters['absenteeism_state']) ? $parameters['absenteeism_state'] : "ACT";
         $unico['COD_PROC'] = '1'; // Always send it as payroll;
         $unico['USUARIO'] = 'SRHADMIN';
