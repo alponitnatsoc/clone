@@ -33,7 +33,10 @@ class PersonController extends Controller
             throw $this->createAccessDeniedException();
         }
         $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
         $user=$this->getUser();
+        if($user->getStatus()>=2 )
+            return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
         /** @var Person $people */
         $people = $user->getPersonPerson();
         $employer = $people->getEmployer();

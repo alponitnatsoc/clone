@@ -1,0 +1,46 @@
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block body %}
+	<div id="registrationTypeContainer">
+		<div class="content">
+			<img src="/img/logo_internal.png">
+			<p>
+				Felicitaciones has confirmado tu cuenta<br />
+				te vamos a explicar un poco lo que ha de seguir
+			</p>
+
+			<div class="">
+				<div class="registrationTypeTitle ">Información a tener en cuenta</div>
+				<div class="registrationTypecontent ">
+
+					<div class="optionDescription">
+						Nuestro tutorial te lleva de la mano en el proceso de registro tuyo y de tus empleados.
+						<br /><br />
+						El registro dura aproximadamente 35 minutos.
+						<br /><br />
+						Puedes parar y retomarlo cuando quieras.
+						<br /><br />
+						Te damos otro mes gratis para los empleados que registres completamente en las siguientes 48 horas
+						La infomracion que necesitas es:
+						<ul style="list-style: none">
+							<li>
+								X1
+							</li>
+							<li>
+								X2
+							</li>
+							<li>
+								X3
+							</li>
+						</ul>
+					</div>
+					<a href="{{path('welcome')}}" class="btn btn-orange">Empezar</a>
+				</div>
+				
+				
+			</div>
+		</div>		
+	</div>	
+{% endblock body %}

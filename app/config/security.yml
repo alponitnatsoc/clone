@@ -42,7 +42,7 @@ security:
                 failure_path: fos_user_registration_register
                 login_path: fos_user_security_login
                 check_path: fos_user_security_check
-                default_target_path: choose_registration
+                default_target_path: welcome_post_register
                 provider: fos_userbundle
                 resource_owners:
                     facebook: hwi_facebook_login

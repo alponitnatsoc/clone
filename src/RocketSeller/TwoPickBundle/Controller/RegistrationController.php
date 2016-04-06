@@ -169,7 +169,7 @@ class RegistrationController extends BaseController
               $url = $this->generateUrl('edit_profile');
               } */
 
-            $url = $this->generateUrl('choose_registration');
+            $url = $this->generateUrl('welcome_post_register');
             $response = new RedirectResponse($url);
         }
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
@@ -182,6 +182,17 @@ class RegistrationController extends BaseController
         $user = $this->getUser();
         if ($user->getPersonPerson()->getEmployer() == null) {
             return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
+        } else {
+            return $this->redirectToRoute('ajax');
+        }
+    }
+
+    public function welcomePostRegisterAction()
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($user->getPersonPerson()->getEmployer() == null) {
+            return $this->render('RocketSellerTwoPickBundle:Registration:postRegistrationWelcome.html.twig');
         } else {
             return $this->redirectToRoute('ajax');
         }

@@ -441,6 +441,9 @@ express_registration_employee:
 choose_registration:
     path: /choose/register
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:chooseRegister }
+welcome_post_register:
+    path: /welcome/register
+    defaults:  { _controller: RocketSellerTwoPickBundle:Registration:welcomePostRegister }
 
 
 back_employer_menu:
