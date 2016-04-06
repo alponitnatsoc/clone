@@ -33,17 +33,29 @@ use EightPoints\Bundle\GuzzleBundle;
 class PilaPlainTextRestController extends FOSRestController
 {
 
-
+  /**
+   * This method returns the verification digit of a NIT or a CC, this number
+   * is math process to confirm the main number.
+   *
+   * @param Int $documentNumber The document to process the verification digit.
+   * @return Int The verification digit.
+   */
     public function digitoVerificacion($cedula){
+        // For the equation to work, we need 15 digits on the string, we append
+        // ceros at the begining of the document.
         while(strlen($cedula) < 15) {
           $cedula = '0' . $cedula;
         }
+        // I'm not sure why it doesn't use all the primes, it skips some
+        // numbers, here is the list of primes used.
         $specialPrimes = [71,67,59,53,47,43,41,37,29,23,19,17,13,7,3];
         $conta = 0;
         for($i = 0; $i < 15; $i++) {
           $conta += $specialPrimes[$i] * $cedula[$i];
         }
         $residuo = $conta % 11;
+        // The formula says that after module 11, if the result is 1 or 0, that
+        // is the result, if not, the result is 11 minus the result.
         if($residuo == 0 || $residuo == 1)
           return $residuo;
         return 11 - $residuo;
@@ -70,8 +82,10 @@ class PilaPlainTextRestController extends FOSRestController
     public function getPlainTextCsvAction($documentNumber)
     {
 
-      $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
-      $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+      $personRepo = $this->getDoctrine()->getRepository(
+                                            "RocketSellerTwoPickBundle:Person");
+      $userRepo = $this->getDoctrine()->getRepository(
+                                            "RocketSellerTwoPickBundle:User");
       /** @var $NoveltyType NoveltyType  */
       $person = $personRepo->findOneBy(array('document' => $documentNumber));
 
@@ -87,7 +101,8 @@ class PilaPlainTextRestController extends FOSRestController
       $res .= ',';
       $res .= $this->digitoVerificacion($person->getDocument());
       $res .= ',';
-      $res .= $person->getNames() . ' ' . $person->getLastName1() . ' ' . $person->getLastName2(); // Razón social.
+      $res .= $person->getNames() . ' ' . $person->getLastName1() . ' ' .
+              $person->getLastName2(); // Razón social.
       $res .= ',';
       $res .= $person->getMainAddress();
       $res .= ',';
@@ -131,11 +146,20 @@ class PilaPlainTextRestController extends FOSRestController
       return $res;
     }
 
-    public function getSalary($document)
+    /**
+     * This method returns the salary of an employee given
+     * the idEmployerHasEmployee.
+     *
+     * @param Int $idEmployerHasEmployee The id in our DB.
+     * @return Int Salary of the employee.
+     */
+    public function getSalary($idEmployerHasEmployee)
     {
-        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        $personRepo = $this->getDoctrine()->getRepository(
+                              "RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var $ehEs EmployerHasEmployee */
-        $ehEs = $personRepo->findOneBy(array('idEmployerHasEmployee' => $document));
+        $ehEs = $personRepo->findOneBy(array(
+                            'idEmployerHasEmployee' => $idEmployerHasEmployee));
         if ($ehEs == null)
             return 0;
         if ($ehEs->getState() == 1) {
@@ -151,6 +175,12 @@ class PilaPlainTextRestController extends FOSRestController
         return 0;
     }
 
+    /**
+     * This method returns wether this empoyee pays social securtity.
+     *
+     * @param Int $employee The id of the employee in our DB.
+     * @return Boolean.
+     */
     public function aporta($employee) {
       $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
       /** @var $NoveltyType NoveltyType  */
@@ -165,6 +195,13 @@ class PilaPlainTextRestController extends FOSRestController
       return true;
     }
 
+    /**
+     * Returns the entity code for an employee.
+     *
+     * @param Int $employee The id of the employee in our DB.
+     * @param Int $entity_code Entity to be queried(eps, arp, etc).
+     * @return String The entity code.
+     */
     public function codigoEntidad($employee, $entity_code) {
         $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
         /** @var $NoveltyType NoveltyType  */
@@ -179,6 +216,13 @@ class PilaPlainTextRestController extends FOSRestController
         return false;
     }
 
+    /**
+     * Returns the entity code for an employer.
+     *
+     * @param Int $employer The id of the employer in our DB.
+     * @param Int $entity_code Entity to be queried(eps, arp, etc).
+     * @return String The entity code.
+     */
     public function codigoEntidadEmployer($employer, $entity_code) {
         $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEntity");
         /** @var $NoveltyType NoveltyType  */
@@ -193,20 +237,12 @@ class PilaPlainTextRestController extends FOSRestController
         return false;
     }
 
-    public function coverageCode($employee) {
-        $eheRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployeeHasEntity");
-        /** @var $NoveltyType NoveltyType  */
-        $ehe = $personRepo->findBy(array('employee_id_employee' => $employee));
-        foreach($ehe as $i) {
-          $entity = $i->getEntityEntity();
-          // If is AFP and doesn't pay.
-          if($entity->getIdEntity() == $entity) {
-            return $entity->getPilaCode();
-          }
-        }
-        return false;
-    }
-
+    /**
+     * Returns the coverage code in the ARL of an empoyee.
+     *
+     * @param Int $document The idEmployerHasEmployee of the employee in our DB.
+     * @return String The coverage code.
+     */
     public function getArlCode($document)
     {
         $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
