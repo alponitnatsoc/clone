@@ -11,7 +11,21 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DashBoardController extends Controller
 {
+    public function changeFlagAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $user->setLegalFlag(1);
+        $em->persist($user);
+        $em->flush();
 
+        return $this->redirectToRoute('show_dashboard');
+    }
+    
+    public function legalAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig');
+    }
     /**
      * Maneja el registro de una nueva persona con los datos básicos,
      * TODO agregar todos los campos de los wireframes

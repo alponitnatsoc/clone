@@ -2,6 +2,19 @@
 ajax:
     path:      /pages
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
+welcome:
+    path:      /welcome
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:index} 
+legal:
+    path:      /legal-status
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:legal} 
+legal_assist:
+    path:      /legal-assist
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:index } 
+change_flag:
+    path:      /change-flag
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:changeFlag} 
+
 registration_confirmed_start:
     path:      /registration/confirmed/start
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerConfirmedStart}
@@ -127,7 +140,7 @@ show_beneficiaries_documents:
 
 edit_beneficiaries:
     path:      /manage/employee/{employee}/beneficiary/{beneficiary}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:manageBeneficiary}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:editBeneficiary}
 pay_method_fields:
     path:      /pay/method/fields/{id}/{idContract}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:postPayMethod, idContract: -1, }

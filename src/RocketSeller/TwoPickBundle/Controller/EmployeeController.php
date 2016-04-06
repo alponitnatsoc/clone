@@ -931,5 +931,12 @@ filename = "certificadoLaboral.pdf"'
 
         return $this->redirectToRoute("manage_employees");
     }
+    public function editBeneficiaryAction($employee,$beneficiary)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $beneficiary = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Beneficiary")->find($beneficiary);
+        
+
+    }
 
 }

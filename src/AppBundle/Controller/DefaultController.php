@@ -24,8 +24,9 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('home/index.html.twig');
+        return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+
     /**
      * @Route("/connect", name="connect_db")
      */

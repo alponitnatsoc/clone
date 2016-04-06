@@ -236,12 +236,46 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-8 col-sm-offset-2 middle-content">
+                <div class="col-sm-12" style="text-align:center;">
+                    <div class="col-sm-4">
+                        <p><strong>Beneficiario</strong></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p><strong>Entidad</strong></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p><strong>Acción</strong></p>
+                    </div>
+                </div>
+                {% if employee.employeeHasBeneficiary %}
+                    {% set beneficiaries = employee.employeeHasBeneficiary  %}                
+                    {% for beneficiary in beneficiaries %}
+                        <div class="col-sm-12 row-novelty" style="text-align:center;">
+                            <div class=" element-table col-sm-4">
+                                
+                                <p><strong>{{beneficiary.beneficiaryBeneficiary.personPerson.names}} {{ beneficiary.beneficiaryBeneficiary.personPerson.lastName1}}</strong></p>
+                                
+                            </div>
+                            <div class="element-table col-sm-4">
+                                <p><strong>{{beneficiary.entityEntity.entityTypeEntityType.name}}: {{beneficiary.entityEntity.name}}</strong></p>
+                            </div>
+                            <div class="element-detail col-sm-4">
+                                <a href="/api/public/v1/edits/{{beneficiary.beneficiaryBeneficiary.idBeneficiary}}/beneficiaries"></a>
+                                <p><strong class="editBeneficiary">Editar</strong></p>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {{ form_start(form , {'attr': {'id': 'form'}})}}
             <div class="col-sm-12 form-upper">
                 <div class="content col-sm-8 col-sm-offset-2">
                     <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
                     <div class="col-sm-6 form-group form-black input form-dummy">
                         <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
-                        <select id="benefType" name="relation" class="form-control valid" onchange="myFunction()">
+                        <select id="benefType" name="relation" class="form-control valid" onchange="showCreateForm()">
                             <option value="" selected="true" >Seleccionar una opción</option>            
                             <option value="Cónyugue">Cónyuge</option>            
                             <option value="Hijo">Hijo</option>            
@@ -261,7 +295,7 @@
                 </div>
             </div>
             <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
-                {{ form_start(form)}}
+                
                 <div class="content col-sm-6 col-sm-offset-3">
                     
                     <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
@@ -304,7 +338,8 @@
                         <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
                         <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">                                         
                         <div class="col-sm-12 col-xs-12 center">
-                            <span  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit">Salvar y continuar</span>
+                            <span id="btn-create"  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
+                            <span id="btn-edit"  href="/api/public/v1/edits/" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
                             <br><br>
                         </div>
                     </div>
@@ -468,7 +503,21 @@
         </div>
     </div>
 </div>
-
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>                
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div id="agregarNovedad"></div>
 {% endblock fos_user_content %}
@@ -482,11 +531,6 @@
         addBeneficiary();        
     });
 
-    </script>
-    <script>
-        function myFunction() {
-            $("#form-beneficiary").fadeIn("slow");
-        }
     </script>
 
 {% endblock %}

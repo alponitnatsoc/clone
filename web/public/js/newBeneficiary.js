@@ -1,4 +1,9 @@
+
 function addBeneficiary(){
+    $('.editBeneficiary').click(function(e){
+        e.preventDefault();
+        showEditForm();        
+    });
     $('.submit').click(function (e) {
             e.preventDefault();
             var form = $("form");
@@ -19,7 +24,7 @@ function addBeneficiary(){
             var department = $(form).find("select[name='register_beneficiary[department]']");
             var city = $(form).find("select[name='register_beneficiary[city]']");
             var civilStatus = $(form).find("select[name='register_beneficiary[civilStatus]']");
-
+            
             $.ajax({
                 url: $(this).attr('href'),
                 type: 'POST',
@@ -44,10 +49,33 @@ function addBeneficiary(){
                     cc: cc.val(),
 
                 }
-            }).done(function (data) {
-                alert("se guardo");
+            }).done(function (data) {  
+                hideForm();
+                clearForm();                
+                alert("funciono");
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert("hizo algo mal");
             });
         });
 }
+function editBeneficiary(){
+
+}
+function clearForm(){
+    
+    document.getElementById("benefType").reset();
+    document.getElementById("form").reset();
+}
+function showEditForm(){
+    $("#form-beneficiary").fadeIn("slow");
+    document.getElementById("btn-edit").style.display = 'block';
+}   
+function showCreateForm() {
+    $("#form-beneficiary").fadeIn("slow");
+    document.getElementById("btn-create").style.display = 'block';
+}
+function hideForm(){
+    $("#form-beneficiary").fadeOut("slow");
+}
+
+

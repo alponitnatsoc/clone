@@ -105,6 +105,17 @@ class User extends BaseUser
     private $status = 1;
 
     /**
+     * Columna utilizada para conocer el estado del empleado 
+     * 0 No ha iiciado labores
+     * 1 ya inicio labores
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $legalFlag = 0;
+
+    /**
      * Columna utilizada para saber si el usuario requiere registro express
      * 0 false
      * 1 true     
@@ -719,5 +730,29 @@ class User extends BaseUser
     public function getLastPayDate()
     {
         return $this->lastPayDate;
+    }
+
+    /**
+     * Set legalFlag
+     *
+     * @param integer $legalFlag
+     *
+     * @return User
+     */
+    public function setLegalFlag($legalFlag)
+    {
+        $this->legalFlag = $legalFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get legalFlag
+     *
+     * @return integer
+     */
+    public function getLegalFlag()
+    {
+        return $this->legalFlag;
     }
 }
