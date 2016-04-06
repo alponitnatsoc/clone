@@ -1,0 +1,36 @@
+{% extends "::base.html.twig" %}
+{% block sidebar %}{% endblock %}
+{% block fos_user_content %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
+{% endblock stylesheets %}
+    {% block body %}
+
+
+<div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
+
+    <div class="smallOrangeBox">
+        <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Asistencia Legal</span></div>
+        
+        <div class="smallOrangeBoxContent">
+            
+            <span>Súper! tu pago ha sido recibido y lo estamos procesando,<br /> pronto nos comunicaremos contigo para asesorarte</span>
+
+            <span class="light-text">No te preocupes, si está muy tarde o no es apropiado te llamaremos mañana</span>
+            <hr class="smallDivider" />
+            
+
+                <br />
+                    
+                <a href="/dashboard" class="btn btn-symplifica" role="button">Regresar al home</a>
+                <br /><br />
+
+        </div>
+    </div>
+</div>
+
+    
+    {% endblock %}
+{% endblock fos_user_content %}
+

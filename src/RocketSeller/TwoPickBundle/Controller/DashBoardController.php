@@ -11,16 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DashBoardController extends Controller
 {
-    public function changeFlagAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $user->setLegalFlag(1);
-        $em->persist($user);
-        $em->flush();
 
-        return $this->redirectToRoute('show_dashboard');
-    }
     
     public function legalAction(Request $request)
     {

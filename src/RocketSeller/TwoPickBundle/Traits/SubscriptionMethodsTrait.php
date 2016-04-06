@@ -86,7 +86,7 @@ trait SubscriptionMethodsTrait
                 //$employees[$keyEmployee]['product']['floor'] = floor($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax));
                 //$employees[$keyEmployee]['product']['round_up'] = round($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax), 0, PHP_ROUND_HALF_UP);
                 //$employees[$keyEmployee]['product']['round_down'] = round($employees[$keyEmployee]['product']['object']->getPrice() * (1 + $tax), 0, PHP_ROUND_HALF_DOWN);
-                $total_sin_descuentos += $employees[$keyEmployee]['product']['price'];
+                $total_sin_descuentos += $employee->getState() ? $employees[$keyEmployee]['product']['price'] : 0;
                 break;
             }
         }
