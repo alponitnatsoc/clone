@@ -370,6 +370,7 @@ class EmployeeRestController extends FOSRestController
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
+        /** @var User $user */
         $user = $this->getUser();
         /** @var Person $people */
         $people = $user->getPersonPerson();
@@ -438,6 +439,9 @@ class EmployeeRestController extends FOSRestController
                     return $view;
                 }
             }
+
+            $employerEmployee->setIsFree($user->getIsFree());
+
             /** @var Person $person */
             $person = $employee->getPersonPerson();
             $person->setNames($paramFetcher->get('names'));
@@ -488,6 +492,7 @@ class EmployeeRestController extends FOSRestController
                 if ($employee->getRegisterState() == 0) {
                     $employee->setRegisterState(25);
                 }
+                $em->persist($employerEmployee);
                 $em->persist($employee);
                 $em->flush();
                 $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
@@ -1318,7 +1323,7 @@ class EmployeeRestController extends FOSRestController
         /** @var Entity $realArl */
         $realArl = $entityRepo->find($paramFetcher->get('arl'));
         $realSeverances = new ArrayCollection();
-        $severances=$paramFetcher->get('severances');
+        $severances = $paramFetcher->get('severances');
         foreach ($severances as $sever) {
             $realSeverances->add($entityRepo->find($sever));
         }
@@ -1330,20 +1335,20 @@ class EmployeeRestController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
 
-        if ($realEmployerEnt->count() < $realSeverances->count()+1) {
-            $counter=0;
+        if ($realEmployerEnt->count() < $realSeverances->count() + 1) {
+            $counter = 0;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="AFP"){
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($realArl);
                 }
-                if($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="PARAFISCAL"){
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
                     $counter++;
                 }
             }
-            if($counter<$realSeverances->count()){
-                for($i=$counter;$i<$realSeverances->count();$i++){
+            if ($counter < $realSeverances->count()) {
+                for ($i = $counter; $i < $realSeverances->count(); $i++) {
                     $realSevereancesHasEmployer = new EmployerHasEntity();
                     $realSevereancesHasEmployer->setEntityEntity($realSeverances->get($i));
                     $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
@@ -1352,19 +1357,16 @@ class EmployeeRestController extends FOSRestController
                 $em->persist($realEmployer);
                 $em->flush();
             }
-
-
         } else {
-            $counter=0;
+            $counter = 0;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="AFP") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($realArl);
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode()=="PARAFISCAL") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
                     $counter++;
-
                 }
             }
             $em->persist($realEmployer);
@@ -1491,14 +1493,15 @@ class EmployeeRestController extends FOSRestController
 
             $view = View::create();
             $view->setStatusCode(200);
-        }else{
+        } else {
             $view = View::create();
             $view->setStatusCode(404);
         }
-        
+
 
         return $view;
     }
+
     /**
      * Edit a Beneficiary from the submitted data.<br/>
      *
@@ -1559,6 +1562,17 @@ class EmployeeRestController extends FOSRestController
         $view->setStatusCode(400);
 
         return $view;
+    }
+
+    protected function getDaysSince($sinceDate, $toDate)
+    {
+        $dDiff = true;
+        if ($sinceDate !== null && $toDate !== null) {
+            $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));
+            $dEnd = new \DateTime(date_format($toDate, 'Y-m-d'));
+            $dDiff = $dStart->diff($dEnd);
+        }
+        return $dDiff;
     }
 
 }

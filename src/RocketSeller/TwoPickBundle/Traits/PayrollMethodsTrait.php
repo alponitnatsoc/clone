@@ -92,6 +92,9 @@ trait PayrollMethodsTrait
                             $employeesData[$payroll->getIdPayroll()]['totalAportes'] = $totalAportes;
 
                             //$pila = $this->getInfoPilaSQL($employerHasEmployee);
+                            //dump($pila);
+                            //die;
+
                             if ($payroll->getPeriod() == 4) {
                                 $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($salary);
                             } else {
