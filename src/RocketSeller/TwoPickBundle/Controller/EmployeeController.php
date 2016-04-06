@@ -341,7 +341,7 @@ class EmployeeController extends Controller
             }
         }
         $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions, $timeCommitments), $employee, array(
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions, $timeCommitments,$user), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));

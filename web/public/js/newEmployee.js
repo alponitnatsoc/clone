@@ -139,6 +139,9 @@ function startEmployee() {
         }
     });
     $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
+        if($("#changeBehavior").text()=="1"){
+            return;
+        }
         if (!checkDate(new Date(
                 $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(),
                 parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,

@@ -192,7 +192,8 @@ class RegistrationController extends BaseController
         /** @var User $user */
         $user = $this->getUser();
         if ($user->getPersonPerson()->getEmployer() == null) {
-            return $this->render('RocketSellerTwoPickBundle:Registration:postRegistrationWelcome.html.twig');
+            //return $this->render('RocketSellerTwoPickBundle:Registration:postRegistrationWelcome.html.twig');
+            return $this->redirectToRoute('welcome');
         } else {
             return $this->redirectToRoute('ajax');
         }

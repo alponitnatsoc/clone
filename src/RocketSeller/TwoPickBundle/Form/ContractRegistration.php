@@ -6,6 +6,7 @@ use DateTime;
 use RocketSeller\TwoPickBundle\Entity\ContractType;
 use RocketSeller\TwoPickBundle\Entity\PayType;
 use RocketSeller\TwoPickBundle\Entity\TimeCommitment;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -23,7 +24,15 @@ class ContractRegistration extends AbstractType
     private $workplaces;
     private $today;
     private $todayOneYear;
-    function __construct($workplaces,$timeCommitments){
+    private $user;
+
+    /**
+     * @param $workplaces
+     * @param $timeCommitments
+     * @param User $user
+     */
+    function __construct($workplaces,$timeCommitments,$user){
+        $this->user=$user;
         $this->timeCommitments=$timeCommitments;
         $this->today= new DateTime();
         $this->todayOneYear= new DateTime((intval($this->today->format("Y"))+1)."-".$this->today->format("m")."-".$this->today->format("d"));
@@ -145,7 +154,7 @@ class ContractRegistration extends AbstractType
                 ),
                 'label' => 'Fecha inicio de contrato*:',
                 'data' => $this->today,
-                'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+1),
+                'years' => range($this->user->getLegalFlag()!=1?$this->today->format("Y"):1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
                 'placeholder' => array(
