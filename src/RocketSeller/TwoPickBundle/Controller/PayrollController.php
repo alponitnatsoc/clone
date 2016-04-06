@@ -226,7 +226,6 @@ class PayrollController extends Controller
                         }
                     }
 
-                    $totalLiquidation = $this->totalLiquidation($detailNomina);
                     if (isset($paymentMethod[$key])) {
                         $data[$key]['paymentMethod'] = $paymentMethod[$key];
                     } else {
