@@ -75,7 +75,7 @@
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
-                    <span class="step">Paso 2 de 4</span>
+                    <span class="step">Paso 2 de 3</span>
                     Datos de mis empleados
                 </div>
             </div>
@@ -323,7 +323,7 @@
 
             <div id="contractData" class="tab-pane fade in {%   if tab==3 %} active {% endif %}">
                 <div class="col-md-10 col-md-push-1">
-                    <div id="contractDataWiz">
+                    <div id="contractDataWiz" style="margin-top:10px">
                         <ul id="contractNav" class="nav nav-tabs nav-justified">
                             <li class="active" ><a data-toggle="tab" data-target="#contractTypeTab"></a></li>
                             <li><a data-toggle="tab" data-target="#employeeContractTypeTab"></a></li>
@@ -333,7 +333,8 @@
                             <div id="changeBehavior" class="hidden">{{ app.user.legalFlag }}</div>
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
-                                    <p class="text-center typeQuestion">Escoge el tipo de contrato que más se ajusta a tus requerimientos</p>
+                                    <h2 class="text-center" style="font-size: 30px;border-bottom: 1px solid #ccc;padding-bottom: 10px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
+                                    <p class="text-center typeQuestion" style="font-size: 20px;">Escoge el tipo de contrato que más se ajusta a tus requerimientos</p>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-10 col-md-push-1">
@@ -349,7 +350,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="contractFijo">
+                                <div id="contractFijo" style="margin-top: 10px;">
+                                    <br />
                                     <div class="row">
                                         <p class="text-center typeQuestion">Características</p>
                                     </div>
@@ -371,7 +373,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div id="contractIndefinido">
+                                <div id="contractIndefinido" style="margin-top: 10px;">
                                     <div class="row">
                                         <p class="text-center typeQuestion">Características</p>
                                     </div>

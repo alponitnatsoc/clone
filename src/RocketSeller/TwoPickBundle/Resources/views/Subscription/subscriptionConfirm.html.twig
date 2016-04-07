@@ -5,7 +5,7 @@
 {% set year = startDate|date("Y") %}
 {% set day_pay = startDate|date("d") %}
 {% set month_pay = startDate|date("F")|trans %}
-{% set year_pay = startDate|date("Y") %}   
+{% set year_pay = startDate|date("Y") %}
 {% block stylesheet %}
     {{ parent() }}
     <style type="text/css">
@@ -131,7 +131,7 @@
         .codigo_referido_invalido{
             color: red;
         }
-        .form-group select{            
+        .form-group select{
             width: 100%
         }
 
@@ -190,11 +190,11 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <div id="" class="col-sm-12 col-xs-12 blockStep inline">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
-                    <span class="step">Paso 3 de 4</span>                            
+                    <span class="step">Paso 3 de 3</span>
                     Subscripción a Symplifica
                 </div>
             </div>
@@ -231,92 +231,92 @@
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.documentType) }}    
+                                    {{ form_label(form.documentType) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.documentType) }}    
+                                    {{ form_widget(form.documentType) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.document) }}    
+                                    {{ form_label(form.document) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.document) }}    
+                                    {{ form_widget(form.document) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.names) }}    
+                                    {{ form_label(form.names) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.names) }}    
+                                    {{ form_widget(form.names) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12 hidden">
                                 <div class="col-sm-6 label-group">
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.razonSocial) }}    
+                                    {{ form_widget(form.razonSocial) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.lastName1) }}    
+                                    {{ form_label(form.lastName1) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.lastName1) }}    
+                                    {{ form_widget(form.lastName1) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.lastName2) }}    
+                                    {{ form_label(form.lastName2) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.lastName2) }}    
+                                    {{ form_widget(form.lastName2) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.department) }}    
+                                    {{ form_label(form.department) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.department) }}    
+                                    {{ form_widget(form.department) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.city) }}    
+                                    {{ form_label(form.city) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.city) }}    
+                                    {{ form_widget(form.city) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.address) }}    
+                                    {{ form_label(form.address) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.address) }}    
+                                    {{ form_widget(form.address) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
-                                    {{ form_label(form.phone) }}    
+                                    {{ form_label(form.phone) }}
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    {{ form_widget(form.phone) }}    
+                                    {{ form_widget(form.phone) }}
                                 </div>
-                                <!--<img src="/img/typePerson.png">-->                        
+                                <!--<img src="/img/typePerson.png">-->
                             </div>
                         </div>
                     </div>
@@ -329,7 +329,7 @@
             <div class="col-md-12 center">
                 <span style="margin-top: 20px"><h3>Información de la tarjeta de crédito*</h3></span>
                 <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
+                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
             </div>
             <div class="formulario col-xs-12" style="border: none;">
                 <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
@@ -338,9 +338,9 @@
                             <label>Nombre en la tarjeta:</label>
                         </div>
                         <div class="col-sm-6 form-group">
-                            <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">  
+                            <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                        <!--<img src="/img/typePerson.png">-->
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -349,7 +349,7 @@
                         <div class="col-sm-6 form-group">
                             <input type="number" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                        <!--<img src="/img/typePerson.png">-->
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -375,7 +375,7 @@
                                 <input type="number" min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="Año" required="required">
                             </div>
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                        <!--<img src="/img/typePerson.png">-->
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -384,7 +384,7 @@
                         <div class="col-sm-6 form-group">
                             <input type="number" class="form-control" name="cvv" id="cvv" min="0" minlength="3" maxlength="4" placeholder="123" required="required" style="float: left;">
                         </div>
-                        <!--<img src="/img/typePerson.png">-->                        
+                        <!--<img src="/img/typePerson.png">-->
                     </div>
                 </div>
             </div>
@@ -395,7 +395,7 @@
                 <div class="col-md-12 center">
                     <span style="margin-top: 20px"><h3>¿Código de referido?</h3></span>
                     <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-                    <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->    
+                    <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
                 </div>
                 <div class="formulario col-xs-12" style="border: none;">
                     <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
@@ -403,7 +403,7 @@
                             <div class="col-sm-6 form-group col-sm-push-4">
                                 <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10" placeholder="Código"  style="margin-top: 20px">
                             </div>
-                            <!--<img src="/img/typePerson.png">-->                        
+                            <!--<img src="/img/typePerson.png">-->
                         </div>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
             </div>-->
         {% endif %}
 
-        <input type="hidden" id="tieneReferidos" value="{{ descuento_haveRefered['object']|length }}"> 
+        <input type="hidden" id="tieneReferidos" value="{{ descuento_haveRefered['object']|length }}">
         <input type="hidden" id="esReferido" value="{{ descuento_isRefered['object']|length }}">
         <input type="hidden" id="esReferidoPercent" value="{{ descuento_isRefered['percent'] }}">
         <div id="confirmacionPago" class="confirmacionPago" style="margin: 10px 0px 10px 0px">
@@ -426,14 +426,14 @@
                 <div class="row">
                     <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
                         <span style="font-size: 20px;">Con el número de empleados<br /> nuestro servicio tendrá un costo mensual de:</span>
-                        <div class="div_price">     
+                        <div class="div_price">
                             <div id="result_price">$ {{ (total_con_descuentos)|number_format  }}</div>
                             <div>A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}</div>
                             {#<div id="result_discount">$ {{ total_sin_descuentos|number_format  }}</div>    #}
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 20px;">
-                        Recuerda que el primer mes es gratis y que te obsequiamos otro mes si  completas antes de 48 horas el registro y carga documentación 
+                        Recuerda que el primer mes es gratis y que te obsequiamos otro mes si  completas antes de 48 horas el registro y carga documentación
                     </div>
                     {% if descuento_3er['value'] == 0 %}
                         <div style="text-align: center; margin-top: 20px;">
@@ -445,10 +445,10 @@
             <div class="row buttons center">
                 <div class="col-md-12" style="margin: 30px 0 20px 0;">
                     <input type="checkbox" id="tos" name="tos">
-                    <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a> de Symplifica para el cargo mensual del valor del plan</label>                        
+                    <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a> de Symplifica para el cargo mensual del valor del plan</label>
                 </div>
                 <div class="col-xs-12 center">
-                    <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/> 
+                    <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/>
                     <input type="submit" id="sumbit" class="btn btn-orange " value="Finalizar" disabled/>
                 </div>
             </div>

@@ -439,6 +439,7 @@ trait SubscriptionMethodsTrait
 
             $this->sendEmailPaySuccess($user->getId(), $purchaseOrder->getIdPurchaseOrders());
 
+            $user->setStatus(2);
             $user->setPaymentState(1);
             $user->setDayToPay(date('d'));
             $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
