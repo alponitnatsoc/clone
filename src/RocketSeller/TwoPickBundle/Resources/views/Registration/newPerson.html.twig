@@ -290,16 +290,16 @@
             <div id="employerEntities" class="tab-pane fade in">
                 <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
                     <div class="col-sm-12 col-xs-12 text-center">
-                        <p>
+                        <p style="font-weight:100;">
                             Escoge la Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales estas afiliado o te afiliarás como empleador. Symplifica no hace cambios de entidades.
                         </p>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-12 col-xs-12 blockUpData" style="border-bottom:none;">
+                        <div class="col-sm-8 col-sm-offset-2 col-xs-12 blockUpData" style="border-bottom:none;">
                             <div class="col-sm-12 col-xs-12">
-                                <div class="col-sm-12">
-                                    {{ form_label(form.severances,null,{'label_attr': {'class': 'title'}})}}
+                                <div class="col-sm-12" style="font-weight:100 !important;">
+                                    {{ form_label(form.severances,null,{'label_attr': {'class': ''}})}}
                                 </div>
                                 {% if employee.severances.vars.data.name is defined %}
                                     {% set sname = employee.severances.vars.data.name %}
@@ -315,7 +315,7 @@
                                     <ul class="severances" data-prototype="
                         {% filter escape %}
                             {{ include('RocketSellerTwoPickBundle:DataPrototypes:severancesPrototype.html.twig', { 'form': form.severances.vars.prototype|e }) }}
-                        {% endfilter %} "  style="list-style: none">
+                        {% endfilter %} "  style="list-style: none; padding:0;">
                                         {% for caja in form.severances %}
                                             {% if caja.vars.data.entityEntity.name is defined %}
                                                 {% set sname = caja.vars.data.entityEntity.name %}
@@ -338,7 +338,7 @@
                             </div>
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-12">
-                                    {{ form_label(form.arl,null,{'label_attr': {'class': 'title'}})}}
+                                    {{ form_label(form.arl,null,{'label_attr': {'class': ''}})}}
                                 </div>
                                 <div class="wrapper">
                                     <div class="hidden">
