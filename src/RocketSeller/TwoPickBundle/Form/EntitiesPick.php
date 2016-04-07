@@ -24,7 +24,7 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->wealthEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>' '
+                'label'=>'EPS*'
 
             ))
             ->add('pension', 'entity', array(
@@ -32,19 +32,25 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->pensionEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>' '
+                'label'=>'Pension*'
             ))
             ->add('wealthAC', 'text', array(
                 'mapped' => false,
-                'label'=>' ',
+                'label'=>'EPS*',
                 'required' => true,
-                'attr'=>array("class"=>'autocomW')
+                'attr'=>array(
+                    "class"=>'autocomW',
+                    "placeholder" => "Seleccionar un opción"
+                )
             ))
             ->add('pensionAC', 'text', array(
                 'mapped' => false,
-                'label'=>' ',
+                'label'=>'Pension*',
                 'required' => true,
-                'attr'=>array("class"=>'autocomP')
+                'attr'=>array(
+                    "class"=>'autocomP',
+                    "placeholder" => "Seleccionar un opción"
+                )
             ))
             ->add('beneficiaries', 'choice', array(
                 'choices' => array(
@@ -54,7 +60,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>' ',
+                'label'=>'¿Registrará beneficiarios?*',
                 'required' => true
             ));
     }
