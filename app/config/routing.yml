@@ -16,7 +16,7 @@ legal_payment:
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPayment } 
 change_flag:
     path:      /change-flag
-    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:changeFlag} 
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:changeFlag} 
 
 
 registration_confirmed_start:
