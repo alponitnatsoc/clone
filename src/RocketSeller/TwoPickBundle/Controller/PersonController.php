@@ -70,7 +70,10 @@ class PersonController extends Controller
                 $severances = $entityType->getEntities();
             }
         }
-
+        if($employer->getEntities()->count()==0 ){
+            $ehEtities= new EmployerHasEntity();
+            $employer->addEntity($ehEtities);
+        }
         $form = $this->createForm(new EmployerRegistration($severances,$arls), $employer, array(
             'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
             'method' => 'POST',
@@ -81,10 +84,9 @@ class PersonController extends Controller
         if ($empEntities&&$empEntities->count() != 0) {
             /** @var EmployerHasEntity $enti */
             foreach ($empEntities as $enti) {
-                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
+                if ($enti->getEntityEntity()!=null &&$enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                     $form->get('arl')->setData($enti->getEntityEntity());
-                }
-                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
+                }else {
                     $actualSeverances->add($enti);
                 }
             }
