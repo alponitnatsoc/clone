@@ -327,7 +327,10 @@
                                                 <div class="hidden">
                                                     {{ form_row(caja.severances) }}
                                                 </div>
-                                                {{ form_row(caja.severancesAC,{'value' : sname}) }}
+                                                <div style="margin-top:10px;">
+                                                    {{ form_widget(caja.severancesAC,{'value' : sname}) }}
+                                                </div>
+
                                             </li>
                                         {% endfor %}
                                     </ul>
