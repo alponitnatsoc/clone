@@ -51,7 +51,8 @@
 					    </div>
 					</div>
 					<br />
-					<a id="noLegalAss" class="btn btn-orange notAjax" href="javascript:;">Continuar sin la consultoria</a>
+					<!--a id="noLegalAss" class="btn btn-orange notAjax" href="javascript:;">Continuar sin la consultoria</a-->
+					<input disabled="" id="noLegalAss" class="btn btn-orange notAjax" type="submit" value="Continuar sin la consultoria" href"/register/edit" onclick="redirect()">
 				</div>
 				
 				
@@ -74,6 +75,7 @@
 						Te ayudaremos a dar de alta tu empleado en Symplifica cuando estes listo para hacerlo.
 					</div>
 					<br />
+
 					<a class="btn btn-orange notAjax" href="{{ path('legal_payment')}}">Continuar con la consultoria</a>
 				</div>
 				
@@ -104,10 +106,8 @@
 		});
 		function check(){
 			if (document.getElementById("check").checked) {
-				//document.getElementById("noLegalAss").disabled = false;
-				$('#noLegalAss').prop("disabled", false);	
-				$('#noLegalAss').removeAttr("disabled");
-				$('#noLegalAss').attr("href", "/register/edit");
+				document.getElementById("noLegalAss").disabled = false;
+				//$('#noLegalAss').attr("disabled", "false");
 
 				//console.log("On " + document.getElementById("check").checked  );
 				//console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );
@@ -115,16 +115,16 @@
 			}else{
 				//document.getElementById("noLegalAss").disabled = true;	
 
-				$('#noLegalAss').prop("disabled", true);
-				$('#noLegalAss').attr("href", "#");
-				
+				document.getElementById("noLegalAss").disabled = true;
 					
 
 /*				console.log("Off " + document.getElementById("check").checked);
 				console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );*/
-			}
-				  
+			};						  
 		}
+		function redirect(){
+			document.location.href = '/register/edit';
+		};
 	</script>
 
 {% endblock %}
