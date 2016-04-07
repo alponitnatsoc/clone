@@ -765,7 +765,7 @@
                 </div>
             </div>
 
-            <div id="employeeEntities" class="tab-pane fade in {%   if tab==5 %}active{% endif %}">
+            <div id="employeeEntities" class="formulario tab-pane fade in {%   if tab==5 %}active{% endif %}">
                 {# render the task's only field: description #}
                 <div class="forma clearfix">
 {#                     <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">#}
@@ -828,6 +828,9 @@
 {#                             {{ form_row(form.entities.beneficiaries) }}#}
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 remember">
+                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
                     <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
