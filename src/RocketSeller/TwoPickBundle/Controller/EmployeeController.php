@@ -292,7 +292,7 @@ class EmployeeController extends Controller
         $employerHasEmployee = null;
         if ($id == -1) {
             $employee = new Employee();
-            $tab = 0;
+            $tab = 1;
         } else {
             $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
             //verify if the Id exists or it belongs to the logged user
