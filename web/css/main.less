@@ -1377,6 +1377,20 @@ ul.phones {
     }
 }
 
+.lista_check {
+    list-style-type: none;
+    padding: 0;
+    li {
+        &:before {
+            content: '\2713';
+            font-size: 15px;
+            color: #df9136;
+            margin-right: 10px;
+            line-height: 21px;
+        }
+    }
+}
+
 div#register_employee_employeeHasEmployers_weekWorkableDays > div
 {
     &.checkbox {
