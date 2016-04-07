@@ -15,6 +15,9 @@
             }
 
             .dashboard_employer_pending_tasks_list {
+                padding-left: 20px;
+                border-radius: 7px;
+                padding-top: 15px;
                 display: inline-block;
                 width: 100%;
                 background: #FBFBFB;
@@ -56,22 +59,27 @@
 
             .download-link, .download-link:hover {
                 color: #fff;
-                background-color: #BE1E2D;
+                background-color: #FD9224;
                 font-size: 12px;
                 padding: 5px;
                 cursor: pointer;
                 min-width: 100px;
+                border-radius: 3px;
+                font-weight: bold;
+                padding-left: 40px;
             }
 
             .action-link, .action-link:hover {
                 color: #fff;
-                background-color: #3c4b5a;
+                background-color: #1fcecb;
                 font-size: 12px;
+                font-weight: bold;
                 padding: 5px;
                 cursor: pointer;
                 min-width: 107px;
                 display: block;
                 text-align: center;
+                border-radius: 3px;
             }
 
             .panel-title{
@@ -103,10 +111,10 @@
                 font-size: 13px;
             }
             .description_list{
-                font-weight: bold;
+                margin-bottom: 15px;
                 font-family: 'Arial Negrita', 'Arial';
                 font-style: normal;
-                font-size: 13px;
+                font-size: 17px;
                 display: inline-block;
                 vertical-align: -webkit-baseline-middle;
                 margin-left: 10px;
@@ -189,25 +197,27 @@
                 border-width: 2px;
             }
             .dashboard_employer_contador_type_alert{
-                background-color: #BE1E2D;
+                background-color: #df8728;
                 height: 10px;
                 width: 10px;
                 margin-top: 4px;
                 margin-right: 6px;
                 display: inline-block;
                 float: left;
+                border-radius: 15px;
             }
             .contador_logo{
                 height: 50px;
             }
             .dashboard_employer_contador_type_notification{
-                background-color: #5D5D5D;
+                background-color: #1fcecb;
                 height: 10px;
                 width: 10px;
                 margin-top: 4px;
                 margin-right: 6px;
                 display: inline-block;
                 float: left;
+                border-radius: 15px;
             }
             .dashboard_employer_contador_type_mensaje{
                 background-color: #00CDCC;
@@ -299,7 +309,7 @@
         <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
             <div id="" class="col-sm-12 col-xs-12 blockStep inline">
                 <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                    <img src="/img/block-inline.png" class="center-block">                    
+                    <img src="{{ asset('/public/img/mail/check.png') }}" class="center-block">                    
                 </div>
                 <div id="" class="col-md-10 col-xs-12 txt-AD1">
                     <div id="" class="text-left">
@@ -387,7 +397,7 @@
                                 </div>
 
                                     {% if notification.accion %}
-                                        {% if notification.accion|lower == "subir documento" %}
+                                        {% if (notification.accion|lower|trim) == "subir" %}
                                             <div class="panel_btn">
                                                 <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link">{{ notification.accion }}</span>
                                             </div>
@@ -403,16 +413,16 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="dashboard_employer_pending_tasks_list">
+                        <div class="dashboard_employer_pending_tasks_list col-md-12">
                             {% if notification.type  %}
-                                <div class=" label_list type_{{ notification.type }}"> </div>
+                                
                             {% else %}
                                 <div class="label-as-badge label_list label-success">!</div>
                             {% endif %}
-                            <div class="description_list">
+                            <div class="description_list col-md-8">
                                 {{ notification.description }}
                             </div>
-                            <div class="deadline_list">
+                            <div class="deadline_list col-md-2">
                                 {% if notification.deadline %}
                                     {% set str_deadline = '' %}
                                     {% set deadline_type =  ''%}
@@ -430,10 +440,13 @@
                                     <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
                                 {% endif %}
                             </div>
-                            <div class="btn_list pull-right">
+                            <div class="btn_list pull-right col-md-2">
                                 {% if notification.accion %}
-                                    {% if notification.accion|lower == "subir documento" %}
+
+                                    {% if (notification.accion|lower|trim) == "subir" %}
+
                                         <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                        
                                     {% else %}
                                         <a href="{{ notification.relatedlink }}" class="action-link">{{ notification.accion }}</a>
                                     {% endif %}
