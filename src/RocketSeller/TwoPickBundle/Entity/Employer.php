@@ -126,13 +126,6 @@ class Employer
     {
         return $this->personPerson;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add workplace
@@ -322,6 +315,7 @@ class Employer
      */
     public function addEntity(\RocketSeller\TwoPickBundle\Entity\EmployerHasEntity $entity)
     {
+        $entity->setEmployerEmployer($this);
         $this->entities[] = $entity;
 
         return $this;
@@ -418,4 +412,15 @@ class Employer
     {
         return $this->idSqlSociety;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workplaces = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->realProcedure = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->employerHasEmployees = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }
