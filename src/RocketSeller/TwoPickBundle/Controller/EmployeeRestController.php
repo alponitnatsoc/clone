@@ -1337,15 +1337,23 @@ class EmployeeRestController extends FOSRestController
 
         if ($realEmployerEnt->count() < $realSeverances->count() + 1) {
             $counter = 0;
+            $exist=false;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($realArl);
+                    $exist=true;
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
                     $counter++;
                 }
+            }
+            if(!$exist){
+                $realArlHasEmployer = new EmployerHasEntity();
+                $realArlHasEmployer->setEntityEntity($realArl);
+                $realArlHasEmployer->setEmployerEmployer($realEmployer);
+                $realEmployer->addEntity($realArlHasEmployer);
             }
             if ($counter < $realSeverances->count()) {
                 for ($i = $counter; $i < $realSeverances->count(); $i++) {
@@ -1354,9 +1362,9 @@ class EmployeeRestController extends FOSRestController
                     $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
                     $realEmployer->addEntity($realSevereancesHasEmployer);
                 }
-                $em->persist($realEmployer);
-                $em->flush();
             }
+            $em->persist($realEmployer);
+            $em->flush();
         } else {
             $counter = 0;
             /** @var EmployerHasEntity $rEE */
