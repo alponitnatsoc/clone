@@ -396,7 +396,7 @@ trait SubscriptionMethodsTrait
         );
     }
 
-    protected function createPurchaceOrder($user, $methodId = false)
+    protected function createPurchaceOrder(User $user, $methodId = false)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$methodId) {
@@ -411,7 +411,7 @@ trait SubscriptionMethodsTrait
         $purchaseOrder = new PurchaseOrders();
         $purchaseOrder->setIdUser($user);
         $purchaseOrder->setName('Pago Membresia');
-        $total = ($user->getStatus() == 2 || $user->getStatus() == 3) ? 0 : $data['total_con_descuentos'];
+        $total = ($user->getIsFree() > 0) ? 0 : $data['total_con_descuentos'];
         $purchaseOrder->setValue($total);
         $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
         $purchaseOrder->setPayMethodId($methodId);
@@ -442,6 +442,14 @@ trait SubscriptionMethodsTrait
             $user->setPaymentState(1);
             $user->setDayToPay(date('d'));
             $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
+
+            if ($user->getIsFree() > 0) {
+                $date = new \DateTime();
+                $date->add(new \DateInterval('P1M'));
+                $startDate = $date->format('Y-m-d');
+                $user->setIsFreeTo($date);
+            }
+
             $em->persist($user);
             $em->flush();
 

@@ -93,16 +93,31 @@ class User extends BaseUser
 
     /**
      * Columna utilizada para conocer el estado de la suscripcion del usuario
-     * 0 Inactivo
-     * 1 Activo
-     * 2 Free
-     * 3 Free3
+     * 
+     * Estados del usuario:
+     *      0 - Inactivo / Suscripcion desactivada o inactiva
+     *      1 - Mail confirmado
+     *      2 - Registro completado
      *
      * @var SmallIntType
      *
      * @ORM\Column(type="smallint")
      */
     private $status = 1;
+
+    /**
+     * Columna utilizada para saber cantidad de meses gratis
+     * 
+     * Estados del usuario:
+     *      0 - sin tiempo gratis
+     *      1 - 1 mes gratis
+     *      n - n meses gratis
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $isFree = 1;
 
     /**
      * Columna utilizada para conocer el estado del empleado 
@@ -158,6 +173,13 @@ class User extends BaseUser
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastPayDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $isFreeTo;
 
     /**
      * @var string
@@ -453,9 +475,8 @@ class User extends BaseUser
      * @return User
      * Estados del usuario:
      *      0 - Inactivo / Suscripcion desactivada o inactiva
-     *      1 - Activo / Suscripcion activa
-     *      2 - Free / Periodo gratis para el usuario primer mes
-     *      3 - Free3 / Periodo gratis para el usuario +2 meses por completar registro 48 horas total 3 meses gratis
+     *      1 - Mail confirmado
+     *      2 - Registro completado
      *
      */
     public function setStatus($status)
@@ -707,7 +728,6 @@ class User extends BaseUser
         return $this->express;
     }
 
-
     /**
      * Set lastPayDate
      *
@@ -754,5 +774,54 @@ class User extends BaseUser
     public function getLegalFlag()
     {
         return $this->legalFlag;
+    }
+
+
+    /**
+     * Set isFree
+     *
+     * @param integer $isFree
+     *
+     * @return User
+     */
+    public function setIsFree($isFree)
+    {
+        $this->isFree = $isFree;
+
+        return $this;
+    }
+
+    /**
+     * Get isFree
+     *
+     * @return integer
+     */
+    public function getIsFree()
+    {
+        return $this->isFree;
+    }
+
+    /**
+     * Set isFreeTo
+     *
+     * @param \DateTime $isFreeTo
+     *
+     * @return User
+     */
+    public function setIsFreeTo($isFreeTo)
+    {
+        $this->isFreeTo = $isFreeTo;
+
+        return $this;
+    }
+
+    /**
+     * Get isFreeTo
+     *
+     * @return \DateTime
+     */
+    public function getIsFreeTo()
+    {
+        return $this->isFreeTo;
     }
 }

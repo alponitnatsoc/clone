@@ -32,13 +32,6 @@ class SubscriptionController extends Controller
             $date->add(new \DateInterval('P1M'));
             $startDate = $date->format('Y-m-d');
 
-            $responce = $this->forward('RocketSellerTwoPickBundle:EmployerRest:setEmployeesFree', array(
-                'idEmployer' => $this->getUser()->getPersonPerson()->getEmployer()->getIdEmployer(),
-                'freeTime' => 1,
-                'all' => true
-                    ), array('_format' => 'json')
-            );
-
             $data = $this->getSubscriptionCost($user, false);
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(

@@ -1,14 +1,94 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
+	<div class="row">
+		<div class="col-sm-12 col-xs-12 align-Resp">
+	        <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
+	            <div class="col-md-12 col-xs-12 txt-AD1" id="">
+	                <div class="text-center" id="">
+	                    ¡Bienvenido a Symplifica!
+	                </div>
+	            </div>
+	        </a>
+	    </div>
+	</div>	
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+			<br /><br />
+			<h4 style="font-weight: lighter;">
+				De acuerdo a tus respuestas puede que en el pasado no hayas cumplido con todas las exigencias de ley en la relación laboral con tu empleado
+			</h4>
+			<br /><br />
+			<h4>
+				<strong>¡No te preocupes! Estamos para ayudarte!</strong><br />
+				Te presentamos dos opciones para continuar con nosotros.
+			</h4>
+		</div>
+	</div>
+
+
+	<div id="registrationTypeContainer" style="background:none; padding:0 0 20px;">
+		<div class="content" style="max-width: 840px;">
+			<div class="registrationTypeOption">
+				<div class="registrationTypeTitle ">Iniciar con mi situación actual</div>
+				<div class="registrationTypecontent ">
+					<div class="optionPrice">
+						<h3>$0</h3>
+					</div>
+					<div class="optionDescription">
+						Generar un nuevo contrato con tu empleado
+						<br /><br />
+						Este contrato reemplazará cualquier contrato o acuerdo anterior
+						<br /><br />
+						Esto no significa que las obligaciones o deberes como empleador que adquiriste en el pasado queden cerradas
+						<br /><br />
+						Esto es un mecanismo que usamos para generar un corte y poder garantizar que de aca en adelante estas haciendo las cosas bien
+						<br /><br />
+						Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica
+
+						<div class="checkbox">
+					      <label><input name="legal-status" type="checkbox" value="">Acepto que soy responsable de mis obligaciones con mi empleado en el pasado</label>
+					    </div>
+					</div>
+					<br />
+					<a class="btn btnPrevious notAjax" href="/register/edit">Continuar sin la consultoria</a>
+				</div>
+				
+				
+			</div>
+			<div class="registrationTypeOption">
+				<div class="registrationTypeTitle darkOne">Evalua tu caso con un especialista</div>
+				<div class="registrationTypecontent ">
+					
+					<div class="optionPrice">
+						<h3>${{totalValue}}</h3>
+					</div>
+					<div class="optionDescription">
+						Por un fee de $150.000 un abogado evaluará contigo durante una hora tu situación actua
+						<br /><br />
+						Generará unas alternativas de solución
+						<br /><br />
+						Recibirás un estimado del valor de la solución de tu caso.
+						<br /><br />
+						Te ayudaremos a dar de alta tu empleado en Symplifica cuando estes listo para hacerlo.
+					</div>
+					<br />
+					<a class="btn btn-orange notAjax" href="{{ path('legal_payment')}}">Continuar con la consultoria</a>
+				</div>
+				
+			</div>
+		</div>		
+	</div>	
+
+
 	<div class="col-sm-12">
 		<div class="col-sm-8 col-sm-offset-2"> 
 			<div class="col-sm-6" style="text-align: right;">
-				<a class="btn btn-orange notAjax" href="/register/edit">Continuar sin la consultoria</a>
+				
 			</div>
 			<div class="col-sm-6">
 
-				<h2>{{totalValue}}</h2>
-				<a class="btn btn-orange notAjax" href="{{ path('legal_payment')}}">Continuar con la consultoria</a>
+				<h2></h2>
+				
 			</div>
 		</div>
 		

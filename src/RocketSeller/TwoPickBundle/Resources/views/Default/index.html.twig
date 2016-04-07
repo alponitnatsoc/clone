@@ -1,14 +1,47 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-	<div class="col-sm-12">
-		<div class="col-sm-8 col-sm-offset-2"> 
-			<div class="col-sm-6" style="text-align: right;">
-				<a class="btn btn-orange notAjax" href="/legal-status">Si, ya inicio labores</a>
-			</div>
-			<div class="col-sm-6">
-				<a class="btn btn-orange notAjax" href="/register/edit">No, aún no ha iniciado labores</a>
-			</div>
-		</div>
+
+
+	<div class="row">
 		
+
+		<div class="col-sm-12 col-xs-12 align-Resp">
+	        <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
+	            <div class="col-md-12 col-xs-12 txt-AD1" id="">
+	                <div class="text-center" id="">
+	                    ¡Bienvenido a Symplifica!
+	                </div>
+	            </div>
+	        </a>
+	    </div>
+
+
 	</div>
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+			<br /><br />
+			<h4 style="font-weight: lighter;">
+				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas. Estas preguntas son privadas y no guardaremos registro de las mismas
+			</h4>
+			<br /><br />
+			<h4>
+				<strong>¿Tu empleado ya se encuentra trabajando para tí?</strong>
+			</h4>
+			<br /><br />
+		</div>
+	</div>
+
+	<div class="row">
+		
+
+		<div class="col-sm-6 col-xs-12" style="text-align: right;">
+			<a class="btn btn-darkblue notAjax" href="/legal-status">Si, ya inicio labores</a>
+		</div>
+		<div class="col-sm-6 col-xs-12">
+			<a class="btn btn-grey notAjax" href="/register/edit">No, aún no ha iniciado</a>
+		</div>
+
+	</div>
+
+
 {% endblock %}

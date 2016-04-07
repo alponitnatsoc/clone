@@ -28,9 +28,9 @@
   & .registrationTypeTitle {
     background-color: #00C4C5;
     color: @txtWhite;
-    height: 60px;
+    height: 58px;
     text-align: center;
-    font-size: 26px;
+    font-size: 23px;
     padding: 10px 0 0;
     font-weight: 100;
   }
@@ -41,7 +41,7 @@
 
   & .registrationTypeOption {
     margin-top: 20px;
-    width: 47%;
+    width: 48%;
     float: left;
     position: relative;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -80,7 +80,7 @@
     text-align: left;
     margin: 0 0 10px;
     font-size: 12px;
-    height: 200px;
+    height: 280px;
   }
 }
 
@@ -173,6 +173,30 @@
 
 
 
+.priceContainer {
+  background-color: #00C4C5;
+  margin: 0 auto;
+  width: 230px;
+  padding: 8px;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+
+  & h1 {
+    font-size: 40px;
+    margin: 0;
+    padding: 0;
+    font-weight: 800;
+  }
+
+  & h2 {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    font-weight: 100;
+  }
+}
+
 @media only screen and (max-device-width : 360px) { 
  
 .smallOrangeBox {
@@ -194,4 +218,84 @@
           text-align: center;
         }     
     }
+
+
+
+#registrationTypeContainer {    
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+
+  & .content {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+
+    & p {
+      font-size: 17px;
+    }
+  }
+  & .registrationTypeTitle {
+    background-color: #00C4C5;
+    color: @txtWhite;
+    height: 85px;
+    text-align: center;
+    font-size: 23px;
+    padding: 10px 0 0;
+    font-weight: 100;
+  }
+
+  & .darkOne {
+    background-color: #008990;
+  }
+
+  & .registrationTypeOption {
+    margin-top: 20px;
+    width: 100%;
+    float: left;
+    position: relative;
+    box-shadow: 0;
+    margin-right: 0px;
+
+  }
+
+  & .registrationTypeOption:last-child {
+    margin-right: 0px;
+    
+  }  
+
+  & .registrationTypecontent {
+    background-color: @whiteBackGround;
+    padding: 0px;
+  }
+
+  & .optionPrice {
+    color: #89878B;
+    width: 100%;
+    border-bottom: 1px solid #ccc; 
+    margin: 0 0 20px;
+
+    & h3 {
+        color: @orange;
+        margin-top: 5px;
+    }
+  }
+
+  & .optionPrice {
+    color: #89878B;
+
+  }
+
+  & .optionDescription {
+    text-align: left;
+    margin: 0 0 10px;
+    font-size: 12px;
+    height: 400px;
+    padding: 10px;
+  }
+}
+
+
+
 }

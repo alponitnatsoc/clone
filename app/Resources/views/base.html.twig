@@ -141,7 +141,9 @@
                                     {% else %}
                                         {% set status = 0 %}
                                     {% endif %}
-                                    {% if status < 2 %} <a class="btn btn-primpary btn-orange notAjax" href="express-payment/add">Registro Express</a>{% endif %}
+                                    {% if status < 2 %} 
+                                        <!--a class="btn btn-primpary btn-orange notAjax" href="express-payment/add">Registro Express</a-->
+                                    {% endif %}
                                     {% if status >= 2 %}
                                         <div class="{% if app.request.get('_route') == 'show_dashboard_employer' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                             <a href="{{ path('show_dashboard_employer') }}">Tablero de control</a>
