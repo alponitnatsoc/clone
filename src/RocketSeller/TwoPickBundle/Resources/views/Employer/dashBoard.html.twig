@@ -359,47 +359,7 @@
         <div class="notification_contenedor col-md-12">
             {% for notification in notifications %}
                 {% if notification.status == 1 and (notification.type == 'alert'  or notification.type == 'notification' or notification.type == 'mensaje'  ) %}
-                    {% if app.request.get('view') == 'list'  %}
-                        <div class="dashboard_employer_pending_tasks_list">
-                            {% if notification.type  %}
-                                <div class=" label_list type_{{ notification.type }}"> </div>
-                            {% else %}
-                                <div class="label-as-badge label_list label-success">!</div>
-                            {% endif %}
-                            <div class="description_list">
-                                {{ notification.description }}
-                            </div>
-                            <div class="deadline_list">
-                                {% if notification.deadline %}
-                                    {% set str_deadline = '' %}
-                                    {% set deadline_type =  ''%}
-                                    {% set difference = date().diff(date(notification.deadline)) %}
-                                    {% if difference.invert== 1 %}
-                                        {% set deadline_type = '_alert' %}
-                                        {% set str_deadline =  str_deadline ~ '-' %}
-                                    {% endif %}
-                                    {% if difference.days == 1 %}
-                                        {% set deadline_type =  '_warning' %}
-                                        {% set str_deadline =  str_deadline ~ '1 día' %}
-                                    {% else %}
-                                        {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
-                                    {% endif %}
-                                    <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
-                                {% endif %}
-                            </div>
-                            <div class="btn_list pull-right">
-                                {% if notification.accion %}
-                                    {% if notification.accion|lower == "subir documento" %}
-                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
-                                    {% else %}
-                                        <a href="{{ notification.relatedlink }}" class="action-link">{{ notification.accion }}</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% else %}
+                    {% if app.request.get('view') == 'panel'  %}
                         <div class="dashboard_employer_pending_tasks col-md-4">
                             <div class="col-xs-12">
                                 <div class="panel-body">
@@ -442,6 +402,47 @@
                                     {% endif %}
                             </div>
                         </div>
+                    {% else %}
+                        <div class="dashboard_employer_pending_tasks_list">
+                            {% if notification.type  %}
+                                <div class=" label_list type_{{ notification.type }}"> </div>
+                            {% else %}
+                                <div class="label-as-badge label_list label-success">!</div>
+                            {% endif %}
+                            <div class="description_list">
+                                {{ notification.description }}
+                            </div>
+                            <div class="deadline_list">
+                                {% if notification.deadline %}
+                                    {% set str_deadline = '' %}
+                                    {% set deadline_type =  ''%}
+                                    {% set difference = date().diff(date(notification.deadline)) %}
+                                    {% if difference.invert== 1 %}
+                                        {% set deadline_type = '_alert' %}
+                                        {% set str_deadline =  str_deadline ~ '-' %}
+                                    {% endif %}
+                                    {% if difference.days == 1 %}
+                                        {% set deadline_type =  '_warning' %}
+                                        {% set str_deadline =  str_deadline ~ '1 día' %}
+                                    {% else %}
+                                        {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
+                                    {% endif %}
+                                    <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="btn_list pull-right">
+                                {% if notification.accion %}
+                                    {% if notification.accion|lower == "subir documento" %}
+                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                    {% else %}
+                                        <a href="{{ notification.relatedlink }}" class="action-link">{{ notification.accion }}</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
                     {% endif %}
                 {% endif %}
             {% endfor %}
