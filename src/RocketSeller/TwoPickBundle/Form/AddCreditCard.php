@@ -24,16 +24,20 @@ class AddCreditCard extends AbstractType
         }
         $builder->add('credit_card', 'text', array(
                     "attr" => array(
+                        
                         'placeholder' => 'Tu tarjeta de crédito',
                         'title' => 'Tu tarjeta de crédito'
                     ),
+                    'label' => 'Targeta de crédito',
                     'required' => true
                 ))
                 ->add('expiry_date_year', 'integer', array(
                     "attr" => array(
+                        
                         'placeholder' => 'Año de vencimiento',
                         'title' => 'Año de vencimiento'
                     ),
+                    'label' => 'Año de expiración',
                     'required' => true
                 ))
                 /* ->add('expiry_date', 'date', array(
@@ -63,13 +67,16 @@ class AddCreditCard extends AbstractType
                         '12' => '12',
                     ),
                     "attr" => array(
+                        
                         'placeholder' => 'Mes de vencimiento',
                         'title' => 'Mes de vencimiento'
                     ),
+                    'label' => 'Mes de expiración',
                     'required' => true
                 ))
                 ->add('cvv', 'integer', array(
                     "attr" => array(
+                        'label' => 'CCV',
                         'placeholder' => 'CVV',
                         'title' => 'CVV'
                     ),
@@ -77,9 +84,11 @@ class AddCreditCard extends AbstractType
                 ))
                 ->add('name_on_card', 'text', array(
                     "attr" => array(
+                        
                         'placeholder' => 'Tu nombre en la tarjeta de crédito',
                         'title' => 'Tu nombre en la tarjeta de crédito'
                     ),
+                    'label' => 'Nombre en tarjeta de credito',
                     'required' => true
         ))
         ->add('documentType', 'choice', array(

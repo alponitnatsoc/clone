@@ -32,6 +32,7 @@
 				<div class="registrationTypeTitle ">Iniciar con mi situación actual</div>
 				<div class="registrationTypecontent ">
 					<div class="optionPrice">
+						Costo
 						<h3>$0</h3>
 					</div>
 					<div class="optionDescription">
@@ -46,11 +47,11 @@
 						Si tienes dudas respecto a tu situación actual puedes hacer una consulta con nuestra firma de abogados aliada a unas tarifas especiales para clientes Symplifica
 
 						<div class="checkbox">
-					      <label><input name="legal-status" type="checkbox" value="">Acepto que soy responsable de mis obligaciones con mi empleado en el pasado</label>
+					      <label><input id="check" name="legal-status" type="checkbox" value="" onclick="check()">Acepto que soy responsable de mis obligaciones con mi empleado en el pasado</label>
 					    </div>
 					</div>
 					<br />
-					<a class="btn btnPrevious notAjax" href="/register/edit">Continuar sin la consultoria</a>
+					<a id="noLegalAss" class="btn btn-orange notAjax" href="javascript:;">Continuar sin la consultoria</a>
 				</div>
 				
 				
@@ -60,6 +61,7 @@
 				<div class="registrationTypecontent ">
 					
 					<div class="optionPrice">
+						Costo
 						<h3>${{totalValue}}</h3>
 					</div>
 					<div class="optionDescription">
@@ -93,4 +95,36 @@
 		</div>
 		
 	</div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready(function(){
+			document.getElementById("noLegalAss").disabled = true;		  
+		});
+		function check(){
+			if (document.getElementById("check").checked) {
+				//document.getElementById("noLegalAss").disabled = false;
+				$('#noLegalAss').prop("disabled", false);	
+				$('#noLegalAss').removeAttr("disabled");
+				$('#noLegalAss').attr("href", "/register/edit");
+
+				//console.log("On " + document.getElementById("check").checked  );
+				//console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );
+
+			}else{
+				//document.getElementById("noLegalAss").disabled = true;	
+
+				$('#noLegalAss').prop("disabled", true);
+				$('#noLegalAss').attr("href", "#");
+				
+					
+
+/*				console.log("Off " + document.getElementById("check").checked);
+				console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );*/
+			}
+				  
+		}
+	</script>
+
 {% endblock %}
