@@ -323,7 +323,7 @@
 
             <div id="contractData" class="tab-pane fade in {%   if tab==3 %} active {% endif %}">
                 <div class="col-md-10 col-md-push-1">
-                    <div id="contractDataWiz" style="margin-top:10px">
+                    <div id="contractDataWiz" style="padding-top:10px">
                         <ul id="contractNav" class="nav nav-tabs nav-justified">
                             <li class="active" ><a data-toggle="tab" data-target="#contractTypeTab"></a></li>
                             <li><a data-toggle="tab" data-target="#employeeContractTypeTab"></a></li>
@@ -505,19 +505,26 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-12 col-xs-12 text-center">
+                                    <br />
+                                    <p style="font-weight:100">El costo mensual de este empleado es:</p>
+                                    <div class="priceContainer">
+                                        <h1><input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                        <h2><a id="link_calculator" href="" style="    color: #fff;font-size: 16px;font-weight: 100;text-decoration: underline;" class="notAjax">Ver detalle del costo</a></h2>
+                                    </div>
+                                    <!--
                                     <div class="col-sm-6 label-group">
                                         <label>El costo mensual de este empleado es:</label>
                                     </div>
                                     <div class="col-sm-6 form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon">COP </span>
-                                            <input type="text" id="totalExpensesVal" class="form-control">
                                         </div>
                                         <div style="text-align: right">
                                             <a id="link_calculator" href="" class="notAjax">Mostrar detalles</a>
                                         </div>
-                                    </div>
+                                    </div>-->
+                                    <br />
                                 </div>
                                 <div class="col-sm-12 col-xs-12 center">
 
