@@ -1,5 +1,5 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block subject %}{% autoescape false %}{{ 'registration.email.subject'|trans({'%username%': user.personPerson.names}) }} a Symplifica{% endautoescape %}{% endblock %}
+{% block subject %}{% autoescape false %}Bienvenido {{ user.personPerson.names }} a Symplifica{% endautoescape %}{% endblock %}
 {% block body_text %}
 {% autoescape false %}
 &#161;Bienvenido&#33;
@@ -195,13 +195,14 @@ mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este
                 <table  border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
                         <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 20px; color:#74BEC0">
-                            Symplifica te obsequia desde hoy UN MES de servicio completo, terminando el día {{ fechaFin }}.
+                            Symplifica te obsequia desde hoy UN MES de servicio completo, que comienza en el momento activar el servicio.
                         </td>
                     </tr>
                     <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
                     <tr>
                         <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px; color:#74BEC0">
-                            Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:
+{#                             Podrás recibir OTRO MES por cada persona que refieras y adquiera nuestro servicio usando el siguiente código:#}
+                            Podrás recibir un 20% descuento sobre el valor de tu membresia por cada persona que refieras y adquiera nuestro servicio usaurio el siguiente código:
                         </td>
                     </tr>
                     <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
