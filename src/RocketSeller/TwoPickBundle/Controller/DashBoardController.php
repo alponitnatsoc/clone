@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DashBoardController extends Controller
 {
 
-    
+
     public function legalAction(Request $request)
     {
         return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig');
@@ -50,8 +50,8 @@ class DashBoardController extends Controller
             $employees = $employer->getEmployerHasEmployees();
             //se calcula cuantos empleados tenemos 0 ó *
             $numEmployees = count($employees);
-            //para agregar procentajes respectivos la minima unidad es el registro del 
-            //empleado sin el contrato, cuando se le agrega el contrato es otra unidad 
+            //para agregar procentajes respectivos la minima unidad es el registro del
+            //empleado sin el contrato, cuando se le agrega el contrato es otra unidad
             //minima de un 100%
             //si existen empleados se puede empezar a subir el 0%
             if ($numEmployees > 0) {
@@ -109,14 +109,14 @@ class DashBoardController extends Controller
             'stateMessage' => !$paymentState ? "Iniciar" : "Editar",);
         $steps ['3'] = $step4;
 
-        $step5 = array(
-            'url' => $paymentState != 1 ? "" : $this->generateUrl('matrix_choose'),
-            'name' => "Finalizar afiliación",
-            'paso' => 4,
-            'state' => $stateAfiliation,
-            'boxStyle' => "big",
-            'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
-        $steps ['4'] = $step5;
+//         $step5 = array(
+//             'url' => $paymentState != 1 ? "" : $this->generateUrl('matrix_choose'),
+//             'name' => "Finalizar afiliación",
+//             'paso' => 4,
+//             'state' => $stateAfiliation,
+//             'boxStyle' => "big",
+//             'stateMessage' => $stateAfiliation != 100 ? "Iniciar" : "Editar",);
+//         $steps ['4'] = $step5;
 
         return $this->render('RocketSellerTwoPickBundle:General:dashBoard.html.twig', array('steps' => $steps));
     }
