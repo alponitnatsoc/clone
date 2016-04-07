@@ -1218,7 +1218,6 @@ function payMethodListener() {
                 $(this).hide();
             });
         } else {
-            $("#noDaviplata").modal("show");
             $hasIt.parent().parent().find(".form-group").each(function () {
                 $(this).show();
             })
