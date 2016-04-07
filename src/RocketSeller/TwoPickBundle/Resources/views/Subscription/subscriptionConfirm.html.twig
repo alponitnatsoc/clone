@@ -426,11 +426,18 @@
                 <div class="row">
                     <div class="" style="display: inline-block; text-align: center; width: 100%; margin-top: 20px;">
                         <span style="font-size: 20px;">Con el número de empleados<br /> nuestro servicio tendrá un costo mensual de:</span>
+                        <br />
+                        <div class="priceContainer" style="padding-bottom:10px">
+                            <h1 style="color: #fff;text-align: center;">$ {{ (total_con_descuentos)|number_format  }}</h1>
+                            <h2 style="color: #fff;font-size: 14px;font-weight: 100;">A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}</h2>
+                        </div>
+                    <!--
                         <div class="div_price">
                             <div id="result_price">$ {{ (total_con_descuentos)|number_format  }}</div>
                             <div>A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}</div>
                             {#<div id="result_discount">$ {{ total_sin_descuentos|number_format  }}</div>    #}
                         </div>
+                    -->
                     </div>
                     <div style="text-align: center; margin-top: 20px;">
                         Recuerda que el primer mes es gratis y que te obsequiamos otro mes si  completas antes de 48 horas el registro y carga documentación
