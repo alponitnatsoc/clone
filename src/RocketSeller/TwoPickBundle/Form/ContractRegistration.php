@@ -173,6 +173,7 @@ class ContractRegistration extends AbstractType
                     '5' => '5',
                     '6' => '6',
                 ),
+                'placeholder'=>' ',
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
