@@ -344,13 +344,20 @@
                                     <div class="hidden">
                                         {{ form_row(form.arl) }}
                                     </div>
-                                    <div style="margin-top:10px;">
+                                    <div style="margin-top:10px;padding:0 15px;" class="form-group">
                                         {{ form_widget(form.arlAC,{'value' : aname}) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember">
+                            <h4><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué debo afiliarme si yo soy el empleador?</h4>
+                            <span style="color:#666; font-weight:300">Para control de las administradoras se requiere que el empleador se inscriba como tal. La ARL y la Caja de Compensación son elección del empleador, esta última deben tener cobertura en el departamento donde se labora el empleado.</span>
+                        </div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 remember">
                             <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
@@ -370,11 +377,13 @@
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content"><div class="modal-body" style="padding: 0">
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¡Muy Bien!<br />Terminaste el primer paso</div>
+                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¡Muy Bien!<br />
+                                <span style="font-weight:100;font-size:23px">Terminaste el primer paso<span>
+                            </div>
                         </div>
                         <div class="row-fluid clearfix" style="padding: 30px;">
                             <p>Ten a la mano los siguienes datos de tus empleados para agilizar su registro:</p>
-                            <ul class="lista_listo">
+                            <ul class="lista_check">
                                 <li>Documento de identidad</li>
                                 <li>Datos de  contacto (Teléfono, dirección, email)</li>
                                 <li>Datos contractuales (Salario, fecha de ingreso)</li>

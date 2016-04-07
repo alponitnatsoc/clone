@@ -123,7 +123,7 @@ class LegalAssistanceController extends Controller
         $em->persist($user);
         $em->flush();
 
-        return true;
+        return $this->redirectToRoute('edit_profile');
     }
     public function successExpress()
     {
