@@ -3,9 +3,10 @@
 <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
     {{ form_widget(form) }}
     <div class="form-group txt-A1-terms">
-        <input type="checkbox" id="chkTOS"/> Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a>
+        <input type="checkbox" id="chktyc" required />
+        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a>
     </div>
     <div class="col-xs-12">
-		<input type="submit" id="btnSubmit" value="{{ 'registration.submit'|trans }}" class="btn register-AS1 btn-symplifica" disabled/>
+		<input type="submit" id="btnSubmit" value="{{ 'registration.submit'|trans }}" class="btn register-AS1 btn-symplifica" />
     </div>
 </form>

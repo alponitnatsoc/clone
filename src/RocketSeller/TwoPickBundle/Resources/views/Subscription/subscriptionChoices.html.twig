@@ -69,7 +69,7 @@
     </ul>
 
     <div class="col-xs-12 text-center">
-        <p style="padding: 20px; color:#00acd6; border-bottom: 1px solid #E6E7E8;">
+        <p style="padding: 20px; border-bottom: 1px solid #E6E7E8;">
             Has registrado los siguientes empleados
         </p>
     </div>
@@ -95,10 +95,11 @@
                             <div class="row-fluid">
                                 <div class="col-xs-12 {{ employee.state>0 ?'activo':'inactivo' }} {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }}">
                                     <div class="employee_name">
-                                        <b>{{ employee.employeeEmployee.personPerson.names ~ ' ' ~ employee.employeeEmployee.personPerson.lastname1}}</b>
+                                        <b>{{ employee.employeeEmployee.personPerson.names }}</b><br />
+                                        <span style="font-weight:100">{{ employee.employeeEmployee.personPerson.lastname1 }}</span>
                                     </div>
                                     {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                    <div class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
+                                    <div style="font-style:italic" class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}">
                                         Labora {{ (contrato.workableDaysMonth)|number_format }} días al mes
                                     </div>
                                     <div>

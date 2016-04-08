@@ -769,50 +769,72 @@
                 </div>
             </div>
 
-            <div id="employeeEntities" class="tab-pane fade in {%   if tab==5 %}active{% endif %}">
+            <div id="employeeEntities" class="formulario tab-pane fade in {%   if tab==5 %}active{% endif %}">
                 {# render the task's only field: description #}
                 <div class="forma clearfix">
-                    <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">
-                        <div class="col-sm-4 col-xs-12">
-                            <div class="title text-center">Salud</div>
+{#                     <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">#}
+{#                         <div class="col-sm-4 col-xs-12">#}
+{#                             <div class="title text-center">Salud</div>#}
+{#                         </div>#}
+{#                         <div class="col-sm-4 col-xs-12">#}
+{#                             <div class="title text-center">Pensión</div>#}
+{#                         </div>#}
+{#                         <div class="col-sm-4 col-xs-12">#}
+{#                             <div class="title text-center">¿Registrará beneficiarios?</div>#}
+{#                         </div>#}
+{#                     </div>#}
+                    {% if form.entities.wealth.vars.data.name is defined %}
+                        {% set wname = form.entities.wealth.vars.data.name %}
+                    {% else %}
+                        {% set wname = "" %}
+                    {% endif %}
+                    {% if form.entities.pension.vars.data.name is defined %}
+                        {% set pname = form.entities.pension.vars.data.name %}
+                    {% else %}
+                        {% set pname = "" %}
+                    {% endif %}
+                    <div class="col-sm-10 col-xs-12 blockUpData">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="hidden">
+                                {{ form_row(form.entities.wealth) }}
+                            </div>
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.entities.wealthAC) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
+                            </div>
+{#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                         </div>
-                        <div class="col-sm-4 col-xs-12">
-                            <div class="title text-center">Pensión</div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="hidden">
+                                {{ form_row(form.entities.pension) }}
+                            </div>
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.entities.pensionAC) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
+                            </div>
+{#                             <div class="col-sm-12 col-xs-12">#}
+{#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
+{#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
+{#                             </div>#}
                         </div>
-                        <div class="col-sm-4 col-xs-12">
-                            <div class="title text-center">¿Registrará beneficiarios?</div>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.entities.beneficiaries) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.entities.beneficiaries) }}
+                            </div>
+{#                             <div class="title text-center col-sm-6 label-group">¿Registrará beneficiarios?</div>#}
+{#                             {{ form_row(form.entities.beneficiaries) }}#}
                         </div>
                     </div>
-
-                        {% if form.entities.wealth.vars.data.name is defined %}
-                            {% set wname = form.entities.wealth.vars.data.name %}
-                        {% else %}
-                            {% set wname = "" %}
-                        {% endif %}
-                        {% if form.entities.pension.vars.data.name is defined %}
-                            {% set pname = form.entities.pension.vars.data.name %}
-                        {% else %}
-                            {% set pname = "" %}
-                        {% endif %}
-                        <div class="col-sm-12 col-xs-12 blockUpData">
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="hidden">
-                                    {{ form_row(form.entities.wealth) }}
-                                </div>
-                                {{ form_row(form.entities.wealthAC,{'value' : wname}) }}
-                            </div>
-                            <div class="wrapper">
-                                <div class="hidden">
-                                    {{ form_row(form.entities.pension) }}
-                                </div>
-                                <div class="col-sm-4 col-xs-12">
-                                    {{ form_row(form.entities.pensionAC,{'value' : pname}) }}
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12">
-                                {{ form_row(form.entities.beneficiaries) }}
-                            </div>
-                        </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 remember">
+                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
                     <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
@@ -823,7 +845,6 @@
                     <br></br>
                 </div>
                 <div id="toHide">
-
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.employeeHasEmployers.contractType) }}
@@ -834,19 +855,10 @@
                     </div>
                     {{ form_widget(form) }}
                 </div>
-
-
             </div>
-
-
-
         </div>
-
-
-
         {{ form_end(form) }}
     </div>
-
 
     <!-- Modal salario minimo -->
     <div class="modal fade" id="salarioMinimo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">

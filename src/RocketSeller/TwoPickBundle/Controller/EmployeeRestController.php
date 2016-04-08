@@ -1147,7 +1147,7 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function createNotification($person, $descripcion, $url, $action = "Subir documento")
+    private function createNotification($person, $descripcion, $url, $action = "Subir")
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
