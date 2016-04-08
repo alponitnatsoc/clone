@@ -119,6 +119,11 @@
               e.preventDefault();
               $('#loginModal').modal('hide');
               $('#forgotModal').modal('show');
+          });
+
+          $('#forgotBtn2').click(function (e) {
+              e.preventDefault();
+              $('#forgotModal').modal('show');
           })
       })
       </script>
@@ -153,6 +158,6 @@
             </div>
         </div>
         {% block javascripts %}
-        {% endblock %}  
+        {% endblock %}
     </body>
 </html>

@@ -1,21 +1,40 @@
-{% extends "::public.html.twig" %}
+{# {% extends "::public.html.twig" %}#}
+{% extends "::new-design/public.html.twig" %}
+{# {% extends "::base.html.twig" %}#}
+
+{# {% block body %}#}
+{# <div class="row-fluid" style="background-color: #f8f8f8;">#}
+{# 	<div class="container">#}
+{# 		<div class="middlePage">#}
+{# 			<div class="page-header">#}
+{# 				<h1 class="logo"><small>Bienvenido a Symplifica!</small></h1>#}
+{# 			</div>#}
+{# 			<div class="panel panel-info">#}
+{# 				<div class="panel-heading">#}
+{# 			    	<h3 class="panel-title"></h3>#}
+{# 			  	</div>#}
+{# 		  		<div class="panel-body">#}
+{# 					{% include "RocketSellerTwoPickBundle:General:login.html.twig" %}#}
+{# 				</div>#}
+{# 			</div>#}
+{# 		</div>#}
+{# 	</div>#}
+{# </div>#}
+{# {% endblock body %}#}
 
 {% block body %}
-<div class="row-fluid" style="background-color: #f8f8f8;">
-	<div class="container">
-		<div class="middlePage">
-			<div class="page-header">
-				<h1 class="logo"><small>Bienvenido a Symplifica!</small></h1>
-			</div>
-			<div class="panel panel-info">
-				<div class="panel-heading">
-			    	<h3 class="panel-title"></h3>
-			  	</div>
-		  		<div class="panel-body">
-					{% include "RocketSellerTwoPickBundle:General:login.html.twig" %}
-				</div>
-			</div>
-		</div>
-	</div>
+<div id="registrationContainer" class="row-fluid clearfix" style="background-color: #3c4b5a; padding-bottom: 30px;">
+    <div class="smallOrangeBox">
+        <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle" /></div>
+        <div class="smallOrangeBoxContent">
+            <hr class="smallDivider" />
+            {% include "RocketSellerTwoPickBundle:General:login.html.twig" %}
+{#             <div class="registrationSocialNetworks">#}
+{#                 <hr class="smallDivider"></hr>#}
+{#                 <span>Ingresar con:</span>#}
+{#                 {% include "RocketSellerTwoPickBundle:General:new/redes-login.html.twig" %}#}
+{#             </div>#}
+        </div>
+    </div>
 </div>
 {% endblock body %}
