@@ -406,6 +406,130 @@ class EmployeeController extends Controller
         ));
     }
 
+    public function newEmployeePostRegisterAction($id, $tab)
+    {
+
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        /** @var User $user */
+        $user=$this->getUser();
+        $employee = null;
+        $employerHasEmployee = null;
+        if ($id == -1) {
+            $employee = new Employee();
+            $tab = 1;
+        } else {
+            $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+            //verify if the Id exists or it belongs to the logged user
+            /** @var Employee $employee */
+            $employee = $repository->find($id);
+            /** @var EmployerHasEmployee $ee */
+            $idEmployer = $user->getPersonPerson()->getEmployer()->getIdEmployer();
+            $flag = false;
+            foreach ($employee->getEmployeeHasEmployers() as $ee) {
+                if ($ee->getEmployerEmployer()->getIdEmployer() == $idEmployer) {
+                    $employerHasEmployee = $ee;
+                    $flag = true;
+                    break;
+                }
+            }
+
+            if ($employee == null || !$flag||$employee->getRegisterState()==100) {
+                $employeesData = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                return $this->redirectToRoute("manage_employees");
+            }
+        }
+        $userWorkplaces = $user->getPersonPerson()->getEmployer()->getWorkplaces();
+        $tempPerson = $employee->getPersonPerson();
+        if ($tempPerson == null) {
+            $tempPerson = new Person();
+            $employee->setPersonPerson($tempPerson);
+        }
+        if ($tempPerson->getPhones()->count() == 0) {
+            $tempPerson->addPhone(new Phone());
+        }
+        $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
+        $entityTypes = $entityTypeRepo->findAll();
+        $configData = $this->getConfigData();
+        $pensions = null;
+        $eps = null;
+
+
+        /** @var EntityType $entityType */
+        foreach ($entityTypes as $entityType) {
+            if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
+                $eps = $entityType->getEntities();
+            }
+            if ($entityType->getName() == (isset($configData['Pension']) ? $configData['Pension'] : "Pension")) {
+                $pensions = $entityType->getEntities();
+            }
+        }
+        $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions, $timeCommitments,$user), $employee, array(
+            'action' => $this->generateUrl('api_public_post_new_employee_submit'),
+            'method' => 'POST',
+        ));
+        $employeeForm = $form->get('entities');
+        $eHEEntities = $employee->getEntities();
+        if ($employee->getAskBeneficiary()) {
+            $employeeForm->get('beneficiaries')->setData($employee->getAskBeneficiary());
+        } else {
+            $employeeForm->get('beneficiaries')->setData('-1');
+        }
+        if ($eHEEntities && $eHEEntities->count() != 0) {
+            /** @var EmployeeHasEntity $enti */
+            foreach ($eHEEntities as $enti) {
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
+                    $employeeForm->get('wealth')->setData($enti->getEntityEntity());
+                }
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
+                    $employeeForm->get('pension')->setData($enti->getEntityEntity());
+                }
+            }
+        }
+        $todayPlus = new \DateTime();
+        $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
+        $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
+        $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
+        if ($employerHasEmployee != null) {
+            $contracts = $employerHasEmployee->getContracts();
+            if ($contracts->count() != 0) {
+                $currentContract = null;
+                /** @var Contract $contract */
+                foreach ($contracts as $contract) {
+                    if ($contract->getState() == "Active")
+                        $currentContract = $contract;
+                }
+
+                $form->get('employeeHasEmployers')->setData($currentContract);
+                $form->get('employeeHasEmployers')->get("contractType")->setData($currentContract->getContractTypeContractType()->getPayrollCode());
+                $payType = $contract->getPayMethodPayMethod();
+                if ($payType != null) {
+                    $form->get('employeeHasEmployers')->get("payMethod")->setData($contract->getPayMethodPayMethod()->getPayTypePayType());
+                }
+                $weekWDs = $currentContract->getWeekWorkableDays();
+                /** @var WeekWorkableDays $weekWD */
+                $arrayWWD = array();
+                foreach ($weekWDs as $weekWD) {
+                    $arrayWWD[] = $weekWD->getDayName();
+                }
+                $form->get('employeeHasEmployers')->get("weekDays")->setData($arrayWWD);
+                $form->get('employeeHasEmployers')->get("weekWorkableDays")->setData($contract->getWorkableDaysMonth() / 4);
+                if ($contract->getWorkableDaysMonth() != null)
+                    $form->get('employeeHasEmployers')->get("salaryD")->setData(intval($contract->getSalary() / $contract->getWorkableDaysMonth()));
+                $form->get('idContract')->setData($currentContract->getIdContract());
+            }
+        }
+
+        $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
+        $choices = $options['choice_list']->getChoices();
+        return $this->render('RocketSellerTwoPickBundle:Registration:EmployeeForm.html.twig', array(
+            'form' => $form->createView(),
+            'tab' => $tab,
+            'choices' => $choices
+        ));
+    }
     /**
      * Retorna los campos especificos para el metodo de pago solicitado
      *
