@@ -67,8 +67,10 @@ class ContractRegistration extends AbstractType
             ))
             ->add('sisben', 'choice', array(
                 'choices' => array(
-                     1=> 'Si',
-                     -1=> 'No',
+                    1=> 'Si',
+                    -1=> 'No',
+                    0=> 'No Se',
+
                 ),
                 'multiple' => false,
                 'expanded' => true,

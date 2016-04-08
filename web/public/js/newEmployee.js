@@ -748,6 +748,14 @@ function addListeners() {
             inquiry();
         }
     });
+    $("#register_employee_employeeHasEmployers_sisben").on("change",function(){
+        if($(this).find("input:checked").val()=="0"){
+            $("#sisbenUnknown").show();
+        }else{
+            $("#sisbenUnknown").hide();
+        }
+    });
+    $("#sisbenUnknown").hide();
     $("input[name='register_employee[employeeHasEmployers][transportAid]']").on("change", function () {
         calculator();
         formatMoney($("#totalExpensesVal"));
@@ -842,6 +850,8 @@ function addListeners() {
         return this.id.match(/department/);
     }).change(function () {
         var $department = $(this);
+        $department.parent().parent().next().find("select[name*='ity']").html("<option value =''>Cargando Ciudades...</option>");
+
         // ... retrieve the corresponding form.
         var $form = $(this).closest('form');
         // Simulate form data, but only include the selected department value.
@@ -864,6 +874,7 @@ function addListeners() {
         return this.id.match(/Department/);
     }).change(function () {
         var $department = $(this);
+        $department.parent().parent().next().find("select[name*='ity']").html("<option value =''>Cargando Ciudades...</option>");
         // ... retrieve the corresponding form.
         var $form = $(this).closest('form');
         // Simulate form data, but only include the selected department value.

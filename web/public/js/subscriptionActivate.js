@@ -125,6 +125,7 @@ function startSubscriptionActivate() {
     }
     $('#pago_membresia_department').change(function () {
         var $department = $(this);
+        $department.parent().parent().next().find("select[name*='ity']").html("<option value =''>Cargando Ciudades...</option>");
         // ... retrieve the corresponding form.
         var $form = $(this).closest('form');
         // Simulate form data, but only include the selected department value.
