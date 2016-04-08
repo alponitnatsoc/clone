@@ -119,13 +119,13 @@ class RegistrationController extends BaseController
             return $response;
         }
 
-        //$queryCode = $request->query->get("c");
-        //if ($form->has("invitation")) {
-        //    $form->get("invitation")->setData($queryCode);
-        //}
+        $queryCode = $request->query->get("c");
+        if ($form->has("invitation")) {
+           $form->get("invitation")->setData($queryCode);
+        }
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
-                    'form' => $form->createView()
+            'form' => $form->createView()
         ));
     }
 

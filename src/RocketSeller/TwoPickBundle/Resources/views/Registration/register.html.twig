@@ -2,35 +2,25 @@
 
 {% block body %}
 <div id="registrationContainer" class="row-fluid clearfix" style="background-color: #3c4b5a; padding-bottom: 30px;">
-
     <div class="smallOrangeBox">
-        <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle"></div>
-        
+        <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle" /></div>
         <div class="smallOrangeBoxContent">
-            
-                <!--<h3>¿Empezamos?</h3>-->
-                <span>Estamos listos para facilitarte la <br />gestión de tus empleados</span>
-
-                <span class="light-text">El primer mes es gratis</span>
-                <!--<span class="light-text">Puedes registrarte gratis de dos maneras</span>-->
-                <hr class="smallDivider" />
-                {% include "FOSUserBundle:Registration:register_content.html.twig" %}
-
-                
-                <div class="registrationSocialNetworks">
-                    <hr class="smallDivider"></hr>
-                    <span>o puedes registrarte también con tu red social favorita</span>
-                    {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
-                </div>
-
-
+            <!--<h3>¿Empezamos?</h3>-->
+            <span>Estamos listos para facilitarte la <br />gestión de tus empleados</span>
+            <span class="light-text">El primer mes es gratis</span>
+            <!--<span class="light-text">Puedes registrarte gratis de dos maneras</span>-->
+            <hr class="smallDivider" />
+            {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+            <div class="registrationSocialNetworks">
+                <hr class="smallDivider"></hr>
+                <span>o puedes registrarte también con tu red social favorita</span>
+                {% include "RocketSellerTwoPickBundle:General:redes-login.html.twig" %}
+            </div>
         </div>
     </div>
-
-
-
 </div>
 {% endblock body %}
+
 {% block styles %}
     <style type="text/css">
         .btn.disabled{
@@ -42,11 +32,23 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        $("#chkTOS").change(function () {
-            if ($(this).is(':checked')) {
-                $("#btnSubmit").prop('disabled', false);
-            } else {
-                $("#btnSubmit").prop('disabled', true);
+//         $("#chktyc").change(function () {
+//             if ($(this).is(':checked')) {
+//                 $("#btnSubmit").prop('disabled', false);
+//             } else {
+//                 $("#btnSubmit").prop('disabled', true);
+//             }
+//         });
+        $('.fos_user_registration_register input[id=chktyc]').on('change invalid', function() {
+            var textfield = $(this).get(0);
+
+            // 'setCustomValidity not only sets the message, but also marks
+            // the field as invalid. In order to see whether the field really is
+            // invalid, we have to remove the message first
+            textfield.setCustomValidity('');
+
+            if (!textfield.validity.valid) {
+              textfield.setCustomValidity('Debes aceptar los términos y condiciones');
             }
         });
     </script>
