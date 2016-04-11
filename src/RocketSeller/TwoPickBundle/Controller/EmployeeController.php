@@ -584,6 +584,13 @@ class EmployeeController extends Controller
                 $activeContract = $contract;
             }
         }
+        $nonRepeatedBenef = array();
+        $employeeHasBeneficiaries = $employee->getEmployeeHasBeneficiary();
+        foreach ($employeeHasBeneficiaries as $employeeHasBeneficiary) {
+            if (!in_array($employeeHasBeneficiary->getBeneficiaryBeneficiary(),$nonRepeatedBenef)) {
+                array_push($nonRepeatedBenef, $employeeHasBeneficiary->getBeneficiaryBeneficiary());
+            }
+        }
         $contractEmployee = "";
         $entidades = array();
         $documents = $employee->getPersonPerson()->getDocs();
@@ -615,6 +622,7 @@ class EmployeeController extends Controller
                     'contract' => $activeContract,
                     'contractEmployee' => $contractEmployee,
                     'entidades' => $entidades,
+                    'nonRepeatedBenef'=>$nonRepeatedBenef,
                     'form' => $form->createView()
         ));
     }

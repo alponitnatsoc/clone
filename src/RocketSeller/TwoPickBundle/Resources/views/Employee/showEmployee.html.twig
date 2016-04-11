@@ -247,35 +247,40 @@
                     <div class="col-sm-4">
                         <p><strong>Acción</strong></p>
                     </div>
-                </div>
-                {% if employee.employeeHasBeneficiary %}
-                    {% set beneficiaries = employee.employeeHasBeneficiary  %}                
-                    {% for beneficiary in beneficiaries %}
+                </div>                
+                    {% for  beneficiary in nonRepeatedBenef %}
+
                         <div class="col-sm-12 row-novelty" style="text-align:center;">
                             <div class=" element-table col-sm-4">
                                 
-                                <p><strong>{{beneficiary.beneficiaryBeneficiary.personPerson.names}} {{ beneficiary.beneficiaryBeneficiary.personPerson.lastName1}}</strong></p>
+                                <p><strong>{{beneficiary.personPerson.names}} {{ beneficiary.personPerson.lastName1}}</strong></p>
                                 
                             </div>
                             <div class="element-table col-sm-4">
-                                <p><strong>{{beneficiary.entityEntity.entityTypeEntityType.name}}: {{beneficiary.entityEntity.name}}</strong></p>
+                                <p><strong>Entidad</strong></p>
                             </div>
                             <div class="element-detail col-sm-4">
-                                <a href="/api/public/v1/edits/{{beneficiary.beneficiaryBeneficiary.idBeneficiary}}/beneficiaries"></a>
-                                <p><strong class="editBeneficiary">Editar</strong></p>
+                                <span class="editBeneficiary" style="cursor:pointer" href="/api/public/v1/beneficiaries/{{beneficiary.idBeneficiary}}"><p><strong class="editBeneficiary">Editar</strong></p></span>
+                                
                             </div>
                         </div>
 
                     {% endfor %}
-                {% endif %}
             </div>
             {{ form_start(form , {'attr': {'id': 'form'}})}}
             <div class="col-sm-12 form-upper">
-                <div class="content col-sm-8 col-sm-offset-2">
-                    <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
+                <div class="content col-sm-8 col-sm-offset-2" style="cursor:pointer" onclick="showCreateForm()">
+                    <h4 >Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
+
+                </div>
+            </div>
+            <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
+                
+                <div class="content col-sm-6 col-sm-offset-3">
+                    
                     <div class="col-sm-6 form-group form-black input form-dummy">
                         <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
-                        <select id="benefType" name="relation" class="form-control valid" onchange="showCreateForm()">
+                        <select id="benefType" name="relation" class="form-control valid" >
                             <option value="" selected="true" >Seleccionar una opción</option>            
                             <option value="Cónyugue">Cónyuge</option>            
                             <option value="Hijo">Hijo</option>            
@@ -283,7 +288,6 @@
                             <option value="Padre">Padre</option>
                         </select>
                     </div>
-                    <p id="demo"></p>
                     <div class="col-sm-6 form-group form-black input form-dummy">
                         <p class="title"><i><strong>Tiene discapacidad?</strong></i></p> 
                         <div style="text-align:left;">
@@ -292,33 +296,28 @@
                         </div>
                         
                     </div>
-                </div>
-            </div>
-            <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
-                
-                <div class="content col-sm-6 col-sm-offset-3">
-                    
-                    <h4>Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
 
-                    <div class="form-black form-group">
+                    <br>
+
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.names)}}         
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.lastName1)}}        
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.lastName2)}}        
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.civilStatus)}}        
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.documentType)}}       
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.document)}}       
                     </div>
-                    <div class="form-black form-group">
+                    <div class="col-sm-12 form-black form-group">
                         {{form_row(form.birthDate)}}       
                     </div>                    
                 </div>
@@ -336,10 +335,11 @@
                         </div>       
                         <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
                         <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
-                        <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">                                         
+                        <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">
+                        <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">                                         
                         <div class="col-sm-12 col-xs-12 center">
                             <span id="btn-create"  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
-                            <span id="btn-edit"  href="/api/public/v1/edits/" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
+                            <span id="btn-edit"  href="/api/public/v1/edits/beneficiaries" class="btn btn-orange btn-edit" style="display: none;">Editar y continuar</span>
                             <br><br>
                         </div>
                     </div>
@@ -492,7 +492,7 @@
                                         <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
                                     </div>
                                     <div class="panel_btn_action">
-                                        <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
+                                        <a class="btn btn-docs notAjax " value="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -531,6 +531,83 @@
         addBeneficiary();        
     });
 
+    </script>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            var validator = null;
+            $.getScript("/public/js/jquery.validate.min.js").done(function () {
+                validator = $("form[name='register_beneficiary']").validate({
+                    //onfocusout: true,
+                    rules: {
+                        "register_beneficiary[document]": {required: true, number: true},
+                        "register_beneficiary[documentType]": "required",
+                        "register_beneficiary[names]": {required: true},
+                        "register_beneficiary[lastName1]": {required: true},
+                        "register_beneficiary[lastName2]": {required: true},
+                        "register_beneficiary[mainAddress]": {required: true},
+                        "register_beneficiary[birthDate][year]": {required: true},
+                        "register_beneficiary[birthDate][month]": {required: true},
+                        "register_beneficiary[birthDate][day]": {required: true},
+                        "relation": {required: true},
+                        "disability": {required: true},                        
+                    },
+                    messages: {
+                        "register_beneficiary[document]": {
+                            required: "Por favor ingrese el numero de documento",
+                            number: "ingresa solamente dígitos",
+                        },
+                        "register_beneficiary[documentType]": {
+                            required: "Por favor seleccione el tipo de documento",
+                            
+                        },
+                        "register_beneficiary[names]": {
+                            required: "Por favor ingrese el nombre",
+                            
+                        },
+                        "register_beneficiary[lastName1]": {
+                            required: "Por favor ingrese el primer apellido",
+                            
+                        },
+                        "register_beneficiary[lastName2]": {
+                            required: "Por favor ingrese el segundo apellido",
+                            
+                        },
+                        "register_beneficiary[mainAddress]": {
+                            required: "Por favor ingrese la dirección",
+                            
+                        },
+                        "realation": {
+                            required: "Por favor seleccione una opción",
+                            
+                        },
+                        "disability": {
+                            required: "Por favor seleccione una opción",
+                            
+                        },
+                        "register_beneficiary[department]": {
+                            required: "Por favor seleccione el departamento",
+                            
+                        },
+                        "register_beneficiary[city]": {
+                            required: "Por favor seleccione la ciudad",
+                            
+                        },
+                        "register_beneficiary[birthDate][year]": {
+                            required: "Por favor seleccione el año de nacimiento",
+                            
+                        }, 
+                        "register_beneficiary[birthDate][month]": {
+                            required: "Por favor seleccione el mes de nacimiento",
+                            
+                        }, 
+                        "register_beneficiary[birthDate][day]": {
+                            required: "Por favor seleccione el dia de nacimiento",
+                            
+                        },                                  
+                    }
+                });
+            });            
+        });
     </script>
 
 {% endblock %}

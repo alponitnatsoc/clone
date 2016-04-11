@@ -1458,6 +1458,7 @@ class EmployeeRestController extends FOSRestController
     public function postNewBeneficiaryAction(ParamFetcher $paramFetcher)
     {
 
+
         $em = $this->getDoctrine()->getManager();
         $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
         $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employee')->find($paramFetcher->get('idEmployee'));
@@ -1468,8 +1469,9 @@ class EmployeeRestController extends FOSRestController
         array_push($entities, $cc);
         $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
         $tempBDep = $depRepo->find($paramFetcher->get('department'));
+
         $tempBCity = $cityRepo->find($paramFetcher->get('city'));
-        $person = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person')->findByDocument($paramFetcher->get("document"));
+        $person = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person')->findOneByDocument($paramFetcher->get("document"));
         if (!$person) {
             $person = new Person();
             $person->setDocument($paramFetcher->get("document"));
@@ -1502,11 +1504,79 @@ class EmployeeRestController extends FOSRestController
             $view = View::create();
             $view->setStatusCode(200);
         } else {
+            $beneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Beneficiary')->findOneByPersonPerson($person);
+            if (!$beneficiary) {
+                $beneficiary = new Beneficiary();
+                $beneficiary->setDisability($paramFetcher->get('disability'));
+                $beneficiary->setPersonPerson($person);
+                foreach ($entities as $ent) {
+                    $employeeHasBeneficiary = new employeeHasBeneficiary();
+                    $employeeHasBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+                    $employeeHasBeneficiary->setEmployeeEmployee($employee);
+                    $employeeHasBeneficiary->setEntityEntity($ent);
+                    $employeeHasBeneficiary->setRelation($paramFetcher->get('relation'));
+                    $em->persist($beneficiary);
+                    $em->persist($employeeHasBeneficiary);
+                    $em->flush();
+                }
+            }else{
+                
+                foreach ($entities as $ent) {
+                    $eHasBe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employeeHasBeneficiary')->findOneBy(
+                    array('beneficiaryBeneficiary' => $beneficiary, 'employeeEmployee' => $employee, 'entityEntity'=>$ent)
+                    );
+                    if (!$eHasBe) {
+                        $employeeHasBeneficiary = new employeeHasBeneficiary();
+                        $employeeHasBeneficiary->setBeneficiaryBeneficiary($beneficiary);
+                        $employeeHasBeneficiary->setEmployeeEmployee($employee);
+                        $employeeHasBeneficiary->setEntityEntity($ent);
+                        $employeeHasBeneficiary->setRelation($paramFetcher->get('relation'));
+                        $em->persist($beneficiary);
+                        $em->persist($employeeHasBeneficiary);
+                        $em->flush();
+                    }else{
+                        $view = View::create(); 
+                        $view->setData(array('error' => array('EmployeeHasBeneficiary' => 'Ya existe')))->setStatusCode(200);
+
+                    }                    
+                    
+                    
+                    
+                }
+            }
+            
             $view = View::create();
-            $view->setStatusCode(404);
+            $view->setData(array('msj'=>'exito agregando el beneficiario'))->setStatusCode(200);
         }
 
 
+        return $view;
+    }
+    public function getBeneficiaryAction($idBeneficiary){
+        $beneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Beneficiary')->find($idBeneficiary);
+        $employeeHasBeneficiary  = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')->findOneByBeneficiaryBeneficiary($beneficiary);
+        $view = View::create();
+        $view->setData(array(
+                'names' => $beneficiary->getPersonPerson()->getNames(),
+                'documentType' => $beneficiary->getPersonPerson()->getDocumentType(),
+                'document' => $beneficiary->getPersonPerson()->getDocument(),
+                'lastName1' => $beneficiary->getPersonPerson()->getLastName1(),
+                'lastName2' => $beneficiary->getPersonPerson()->getLastName2(),
+                'civilStatus' => $beneficiary->getPersonPerson()->getCivilStatus(),
+                'gender' => $beneficiary->getPersonPerson()->getGender(),                
+                'birthDate' => $beneficiary->getPersonPerson()->getBirthDate() ? array(
+                    'year' => $beneficiary->getPersonPerson()->getBirthDate()->format("Y"),
+                    'month' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("m")),
+                    'day' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("d")),) : array(
+                ),
+                'mainAddress' => $beneficiary->getPersonPerson()->getMainAddress(),
+                'department' => $beneficiary->getPersonPerson()->getDepartment()->getIdDepartment(),
+                'city' => $beneficiary->getPersonPerson()->getCity()->getIdCity(),
+                'disability' => $beneficiary->getDisability(),
+                'relation' => $employeeHasBeneficiary->getRelation(),
+                'beneficiary' => $beneficiary->getIdBeneficiary()
+
+            ))->setStatusCode(200);
         return $view;
     }
 
@@ -1540,13 +1610,54 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="idEmployee", nullable=false, strict=true, description="benefits of the employee.")
      * @RequestParam(name="relation", nullable=false, strict=true, description="employee relationship with beneficiary")
      * @RequestParam(name="disability", nullable=false, strict=true, description="disability")
-     * @RequestParam(name="eps", nullable=false, strict=true, description="eps id")
-     * @RequestParam(name="cc", nullable=false, strict=true, description="caja de compensacion id")
+     * @RequestParam(name="beneficiary", nullable=false, strict=true, description="id beneficiario")
 
      * @return View
      */
-    public function postEditBeneficiaryAction(ParamFetcher $paramFetcher, $idBeneficiary)
+    public function postEditBeneficiaryAction(ParamFetcher $paramFetcher)
     {
+
+        $view = View::create();
+        $em = $this->getDoctrine()->getManager();
+
+        $beneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Beneficiary')->find($paramFetcher->get('beneficiary'));
+
+        $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($paramFetcher->get('idEmployee'));
+        $employeeHasBeneficiaries = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employeeHasBeneficiary')->findBy(array('beneficiaryBeneficiary' => $beneficiary, 'employeeEmployee' => $employee));
+
+        $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
+
+
+
+        $tempBDep = $depRepo->find($paramFetcher->get('department'));
+
+        $tempBCity = $cityRepo->find($paramFetcher->get('city'));
+
+        $person = $beneficiary->getPersonPerson();
+        $person->setDocument($paramFetcher->get("document"));
+        $person->setDocumentType($paramFetcher->get("documentType"));
+        $person->setNames($paramFetcher->get("names"));
+        $person->setLastName1($paramFetcher->get("lastName1"));
+        $person->setLastName2($paramFetcher->get("lastName2"));
+        $datetime = new DateTime();
+        $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
+        $person->setBirthDate($datetime);
+        $person->setCivilStatus($paramFetcher->get("civilStatus"));
+        $person->setMainAddress($paramFetcher->get("mainAddress"));
+        $person->setDepartment($tempBDep);
+        $person->setCity($tempBCity);
+        $beneficiary->setDisability($paramFetcher->get('disability'));
+        $em->persist($person);
+        $em->persist($beneficiary);
+        $em->flush();
+        foreach ($employeeHasBeneficiaries as $employeeHasBeneficiary) {
+            $employeeHasBeneficiary->setRelation($paramFetcher->get('relation'));
+            $em->persist($employeeHasBeneficiary);
+            $em->flush();
+        }
+
+        $view->setStatusCode(200);
         return $view;
     }
 
