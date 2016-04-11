@@ -23,6 +23,19 @@ class SecurityController extends BaseController
 {
     public function loginAction(Request $request)
     {
+
+        //Redirecting if the user is already logged
+        $authChecker = $this->container->get('security.authorization_checker');
+        $router = $this->container->get('router');
+
+        if ($authChecker->isGranted('ROLE_ADMIN')) {
+            return new RedirectResponse($router->generate('sonata_admin_dashboard'), 307);
+        }
+
+        if ($authChecker->isGranted('ROLE_USER')) {
+            return new RedirectResponse($router->generate('show_dashboard'), 307);
+        }
+
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
 
