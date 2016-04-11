@@ -32,7 +32,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
         $this->service_container = $service_container;
 
     }
-    
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
         if ($request->isXmlHttpRequest()) {
             $result = array('success' => true);
@@ -48,15 +48,15 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
             return new RedirectResponse($url);
         }
 
-        return new RedirectResponse($this->router->generate('anag_new')); 
-    } 
-    
+        return new RedirectResponse($this->router->generate('anag_new'));
+    }
+
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception) {
     	$translator = $this->service_container->get('translator');
 	    $result = array(
-	        'success' => false, 
-	        'function' => 'onAuthenticationFailure', 
-	        'error' => true, 
+	        'success' => false,
+	        'function' => 'onAuthenticationFailure',
+	        'error' => true,
 	        'message' => $translator->trans($exception->getMessage())
 	    );
 	    $response = new Response(json_encode($result));
