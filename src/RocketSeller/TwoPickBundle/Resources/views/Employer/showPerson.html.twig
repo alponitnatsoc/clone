@@ -49,6 +49,7 @@
             <li class="active"><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#basicData">Datos básicos</a></li>
             <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#contactData">Datos de contacto</a></li>
             <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#workplacesData">Lugares de trabajo</a></li>
+            <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#employerEntities">Lugares de trabajo</a></li>
         </ul>
 
         <div class="tab-content">
@@ -216,6 +217,46 @@
                         </div>
                     {% endfor %}                    
                 </ul>
+            </div>
+            <div id="employerEntities" class="tab-pane fade in">
+                <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
+                    <div class="col-sm-12 col-xs-12 text-center">
+                        <p style="font-weight:100;">
+                            La Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales estas afiliado.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 col-xs-12 blockUpData" style="border-bottom:none;">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-12 form-group">
+                                    <ul class="severances"  style="list-style: none; padding:0;">
+                                        {% for entity in employer.entities %}
+                                            <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
+                                                <div class="row">
+                                                    <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
+                                                        <div class="col-sm-12 col-xs-12">
+                                                            <div class="col-sm-6 label-group">
+                                                                {% set entityType=  entity.entityEntity.entityTypeEntityType %}
+                                                                {{ entityType.name }}
+                                                            </div>
+                                                            <div class="col-sm-6 form-group input">
+                                                                {{ entity.entityEntity.name }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
+
+                                            </div>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <br /><br />
