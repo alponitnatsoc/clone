@@ -23,7 +23,7 @@ use EightPoints\Bundle\GuzzleBundle;
 class DocumentoSoporte {
         var $nombre;
         var $base64;
-        function DocumentoSoporte($a,$b) {
+        function __construct($a,$b) {
           $this->nombre = $a;
           $this->base64 = $b;
         }
@@ -85,7 +85,7 @@ class InfoEstudio {
         var $titulo_obtenido;
         var $ocupacion;
 
-        function InfoEstudio($a=null,$b=null,$c=null) {
+        function __construct($a=null,$b=null,$c=null) {
           $this->nivel_estudios = $a;
           $this->titulo_obtenido = $b;
           $this->ocupacion = $c;
@@ -167,7 +167,8 @@ class Payments2RestController extends FOSRestController
 
       // This other way also works, may be usefull.
       //$res = $client->RegistrarBeneficiario($parameters);
-      $res = (array)$res;
+      // Trick to get everything as an array.
+      $res = json_decode(json_encode($res), True);
 
       $responseCode = $res['codigoRespuesta'];
 
@@ -399,7 +400,8 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['numeroCuenta'] = $parameters['bankAccountNumber'];
         $parameters_fixed['fechaVencimiento'] = $parameters['expirationDate'];
         $parameters_fixed['documentoSoporteAutorizacion'] =
-        new DocumentoSoporte($parameters['autorizationDocumentName'], $parameters['autorizationDocument']);
+        new DocumentoSoporte($parameters['autorizationDocumentName'],
+                            base64_encode($parameters['autorizationDocument']));
 
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "RegistrarCuentaBancaria");
