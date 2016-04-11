@@ -629,7 +629,7 @@ function startEmployee() {
                 contractId: $(form).find("input[name='register_employee[idContract]']").val()
             }
         }).done(function (data) {
-            $('#formNav > .active').next('li').find('a').trigger('click');
+            $('#contractNav > .active').next('li').find('a').trigger('click');
             $(form).find("input[name='register_employee[idContract]']").val(data['response']['idContract']);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if (jqXHR == errorHandleTry(jqXHR)) {
