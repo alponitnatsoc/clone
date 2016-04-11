@@ -123,8 +123,67 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-sm-12 bottom-box-edit" hidden="true">
+                <div class="col-sm-4 col-sm-offset-2 left">
+                    <ul class="col-sm-12">
+                        <h4 class="col-sm-12">Datos basicos</h4>
+                        <li>
+                            {{ form_start(form2)}}
+                            <p class="title"><i>Estado civil</i></p>
+                            <p>{{form_widget(form2.civilStatus) }}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Fecha de nacimiento</i></p>
+                            <p>{{form_widget(form2.birthDate) }}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>País</i></p>
+                            <p>{{form_widget(form2.birthCountry) }}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Departamento</i></p>
+                            <p>{{form_widget(form2.birthDepartment) }}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Ciudad</i></p>
+                            <p>{{form_widget(form2.birthCity) }}</p>
+                            
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-sm-offset-1 right">
+                    <ul class="col-sm-12">
+                        <h4 class="col-sm-12">Datos de contacto</h4>
+                        <li>
+                            <p class="title"><i>Dirección</i></p>
+                            <p>{{form_widget(form2.mainAddress)}}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Email</i></p>
+                            <p>{{form_widget(form2.email)}}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Teléfono</i></p>
+                            <p>{{form_widget(form2.phone)}}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Departamento</i></p>
+                            <p>{{form_widget(form2.department)}}</p>
+                        </li>
+                        <li>
+                            <p class="title"><i>Ciudad</i></p>
+                            <p>{{form_widget(form2.city)}}</p>
+                        </li>
+                    </ul>
+                    
+                </div>
+                <div class="col-sm-4 col-sm-offset-5">
+                    {{form_end(form2)}}
+                </div>
+                
+            </div>
             <div class="col-sm-12 col-sm-offset-5">
-                <a class="btn btn-orange notAjax" href="/register/employee/{{employee.idEmployee}}">Editar</a>
+                <span class="editEmployee btn btn-orange notAjax" href="/api/public/v1/employees/{{employee.idEmployee}}/info">Editar</span>
             </div>
         </div>
         <div id="contactData" class="tab-pane">
@@ -528,7 +587,8 @@
     <script>
     $(document).ready(function(){
         manageEmployees();
-        addBeneficiary();        
+        addBeneficiary(); 
+        editEmployee();      
     });
 
     </script>

@@ -29,6 +29,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Employee controller.
@@ -563,6 +565,7 @@ class EmployeeController extends Controller
 
     public function showEmployeeAction($id)
     {
+        $this->dateToday= new \DateTime();
         $user = $this->getUser();
         $person = $user->getPersonPerson();
 
@@ -615,6 +618,97 @@ class EmployeeController extends Controller
         }
         $person = new Person();
         $form = $this->createForm(new EmployeeBeneficiaryRegistration(), $person);
+
+        $form2 = $this->createFormBuilder($person)
+            ->add('civilStatus','choice', array(
+                'choices' => array(
+                    'soltero'   => 'Soltero(a)',
+                    'casado' => 'Casado(a)',
+                    'unionLibre' => 'Union Libre',
+                    'viudo' => 'Viudo(a)'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'civilStatus',
+                'label' => 'Estado civil*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('birthDate', 'date', array(
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
+                'years' => range(intval($this->dateToday->format("Y"))-15,1900),
+                'label' => 'Fecha de Nacimiento*'
+            ))
+            ->add('birthCountry', 'entity', array(
+                'label' => 'País de Nacimiento*',
+                'translation_domain' => 'messages',
+                'class' => 'RocketSellerTwoPickBundle:Country',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'birthCountry',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('birthDepartment', 'entity', array(
+                'label' => 'Departamento de Nacimiento*',
+                'translation_domain' => 'messages',
+                'class' => 'RocketSellerTwoPickBundle:Department',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'birthDepartment',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('birthCity', 'entity', array(
+                'label' => 'Ciudad de Nacimiento*',
+                'translation_domain' => 'messages',
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'birthCity',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('email', 'text', array(
+                
+                'property_path' => 'email',
+                'required' => false
+            ))
+            ->add('phone', 'text', array(
+                
+                'property_path' => 'email',
+                'required' => false
+            ))
+            ->add('mainAddress', 'text', array(
+                'label' => 'Dirección*'
+            ))
+            ->add('department', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Department',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'department',
+                'label' => 'Departamento*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('city', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:City',
+                'property' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'property_path' => 'city',
+                'label' => 'Ciudad*',
+                'placeholder' => 'Seleccionar una opción',
+                'required' => true
+            ))
+            ->add('save', 'submit', array('label' => 'Create Task'))
+            ->getForm();
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
                     'employee' => $employee,
@@ -623,7 +717,8 @@ class EmployeeController extends Controller
                     'contractEmployee' => $contractEmployee,
                     'entidades' => $entidades,
                     'nonRepeatedBenef'=>$nonRepeatedBenef,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'form2' =>$form2->createView(),
         ));
     }
 

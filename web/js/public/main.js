@@ -20,6 +20,7 @@ $(document).ready(function() {
 
 	$('#forma-login').on('submit', function(evt) {
 		evt.preventDefault();
+
 		$('#errorLogin').fadeOut();
 		$.ajax({
             url: $(this).attr('action'),
@@ -29,16 +30,41 @@ $(document).ready(function() {
             success     : function(data, status, object) {
             	if(data.error) {
             		$('#errorLogin').html(data.message);
-           			$('#errorLogin').fadeIn();	
+           			$('#errorLogin').fadeIn();
             	} else {
             		location.reload();
             	}
             },
            	error: function(data, status, object){
-           		
+
            		$('#errorLogin').html("Error de autenticación");
-           		$('#errorLogin').fadeIn();	
+           		$('#errorLogin').fadeIn();
 			}
         });
-	})
+	});
+
+	$('form[name="forma-login"]').on('submit', function(evt) {
+        evt.preventDefault();
+
+        $('#errorLogin').fadeOut();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: $(this).serialize(),
+            dataType: "json",
+            success     : function(data, status, object) {
+                if(data.error) {
+                    $('#errorLogin').html(data.message);
+                    $('#errorLogin').fadeIn();
+                } else {
+                    location.reload();
+                }
+            },
+            error: function(data, status, object){
+
+                $('#errorLogin').html("Error de autenticación");
+                $('#errorLogin').fadeIn();
+            }
+        });
+    })
 });

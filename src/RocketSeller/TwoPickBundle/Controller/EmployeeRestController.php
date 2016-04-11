@@ -1682,6 +1682,33 @@ class EmployeeRestController extends FOSRestController
 
         return $view;
     }
+    public function getEmployeeInfoAction($idEmployee)
+    {
+        
+        $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($idEmployee);
+
+        $view = View::create();
+        $view->setData(array(
+                'civilStatus' => $employee->getPersonPerson()->getCivilStatus(),
+              
+                'birthDate' => $employee->getPersonPerson()->getBirthDate() ? array(
+                    'year' => $employee->getPersonPerson()->getBirthDate()->format("Y"),
+                    'month' => intval($employee->getPersonPerson()->getBirthDate()->format("m")),
+                    'day' => intval($employee->getPersonPerson()->getBirthDate()->format("d")),) : array(
+                ),
+                'mainAddress' => $employee->getPersonPerson()->getMainAddress(),
+                'department' => $employee->getPersonPerson()->getDepartment()->getIdDepartment(),
+                'city' => $employee->getPersonPerson()->getCity()->getIdCity(),
+                'birthCountry' => $employee->getPersonPerson()->getBirthCountry()->getIdCountry(),
+                'birthDepartment' => $employee->getPersonPerson()->getBirthDepartment()->getIdDepartment(),
+                'birthCity' => $employee->getPersonPerson()->getBirthCity()->getIdCity(),
+                'phone' => $employee->getPersonPerson()->getPhones()[0]->getPhoneNumber(),
+                'email' => $employee->getPersonPerson()->getEmail(),
+
+
+            ))->setStatusCode(200);
+        return $view;
+    }
 
     protected function getDaysSince($sinceDate, $toDate)
     {
