@@ -26,7 +26,6 @@ class LegalAssistanceController extends Controller
 	public function startPaymentAction(Request $request){
         $user = $this->getUser();
         $person = $user->getPersonPerson();
-        
 
         $form = $this->createForm(new AddCreditCard(), null, array(
             'action' => $this->generateUrl('legal_payment'),
