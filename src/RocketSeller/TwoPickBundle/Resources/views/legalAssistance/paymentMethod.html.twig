@@ -66,25 +66,24 @@
         }
     </style>
 {% endblock stylesheets %}
-    <div class="row">
-        <div class="col-sm-12 col-xs-12 align-Resp">
-            <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
-                <div class="col-md-12 col-xs-12 txt-AD1" id="">
-                    <div class="text-center" id="">
-                        Consultoría Juridica
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-
+{#     <div class="row">#}
+{#         <div class="col-sm-12 col-xs-12 align-Resp">#}
+{#             <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">#}
+{#                 <div class="col-md-12 col-xs-12 txt-AD1" id="">#}
+{#                     <div class="text-center" id="">#}
+{#                         Consultoría Juridica#}
+{#                     </div>#}
+{#                 </div>#}
+{#             </a>#}
+{#         </div>#}
+{#     </div>#}
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <br /><br />
             <h3>
-                <strong>No corras riesgos, nuestro consultorio jurídico está listo para orientarte</strong>
+                <strong><i>No corras riesgos, nuestro consultorio jurídico está listo para orientarte</i></strong>
             </h3>
-
+            <br />
             <h5 style="font-weight: lighter;">
                 Expón tu caso y nuestros abogados podrán ofrecerte un diagnóstico que te permita saber cómo abordarlo*
             </h5>
@@ -96,18 +95,16 @@
             <h2>Valor de la consulta</h2>
             <h1>$150.000</h1>
         </div>
-            
     </div>
     <div class="row">
     <br />
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <h4>
-                Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes <strong>24 horas hábiles</strong>
+                <i>Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes </i><strong>24 horas hábiles</strong>
             </h4>
         </div>
     </div>
     <br />
-
     <div id="" class="row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
         <hr />
         <h3 class="text-center">Información de tu tarjeta de crédito</h3>
@@ -115,68 +112,61 @@
         <div class="">
             <div class="">
                 {% if errno is defined %}
-                    <span class="alert alert-danger">   
+                    <span class="alert alert-danger">
                         <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
                     </span>
                 {% endif %}
- 
                 <div id='' class='col-md-12'>
-
                     {{ form_start(form) }}
                     <div class="form-black form-group">
-                        {{form_row(form.credit_card)}}	    	
+                        {{form_row(form.credit_card)}}
                     </div>
 
                     <div class="form-black form-group">
-                        {{form_row(form.name_on_card)}}	    	
+                        {{form_row(form.name_on_card)}}
                     </div>
                     <div class="form-black form-group">
                         {{form_row(form.documentType)}}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.document)}}        
+                        {{form_row(form.document)}}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.phoneNumber)}}        
+                        {{form_row(form.phoneNumber)}}
                     </div>
 
                     <div class="form-black form-group">
                         <div class="col-md-4">
-                            {{form_row(form.expiry_date_year)}}	
+                            {{form_row(form.expiry_date_year)}}
                         </div>
                         <div class="col-md-4">
                             {{form_row(form.expiry_date_month)}}
                         </div>
                         <div class="col-md-4">
                             {{form_row(form.cvv)}}
-                        </div>    	
+                        </div>
                     </div>
                     <br />
                     <div class="text-center">
                         <button type="submit"  class="btn register-AS1 btn-symplifica btn">Continuar</button>
                     </div>
                     {{ form_end(form) }}
-
-                </div>	
- 
+                </div>
             </div>
-	
         </div>
     </div>
-
+    <div class="col-sm-12">
+        <hr style="width: 75%;" />
+    </div>
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-            <small style="font-weight: lighter;">
-                 * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se 
-haga cargo lo cual también incluye completar tu registro en Symplifica
+            <small style="font-weight: lighter;"><i>
+                 * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se
+haga cargo lo cual también incluye completar tu registro en Symplifica</i>
             </small>
             <br />
         </div>
     </div>
-
-
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -271,7 +261,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica
                 $('#add_credit_card_credit_card').validateCreditCard(function (result) {
                     $(this).removeClass();
                     $(this).addClass('form-control');
-                    
+
                     if (result.valid) {
                         $(this).addClass(result.card_type.name);
                         return $(this).addClass('valid');

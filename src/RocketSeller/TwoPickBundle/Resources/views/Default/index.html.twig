@@ -1,47 +1,36 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-
-
-	<div class="row">
-		
-
-		<div class="col-sm-12 col-xs-12 align-Resp">
-	        <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
-	            <div class="col-md-12 col-xs-12 txt-AD1" id="">
-	                <div class="text-center" id="">
-	                    ¡Bienvenido a Symplifica!
-	                </div>
-	            </div>
-	        </a>
-	    </div>
-
-
-	</div>
+    {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
 			<br /><br />
 			<h4 style="font-weight: lighter;">
-				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas. Estas preguntas son privadas y no guardaremos registro de las mismas
+				<strong>Tu registro fue activado exitosamente</strong> y queremos comenzar brindándote la mejor asesoría para el manejo de tus empleados. Para lograrlo queremos saber lo siguiente:
 			</h4>
 			<br /><br />
 			<h4>
-				<strong>¿Tu empleado ya se encuentra trabajando para tí?</strong>
+				<strong><i>¿Tu empleado ya se encuentra
+                <br />
+                trabajando para tí?</i></strong>
 			</h4>
 			<br /><br />
 		</div>
 	</div>
-
 	<div class="row">
-		
-
 		<div class="col-sm-6 col-xs-12" style="text-align: right;">
 			<a class="btn btn-darkblue notAjax" href="/legal-status">Si, ya inicio labores</a>
 		</div>
 		<div class="col-sm-6 col-xs-12">
-			<a class="btn btn-grey notAjax" href="/register/edit">No, aún no ha iniciado</a>
+			<a class="btn btn-grey notAjax" href="/register/edit">No, aún no ha iniciado labores</a>
 		</div>
-
 	</div>
-
-
+    <div class="col-sm-12">
+        <br /><hr style="width: 75%;" />
+    </div>
+    <div class="row center">
+        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px;">
+            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;" class="blockStep"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué te preguntamos esto?</h4>
+            <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">De acuerdo a la situación con tu empleado, podremos darte mejores alternativas para el manejo de la contratación.</span>
+        </div>
+    </div>
 {% endblock %}
