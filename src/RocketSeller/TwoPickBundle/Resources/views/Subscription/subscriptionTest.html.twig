@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% block title %}Symplifica - Medio de pago{% endblock %}
+
+{% block fos_user_content %}
+    <style>
+
+    </style>
+
+    <form action="{{ path('api_public_post_add_debit_account') }}" method="POST">
+        <input type="text" id="accountNumber"/>
+        <input type="text" id="bankId"/>
+        <input type="text" id="accountTypeId"/>
+        <input type="text" id="userId"/>
+        <input type="submit" value="Enviar">
+    </form>
+
+
+{% endblock %}
