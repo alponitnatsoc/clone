@@ -243,7 +243,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['documentType'] = true;
         $regex['documentNumber'] = '\d+';
         $mandatory['documentNumber'] = true;
-        $regex['documentExpeditionDate'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+        $regex['documentExpeditionDate'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}|(^$)';
         $mandatory['documentExpeditionDate'] = false;
         $regex['civilState'] = '(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)';
         $mandatory['civil_state'] = false;
