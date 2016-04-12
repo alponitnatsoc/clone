@@ -1,32 +1,29 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-	<div class="row">
-		<div class="col-sm-12 col-xs-12 align-Resp">
-	        <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
-	            <div class="col-md-12 col-xs-12 txt-AD1" id="">
-	                <div class="text-center" id="">
-	                    ¡Bienvenido a Symplifica!
-	                </div>
-	            </div>
-	        </a>
-	    </div>
-	</div>	
-	<div class="row">
+{#  {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+   	<br /><br /><br /><br />
+	<div class="col-sm-12" style="border: 1px solid #C5C7C9; border-radius: 5px; padding: 10px;">
 		<div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
-			<br /><br />
-			<h4 style="font-weight: lighter;">
-				De acuerdo a tus respuestas puede que en el pasado no hayas cumplido con todas las exigencias de ley en la relación laboral con tu empleado
+			<h4 style="font-weight: bold; text-align: justify;">
+                <i class="glyphicon glyphicon-alert"></i>
+				De acuerdo a tus respuestas puede que en el pasado no hayas cumplido con todas las exigencias de ley en la relación laboral con tu empleado.
 			</h4>
-			<br /><br />
-			<h4>
-				<strong>¡No te preocupes! Estamos para ayudarte!</strong><br />
-				Te presentamos dos opciones para continuar con nosotros.
-			</h4>
+{# 			<br /><br />#}
+{# 			<h4>#}
+{# 				<strong>¡No te preocupes! Estamos para ayudarte!</strong><br />#}
+{# 				Te presentamos dos opciones para continuar con nosotros.#}
+{# 			</h4>#}
 		</div>
 	</div>
-
-
-	<div id="registrationTypeContainer" style="background:none; padding:0 0 20px;">
+    <br /><br /><br />
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+            <h4><strong><i>¿Desea usar el servicio de Symplifica asumiendo la responsabilidad de lo anterior o quiere que le ayudemos a corregirlo?</i></strong></h4>
+            <br />
+            <span>Si desea continuar, le sugerimos que a partir de este momento inicie una nueva contratación con su empleado.</span>
+        </div>
+    </div>
+	<div id="registrationTypeContainer" style="background:none; padding:0 0 20px;" class="col-sm-12">
 		<div class="content" style="max-width: 840px;">
 			<div class="registrationTypeOption">
 				<div class="registrationTypeTitle ">Iniciar con mi situación actual</div>
@@ -53,13 +50,10 @@
 					<!--a id="noLegalAss" class="btn btn-orange notAjax" href="javascript:;">Continuar sin la consultoria</a-->
 					<input disabled="" id="noLegalAss" class="btn btn-orange notAjax" type="submit" value="Continuar sin la consultoria" href"/register/edit" onclick="redirect()">
 				</div>
-				
-				
 			</div>
 			<div class="registrationTypeOption">
 				<div class="registrationTypeTitle darkOne">Evalua tu caso con un especialista</div>
 				<div class="registrationTypecontent ">
-					
 					<div class="optionPrice">
 						<h3>${{totalValue}}</h3>
 					</div>
@@ -73,28 +67,31 @@
 						Te ayudaremos a dar de alta tu empleado en Symplifica cuando estes listo para hacerlo.
 					</div>
 					<br />
-
 					<a class="btn btn-orange notAjax" href="{{ path('legal_payment')}}">Continuar con la consultoria</a>
 				</div>
-				
 			</div>
-		</div>		
-	</div>	
-
-	<div class="col-sm-12"> 
-		<div class="col-sm-12 text-center">
-			<a class="btn btnPrevious notAjax" href="/legal-status">Anterior</a>
 		</div>
 	</div>
-
-
-
+{# 	<div class="col-sm-12">#}
+{# 		<div class="col-sm-12 text-center">#}
+{# 			<a class="btn btnPrevious notAjax" href="/legal-status">Anterior</a>#}
+{# 		</div>#}
+{# 	</div>#}
+    <div class="col-sm-12">
+        <br /><hr style="width: 75%;" />
+    </div>
+    <div class="row center">
+        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px;">
+            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;" class="blockStep"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cuál es la importancia de saber esto?</h4>
+            <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si decide asumir la responsabilidad de su situación actual y no hace lo necesario para normalizarla, está expuesto a eventuales demandas por parte de su empleado en razón de los deberes que debiño cumplir con él/ella desde que inició a trabajar para usted</span>
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
 	{{ parent() }}
 	<script>
 		$(document).ready(function(){
-			document.getElementById("noLegalAss").disabled = true;		  
+			document.getElementById("noLegalAss").disabled = true;
 		});
 		function check(){
 			if (document.getElementById("check").checked) {
@@ -105,18 +102,17 @@
 				//console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );
 
 			}else{
-				//document.getElementById("noLegalAss").disabled = true;	
+				//document.getElementById("noLegalAss").disabled = true;
 
 				document.getElementById("noLegalAss").disabled = true;
-					
+
 
 /*				console.log("Off " + document.getElementById("check").checked);
 				console.log("Link " + $("#noLegalAss").attr("href") + " -- " + $("#noLegalAss").attr("disabled")  );*/
-			};						  
+			};
 		}
 		function redirect(){
 			document.location.href = '/register/edit';
 		};
 	</script>
-
 {% endblock %}

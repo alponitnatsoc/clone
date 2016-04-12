@@ -1,60 +1,66 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-
-	<div class="row">
-		
-
-		<div class="col-sm-12 col-xs-12 align-Resp">
-	        <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">
-	            <div class="col-md-12 col-xs-12 txt-AD1" id="">
-	                <div class="text-center" id="">
-	                    ¡Bienvenido a Symplifica!
-	                </div>
-	            </div>
-	        </a>
-	    </div>
-
-
-	</div>
+{# 	{% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+    <div class="col-sm-12">
+        <hr />
+    </div>
 	<div class="row">
 		<div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-			<br /><br />
-			<h4 style="font-weight: lighter;">
-				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas
-			</h4>
-			<br />
-			<h4>
-				<strong>Selecciona todos los puntos con los cuales te sientes identificado</strong>
+{# 			<h4 style="font-weight: lighter;">#}
+{# 				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas#}
+{# 			</h4>#}
+			<h4 style="font-size: 22px;">
+				<strong><i>¿Cuáles responsabilidades ha cumplido con su empleado?</i></strong>
 			</h4>
 		</div>
 	</div>
-
+    <br /><br />
 	<div class="col-sm-12">
-		<div class="col-sm-8 col-sm-offset-2"> 
-			<form action="">	
+		<div class="col-sm-10 col-sm-offset-1">
+			<form action="">
 			<ul class="list-group">
-			
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Tengo un contrato vigente con mi empleado en el cuál yo soy el empleador y no a través de una empresa</label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Tengo afiliado a mi empleado a todas las entidades de seguridad social (EPS, ARL,Fondo de pensiones y Caja de Compensación) </label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">He pagado los aportes a seguridad social desde el inicio de la relación laboral</label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Mi empleado recibe un sueldo igual o superior al salario mínimo legal vigente (diario o mensual según aplique)</label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Le he otorgado y pagado los días de vacaciones de acuerdo a ley </label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Todos los años le he depositado las cesantías de mi empleado en un fondo de cesantías </label>
-			    </div></li>
-			    <li class="list-group-item"><div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">Le he entregado los intereses sobre las cesantías todos los años</label>
-			    </div></li>
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Tengo un contrato vigente con mi empleado en el cuál yo soy el empleador y no a través de una empresa</label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Tengo afiliado a mi empleado a todas las entidades de seguridad social (EPS, ARL,Fondo de pensiones y Caja de Compensación) </label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">He pagado los aportes a seguridad social desde el inicio de la relación laboral</label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Mi empleado recibe un sueldo igual o superior al salario mínimo legal vigente (diario o mensual según aplique)</label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Le he otorgado y pagado los días de vacaciones de acuerdo a ley </label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Todos los años le he depositado las cesantías de mi empleado en un fondo de cesantías </label>#}
+{# 			    </div></li>#}
+{# 			    <li class="list-group-item"><div class="checkbox">#}
+{# 			      <label><input name="legal-status" type="checkbox" value="">Le he entregado los intereses sobre las cesantías todos los años</label>#}
+{# 			    </div></li>#}
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Contrato en regla y vigente directamente con usted y no por medio de una empresa</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Liquidación según la ley al término de cada periodo de contratación</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Pago de sueldo al día</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Afiliación a seguridad social</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Pago de aportes a segurdad social</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Cumplimiento de periodos de vacaciones</label>
+                </div></li>
+                <li class="list-group-item"><div class="checkbox">
+                  <label><input name="legal-status" type="checkbox" value="" />Pago de Cesantías y sus correspondientes intereses desde que inició la contratación</label>
+                </div></li>
 			    <!--
 			    <div class="checkbox">
 			      <label><input name="legal-status" type="checkbox" value="">No entiendo muchas cosas de las que me están preguntando acá</label>
@@ -62,7 +68,7 @@
 			</ul>
 			</form>
 			<br />
-    		<div class="col-sm-12"> 
+    		<div class="col-sm-12">
 				<div class="col-sm-6" style="text-align: right;">
 					<a class="btn btnPrevious notAjax" href="/welcome">Anterior</a>
 				</div>
@@ -71,15 +77,23 @@
 				</div>
 			</div>
 		</div>
-		
 	</div>
+    <div class="col-sm-12">
+        <hr style="width: 75%;" />
+    </div>
+    <div class="row center">
+        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px;">
+            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;" class="blockStep"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cuál es la importancia de saber esto?</h4>
+            <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si una, varias, o todas las responsabilidades que tiene con su empleado son evadidas requiere un manejo legal para subsanarlo.</span>
+        </div>
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
 	<script>
 	var flag = true;
 	function validate() {
-	    var legal = document.forms[0];	    
+	    var legal = document.forms[0];
 	    var i;
 	    for (i = 0; i < legal.length; i++) {
 	        if (!legal[i].checked) {
