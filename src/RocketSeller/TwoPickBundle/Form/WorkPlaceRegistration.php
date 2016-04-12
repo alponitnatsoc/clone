@@ -23,6 +23,9 @@ class WorkPlaceRegistration extends AbstractType
                     new NotBlank()
                 ),
                 "label"=>"Nombre asignado a este lugar de trabajo*",
+                "attr" => array(
+                    "placeholder"=>"(Casa, Finca, Apartamento)",
+                ),
                 'required' => true
             ))
             ->add('mainAddress', 'text', array(

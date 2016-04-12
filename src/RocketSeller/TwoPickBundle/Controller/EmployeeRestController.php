@@ -1380,8 +1380,12 @@ class EmployeeRestController extends FOSRestController
             $em->persist($realEmployer);
             $em->flush();
         }
-
-        return $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
+        if ($realEmployer->getEmployerHasEmployees()->count() == 0) {
+            $view->setData(array('url' => $this->generateUrl('register_employee', array('id' => -1, 'tab' => 1))))->setStatusCode(200);
+        } else {
+            $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
+        }
+        return $view;
     }
 
     /**
