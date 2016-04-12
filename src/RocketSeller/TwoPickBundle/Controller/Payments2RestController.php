@@ -426,37 +426,7 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['documentoSoporteAutorizacion'] =
         new DocumentoSoporte($parameters['authorizationDocumentName'],
                             base64_encode('Yo ' . $parameters['authorizationDocument'] . ' Autorizo a Symplifica a debitar de mi cuenta bancaria.'));
-/*
-        $documentNumber = '2343434';
-        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
-        $person = $personRepo->findOneBy(array('document' => $documentNumber));
 
-        $userDocuments = $person->getDocs();
-    		$files = array();
-    		$files[0] = array();
-    		$files[1] = array();
-    		foreach ($userDocuments as $document) {
-    			$files[0][] = $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-          die(print_r($document->getMediaMedia()));
-    			$files[1][] = $document->getMediaMedia()->getName();
-          //die(print_r($document->getMediaMedia()->getName()));
-    		}
-
-        $valid_files = array();
-    		$valid_files[0] = array();
-    		$valid_files[1] = array();
-
-    if(is_array($files[0])) {
-        			for($i=0;$i<count($files[0]);$i++){
-        				if(file_exists(getcwd().$files[0][$i])) {
-        					$valid_files[0][] = getcwd().$files[0][$i];
-        					//$valid_files[1][] = $files[1][$i];
-        				}
-        			}
-        		}
-        die(print_r($valid_files));
-
-        */
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "RegistrarCuentaBancaria");
 
