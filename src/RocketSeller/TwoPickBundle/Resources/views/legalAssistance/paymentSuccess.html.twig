@@ -1,36 +1,35 @@
 {% extends "::base.html.twig" %}
-{% block sidebar %}{% endblock %}
 {% block fos_user_content %}
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="demo" href="{{ asset('public/css/demo.css') }}" />   
-{% endblock stylesheets %}
-    {% block body %}
-
-
-<div id="registrationContainer" class="row-fluid clearfix" style="padding-bottom: 30px;">
-
-    <div class="smallOrangeBox">
-        <div class="smallOrangeBoxTitle"><span class="whiteFormTitle">Asistencia Legal</span></div>
-        
-        <div class="smallOrangeBoxContent">
-            
-            <span>Súper! tu pago ha sido recibido y lo estamos procesando,<br /> pronto nos comunicaremos contigo para asesorarte</span>
-
-            <span class="light-text">No te preocupes, si está muy tarde o no es apropiado te llamaremos mañana</span>
-            <hr class="smallDivider" />
-            
-
-                <br />
-                    
-                <a href="/dashboard" class="btn btn-symplifica" role="button">Regresar al home</a>
-                <br /><br />
-
+    {% block stylesheets %}
+        {{ parent() }}
+{#         <link rel="demo" href="{{ asset('public/css/demo.css') }}" />#}
+    {% endblock stylesheets %}
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+            <br /><br />
+            <h3>
+                <strong>¡Bienvenido {{ app.user.getPersonPerson().getNames() }}!</strong>
+            </h3>
+            <h3>Este es su resumen de tareas</he>
+            <br />
         </div>
     </div>
-</div>
-
-    
-    {% endblock %}
+    <div class="col-sm-12">
+        <hr style="width: 75%;" />
+    </div>
+    <div id="" class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 align-Resp text-center">
+            <br />
+            <img src="{{ asset('/public/img/mail/check.png') }}" class="center-block" />
+            <br />
+            <h3><strong><i>El pago de la consulta jurídica fue procesado exitosamente</i></strong></h3>
+            <br />
+            <h4 class="light-text">Nos pondremos en contacto con usted para llevar a cabo la consulta y determinar así la forma de proceder con su registro en Symplifica.</h4>
+{#             <hr class="smallDivider" />#}
+            <br />
+            <a href="/dashboard" class="btn btn-symplifica" role="button">Ir al inicio</a>
+            <br /><br />
+        </div>
+    </div>
 {% endblock fos_user_content %}
 
