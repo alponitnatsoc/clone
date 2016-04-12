@@ -54,7 +54,7 @@ class EmployerHasEmployee
     /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
-    private $state = 0;
+    private $state = 1;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
@@ -242,7 +242,6 @@ class EmployerHasEmployee
         return $this->contracts->matching($criteria);
     }
 
-
     /**
      * Set isFree
      *
@@ -266,4 +265,5 @@ class EmployerHasEmployee
     {
         return $this->isFree;
     }
+
 }

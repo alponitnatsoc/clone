@@ -1337,19 +1337,19 @@ class EmployeeRestController extends FOSRestController
 
         if ($realEmployerEnt->count() < $realSeverances->count() + 1) {
             $counter = 0;
-            $exist=false;
+            $exist = false;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($realArl);
-                    $exist=true;
+                    $exist = true;
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
                     $counter++;
                 }
             }
-            if(!$exist){
+            if (!$exist) {
                 $realArlHasEmployer = new EmployerHasEntity();
                 $realArlHasEmployer->setEntityEntity($realArl);
                 $realArlHasEmployer->setEmployerEmployer($realEmployer);
@@ -1523,11 +1523,11 @@ class EmployeeRestController extends FOSRestController
                     $em->persist($employeeHasBeneficiary);
                     $em->flush();
                 }
-            }else{
-                
+            } else {
+
                 foreach ($entities as $ent) {
                     $eHasBe = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employeeHasBeneficiary')->findOneBy(
-                    array('beneficiaryBeneficiary' => $beneficiary, 'employeeEmployee' => $employee, 'entityEntity'=>$ent)
+                            array('beneficiaryBeneficiary' => $beneficiary, 'employeeEmployee' => $employee, 'entityEntity' => $ent)
                     );
                     if (!$eHasBe) {
                         $employeeHasBeneficiary = new employeeHasBeneficiary();
@@ -1538,49 +1538,46 @@ class EmployeeRestController extends FOSRestController
                         $em->persist($beneficiary);
                         $em->persist($employeeHasBeneficiary);
                         $em->flush();
-                    }else{
-                        $view = View::create(); 
+                    } else {
+                        $view = View::create();
                         $view->setData(array('error' => array('EmployeeHasBeneficiary' => 'Ya existe')))->setStatusCode(200);
-
-                    }                    
-                    
-                    
-                    
+                    }
                 }
             }
-            
+
             $view = View::create();
-            $view->setData(array('msj'=>'exito agregando el beneficiario'))->setStatusCode(200);
+            $view->setData(array('msj' => 'exito agregando el beneficiario'))->setStatusCode(200);
         }
 
 
         return $view;
     }
-    public function getBeneficiaryAction($idBeneficiary){
+
+    public function getBeneficiaryAction($idBeneficiary)
+    {
         $beneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Beneficiary')->find($idBeneficiary);
-        $employeeHasBeneficiary  = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')->findOneByBeneficiaryBeneficiary($beneficiary);
+        $employeeHasBeneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')->findOneByBeneficiaryBeneficiary($beneficiary);
         $view = View::create();
         $view->setData(array(
-                'names' => $beneficiary->getPersonPerson()->getNames(),
-                'documentType' => $beneficiary->getPersonPerson()->getDocumentType(),
-                'document' => $beneficiary->getPersonPerson()->getDocument(),
-                'lastName1' => $beneficiary->getPersonPerson()->getLastName1(),
-                'lastName2' => $beneficiary->getPersonPerson()->getLastName2(),
-                'civilStatus' => $beneficiary->getPersonPerson()->getCivilStatus(),
-                'gender' => $beneficiary->getPersonPerson()->getGender(),                
-                'birthDate' => $beneficiary->getPersonPerson()->getBirthDate() ? array(
-                    'year' => $beneficiary->getPersonPerson()->getBirthDate()->format("Y"),
-                    'month' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("m")),
-                    'day' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("d")),) : array(
-                ),
-                'mainAddress' => $beneficiary->getPersonPerson()->getMainAddress(),
-                'department' => $beneficiary->getPersonPerson()->getDepartment()->getIdDepartment(),
-                'city' => $beneficiary->getPersonPerson()->getCity()->getIdCity(),
-                'disability' => $beneficiary->getDisability(),
-                'relation' => $employeeHasBeneficiary->getRelation(),
-                'beneficiary' => $beneficiary->getIdBeneficiary()
-
-            ))->setStatusCode(200);
+            'names' => $beneficiary->getPersonPerson()->getNames(),
+            'documentType' => $beneficiary->getPersonPerson()->getDocumentType(),
+            'document' => $beneficiary->getPersonPerson()->getDocument(),
+            'lastName1' => $beneficiary->getPersonPerson()->getLastName1(),
+            'lastName2' => $beneficiary->getPersonPerson()->getLastName2(),
+            'civilStatus' => $beneficiary->getPersonPerson()->getCivilStatus(),
+            'gender' => $beneficiary->getPersonPerson()->getGender(),
+            'birthDate' => $beneficiary->getPersonPerson()->getBirthDate() ? array(
+                'year' => $beneficiary->getPersonPerson()->getBirthDate()->format("Y"),
+                'month' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("m")),
+                'day' => intval($beneficiary->getPersonPerson()->getBirthDate()->format("d")),) : array(
+                    ),
+            'mainAddress' => $beneficiary->getPersonPerson()->getMainAddress(),
+            'department' => $beneficiary->getPersonPerson()->getDepartment()->getIdDepartment(),
+            'city' => $beneficiary->getPersonPerson()->getCity()->getIdCity(),
+            'disability' => $beneficiary->getDisability(),
+            'relation' => $employeeHasBeneficiary->getRelation(),
+            'beneficiary' => $beneficiary->getIdBeneficiary()
+        ))->setStatusCode(200);
         return $view;
     }
 
@@ -1686,31 +1683,29 @@ class EmployeeRestController extends FOSRestController
 
         return $view;
     }
+
     public function getEmployeeInfoAction($idEmployee)
     {
-        
+
         $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($idEmployee);
 
         $view = View::create();
         $view->setData(array(
-                'civilStatus' => $employee->getPersonPerson()->getCivilStatus(),
-              
-                'birthDate' => $employee->getPersonPerson()->getBirthDate() ? array(
-                    'year' => $employee->getPersonPerson()->getBirthDate()->format("Y"),
-                    'month' => intval($employee->getPersonPerson()->getBirthDate()->format("m")),
-                    'day' => intval($employee->getPersonPerson()->getBirthDate()->format("d")),) : array(
-                ),
-                'mainAddress' => $employee->getPersonPerson()->getMainAddress(),
-                'department' => $employee->getPersonPerson()->getDepartment()->getIdDepartment(),
-                'city' => $employee->getPersonPerson()->getCity()->getIdCity(),
-                'birthCountry' => $employee->getPersonPerson()->getBirthCountry()->getIdCountry(),
-                'birthDepartment' => $employee->getPersonPerson()->getBirthDepartment()->getIdDepartment(),
-                'birthCity' => $employee->getPersonPerson()->getBirthCity()->getIdCity(),
-                'phone' => $employee->getPersonPerson()->getPhones()[0]->getPhoneNumber(),
-                'email' => $employee->getPersonPerson()->getEmail(),
-
-
-            ))->setStatusCode(200);
+            'civilStatus' => $employee->getPersonPerson()->getCivilStatus(),
+            'birthDate' => $employee->getPersonPerson()->getBirthDate() ? array(
+                'year' => $employee->getPersonPerson()->getBirthDate()->format("Y"),
+                'month' => intval($employee->getPersonPerson()->getBirthDate()->format("m")),
+                'day' => intval($employee->getPersonPerson()->getBirthDate()->format("d")),) : array(
+                    ),
+            'mainAddress' => $employee->getPersonPerson()->getMainAddress(),
+            'department' => $employee->getPersonPerson()->getDepartment()->getIdDepartment(),
+            'city' => $employee->getPersonPerson()->getCity()->getIdCity(),
+            'birthCountry' => $employee->getPersonPerson()->getBirthCountry()->getIdCountry(),
+            'birthDepartment' => $employee->getPersonPerson()->getBirthDepartment()->getIdDepartment(),
+            'birthCity' => $employee->getPersonPerson()->getBirthCity()->getIdCity(),
+            'phone' => $employee->getPersonPerson()->getPhones()[0]->getPhoneNumber(),
+            'email' => $employee->getPersonPerson()->getEmail(),
+        ))->setStatusCode(200);
         return $view;
     }
 
