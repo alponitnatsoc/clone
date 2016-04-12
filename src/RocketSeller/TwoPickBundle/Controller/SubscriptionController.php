@@ -59,6 +59,12 @@ class SubscriptionController extends Controller
         }
     }
 
+    public function suscripcionConfirmPruebaAction(Request $request)
+    {
+        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionTest.html.twig', array(
+        ));
+    }
+
     public function suscripcionConfirmAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
