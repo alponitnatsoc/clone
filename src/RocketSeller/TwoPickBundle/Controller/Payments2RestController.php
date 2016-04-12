@@ -388,8 +388,8 @@ class Payments2RestController extends FOSRestController
      * (name="accountType", nullable=false, requirements="(AH|CC)", strict=true, description="Checking or saving account.")
      * (name="bankAccountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Number of the bank account.")
      * (name="expirationDate", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Expiration date for this account(YYYY-MM-DD).")
-     * (name="autorizationDocumentName", nullable=false, requirements="(.)*", strict=true, description="Name of the file of the letter authorizing symplifica.")
-     * (name="autorizationDocument", nullable=false, requirements="", strict=true, description="File of the letter authorizing symplifica, in base 64.")
+     * (name="authorizationDocumentName", nullable=false, requirements="(.)*", strict=true, description="Name of the file of the letter authorizing symplifica.")
+     * (name="authorizationDocument", nullable=false, requirements="", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      *
      * @return View
      */
@@ -410,10 +410,10 @@ class Payments2RestController extends FOSRestController
         $mandatory['bankAccountNumber'] = true;
         $regex['expirationDate'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
         $mandatory['expirationDate'] = true;
-        $regex['autorizationDocumentName'] = '(.)*';
-        $mandatory['autorizationDocumentName'] = true;
-        //$regex['autorizationDocument'] = ''; No regex, binary.
-        $mandatory['autorizationDocument'] = true;
+        $regex['authorizationDocumentName'] = '(.)*';
+        $mandatory['authorizationDocumentName'] = true;
+        //$regex['authorizationDocument'] = ''; No regex, binary.
+        $mandatory['authorizationDocument'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -424,8 +424,8 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['numeroCuenta'] = $parameters['bankAccountNumber'];
         $parameters_fixed['fechaVencimiento'] = $parameters['expirationDate'];
         $parameters_fixed['documentoSoporteAutorizacion'] =
-        new DocumentoSoporte($parameters['autorizationDocumentName'],
-                            base64_encode($parameters['autorizationDocument']));
+        new DocumentoSoporte($parameters['authorizationDocumentName'],
+                            base64_encode('Yo ' . $parameters['authorizationDocument'] . ' Autorizo a Symplifica a debitar de mi cuenta bancaria.'));
 /*
         $documentNumber = '2343434';
         $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
