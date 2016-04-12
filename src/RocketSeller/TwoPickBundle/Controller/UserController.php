@@ -7,12 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\View\View;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Entity;
+use RocketSeller\TwoPickBundle\Entity\PayMethod;
+use RocketSeller\TwoPickBundle\Entity\PayType;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,6 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController extends Controller
 {
+    use SubscriptionMethodsTrait;
     public function checkLogin(){
         if($this->getUser()==null)
             return null;
@@ -42,10 +48,12 @@ class UserController extends Controller
             throw $this->createAccessDeniedException();
         }
         /** @var User $user */
-        $user=$this->checkLogin();
+        $user=$this->getUser();
         $person=$user->getPersonPerson();
         $employer=$person->getEmployer();
-        //
+
+
+
         //SQL Comsumpsion
 
         //Create Society

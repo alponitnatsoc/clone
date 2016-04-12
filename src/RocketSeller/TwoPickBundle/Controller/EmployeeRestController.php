@@ -222,6 +222,11 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $payMethod->setBankBank($tempBank);
+        }elseif(!($paramFetcher->get('cellphone')==""||$paramFetcher->get('cellphone')==null)){
+            $tempBank = $bankRepo->findOneBy(array("hightechCode"=>51));//daviviedna bank ofr daviplata
+            $tempaccounttype = $accountTypeRepo->findOneBy(array("name"=>"Ahorros"));//tipo de cuenta  bank ofr daviplata
+            $payMethod->setBankBank($tempBank);
+            $payMethod->setAccountTypeAccountType($tempaccounttype);
         }
 
 
@@ -298,6 +303,7 @@ class EmployeeRestController extends FOSRestController
                 $employee->setRegisterState(100);
             }
             $em->persist($contract);
+            $em->persist($payMethod);
             $em->flush();
             if (!$hasIt) {
                 $notification = new Notification();

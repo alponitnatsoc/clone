@@ -29,6 +29,13 @@ class Employer
     private $idSqlSociety;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $idHighTech;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
     private $employerType;
@@ -423,4 +430,28 @@ class Employer
         $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Set idHighTech
+     *
+     * @param integer $idHighTech
+     *
+     * @return Employer
+     */
+    public function setIdHighTech($idHighTech)
+    {
+        $this->idHighTech = $idHighTech;
+
+        return $this;
+    }
+
+    /**
+     * Get idHighTech
+     *
+     * @return integer
+     */
+    public function getIdHighTech()
+    {
+        return $this->idHighTech;
+    }
 }
