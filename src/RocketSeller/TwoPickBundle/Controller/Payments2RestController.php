@@ -212,15 +212,14 @@ class Payments2RestController extends FOSRestController
      *
      * (name="firstLastName", nullable=false, requirements="(.)*", strict=true, description="Code of the bank, can be found int he table Bank.")
      * (name="secondLastName", nullable=true, requirements="(.)*", strict=true, description="Checking or saving account.")
-     * (name="firstFirstName", nullable=false, requirements="(.)*", strict=true, description="Number of the bank account.")
-     * (name="secondFirstName", nullable=true, requirements="(.)*", strict=true, description="Name of the file of the letter authorizing symplifica.")
+     * (name="name", nullable=false, requirements="(.)*", strict=true, description="Name of the person.")
      * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
      * (name="documentNumber", nullable=false, requirements="\d+", strict=true, description="File of the letter authorizing symplifica, in base 64.")
-     * (name="documentExpeditionDate", nullable=false, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="YYYY-MM-DD")
-     * (name="civil_state", nullable=false, requirements="(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)", strict=true, description="")
+     * (name="documentExpeditionDate", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="YYYY-MM-DD")
+     * (name="civilState", nullable=true, requirements="(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)", strict=true, description="")
      * (name="address", nullable=false, requirements="(.)*", strict=true, description="")
      * (name="phone", nullable=false, requirements="\d+", strict=true, description="")
-     * (name="municipio", nullable=false, requirements="(.)*", strict=true, description="")
+     * (name="municipio", nullable=true, requirements="(.)*", strict=true, description="")
      * (name="department", nullable=false, requirements="(.)*", strict=true, description="")
      * (name="mail", nullable=false, requirements="(.)*", strict=true, description="")
      *
@@ -232,34 +231,38 @@ class Payments2RestController extends FOSRestController
         $parameters = $request->request->all();
         $regex = array();
         $mandatory = array();
+
         // Set all the parameters info.
         $regex['firstLastName'] = '(.)*';
         $mandatory['firstLastName'] = true;
         $regex['secondLastName'] = '(.)*';
         $mandatory['secondLastName'] = false;
-        $regex['firstFirstName'] = '(.)*';
-        $mandatory['firstFirstName'] = true;
-        $regex['secondFirstName'] = '(.)*';
-        $mandatory['secondFirstName'] = false;
+        $regex['name'] = '(.)*';
+        $mandatory['name'] = true;
         $regex['documentType'] = '(CC|cc|nit|NIT)';
         $mandatory['documentType'] = true;
         $regex['documentNumber'] = '\d+';
         $mandatory['documentNumber'] = true;
         $regex['documentExpeditionDate'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
-        $mandatory['documentExpeditionDate'] = true;
-        $regex['civil_state'] = '(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)';
-        $mandatory['civil_state'] = true;
+        $mandatory['documentExpeditionDate'] = false;
+        $regex['civilState'] = '(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)';
+        $mandatory['civil_state'] = false;
         $regex['address'] = '(.)*';
         $mandatory['address'] = true;
         $regex['phone'] = '\d+';
         $mandatory['phone'] = true;
         $regex['municipio'] = '(.)*';
-        $mandatory['municipio'] = true;
+        $mandatory['municipio'] = false;
         $regex['department'] = '(.)*';
         $mandatory['department'] = true;
         $regex['mail'] = '(.)*';
         $mandatory['mail'] = true;
 
+        // Separate first and second name.
+        $names = explode(' ', $parameters['name']);
+        $parameters['firstFirstName'] = $names[0];
+        $parameters['secondFirstName'] = count($names) > 1 ? $names[1] : null;
+        //die(print_r($parameters['firstFirstName']));
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $parameters_fixed = array();
@@ -273,7 +276,7 @@ class Payments2RestController extends FOSRestController
                        $parameters['documentNumber'],
                        $parameters['documentExpeditionDate'],
                        null,
-                       $parameters['civil_state'],
+                       $parameters['civilState'],
                        null,
                        $parameters['address'],
                        $parameters['phone'],
@@ -306,8 +309,29 @@ class Payments2RestController extends FOSRestController
 
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "VinculacionPN");
+        $temp = $this->handleView($responseView);
+        $data = json_decode($temp->getContent(), true);
+        $code = json_decode($temp->getStatusCode(), true);
 
-        return $responseView;
+        if($code != 200) {
+          $view = View::create();
+          $view->setStatusCode($code);
+          $view->setData($data);
+          return $view;
+        }
+
+        $codigoView = $this->getEmployerAction($data['numeroRadicado']);
+
+        $temp = $this->handleView($codigoView);
+        $dataCodigo = json_decode($temp->getContent(), true);
+
+        $res = array();
+        $res['cuentaGSC'] = $dataCodigo['cuentaGSC'];
+        $view = View::create();
+        $view->setStatusCode($code);
+        $view->setData($res);
+
+        return $view;
     }
 
     /**
@@ -402,7 +426,37 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['documentoSoporteAutorizacion'] =
         new DocumentoSoporte($parameters['autorizationDocumentName'],
                             base64_encode($parameters['autorizationDocument']));
+/*
+        $documentNumber = '2343434';
+        $personRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Person");
+        $person = $personRepo->findOneBy(array('document' => $documentNumber));
 
+        $userDocuments = $person->getDocs();
+    		$files = array();
+    		$files[0] = array();
+    		$files[1] = array();
+    		foreach ($userDocuments as $document) {
+    			$files[0][] = $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+          die(print_r($document->getMediaMedia()));
+    			$files[1][] = $document->getMediaMedia()->getName();
+          //die(print_r($document->getMediaMedia()->getName()));
+    		}
+
+        $valid_files = array();
+    		$valid_files[0] = array();
+    		$valid_files[1] = array();
+
+    if(is_array($files[0])) {
+        			for($i=0;$i<count($files[0]);$i++){
+        				if(file_exists(getcwd().$files[0][$i])) {
+        					$valid_files[0][] = getcwd().$files[0][$i];
+        					//$valid_files[1][] = $files[1][$i];
+        				}
+        			}
+        		}
+        die(print_r($valid_files));
+
+        */
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "RegistrarCuentaBancaria");
 
@@ -490,7 +544,7 @@ class Payments2RestController extends FOSRestController
      * (name="employeeName", nullable=false, requirements="(.)*", strict=true, description="Name of the employee.")
      * (name="employeeMail", nullable=true, requirements="(.)*", strict=true, description="Mail of the employee, it is optional.")
      * (name="employeeBankCode", nullable=false, requirements="([0-9]|-| )+", strict=true, description="Bank code of the employee, can be found on table Bank.")
-     * (name="employeeCelphone", nullable=true, requirements="([0-9])+", strict=true, description="Cellphone of the employee, it is optional.")
+     * (name="employeeCellphone", nullable=true, requirements="([0-9])+", strict=true, description="Cellphone of the employee, it is optional.")
      * (name="employeeAccountType", nullable=false, requirements="(AH|CC|EN)", strict=true, description="Employee account type(Savings, checking or encargo fiduciario).")
      * (name="employeeAccountNumber", nullable=false, requirements="([0-9]|-| )+", strict=true, description="Bank account number of the employee.")
      * (name="employeeAddress", nullable=true, requirements="(.)*", strict=true, description="Address of the employee, it is optional.")
@@ -521,7 +575,7 @@ class Payments2RestController extends FOSRestController
         $regex['employeeBankCode'] = '([0-9|-]| )+';
         $mandatory['employeeBankCode'] = true;
         $regex['employeeCelphone'] = '([0-9])+';
-        $mandatory['employeeCelphone'] = false;
+        $mandatory['employeeCellphone'] = false;
         $regex['employeeAccountType'] = '(AH|CC|EN)';
         $mandatory['employeeAccountType'] = true;
         $regex['employeeAccountNumber'] = '([0-9|-]| )+';
@@ -557,8 +611,8 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['numeroCuenta'] = $parameters['employeeAccountNumber'];
         if(isset($parameters['employeeMail']))
           $parameters_fixed['correo'] = $parameters['employeeMail'];
-        if(isset($parameters['employeeCelphone']))
-          $parameters_fixed['celular'] = $parameters['employeeCelphone'];
+        if(isset($parameters['employeeCellphone']))
+          $parameters_fixed['celular'] = $parameters['employeeCellphone'];
         if(isset($parameters['employeeAddress']))
           $parameters_fixed['direccion'] = $parameters['employeeAddress'];
 
