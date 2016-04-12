@@ -50,6 +50,48 @@ function editEmployee(){
                 $("select[name='form[birthCountry]']").val(birthCountry);
             });     
     });
+    $('.edit-employee-save').click(function (e) {
+            e.preventDefault();
+            var civilStatus = $("select[name='form[civilStatus]']");
+            var year = $("select[name='form[birthDate][year]']");
+            var month = $("select[name='form[birthDate][month]']");
+            var day = $("select[name='form[birthDate][day]']");
+            var mainAddress = $("input[name='form[mainAddress]']");
+            var phone = $("input[name='form[phone]']");
+            var email = $("input[name='form[email]']");
+            var department = $("select[name='form[department]']");
+            var city = $("select[name='form[city]']");
+            var birthDepartment = $("select[name='form[birthDepartment]']");
+            var birthCity = $("select[name='form[birthCity]']");
+            var birthCountry = $("select[name='form[birthCountry]']");
+            var idEmployee = $(form).find("input[name='idEmployee']");
+
+            $.ajax({
+
+                url: $(this).attr('href'),
+                type: 'POST',
+                data: {
+                    civilStatus: civilStatus.val(),
+                    year: year.val(),
+                    month: month.val(),
+                    day: day.val(),
+                    mainAddress: mainAddress.val(),
+                    phone:phone.val(),
+                    email:email.val(),
+                    department: department.val(),
+                    city: city.val(),
+                    birthCountry: birthCountry.val(),
+                    birthDepartment: department.val(),
+                    birthCity: city.val(),
+                    idEmployee: idEmployee.val(), 
+
+                }
+            }).done(function (data) {                                            
+                alert("funciono");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert("hizo algo mal");
+            });
+        });
 }
 
 

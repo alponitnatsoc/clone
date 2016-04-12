@@ -32,6 +32,11 @@ class Bank
     private $novopaymentCode;
 
     /**
+     * @ORM\Column(type="string", length=5)
+     */
+    private $hightechCode;
+
+    /**
      * Get idBank
      *
      * @return integer
@@ -87,5 +92,29 @@ class Bank
     public function getNovopaymentCode()
     {
         return $this->novopaymentCode;
+    }
+
+    /**
+     * Set hightechCode
+     *
+     * @param string $hightechCode
+     *
+     * @return Bank
+     */
+    public function setHightechCode($hightechCode)
+    {
+        $this->hightechCode = $hightechCode;
+
+        return $this;
+    }
+
+    /**
+     * Get hightechCode
+     *
+     * @return string
+     */
+    public function getHightechCode()
+    {
+        return $this->hightechCode;
     }
 }

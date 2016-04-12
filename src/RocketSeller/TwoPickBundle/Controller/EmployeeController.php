@@ -707,7 +707,7 @@ class EmployeeController extends Controller
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
-            ->add('save', 'submit', array('label' => 'Create Task'))
+            
             ->getForm();
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
