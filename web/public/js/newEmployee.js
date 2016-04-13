@@ -1289,7 +1289,7 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
@@ -1316,7 +1316,7 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
