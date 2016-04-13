@@ -20,7 +20,59 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentMethodRestController extends FOSRestController
 {
+    /**
+     * Add the credit card<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Finds the cities of a department.",
+     *   statusCodes = {
+     *     201 = "Created",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     406 = "Not Acceptable",
+     *     409 = "Conflict",
+     *     500 = "Novo TimeOut"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @return View
+     * @RequestParam(name="accountNumber", nullable=false,  requirements="\d+", strict=true, description="Account Number")
+     * @RequestParam(name="bankId", nullable=false,  requirements="\d+", strict=true, description="the bank id")
+     * @RequestParam(name="accountTypeId", nullable=false, strict=true, description="Account type ID")
+     * @RequestParam(name="userId", nullable=false,  requirements="\d+", strict=true, description="Account type ID")
+     */
+    public function postAddDebitAccountAction(ParamFetcher $paramFetcher)
+    {
+        /** @var User $user */
+        $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
+        //TODO buscar en la bd los codigos de hightec
+        $person = $user->getPersonPerson();
 
+        $employer=$person->getEmployer();
+        $view = View::create();
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $request->request->add(array(
+            "accountNumber" => $employer->getIdHighTech(),
+            "bankCode" => $paramFetcher->get("bankId"),
+            "accountType" => $paramFetcher->get("accountTypeId"),
+            "bankAccountNumber" => $paramFetcher->get("accountNumber"),
+            "expirationDate" => date('Y-m-d', strtotime('+1 years')),
+            "authorizationDocumentName" => $person->getFullName().".txt",
+            "authorizationDocument" => $person->getFullName(),
+        ));
+        $view = View::create();
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBankAccount', array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            $view->setStatusCode($insertionAnswer->getStatusCode())->setData(json_decode($insertionAnswer->getContent(), true));
+            return $view;
+        }
+
+        return $view->setStatusCode(201);
+    }
     /**
      * Add the credit card<br/>
      *
@@ -92,7 +144,6 @@ class PaymentMethodRestController extends FOSRestController
             "chargeId" => $purchaseOrderId,
         ));
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-        dump($insertionAnswer);
         if ($insertionAnswer->getStatusCode() == 200) {
             $chargeRC = json_decode($insertionAnswer->getContent(), true)["charge-rc"];
         } else {
