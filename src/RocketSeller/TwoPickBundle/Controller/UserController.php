@@ -322,14 +322,16 @@ class UserController extends Controller
         $form = $this->createFormBuilder()
             ->setAction("/user/show")
             ->setMethod('POST')
-            ->add('name', 'hidden')
+            ->add('name', 'text', array(
+                'label' => 'Nombre'
+            ))
             ->add('email', 'text', array(
-                'label' => 'Email',))
+                'label' => 'Email'))
             ->add('save', 'submit', array(
-                'label' => 'Actualizar Datos',
+                'label' => 'Actualizar Datos'
             ))
             ->add('modify', 'button', array(
-                'label' => 'Cambiar datos',
+                'label' => 'Cambiar datos'
             ))
             ->getForm();
         $flag=!($user->getFacebookId()!=null||$user->getGoogleId()!=null||$user->getLinkedinId()!=null);
@@ -339,20 +341,20 @@ class UserController extends Controller
         $form->get("email")->setData($user->getEmail());
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $nEmail=$form->get("email")->getData();
-            $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
-            $doesExist=$userRepo->findOneBy(array("email"=>$nEmail));
-            if($doesExist==null){
+            $nEmail = $form->get("email")->getData();
+            $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+            $doesExist = $userRepo->findOneBy( array("email" => $nEmail) );
+
+            if ($doesExist == null) {
                 $user->setEmail($nEmail);
                 $user->setUsername($nEmail);
                 $user->setEmailCanonical(strtolower($nEmail));
                 $user->setUsernameCanonical(strtolower($nEmail));
-                $em=$this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
             }
         }
-
 
         return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
             'form' => $form->createView(),
