@@ -245,7 +245,6 @@ trait SubscriptionMethodsTrait
             "department" => $person->getDepartment()->getName(),
             "mail" => $user->getEmail()
         ));
-        dump($request);
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterNaturalPerson', array('_format' => 'json'));
         //dump($insertionAnswer);
         //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();

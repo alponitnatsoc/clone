@@ -173,7 +173,7 @@ class Payments2RestController extends FOSRestController
       $responseCode = $res['codigoRespuesta'];
 
       // Remove the status code so we can return the entire object.
-      unset($res['codigoRespuesta']);
+      //unset($res['codigoRespuesta']);
 
       $view = View::create();
       $errorCode = 404;

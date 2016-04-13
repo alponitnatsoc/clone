@@ -6,6 +6,7 @@ use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
@@ -186,6 +187,56 @@ class PaymentMethodRestController extends FOSRestController
      *
      * @return View
      */
+    public function getClientListPaymentMethodsAction($idUser){
+        /** @var User $user */
+        $user = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:User")->find($idUser);
+        $bankRepo = $this->getDoctrine()->getManager()->getRepository("RocketSellerTwoPickBundle:Bank");
+
+        $view = View::create();
+        if($user==null){
+            return $view->setStatusCode(404)->setData(array("user"=>"the User Does not exist"));
+        }
+
+        $clientListPaymentmethodsCC = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $user->getPersonPerson()->getDocument()), array('_format' => 'json'));
+        $responsePaymentsMethodsCC = json_decode($clientListPaymentmethodsCC->getContent(), true);
+        $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
+        $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
+        $realPayMethods=[];
+        foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
+            $realPayMethods[]=array(
+              'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
+              'account'=>$value["account"],
+              'method-id'=>$value["method-id"],
+              'bank'=>'',
+            );
+        }foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
+            /** @var Bank $bank */
+            $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
+            $realPayMethods[]=array(
+              'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
+              'account'=>$value["numeroCuenta"],
+              'method-id'=>$value["idCuenta"],
+              'bank'=>$bank->getName(),
+            );
+        }
+        return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
+
+    }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @return View
+     */
     public function getDeletePayMethodAction($idPayM, $idUser)
     {
         /** @var User $user */
@@ -292,10 +343,10 @@ class PaymentMethodRestController extends FOSRestController
         foreach ($descriptions as $desc) {
             $dispersionAnswer=$this->disperseMoney($desc,$person);
             if($dispersionAnswer['code']!=200){
-                return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
+                return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
             }
         }
-        $view->setStatusCode(200);
+        $view->setStatusCode(200)->setData(array());
         return $view;
     }
 
@@ -331,32 +382,46 @@ class PaymentMethodRestController extends FOSRestController
             $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postClientPayment';
         }else{
             $payRoll = $purchaseOrderDescription->getPayrollPayroll();
-            $employeePerson=$payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
-            $payMethod=$payRoll->getContractContract()->getPayMethodPayMethod();
+            if($payRoll==null){
+                $employeePerson=$purchaseOrder->getIdUser()->getPersonPerson();
+                $payMethod=null;
+            }else{
+                $employeePerson=$payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                $payMethod=$payRoll->getContractContract()->getPayMethodPayMethod();
+            }
+
 
             if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
                 $accountType = "CC";
                 $bankCode="PL";
                 $paymentMethodAN="9999999";
+                $documentTypeEmployee="NIT";
+                $documentEmployee ="900862831";
+
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
                 $accountType = $payMethod->getAccountTypeAccountType()->getName()=="Ahorros"?"AH":"CC";
                 $bankCode=$payMethod->getBankBank()->getHightechCode();
-                $paymentMethodAN=$payMethod->getCellPhone()==""?:$payMethod->getAccountNumber();
+                $paymentMethodAN=$payMethod->getCellPhone()!=""?$payMethod->getCellPhone():$payMethod->getAccountNumber();
+                $documentTypeEmployee=$employeePerson->getDocumentType();
+                $documentEmployee =$employeePerson->getDocument();
+
             } else {
-                $accountType ="EN";
-                $bankCode="GS";
+                $accountType ="AH";
+                $bankCode="51";
                 $paymentMethodAN="0550006200737432";//Symplifica bank account
+                $documentTypeEmployee="NIT";
+                $documentEmployee ="900862831";
             }
             $request->request->add(array(
                 "accountNumber" => $person->getEmployer()->getIdHighTech(),
-                "documentTypeEmployee" => $employeePerson->getDocument(),
-                "documentEmployee" => $employeePerson->getDocument(),
+                "documentTypeEmployee" => $documentTypeEmployee,
+                "documentEmployee" => $documentEmployee,
                 "accountType" => $accountType,
                 "accountBankNumber" => $paymentMethodAN,
                 "bankCode" => $bankCode,
                 "value" => $purchaseOrderDescription->getValue(),
             ));
-            $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersionAction';
+            $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersion';
         }
 
         $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
@@ -378,7 +443,7 @@ class PaymentMethodRestController extends FOSRestController
             }
         }else{
             if ($insertionAnswer->getStatusCode() == 200) {
-                $transferId = json_decode($insertionAnswer->getContent(), true)["NumeroRadicado"];
+                $transferId = json_decode($insertionAnswer->getContent(), true)["numeroRadicado"];
                 $pay = new Pay();
                 $pay->setUserIdUser($purchaseOrderDescription->getPurchaseOrders()->getIdUser());
                 $pay->setIdDispercionNovo($transferId);
@@ -389,7 +454,7 @@ class PaymentMethodRestController extends FOSRestController
 
             } else {
                 //TODO TIMEOUT
-                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
+                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => $insertionAnswer->getContent()));
             }
 
         }
@@ -463,13 +528,13 @@ class PaymentMethodRestController extends FOSRestController
             }
         }else{
             $answer = json_decode($insertionAnswer->getContent(), true);
-            $radicatedNumber = isset($answer["NumeroRadicado"])?$answer["NumeroRadicado"]:"";
+            $radicatedNumber = isset($answer["numeroRadicado"])?$answer["numeroRadicado"]:"";
             if (!($insertionAnswer->getStatusCode() == 200)) {
                 $pOS = $pOSRepo->findOneBy(array("idNovoPay" => 12));//Transaccion invalida
                 $purchaseOrder->setPurchaseOrdersStatus($pOS);
                 $em->persist($purchaseOrder);
                 $em->flush();
-                return array('code'=>400,'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la cuenta debito", "charge-rc" => 12)));
+                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la cuenta debito", "charge-rc" => 12)));
             }
             $purchaseOrder->setRadicatedNumber($radicatedNumber);
         }

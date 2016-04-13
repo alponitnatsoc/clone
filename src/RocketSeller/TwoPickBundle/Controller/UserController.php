@@ -58,7 +58,12 @@ class UserController extends Controller
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
 
+        if($this->addToHighTech($user)){
+            dump("suscrito o actualizado en HighTech");
+        }else{
+            dump("no se pudo inscribir o actualizar en HighTech");
 
+        }
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
@@ -277,7 +282,7 @@ class UserController extends Controller
             }
         }
         //Get pay Methods from Novo
-        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $person->getDocument()), array('_format' => 'json'));
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
         //get the remaining days of service
         $dEnd  = new DateTime();
