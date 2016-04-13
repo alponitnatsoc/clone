@@ -44,6 +44,12 @@ twig:
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         symplifica_info: "%symplifica_info%"
+    date:
+        timezone: "America/Bogota"
+    number_format:
+        decimals: 2
+        decimal_point: ','
+        thousands_separator: '.'
 
 
 # Assetic Configuration
