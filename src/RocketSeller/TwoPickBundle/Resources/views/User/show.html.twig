@@ -1,57 +1,206 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-    <div class="col-sm-12 col-xs-12 block-Data">
-        <h1>Mi cuenta</h1>
-        <h3>Datos de registro</h3>
-    </div>
-    <div class="col-sm-12 col-xs-12 row-fluid" id='registrationFormContainer'>
-
-        <ul class="nav nav-tabs nav-justified">
-            <li class="active">
-                <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#basicDataTab">Datos básicos</a>
-            </li>
-            {% if flag ==true %}
-                <li>
-                    <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#passwordTab">Cambiar contraseña</a>
-                </li>
-            {% endif %}
-
-            <li>
-                <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#facturacionTab">Resumen de facturación</a>
-            </li>
-        </ul>
-
-        <div class="tab-content">
-            <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12">
-                {{ form_start(form) }}
-
-                <div id="dataSuccessEmail">
-                    Los datos fueron actualizados exitosamente.
-                </div>
-                <div id="dataFailEmail">
-                    Hubo un problema guardando los datos intenta más tarde
-                </div>
-                <strong>Nombre:</strong> {{ form.name.vars.value }}
-                <br/>
-                <div id="emailValue"><strong>Email:</strong> {{ form.email.vars.value }}
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                {{ form_widget(form.email) }}
-                {{ form_widget(form.modify) }}
-                {{ form_widget(form.save) }}
-                </div>
-                {{ form_end(form) }}
-            </div>
-            {% if flag ==true %}
-                <div id="passwordTab" class="tab-pane fade in">
-                    <div class="col-sm-12 col-xs-12 center">
-    {#                         <a class="notAjax button btn btn-default" href="/profile/change-password">Cambiar contraseña</a>#}
-                            {{ render(controller('RocketSellerTwoPickBundle:ChangePassword:changePassword')) }}
-                            <h2>Tu te acedes con una red social</h2>
+    <div class="col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-sm-12 col-xs-12 align-Resp">
+                <div class="col-sm-12 col-xs-12 blockStep inline">
+                    <div class="col-md-12 col-xs-12 txt-AD1" id="">
+                        Mi cuenta
                     </div>
                 </div>
-            {% endif %}
+            </div>
+        </div>
+        <div class="col-sm-12 col-xs-12 center">
+            <div class="row">
+                <h3>Datos básicos</h3>
+                <br />
+                <div class="col-sm-12 center">
+                    <div id="basicDataTab" class="tab-pane fade in active col-sm-12 col-xs-12">
+                        {{ form_start(form) }}
+                            <div class="col-sm-12" id="formErrors">
+                                <div id="dataSuccessEmail">Los datos fueron actualizados exitosamente.</div>
+                                <div id="dataFailEmail">Hubo un problema guardando los datos intenta más tarde</div>
+                            </div>
+                            <div class="col-sm-12" id="showData">
+                                <h5><strong>{{ form.documentType.vars.value }} {{ form.document.vars.value|number_format(0) }}</strong></h5>
+                                <h5>{{ form.name.vars.value }} {{ form.lastName1.vars.value }} {{ form.lastName2.vars.value }}</h5>
+                                <h5 id="emailValue">{{ form.email.vars.value }}</h5>
+                            </div>
+                            <div class="col-lg-5 input-group" style="margin: 10px; display: inline-block;" id="editData">
+                                {{ form_widget(form.email) }}
+                            </div>
+                            <div class="col-sm-12" id="formButtons">
+                                {{ form_widget(form.modify) }}
+                                {{ form_widget(form.save) }}
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                    <div class="col-sm-12">
+                        <hr style="width: 75%;" />
+                    </div>
+                    <div class="col-sm-12" id="changePasswd">
+                        {% if flag == true %}
+                            <h4><i>¿Quieres cambiar tu contraseña?</i></h4>
+                            <button type="button" class="btn btn-symplifica" aria-label="Left Align" onclick="$('#passwordTab').slideToggle(); $(this).hide();">Cambiar contraseña</button>
+                            <div id="passwordTab" class="tab-pane fade in" style="display: none">
+                                <div class="col-lg-5 input-group center" style="margin: 10px; display: inline-block;">
+                                    {{ render(controller('RocketSellerTwoPickBundle:ChangePassword:changePassword')) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-sm-12">
+                <hr style="width: 75%;" />
+            </div>
+
+            <div class="row">
+                <h3>Medio de pago</h3>
+                <div class="col-sm-12 center">
+                    <div class="col-sm-12 col-xs-12">
+                        <table class="payMethods">
+                            <tbody>
+                            {{ dump(payMethods) }}
+                            {% for payM in payMethods %}
+                                <tr>
+                                    <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>
+                                    <td>{{ payM["account"] }}</td>
+                                    <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <hr style="width: 75%;" />
+            </div>
+
+            <style>
+            .service-days {
+                background-color: gray;
+                margin: 0 auto;
+                width: 150px;
+                padding: 10px;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+            }
+            .service-days h1 {
+                font-size: 30px;
+                margin: 0;
+                padding: 0;
+                font-weight: 800;
+            }
+            .vert-align {
+                vertical-align: middle !important;
+            }
+            </style>
+            <div class="row">
+                <h3>Facturación</h3>
+                <div class="col-sm-12 center">
+                    <div class="col-sm-12 col-xs-12 center">
+                        <div class="row">
+                            <h4><i>Días restantes de servicio gratuito</i></h4>
+                            <div class="service-days">
+                                <h1>{{ dayService }} días</h1>
+                            </div>
+                            <h5>Cliente desde {{ dateCreated|date("F")|trans|lower }} {{ dateCreated|date("d") }} de {{ dateCreated|date("Y") }}</h5>
+                        </div>
+                        {% if app.user.paymentState == 0 %}
+                            <div class="NoPay row panel-default col-sm-12">
+                                <h3>No haz activado tu suscripción a Symplifica</h3>
+                                <a class="button btn btn-symplifica" href="{{ path("subscription_choices") }}">Activar suscripción</a>
+                            </div>
+                        {% else %}
+                            <div class="row panel panel-default table-responsive">
+                                <!-- Default panel contents -->
+                                <div class="panel-heading center">Fecha de próxima facturación</div>
+                                <!-- Table -->
+                                <table class="table table-bordered ">
+                                    <tbody>
+                                        <tr>
+                                            <td class="vert-align"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></td>
+                                            <td class="vert-align">
+                                                <span style="font-weight: 800;">$ {{ amountToPay|number_format }} COP</span>
+                                            </td>
+                                            <td style="width: 40%;">
+                                                <ul style="list-style:none;">
+                                                    <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
+                                                    <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <hr style="width: 75%;" />
+            </div>
+            <style>
+            .no-border {
+                border: 0 !important;
+            }
+            </style>
+            <div class="row">
+                <h3>Facturas emitidas</h3>
+                <div class="col-sm-12 center">
+                    <div class="col-sm-12 col-xs-12 table-responsive">
+                        <table class="record_properties table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="no-border">Fecha de pago</th>
+                                    <th class="no-border">Número factura</th>
+                                    <th class="no-border">Concepto</th>
+                                    <th class="no-border">Valor</th>
+                                    <th class="no-border">PDF</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-bordered">
+                                {% for invoice in invoices %}
+                                    <tr>
+                                        <td>{{ invoice.purchaseOrders.DateCreated|date('d/m/Y') }}</td>
+                                        <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
+                                        <td>{{ invoice.description }}</td>
+                                        <td>$ {{ invoice.value|number_format(2) }}</td>
+                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i>Ver PDF</i></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-xs-12 row-fluid" id='registrationFormContainer'>
+
+{#         <ul class="nav nav-tabs nav-justified">#}
+{#             <li class="active">#}
+{#                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#basicDataTab">Datos básicos</a>#}
+{#             </li>#}
+{#             {% if flag ==true %}#}
+{#                 <li>#}
+{#                     <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#passwordTab">Cambiar contraseña</a>#}
+{#                 </li>#}
+{#             {% endif %}#}
+
+{#             <li>#}
+{#                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#facturacionTab">Resumen de facturación</a>#}
+{#             </li>#}
+{#         </ul>#}
+
+        <div class="tab-content">
             <div id="facturacionTab" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12">
                     <h3>Facturación</h3>
@@ -127,7 +276,6 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-    <!--
     $(document).ready(function () {
         changePassword();
     });
@@ -139,18 +287,18 @@
             var form = $(this);
             var div = form.parent();
 
-            $.ajax({
+			$.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
-                data: form.serialize(),
-            }).done(function (data) {
+                data: form.serialize()
+            }).done( function(data){
                 div.html(data);
                 changePassword();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus + " - " + errorThrown);
             });
+
         });
     }
-    //-->
     </script>
-{% endblock %}
+{% endblock javascripts %}
