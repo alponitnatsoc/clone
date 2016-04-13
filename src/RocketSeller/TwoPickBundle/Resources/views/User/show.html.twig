@@ -172,104 +172,12 @@
                                         <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
                                         <td>{{ invoice.description }}</td>
                                         <td>$ {{ invoice.value|number_format(2) }}</td>
-                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i>Ver PDF</i></td>
+                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i><span class="fa fa-file-pdf-o fa-2x"></span>Ver PDF</i></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-12 col-xs-12 row-fluid" id='registrationFormContainer'>
-
-{#         <ul class="nav nav-tabs nav-justified">#}
-{#             <li class="active">#}
-{#                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#basicDataTab">Datos básicos</a>#}
-{#             </li>#}
-{#             {% if flag ==true %}#}
-{#                 <li>#}
-{#                     <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#passwordTab">Cambiar contraseña</a>#}
-{#                 </li>#}
-{#             {% endif %}#}
-
-{#             <li>#}
-{#                 <a class="notAjax tabsEnabled" data-toggle="tab" data-target="#facturacionTab">Resumen de facturación</a>#}
-{#             </li>#}
-{#         </ul>#}
-
-        <div class="tab-content">
-            <div id="facturacionTab" class="tab-pane fade in">
-                <div class="col-sm-12 col-xs-12">
-                    <h3>Facturación</h3>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <div class="col-xs-4">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                {{ dayService }} días de servicio de symplifica
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-8">
-                        {% if app.user.paymentState==0 %}
-                        <div class="NoPay">
-                            ¡No espere a que se agote el tiempo!
-                            <a class="button btn btn-default" href="{{ path("activate_subscription") }}">Activar suscripción a Symplifica</a>
-                        </div>
-                        {% else %}
-                        <div class="DoPay">
-                            <p>Fecha de la proxima facturación</p>
-                            <h4>{{ factDate|date('Y-m-d') }} | ${{ amountToPay }} | </h4>{{ eHEToSend.fullTime }} Empleados de tiempo completo {{ eHEToSend.partialTime }} Empleados de tiempo parcial
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xs-12 pay-Data">
-                    <h4>Medio de pago</h4>
-                    <div class="col-sm-12 col-xs-12">
-                        <table class="payMethods">
-                            <tbody>
-                            {% for payM in payMethods %}
-                                <tr>
-                                    <td> {{ payM["payment-type"] }}  </td>
-                                    <td>{{ payM["account"] }} {{ payM["bank"] }}</td>
-                                    {#
-                                                                        <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>
-                                    #}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <h4>Facturas emitidas</h4>
-                    <div class="col-sm-12 col-xs-12">
-                        <table class="record_properties">
-                            <tbody>
-                                <tr>
-                                    <th>Fecha de pago</th>
-                                    <th>Número factura</th>
-                                    <th>Concepto</th>
-                                    <th>Valor</th>
-                                    <th>PDF</th>
-                                </tr>
-                                {% for invoice in invoices %}
-                                    <tr>
-                                        <td>{{ invoice.purchaseOrders.DateCreated|date('Y-m-d') }}</td>
-                                        <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
-                                        <td>{{ invoice.description }}</td>
-                                        <td>{{ invoice.value }}</td>
-                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"> > Ver Archivo</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-{#                     <div class="col-sm-12 col-xs-12 center">#}
-{#                         <a class="button btn btn-default" href="{{ path("register_employee") }}">Agregar empleado</a>#}
-{#                     </div>#}
                 </div>
             </div>
         </div>
