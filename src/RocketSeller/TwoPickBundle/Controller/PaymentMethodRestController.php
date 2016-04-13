@@ -6,6 +6,7 @@ use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Product;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus;
 use RocketSeller\TwoPickBundle\Entity\Notification;
@@ -275,122 +276,210 @@ class PaymentMethodRestController extends FOSRestController
         /** @var PurchaseOrders $purchaseOrder */
         $purchaseOrderId = $idPurchaseOrder;
         $purchaseOrder = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
-        $pOSRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $view = View::create();
+        if($purchaseOrder==null){
+            return $view->setStatusCode(404)->setData(array('purchaseOrder'=>"la orden de compra no existe"));
+        }
         /** @var User $user */
         $user = $purchaseOrder->getIdUser();
         $person = $user->getPersonPerson();
-        $request = $this->container->get('request');
-        $view = View::create();
         $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
-        /** @var PurchaseOrdersDescription $description */
-        foreach ($descriptions as $description) {
-            $description->getValue();
-            $product = $description->getProductProduct();
-            $simpleName = $product->getSimpleName();
-            if ($simpleName == "PN" || $simpleName == "PP") {
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "documentNumber" => $person->getDocument(),
-                    "MethodId" => $purchaseOrder->getPayMethodId(),
-                    "totalAmount" => $purchaseOrder->getValue(),
-                    "taxAmount" => 0,
-                    "taxBase" => 0,
-                    "commissionAmount" => 0,
-                    "commissionBase" => 0,
-                    "chargeMode" => 2,
-                    "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
-                ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-                $answer = json_decode($insertionAnswer->getContent(), true);
-                $chargeRC = $answer["charge-rc"];
-                if (!($insertionAnswer->getStatusCode() == 200 && ($chargeRC == "00" || $chargeRC == "08"))) {
-                    $pOS = $pOSRepo->findOneBy(array("idNovoPay" => $chargeRC));
-                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
-                    $em->persist($purchaseOrder);
-                    $em->flush();
-                    $view->setStatusCode(400)->setData(array('error' => array("Credit Card" => "No se pudo hacer el cobro a la tarjeta de Credito", "charge-rc" => $chargeRC)));
-                    return $view;
-                }
-                $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
-                $purchaseOrder->setPurchaseOrdersStatus($pOS);
-                $em->persist($purchaseOrder);
-                $em->flush();
-                /** @var PurchaseOrdersDescription $desc */
-                foreach ($descriptions as $desc) {
-                    $payRoll = $desc->getPayrollPayroll();
-                    if ($desc->getProductProduct()->getSimpleName() == "PP") {
-                        $type = 2;
-                    } elseif ($desc->getProductProduct()->getSimpleName() == "PN") {
-                        $type = 1;
-                    } else {
-                        continue;
-                    }
-                    $request->setMethod("POST");
-                    $request->request->add(array(
-                        "documentNumber" => $person->getDocument(),
-                        "beneficiaryId" => $payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getDocument(),
-                        "beneficiaryAmount" => $desc->getValue(),
-                        "dispersionType" => $type,
-                        "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
-                    ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postClientPayment', array('_format' => 'json'));
-                    if ($insertionAnswer->getStatusCode() == 200) {
-                        $transferId = json_decode($insertionAnswer->getContent(), true)["transfer-id"];
-                        $pay = new Pay();
-                        $pay->setUserIdUser($user);
-                        $pay->setIdDispercionNovo($transferId);
-                        $pay->setPurchaseOrdersDescription($desc);
-                        $em->persist($pay);
-                        $em->flush();
-                    } else {
-                        //TODO TIMEOUT
-                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
-                        return $view;
-                    }
-                }
-
-                $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                return $view;
-            } else {
-                $tax = $product->getTaxTax();
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "documentNumber" => $person->getDocument(),
-                    "MethodId" => $purchaseOrder->getPayMethodId(),
-                    "totalAmount" => $purchaseOrder->getValue(),
-                    "taxAmount" => $purchaseOrder->getValue() - ($purchaseOrder->getValue() / ($tax->getValue() + 1)),
-                    "taxBase" => $purchaseOrder->getValue() / ($tax->getValue() + 1),
-                    "commissionAmount" => 0,
-                    "commissionBase" => 0,
-                    "chargeMode" => 3,
-                    "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
-                ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval', array('_format' => 'json'));
-                $answer = json_decode($insertionAnswer->getContent(), true);
-                $chargeRC = $answer["charge-rc"];
-                if (!($insertionAnswer->getStatusCode() == 200 && ($chargeRC == "00" || $chargeRC == "08"))) {
-                    $pOS = $pOSRepo->findOneBy(array("idNovoPay" => $chargeRC));
-                    $purchaseOrder->setPurchaseOrdersStatus($pOS);
-                    $em->persist($purchaseOrder);
-                    $em->flush();
-                    $view->setStatusCode(400)->setData(array('error' => array("Credit Card" => "No se pudo hacer el cobro a la tarjeta de Credito", "charge-rc" => $chargeRC)));
-                    return $view;
-                }
-                $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
-                $purchaseOrder->setPurchaseOrdersStatus($pOS);
-                $invoiceNumber = $this->getInvoiceNumber();
-                $purchaseOrder->setInvoiceNumber($invoiceNumber);
-                $em->persist($purchaseOrder);
-                $pay = new Pay();
-                $pay->setUserIdUser($user);
-                $pay->setIdDispercionNovo(-1);
-                $pay->setPurchaseOrdersDescription($description);
-                $em->persist($pay);
-                $em->flush();
-                $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                return $view;
+        $extractAnswer=$this->extractMoney($purchaseOrder,$person);
+        if($extractAnswer['code']!=200){
+            return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
+        }
+        /** @var PurchaseOrdersDescription $desc */
+        foreach ($descriptions as $desc) {
+            $dispersionAnswer=$this->disperseMoney($desc,$person);
+            if($dispersionAnswer['code']!=200){
+                return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
             }
         }
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * @param PurchaseOrdersDescription $purchaseOrderDescription
+     * @param Person $person
+     * @return mixed
+     */
+    private function disperseMoney($purchaseOrderDescription, $person)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $purchaseOrder=$purchaseOrderDescription->getPurchaseOrders();
+        if($purchaseOrder->getProviderId()==0){
+            $payRoll = $purchaseOrderDescription->getPayrollPayroll();
+            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
+                $type = 2;
+            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
+                $type = 1;
+            } else {
+                return array('code'=>200);
+            }
+
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "documentNumber" => $person->getDocument(),
+                "beneficiaryId" => $payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson()->getDocument(),
+                "beneficiaryAmount" => $purchaseOrderDescription->getValue(),
+                "dispersionType" => $type,
+                "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
+            ));
+            $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postClientPayment';
+        }else{
+            $payRoll = $purchaseOrderDescription->getPayrollPayroll();
+            $employeePerson=$payRoll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+            $payMethod=$payRoll->getContractContract()->getPayMethodPayMethod();
+
+            if ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PP") {
+                $accountType = "CC";
+                $bankCode="PL";
+                $paymentMethodAN="9999999";
+            } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
+                $accountType = $payMethod->getAccountTypeAccountType()->getName()=="Ahorros"?"AH":"CC";
+                $bankCode=$payMethod->getBankBank()->getHightechCode();
+                $paymentMethodAN=$payMethod->getCellPhone()==""?:$payMethod->getAccountNumber();
+            } else {
+                $accountType ="EN";
+                $bankCode="GS";
+                $paymentMethodAN="0550006200737432";//Symplifica bank account
+            }
+            $request->request->add(array(
+                "accountNumber" => $person->getEmployer()->getIdHighTech(),
+                "documentTypeEmployee" => $employeePerson->getDocument(),
+                "documentEmployee" => $employeePerson->getDocument(),
+                "accountType" => $accountType,
+                "accountBankNumber" => $paymentMethodAN,
+                "bankCode" => $bankCode,
+                "value" => $purchaseOrderDescription->getValue(),
+            ));
+            $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersionAction';
+        }
+
+        $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
+
+        if($purchaseOrder->getProviderId()==0) {
+            if ($insertionAnswer->getStatusCode() == 200) {
+                $transferId = json_decode($insertionAnswer->getContent(), true)["transfer-id"];
+                $pay = new Pay();
+                $pay->setUserIdUser($purchaseOrderDescription->getPurchaseOrders()->getIdUser());
+                $pay->setIdDispercionNovo($transferId);
+                $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
+                $em->persist($pay);
+                $em->flush();
+                return array('code'=>200);
+
+            } else {
+                //TODO TIMEOUT
+                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
+            }
+        }else{
+            if ($insertionAnswer->getStatusCode() == 200) {
+                $transferId = json_decode($insertionAnswer->getContent(), true)["NumeroRadicado"];
+                $pay = new Pay();
+                $pay->setUserIdUser($purchaseOrderDescription->getPurchaseOrders()->getIdUser());
+                $pay->setIdDispercionNovo($transferId);
+                $pay->setPurchaseOrdersDescription($purchaseOrderDescription);
+                $em->persist($pay);
+                $em->flush();
+                return array('code'=>200);
+
+            } else {
+                //TODO TIMEOUT
+                return array('code'=>$insertionAnswer->getStatusCode(),'data'=>array('error' => array('Dispersion' => 'se exedio el tiempo de espera pero el dinero se sacó')));
+            }
+
+        }
+    }
+    /**
+     * @param PurchaseOrders $purchaseOrder
+     * @param Person $person
+     * @return mixed
+     */
+    private function extractMoney($purchaseOrder, $person)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->container->get('request');
+        $request->setMethod("POST");
+        $pOSRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+        $flag=false;
+        if($purchaseOrder->getProviderId()==0){
+            $simpleName=$purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getSimpleName();
+            if(!($simpleName=='PN'||$simpleName=='PP')){
+                $tax = $purchaseOrder->getPurchaseOrderDescriptions()->get(0)->getProductProduct()->getTaxTax();
+                $taxAmount=$purchaseOrder->getValue() - ($purchaseOrder->getValue() / ($tax->getValue() + 1));
+                $taxBase=$purchaseOrder->getValue() / ($tax->getValue() + 1);
+                $chargeMode=3;
+                $flag=true;
+            }else{
+                $chargeMode=2;
+                $taxAmount=0;
+                $taxBase=0;
+            }
+            $request->request->add(array(
+                "documentNumber" => $person->getDocument(),
+                "MethodId" => $purchaseOrder->getPayMethodId(),
+                "totalAmount" => $purchaseOrder->getValue(),
+                "taxAmount" => $taxAmount,
+                "taxBase" => $taxBase,
+                "commissionAmount" => 0,
+                "commissionBase" => 0,
+                "chargeMode" => $chargeMode,
+                "chargeId" => $purchaseOrder->getIdPurchaseOrders(),
+            ));
+            $methodToCall='RocketSellerTwoPickBundle:PaymentsRest:postPaymentAproval';
+        }else{
+            $request->request->add(array(
+                "accountNumber" => $person->getEmployer()->getIdHighTech(),
+                "accountId" => $purchaseOrder->getPayMethodId(),
+                "value" => $purchaseOrder->getValue(),
+            ));
+            $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postClientGscPayment';
+
+        }
+
+        $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
+
+        if($purchaseOrder->getProviderId()==0) {
+            $answer = json_decode($insertionAnswer->getContent(), true);
+            $chargeRC = isset($answer["charge-rc"])?$answer["charge-rc"]:"";
+            if (!($insertionAnswer->getStatusCode() == 200 && ($chargeRC == "00" || $chargeRC == "08"))) {
+                $pOS = $pOSRepo->findOneBy(array("idNovoPay" => $chargeRC));
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
+                $em->flush();
+                return array('code'=>400,'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la tarjeta de Credito", "charge-rc" => $chargeRC)));
+            }
+            if($flag){
+                $pay = new Pay();
+                $pay->setUserIdUser($purchaseOrder->getIdUser());
+                $pay->setIdDispercionNovo(-1);
+                $pay->setPurchaseOrdersDescription($purchaseOrder->getPurchaseOrderDescriptions()->get(0));
+                $em->persist($pay);
+                $em->flush();
+            }
+        }else{
+            $answer = json_decode($insertionAnswer->getContent(), true);
+            $radicatedNumber = isset($answer["NumeroRadicado"])?$answer["NumeroRadicado"]:"";
+            if (!($insertionAnswer->getStatusCode() == 200)) {
+                $pOS = $pOSRepo->findOneBy(array("idNovoPay" => 12));//Transaccion invalida
+                $purchaseOrder->setPurchaseOrdersStatus($pOS);
+                $em->persist($purchaseOrder);
+                $em->flush();
+                return array('code'=>400,'data'=>array('error' => array("Credit Card" => "No se pudo hacer el cobro a la cuenta debito", "charge-rc" => 12)));
+            }
+            $purchaseOrder->setRadicatedNumber($radicatedNumber);
+        }
+
+        $pOS = $pOSRepo->findOneBy(array("idNovoPay" => "00"));
+        $purchaseOrder->setPurchaseOrdersStatus($pOS);
+        $em->persist($purchaseOrder);
+        $em->flush();
+        return array('code'=>200);
+
     }
 
     private function getInvoiceNumber()

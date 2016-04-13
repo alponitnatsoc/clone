@@ -27,6 +27,17 @@ class PurchaseOrders
      * @ORM\Column(type="integer", nullable = TRUE)
      */
     private $payMethodId;
+    /**
+     * Columna utilizada para saber que proveedor se va a usar
+     *
+     *
+     *      0 - NovoPayment
+     *      1 - HighTech
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint", nullable = TRUE)
+     */
+    private $providerId;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersStatus
@@ -69,6 +80,11 @@ class PurchaseOrders
      * @ORM\Column(type="string", length=200, nullable=TRUE)
      */
     private $invoice_number;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
+     */
+    private $radicatedNumber;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=TRUE)
@@ -326,5 +342,53 @@ class PurchaseOrders
     public function getPayMethodId()
     {
         return $this->payMethodId;
+    }
+
+    /**
+     * Set providerId
+     *
+     * @param integer $providerId
+     *
+     * @return PurchaseOrders
+     */
+    public function setProviderId($providerId)
+    {
+        $this->providerId = $providerId;
+
+        return $this;
+    }
+
+    /**
+     * Get providerId
+     *
+     * @return integer
+     */
+    public function getProviderId()
+    {
+        return $this->providerId;
+    }
+
+    /**
+     * Set radicatedNumber
+     *
+     * @param string $radicatedNumber
+     *
+     * @return PurchaseOrders
+     */
+    public function setRadicatedNumber($radicatedNumber)
+    {
+        $this->radicatedNumber = $radicatedNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get radicatedNumber
+     *
+     * @return string
+     */
+    public function getRadicatedNumber()
+    {
+        return $this->radicatedNumber;
     }
 }
