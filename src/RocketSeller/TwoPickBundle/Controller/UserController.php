@@ -256,12 +256,12 @@ class UserController extends Controller
 
             }
 
-    }
+        }
 
 
-    $invoicesEmited=new ArrayCollection();
-    $purchaseOrders=$user->getPurchaseOrders();
-    /** @var PurchaseOrders $purchaseOrder */
+        $invoicesEmited=new ArrayCollection();
+        $purchaseOrders=$user->getPurchaseOrders();
+        /** @var PurchaseOrders $purchaseOrder */
         foreach ($purchaseOrders as $purchaseOrder) {
             $id=$purchaseOrder->getPurchaseOrdersStatus()->getIdNovoPay();
             if($id==0||$id==8){//this ids for novo mean aproved
@@ -282,7 +282,7 @@ class UserController extends Controller
         //get the remaining days of service
         $dEnd  = new DateTime();
         $dStart = new DateTime();
-        $dStart->setDate($dEnd->format("Y"),$dEnd->format("m")+1,$user->getDayToPay());
+        $dStart->setDate($dEnd->format("Y"), $dEnd->format("m")+1, $user->getDayToPay());
         $dDiff = $dStart->diff($dEnd);
         //amount to pay and each active employee
         $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
@@ -322,22 +322,34 @@ class UserController extends Controller
         $form = $this->createFormBuilder()
             ->setAction("/user/show")
             ->setMethod('POST')
-            ->add('name', 'text', array(
-                'label' => 'Nombre'
-            ))
+            ->add('name', 'hidden')
+            ->add('lastName1', 'hidden')
+            ->add('lastName2', 'hidden')
+            ->add('documentType', 'hidden')
+            ->add('document', 'hidden')
             ->add('email', 'text', array(
                 'label' => 'Email'))
             ->add('save', 'submit', array(
-                'label' => 'Actualizar Datos'
+                'label' => 'Actualizar Datos',
+                'attr' => array(
+                    'class' => 'btn-symplifica btn'
+                )
             ))
             ->add('modify', 'button', array(
-                'label' => 'Cambiar datos'
+                'label' => 'Cambiar datos',
+                'attr' => array(
+                    'class' => 'btn-symplifica btn'
+                )
             ))
             ->getForm();
         $flag=!($user->getFacebookId()!=null||$user->getGoogleId()!=null||$user->getLinkedinId()!=null);
 
 
         $form->get("name")->setData($user->getPersonPerson()->getNames());
+        $form->get("lastName1")->setData($user->getPersonPerson()->getLastName1());
+        $form->get("lastName2")->setData($user->getPersonPerson()->getLastName2());
+        $form->get("documentType")->setData($user->getPersonPerson()->getDocumentType());
+        $form->get("document")->setData($user->getPersonPerson()->getDocument());
         $form->get("email")->setData($user->getEmail());
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -359,14 +371,14 @@ class UserController extends Controller
         return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
             'form' => $form->createView(),
             'flag' => $flag,
-            'invoices'=>$invoicesEmited,
-            'payMethods'=>isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
-            'dayService'=>$dDiff->days,
-            'eHEToSend'=>array('fullTime'=>$fullTime,'partialTime'=>$atemporel),
-            'amountToPay'=>$amountToPay,
-            'factDate'=>$dStart));
-
-
+            'invoices' => $invoicesEmited,
+            'payMethods' => isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
+            'dayService' => $dDiff->days,
+            'eHEToSend' => array('fullTime'=>$fullTime, 'partialTime'=>$atemporel),
+            'amountToPay' => $amountToPay,
+            'factDate' => $dStart,
+            'dateCreated' => $user->getDateCreated()
+        ));
     }
 
     /**
