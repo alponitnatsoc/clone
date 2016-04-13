@@ -202,22 +202,28 @@ class PaymentMethodRestController extends FOSRestController
         $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
         $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
         $realPayMethods=[];
-        foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
-            $realPayMethods[]=array(
-              'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
-              'account'=>$value["account"],
-              'method-id'=>$value["method-id"],
-              'bank'=>'',
-            );
-        }foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
-            /** @var Bank $bank */
-            $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
-            $realPayMethods[]=array(
-              'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
-              'account'=>$value["numeroCuenta"],
-              'method-id'=>$value["idCuenta"],
-              'bank'=>$bank->getName(),
-            );
+
+        if (isset($responsePaymentsMethodsCC["payment-methods"])) {
+            foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
+                $realPayMethods[]=array(
+                  'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
+                  'account'=>$value["account"],
+                  'method-id'=>$value["method-id"],
+                  'bank'=>'',
+                );
+            }
+        }
+        if (isset($responsePaymentsMethodsCD["payment-methods"])) {
+            foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
+                /** @var Bank $bank */
+                $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
+                $realPayMethods[]=array(
+                  'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
+                  'account'=>$value["numeroCuenta"],
+                  'method-id'=>$value["idCuenta"],
+                  'bank'=>$bank->getName(),
+                );
+            }
         }
         return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
 
