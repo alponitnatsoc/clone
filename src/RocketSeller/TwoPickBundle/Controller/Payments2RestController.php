@@ -679,7 +679,35 @@ class Payments2RestController extends FOSRestController
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "ConsultarFuentesPago");
 
-        return $responseView;
+        $temp = $this->handleView($responseView);
+        $data = json_decode($temp->getContent(), true);
+        $code = json_decode($temp->getStatusCode(), true);
+
+        if($code != 200) {
+          $view = View::create();
+          $view->setStatusCode($code);
+          $view->setData([]);
+          return $view;
+        }
+
+        $res = array();
+        $res['payment-methods'] = array();
+        $aux = array();
+        foreach($data['cuentas']['cuenta'] as $key => $val) {
+          if(is_numeric($key)) { // es numero.
+            $res['payment-methods'][] = $val;
+          } else {
+            $aux[$key] = $val;
+          }
+        }
+        if(count($aux) > 0)
+          $res['payment-methods'][] = $aux;
+
+        $view = View::create();
+        $view->setStatusCode($code);
+        $view->setData($res);
+
+        return $view;
     }
 
     /**
