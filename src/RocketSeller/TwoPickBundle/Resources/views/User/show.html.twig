@@ -129,7 +129,7 @@
                                                 <span style="font-weight: 800;">$ {{ amountToPay|number_format }} COP</span>
                                             </td>
                                             <td style="width: 40%;">
-                                                <ul style="list-style:none;">
+                                                <ul style="list-style:none; margin: 10px; text-align: justify;">
                                                     <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
                                                     <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
                                                 </ul>
@@ -168,11 +168,16 @@
                             <tbody class="table-bordered">
                                 {% for invoice in invoices %}
                                     <tr>
-                                        <td>{{ invoice.purchaseOrders.DateCreated|date('d/m/Y') }}</td>
-                                        <td>{{ invoice.purchaseOrders.invoiceNumber }}</td>
-                                        <td>{{ invoice.description }}</td>
-                                        <td>$ {{ invoice.value|number_format(2) }}</td>
-                                        <td><a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i><span class="fa fa-file-pdf-o fa-2x"></span>Ver PDF</i></td>
+                                        <td class="vert-align">{{ invoice.purchaseOrders.DateCreated|date('d/m/Y') }}</td>
+                                        <td class="vert-align">{{ invoice.purchaseOrders.invoiceNumber }}</td>
+                                        <td class="vert-align">{{ invoice.description }}</td>
+                                        <td class="vert-align">$ {{ invoice.value|number_format(2) }}</td>
+                                        <td class="vert-align">
+                                            <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}">
+                                                <span class="fa fa-file-pdf-o fa-2x"></span>
+                                                <i style="margin-left: 5px;">Ver PDF</i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
