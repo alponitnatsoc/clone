@@ -95,6 +95,7 @@ class PaymentsRestController extends FOSRestController
             $url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
             //$url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         }
+        $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         $response = null;
         $options = array(
             'headers' => $headers,
@@ -108,11 +109,11 @@ class PaymentsRestController extends FOSRestController
                 //$response = $client->post($url_request, $options, $sslParams);
                 $response = $client->post($url_request, $options);
             } else if ($action == "delete") {
-                $response = $client->delete($url_request, $options, $sslParams);
+                $response = $client->delete($url_request, $options);
             } else if ($action == "get") {
-                $response = $client->get($url_request, $options, $sslParams);
+                $response = $client->get($url_request, $options);
             } else if ($action == "put") {
-                $response = $client->put($url_request, $options, $sslParams);
+                $response = $client->put($url_request, $options);
             }
         } catch (Exception $e) {
 
