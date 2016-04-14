@@ -1187,6 +1187,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="pension", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="wealth", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="ars", nullable=true, strict=true, description="benefits of the employee.")
      * @return View
      */
     public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
@@ -1215,9 +1216,12 @@ class EmployeeRestController extends FOSRestController
         /** @var Entity $tempWealth */
         $tempWealth = $entityRepo->find($paramFetcher->get('wealth'));
 
+        /** @var Entity $tempArs */
+        $tempArs = $entityRepo->find($paramFetcher->get('ars'));
+
         $beneficiarie = $paramFetcher->get('beneficiaries');
 
-        if ($tempPens == null || $tempWealth == null) {
+        if ($tempPens == null ||( $tempWealth == null&& $tempArs==null)) {
             $view = View::create();
             $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
             return $view;
@@ -1243,12 +1247,20 @@ class EmployeeRestController extends FOSRestController
             $employeeHasEntityPens->setEntityEntity($tempPens);
             $realEmployee->addEntity($employeeHasEntityPens);
             $em->persist($employeeHasEntityPens);
+            if($tempWealth!=null){
+                $employeeHasEntityWealth = new EmployeeHasEntity();
+                $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
+                $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                $realEmployee->addEntity($employeeHasEntityWealth);
+                $em->persist($employeeHasEntityWealth);
+            }else{
+                $employeeHasEntityARS = new EmployeeHasEntity();
+                $employeeHasEntityARS->setEmployeeEmployee($realEmployee);
+                $employeeHasEntityARS->setEntityEntity($tempArs);
+                $realEmployee->addEntity($employeeHasEntityARS);
+                $em->persist($employeeHasEntityARS);
+            }
 
-            $employeeHasEntityWealth = new EmployeeHasEntity();
-            $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
-            $employeeHasEntityWealth->setEntityEntity($tempWealth);
-            $realEmployee->addEntity($employeeHasEntityWealth);
-            $em->persist($employeeHasEntityWealth);
 
             $realEmployee->setAskBeneficiary($beneficiarie);
             $em->persist($realEmployee);
@@ -1258,11 +1270,34 @@ class EmployeeRestController extends FOSRestController
         } else {
             /** @var EmployeeHasEntity $rEE */
             foreach ($realEmployeeEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "EPS") {
-                    $rEE->setEntityEntity($tempWealth);
-                    $em->persist($rEE);
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
+                    if($tempWealth!=null) {
+                        $rEE->setEntityEntity($tempWealth);
+                        $em->persist($rEE);
+                    }else{
+                        $realEmployee->removeEntity($rEE);
+                        $em->remove($rEE);
+                        $employeeHasEntityARS = new EmployeeHasEntity();
+                        $employeeHasEntityARS->setEmployeeEmployee($realEmployee);
+                        $employeeHasEntityARS->setEntityEntity($tempArs);
+                        $realEmployee->addEntity($employeeHasEntityARS);
+                        $em->persist($employeeHasEntityARS);
+                    }
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType() == "Pension") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS") {
+                    if($tempArs!=null) {
+                        $rEE->setEntityEntity($tempArs);
+                        $em->persist($rEE);
+                    }else{
+                        $em->remove($rEE);
+                        $employeeHasEntityWealth = new EmployeeHasEntity();
+                        $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
+                        $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                        $realEmployee->addEntity($employeeHasEntityWealth);
+                        $em->persist($employeeHasEntityWealth);
+                    }
+                }
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($tempPens);
                     $em->persist($rEE);
                 }

@@ -23,10 +23,12 @@ class PersonEmployeeRegistration extends AbstractType
     private $idEmployee;
     private $workplaces;
     private $user;
-    function __construct($idEmployee,$workplaces,$wealthEntities,$pensionEntities,$timeCommitments,$user){
+    private $arsEntities;
+    function __construct($idEmployee,$workplaces,$wealthEntities,$pensionEntities,$arsEntities,$timeCommitments,$user){
         $this->timeCommitments=$timeCommitments;
         $this->user=$user;
         $this->wealthEntities=$wealthEntities;
+        $this->arsEntities=$arsEntities;
         $this->pensionEntities=$pensionEntities;
         $this->idEmployee=$idEmployee;
         $this->workplaces=$workplaces;
@@ -50,7 +52,7 @@ class PersonEmployeeRegistration extends AbstractType
                 'property_path' => 'personPerson'))
             ->add('employeeHasEmployers', new ContractRegistration($this->workplaces,$this->timeCommitments,$this->user), array(
                 'mapped' => false))
-            ->add('entities',  new EntitiesPick($this->wealthEntities,$this->pensionEntities), array(
+            ->add('entities',  new EntitiesPick($this->wealthEntities,$this->pensionEntities,$this->arsEntities), array(
                 'mapped' => false))
             ->add('save', 'submit', array(
                 'label' => 'Guardar'
