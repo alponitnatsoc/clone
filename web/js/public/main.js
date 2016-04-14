@@ -51,6 +51,8 @@ $(document).ready(function() {
 
 	$('form[name="forma-login"]').on('submit', function(evt) {
         evt.preventDefault();
+        var btn = $(this).find('#_submit');
+        btn.button('loading');
 
         $('#errorLogin').fadeOut();
         $.ajax({
@@ -62,7 +64,9 @@ $(document).ready(function() {
                 if(data.error) {
                     $('#errorLogin').html(data.message);
                     $('#errorLogin').fadeIn();
+                    btn.button('reset');
                 } else {
+                    btn.button('complete');
                     location.reload();
                 }
             },
@@ -70,6 +74,7 @@ $(document).ready(function() {
 
                 $('#errorLogin').html("Error de autenticación");
                 $('#errorLogin').fadeIn();
+                btn.button('reset');
             }
         });
     })
