@@ -184,11 +184,24 @@ class UserController extends Controller
             }
         }
 
+        $paymentMethodsType = array();
+
+        if (isset($responsePaymentsMethods["payment-methods"]) && is_array($responsePaymentsMethods["payment-methods"])) {
+            foreach ($responsePaymentsMethods["payment-methods"] as $pmt) {
+                if ($pmt['bank'] != null) {
+                    $paymentMethodsType['bankAccounts'][] = $pmt;
+                } else {
+                    $paymentMethodsType['creditCards'][] = $pmt;
+                }
+            }
+        }
+
         return $this->render('RocketSellerTwoPickBundle:User:show.html.twig', array(
             'form' => $form->createView(),
             'flag' => $flag,
             'invoices' => $invoicesEmited,
-            'payMethods' => isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
+//             'payMethods' => isset($responsePaymentsMethods["payment-methods"])?$responsePaymentsMethods["payment-methods"]:null,
+            'payMethods' => $paymentMethodsType,
             'dayService' => $dDiff->days,
             'eHEToSend' => array('fullTime'=>$fullTime, 'partialTime'=>$atemporel),
             'amountToPay' => $amountToPay,
