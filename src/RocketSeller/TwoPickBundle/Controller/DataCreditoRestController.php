@@ -134,7 +134,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         $view = View::create();
         $errorCode = 200;
-        if (isset($array["respuesta"]) && $array["respuesta"] != 0 && $array["respuesta"] != 1)
+        if (isset($array["respuesta"]) && $array["respuesta"] != 13)
             $errorCode = 404;
 
         // Set status code of view with http codes.
