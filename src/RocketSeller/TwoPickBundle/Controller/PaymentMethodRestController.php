@@ -210,6 +210,7 @@ class PaymentMethodRestController extends FOSRestController
                   'account'=>$value["account"],
                   'method-id'=>$value["method-id"],
                   'bank'=>'',
+                  'id-provider'=>'0',
                 );
             }
         }
@@ -222,6 +223,7 @@ class PaymentMethodRestController extends FOSRestController
                   'account'=>$value["numeroCuenta"],
                   'method-id'=>$value["idCuenta"],
                   'bank'=>$bank->getName(),
+                  'id-provider'=>'1',
                 );
             }
         }
