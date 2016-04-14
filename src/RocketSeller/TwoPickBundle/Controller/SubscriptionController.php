@@ -4,7 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Form\PagoMembresiaForm;
-use RocketSeller\TwoPickBundle\Entity\BillingAddress;
+use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,11 +89,17 @@ class SubscriptionController extends Controller
                 $date = new \DateTime();
                 $date->add(new \DateInterval('P1M'));
                 $startDate = $date->format('Y-m-d');
-                $form = $this->createForm(new PagoMembresiaForm(), new BillingAddress(), array(
-                    'action' => $this->generateUrl('subscription_pay'),
-                    'method' => 'POST',
-                ));
 
+                $form = $this->createFormBuilder()
+                        ->add('bank', 'entity', array(
+                            'class' => 'RocketSellerTwoPickBundle:Bank',
+                            'choice_label' => 'name'
+                        ))
+                        ->add('accountType', 'entity', array(
+                            'class' => 'RocketSellerTwoPickBundle:AccountType',
+                            'choice_label' => 'name'
+                        ))
+                        ->getForm();
                 return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionConfirm.html.twig', array(
                             'form' => $form->createView(),
                             'employer' => $person,
@@ -139,30 +145,64 @@ class SubscriptionController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 /* @var $user User */
                 $user = $this->getUser();
-                if ($this->addToNovo($user)) {
-                    $request = new Request();
-                    $request->setMethod('POST');
-                    $request->request->set('credit_card', $request->get('credit_card'));
-                    $request->request->set('expiry_date_year', $request->get('expiry_date_year'));
-                    $request->request->set('expiry_date_month', $request->get('expiry_date_month'));
-                    $request->request->set('cvv', $request->get('cvv'));
-                    $request->request->set('name_on_card', $request->get('name_on_card'));
-                    $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
-                    if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                        $this->addFlash('error', $postAddCreditCard->getContent());
-                        return $this->redirectToRoute("subscription_error");
-                        //throw $this->createNotFoundException($data->getContent());
-                    } else {
-                        $methodId = json_decode($postAddCreditCard->getContent(), true);
-                        $purchaseOrder = $this->createPurchaceOrder($user, isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+                $typeMethod = $request->get('typeMethod');
+                if ($typeMethod == 'creditCard') {
 
-                        if ($purchaseOrder) {
-                            return $this->redirectToRoute("subscription_success");
+                    if ($this->addToNovo($user)) {
+                        $request = new Request ();
+                        $request->setMethod('POST');
+                        $request->request->set('credit_card', $request->get('credit_card'));
+                        $request->request->set('expiry_date_year', $request->get('expiry_date_year'));
+                        $request->request->set('expiry_date_month', $request->get('expiry_date_month'));
+                        $request->request->set('cvv', $request->get('cvv'));
+                        $request->request->set('name_on_card', $request->get('name_on_card'));
+                        $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
+                        if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                            $this->addFlash('error', $postAddCreditCard->getContent());
+                            return $this->redirectToRoute("subscription_error");
+                            //throw $this->createNotFoundException($data->getContent());
+                        } else {
+                            $methodId = json_decode($postAddCreditCard->getContent(), true);
+                            $purchaseOrder = $this->createPurchaceOrder($user, 'novo', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+
+                            if ($purchaseOrder) {
+                                return $this->redirectToRoute("subscription_success");
+                            }
+                            return $this->redirectToRoute("subscription_error");
                         }
+                    } else {
+                        $this->addFlash('error', 'Error al insertar en novopayment');
+                        return $this->redirectToRoute("subscription_error");
+                    }
+                } elseif ($typeMethod == 'debito') {
+
+                    if ($this->addToHighTech($user)) {
+                        $request = new Request ();
+                        $request->setMethod('POST');
+                        $request->request->set('accountNumber', $request->get('numberAccount'));
+                        $request->request->set('bankId', $request->get('form[bank]'));
+                        $request->request->set('accountTypeId', $request->get('accountType'));
+                        $request->request->set('userId', $user->getId());
+                        $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccountAction', array('request' => $request), array('_format' => 'json'));
+                        if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                            $this->addFlash('error', $postAddCreditCard->getContent());
+                            return $this->redirectToRoute("subscription_error");
+                            //throw $this->createNotFoundException($data->getContent());
+                        } else {
+                            $methodId = json_decode($postAddCreditCard->getContent(), true);
+                            $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+
+                            if ($purchaseOrder) {
+                                return $this->redirectToRoute("subscription_success");
+                            }
+                            return $this->redirectToRoute("subscription_error");
+                        }
+                    } else {
+                        $this->addFlash('error', 'Error al insertar en novopayment');
                         return $this->redirectToRoute("subscription_error");
                     }
                 } else {
-                    $this->addFlash('error', 'Error al insertar en novopayment');
+                    $this->addFlash('error', 'La opcion enviada es diferente a las opciones permitidas');
                     return $this->redirectToRoute("subscription_error");
                 }
             } else {

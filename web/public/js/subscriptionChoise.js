@@ -1,73 +1,12 @@
 function startSubscriptionChoise() {
     var tiempo_parcialSlider, medio_tiempoSlider, tiempo_completoSlider;
+
+    //var calculator = $.getScript("/public/js/calculatorSubscription.js");
+    //data = calculator.calculatorCalculate();
+    //$.getScript("/public/js/calculatorSubscription.js").done(function () {
+    //    calculator = calculatorCalculate();
+    //});
     $(document).ready(function () {
-        /*
-         tiempo_parcialSlider = document.getElementById('tiempo_parcial');
-         noUiSlider.create(tiempo_parcialSlider, {
-         start: 0,
-         step: 1,
-         range: {
-         min: 0,
-         max: 5
-         },
-         pips: {
-         mode: 'values',
-         values: [0, 1, 2, 3, 4, 5],
-         density: 100
-         }
-         });
-         tiempo_parcialSlider.noUiSlider.on('set', function () {
-         calculatePrice("_calc");
-         });
-         tiempo_parcialSlider.noUiSlider.on('change', function () {
-         calculatePrice("_calc");
-         });
-         tiempo_parcialSlider.noUiSlider.set($(".activo .trabajo_por_dias").length);
-         
-         medio_tiempoSlider = document.getElementById('medio_tiempo');
-         noUiSlider.create(medio_tiempoSlider, {
-         start: 0,
-         step: 1,
-         range: {
-         min: 0,
-         max: 5
-         },
-         pips: {
-         mode: 'values',
-         values: [0, 1, 2, 3, 4, 5],
-         density: 100
-         }
-         });
-         medio_tiempoSlider.noUiSlider.on('set', function () {
-         calculatePrice("_calc");
-         });
-         medio_tiempoSlider.noUiSlider.on('change', function () {
-         calculatePrice("_calc");
-         });
-         medio_tiempoSlider.noUiSlider.set($(".activo .medio_tiempo").length);
-         
-         tiempo_completoSlider = document.getElementById('tiempo_completo');
-         noUiSlider.create(tiempo_completoSlider, {
-         start: 0,
-         step: 1,
-         range: {
-         min: 0,
-         max: 5
-         },
-         pips: {
-         mode: 'values',
-         values: [0, 1, 2, 3, 4, 5],
-         density: 100
-         }
-         });
-         tiempo_completoSlider.noUiSlider.on('set', function () {
-         calculatePrice("_calc");
-         });
-         tiempo_completoSlider.noUiSlider.on('change', function () {
-         calculatePrice("_calc");
-         });
-         tiempo_completoSlider.noUiSlider.set($(".activo .tiempo_completo").length);
-         */
         calculatePrice('');
     });
 
@@ -123,6 +62,8 @@ function startSubscriptionChoise() {
             state = '';
             if (data.state == 'Inactivo') {
                 $(button).html("Activar");
+                $(button).removeClass("on");
+                $(button).addClass("off");
                 parent.removeClass("activo");
                 parent.addClass("inactivo");
                 if (female > 0) {
@@ -134,10 +75,12 @@ function startSubscriptionChoise() {
                 }
                 //$('#' + employee_id).hide();
                 setTimeout(function () {
-                    $('#' + employee_id).hide(1000);
-                }, 1000);
+                    $('#' + employee_id).hide();
+                }, 2000);
             } else if (data.state == 'Activo') {
-                $(button).html("Inhabilitar");
+                $(button).html("Inactivar");
+                $(button).removeClass("off");
+                $(button).addClass("on");
                 parent.removeClass("inactivo");
                 parent.addClass("activo");
                 if (female > 0) {
@@ -149,14 +92,16 @@ function startSubscriptionChoise() {
                 }
                 //$('#' + employee_id).show();
                 setTimeout(function () {
-                    $('#' + employee_id).show(1000);
-                }, 1000);
+                    $('#' + employee_id).show();
+                }, 2000);
             }
             $('#modal_confirm').modal('hide');
             name = parent.find(".employee_name").html();
-            $('.result_ajax').html(name + " fue " + state + " exitosamente.").show(1000);
+            $('.result_ajax_msg').html(name + " fue " + state + " exitosamente.");
+            $('.result_ajax').show();
             setTimeout(function () {
-                $('.result_ajax').html("").hide(2000);
+                $('.result_ajax_msg').html("");
+                $('.result_ajax').hide();
             }, 2000);
 
             calculatePrice('');
@@ -229,7 +174,29 @@ function startSubscriptionChoise() {
         }
         total = subtotal - (descuento_3er + descuento_isRefered + descuento_haveRefered);
         $("#result_price" + contenedor).html(getPrice(total));
+
+        //for (i = 0; i < contrato.length; i++) {
+        //    console.log(contrato[i]);
+        //   type = (contrato[i]['timeCommitment'] == 'XD' ? 'days' : 'mes');
+        //   salaryM = contrato[i]['salary'];
+        //    calculator = calculatorCalculate(type, salaryM, salaryD, numberOfDays, aid, aidD, sisben, transport);
+        //}
+        contrato.forEach(calculate);
+
     }
+    function calculate(item, index) {
+        console.log(index);
+        console.log(item);
+        type = (item['timeCommitment'] == 'XD' ? 'days' : 'complete');
+        salaryM = item['salary'];
+        salaryD = item['salary'] / item['workableDaysMonth'];
+        numberOfDays = item['workableDaysMonth'];
+        sisben = item['sisben'];
+        transport = item['transportAid'];
+        resultado = calculatorCalculate(type, salaryM, salaryD, numberOfDays, sisben, transport);
+        console.log(resultado);
+    }
+
     function getPrice(valor) {
         price = parseFloat(valor.toString().replace(/,/g, ""))
                 .toFixed(0)
