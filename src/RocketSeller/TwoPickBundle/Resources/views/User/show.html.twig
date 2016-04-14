@@ -98,18 +98,22 @@
                                     {% for payM in payMethods['bankAccounts'] %}
                                     <tr>
                                         <td class="vert-align">
-                                            <span>Terminada en</span>
-                                            <h4><strong>{{ payM["account"] }}</strong></h4>
-                                        </td>
-                                        <td class="vert-align">
                                             <span>Tipo de cuenta</span>
                                             <h4><strong>{{ payM["payment-type"] }}</strong></h4>
                                         </td>
                                         <td class="vert-align">
-                                            <a class="fa-2x fa fa-trash-o"></a>
-                                            <a class="" style="margin-left: 10px;">Eliminar cuenta</a>
-{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
+                                            <span>Número de cuenta</span>
+                                            <h4><strong>{{ payM["account"] }}</strong></h4>
                                         </td>
+                                        <td class="vert-align">
+                                            <span>Banco</span>
+                                            <h4><strong>{{ payM["bank"] }}</strong></h4>
+                                        </td>
+{#                                         <td class="vert-align">#}
+{#                                             <a class="fa-2x fa fa-trash-o"></a>#}
+{#                                             <a class="" style="margin-left: 10px;">Eliminar cuenta</a>#}
+{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
+{#                                         </td>#}
                                     </tr>
                                     {% endfor %}
                                 </tbody>
