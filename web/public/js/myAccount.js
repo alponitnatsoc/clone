@@ -10,7 +10,6 @@ function hideAccountStuff(){
     $("#form_email").hide();
     $("#dataSuccessEmail").hide();
     $("#dataFailEmail").hide();
-    $("#form_name").parent().hide();
 
 }
 function addListeners(){
