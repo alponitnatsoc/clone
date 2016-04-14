@@ -238,25 +238,29 @@ public function fixArrayLocalizacion($array, &$new_array) {
       // Nombres y apellidos.
       if(isset($array['NaturalNacional'])) {
         if(isset($array['NaturalNacional']['nombres'])) {
-          $nombres = explode(' ', $array['NaturalNacional']['nombres']);
-          $res['primerNombre'] = $nombres[0];
-          $res['segundoNombre'] = count($nombres) > 1 ?  $nombres[1] : null;
+          $res['nombres'] = $array['NaturalNacional']['nombres'];
         } else {
-          $res['primerNombre'] = null;
-          $res['segundoNombre'] = null;
+          $res['nombres'] = '';
         }
           isset($array['NaturalNacional']['primerApellido']) ?
-            $res['primerApellido'] = $array['NaturalNacional']['primerApellido'] : null;
+            $res['primerApellido'] = $array['NaturalNacional']['primerApellido'] : '';
           isset($array['NaturalNacional']['segundoApellido']) ?
-            $res['segundoApellido'] = $array['NaturalNacional']['segundoApellido'] : null;
+            $res['segundoApellido'] = $array['NaturalNacional']['segundoApellido'] : '';
 
           // Identificacion which is inside NaturalNacional.
           if(isset($array['NaturalNacional']['Identificacion'])) {
-            $res['fechaExpedicion'] = isset($array['NaturalNacional']['Identificacion']['fechaExpedicion']) ? $array['NaturalNacional']['Identificacion']['fechaExpedicion'] : null;
-            $res['ciudadExpedicion'] = isset($array['NaturalNacional']['Identificacion']['ciudad']) ? $array['NaturalNacional']['Identificacion']['ciudad'] : null;
+            $fecha = isset($array['NaturalNacional']['Identificacion']['fechaExpedicion']) ? $array['NaturalNacional']['Identificacion']['fechaExpedicion'] : '';
+            if($fecha != '') {
+              $fecha = explode('-', $fecha);
+              $res['fechaExpedicionAno'] = $fecha[0];
+              $res['fechaExpedicionMes'] = $fecha[1];
+              $res['fechaExpedicionDia'] = $fecha[2];
+            }
+
+            $res['ciudadExpedicion'] = isset($array['NaturalNacional']['Identificacion']['ciudad']) ? $array['NaturalNacional']['Identificacion']['ciudad'] : '';
           } else {
-            $res['fechaExpedicion'] = null;
-            $res['ciudadExpedicion'] = null;
+            $res['fechaExpedicion'] = '';
+            $res['ciudadExpedicion'] = '';
           }
 
           // Genero.
@@ -267,53 +271,53 @@ public function fixArrayLocalizacion($array, &$new_array) {
             } elseif($codGenero == '4') {
               $res['genero'] = 'M';
             } else {
-              $res['genero'] = null;
+              $res['genero'] = '';
             }
           } else {
-            $res['genero'] = null;
+            $res['genero'] = '';
           }
         } else {
           // If we don't have NaturalNacional we set everything in null.
-          $res['primerNombre'] = null;
-          $res['segundoNombre'] = null;
-          $res['primerApellido'] = null;
-          $res['segundoApellido'] = null;
-          $res['fechaExpedicion'] = null;
-          $res['ciudadExpedicion'] = null;
-          $res['genero'] = null;
+          $res['primerNombre'] = '';
+          $res['segundoNombre'] = '';
+          $res['primerApellido'] = '';
+          $res['segundoApellido'] = '';
+          $res['fechaExpedicion'] = '';
+          $res['ciudadExpedicion'] = '';
+          $res['genero'] = '';
        }
 
        if(isset($array['Direccion'])) {
          $array_direccion = $array['Direccion'][1];
-         $res['direccion'] = isset($array_direccion['direccion']) ? $array_direccion['direccion'] : null;
-         $res['ciudad'] = isset($array_direccion['nombreCiudad']) ? $array_direccion['nombreCiudad'] : null;
-         $res['departamento'] = isset($array_direccion['nombreDepartamento']) ? $array_direccion['nombreDepartamento'] : null;
+         $res['direccion'] = isset($array_direccion['direccion']) ? $array_direccion['direccion'] : '';
+         $res['ciudad'] = isset($array_direccion['nombreCiudad']) ? $array_direccion['nombreCiudad'] : '';
+         $res['departamento'] = isset($array_direccion['nombreDepartamento']) ? $array_direccion['nombreDepartamento'] : '';
        } else {
-         $res['direccion'] = null;
-         $res['ciudad'] = null;
-         $res['departamento'] = null;
+         $res['direccion'] = '';
+         $res['ciudad'] = '';
+         $res['departamento'] = '';
        }
 
 
 
        if(isset($array['Celular'])) {
          $array_direccion = $array['Celular'][1];
-         $res['telefono'] = isset($array_direccion['celular']) ? $array_direccion['celular'] : null;
+         $res['telefono'] = isset($array_direccion['celular']) ? $array_direccion['celular'] : '';
        }
        if(!isset($res['telefono']) || $res['telefono'] == null) {
          if(isset($array['Telefono'])) {
            $array_direccion = $array['Telefono'][1];
-           $res['telefono'] = isset($array_direccion['telefono']) ? $array_direccion['telefono'] : null;
+           $res['telefono'] = isset($array_direccion['telefono']) ? $array_direccion['telefono'] : '';
          }
        }
-       if(!isset($res['telefono']))$res['telefono'] = null;
+       if(!isset($res['telefono']))$res['telefono'] = '';
 
 
        if(isset($array['Email'])) {
          $array_direccion = $array['Email'][1];
-         $res['mail'] = isset($array_direccion['email']) ? $array_direccion['email'] : null;
+         $res['mail'] = isset($array_direccion['email']) ? $array_direccion['email'] : '';
        } else {
-         $res['mail'] = null;
+         $res['mail'] = '';
        }
        return $res;
     }
