@@ -60,20 +60,8 @@
                 <h3>Medios de pago</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12">
-{#                         <table class="payMethods">#}
-{#                             <tbody>#}
-{#                             {{ dump(payMethods) }}#}
-{#                             {% for payM in payMethods %}#}
-{#                                 <tr>#}
-{#                                     <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>#}
-{#                                     <td>{{ payM["account"] }}</td>#}
-{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
-{#                                 </tr>#}
-{#                             {% endfor %}#}
-{#                             </tbody>#}
-{#                         </table>#}
                         {% if (payMethods['creditCards'] is defined) %}
-                        <div class="row panel panel-default table-responsive">
+                        <div class="row panel panel-default table-responsive" id="creditCards">
                             <!-- Default panel contents -->
                             <div class="panel-heading center">Tarjetas de crédito</div>
                             <!-- Table -->
@@ -92,6 +80,7 @@
                                         <td class="vert-align">
                                             <a class="fa-2x fa fa-trash-o"></a>
                                             <a class="" style="margin-left: 10px;">Eliminar tarjeta</a>
+{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -100,7 +89,7 @@
                         </div>
                         {% endif %}
                         {% if (payMethods['bankAccounts'] is defined) %}
-                        <div class="row panel panel-default table-responsive">
+                        <div class="row panel panel-default table-responsive" id="bankAccounts">
                             <!-- Default panel contents -->
                             <div class="panel-heading center">Cuentas bancarias</div>
                             <!-- Table -->
@@ -119,6 +108,7 @@
                                         <td class="vert-align">
                                             <a class="fa-2x fa fa-trash-o"></a>
                                             <a class="" style="margin-left: 10px;">Eliminar cuenta</a>
+{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -126,6 +116,9 @@
                             </table>
                         </div>
                         {% endif %}
+                        <div class="row text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px;">
+                            <a type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_credit_card') }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -227,9 +220,7 @@
                                         <td class="vert-align">{{ invoice.description }}</td>
                                         <td class="vert-align">$ {{ invoice.value|number_format(2) }}</td>
                                         <td class="vert-align">
-                                            <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}">
-{#                                                 <span class="fa fa-file-pdf-o fa-2x"></span>#}
-                                            </a>
+                                            <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"></a>
                                             <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i style="margin-left: 5px;">Ver PDF</i></a>
                                         </td>
                                     </tr>
@@ -241,6 +232,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal loader-->
+    <div class="modal fade" role="dialog" id="modal_loader">
+        <div class="modal-dialog">
+            <div class="modal-content text-center">
+                <img src="/img/loader.gif">
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal add metodo de pago-->
+    <div id="modal_add_pay_method"></div>
+
 {% endblock fos_user_content%}
 {% block javascripts %}
     {{ parent() }}
@@ -268,6 +271,57 @@
             });
 
         });
+    }
+
+    $('#addPayMethod').click(function (event) {
+        event.preventDefault();
+        url = $(this).attr('href');
+        $.ajax({
+            url: url,
+            //data: data,
+            //success: success,
+            //dataType: dataType,
+            beforeSend: function (xhr) {
+                $('#modal_loader').modal('show');
+            }
+        }).done(function (data) {
+            //$('#modal_add_pay_method').html($(data).find("#main"));
+            $('#modal_add_pay_method').html(data);
+
+            $('#modal_add_credit_card').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+
+            $('#modal_add_credit_card').modal('show');
+            $.getScript("/public/js/addCreditCard.js").done(function () {
+                startAddCreditCard();
+            });
+        }).fail(function (data) {
+            //$("#modal_body_add_novelty").html(data);
+        }).always(function () {
+            $('#modal_loader').modal('hide');
+        });
+    });
+
+    function updateListPaymentMethods(data) {
+        console.log(data);
+//         $(".paymentMethod").each(function () {
+//             $(this).html(jsonToSelect(data));
+//         });
+        location.reload();
+        var html = '';
+        $.each(data['payment-methods'], function (key, obj) {
+            html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
+        });
+    }
+    function jsonToSelect(data) {
+        html = '';
+        $.each(data['payment-methods'], function (key, obj) {
+            html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
+        });
+        return html;
     }
     </script>
 {% endblock javascripts %}
