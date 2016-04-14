@@ -802,13 +802,18 @@
                     {% else %}
                         {% set wname = "" %}
                     {% endif %}
+                    {% if form.entities.ars.vars.data.name is defined %}
+                        {% set arsname = form.entities.ars.vars.data.name %}
+                    {% else %}
+                        {% set arsname = "" %}
+                    {% endif %}
                     {% if form.entities.pension.vars.data.name is defined %}
                         {% set pname = form.entities.pension.vars.data.name %}
                     {% else %}
                         {% set pname = "" %}
                     {% endif %}
                     <div class="col-sm-10 col-xs-12 blockUpData">
-                        <div class="col-sm-12 col-xs-12">
+                        <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                             <div class="hidden">
                                 {{ form_row(form.entities.wealth) }}
                             </div>
@@ -817,6 +822,18 @@
                             </div>
                             <div class="col-sm-6 form-group">
                                 {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
+                            </div>
+{#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
+                        </div>
+                        <div id="arsBlock"  class="col-sm-12 col-xs-12 days">
+                            <div class="hidden">
+                                {{ form_row(form.entities.ars) }}
+                            </div>
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.entities.arsAC) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.entities.arsAC, { 'value' : arsname}) }}
                             </div>
 {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                         </div>

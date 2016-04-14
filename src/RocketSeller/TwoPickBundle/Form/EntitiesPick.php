@@ -12,8 +12,10 @@ class EntitiesPick extends AbstractType
 {
     private $wealthEntities;
     private $pensionEntities;
-    function __construct($wealthEntities,$pensionEntities){
+    private $arsEntities;
+    function __construct($wealthEntities,$pensionEntities,$arsEntities){
         $this->wealthEntities=$wealthEntities;
+        $this->arsEntities=$arsEntities;
         $this->pensionEntities=$pensionEntities;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -37,7 +39,7 @@ class EntitiesPick extends AbstractType
             ->add('wealthAC', 'text', array(
                 'mapped' => false,
                 'label'=>'EPS*',
-                'required' => true,
+                'required' => false,
                 'attr'=>array(
                     "class"=>'autocomW',
                     "placeholder" => "Seleccionar un opción"
@@ -62,6 +64,25 @@ class EntitiesPick extends AbstractType
                 'mapped' => false,
                 'label'=>'¿Registrará beneficiarios?*',
                 'required' => true
+            ))
+
+            ->add('ars', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->arsEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'ARS*'
+
+            ))
+
+            ->add('arsAC', 'text', array(
+                'mapped' => false,
+                'label'=>'ARS*',
+                'required' => false,
+                'attr'=>array(
+                    "class"=>'autocomArs',
+                    "placeholder" => "Seleccionar un opción"
+                )
             ));
     }
 

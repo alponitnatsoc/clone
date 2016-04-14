@@ -331,6 +331,7 @@ class EmployeeController extends Controller
         $configData = $this->getConfigData();
         $pensions = null;
         $eps = null;
+        $ars = null;
 
 
         /** @var EntityType $entityType */
@@ -338,12 +339,15 @@ class EmployeeController extends Controller
             if ($entityType->getName() == (isset($configData['EPS']) ? $configData['EPS'] : "EPS")) {
                 $eps = $entityType->getEntities();
             }
+            if ($entityType->getPayrollCode() == "ARS") {
+                $ars = $entityType->getEntities();
+            }
             if ($entityType->getName() == (isset($configData['Pension']) ? $configData['Pension'] : "Pension")) {
                 $pensions = $entityType->getEntities();
             }
         }
         $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions, $timeCommitments,$user), $employee, array(
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions,$ars, $timeCommitments,$user), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
@@ -359,6 +363,9 @@ class EmployeeController extends Controller
             foreach ($eHEEntities as $enti) {
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "EPS") {
                     $employeeForm->get('wealth')->setData($enti->getEntityEntity());
+                }
+                if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "ARS") {
+                    $employeeForm->get('ars')->setData($enti->getEntityEntity());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getName() == "Pension") {
                     $employeeForm->get('pension')->setData($enti->getEntityEntity());

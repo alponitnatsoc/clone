@@ -366,19 +366,38 @@ function startEmployee() {
         var form = $("form");
         var i = 0;
         var flagValid = true;
-        $(form).find("select[name*='[wealth]']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
+        var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
+        if (selectedVal == " Trabajo por días") {
+            $(form).find("select[name*='[ars]']").each(function () {
+                if (!validator.element($(this))) {
+                    flagValid = false;
+                    return;
+                }
+            });
+
+            $(form).find("input[name*='[arsAC]']").each(function () {
+                if (!validator.element($(this))) {
+                    flagValid = false;
+                    return;
+                }
+            });
+        }else{
+            $(form).find("select[name*='[wealth]']").each(function () {
+                if (!validator.element($(this))) {
+                    flagValid = false;
+                    return;
+                }
+            });
+
+            $(form).find("input[name*='[wealthAC]']").each(function () {
+                if (!validator.element($(this))) {
+                    flagValid = false;
+                    return;
+                }
+            });
+        }
+
         $(form).find("select[name*='[pension]']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
-        $(form).find("input[name*='[wealthAC]']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
                 return;
@@ -400,7 +419,11 @@ function startEmployee() {
         if (!flagValid) {
             return;
         }
-
+        if (selectedVal == " Trabajo por días") {
+            $("#register_employee_entities_wealth").val("");
+        }else{
+            $("#register_employee_entities_ars").val("");
+        }
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -409,6 +432,7 @@ function startEmployee() {
                 beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
                 wealth:  $("#register_employee_entities_wealth").val(),
+                ars:  $("#register_employee_entities_ars").val(),
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -1310,6 +1334,34 @@ function initEntitiesFields(){
         $(this).autocomplete({
             source: function(request, response) {
                 var results = $.ui.autocomplete.filter(dataWe, request.term);
+
+                response(results.slice(0, 5));
+            },                minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+    var dataArs=[];
+    $("#register_employee_entities_ars").find("> option").each(function() {
+        dataArs.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomArs").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataArs, request.term);
 
                 response(results.slice(0, 5));
             },                minLength: 0,
