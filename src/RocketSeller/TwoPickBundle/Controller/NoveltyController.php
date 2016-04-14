@@ -148,7 +148,8 @@ class NoveltyController extends Controller {
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getValidVacationDaysContract',array(
                     "dateStart"=>$novelty->getDateStart()->format("Y-m-d"),
                     "dateEnd"=>$novelty->getDateEnd()->format("Y-m-d"),
-                    "contractId"=>$payRol->getContractContract()->getIdContract()
+                    "contractId"=>$payRol->getContractContract()->getIdContract(),
+                    "payrollId"=>"-1",
                     ), array('_format' => 'json'));
                 $days=json_decode($insertionAnswer->getContent(),true)["days"];
                 $novelty->setUnits($days);
@@ -158,6 +159,19 @@ class NoveltyController extends Controller {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($payRol);
             $em->flush();
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql',array(
+                "idNovelty"=>$novelty->getIdNovelty()), array('_format' => 'json'));
+            if($insertionAnswer->getStatusCode()!=201){
+                $payRol->removeNovelty($novelty);
+                $em->remove($novelty);
+                $em->persist($payRol);
+                $em->flush();
+                return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
+                    'form' => $form->createView(),
+                    'errno'=> 'No Se puedo agregar la novedad intente mas tarde!'
+                ));
+            }
             if ( !$this->checkNoveltyFulfilment($novelty, $form)) {
                 /** @var User $user */
                 $user = $this->getUser();

@@ -883,8 +883,7 @@ class EmployeeRestController extends FOSRestController
                             $dayNumber = 0;
                             break;
                     }
-                    if ($value == "lunes")
-                        $weekWorkableDay->setDayNumber($dayNumber);
+                    $weekWorkableDay->setDayNumber($dayNumber);
                     $contract->addWeekWorkableDay($weekWorkableDay);
                 }
 
