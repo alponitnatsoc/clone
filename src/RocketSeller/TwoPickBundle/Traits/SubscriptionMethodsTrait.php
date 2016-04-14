@@ -131,145 +131,143 @@ trait SubscriptionMethodsTrait
 
     protected function addToSQL(User $user)
     {
-        $person=$user->getPersonPerson();
-        $employer=$person->getEmployer();
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();
         //SQL Comsumpsion
-
         //Create Society
-        $em=$this->getDoctrine()->getManager();
-        $dateToday=new DateTime();
-        $dateToday->setDate(2016,02,01);//TODO ERASE THIS SHIT
-        if($employer->getIdSqlSociety()==null){
+        $em = $this->getDoctrine()->getManager();
+        $dateToday = new DateTime();
+        $dateToday->setDate(2016, 02, 01); //TODO ERASE THIS SHIT
+        if ($employer->getIdSqlSociety() == null) {
             $request = $this->container->get('request');
             $request->setMethod("POST");
             $request->request->add(array(
-                "society_nit"=>$person->getDocument(),
-                "society_name"=>$person->getNames(),
-                "society_start_date"=>$dateToday->format("d-m-Y"),
-                "society_mail"=>$user->getEmail(),
+                "society_nit" => $person->getDocument(),
+                "society_name" => $person->getNames(),
+                "society_start_date" => $dateToday->format("d-m-Y"),
+                "society_mail" => $user->getEmail(),
             ));
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
-            if($insertionAnswer->getStatusCode()!=200){
+            if ($insertionAnswer->getStatusCode() != 200) {
                 return false;
             }
         }
 
         $request->setMethod("GET");
         $view = View::create();
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety',array("societyNit"=>$person->getDocument()), array('_format' => 'json'));
-        if($insertionAnswer->getStatusCode()!=200){
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }
-        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
+        $idSQL = json_decode($insertionAnswer->getContent(), true)["COD_SOCIEDAD"];
         //$idSQL=$employer->getIdSqlSociety();
         $employer->setIdSqlSociety($idSQL);
         $em->persist($employer);
         $em->flush();
         //return $view->setStatusCode(201);
-
         //Employee creation
-        $employerHasEmployees=$employer->getEmployerHasEmployees();
+        $employerHasEmployees = $employer->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $eHE */
-        foreach ( $employerHasEmployees as $eHE) {
-            if($eHE->getState()==1){
-                $contracts=$eHE->getContracts();
-                $actContract=null;
+        foreach ($employerHasEmployees as $eHE) {
+            if ($eHE->getState() == 1) {
+                $contracts = $eHE->getContracts();
+                $actContract = null;
                 /** @var Contract $c */
                 foreach ($contracts as $c) {
-                    if($c->getState()==1){
-                        $actContract=$c;
+                    if ($c->getState() == 1) {
+                        $actContract = $c;
                         break;
                     }
                 }
 //                 $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
                 $liquidationType = $actContract->getFrequencyFrequency()->getPayrollCode();
-                $endDate=$actContract->getEndDate();
-                $employee=$eHE->getEmployeeEmployee();
-                $employeePerson=$employee->getPersonPerson();
-                if($actContract->getTimeCommitmentTimeCommitment()->getCode()=="TC"){
-                    $payroll_type=4;
-                    $value=$actContract->getSalary();
-                }else{
-                    $payroll_type=6;
-                    $value=$actContract->getSalary()/$actContract->getWorkableDaysMonth();
+                $endDate = $actContract->getEndDate();
+                $employee = $eHE->getEmployeeEmployee();
+                $employeePerson = $employee->getPersonPerson();
+                if ($actContract->getTimeCommitmentTimeCommitment()->getCode() == "TC") {
+                    $payroll_type = 4;
+                    $value = $actContract->getSalary();
+                } else {
+                    $payroll_type = 6;
+                    $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
                 }
                 $request->setMethod("POST");
                 $request->request->add(array(
-                    "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                    "last_name"=>$employeePerson->getLastName1(),
-                    "first_name"=>$employeePerson->getNames(),
-                    "document_type"=>$employeePerson->getDocumentType(),
-                    "document"=>$employeePerson->getDocument(),
-                    "gender"=>$employeePerson->getGender(),
-                    "birth_date"=>$employeePerson->getBirthDate()->format("d-m-Y"),
-                    "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
-                    "contract_number"=>$actContract->getIdContract(),
-                    "worked_hours_day"=>8,
-                    "payment_method"=>"EFE",
-                    "liquidation_type"=>$liquidationType,
-                    "contract_type"=>$actContract->getContractTypeContractType()->getPayrollCode(),
-                    "transport_aux"=>$actContract->getTransportAid()==1?"N":"S",
-                    "worked_days_week"=>$actContract->getWorkableDaysMonth()/4,
-                    "society"=>$employer->getIdSqlSociety(),
-                    "payroll_type"=>$payroll_type,
+                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                    "last_name" => $employeePerson->getLastName1(),
+                    "first_name" => $employeePerson->getNames(),
+                    "document_type" => $employeePerson->getDocumentType(),
+                    "document" => $employeePerson->getDocument(),
+                    "gender" => $employeePerson->getGender(),
+                    "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
+                    "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    "contract_number" => $actContract->getIdContract(),
+                    "worked_hours_day" => 8,
+                    "payment_method" => "EFE",
+                    "liquidation_type" => $liquidationType,
+                    "contract_type" => $actContract->getContractTypeContractType()->getPayrollCode(),
+                    "transport_aux" => $actContract->getTransportAid() == 1 ? "N" : "S",
+                    "worked_days_week" => $actContract->getWorkableDaysMonth() / 4,
+                    "society" => $employer->getIdSqlSociety(),
+                    "payroll_type" => $payroll_type,
                 ));
-                if( $endDate!=null){
+                if ($endDate != null) {
                     $request->request->add(array(
-                        "last_contract_end_date"=>$endDate->format("d-m-Y")
+                        "last_contract_end_date" => $endDate->format("d-m-Y")
                     ));
                 }
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
-                if($insertionAnswer->getStatusCode()!=200){
+                if ($insertionAnswer->getStatusCode() != 200) {
                     return false;
                 }
 
                 $request->setMethod("POST");
                 $request->request->add(array(
-                    "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                    "value"=>$value,
-                    "date_change"=>$actContract->getStartDate()->format("d-m-Y"),
+                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                    "value" => $value,
+                    "date_change" => $actContract->getStartDate()->format("d-m-Y"),
                 ));
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
-                if($insertionAnswer->getStatusCode()!=200){
+                if ($insertionAnswer->getStatusCode() != 200) {
                     return false;
                 }
                 //ADDING THE ENTITIES
-                $emEntities=$employee->getEntities();
+                $emEntities = $employee->getEntities();
                 /** @var EmployeeHasEntity $eEntity */
-                foreach ( $emEntities as $eEntity) {
-                    $entity=$eEntity->getEntityEntity();
-                    $eType=$entity->getEntityTypeEntityType();
-                    if($eType->getPayrollCode()=="EPS"||$eType->getPayrollCode()=="ARS"){
+                foreach ($emEntities as $eEntity) {
+                    $entity = $eEntity->getEntityEntity();
+                    $eType = $entity->getEntityTypeEntityType();
+                    if ($eType->getPayrollCode() == "EPS" || $eType->getPayrollCode() == "ARS") {
                         $request->setMethod("POST");
                         $request->request->add(array(
-                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code"=>$eType->getPayrollCode(),
-                            "coverage_code"=>$eType->getPayrollCode()=="EPS"?"2":"1",//EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
-                            "entity_code"=>$entity->getPayrollCode(),
-                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code" => $eType->getPayrollCode(),
+                            "coverage_code" => $eType->getPayrollCode() == "EPS" ? "2" : "1", //EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
+                            "entity_code" => $entity->getPayrollCode(),
+                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if($insertionAnswer->getStatusCode()!=200){
+                        if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
                     }
-                    if($eType->getPayrollCode()=="AFP"){
-                        if($entity->getPayrollCode()==0){
-                            $coverage=$entity->getName()=="Pensionado"?2:0;//2 si es pensionado o 0 si no amporta
-                        }else{
-                            $coverage=1;
+                    if ($eType->getPayrollCode() == "AFP") {
+                        if ($entity->getPayrollCode() == 0) {
+                            $coverage = $entity->getName() == "Pensionado" ? 2 : 0; //2 si es pensionado o 0 si no amporta
+                        } else {
+                            $coverage = 1;
                         }
                         $request->setMethod("POST");
                         $request->request->add(array(
-                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code"=>$eType->getPayrollCode(),
-                            "coverage_code"=>$coverage,//the relation coverage from SQL
-                            "entity_code"=>$entity->getPayrollCode(),
-                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code" => $eType->getPayrollCode(),
+                            "coverage_code" => $coverage, //the relation coverage from SQL
+                            "entity_code" => $entity->getPayrollCode(),
+                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if($insertionAnswer->getStatusCode()!=200){
-                            echo "Cago insertar entidad AFP ".$eHE->getIdEmployerHasEmployee()." SC".$insertionAnswer->getStatusCode();
+                        if ($insertionAnswer->getStatusCode() != 200) {
+                            echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
                             die();
                             $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
                             return $view;
@@ -277,62 +275,63 @@ trait SubscriptionMethodsTrait
                         //TODO ESTOE S TEMORAL POR EL FONDO NACIONAL DEL AHORRO
                         $request->setMethod("POST");
                         $request->request->add(array(
-                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code"=>"FCES",
-                            "coverage_code"=>1,//DONT change this is forever and ever
-                            "entity_code"=>intval($entity->getPayrollCode())+100,
-                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code" => "FCES",
+                            "coverage_code" => 1, //DONT change this is forever and ever
+                            "entity_code" => intval($entity->getPayrollCode()) + 100,
+                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if($insertionAnswer->getStatusCode()!=200){
+                        if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
                     }
                 }
-                $emEntities=$employer->getEntities();
-                $flag=false;
+                $emEntities = $employer->getEntities();
+                $flag = false;
                 /** @var EmployerHasEntity $eEntity */
-                foreach ( $emEntities as $eEntity) {
-                    $entity=$eEntity->getEntityEntity();
-                    $eType=$entity->getEntityTypeEntityType();
-                    if($eType->getPayrollCode()=="ARP"){
+                foreach ($emEntities as $eEntity) {
+                    $entity = $eEntity->getEntityEntity();
+                    $eType = $entity->getEntityTypeEntityType();
+                    if ($eType->getPayrollCode() == "ARP") {
                         $request->setMethod("POST");
                         $request->request->add(array(
-                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code"=>$eType->getPayrollCode(),
-                            "coverage_code"=>$actContract->getPositionPosition()->getPayrollCoverageCode(),
-                            "entity_code"=>$entity->getPayrollCode(),
-                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code" => $eType->getPayrollCode(),
+                            "coverage_code" => $actContract->getPositionPosition()->getPayrollCoverageCode(),
+                            "entity_code" => $entity->getPayrollCode(),
+                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if($insertionAnswer->getStatusCode()!=200){
+                        if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
                     }
-                    if($eType->getPayrollCode()=="PARAFISCAL"){
-                        if(!$flag){
-                            $flag=true;
-                        }else{continue;}
+                    if ($eType->getPayrollCode() == "PARAFISCAL") {
+                        if (!$flag) {
+                            $flag = true;
+                        } else {
+                            continue;
+                        }
                         $request->setMethod("POST");
                         $request->request->add(array(
-                            "employee_id"=>$eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code"=>$eType->getPayrollCode(),
-                            "coverage_code"=>"1",//Forever and ever don't change this
-                            "entity_code"=>$entity->getPayrollCode(),
-                            "start_date"=>$actContract->getStartDate()->format("d-m-Y"),
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "entity_type_code" => $eType->getPayrollCode(),
+                            "coverage_code" => "1", //Forever and ever don't change this
+                            "entity_code" => $entity->getPayrollCode(),
+                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if($insertionAnswer->getStatusCode()!=200){
+                        if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
                     }
                 }
-
             }
-
         }
         return true;
     }
+
     protected function addToNovo(User $user)
     {
         /* @var $person Person */
@@ -432,7 +431,7 @@ trait SubscriptionMethodsTrait
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
         $employer = $person->getEmployer();
-        $em=$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
         $request->setMethod("POST");
         $request->request->add(array(
@@ -441,7 +440,7 @@ trait SubscriptionMethodsTrait
             "name" => $person->getNames(),
             "firstLastName" => $person->getLastName1(),
             "secondLastName" => $person->getLastName2(),
-            "documentExpeditionDate" => $person->getDocumentExpeditionDate()?$person->getDocumentExpeditionDate()->format("Y-m-d"):"",
+            "documentExpeditionDate" => $person->getDocumentExpeditionDate() ? $person->getDocumentExpeditionDate()->format("Y-m-d") : "",
             "civilState" => $person->getCivilStatus(),
             "address" => $person->getMainAddress(),
             "phone" => $person->getPhones()->get(0)->getPhoneNumber(),
@@ -454,8 +453,8 @@ trait SubscriptionMethodsTrait
         //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
 
         if ($insertionAnswer->getStatusCode() == 404 || $insertionAnswer->getStatusCode() == 200) {
-            if($insertionAnswer->getStatusCode() == 200){
-                $idHighTech=json_decode($insertionAnswer->getContent(),true)["cuentaGSC"];
+            if ($insertionAnswer->getStatusCode() == 200) {
+                $idHighTech = json_decode($insertionAnswer->getContent(), true)["cuentaGSC"];
                 $employer->setIdHighTech($idHighTech);
                 $em->persist($employer);
                 $em->flush();
@@ -501,17 +500,17 @@ trait SubscriptionMethodsTrait
                             "employeeAddress" => $employeePerson->getMainAddress(),
                             "employeeCellphone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
                             "employeeMail" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
-                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+                                    "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
                             "employeeAccountType" => $paymentMethodId,
                             "employeeAccountNumber" => $paymentMethodAN,
-                            "employeeBankCode" => $payMC->getBankBank()->getHightechCode()?:23,
+                            "employeeBankCode" => $payMC->getBankBank()->getHightechCode()? : 23,
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBeneficiary', array('_format' => 'json'));
                         if (!($insertionAnswer->getStatusCode() == 200 )) {
                             $this->addFlash('error', $insertionAnswer->getContent());
 
-                            dump("se cago el empleado".$employeePerson->getDocument(). " codigo ".$insertionAnswer->getStatusCode() );
-                            dump($request );
+                            dump("se cago el empleado" . $employeePerson->getDocument() . " codigo " . $insertionAnswer->getStatusCode());
+                            dump($request);
 
                             return false;
                         }
@@ -519,7 +518,7 @@ trait SubscriptionMethodsTrait
                 }
             }
         } else {
-            dump("se cago el empleador".$employer->getPersonPerson()->getDocument()." codigo".$insertionAnswer->getStatusCode() );
+            dump("se cago el empleador" . $employer->getPersonPerson()->getDocument() . " codigo" . $insertionAnswer->getStatusCode());
             $this->addFlash('error', $insertionAnswer->getContent());
             return false;
         }
@@ -719,6 +718,7 @@ trait SubscriptionMethodsTrait
         $purchaseOrder->setValue($total);
         $purchaseOrder->setPurchaseOrdersStatus($purchaseOrdersStatus);
         $purchaseOrder->setPayMethodId($methodId);
+        $purchaseOrder->setProviderId(0);
 
         foreach ($data['employees'] as $key => $employee) {
             $purchaseOrderDescription = new PurchaseOrdersDescription();
