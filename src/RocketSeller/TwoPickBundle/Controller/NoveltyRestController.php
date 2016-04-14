@@ -35,16 +35,17 @@ class NoveltyRestController extends FOSRestController
      *   }
      * )
      *
-     * @param $idNotification
+     * @param $idNovelty
      * @return View
+     * @internal param $idNotification
      */
-    public function getAddNoveltySqlAction($idNotification)
+    public function getAddNoveltySqlAction($idNovelty)
     {
 
         $em=$this->getDoctrine();
         $noveltyRepo=$em->getRepository("RocketSellerTwoPickBundle:Novelty");
         /** @var Novelty $novelty */
-        $novelty=$noveltyRepo->find($idNotification);
+        $novelty=$noveltyRepo->find($idNovelty);
         $view = View::create();
         $request = $this->container->get('request');
         $noveltyType=$novelty->getNoveltyTypeNoveltyType();
@@ -113,6 +114,7 @@ class NoveltyRestController extends FOSRestController
      */
     public function getValidVacationDaysContractAction($dateStart, $dateEnd,$contractId,$payrollId)
     {
+        //datetime format YYYY-mm-dd
         $em=$this->getDoctrine()->getManager();
         if($contractId==-1){
             $payrollRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
@@ -126,7 +128,7 @@ class NoveltyRestController extends FOSRestController
         }
 
         $wkd=array();
-        if($realContract->getTimeCommitmentTimeCommitment()->getName()=="Tiempo Completo"){
+        if($realContract->getTimeCommitmentTimeCommitment()->getCode()=="TC"){
             $wkd[6]=true;
             $wkd[5]=true;
             $wkd[4]=true;

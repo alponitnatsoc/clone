@@ -57,6 +57,11 @@ class EmployerHasEmployee
     private $state = 1;
 
     /**
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $existentSQL = 0;
+
+    /**
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $isFree = 0;
@@ -266,4 +271,28 @@ class EmployerHasEmployee
         return $this->isFree;
     }
 
+
+    /**
+     * Set existentSQL
+     *
+     * @param integer $existentSQL
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setExistentSQL($existentSQL)
+    {
+        $this->existentSQL = $existentSQL;
+
+        return $this;
+    }
+
+    /**
+     * Get existentSQL
+     *
+     * @return integer
+     */
+    public function getExistentSQL()
+    {
+        return $this->existentSQL;
+    }
 }

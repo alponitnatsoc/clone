@@ -31,6 +31,10 @@ class Payroll
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $year;
+    /**
+     * @ORM\Column(type="boolean",  nullable=TRUE)
+     */
+    private $daysSent;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
@@ -296,5 +300,29 @@ class Payroll
     public function removePurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription)
     {
         $this->purchaseOrdersDescription->removeElement($purchaseOrdersDescription);
+    }
+
+    /**
+     * Set daysSent
+     *
+     * @param boolean $daysSent
+     *
+     * @return Payroll
+     */
+    public function setDaysSent($daysSent)
+    {
+        $this->daysSent = $daysSent;
+
+        return $this;
+    }
+
+    /**
+     * Get daysSent
+     *
+     * @return boolean
+     */
+    public function getDaysSent()
+    {
+        return $this->daysSent;
     }
 }
