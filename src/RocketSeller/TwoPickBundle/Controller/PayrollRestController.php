@@ -21,6 +21,7 @@ use DateTime;
 use GuzzleHttp\Client;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 
 /**
  * Contains all the web services to call the payroll system.
@@ -188,7 +189,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
+//         $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
 
         $response = null;
         $options = array(
@@ -2677,9 +2678,24 @@ class PayrollRestController extends FOSRestController
                     $format
                 );
 
+                $req = new Request();
+                $req->request->set("employee_id", $idEhE);
+                $req->request->set("execution_type", "C");
+
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+                if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+//                     $data = $response->getContent();
+//                     $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
+//                     $view->setStatusCode(410);
+//                     return $view;
+                }
+
                 $result = json_decode($response->getContent(), true);
                 $total[] = $this->totalLiquidation($result);
+
                 // Generar notificacion
+                $notification = new Notification();
+                $notification->setTitle("");
                 // Enviar correo
             }
         }
