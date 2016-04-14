@@ -232,6 +232,93 @@ public function fixArrayLocalizacion($array, &$new_array) {
        return $view;
   }
 
+    public function adaptLocationService($json) {
+      $array = json_decode($json, true);
+      $res = array();
+      // Nombres y apellidos.
+      if(isset($array['NaturalNacional'])) {
+        if(isset($array['NaturalNacional']['nombres'])) {
+          $nombres = explode(' ', $array['NaturalNacional']['nombres']);
+          $res['primerNombre'] = $nombres[0];
+          $res['segundoNombre'] = count($nombres) > 1 ?  $nombres[1] : null;
+        } else {
+          $res['primerNombre'] = null;
+          $res['segundoNombre'] = null;
+        }
+          isset($array['NaturalNacional']['primerApellido']) ?
+            $res['primerApellido'] = $array['NaturalNacional']['primerApellido'] : null;
+          isset($array['NaturalNacional']['segundoApellido']) ?
+            $res['segundoApellido'] = $array['NaturalNacional']['segundoApellido'] : null;
+
+          // Identificacion which is inside NaturalNacional.
+          if(isset($array['NaturalNacional']['Identificacion'])) {
+            $res['fechaExpedicion'] = isset($array['NaturalNacional']['Identificacion']['fechaExpedicion']) ? $array['NaturalNacional']['Identificacion']['fechaExpedicion'] : null;
+            $res['ciudadExpedicion'] = isset($array['NaturalNacional']['Identificacion']['ciudad']) ? $array['NaturalNacional']['Identificacion']['ciudad'] : null;
+          } else {
+            $res['fechaExpedicion'] = null;
+            $res['ciudadExpedicion'] = null;
+          }
+
+          // Genero.
+          if(isset($array['NaturalNacional']['genero'])) {
+            $codGenero = $array['NaturalNacional']['genero'];
+            if($codGenero == 1 || $codGenero == 2 || $codGenero == 3) {
+              $res['genero'] = 'F';
+            } elseif($codGenero == '4') {
+              $res['genero'] = 'M';
+            } else {
+              $res['genero'] = null;
+            }
+          } else {
+            $res['genero'] = null;
+          }
+        } else {
+          // If we don't have NaturalNacional we set everything in null.
+          $res['primerNombre'] = null;
+          $res['segundoNombre'] = null;
+          $res['primerApellido'] = null;
+          $res['segundoApellido'] = null;
+          $res['fechaExpedicion'] = null;
+          $res['ciudadExpedicion'] = null;
+          $res['genero'] = null;
+       }
+
+       if(isset($array['Direccion'])) {
+         $array_direccion = $array['Direccion'][1];
+         $res['direccion'] = isset($array_direccion['direccion']) ? $array_direccion['direccion'] : null;
+         $res['ciudad'] = isset($array_direccion['nombreCiudad']) ? $array_direccion['nombreCiudad'] : null;
+         $res['departamento'] = isset($array_direccion['nombreDepartamento']) ? $array_direccion['nombreDepartamento'] : null;
+       } else {
+         $res['direccion'] = null;
+         $res['ciudad'] = null;
+         $res['departamento'] = null;
+       }
+
+
+
+       if(isset($array['Celular'])) {
+         $array_direccion = $array['Celular'][1];
+         $res['telefono'] = isset($array_direccion['celular']) ? $array_direccion['celular'] : null;
+       }
+       if(!isset($res['telefono']) || $res['telefono'] == null) {
+         if(isset($array['Telefono'])) {
+           $array_direccion = $array['Telefono'][1];
+           $res['telefono'] = isset($array_direccion['telefono']) ? $array_direccion['telefono'] : null;
+         }
+       }
+       if(!isset($res['telefono']))$res['telefono'] = null;
+
+
+       if(isset($array['Email'])) {
+         $array_direccion = $array['Email'][1];
+         $res['mail'] = isset($array_direccion['email']) ? $array_direccion['email'] : null;
+       } else {
+         $res['mail'] = null;
+       }
+       return $res;
+    }
+
+
     /**
      * Get the client information from the datacredito service.
      * Servicio reconocer<br/>
@@ -272,7 +359,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
           $identificationType == "CE" ) {
             $identificationType = 4;
         }
-
+        $surname = mb_strtoupper ($surname, 'utf-8');
         $parameters["tipoIdentificacion"] = $identificationType;
         $parameters["identificacion"] = $documentNumber;
         $parameters["primerApellido"] = $surname;
@@ -290,7 +377,17 @@ public function fixArrayLocalizacion($array, &$new_array) {
         /** @var View $responseView */
         $responseView = $this->callApi($parameters, "http://52.73.111.160:8080/localizacion2/services/ServicioLocalizacion2");
 
-        return $responseView;
+        $temp = $this->handleView($responseView);
+        //$data = json_decode($temp->getContent(), true);
+        $code = json_decode($temp->getStatusCode(), true);
+
+        $newinfo = $this->adaptLocationService($temp->getContent());
+
+        $view = View::create();
+        $view->setStatusCode($code);
+        $view->setData($newinfo);
+
+        return $view;
     }
 
     /**
