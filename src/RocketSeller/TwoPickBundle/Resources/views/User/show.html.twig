@@ -57,21 +57,75 @@
             </div>
 
             <div class="row">
-                <h3>Medio de pago</h3>
+                <h3>Medios de pago</h3>
                 <div class="col-sm-12 center">
                     <div class="col-sm-12 col-xs-12">
-                        <table class="payMethods">
-                            <tbody>
-                            {{ dump(payMethods) }}
-                            {% for payM in payMethods %}
-                                <tr>
-                                    <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>
-                                    <td>{{ payM["account"] }}</td>
-                                    <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+{#                         <table class="payMethods">#}
+{#                             <tbody>#}
+{#                             {{ dump(payMethods) }}#}
+{#                             {% for payM in payMethods %}#}
+{#                                 <tr>#}
+{#                                     <td> {% if payM["payment-type"]==3  %} Visa{% else %} MasterC {% endif %}</td>#}
+{#                                     <td>{{ payM["account"] }}</td>#}
+{#                                     <td><a class="DeleteCC" href="{{ path('api_public_get_delete_pay_method',{'idPayM': payM['method-id'], 'idUser': app.user.personPerson.document })  }}">Eliminar</a></td>#}
+{#                                 </tr>#}
+{#                             {% endfor %}#}
+{#                             </tbody>#}
+{#                         </table>#}
+                        {% if (payMethods['creditCards']) %}
+                        <div class="row panel panel-default table-responsive">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading center">Tarjetas de crédito</div>
+                            <!-- Table -->
+                            <table class="table table-bordered ">
+                                <tbody>
+                                    {% for payM in payMethods['creditCards'] %}
+                                    <tr>
+                                        <td class="vert-align">
+                                            <span>Terminada en</span>
+                                            <h4><strong>{{ payM["account"] }}</strong></h4>
+                                        </td>
+                                        <td class="vert-align">
+                                            <span>Franquicia</span>
+                                            <h4><strong>{{ payM["payment-type"] }}</strong></h4>
+                                        </td>
+                                        <td class="vert-align">
+                                            <a class="fa-2x fa fa-trash-o"></a>
+                                            <a class="" style="margin-left: 10px;">Eliminar tarjeta</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                        {% if (payMethods['bankAccounts']) %}
+                        <div class="row panel panel-default table-responsive">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading center">Cuentas bancarias</div>
+                            <!-- Table -->
+                            <table class="table table-bordered ">
+                                <tbody>
+                                    {% for payM in payMethods['bankAccounts'] %}
+                                    <tr>
+                                        <td class="vert-align">
+                                            <span>Terminada en</span>
+                                            <h4><strong>{{ payM["account"] }}</strong></h4>
+                                        </td>
+                                        <td class="vert-align">
+                                            <span>Tipo de cuenta</span>
+                                            <h4><strong>{{ payM["payment-type"] }}</strong></h4>
+                                        </td>
+                                        <td class="vert-align">
+                                            <a class="fa-2x fa fa-trash-o"></a>
+                                            <a class="" style="margin-left: 10px;">Eliminar cuenta</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -173,10 +227,10 @@
                                         <td class="vert-align">{{ invoice.description }}</td>
                                         <td class="vert-align">$ {{ invoice.value|number_format(2) }}</td>
                                         <td class="vert-align">
-                                            <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}">
-                                                <span class="fa fa-file-pdf-o fa-2x"></span>
-                                                <i style="margin-left: 5px;">Ver PDF</i>
+                                            <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}">
+{#                                                 <span class="fa fa-file-pdf-o fa-2x"></span>#}
                                             </a>
+                                            <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i style="margin-left: 5px;">Ver PDF</i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
