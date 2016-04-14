@@ -37,7 +37,7 @@ trait SubscriptionMethodsTrait
     }
 
     /**
-     * 
+     *
      * @param User $user Empleador del cual se buscaran los empleados
      * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos
      * @return array
@@ -108,7 +108,7 @@ trait SubscriptionMethodsTrait
         if (($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered) > $total_sin_descuentos) {
             $total_con_descuentos = 0;
         } else {
-            $total_con_descuentos = $total_sin_descuentos - ($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered); //descuentos antes de iva            
+            $total_con_descuentos = $total_sin_descuentos - ($valor_descuento_3er + $valor_descuento_isRefered + $valor_descuento_haveRefered); //descuentos antes de iva
         }
         return array(
             'employees' => $employees,
@@ -423,7 +423,7 @@ trait SubscriptionMethodsTrait
     }
 
     /**
-     * Buscar referidos que tiene el usuario y que ya tengan subscripcion 
+     * Buscar referidos que tiene el usuario y que ya tengan subscripcion
      * @param User $user
      * @return array
      */
@@ -470,7 +470,7 @@ trait SubscriptionMethodsTrait
 
             if (isset($response['name-path'])) {
                 $path = $this->get('kernel')->getRootDir() . "/../web/public/docs/tmp/invoices/" . $response['name-path'];
-//D:\drive\Multiplica\symplifica\app/../web/public/docs/tmp/invoices/8061777-123.pdf 
+//D:\drive\Multiplica\symplifica\app/../web/public/docs/tmp/invoices/8061777-123.pdf
             } else {
                 $path = null;
             }
@@ -485,7 +485,7 @@ trait SubscriptionMethodsTrait
     }
 
     /**
-     * 
+     *
      * @param int $idUser id del usuario a buscar
      * @return User|null
      */
