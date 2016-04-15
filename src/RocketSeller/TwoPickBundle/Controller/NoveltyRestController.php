@@ -91,8 +91,6 @@ class NoveltyRestController extends FOSRestController
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=200){
-                echo "hola 3";
-
                 return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
             }
 

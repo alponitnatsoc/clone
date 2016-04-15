@@ -1214,6 +1214,7 @@ function inquiry() {
             documentType: documentType.val(),
             document: document.val(),
             lastName1: lastName1.val(),
+            personType: '2'
         }
     }).done(function (data) {
         //alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
@@ -1238,7 +1239,9 @@ function inquiry() {
         $(form).find("select[name='register_employee[person][city]']").val(data["city"]["id_city"]);
         $(form).find("input[name='register_employee[personExtra][email]']").val(data["email"]);
         $(form).find("input[name='register_employee[person][mainAddress]']").val(data["mainAddress"]);
+        $(form).find("#register_employee_person_phones_0_phoneNumber").val(data["phones"]);
         $("#documentExistent").modal("show");
+        console.log(data);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         //show the other stuf
     });

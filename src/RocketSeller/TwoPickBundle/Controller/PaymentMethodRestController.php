@@ -6,6 +6,7 @@ use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\AccountType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Product;
@@ -52,6 +53,12 @@ class PaymentMethodRestController extends FOSRestController
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         //TODO buscar en la bd los codigos de hightec
         $person = $user->getPersonPerson();
+        $bankRepo=$this->getDoctrine()->getRepository("RocketSelletTwoPickBundle:Bank");
+        $accountTypeRepo=$this->getDoctrine()->getRepository("RocketSelletTwoPickBundle:AccountType");
+        /** @var Bank $realBank */
+        $realBank=$bankRepo->find($paramFetcher->get("bankId"));
+        /** @var AccountType $realAccountType */
+        $realAccountType=$accountTypeRepo->find($paramFetcher->get("accountTypeId"));
 
         $employer=$person->getEmployer();
         $view = View::create();
@@ -59,8 +66,8 @@ class PaymentMethodRestController extends FOSRestController
         $request->setMethod("POST");
         $request->request->add(array(
             "accountNumber" => $employer->getIdHighTech(),
-            "bankCode" => $paramFetcher->get("bankId"),
-            "accountType" => $paramFetcher->get("accountTypeId"),
+            "bankCode" => $realBank->getHightechCode(),
+            "accountType" => $realAccountType->getName()=='Ahorros'?"AH":"CC",
             "bankAccountNumber" => $paramFetcher->get("accountNumber"),
             "expirationDate" => date('Y-m-d', strtotime('+1 years')),
             "authorizationDocumentName" => $person->getFullName().".txt",
