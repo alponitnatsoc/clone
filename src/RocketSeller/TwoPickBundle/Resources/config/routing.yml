@@ -79,3 +79,6 @@ routes:
 register_express:
     path:     /backoffice/register
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:registerExpress }
+legal_ass:
+    path:     /backoffice/legal
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:legalAssistance }

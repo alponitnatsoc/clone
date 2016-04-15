@@ -12,7 +12,7 @@ function showEmployeeForm(){
 
 }
 function editEmployee(){
-    $('.editEmployee').click(function(e){
+    $('.editEmployee').on("click",function(e){
         hideInfo();
         showEmployeeForm();
         $(".editEmployee").hide();
@@ -87,7 +87,7 @@ function editEmployee(){
 
                 }
             }).done(function (data) {                                            
-                alert("funciono");
+                location.reload();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert("hizo algo mal");
             });

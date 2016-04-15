@@ -31,8 +31,12 @@
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('back_office')}}">Inicio</a>
                                     </div>
-                                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                                    <div class="{% if app.request.get('_route') == '
+                                    show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('register_express')}}">Registro express</a>
+                                    </div>
+                                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                                        <a href="{{ path('legal_ass')}}">Asistencia legal</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_procedures')}}">Tramites</a>

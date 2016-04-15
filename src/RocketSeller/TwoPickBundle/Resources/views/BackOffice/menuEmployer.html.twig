@@ -35,6 +35,9 @@
                                         <a href="{{ path('register_express')}}">Registro express</a>
                                     </div>
                                     <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                                        <a href="{{ path('legal_ass')}}">Asistencia legal</a>
+                                    </div>
+                                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
                                         <a href="{{ path('show_procedures')}}">Tramites</a>
                                     </div>                                      
                                 </div>
@@ -52,11 +55,14 @@
                         		{% else %}                      			                        		
                                     {% set employerHasEmployees = employer.employerHasEmployees %}
                                     {% for employerHasEmployee in employerHasEmployees %}
-                                        <p>{{ employerHasEmployee.employeeEmployee.personPerson.names}}</p>
-                                        <button>
-                                            <a href="{{ path('express_registration_contract_employee',{'id':employer.personPerson.idPerson , 'idEmployee':employerHasEmployee.employeeEmployee.idEmployee})}}">contrato</a>    
-                                        </button>
-                                                                            
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-6">
+                                                {{ employerHasEmployee.employeeEmployee.personPerson.names}}
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <a class="btn notAjax" href="{{ path('express_registration_contract_employee',{'id':employer.personPerson.idPerson , 'idEmployee':employerHasEmployee.employeeEmployee.idEmployee})}}">contrato</a>
+                                            </div>
+                                        </div>                                                                            
                                     {% endfor %}
                                     <a href="{{ path('express_registration_employee',{'id':employer.personPerson.idPerson , 'idEmployee':-1})}}">Nuevo empleado</a>
 

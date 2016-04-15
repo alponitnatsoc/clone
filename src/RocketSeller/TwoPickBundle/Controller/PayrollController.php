@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -176,12 +177,13 @@ class PayrollController extends Controller
             throw $this->createAccessDeniedException();
         }
         if ($request->isMethod('POST')) {
-
+            /* @var $user User */
+            $user = $this->getUser();
             $payrollToPay = $request->request->get('payrollToPay');
             $data = $this->getInfoPayroll($this->getUser()->getPersonPerson()->getEmployer(), $payrollToPay);
             if ($data) {
                 $documentNumber = $this->getUser()->getPersonPerson()->getDocument();
-                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), array('_format' => 'json'));
                 dump($clientListPaymentmethods);
                 $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
 
