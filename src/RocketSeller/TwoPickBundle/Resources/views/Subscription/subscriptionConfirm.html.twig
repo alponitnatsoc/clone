@@ -52,7 +52,7 @@
             -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
         }
-        .infoTarjeta #credit_card {
+        .infoTarjeta #pagoMembresia_credit_card {
             background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
             background-position: 2px -117px, 233px -55px;
             background-size: 120px 361px, 120px 361px;
@@ -60,46 +60,46 @@
             padding-left: 54px;
             /*width: 225px;*/
         }
-        .infoTarjeta #credit_card.visa {
+        .infoTarjeta #pagoMembresia_credit_card.visa {
             background-position: 2px -159px, 260px -61px;
         }
-        .infoTarjeta #credit_card.visa_electron {
+        .infoTarjeta #pagoMembresia_credit_card.visa_electron {
             background-position: 2px -201px, 260px -61px;
         }
-        .infoTarjeta #credit_card.mastercard {
+        .infoTarjeta #pagoMembresia_credit_card.mastercard {
             background-position: 2px -243px, 260px -61px;
         }
-        .infoTarjeta #credit_card.maestro {
+        .infoTarjeta #pagoMembresia_credit_card.maestro {
             background-position: 2px -285px, 260px -61px;
         }
-        .infoTarjeta #credit_card.discover {
+        .infoTarjeta #pagoMembresia_credit_card.discover {
             background-position: 2px -327px, 260px -61px;
         }
-        .infoTarjeta #credit_card.amex {
+        .infoTarjeta #pagoMembresia_credit_card.amex {
             background-position: 2px -327px, 260px -61px;
         }
-        .infoTarjeta #credit_card.diners_club_carte_blanche {
+        .infoTarjeta #pagoMembresia_credit_card.diners_club_carte_blanche {
             background-position: 2px -327px, 260px -61px;
         }
-        .infoTarjeta #credit_card.valid.visa {
+        .infoTarjeta #pagoMembresia_credit_card.valid.visa {
             background-position: 2px -159px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.visa_electron {
+        .infoTarjeta #pagoMembresia_credit_card.valid.visa_electron {
             background-position: 2px -201px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.mastercard {
+        .infoTarjeta #pagoMembresia_credit_card.valid.mastercard {
             background-position: 2px -243px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.maestro {
+        .infoTarjeta #pagoMembresia_credit_card.valid.maestro {
             background-position: 2px -285px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.discover {
+        .infoTarjeta #pagoMembresia_credit_card.valid.discover {
             background-position: 2px -327px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.amex {
+        .infoTarjeta #pagoMembresia_credit_card.valid.amex {
             background-position: 2px -327px, 233px -82px;
         }
-        .infoTarjeta #credit_card.valid.diners_club_carte_blanche {
+        .infoTarjeta #pagoMembresia_credit_card.valid.diners_club_carte_blanche {
             background-position: 2px -327px, 233px -82px;
         }
         .toHide{
@@ -220,169 +220,177 @@
         </div>
     </div>
 
-    <form name="pago_membresia" action="{{ path('subscription_pay') }}" method="POST">
-        <div class="row">
-            <div class="col-md-12 text-center" style="padding: 50px 200px 0px 200px;">
-                Para que puedas realizar los pagos de nómina, aportes y nuestro
-                servicio necesitamos que registres un medio de pago del cuál te
-                haremos el cargo mensual
-            </div>
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        <div class="col-md-12 text-center" style="padding: 50px 200px 0px 200px;">
+            Para que puedas realizar los pagos de nómina, aportes y nuestro
+            servicio necesitamos que registres un medio de pago del cuál te
+            haremos el cargo mensual
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center" style="padding: 20px 200px 0px 200px;">
+            <div style="font-weight: bold">Selecciona el medio de pago</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
+            <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" checked="true"/>
+            <label for="creditCard_radio" style="font-weight: normal;">Tarjeta de Crédito</label>
+        </div>
+        <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
+            <input type="radio" id="debito_radio" name="typeMethod" value="debito"/>
+            <label for="debito_radio" style="font-weight: normal;">Cuenta de Ahorros</label>                
+        </div>
+        <div class="col-md-12 text-center" style="padding: 5px 5px 5px 5px;"> 
+            Por su seguridad el medio de pago debe estar a nombre del empleador
+        </div>
+    </div>
+    <hr>
+    <div id="infoTarjeta" class="infoTarjeta blockUpData content-input">
+        <div class="col-md-12 text-center">
+            <span style="margin-top: 20px"><h4>Información de la tarjeta de credito*</h4></span>
+            <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+            <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
         </div>
 
-        <div class="row">
-            <div class="col-md-12 text-center" style="padding: 20px 200px 0px 200px;">
-                <div style="font-weight: bold">Selecciona el medio de pago</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
-                <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" checked="true"/>
-                <label for="creditCard_radio" style="font-weight: normal;">Tarjeta de Crédito</label>
-            </div>
-            <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
-                <input type="radio" id="debito_radio" name="typeMethod" value="debito"/>
-                <label for="debito_radio" style="font-weight: normal;">Cuenta de Ahorros</label>                
-            </div>
-            <div class="col-md-12 text-center" style="padding: 5px 5px 5px 5px;"> 
-                Por su seguridad el medio de pago debe estar a nombre del empleador
-            </div>
-        </div>
-        <hr>
-        <div id="infoTarjeta" class="infoTarjeta blockUpData content-input">
-            <div class="col-md-12 text-center">
-                <span style="margin-top: 20px"><h4>Información de la tarjeta de credito*</h4></span>
-                <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Nombre en la tarjeta:</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">
-                    </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.name_on_card) }}
                 </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Número tarjeta de crédito:</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <input type="number" min="1"  step="1" id="credit_card" name="credit_card" class="form-control" placeholder="1234 5678 9012 3456" required="required">
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="col-md-6 ">
-                    <div class="col-md-12">
-                        <label>Fecha de vencimiento</label>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-6 form-group">
-                            <select id="expiry_date_month" name="expiry_date_month" class="form-control" required="required">
-                                <option value="">Mes</option>
-                                <option value="01">1</option>
-                                <option value="02">2</option>
-                                <option value="03">3</option>
-                                <option value="04">4</option>
-                                <option value="05">5</option>
-                                <option value="06">6</option>
-                                <option value="07">7</option>
-                                <option value="08">8</option>
-                                <option value="09">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </div>
-                        <div class=" col-md-6 form-group">
-                            <input type="number" class="form-control"  min="2016" max="9999" step="1" maxlength="4" minlength="4" name="expiry_date_year" id="expiry_date_year" placeholder="Año" required="required">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 ">
-                    <div class="col-md-12">
-                        <label>Código de seguridad:</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <input type="number" class="form-control" name="cvv" id="cvv" min="1" max="9999" minlength="3" maxlength="4" placeholder="123" required="required">
-                    </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.name_on_card) }}
                 </div>
             </div>
         </div>
 
-        <div id="infoDebito" class="infoDebito blockUpData content-input" style="display: none">
-            <div class="col-md-12 text-center">
-                <span style="margin-top: 20px"><h4>Información de la cuenta bancaria*</h4></span>
-                <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
-                <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Titular de la cuenta</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <input type="text" id="name_on_card" name="name_on_card" class="form-control" placeholder="Nombre" required="required">
-                    </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.credit_card) }}
                 </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Banco</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        {{ form_widget(form.bank) }}
-                    </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.credit_card) }}                        
                 </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Tipo de Cuenta</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        {{ form_widget(form.accountType) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="col-md-12 ">
-                    <div class="col-md-12">
-                        <label>Número de la cuenta</label>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <input type="text" id="numberAccount" name="numberAccount" class="form-control" placeholder="Número de la cuenta" required="required">
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-12" style="margin: 30px 0 20px 0;">
-            <div class="col-md-1">
-            </div>
-            <div class="col-md-11 center">
-                <input type="checkbox" id="tos" name="tos">
-                <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
             </div>
         </div>
 
-        <div class="col-md-12 center">
-            <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/>
-            <input type="submit" id="sumbit" class="btn btn-orange " value="Finalizar" disabled/>
+        <div class="col-md-12">
+            <div class="col-md-6 ">
+                <div class="col-md-12">
+                    {{ form_label(form.expiry_month) }} 
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6 form-group">
+                        {{ form_widget(form.expiry_month) }} 
+                    </div>
+                    <div class=" col-md-6 form-group">
+                        {{ form_widget(form.expiry_year) }}                             
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="col-md-12">
+                    {{ form_label(form.cvv) }}  
+                </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.cvv) }}                             
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="infoDebito" class="infoDebito blockUpData content-input" style="display: none">
+        <div class="col-md-12 text-center">
+            <span style="margin-top: 20px"><h4>Información de la cuenta bancaria*</h4></span>
+            <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
+            <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.titularName) }}  
+                </div>
+                <div class="col-md-12 form-group">                        
+                    {{ form_widget(form.titularName) }}  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.documentType) }}  
+                </div>
+                <div class="col-md-12 form-group">                        
+                    {{ form_widget(form.documentType) }}  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.documentNumber) }}  
+                </div>
+                <div class="col-md-12 form-group">                        
+                    {{ form_widget(form.documentNumber) }}  
+                </div>
+            </div>
         </div>
 
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.bank) }}
+                </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.bank) }}
+                </div>
+            </div>
+        </div>
 
-    </form>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.accountType) }}
+                </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.accountType) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.numberAccount) }}
+                </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.numberAccount) }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-12" style="margin: 30px 0 20px 0;">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-11 center">
+            <input type="checkbox" id="tos" name="tos">
+            <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
+        </div>
+    </div>
+
+    <div class="col-md-12 center">
+        <input type="button" class="btn btnPrevious" id="btnBack" value="Volver Atrás" onclick="window.location.href = '{{ path('subscription_choices') }}'"/>
+        <input type="submit" id="sumbit" class="btn btn-orange " value="Finalizar" disabled/>
+    </div>
+
+
+    {{ form_end(form) }}
 
 {% endblock %}

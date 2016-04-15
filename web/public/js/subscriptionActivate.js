@@ -1,18 +1,18 @@
 function startSubscriptionActivate() {
     var validator;
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-        validator = $("form[name='pago_membresia']").validate({
+        validator = $("form[name='pagoMembresia']").validate({
 //onfocusout: true,
             rules: {
-                "credit_card": {required: true, number: true, min: 1},
-                "name_on_card": {required: true},
-                "expiry_date_month": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                "pagoMembresia[credit_card]": {required: true, number: true, min: 1},
+                "pagoMembresia[name_on_card]": {required: true},
+                "pagoMembresia[expiry_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
                         // min needs a parameter passed to it
                         param: function () {
                             var date = new Date();
                             var year = date.getFullYear();
                             var month = date.getMonth() + 2;
-                            if ($("#expiry_date_year").val() == year) {
+                            if ($("#pagoMembresia_expiry_year").val() == year) {
                                 return month;
                             }
                             return 1;
@@ -21,23 +21,23 @@ function startSubscriptionActivate() {
                             var date = new Date();
                             var year = date.getFullYear();
                             var month = date.getMonth() + 2;
-                            if ($("#expiry_date_year").val() == year) {
-                                return ($("#expiry_date_month").val() < month);
+                            if ($("#pagoMembresia_expiry_year").val() == year) {
+                                return ($("#pagoMembresia_expiry_month").val() < month);
                             }
                             return false;
                         }
                     }},
-                "expiry_date_year": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
+                "pagoMembresia[expiry_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
                         param: function () {
                             var date = new Date();
                             return date.getFullYear();
                         }
                     }},
-                "cvv": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 001}
+                "pagoMembresia[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 001}
 
             },
             messages: {
-                "credit_card": {
+                "pagoMembresia[credit_card]": {
                     required: "Por favor ingrese el numero de la tarjeta",
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo 16 digitos",
@@ -45,8 +45,8 @@ function startSubscriptionActivate() {
                     min: ""
 
                 },
-                "name_on_card": {required: "Por favor ingrese el numero de la tarjeta"},
-                "expiry_date_month": {
+                "pagoMembresia[name_on_card]": {required: "Por favor ingrese el numero de la tarjeta"},
+                "pagoMembresia[expiry_month]": {
                     required: "Por favor ingrese el mes de vencimiento",
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo mes de 2 digitos",
@@ -56,17 +56,17 @@ function startSubscriptionActivate() {
                         var date = new Date();
                         var year = date.getFullYear();
                         var month = date.getMonth() + 1;
-                        if ($("#expiry_date_year").val() == year) {
-                            if ($("#expiry_date_month").val() == month) {
+                        if ($("#pagoMembresia_expiry_year").val() == year) {
+                            if ($("#pagoMembresia_expiry_month").val() == month) {
                                 return "Tarjeta vence este mes";
-                            } else if ($("#expiry_date_month").val() < month) {
+                            } else if ($("#pagoMembresia_expiry_month").val() < month) {
                                 return "Tarjeta vencida";
                             }
                         }
                         return "mes del 01 al 12";
                     }
                 },
-                "expiry_date_year": {
+                "pagoMembresia[expiry_year]": {
                     required: "Por favor ingrese el año de vencimiento",
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo año de 4 digitos",
@@ -74,7 +74,7 @@ function startSubscriptionActivate() {
                     max: "año maximo 9999",
                     min: "año minimo 2016"
                 },
-                "cvv": {
+                "pagoMembresia[cvv]": {
                     required: "Por favor ingrese el codigo de verificación",
                     number: "ingresa solamente dígitos",
                     maxlength: "maximo 4 digitos",
@@ -86,7 +86,7 @@ function startSubscriptionActivate() {
         });
     });
     $.getScript("/public/js/jquery.creditCardValidator.js").done(function () {
-        $('#credit_card').validateCreditCard(function (result) {
+        $('#pagoMembresia_credit_card').validateCreditCard(function (result) {
             $(this).removeClass();
             $(this).addClass('form-control');
             if (result.valid) {

@@ -9,6 +9,12 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class SubscriptionController extends Controller
 {
@@ -76,6 +82,7 @@ class SubscriptionController extends Controller
 
         $day = $this->getDaysSince($user->getLastPayDate(), date_create(date('Y-m-d')));
 
+
         if ($day === true || ($day->d >= 28) || ($day->m >= 1)) {
 
             if ($request->isMethod('POST')) {
@@ -89,17 +96,116 @@ class SubscriptionController extends Controller
                 $date = new \DateTime();
                 $date->add(new \DateInterval('P1M'));
                 $startDate = $date->format('Y-m-d');
+                $minMont = $date->format('m');
+                $minYear = $date->format('Y');
 
-                $form = $this->createFormBuilder()
+                $form = $this->get('form.factory')->createNamedBuilder('pagoMembresia', 'form', array(), array(
+                            'action' => $this->generateUrl('subscription_pay'),
+                            //'action' => $this->generateUrl('subscription_confirm'),
+                            'method' => 'POST'))
+                        ->add('name_on_card', 'text', array(
+                            'label' => 'Nombre en la tarjeta',
+                            'required' => true,
+                            'attr' => array('placeholder' => 'Nombre en la tarjeta')
+                        ))
+                        ->add('credit_card', 'integer', array(
+                            'label' => 'Número tarjeta de crédito',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => '1234 5678 9012 3456',
+                                'min' => 1,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('expiry_month', 'integer', array(
+                            'label' => 'Fecha de vencimiento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Mes',
+                                'min' => 01,
+                                'max' => 12,
+                                'maxlength' => 2,
+                                'minlength' => 1,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('expiry_year', 'integer', array(
+                            'label' => 'Fecha de vencimiento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Año',
+                                'min' => $minYear,
+                                'max' => 9999,
+                                'maxlength' => 4,
+                                'minlength' => 4,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('cvv', 'integer', array(
+                            'label' => 'Código de seguridad:',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => '123',
+                                'min' => 1,
+                                'max' => 9999,
+                                'maxlength' => 4,
+                                'minlength' => 3,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('titularName', 'text', array(
+                            'label' => 'Titular de la cuenta',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Nombre titular de la cuenta',
+                                'readonly' => true,
+                                'value' => $person->getNames() . ' ' . $person->getLastName1() . ' ' . $person->getLastName2()
+                            )
+                        ))
+                        ->add('documentType', 'text', array(
+                            'label' => 'Tipo de Documento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Tipo de Documento',
+                                'readonly' => true,
+                                'value' => $person->getDocumentType()
+                            )
+                        ))
+                        ->add('documentNumber', 'text', array(
+                            'label' => 'Número de documento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Número de documento',
+                                'readonly' => true,
+                                'value' => $person->getDocument()
+                            )
+                        ))
                         ->add('bank', 'entity', array(
+                            'label' => 'Banco',
+                            'required' => false,
                             'class' => 'RocketSellerTwoPickBundle:Bank',
+                            'empty_value' => 'Seleccione',
                             'choice_label' => 'name'
                         ))
                         ->add('accountType', 'entity', array(
+                            'label' => 'Tipo de Cuenta',
+                            'required' => false,
                             'class' => 'RocketSellerTwoPickBundle:AccountType',
+                            'empty_value' => 'Seleccione',
                             'choice_label' => 'name'
                         ))
+                        ->add('numberAccount', 'integer', array(
+                            'label' => 'Número de la cuenta',
+                            'required' => false,
+                            'attr' => array(
+                                'placeholder' => 'Número de la cuenta',
+                                'min' => 1,
+                                'minlength' => 1,
+                                'step' => 1
+                            )
+                        ))
                         ->getForm();
+
                 return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionConfirm.html.twig', array(
                             'form' => $form->createView(),
                             'employer' => $person,
@@ -128,12 +234,12 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function suscripcionPayAction(Request $request)
+    public function suscripcionPayAction(Request $requestIn)
     {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-
+        //dump($requestIn);
         /* @var $user User */
         $user = $this->getUser();
 
@@ -141,68 +247,76 @@ class SubscriptionController extends Controller
 
         if ($day === true || ($day->d >= 28) || ($day->m >= 1)) {
 
-            if ($request->isMethod('POST')) {
+            if ($requestIn->isMethod('POST')) {
                 $em = $this->getDoctrine()->getManager();
                 /* @var $user User */
                 $user = $this->getUser();
-                $typeMethod = $request->get('typeMethod');
-                if ($typeMethod == 'creditCard') {
+                $typeMethod = $requestIn->get('typeMethod');
+                $pagoMembresia = $requestIn->get('pagoMembresia');
+                $tos = $requestIn->get('tos');
+                if ($tos == 'on') {
 
-                    if ($this->addToNovo($user)) {
-                        $request = new Request ();
-                        $request->setMethod('POST');
-                        $request->request->set('credit_card', $request->get('credit_card'));
-                        $request->request->set('expiry_date_year', $request->get('expiry_date_year'));
-                        $request->request->set('expiry_date_month', $request->get('expiry_date_month'));
-                        $request->request->set('cvv', $request->get('cvv'));
-                        $request->request->set('name_on_card', $request->get('name_on_card'));
-                        $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
-                        if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                            $this->addFlash('error', $postAddCreditCard->getContent());
-                            return $this->redirectToRoute("subscription_error");
-                            //throw $this->createNotFoundException($data->getContent());
-                        } else {
-                            $methodId = json_decode($postAddCreditCard->getContent(), true);
-                            $purchaseOrder = $this->createPurchaceOrder($user, 'novo', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+                    if ($typeMethod == 'creditCard') {
 
-                            if ($purchaseOrder) {
-                                return $this->redirectToRoute("subscription_success");
+                        if ($this->addToNovo($user)) {
+                            $request = new Request ();
+                            $request->setMethod('POST');
+                            $request->request->set('credit_card', $pagoMembresia['credit_card']);
+                            $request->request->set('expiry_date_year', $pagoMembresia['expiry_year']);
+                            $request->request->set('expiry_date_month', $pagoMembresia['expiry_month']);
+                            $request->request->set('cvv', $pagoMembresia['cvv']);
+                            $request->request->set('name_on_card', $pagoMembresia['name_on_card']);
+                            $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
+                            if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                                $this->addFlash('error', $postAddCreditCard->getContent());
+                                return $this->redirectToRoute("subscription_error");
+                                //throw $this->createNotFoundException($data->getContent());
+                            } else {
+                                $methodId = json_decode($postAddCreditCard->getContent(), true);
+                                $purchaseOrder = $this->createPurchaceOrder($user, 'novo', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+
+                                if ($purchaseOrder) {
+                                    return $this->redirectToRoute("subscription_success");
+                                }
+                                return $this->redirectToRoute("subscription_error");
                             }
+                        } else {
+                            $this->addFlash('error', 'Error al insertar en novopayment');
+                            return $this->redirectToRoute("subscription_error");
+                        }
+                    } elseif ($typeMethod == 'debito') {
+
+                        if ($this->addToHighTech($user)) {
+                            $request = new Request ();
+                            $request->setMethod('POST');
+                            $request->request->set('accountNumber', $pagoMembresia['numberAccount']);
+                            $request->request->set('bankId', $pagoMembresia['bank']);
+                            $request->request->set('accountTypeId', $pagoMembresia['accountType']);
+                            $request->request->set('userId', $user->getId());
+                            $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('request' => $request), array('_format' => 'json'));
+                            if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                                $this->addFlash('error', $postAddCreditCard->getContent());
+                                return $this->redirectToRoute("subscription_error");
+                                //throw $this->createNotFoundException($data->getContent());
+                            } else {
+                                $methodId = json_decode($postAddCreditCard->getContent(), true);
+                                $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+
+                                if ($purchaseOrder) {
+                                    return $this->redirectToRoute("subscription_success");
+                                }
+                                return $this->redirectToRoute("subscription_error");
+                            }
+                        } else {
+                            $this->addFlash('error', 'Error al insertar en novopayment');
                             return $this->redirectToRoute("subscription_error");
                         }
                     } else {
-                        $this->addFlash('error', 'Error al insertar en novopayment');
-                        return $this->redirectToRoute("subscription_error");
-                    }
-                } elseif ($typeMethod == 'debito') {
-
-                    if ($this->addToHighTech($user)) {
-                        $request = new Request ();
-                        $request->setMethod('POST');
-                        $request->request->set('accountNumber', $request->get('numberAccount'));
-                        $request->request->set('bankId', $request->get('form[bank]'));
-                        $request->request->set('accountTypeId', $request->get('accountType'));
-                        $request->request->set('userId', $user->getId());
-                        $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccountAction', array('request' => $request), array('_format' => 'json'));
-                        if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                            $this->addFlash('error', $postAddCreditCard->getContent());
-                            return $this->redirectToRoute("subscription_error");
-                            //throw $this->createNotFoundException($data->getContent());
-                        } else {
-                            $methodId = json_decode($postAddCreditCard->getContent(), true);
-                            $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
-
-                            if ($purchaseOrder) {
-                                return $this->redirectToRoute("subscription_success");
-                            }
-                            return $this->redirectToRoute("subscription_error");
-                        }
-                    } else {
-                        $this->addFlash('error', 'Error al insertar en novopayment');
+                        $this->addFlash('error', 'La opcion enviada es diferente a las opciones permitidas');
                         return $this->redirectToRoute("subscription_error");
                     }
                 } else {
-                    $this->addFlash('error', 'La opcion enviada es diferente a las opciones permitidas');
+                    $this->addFlash('error', 'No se aceptaron terminos y condiciones');
                     return $this->redirectToRoute("subscription_error");
                 }
             } else {
