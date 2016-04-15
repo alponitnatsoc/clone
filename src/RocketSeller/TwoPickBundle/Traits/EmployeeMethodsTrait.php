@@ -57,13 +57,13 @@ trait EmployeeMethodsTrait
         $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $employerHasEmployees->first();
+        $this->validateDocumentsEmployer($employerHasEmployee->getEmployerEmployer());
         do {
             $employee = $employerHasEmployee->getEmployeeEmployee();
             $this->validateDocumentsEmployee($employee);
             $this->validateEntitiesEmployee($employee);
         } while ($employerHasEmployee = $employerHasEmployees->next());
 
-        $this->validateDocumentsEmployer($employerHasEmployee->getEmployerEmployer());
         return true;
     }
 
