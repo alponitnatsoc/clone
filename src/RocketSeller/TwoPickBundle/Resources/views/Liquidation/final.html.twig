@@ -1,44 +1,23 @@
 {% extends '::base.html.twig' %}
 {% block title %}Symplifica - Liquidación final del empleado{% endblock %}
 {% block fos_user_content %}
-{% block stylesheets %}
-    <style>
-/*         #rocketseller_twopickbundle_liquidation_lastWorkDay select { */
-/*             margin-right: 10px; */
-/*         } */
-    </style>
-{% endblock %}
-<div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
-    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
-        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-            <img src="/img/block-complete.png" class="center-block">
-        </div>
-        <div id="" class="col-md-10 col-xs-12 txt-AD1">
-            <div id="" class="text-left">
-                <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>
-            </div>
-        </div>
-    </div>
-</div>
-
+{# <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">#}
+{#     <div id="" class="col-sm-12 col-xs-12 blockStep inline">#}
+{#         <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">#}
+{#             <img src="/img/block-complete.png" class="center-block">#}
+{#         </div>#}
+{#         <div id="" class="col-md-10 col-xs-12 txt-AD1">#}
+{#             <div id="" class="text-left">#}
+{#                 <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>#}
+{#             </div>#}
+{#         </div>#}
+{#     </div>#}
+{# </div>#}
+{% include 'RocketSellerTwoPickBundle:Liquidation:header-liquidation.html.twig' %}
 <form action="{{ path('api_public_post_final_pre_liquidation_submit') }}" method="post" {{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
 {{ form_errors(form) }}
     <div class="col-sm-12">
-        <div class="col-sm-12">
-            <h4><strong>{{ employeeInfo.name }}</strong><br />{{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</h4>
-        </div>
-        <div class="col-sm-12 table-responsive">
-            <table class="table table-bordered text-center">
-                <tbody>
-                    <tr>
-                        <td><i>Documento</i><h4>{{ employeeInfo.documentType }} {{ employeeInfo.document }} de {{ employeeInfo.docExpeditionPlace }}</h4></td>
-                        <td><i>Tipo de contrato</i><h4>{{ contractInfo.contractType }}</h4></td>
-                        <td><i>Duración contrato</i><h4>{{ contractInfo.contractPeriod }}</h4></td>
-                        <td><i>Salario</i><h4>$ {{ contractInfo.salary|number_format(0) }}</h4></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        {% include 'RocketSellerTwoPickBundle:Liquidation:header-info-liquidation.html.twig' %}
         <div id="liquidationStep1" class="col-sm-12" style="margin-top: 35px;">
             <div class="text-center col-sm-12" style="margin-bottom: 35px;">
                 <h4 style="font-size: 23px;">Completa los siguientes datos para calcular el valor de la liquidación</h4>
@@ -59,7 +38,6 @@
                     <table class="table table-bordered">
                         <tbody>
                             {% for child in form.liquidationReason %}
-
                                 {% if loop.index == 1%}
                                     <tr>
                                 {% endif %}
@@ -76,7 +54,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
             <div class="col-sm-12 text-center" style="margin-top: 30px;">
                 <i>El valor de la liquidación es:</i>

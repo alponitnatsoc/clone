@@ -1,177 +1,103 @@
 {% extends '::base.html.twig' %}
 {% block title %}Symplifica - Liquidación final del empleado{% endblock %}
 {% block fos_user_content %}
-{% block stylesheets %}
-    <style>
-        .glyphicon-th-large{
-            color:#00CDCC;
-        }
-        .glyphicon-th-large:hover{
-            color:#00CDCC;
-            cursor: pointer;
-        }
-        .glyphicon-th-list{
-            color:#00CDCC;
-        }
-        .employee_data_info{
-            padding: 5px 30px 5px 30px;
-            display: inline-block;
-            text-align: center;
-        }
-        .employee_head_liquidation{
-            width: 100%;
-            padding: 10px;
-            display: -webkit-inline-box;
-            border-bottom: solid #efefef;
-            border-top: solid #efefef;
-            border-width: 2px;
-        }
-        #liquidationStep2 {
-            width: 100%;
-        }
-        h5 {
-            width: 100%;
-            font-weight: bold;
-            font-size: 17px;
-        }
-        .employee_data_info {
-            border-right: 1px solid #E6E6E7;
-            min-height: 130px;
-        }
-        .employee_data_info:last-child {
-            border-right: none;
-        }
-        .contador_logo{
-            height: 50px;
-        }
-        a:hover{
-            text-decoration: none;
-        }
-        .liq-container {
-            width: 100%;
-            padding: 10px;
-        }
-        #btnAddNovelty {
-            width: 100%;
-            padding: 20px 0px;
-            background: 0;
-            border: 2px dashed #FD9224;
-            color: #FD9224;
-            font-size: 21px;
-        }
-    </style>
-{% endblock %}
-<div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
-    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
-        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-            <img src="/img/block-complete.png" class="center-block">
-        </div>
-        <div id="" class="col-md-10 col-xs-12 txt-AD1">
-            <div id="" class="text-left">
-                <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>
-            </div>
-        </div>
-    </div>
-</div>
+{# <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">#}
+{#     <div id="" class="col-sm-12 col-xs-12 blockStep inline">#}
+{#         <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">#}
+{#             <img src="/img/block-complete.png" class="center-block">#}
+{#         </div>#}
+{#         <div id="" class="col-md-10 col-xs-12 txt-AD1">#}
+{#             <div id="" class="text-left">#}
+{#                 <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>#}
+{#             </div>#}
+{#         </div>#}
+{#     </div>#}
+{# </div>#}
+{% include 'RocketSellerTwoPickBundle:Liquidation:header-liquidation.html.twig' %}
+<style>
+.no-border {
+    border: 0 !important;
+}
+</style>
 <form action="{{ path('api_public_post_final_pre_liquidation_submit') }}" method="post" {{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
 {{ form_errors(form) }}
-    <div class="col-xs-12">
-        <div class="col-xs-12">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h4><strong>{{ employeeInfo.name }}</strong><br />{{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</h4>
+    <div class="col-sm-12">
+        {% include 'RocketSellerTwoPickBundle:Liquidation:header-info-liquidation.html.twig' %}
+        <div id="liquidationStep2" class="col-sm-12">
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-center">
+                    <h4>1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} <br />¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h4>
                 </div>
-            </div>
-        </div>
-        <div class="employee_head_liquidation">
-            <div class="col-sm-12 employee_data">
-                <div class="row">
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp text-left"><h5 class="text-left">Documento</h5><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}<br />{{ employeeInfo.docExpeditionPlace }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Tipo de contrato</h5><p>{{ contractInfo.contractType }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Duración contrato</h5><p>{{ contractInfo.contractPeriod }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Salario</h5><p>${{ contractInfo.salary|number_format }}</p></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="liquidationStep2">
-            <div class="liq-container">
-                <div class="col-xs-12 text-center">
-                    <h4 style="font-weight: 200; text-align: center;">1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} <br />¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h4>
-                </div>
-                <br />
-                <div class="middle-content" style="border: none;">
-                    <div class="col-sm-12" style="text-align:center; margin-top: 40px;">
-                            <div class="col-sm-3">
-                                <p><strong>Fecha inicio</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Fecha fin</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Estado</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Detalle</strong></p>
-                            </div>
+                <div class="col-sm-12 text-center" style="margin-top: 40px;">
+                    <div class="col-sm-12">
+                        <div class="col-sm-4">
+                            <p><strong>Fecha</strong></p>
                         </div>
-                        <div class="col-sm-12" style="text-align:center;">
-                    {% if novelties is not empty %}
-                        {% for novelty in novelties %}
-                            {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
-                                <div class="col-sm-12 row-novelty" style="text-align:center;">
-                                               <div class=" element-table col-sm-3">
-                                                   {% if novelty.dateStart %}
-                                                       <p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
-                                                   {% else %}
-                                                       <p><strong>-</strong></p>
-                                                   {% endif %}
-
-                                               </div>
-                                               <div class="element-table col-sm-3">
-                                                   {% if novelty.dateEnd %}
-                                                       <p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
-                                                   {% else %}
-                                                       <p><strong>-</strong></p>
-                                                   {% endif %}
-                                               </div>
-                                               <div class="element-table col-sm-3">
-                                                   <p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
-                                               </div>
-
-                                               <div class="element-detail col-sm-3">
-                                                   <p><strong>ver detalle</strong></p>
-                                               </div>
-                                           </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <li>No hay novedades reportadas</li>
-                    {% endif %}
+                        <div class="col-sm-4">
+                            <p><strong>Tipo de novedad</strong></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><strong>Estado</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 table-responsive">
+                        {% if novelties is not empty %}
+                            <table class="table record_properties table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="no-border">Fecha</th>
+                                        <th class="no-border">Tipo de novedad</th>
+                                        <th class="no-border">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for novelty in novelties %}
+                                    {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
+                                        <tr>
+                                            <td>
+                                                {% if novelty.dateStart %}
+                                                    <i>{{ novelty.dateStart|date('d/m/y') }}</i>
+                                                {% else %}
+                                                    <i>-</i>
+                                                {% endif %}
+                                            </td><td>
+                                                {% if novelty.dateEnd %}
+                                                    <i>{{ novelty.dateEnd|date('d/m/y') }}</i>
+                                                {% else %}
+                                                    <i>-</i>
+                                                {% endif %}
+                                            </td><td>
+                                                <i>{{ novelty.noveltyTypeNoveltyType.name}}</i>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="element-table col-sm-12">No hay novedades reportadas</div>
+                        {% endif %}
                     </div>
                 </div>
                 {% if liquidationReason != 2 %}
-                    <button type="button" id="btnAddNovelty" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle"></i> Agregar novedades</button>
+{#                     <div class="col-sm-12">#}
+{#                         <button class="btn btn-symplifica" type="button" id="btnAddNovelty" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle"></i> Agregar novedades</button>#}
+{#                     </div>#}
+                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px; margin-top: 20px;">
+                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')" href="javascript:void(0)"><i class="fa fa-plus-circle"></i> <i>Agregar novedad</i></a>
+                    </div>
                 {% endif %}
             </div>
             {% if liquidationReason == 2 %}
-                <div class="liq-container" id="liqJustaCausa">
-                    <div class="col-sm-12">
-                        <h4 style="font-weight: 200; text-align: center; margin-top: 30px;">2. Razones para liquidación con justa causa</h4>
+                <div class="col-sm-12" id="liqJustaCausa">
+                    <div class="col-sm-12 text-center">
+                        <h4>2. Razones para liquidación con justa causa</h4>
                     </div>
-                    <br/>
-                    <div class="col-sm-12">
-                        <span class="txthelp">Para finalizar el contrato con un empleado de forma unilateral
+                    <div class="col-sm-12 text-center">
+                        <h5>Para finalizar el contrato con un empleado de forma unilateral
                         debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
                         empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
-                        atención</strong> así como también sus correspondientes <strong>descargos</strong>.</span>
+                        atención</strong> así como también sus correspondientes <strong>descargos</strong>.</h5>
                     </div>
                     {% if llamadosAtencion %}
                     <div class="col-sm-12">
@@ -189,19 +115,20 @@
                     {% else %}
                     <div class="col-sm-12">No tiene llamados de atencion reportados</div>
                     {% endif %}
-                    <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
+{#                     <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>#}
+                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px;">
+                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle fa-2x"></i> <i>Agregar novedad</i></a>
+                    </div>
                 </div>
             {% elseif liquidationReason in [7,10] %}
-                <div class="liq-container" id="liqSinJustaCausa">
+                <div class="col-sm-12 text-center" id="liqSinJustaCausa" style="margin-top: 30px;">
                     <div class="col-sm-12">
-                        <h3>2. Descagar el documento para ser firmado por el empleado</h3>
+                        <h4>2. Descagar el documento para ser firmado por el empleado</h4>
                     </div>
-                    <br />
-                    <div class="col-sm-12">
-                        <span class="txthelp">Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
-                        Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</span>
+                    <div class="col-sm-10 col-sm-offset-1" style="text-align: justify;">
+                        <h5>Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
+                        Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</h5>
                     </div>
-                    <br />
                     <div class="col-sm-12 col-xs-12 center" style="margin-top:30px; margin-bottom:30px; ">
                         <div class="col-sm-6 col-sm-push-3">
                             <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia <br />
@@ -229,12 +156,22 @@
                     </div>
                 </div>
             {% endif %}
-
+            <div class="col-sm-12"><br /><hr/></div>
             <div class="col-sm-12 col-xs-12 center" id="contLiq">
                 <div class="col-sm-6 col-sm-push-3">
                     <button type="button" class="btn btnPrevious" onclick="history.go(-1)">Anterior</button>
                     <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
                     <br /><br />
+                </div>
+            </div>
+            <div class="col-sm-12"><br /><hr/></div>
+            <div class="col-sm-12">
+                <div class="col-sm-4 text-right">
+                    <i class="fa fa-exclamation fa-4x" aria-hidden="true"></i>
+                </div>
+                <div class="col-sm-8">
+                    <span class="cols-sm-8" style="font-size: 20px;">¿Necesitas ayuda?</span>
+                    <span class="cols-sm-8" style="font-size: 15px;">Contamos con un Consultorio Jurídico a su disposición.</span>
                 </div>
             </div>
         </div>
