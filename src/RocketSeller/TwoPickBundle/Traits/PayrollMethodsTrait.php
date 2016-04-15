@@ -186,7 +186,7 @@ trait PayrollMethodsTrait
     {
         $employeeId = $employerHasEmployee->getIdEmployerHasEmployee();
 
-        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRestController:getGeneralPayrolls', array(
             'employeeId' => $employeeId,
             'period' => null,
             'month' => null,

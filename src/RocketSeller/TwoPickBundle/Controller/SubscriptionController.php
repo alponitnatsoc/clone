@@ -259,7 +259,8 @@ class SubscriptionController extends Controller
                     if ($typeMethod == 'creditCard') {
 
                         if ($this->addToNovo($user)) {
-                            $request = new Request ();
+                            //$request = new Request ();
+                            $request = $this->container->get('request');
                             $request->setMethod('POST');
                             $request->request->set('credit_card', $pagoMembresia['credit_card']);
                             $request->request->set('expiry_date_year', $pagoMembresia['expiry_year']);
@@ -291,7 +292,8 @@ class SubscriptionController extends Controller
                     } elseif ($typeMethod == 'debito') {
 
                         if ($this->addToHighTech($user)) {
-                            $request = new Request ();
+                            //$request = new Request ();
+                            $request = $this->container->get('request');
                             $request->setMethod('POST');
                             $request->request->set('accountNumber', $pagoMembresia['numberAccount']);
                             $request->request->set('bankId', $pagoMembresia['bank']);

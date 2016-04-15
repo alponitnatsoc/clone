@@ -790,7 +790,7 @@ trait SubscriptionMethodsTrait
             '$idProcedureType' => $ProcedureType->getIdProcedureType()
                 ), array('_format' => 'json')
         );
-        //$this->validateDocuments();
+        $this->validateDocuments($user);
         $this->addToSQL($user);
         $em->persist($user);
         $em->flush();
