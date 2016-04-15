@@ -243,10 +243,11 @@ class PayrollController extends Controller
                             ), array('_format' => 'json')
                     );
                     $responceC = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postExecutePayrollLiquidation', array(
-                        "employee_id" => $purchaseOrder->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+                        "employee_id" => $purchaseOrder->getPurchaseOrderDescriptions()->first()->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
                         'execution_type' => 'C'
                             ), array('_format' => 'json')
                     );
+                    $this->createNewPayroll($purchaseOrder->getPurchaseOrderDescriptions()->first()->getPayrollPayroll());
                 }
                 if (!empty($responce) && $responce !== null) {
                     //dump($responce);
@@ -275,6 +276,14 @@ class PayrollController extends Controller
         } else {
             return $this->redirectToRoute("payroll");
         }
+    }
+
+    public function createNewPayroll(Payroll $payroll)
+    {
+        dump('createNewPayroll');
+        dump($payroll);
+        $this->addFlash('success', 'createNewPayroll');
+        $this->addFlash('success', json_encode($payroll));
     }
 
     public function payrollSuccessAction(Request $request)
