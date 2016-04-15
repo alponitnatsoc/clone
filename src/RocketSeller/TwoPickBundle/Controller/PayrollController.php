@@ -205,9 +205,10 @@ class PayrollController extends Controller
             throw $this->createAccessDeniedException();
         }
         if ($request->isMethod('POST')) {
-
+            /* @var $user User */
+            $user = $this->getUser();
             $payrollToPay = $request->request->get('payrollToPay');
-            $data = $this->getInfoPayroll($this->getUser()->getPersonPerson()->getEmployer(), $payrollToPay);
+            $data = $this->getInfoPayroll($user->getPersonPerson()->getEmployer(), $payrollToPay);
             if ($data) {
                 $total = 0;
                 $paymentMethod = $request->request->get('paymentMethod');
@@ -237,7 +238,15 @@ class PayrollController extends Controller
                 $purchaseOrders = $this->pagarNomina($data, $total);
                 $responce = null;
                 foreach ($purchaseOrders as $key => $purchaseOrder) {
-                    $responce = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array("idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()), array('_format' => 'json'));
+                    $responce = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array(
+                        "idPurchaseOrder" => $purchaseOrder->getIdPurchaseOrders()
+                            ), array('_format' => 'json')
+                    );
+                    $responceC = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postExecutePayrollLiquidation', array(
+                        "employee_id" => $purchaseOrder->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee(),
+                        'execution_type' => 'C'
+                            ), array('_format' => 'json')
+                    );
                 }
                 if (!empty($responce) && $responce !== null) {
                     //dump($responce);
