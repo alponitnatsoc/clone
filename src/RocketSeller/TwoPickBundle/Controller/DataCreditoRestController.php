@@ -288,7 +288,10 @@ public function fixArrayLocalizacion($array, &$new_array) {
        }
 
        if(isset($array['Direccion'])) {
-         $array_direccion = $array['Direccion'][1];
+         if(isset($array['Direccion'][1]))
+          $array_direccion = $array['Direccion'][1];
+         else
+          $array_direccion = $array['Direccion'];
          $res['direccion'] = isset($array_direccion['direccion']) ? $array_direccion['direccion'] : '';
          $res['ciudad'] = isset($array_direccion['nombreCiudad']) ? $array_direccion['nombreCiudad'] : '';
          $res['departamento'] = isset($array_direccion['nombreDepartamento']) ? $array_direccion['nombreDepartamento'] : '';
@@ -301,7 +304,10 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
 
        if(isset($array['Celular'])) {
-         $array_direccion = $array['Celular'][1];
+         if(isset($array['Celular'][1]))
+          $array_direccion = $array['Celular'][1];
+        else
+          $array_direccion = $array['Celular'];
          $res['telefono'] = isset($array_direccion['celular']) ? $array_direccion['celular'] : '';
        }
        if(!isset($res['telefono']) || $res['telefono'] == null) {
@@ -314,7 +320,10 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
 
        if(isset($array['Email'])) {
-         $array_direccion = $array['Email'][1];
+         if(isset($array['Email'][1]))
+          $array_direccion = $array['Email'][1];
+         else
+          $array_direccion = $array['Email'];
          $res['mail'] = isset($array_direccion['email']) ? $array_direccion['email'] : '';
        } else {
          $res['mail'] = '';
