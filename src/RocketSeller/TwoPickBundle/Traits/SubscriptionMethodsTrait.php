@@ -13,11 +13,15 @@ use RocketSeller\TwoPickBundle\Entity\Referred;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
+use RocketSeller\TwoPickBundle\Entity\ProcedureType;
 use Symfony\Component\HttpFoundation\Response;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
 
 trait SubscriptionMethodsTrait
 {
+
+    use EmployeeMethodsTrait;
 
     protected function findProductByNumDays($productos, $days)
     {
@@ -160,7 +164,7 @@ trait SubscriptionMethodsTrait
             return false;
         }
         //$idSQL=$employer->getIdSqlSociety();
-        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
+        $idSQL = json_decode($insertionAnswer->getContent(), true)["COD_SOCIEDAD"];
         $employer->setIdSqlSociety($idSQL);
         $em->persist($employer);
         $em->flush();
@@ -779,10 +783,18 @@ trait SubscriptionMethodsTrait
             $startDate = $date->format('Y-m-d');
             $user->setIsFreeTo($date);
         }
-
+        /* @var $ProcedureType ProcedureType */
+        $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
+        $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
+            '$employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
+            '$idProcedureType' => $ProcedureType->getIdProcedureType()
+                ), array('_format' => 'json')
+        );
+        //$this->validateDocuments();
         $this->addToSQL($user);
         $em->persist($user);
         $em->flush();
+        return true;
     }
 
     protected function getMethodId($documentNumber)
