@@ -299,13 +299,17 @@ class SubscriptionController extends Controller
                                 return $this->redirectToRoute("subscription_error");
                                 //throw $this->createNotFoundException($data->getContent());
                             } else {
-                                $methodId = json_decode($postAddCreditCard->getContent(), true);
-                                $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
+                                $this->procesosLuegoPagoExitoso($user);
+                                return $this->redirectToRoute("subscription_success");
+                                /*
+                                  $methodId = json_decode($postAddCreditCard->getContent(), true);
+                                  $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
 
-                                if ($purchaseOrder) {
-                                    return $this->redirectToRoute("subscription_success");
-                                }
-                                return $this->redirectToRoute("subscription_error");
+                                  if ($purchaseOrder) {
+                                  return $this->redirectToRoute("subscription_success");
+                                  }
+                                  return $this->redirectToRoute("subscription_error");
+                                 */
                             }
                         } else {
                             dump('Error al insertar en hightec');

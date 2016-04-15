@@ -768,6 +768,26 @@ trait SubscriptionMethodsTrait
         return false;
     }
 
+    protected function procesosLuegoPagoExitoso(User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user->setStatus(2);
+        $user->setPaymentState(1);
+        $user->setDayToPay(date('d'));
+        $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
+
+        if ($user->getIsFree() > 0) {
+            $date = new \DateTime();
+            $date->add(new \DateInterval('P1M'));
+            $startDate = $date->format('Y-m-d');
+            $user->setIsFreeTo($date);
+        }
+
+        $this->addToSQL($user);
+        $em->persist($user);
+        $em->flush();
+    }
+
     protected function getMethodId($documentNumber)
     {
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
