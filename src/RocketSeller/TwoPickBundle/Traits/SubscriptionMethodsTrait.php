@@ -160,6 +160,7 @@ trait SubscriptionMethodsTrait
             return false;
         }
         //$idSQL=$employer->getIdSqlSociety();
+        $idSQL=json_decode($insertionAnswer->getContent(),true)["COD_SOCIEDAD"];
         $employer->setIdSqlSociety($idSQL);
         $em->persist($employer);
         $em->flush();
@@ -512,16 +513,12 @@ trait SubscriptionMethodsTrait
                         if (!($insertionAnswer->getStatusCode() == 200 )) {
                             $this->addFlash('error', $insertionAnswer->getContent());
 
-                            dump("se cago el empleado" . $employeePerson->getDocument() . " codigo " . $insertionAnswer->getStatusCode());
-                            dump($request);
-
                             return false;
                         }
                     }
                 }
             }
         } else {
-            dump("se cago el empleador" . $employer->getPersonPerson()->getDocument() . " codigo" . $insertionAnswer->getStatusCode());
             $this->addFlash('error', $insertionAnswer->getContent());
             return false;
         }
