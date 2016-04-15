@@ -44,6 +44,11 @@ class LegalAssistanceController extends Controller
             $phone->setPhoneNumber($form->get("phoneNumber")->getData());
             $person->setDocument($form->get("document")->getData());
             $person->addPhone($phone);
+            $employer = new Employer();
+            $employer->setPersonPerson($person);
+            $employer->setEmployerType("Persona");
+            $employer->setRegisterState(10);
+            $em->persist($employer);
             $em->persist($phone);
             $em->persist($person);
             $em->flush();

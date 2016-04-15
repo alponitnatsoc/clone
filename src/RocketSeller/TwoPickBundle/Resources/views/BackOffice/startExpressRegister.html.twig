@@ -35,14 +35,21 @@
 	                        <a href="{{ path('register_express')}}">Registro express</a>
 	                    </div>
 	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
+                            <a href="{{ path('legal_ass')}}">Asistencia legal</a>
+                        </div>
+	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
 	                        <a href="{{ path('show_procedures')}}">Tramites</a>
 	                    </div>                                      
 	                </div>
 	            {% endblock %}
 	        </div>
 			<div id="main" class="col-sm-9" style="color:black;">
+
 				{{ form_start(form) }}
-				{{ form_widget(form) }}
+				<div class="form-black">
+					{{ form_widget(form) }}
+				</div>
+				
 				{{ form_end(form)}}				
 	        </div>
 	    </div>

@@ -65,10 +65,21 @@ class BackOfficeController extends Controller
     {   
         $em = $this->getDoctrine()->getManager();
         $role = $em->getRepository('RocketSellerTwoPickBundle:Role')
-                ->findByName("ROLE_BACK_OFFICE");
+                ->findOneByName("ROLE_BACK_OFFICE");
         $notifications = $em->getRepository('RocketSellerTwoPickBundle:Notification')
-                ->findByRoleRole($role[0]);                     
+                ->findBy(array("roleRole" => $role,
+                                        "type"=>"Registro express"));                     
         return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('notifications'=>$notifications));    
+    }
+    public function legalAssistanceAction()
+    {   
+        $em = $this->getDoctrine()->getManager();
+        $role = $em->getRepository('RocketSellerTwoPickBundle:Role')
+                ->findOneByName("ROLE_BACK_OFFICE");
+        $notifications = $em->getRepository('RocketSellerTwoPickBundle:Notification')
+                ->findBy(array("roleRole" => $role,
+                                        "type"=>"Asistencia legal"));                     
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:legalAssistance.html.twig',array('notifications'=>$notifications));    
     }
     /**
      * hace un query de la clase para instanciarla

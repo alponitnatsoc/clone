@@ -1748,6 +1748,78 @@ class EmployeeRestController extends FOSRestController
         ))->setStatusCode(200);
         return $view;
     }
+    /**
+     * Edit a Beneficiary from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when the requested Ids don't exist"     
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     * @RequestParam(name="civilStatus", nullable=false, strict=true, description="the civil status of the employee")
+     * @RequestParam(name="year", nullable=false, strict=true, description="year of birth.")
+     * @RequestParam(name="month", nullable=false, strict=true, description="month of birth.")
+     * @RequestParam(name="day", nullable=false, strict=true, description="day of birth.")
+     * @RequestParam(name="mainAddress", nullable=false, strict=true, description="mainAddress.")
+     * @RequestParam(name="phone", nullable=false, strict=true, description="telefono.")
+     * @RequestParam(name="email", nullable=false, strict=true, description="correo electronico.")
+     * @RequestParam(name="birthDepartment", nullable=false, strict=true, description="birth department.")
+     * @RequestParam(name="birthCity", nullable=false, strict=true, description="birth city.")
+     * @RequestParam(name="birthCountry", nullable=false, strict=true, description="birth country.")
+     * @RequestParam(name="department", nullable=false, strict=true, description="department.")
+     * @RequestParam(name="city", nullable=false, strict=true, description="city.")
+     * @RequestParam(name="idEmployee", nullable=false, strict=true, description="benefits of the employee.")
+
+     * @return View
+     */
+    public function postEditEmployeeAction(ParamFetcher $paramFetcher)
+    {
+        $view = $view = View::create();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($paramFetcher->get('idEmployee'));
+        $city = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City')->find($paramFetcher->get('city'));
+        $birthCity = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City')->find($paramFetcher->get('birthCity'));
+        $department = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department')->find($paramFetcher->get('department'));
+        $birthDepartment = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department')->find($paramFetcher->get('birthDepartment'));
+        $birthCountry = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Country')->find($paramFetcher->get('birthCountry'));
+
+
+        $person = $employee->getPersonPerson();
+        $person->setEmail($paramFetcher->get('email'));
+        $person->setCivilStatus($paramFetcher->get('civilStatus'));
+        $person->setMainAddress($paramFetcher->get('mainAddress'));
+        $datetime = new DateTime();
+        $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
+        $person->setBirthDate($datetime);
+        $phone = $person->getPhones()[0];
+        $phone->setPhoneNumber($paramFetcher->get('phone'));
+
+        $person->setDepartment($department);
+        $person->setBirthDepartment($birthDepartment);
+
+        $person->setCity($city);
+        $person->setBirthCity($birthCity);
+        $person->setBirthCountry($birthCountry);
+
+        $em->persist($person);
+        $em->flush();
+
+
+
+
+
+        $view->setStatusCode(200);
+        return $view;
+    }
+
 
     protected function getDaysSince($sinceDate, $toDate)
     {

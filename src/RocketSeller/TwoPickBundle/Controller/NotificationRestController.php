@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -62,6 +63,54 @@ class NotificationRestController extends FOSRestController
         $serializer = $this->get('jms_serializer');
         $serializer->serialize($response, "json");
         $view->setData($response);
+        return $view;
+    }
+        /**
+     * Add the novelty<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Finds the cities of a department.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Returned when the notification id doesn't exists "
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="idPerson",  requirements="\d+",nullable=false, strict=true, description="the person id.")
+     * @RequestParam(name="type", nullable=false, strict=true, description="notification 
+     type")
+     * @RequestParam(name="accion", nullable=false, strict=true, description="notification accion")
+     * @return View
+     */
+    public function postCreateNotificationAction(ParamFetcher $paramFetcher)
+    {
+        // $user = $this->getUser();
+        $view = View::create();
+        // if($user==null){
+        //     $view->setStatusCode(401);
+        //     return $view;
+        // }
+        $role = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Role')
+                ->findOneByName("ROLE_BACK_OFFICE");
+        $person = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:Person')
+            ->find($paramFetcher->get('idPerson'));
+
+        $notification = new Notification();
+        $notification->setType($paramFetcher->get('type'));
+        $notification->setAccion($paramFetcher->get('accion'));
+        $notification->setPersonPerson($person);
+        $notification->setRoleRole($role);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($notification);
+        $em->flush();
+        $view->setStatusCode(200);
         return $view;
     }
 

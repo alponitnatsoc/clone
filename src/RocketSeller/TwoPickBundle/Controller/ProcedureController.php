@@ -77,7 +77,7 @@ class ProcedureController extends Controller
 			$em->flush();
 
 			$this->addFlash('success', 'Exito al terminar los tramites del empleado');
-			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));	
+			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
 		}else{
 
 			$this->addFlash('error', 'No has terminado las vueltas del empleado');
