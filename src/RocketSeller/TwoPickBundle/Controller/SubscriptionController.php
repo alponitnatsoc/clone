@@ -268,7 +268,7 @@ class SubscriptionController extends Controller
                             $request->request->set('name_on_card', $pagoMembresia['name_on_card']);
                             $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));
                             if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                                $this->addFlash('error', $postAddCreditCard->getContent());
+                                dump($postAddCreditCard->getContent());
                                 return $this->redirectToRoute("subscription_error");
                                 //throw $this->createNotFoundException($data->getContent());
                             } else {
@@ -281,7 +281,7 @@ class SubscriptionController extends Controller
                                 return $this->redirectToRoute("subscription_error");
                             }
                         } else {
-                            $this->addFlash('error', 'Error al insertar en novopayment');
+                            dump('Error al insertar en novopayment');
                             return $this->redirectToRoute("subscription_error");
                         }
                     } elseif ($typeMethod == 'debito') {
@@ -295,7 +295,7 @@ class SubscriptionController extends Controller
                             $request->request->set('userId', $user->getId());
                             $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('request' => $request), array('_format' => 'json'));
                             if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                                $this->addFlash('error', $postAddCreditCard->getContent());
+                                dump($postAddCreditCard->getContent());
                                 return $this->redirectToRoute("subscription_error");
                                 //throw $this->createNotFoundException($data->getContent());
                             } else {
@@ -308,15 +308,15 @@ class SubscriptionController extends Controller
                                 return $this->redirectToRoute("subscription_error");
                             }
                         } else {
-                            $this->addFlash('error', 'Error al insertar en novopayment');
+                            dump('Error al insertar en hightec');
                             return $this->redirectToRoute("subscription_error");
                         }
                     } else {
-                        $this->addFlash('error', 'La opcion enviada es diferente a las opciones permitidas');
+                        dump('La opcion enviada es diferente a las opciones permitidas');
                         return $this->redirectToRoute("subscription_error");
                     }
                 } else {
-                    $this->addFlash('error', 'No se aceptaron terminos y condiciones');
+                    dump('No se aceptaron terminos y condiciones');
                     return $this->redirectToRoute("subscription_error");
                 }
             } else {
