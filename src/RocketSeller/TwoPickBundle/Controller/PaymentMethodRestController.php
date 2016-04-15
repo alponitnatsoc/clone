@@ -215,7 +215,7 @@ class PaymentMethodRestController extends FOSRestController
                 $realPayMethods[]=array(
                   'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
                   'account'=>$value["account"],
-                  'method-id'=>$value["method-id"],
+                  'method-id'=>'0-'.$value["method-id"],
                   'bank'=>'',
                   'id-provider'=>'0',
                 );
@@ -228,7 +228,7 @@ class PaymentMethodRestController extends FOSRestController
                 $realPayMethods[]=array(
                   'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
                   'account'=>$value["numeroCuenta"],
-                  'method-id'=>$value["idCuenta"],
+                  'method-id'=>'1-'.$value["idCuenta"],
                   'bank'=>$bank->getName(),
                   'id-provider'=>'1',
                 );
@@ -350,6 +350,13 @@ class PaymentMethodRestController extends FOSRestController
         $user = $purchaseOrder->getIdUser();
         $person = $user->getPersonPerson();
         $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
+        $pmid=$purchaseOrder->getPayMethodId();
+        $pmArray=explode('-',$pmid);
+        $purchaseOrder->setPayMethodId($pmArray[0]);
+        $purchaseOrder->setProviderId($pmArray[1]);
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($purchaseOrder);
+        $em->flush();
         $extractAnswer=$this->extractMoney($purchaseOrder,$person);
         if($extractAnswer['code']!=200){
             return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
