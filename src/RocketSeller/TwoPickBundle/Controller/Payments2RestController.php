@@ -683,7 +683,7 @@ class Payments2RestController extends FOSRestController
         $data = json_decode($temp->getContent(), true);
         $code = json_decode($temp->getStatusCode(), true);
 
-        if($code != 200) {
+        if($code != 200 || !isset($data['cuentas']['cuenta'])) {
           $view = View::create();
           $view->setStatusCode($code);
           $view->setData([]);
