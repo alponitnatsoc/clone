@@ -42,10 +42,10 @@ class PaymentMethodRestController extends FOSRestController
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      * @return View
-     * @RequestParam(name="accountNumber", nullable=false,  requirements="\d+", strict=true, description="Account Number")
-     * @RequestParam(name="bankId", nullable=false,  requirements="\d+", strict=true, description="the bank id")
-     * @RequestParam(name="accountTypeId", nullable=false, strict=true, description="Account type ID")
-     * @RequestParam(name="userId", nullable=false,  requirements="\d+", strict=true, description="Account type ID")
+     * @RequestParam(name="accountNumber", requirements="\d+", strict=true, description="Account Number")
+     * @RequestParam(name="bankId",   requirements="\d+", strict=true, description="the bank id")
+     * @RequestParam(name="accountTypeId",  strict=true, description="Account type ID")
+     * @RequestParam(name="userId", strict=true, description="Account type ID")
      */
     public function postAddDebitAccountAction(ParamFetcher $paramFetcher)
     {
@@ -53,8 +53,8 @@ class PaymentMethodRestController extends FOSRestController
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         //TODO buscar en la bd los codigos de hightec
         $person = $user->getPersonPerson();
-        $bankRepo=$this->getDoctrine()->getRepository("RocketSelletTwoPickBundle:Bank");
-        $accountTypeRepo=$this->getDoctrine()->getRepository("RocketSelletTwoPickBundle:AccountType");
+        $bankRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank");
+        $accountTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType");
         /** @var Bank $realBank */
         $realBank=$bankRepo->find($paramFetcher->get("bankId"));
         /** @var AccountType $realAccountType */
