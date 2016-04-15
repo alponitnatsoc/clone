@@ -77,7 +77,7 @@ $('input[name="rocketseller_twopickbundle_liquidation[liquidationReason]"]:radio
 
     var frequency = form.find("input[name='rocketseller_twopickbundle_liquidation[frequency]']").val();
 
-    $("#liquidationValue").html("$")
+    $("#liquidationValue").html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>')
 
     $.ajax({
         url: url,
@@ -105,6 +105,6 @@ function getPrice(valor) {
     price = parseFloat(valor.toString().replace(/,/g, ""))
             .toFixed(0)
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return "$ " + price;
 }
