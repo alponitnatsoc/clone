@@ -15,27 +15,28 @@
                 </div>
             </div>
         </div>
-        <div class="employee_head_liquidation">
-            <div class="col-sm-12 employee_data">
-                <div class="col-sm-3 employee_data_info">
-                    <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
-                    <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>
-                    <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>
-                </div>
-                <div class="col-sm-3 employee_data_info">
-                    <p><strong>Tipo contrato</strong></p>
-                    <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>
-                </div>
-                <div class="col-sm-3 employee_data_info">
-                    <p><strong>Duración contrato</strong></p>
-                    <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>
-                </div>
-                <div class="col-sm-3 employee_data_info">
-                    <p><strong>Salario</strong></p>
-                    <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>
-                </div>
-            </div>
-        </div>
+        {% include 'RocketSellerTwoPickBundle:Liquidation:header-info-liquidation.html.twig' %}
+{#         <div class="employee_head_liquidation">#}
+{#             <div class="col-sm-12 employee_data">#}
+{#                 <div class="col-sm-3 employee_data_info">#}
+{#                     <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>#}
+{#                     <span class="txthelp"><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}</p></span>#}
+{#                     <span class="txthelp"><p>de {{ employeeInfo.docExpeditionPlace }}</p></span>#}
+{#                 </div>#}
+{#                 <div class="col-sm-3 employee_data_info">#}
+{#                     <p><strong>Tipo contrato</strong></p>#}
+{#                     <span class="txthelp"><p>{{ contractInfo.contractType }}</p></span>#}
+{#                 </div>#}
+{#                 <div class="col-sm-3 employee_data_info">#}
+{#                     <p><strong>Duración contrato</strong></p>#}
+{#                     <span class="txthelp"><p>{{ contractInfo.contractPeriod }}</p></span>#}
+{#                 </div>#}
+{#                 <div class="col-sm-3 employee_data_info">#}
+{#                     <p><strong>Salario</strong></p>#}
+{#                     <span class="txthelp"><p>{{ contractInfo.salary }}</p></span>#}
+{#                 </div>#}
+{#             </div>#}
+{#         </div>#}
         <div class="col-sm-12">
             <div class="table-responsive">
                 <table class="table">
@@ -82,7 +83,7 @@
                     <tfoot>
                         <tr class="warning">
                             <td class="text-center"><strong>Valor a pagar</strong></td>
-                            <td><strong class="formatValue">{{ totalLiq }}</strong></td>
+                            <td><strong class="formatValue">{{ totalLiq|number_format(0) }}</strong></td>
                         </tr>
                     </tfoot>
                 </table>

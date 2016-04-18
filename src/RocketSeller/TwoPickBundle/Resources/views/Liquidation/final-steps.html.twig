@@ -28,56 +28,36 @@
                 <div class="col-sm-12 text-center">
                     <h4>1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} <br />¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h4>
                 </div>
-                <div class="col-sm-12 text-center" style="margin-top: 40px;">
-                    <div class="col-sm-12">
-                        <div class="col-sm-4">
-                            <p><strong>Fecha</strong></p>
-                        </div>
-                        <div class="col-sm-4">
-                            <p><strong>Tipo de novedad</strong></p>
-                        </div>
-                        <div class="col-sm-4">
-                            <p><strong>Estado</strong></p>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 table-responsive">
-                        {% if novelties is not empty %}
-                            <table class="table record_properties table-bordered">
-                                <thead>
+                <div class="col-sm-12 text-center table-responsive" style="margin-top: 40px;">
+                    {% if novelties is not empty and llamadosAtencion is empty %}
+                        <table class="table record_properties table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="no-border">Fecha</th>
+                                    <th class="no-border">Novedad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for novelty in novelties %}
+                                {% if novelty.name not in ["Llegada tarde", "Abandono puesto de trabajo"] %}
                                     <tr>
-                                        <th class="no-border">Fecha</th>
-                                        <th class="no-border">Tipo de novedad</th>
-                                        <th class="no-border">Estado</th>
+                                        <td>
+                                            {% if novelty.dateStart %}
+                                                <i>{{ novelty.dateStart|date('d/m/Y') }}</i>
+                                            {% else %}
+                                                <i>-</i>
+                                            {% endif %}
+                                        </td><td>
+                                            <i>{{ novelty.noveltyTypeNoveltyType.name}}</i>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                {% for novelty in novelties %}
-                                    {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
-                                        <tr>
-                                            <td>
-                                                {% if novelty.dateStart %}
-                                                    <i>{{ novelty.dateStart|date('d/m/y') }}</i>
-                                                {% else %}
-                                                    <i>-</i>
-                                                {% endif %}
-                                            </td><td>
-                                                {% if novelty.dateEnd %}
-                                                    <i>{{ novelty.dateEnd|date('d/m/y') }}</i>
-                                                {% else %}
-                                                    <i>-</i>
-                                                {% endif %}
-                                            </td><td>
-                                                <i>{{ novelty.noveltyTypeNoveltyType.name}}</i>
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <div class="element-table col-sm-12">No hay novedades reportadas</div>
-                        {% endif %}
-                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="element-table col-sm-12">No hay novedades reportadas</div>
+                    {% endif %}
                 </div>
                 {% if liquidationReason != 2 %}
 {#                     <div class="col-sm-12">#}
@@ -89,35 +69,48 @@
                 {% endif %}
             </div>
             {% if liquidationReason == 2 %}
-                <div class="col-sm-12" id="liqJustaCausa">
-                    <div class="col-sm-12 text-center">
+                <div class="col-sm-12 text-center" id="liqJustaCausa" style="margin-top: 30px;">
+                    <div class="col-sm-12">
                         <h4>2. Razones para liquidación con justa causa</h4>
                     </div>
-                    <div class="col-sm-12 text-center">
+                    <div class="col-sm-10 col-sm-offset-1" style="text-align: justify;">
                         <h5>Para finalizar el contrato con un empleado de forma unilateral
                         debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
                         empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
                         atención</strong> así como también sus correspondientes <strong>descargos</strong>.</h5>
                     </div>
-                    {% if llamadosAtencion %}
-                        <div class="col-sm-12">
-                            <ul class="list-group">
+                    <div class="col-sm-12 table-responsive text-center" style="margin-top: 40px;">
+                        {% if llamadosAtencion %}
+                            <table class="table record_properties table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="no-border">Fecha</th>
+                                        <th class="no-border">Novedad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                 {% for llamado in llamadosAtencion %}
-                                    <li class="list-group-item">
-                                        {{ llamado.name }}
-                                        {% if llamado.dateStart %}
-                                            {{ llamado.dateStart.date }}
-                                        {% endif %}
-                                    </li>
+                                    <tr>
+                                        <td>
+                                            {% if llamado.dateStart %}
+                                                <i>{{ llamado.dateStart|date('d/m/Y') }}</i>
+                                            {% else %}
+                                                <i>-</i>
+                                            {% endif %}
+                                        </td><td>
+                                            <i>{{ llamado.noveltyTypeNoveltyType.name }}</i>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
-                            </ul>
-                        </div>
-                    {% else %}
-                        <div class="col-sm-12">No tiene llamados de atencion reportados</div>
-                    {% endif %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="col-sm-10 col-sm-offset-1">No tiene llamados de atencion reportados</div>
+                        {% endif %}
+                    </div>
 {#                     <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>#}
-                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px;">
-                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle fa-2x"></i> <i>Agregar novedad</i></a>
+                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px; margin-top: 20px;">
+                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')" href="javascript:void(0)"><i class="fa fa-plus-circle"></i> <i>Agregar novedad</i></a>
                     </div>
                 </div>
             {% elseif liquidationReason in [7,10] %}
