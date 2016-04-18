@@ -1994,7 +1994,6 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="username", nullable=false, requirements="(.*)", strict=true, description="Username of the employer.")
      *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
      *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
      *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
@@ -2012,8 +2011,6 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['username'] = '(.*)';
-        $mandatory['username'] = true;
         $regex['year'] = '([0-9])+';
         $mandatory['year'] = true;
         $regex['month'] = '([0-9])+';
@@ -2036,7 +2033,7 @@ class PayrollRestController extends FOSRestController
 
         $unico['TIPOCON'] = 0;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
-        $unico['USERNAME'] = $parameters['username'];
+        $unico['USERNAME'] = 'SRHADMIN';
         $unico['PDEF_ANO'] = $parameters['year'];
         $unico['PDEF_MES'] = $parameters['month'];
         $unico['PDEF_PERIODO'] = $parameters['period'];
@@ -2074,7 +2071,6 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="username", nullable=true, requirements="(.*)", strict=true, description="Username of the person generating the parameters.")
      *    (name="year", nullable=true, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
      *    (name="month", nullable=true, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
      *    (name="period", nullable=true, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
@@ -2092,8 +2088,6 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['username'] = '(.*)';
-        $mandatory['username'] = false;
         $regex['year'] = '([0-9])+';
         $mandatory['year'] = false;
         $regex['month'] = '([0-9])+';
@@ -2115,7 +2109,7 @@ class PayrollRestController extends FOSRestController
         $info = $this->getFinalLiquidationParametersAction($parameters['employee_id'])->getData();
 
         $unico['TIPOCON'] = 1;
-        $unico['USERNAME'] = isset($parameters['username']) ? $parameters['username'] : $info['USERNAME'];
+        $unico['USERNAME'] = 'SRHADMIN';
         $unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
         $unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
         $unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
