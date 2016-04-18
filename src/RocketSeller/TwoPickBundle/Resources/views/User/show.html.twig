@@ -177,7 +177,7 @@
                                         <tr>
                                             <td class="vert-align"><span>{{ factDate|date("F")|trans }} {{ factDate|date("d") }} {{ factDate|date("Y") }}</span></td>
                                             <td class="vert-align">
-                                                <span style="font-weight: 800;">$ {{ amountToPay|number_format }} COP</span>
+                                                <span style="font-weight: 800;">$ {{ amountToPay|number_format(0) }} COP</span>
                                             </td>
                                             <td style="width: 40%;">
                                                 <ul style="list-style:none; margin: 10px; text-align: justify;">
@@ -222,7 +222,7 @@
                                         <td class="vert-align">{{ invoice.purchaseOrders.DateCreated|date('d/m/Y') }}</td>
                                         <td class="vert-align">{{ invoice.purchaseOrders.invoiceNumber }}</td>
                                         <td class="vert-align">{{ invoice.description }}</td>
-                                        <td class="vert-align">$ {{ invoice.value|number_format(2) }}</td>
+                                        <td class="vert-align">$ {{ invoice.value|number_format(0) }}</td>
                                         <td class="vert-align">
                                             <a class="fa fa-file-pdf-o fa-2x" href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"></a>
                                             <a href="{{ path('download_documents', { 'id': invoice.purchaseOrders.idPurchaseOrders, 'ref': 'factura', 'type': 'pdf' }) }}"><i style="margin-left: 5px;">Ver PDF</i></a>
