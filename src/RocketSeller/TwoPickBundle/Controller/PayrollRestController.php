@@ -2024,8 +2024,6 @@ class PayrollRestController extends FOSRestController
         $regex['retirementCause'] = '([0-9])+';
         $mandatory['retirementCause'] = true;
 
-
-
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $content = array();
