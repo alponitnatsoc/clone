@@ -316,17 +316,17 @@
 //             $(this).html(jsonToSelect(data));
 //         });
         location.reload();
-        var html = '';
-        $.each(data['payment-methods'], function (key, obj) {
-            html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
-        });
+//         var html = '';
+//         $.each(data['payment-methods'], function (key, obj) {
+//             html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
+//         });
     }
-    function jsonToSelect(data) {
-        html = '';
-        $.each(data['payment-methods'], function (key, obj) {
-            html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
-        });
-        return html;
-    }
+//     function jsonToSelect(data) {
+//         html = '';
+//         $.each(data['payment-methods'], function (key, obj) {
+//             html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
+//         });
+//         return html;
+//     }
     </script>
 {% endblock javascripts %}
