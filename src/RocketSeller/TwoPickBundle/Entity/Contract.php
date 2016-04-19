@@ -171,6 +171,11 @@ class Contract
     private $endDate;
 
     /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $testPeriod;
+
+    /**
      * @ORM\Column(type="time", nullable=TRUE)
      */
     private $workTimeStart;
@@ -826,5 +831,29 @@ class Contract
     public function getTransportAid()
     {
         return $this->transportAid;
+    }
+
+    /**
+     * Set testPeriod
+     *
+     * @param \DateTime $testPeriod
+     *
+     * @return Contract
+     */
+    public function setTestPeriod($testPeriod)
+    {
+        $this->testPeriod = $testPeriod;
+
+        return $this;
+    }
+
+    /**
+     * Get testPeriod
+     *
+     * @return \DateTime
+     */
+    public function getTestPeriod()
+    {
+        return $this->testPeriod;
     }
 }
