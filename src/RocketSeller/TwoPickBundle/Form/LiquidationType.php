@@ -56,6 +56,7 @@ class LiquidationType extends AbstractType
             ->add('liquidationReason', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:LiquidationReason',
                 'property' => 'name',
+                'choice_value' => 'payrollCode',
                 'multiple' => false,
                 'expanded' => true,
                 'attr' => array(

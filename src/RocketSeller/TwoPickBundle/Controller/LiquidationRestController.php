@@ -446,17 +446,27 @@ class LiquidationRestController extends FOSRestController
         /**
          * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
          */
-        $req = new Request();
-        $req->request->set("employee_id", $employee_id);
-        $req->request->set("execution_type", "P");
+//         $req = new Request();
+//         $req->request->set("employee_id", $employee_id);
+//         $req->request->set("execution_type", "P");
 
-        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
-        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-            $data = $response->getContent();
-            $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
-            $view->setStatusCode(410);
-            return $view;
-        }
+//         $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+//         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+//             $data = $response->getContent();
+//             $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
+//             $view->setStatusCode(410);
+//             return $view;
+//         }
+
+        /**
+         * Obtener datos de la preliquidacion antes de consolidarla
+         */
+        $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+                'employeeId' => $employee_id,
+                'period' => $period
+            ),
+            $format
+        );
 //         Desprocesar
 
         $data = array(
@@ -508,7 +518,7 @@ class LiquidationRestController extends FOSRestController
         $format = array('_format' => 'json');
 
         /**
-         * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
+         * Solicitar que se procese la liquidacion y se consolida
          */
         $req = new Request();
         $req->request->set("employee_id", $employee_id);
@@ -521,6 +531,16 @@ class LiquidationRestController extends FOSRestController
             $view->setStatusCode(410);
             return $view;
         }
+
+//         /**
+//          * Consultar la liquidacion
+//          */
+//         $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+//                 'employeeId' => $employee_id,
+//                 'period' => $period
+//             ),
+//             $format
+//         );
 
         $data = array(
             "data" => $response->getContent()
