@@ -950,13 +950,14 @@ class EmployeeRestController extends FOSRestController
             $errors = $this->get('validator')->validate($contract, array('Update'));
             $view = View::create();
             if (count($errors) == 0) {
+
                 if($contract->getContractTypeContractType()->getPayrollCode()==1){
-                    $endTestPeriod=date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) ));
+                    $endTestPeriod=new DateTime(date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
                 }else{
                     /** @var DateTime $endTestPeriod2 */
-                    $endTestPeriod2=date ( 'Y-m-d' ,strtotime ( '+'.($contract->getStartDate()->diff($contract->getEndDate())->days/5).' day' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) ));
+                    $endTestPeriod2=new DateTime(date ( 'Y-m-d' ,strtotime ( '+'.intval($contract->getStartDate()->diff($contract->getEndDate())->format("%a")/5).' day' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
                     /** @var DateTime $endTestPeriod */
-                    $endTestPeriod=date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) ));
+                    $endTestPeriod=new DateTime(date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
                     if($endTestPeriod2<$endTestPeriod){
                         $endTestPeriod=$endTestPeriod2;
                     }
