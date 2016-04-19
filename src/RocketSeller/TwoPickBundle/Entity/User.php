@@ -57,7 +57,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->date_created = new \DateTime("now");
-        $this->code = substr(md5(uniqid(rand(), true)), 0, 6);
+        $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         // your own logic
     }
 
@@ -93,7 +93,7 @@ class User extends BaseUser
 
     /**
      * Columna utilizada para conocer el estado de la suscripcion del usuario
-     * 
+     *
      * Estados del usuario:
      *      0 - Inactivo / Suscripcion desactivada o inactiva
      *      1 - Mail confirmado
@@ -107,7 +107,7 @@ class User extends BaseUser
 
     /**
      * Columna utilizada para saber cantidad de meses gratis
-     * 
+     *
      * Estados del usuario:
      *      0 - sin tiempo gratis
      *      1 - 1 mes gratis
@@ -120,7 +120,7 @@ class User extends BaseUser
     private $isFree = 1;
 
     /**
-     * Columna utilizada para conocer el estado del empleado 
+     * Columna utilizada para conocer el estado del empleado
      * 0 No ha iiciado labores
      * 1 ya inicio labores
      *
@@ -133,7 +133,7 @@ class User extends BaseUser
     /**
      * Columna utilizada para saber si el usuario requiere registro express
      * 0 false
-     * 1 true     
+     * 1 true
      *
      * @var SmallIntType
      *
