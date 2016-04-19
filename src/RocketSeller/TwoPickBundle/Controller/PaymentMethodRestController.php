@@ -352,8 +352,8 @@ class PaymentMethodRestController extends FOSRestController
         $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
         $pmid=$purchaseOrder->getPayMethodId();
         $pmArray=explode('-',$pmid);
-        $purchaseOrder->setPayMethodId($pmArray[0]);
-        $purchaseOrder->setProviderId($pmArray[1]);
+        $purchaseOrder->setPayMethodId($pmArray[1]);
+        $purchaseOrder->setProviderId($pmArray[0]);
         $em=$this->getDoctrine()->getManager();
         $em->persist($purchaseOrder);
         $em->flush();
@@ -527,7 +527,6 @@ class PaymentMethodRestController extends FOSRestController
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postClientGscPayment';
 
         }
-
         $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
 
         if($purchaseOrder->getProviderId()==0) {
