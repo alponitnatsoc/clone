@@ -201,7 +201,7 @@ class PayrollRestController extends FOSRestController
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
-        //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
 
@@ -2108,6 +2108,7 @@ class PayrollRestController extends FOSRestController
 
         $unico['TIPOCON'] = 1;
         $unico['USERNAME'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] =  $parameters['employee_id'];
         $unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
         $unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
         $unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
