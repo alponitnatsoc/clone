@@ -612,6 +612,7 @@ class LiquidationController extends Controller
 
         $totalLiq = $this->totalLiquidation($data);
 
+        $tmp = $devengos = $deducciones = null;
         foreach ($data as $key => $liq) {
             $payroll_code = $liq["CON_CODIGO"];
             /** @var NoveltyType $noveltyType */
