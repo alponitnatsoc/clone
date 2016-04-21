@@ -201,7 +201,7 @@ class PayrollRestController extends FOSRestController
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
-        //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
 
@@ -2108,6 +2108,7 @@ class PayrollRestController extends FOSRestController
 
         $unico['TIPOCON'] = 1;
         $unico['USERNAME'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] =  $parameters['employee_id'];
         $unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
         $unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
         $unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
@@ -2207,6 +2208,13 @@ class PayrollRestController extends FOSRestController
 
 
         $this->validateParamters($parameters, $regex, $mandatory);
+
+        // We first execute the pending days.
+        $request2 =  new Request();
+        $request2->request->set("employee_id", $parameters['employee_id']);
+        $request2->request->set("execution_type", "P");
+
+        $this->postExecutePendingVacationDaysAction($request2);
 
         $content = array();
         $unico = array();
@@ -2627,6 +2635,62 @@ class PayrollRestController extends FOSRestController
 
         return $responseView;
     }
+
+    /**
+     * Executes the vacation pending days.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the vacation pending days.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postExecutePendingVacationDaysAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['execution_type'] = '(P|D|C)';
+        $mandatory['execution_type'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['COD_PROC'] = 201; // pending days is always 201.
+        $unico['USUARIO'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['TIP_EJEC'] = $parameters['execution_type'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '611';
+        $parameters['clXMLSolic'] = $this->createXml($content, 611);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
 
     /**
      * Process to liquidate the payroll at the end of the month

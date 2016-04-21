@@ -13,7 +13,7 @@ trait LiquidationReasonMethodsTrait
     protected function liquidationReasonByPayrollCode($id)
     {
         $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:LiquidationReason');
-        $liquidationReason = $repository->find($id);
+        $liquidationReason = $repository->findOneBy(array('payroll_code' => $id));
 
         return $liquidationReason;
     }

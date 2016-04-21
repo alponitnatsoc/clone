@@ -424,10 +424,11 @@ public function fixArrayLocalizacion($array, &$new_array) {
      * @param String $identificationType The type of the document.
      * @param String $surname The last name of the client.
      * @param Int $names The first and middle name of the client.
+     * @param String $documentExpeditionDate format DD-MM-YYYY.
      *
      * @return View
      */
-    public function getClientIdentificationServiceExperianValidarAction($documentNumber,$identificationType, $surname, $names)
+    public function getClientIdentificationServiceExperianValidarAnswersAction($documentNumber,$identificationType, $surname, $names, $documentExpeditionDate)
     {
         $parameters = array();
         $regex = array();
@@ -451,6 +452,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
         $parameters["identificacion"] = $documentNumber;
         $parameters["primerApellido"] = $surname;
         $parameters["nombres"] = $names;
+        $parameters["documentExpeditionDate"] = $documentExpeditionDate;
 
         // Set all the parameters info.
         $regex['tipoIdentificacion'] = '(.)*';
@@ -461,14 +463,21 @@ public function fixArrayLocalizacion($array, &$new_array) {
         $mandatory['primerApellido'] = true;
         $regex['nombres'] = '(.)*';
         $mandatory['nombres'] = true;
+        $regex['documentExpeditionDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['nombres'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
+
+        // We adapt the date to the new format.
+        $newFormated = new DateTime($parameters["documentExpeditionDate"],  new \DateTimeZone('UTC'));
+        $parameters["documentExpeditionDate"]  = $newFormated->getTimestamp();
+        $parameters["documentExpeditionDate"] .= '000'; // Not sure why we need this, but this is the format in datacredito.
 
         // TODO(daniel.serrano): Change the timestamp to real value.
         $request = '<?xml version="1.0" encoding="UTF-8"?> <DatosValidacion>
                     <Identificacion numero="' . $parameters["identificacion"] .'" tipo="' . $parameters["tipoIdentificacion"] .
                     '" /> <PrimerApellido>' . $parameters["primerApellido"] . '</PrimerApellido> <Nombres>' . $parameters["nombres"] . '</Nombres>
-                    <FechaExpedicion timestamp="503017122714" />
+                    <FechaExpedicion timestamp="' . $parameters["documentExpeditionDate"] . '" />
                     </DatosValidacion>';
 
         /** @var View $responseView */
@@ -572,7 +581,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
      * (name="idQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner, it is returned in the questions method in the field: id.")
      * (name="regQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner regitery, it is returned int he questions method in the field: registro.")
      * (name="answers", nullable=false, requirements="", strict=true, description="This is an array containing the answers to the questions it must be in the form:
-     *                                                                             ["id_question"=>"id_answer"].")
+     *                                                                             ["id_question"=>"id_answer"]. id_question is in the field order.")
      *
      * @return View
      */

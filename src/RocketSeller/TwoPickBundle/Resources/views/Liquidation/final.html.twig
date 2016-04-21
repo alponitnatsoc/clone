@@ -37,7 +37,25 @@
                     <div class="panel-heading text-center">¿Cuál es la razón para finalizar el contrato?</div>
                     <table class="table table-bordered">
                         <tbody>
-                            {% for child in form.liquidationReason %}
+                            {% set i = 0 %}
+                            {% set reasons = {} %}
+                            {% if (contractInfo.testPeriod) %}
+                                {% for reason in form.liquidationReason %}
+                                    {% if reason.vars.value in [7, 9] %}
+                                        {% set reasons = reasons|merge({ (i) : reason}) %}
+                                        {% set i = i + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for reason in form.liquidationReason %}
+                                    {% if reason.vars.value not in [9] %}
+                                        {% set reasons = reasons|merge({ (i) : reason}) %}
+                                        {% set i = i + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% for child in reasons %}
                                 {% if loop.index == 1%}
                                     <tr>
                                 {% endif %}

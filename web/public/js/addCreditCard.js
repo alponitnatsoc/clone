@@ -13,10 +13,10 @@ function startAddCreditCard() {
             },
             messages: {
                 "credit_card": {
-                    required: "Por favor ingrese el numero de la tarjeta",
+                    required: "Por favor ingrese el número de la tarjeta",
                     number: "ingresa solamente dígitos",
-                    maxlength: "maximo 16 digitos",
-                    minlength: "minimo 16 digitos",
+                    maxlength: "maximo 16 dígitos",
+                    minlength: "minimo 16 dígitos",
                     min: ""
 
                 },
@@ -24,24 +24,24 @@ function startAddCreditCard() {
                 "expiry_date_month": {
                     required: "Por favor ingrese el mes de vencimiento",
                     number: "ingresa solamente dígitos",
-                    maxlength: "maximo mes de 2 digitos",
-                    minlength: "minimo mes de 1 digitos",
+                    maxlength: "maximo mes de 2 dígitos",
+                    minlength: "minimo mes de 1 dígitos",
                     max: "mes del 01 al 12",
                     min: "mes del 01 al 12"
                 },
                 "expiry_date_year": {
                     required: "Por favor ingrese el año de vencimiento",
                     number: "ingresa solamente dígitos",
-                    maxlength: "maximo año de 4 digitos",
-                    minlength: "minimo año de 4 digitos",
+                    maxlength: "maximo año de 4 dígitos",
+                    minlength: "minimo año de 4 dígitos",
                     max: "año maximo 9999",
                     min: "año minimo 2016"
                 },
                 "cvv": {
-                    required: "Por favor ingrese el codigo de verificación",
+                    required: "Por favor ingrese el código de verificación",
                     number: "ingresa solamente dígitos",
-                    maxlength: "maximo 4 digitos",
-                    minlength: "minimo 3 digitos",
+                    maxlength: "maximo 4 dígitos",
+                    minlength: "minimo 3 dígitos",
                     max: "minimo 001",
                     min: "maximo 9999"
                 }

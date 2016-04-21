@@ -257,6 +257,14 @@ class LiquidationController extends Controller
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
 
+        $nowDate = new \DateTime();
+        $diff = $nowDate->diff($contract[0]->getTestPeriod());
+
+        $isTestPeriod = true;
+        if ($diff->invert > 0) {
+            $isTestPeriod = false;
+        }
+
         $frec = $contract[0]->getFrequencyFrequency();
         $frequency = null;
         if ($frec){
@@ -273,7 +281,8 @@ class LiquidationController extends Controller
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
             'startDate' => $startDate,
             'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
-            'frequency' => $frequency
+            'frequency' => $frequency,
+            'testPeriod' => $isTestPeriod
         );
 
         $form = $this->createForm(new LiquidationType());
@@ -603,6 +612,7 @@ class LiquidationController extends Controller
 
         $totalLiq = $this->totalLiquidation($data);
 
+        $tmp = $devengos = $deducciones = null;
         foreach ($data as $key => $liq) {
             $payroll_code = $liq["CON_CODIGO"];
             /** @var NoveltyType $noveltyType */
