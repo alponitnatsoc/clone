@@ -102,6 +102,41 @@ class NoveltyRestController extends FOSRestController
      * Get the validation errors
      *
      *
+     * @param string $dateStart
+     * @param int $days
+     * @return View data
+     *
+     */
+    public function getWorkableDaysToDateAction($dateStart, $days)
+    {
+        $view = View::create();
+        $wkd=array();
+        $wkd[5]=true;
+        $wkd[4]=true;
+        $wkd[3]=true;
+        $wkd[2]=true;
+        $wkd[1]=true;
+        $dateRStart= new DateTime($dateStart);
+        $numberDays=intval($days);
+        $days=[];
+        $dateToCheck=new DateTime();
+        $i=$j=0;
+        while($j<$numberDays){
+            $dateToCheck->setDate($dateRStart->format("Y"),$dateRStart->format("m"),intval($dateRStart->format("d"))+$i);
+            if($this->workable($dateToCheck)&&isset($wkd[$dateToCheck->format("w")])){
+                $days[]=$dateToCheck->format("Y-m-d");
+                $j++;
+            }
+            $i++;
+
+        }
+        $view->setStatusCode(200)->setData(array("date"=>$dateToCheck->format("Y-m-d")));
+        return $view;
+    }
+    /**
+     * Get the validation errors
+     *
+     *
      * @param $dateStart
      * @param $dateEnd
      * @param int $contractId
