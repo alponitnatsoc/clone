@@ -102,9 +102,9 @@ class NoveltyRestController extends FOSRestController
      * Get the validation errors
      *
      *
-     * @param string $dateStart
+     * @param string $dateStart format YYYY-MM-DD
      * @param int $days
-     * @return View data
+     * @return View data date YYYY-MM-DD
      *
      */
     public function getWorkableDaysToDateAction($dateStart, $days)
