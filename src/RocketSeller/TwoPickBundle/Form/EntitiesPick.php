@@ -13,7 +13,9 @@ class EntitiesPick extends AbstractType
     private $wealthEntities;
     private $pensionEntities;
     private $arsEntities;
-    function __construct($wealthEntities,$pensionEntities,$arsEntities){
+    private $severancesEntities;
+    function __construct($wealthEntities,$pensionEntities,$arsEntities,$severancesEntities ){
+        $this->severancesEntities=$severancesEntities;
         $this->wealthEntities=$wealthEntities;
         $this->arsEntities=$arsEntities;
         $this->pensionEntities=$pensionEntities;
@@ -66,6 +68,24 @@ class EntitiesPick extends AbstractType
                 'required' => true
             ))
 
+            ->add('severances', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->severancesEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Cesantias*'
+
+            ))
+
+            ->add('severancesAC', 'text', array(
+                'mapped' => false,
+                'label'=>'Cesantias*',
+                'required' => false,
+                'attr'=>array(
+                    "class"=>'autocomCes',
+                    "placeholder" => "Seleccionar un opción"
+                )
+            ))
             ->add('ars', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arsEntities,

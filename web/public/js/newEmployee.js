@@ -367,7 +367,8 @@ function startEmployee() {
         var i = 0;
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-        if (selectedVal == " Trabajo por días") {
+        var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
             $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
                     flagValid = false;
@@ -409,6 +410,19 @@ function startEmployee() {
                 return;
             }
         });
+
+        $(form).find("select[name*='[severances]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("input[name*='[severancesAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
         $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -419,7 +433,7 @@ function startEmployee() {
         if (!flagValid) {
             return;
         }
-        if (selectedVal == " Trabajo por días") {
+        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
             $("#register_employee_entities_wealth").val("");
         }else{
             $("#register_employee_entities_ars").val("");
@@ -433,6 +447,7 @@ function startEmployee() {
                 pension: $("#register_employee_entities_pension").val(),
                 wealth:  $("#register_employee_entities_wealth").val(),
                 ars:  $("#register_employee_entities_ars").val(),
+                severances:  $("#register_employee_entities_severances").val(),
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -1300,6 +1315,24 @@ function infoNuevoContrato(from, to, template, event) {
     });
 }
 function initEntitiesFields(){
+    var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+    if(sisben==" No"){
+        $("#arsBlock").hide();
+        $("#wealthBlock").show();
+    }else if(sisben==" Si"){
+        $("#arsBlock").show();
+        $("#wealthBlock").hide();
+    }
+    $("#register_employee_employeeHasEmployers_sisben").on("change", function () {
+        var sisben=$(this).find("input:checked").parent().text();
+        if(sisben==" No") {
+            $("#arsBlock").hide();
+            $("#wealthBlock").show();
+        }else if(sisben==" Si"){
+            $("#arsBlock").show();
+            $("#wealthBlock").hide();
+        }
+    });
     var dataPen=[];
     $("#register_employee_entities_pension").find("> option").each(function() {
         dataPen.push({'label':this.text,'value':this.value});
@@ -1365,6 +1398,34 @@ function initEntitiesFields(){
         $(this).autocomplete({
             source: function(request, response) {
                 var results = $.ui.autocomplete.filter(dataArs, request.term);
+
+                response(results.slice(0, 5));
+            },                minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+    var dataSeverances=[];
+    $("#register_employee_entities_severances").find("> option").each(function() {
+        dataSeverances.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomCes").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataSeverances, request.term);
 
                 response(results.slice(0, 5));
             },                minLength: 0,

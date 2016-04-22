@@ -1200,6 +1200,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="pension", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="wealth", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="ars", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="severances", nullable=false, strict=true, description="benefits of the employee.")
      * @return View
      */
     public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
@@ -1231,9 +1232,12 @@ class EmployeeRestController extends FOSRestController
         /** @var Entity $tempArs */
         $tempArs = $entityRepo->find($paramFetcher->get('ars'));
 
+        /** @var Entity $tempSeverances */
+        $tempSeverances = $entityRepo->find($paramFetcher->get('severances'));
+
         $beneficiarie = $paramFetcher->get('beneficiaries');
 
-        if ($tempPens == null ||( $tempWealth == null&& $tempArs==null)) {
+        if ($tempPens == null ||( $tempWealth == null&& $tempArs==null)||$tempSeverances==null) {
             $view = View::create();
             $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
             return $view;
@@ -1259,6 +1263,13 @@ class EmployeeRestController extends FOSRestController
             $employeeHasEntityPens->setEntityEntity($tempPens);
             $realEmployee->addEntity($employeeHasEntityPens);
             $em->persist($employeeHasEntityPens);
+
+            $employeeHasEntityCes = new EmployeeHasEntity();
+            $employeeHasEntityCes->setEmployeeEmployee($realEmployee);
+            $employeeHasEntityCes->setEntityEntity($tempSeverances);
+            $realEmployee->addEntity($employeeHasEntityCes);
+            $em->persist($employeeHasEntityCes);
+
             if($tempWealth!=null){
                 $employeeHasEntityWealth = new EmployeeHasEntity();
                 $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
@@ -1311,6 +1322,11 @@ class EmployeeRestController extends FOSRestController
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($tempPens);
+                    $em->persist($rEE);
+                }
+
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "FCES") {
+                    $rEE->setEntityEntity($tempSeverances);
                     $em->persist($rEE);
                 }
             }
@@ -1520,6 +1536,7 @@ class EmployeeRestController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $depRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+        /** @var Employee $employee */
         $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:employee')->find($paramFetcher->get('idEmployee'));
         $entities = array();
         $eps = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Entity')->find($paramFetcher->get('eps'));

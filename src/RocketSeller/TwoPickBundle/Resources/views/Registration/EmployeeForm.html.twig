@@ -813,6 +813,11 @@
                     {% else %}
                         {% set pname = "" %}
                     {% endif %}
+                    {% if form.entities.severances.vars.data.name is defined %}
+                        {% set sname = form.entities.severances.vars.data.name %}
+                    {% else %}
+                        {% set sname = "" %}
+                    {% endif %}
                     <div class="col-sm-10 col-xs-12 blockUpData">
                         <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                             <div class="hidden">
@@ -837,6 +842,17 @@
                                 {{ form_widget(form.entities.arsAC, { 'value' : arsname}) }}
                             </div>
 {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
+                        </div>
+                        <div  class="col-sm-12 col-xs-12">
+                            <div class="hidden">
+                                {{ form_row(form.entities.severances) }}
+                            </div>
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.entities.severancesAC) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                            </div>
                         </div>
                         <div class="col-sm-12 col-xs-12">
                             <div class="hidden">
