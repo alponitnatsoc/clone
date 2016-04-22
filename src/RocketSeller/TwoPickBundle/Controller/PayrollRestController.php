@@ -2721,14 +2721,37 @@ class PayrollRestController extends FOSRestController
 
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $month = date("m");
-        $payrolls = $payrollEntity->findBy(array("month" => $month));
+        $day = date("d");
+
+        $params = array(
+            "month" => $month
+        );
+        echo $day;
+        if ($day == 12) {
+            $period = 2;
+            $params = array(
+                "month" => $month,
+                "period" => $period
+            );
+        }
+        $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
         foreach($payrolls as $payroll) {
-            $pod = $payroll->getPurchaseOrdersDescription();
+            $pods = $payroll->getPurchaseOrdersDescription();
 
-            if (count($pod) == 0) {
+            $podPN = false;
+            if (count($pods) > 0) {
+                foreach ($pods as $pod) {
+                    if ($pod->getProductProduct()->getSimpleName() == "PN") {
+                        $podPN = true;
+                        break;
+                    }
+                }
+            }
+
+            if (count($pods) == 0 || !$podPN) {
                 $empHasEmp = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
                 $idEhE = $empHasEmp->getIdEmployerHasEmployee();
 //                 Crear orden de compra
