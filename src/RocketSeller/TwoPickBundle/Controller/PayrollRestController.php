@@ -2723,16 +2723,21 @@ class PayrollRestController extends FOSRestController
         $month = date("m");
         $day = date("d");
 
-        $params = array(
-            "month" => $month
-        );
-        echo $day;
-        if ($day == 12) {
+        if ($day == 25) {
+            $params = array(
+                "month" => $month
+            );
+        } else  if ($day == 12) {
             $period = 2;
             $params = array(
                 "month" => $month,
                 "period" => $period
             );
+        } else {
+            $view->setStatusCode(200);
+
+            $view->setData("No es dia para cerrar nominas automaticamente");
+            return $view;
         }
         $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
