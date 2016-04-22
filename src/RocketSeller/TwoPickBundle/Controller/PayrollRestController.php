@@ -2712,7 +2712,7 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getAutoLiquidatePayrollAction()
+    public function putAutoLiquidatePayrollAction()
     {
         $em = $this->getDoctrine()->getManager();
 
