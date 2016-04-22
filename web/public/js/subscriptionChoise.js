@@ -179,5 +179,44 @@ function startSubscriptionChoise() {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return "$ " + price;
     }
+
+    $("#btnRedimir").on('click', function () {
+        if ($("#codigo_referido").val().length >= 6) {
+            $.ajax({
+                method: "POST",
+                url: "/api/public/v1/validates/codes",
+                data: {code: $("#codigo_referido").val()},
+                beforeSend: function (xhr) {
+                    $("#codigo_referido_estado").html('Validando código...');
+                    $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                    $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                }
+            }).done(function (data) {
+                if (data == true) {
+                    $("#esReferido").val(1);
+                    $("#codigo_referido").attr('readonly', true);
+                    $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                    $("#codigo_referido_estado").addClass('codigo_referido_valido');
+                    $("#codigo_referido_estado").html('Código valido');
+                    $("#codigoReferido").hide();
+                    $("#btnRedimir").attr('disabled', true);
+                    $("#btnRedimir").addClass('off', true);
+                } else {
+                    $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                    $("#codigo_referido_estado").addClass('codigo_referido_invalido');
+                    $("#codigo_referido_estado").html(data);
+                }
+            }
+            ).fail(function (jqXHR, textStatus, errorThrown) {
+                $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                $("#codigo_referido_estado").addClass('codigo_referido_invalido');
+                $("#codigo_referido_estado").html('No se pudo validar el código');
+                console.log("FAIL codigo_referido {{ path('api_public_post_validate_code') }}:");
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            });
+        }
+    });
 }
 

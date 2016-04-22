@@ -107,6 +107,15 @@
             background-color: #B8B2AC;
             width: 100px;
         }
+        .codigo_referido_valido{
+            color: green;
+        }
+        .codigo_referido_invalido{
+            color: red;
+        }
+        #btnRedimir.off{
+            background-color: #B8B2AC;
+        }
         .result_ajax_icon{
             color: orange;
             font-size: 30px;
@@ -266,11 +275,10 @@
                 descuento en la suscripción de ese mes.<br/>
             </div>
             <div class="col-md-12 margin-top-bottom-10">
-                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10" placeholder="Ingresa un código de referido" style="width: 300px; display: inline-block;">
-
-                <button class="btn btn-default" value="Redimir" style="margin-top: 0px; font-size: 13px;">Redimir</button>
-
+                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10" placeholder="Ingresa un código de referido" style="width: 300px; display: inline-block;">                
+                <button id="btnRedimir" class="btn btn-default" value="Redimir" style="margin-top: 0px; font-size: 13px;">Redimir</button>
             </div>
+            <div class="col-md-12" id="codigo_referido_estado"></div>
         </div>
 
     {% endif %}
