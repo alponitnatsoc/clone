@@ -22,6 +22,9 @@ use GuzzleHttp\Client;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Traits\PayrollMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 
 /**
  * Contains all the web services to call the payroll system.
@@ -36,8 +39,9 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
  */
 class PayrollRestController extends FOSRestController
 {
-    use LiquidationMethodsTrait;
-    use NoveltyTypeMethodsTrait;
+//     use LiquidationMethodsTrait;
+//     use NoveltyTypeMethodsTrait;
+    use PayrollMethodsTrait;
 
     public function validateParamters($parameters, $regex, $mandatory)
     {
@@ -2710,6 +2714,8 @@ class PayrollRestController extends FOSRestController
      */
     public function getAutoLiquidatePayrollAction()
     {
+        $em = $this->getDoctrine()->getManager();
+
         $view = View::create();
         $format = array('_format' => 'json');
 
@@ -2723,40 +2729,100 @@ class PayrollRestController extends FOSRestController
             $pod = $payroll->getPurchaseOrdersDescription();
 
             if (count($pod) == 0) {
-                $idEhE = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
+                $empHasEmp = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+                $idEhE = $empHasEmp->getIdEmployerHasEmployee();
 //                 Crear orden de compra
 //                 Liquidacion en SQL
 //                 $period = 4;
 //                 $response = $this->getGeneralPayrollAction($idEhE, $period);
-                $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
-                        'employeeId' => $idEhE
-                    ),
-                    $format
-                );
+//                 $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+//                         'employeeId' => $idEhE
+//                     ),
+//                     $format
+//                 );
 
+//                 $result = json_decode($response->getContent(), true);
+//                 $total[] = $this->totalLiquidation($result);
+
+//                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
+//                 $infoPayroll = $this->getInfoPayroll($employer, array($payroll->getIdPayroll()));
+//                 $total[] = $infoPayroll;
+
+                $dataNomina = $this->getInfoNominaSQL($empHasEmp);
+                $salary = $this->getSalary($dataNomina);
+                $aportes = $this->getTotalAportes($dataNomina);
+                $pila = $this->getTotalPILA($empHasEmp);
+
+//                 $data[] = array("salary" => $salary, "aportes" => $aportes, "pila" => $pila);
+
+//                 CERRAR nomina en sql
                 $req = new Request();
                 $req->request->set("employee_id", $idEhE);
                 $req->request->set("execution_type", "C");
 
                 $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
                 if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-//                     $data = $response->getContent();
-//                     $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
-//                     $view->setStatusCode(410);
-//                     return $view;
+                    $data = $response->getContent();
+                    $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
+                    $view->setStatusCode(410);
+                    return $view;
                 }
 
-                $result = json_decode($response->getContent(), true);
-                $total[] = $this->totalLiquidation($result);
+                $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+                $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
 
-                // Generar notificacion
-                $notification = new Notification();
-                $notification->setTitle("");
-                // Enviar correo
+//                 CREAR orden de compra
+                $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+                $idUser = $userRepo->findOneBy(array("personPerson" => $empHasEmp->getEmployerEmployer()->getPersonPerson()));
+                $purchaseOrder = new PurchaseOrders();
+                $now = new \DateTime();
+                $purchaseOrder->setDateCreated($now);
+                $purchaseOrder->setIdUser($idUser);
+                $purchaseOrder->setName("Cierre nómina mes " . $month);
+                $purchaseOrder->setPurchaseOrdersStatus($pos);
+
+                $em->persist($purchaseOrder);
+                $em->flush();
+
+//                 CREAR Descripciones de ordenes de compra
+                $pod = new PurchaseOrdersDescription();
+                $pod->setDescription("Pago de nómina mes " . $month);
+                $pod->setPayrollPayroll($payroll);
+                $pod->setPurchaseOrders($purchaseOrder);
+                $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                $product = $prodRepo->findOneBy(array("simpleName" => "PN"));
+                $pod->setProductProduct($product);
+                $pod->setValue($salary);
+                $pod->setPurchaseOrdersStatus($pos);
+
+                $em->persist($pod);
+                $em->flush();
+
+                $pod = new PurchaseOrdersDescription();
+                $pod->setDescription("Pago de PILA mes " . $month);
+                $pod->setPayrollPayroll($payroll);
+                $pod->setPurchaseOrders($purchaseOrder);
+                $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                $product = $prodRepo->findOneBy(array("simpleName" => "PP"));
+                $pod->setProductProduct($product);
+                $pod->setValue($aportes["total"] + $pila["total"]);
+                $pod->setPurchaseOrdersStatus($pos);
+
+                $em->persist($pod);
+                $em->flush();
+
+//                 ABRIR nueva nómina
+
+
+//                 CREAR EN JIRA LO QUE FALTA
+
+                $total = "proceso terminado";
+
             }
         }
 
 //         $result .= count($pod);
+//         $total = $data;
 
         $view->setStatusCode(200);
 

@@ -73,7 +73,7 @@ class ExpressRegistrationRestController extends FOSRestController
      * 200 tiene que crearlo y lo crea.
      * 400 si no lo esta proscesando.
      */
-    public function postPayRegisterExpressAction($id, $idPayMethod)
+    public function postPayRegisterExpressAction($id, $idPayMethod,$payType)
     {
         $em = $this->getDoctrine()->getManager();
         $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
@@ -109,6 +109,7 @@ class ExpressRegistrationRestController extends FOSRestController
             $PurchaseOrders = new PurchaseOrders();
             $PurchaseOrders->setIdUser($user);
             $PurchaseOrders->setPayMethodId($id);
+            $PurchaseOrders->setProviderId($payType);
             $PurchaseOrders->setName("Registro express");
 
             $PurchaseOrdersDescription = new PurchaseOrdersDescription();

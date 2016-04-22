@@ -57,6 +57,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->date_created = new \DateTime("now");
+        //@todo GABRIEL agregar id unico del usuario al momento de registrar.
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         // your own logic
     }

@@ -26,23 +26,145 @@ class LegalAssistanceController extends Controller
 	public function startPaymentAction(Request $request){
         $user = $this->getUser();
         $person = $user->getPersonPerson();
+        $date = new \DateTime();
+                $date->add(new \DateInterval('P1M'));
+                $startDate = $date->format('Y-m-d');
+                $minMont = $date->format('m');
+                $minYear = $date->format('Y');
 
-        $form = $this->createForm(new AddCreditCard(), null, array(
-            'action' => $this->generateUrl('legal_payment'),
-            'method' => 'POST',
-        ));
+        $form = $this->get('form.factory')->createNamedBuilder('legalAssistancePay', 'form', array(), array(
+                            'action' => $this->generateUrl('legal_payment'),
+                            //'action' => $this->generateUrl('subscription_confirm'),
+                            'method' => 'POST'))
+                        ->add('name_on_card', 'text', array(
+                            'label' => 'Nombre en la tarjeta',
+                            'required' => true,
+                            'attr' => array('placeholder' => 'Nombre en la tarjeta')
+                        ))
+                        ->add('credit_card', 'integer', array(
+                            'label' => 'Número tarjeta de crédito',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => '1234 5678 9012 3456',
+                                'min' => 1,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('expiry_month', 'integer', array(
+                            'label' => 'Fecha de vencimiento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Mes',
+                                'min' => 01,
+                                'max' => 12,
+                                'maxlength' => 2,
+                                'minlength' => 1,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('expiry_year', 'integer', array(
+                            'label' => 'Fecha de vencimiento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Año',
+                                'min' => $minYear,
+                                'max' => 9999,
+                                'maxlength' => 4,
+                                'minlength' => 4,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('cvv', 'integer', array(
+                            'label' => 'Código de seguridad:',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => '123',
+                                'min' => 1,
+                                'max' => 9999,
+                                'maxlength' => 4,
+                                'minlength' => 3,
+                                'step' => 1
+                            )
+                        ))
+                        ->add('titularName', 'text', array(
+                            'label' => 'Titular de la cuenta',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Nombre titular de la cuenta',
+                            )
+                        ))
+                        ->add('documentType', 'choice', array(
+                                'choices' => array(
+                                    'CC'   => 'Cédula de ciudadanía',
+                                    'CE' => 'Cedula de extranjería',
+                                    'TI' => 'Tarjeta de identidad'
+                                ),
+                                'multiple' => false,
+                                'expanded' => false,
+                                'label' => 'Tipo de documento*',
+                                'placeholder' => 'Seleccionar una opción',
+                                'required' => true
+                            ))
+                        ->add('documentNumber', 'text', array(
+                            'label' => 'Número de documento',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Número de documento',
+                                'value' => $person->getDocument()
+                            )
+                        ))
+                        ->add('phoneNumber', 'text', array(
+                            'label' => 'Teléfono',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Número de teléfono',
+                            )
+                        ))
+                        ->add('bank', 'entity', array(
+                            'label' => 'Banco',
+                            'required' => false,
+                            'class' => 'RocketSellerTwoPickBundle:Bank',
+                            'empty_value' => 'Seleccione',
+                            'choice_label' => 'name'
+                        ))
+                        ->add('accountType', 'entity', array(
+                            'label' => 'Tipo de Cuenta',
+                            'required' => false,
+                            'class' => 'RocketSellerTwoPickBundle:AccountType',
+                            'empty_value' => 'Seleccione',
+                            'choice_label' => 'name'
+                        ))
+                        ->add('numberAccount', 'integer', array(
+                            'label' => 'Número de la cuenta',
+                            'required' => false,
+                            'attr' => array(
+                                'placeholder' => 'Número de la cuenta',
+                                'min' => 1,
+                                'minlength' => 1,
+                                'step' => 1
+                            )
+                        ))
+                        ->getForm();
 
         $form->handleRequest($request);
         if ($form->isValid()) {
         	$em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             /** @var Person $person */
+            $methodType = $request->get('methodType');
+            if ($methodType == "cre") {
+                dump("se quiere pagar con credito");
+                exit();
+            }else if($methodType == "deb"){
+                dump("se quiere pagar con debito");
+                exit();
+            }
             $person = $user->getPersonPerson();
             $person->setDocumentType($form->get("documentType")->getData());
-            $person->setDocument($form->get("document")->getData());
+            $person->setDocument($form->get("documentNumber")->getData());
             $phone = new Phone();
             $phone->setPhoneNumber($form->get("phoneNumber")->getData());
-            $person->setDocument($form->get("document")->getData());
+            $person->setDocument($form->get("documentNumber")->getData());
             $person->addPhone($phone);
             $employer = new Employer();
             $employer->setPersonPerson($person);
@@ -61,8 +183,8 @@ class LegalAssistanceController extends Controller
                 "documentType" => $person->getDocumentType(),
                 "documentNumber" => $person->getDocument(),
                 "credit_card" => $form->get("credit_card")->getData(),
-                "expiry_date_year" => $form->get("expiry_date_year")->getData(),
-                "expiry_date_month" => $form->get("expiry_date_month")->getData(),
+                "expiry_date_year" => $form->get("expiry_year")->getData(),
+                "expiry_date_month" => $form->get("expiry_month")->getData(),
                 "cvv" => $form->get("cvv")->getData(),
             ));
 
