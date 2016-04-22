@@ -208,19 +208,19 @@
                             {% set producto = employeeData['product'] %}
 
                             <div class="row clearfix">
-                                <div class="col-md-12 padding-all-10 margin-all-right-botton-10 employee text-left border-all-darkGray">
-                                    <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} {{ employee.state>0 ?'activo':'inactivo' }}">
+                                <div class="col-md-12 padding-all-10 margin-all-right-botton-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}">
+                                    <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                         <div >
                                             <b class="employee_name" style="font-size:large;">{{ employee.employeeEmployee.personPerson.names }}</b><br />
                                             <span style="font-weight:80;">{{ employee.employeeEmployee.personPerson.lastname1 ~ employee.employeeEmployee.personPerson.lastname2}}</span>
                                         </div>
                                         {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                        <div style="font-style:italic; font-weight:100; font-size: small;" class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  ">
+                                        <div style="font-style:italic; font-weight:100; font-size: small;" class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  " data-employeeId="{{ employee.idEmployerHasEmployee }}">
                                             Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días al mes
                                         </div>
                                     </div>
                                     <div class="col-md-3 div-btn-change-state-contract">
-                                        <div class="btn btn-orange btn-change-state-contract {{ employee.state>0 ?'on':'off' }}" data-id="employee_{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}"  data-value="{{ (producto?producto.price:0)|number_format }}">{{ employee.state?'Inactivar':'Activar' }}</div>
+                                        <div class="btn btn-orange btn-change-state-contract {{ employee.state>0 ?'on':'off' }}" data-id="{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}" >{{ employee.state?'Inactivar':'Activar' }}</div>
                                     </div>
                                 </div> 
                             </div>
@@ -232,8 +232,7 @@
                             Este es el valor por:<br><b id="count_employee">{{ employees|length }} Empleados</b>
                         </div>
                         <div class="col-md-12 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 8%; margin-top: 20px;">
-                            <div  id="divSubtotal" class="x-large font-bold dark-blue" >$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>
-                            <input type="hidden" id="subtotal" value="{{ total_sin_descuentos|number_format }}">                            
+                            <div  id="divSubtotal" class="x-large font-bold dark-blue" >$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>                            
                         </div>
                     </div>
                 </div>
@@ -257,6 +256,7 @@
         <input type="hidden" id="{{ producto.simpleName }}" value="{{ producto.price }}"/>
         <input type="hidden" id="{{ producto.simpleName }}_IVA" value="{{ producto.taxTax.value }}"/>
     {% endfor %}
+
     {% if descuento_isRefered['object']|length <=0 %}
 
         <div class="row text-center margin-left-right-25-40 border-all-darkGray padding-all-10">
@@ -289,7 +289,7 @@
                      padding-top: 10px;
                      text-align: right;
                      padding-right: 100px;">
-                    <div  id="divSubtotal" style="font-size: x-large; font-weight: bold; color: lightgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>
+                    <div  id="primerPago" style="font-size: x-large; font-weight: bold; color: lightgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>
                 </div>
             </div>
             <div class="col-md-12 padding-top-botton-10">
@@ -302,7 +302,7 @@
                 <div class="col-md-4 " style="
                      text-align: right;
                      padding-right: 100px;">
-                    <div  id="divSubtotal" style="font-size: x-large; font-weight: bold; color: darkgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')   }}</div>
+                    <div  id="segundoPago" style="font-size: x-large; font-weight: bold; color: darkgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')   }}</div>
                 </div>
             </div>
         </div>
@@ -350,60 +350,6 @@
         </div>
     </div><!-- /.modal -->
 
-    <!-- Modal Pricing Calculator-->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal_price_calculator">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content"><div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span>&times;</span></button>
-                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-md-12 up-Intro" style="font-size: 26px;">Cálculo del valor de la suscripción a Symplifica</div>
-                    </div>
-                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-12">
-                            <div class="divSlider">
-                                <div class="type_employee">
-                                    <span class="type_time">Tiempo Parcial</span>
-                                    <span class="type_time_desc">Trabaja(n) 1 a 10 días al mes</span>
-                                </div>
-                                <div class="slider_employee" id="tiempo_parcial"></div>
-                            </div>
-                            <div class="divSlider">
-                                <div class="type_employee">
-                                    <span class="type_time">Medio Tiempo</span>
-                                    <span class="type_time_desc">Trabaja(n) 11 a 19 días al mes</span>
-                                </div>
-                                <div class="slider_employee" id="medio_tiempo"></div>
-                            </div>
-                            <div class="divSlider">
-                                <div class="type_employee">
-                                    <span class="type_time">Tiempo Completo</span>
-                                    <span class="type_time_desc">Trabaja(n) más de 20 días al mes</span>
-                                </div>
-                                <div class="slider_employee" id="tiempo_completo"></div>
-                            </div>
-                            <div class="" style="display: inline-block; text-align: center; width: 100%;">
-                                Valor suscripción mensual
-                                <div class="div_price">
-                                    <div id="result_price_calc"></div>
-                                    <div id="result_discount_calc"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 text-right">
-                                    <button type="button" class="btn" data-dismiss="modal">Volver atrás</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <a type="button" class="btn btn-orange btn-add-employee notAjax" href="{{ path('register_employee') }}">Agregar un empleado</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- /.modal -->
 
 {% endblock %}
 
@@ -414,6 +360,11 @@
         var employee = new Array();
         var contrato = new Array();
         var producto = new Array();
+        var constraints = new Array();
+        {% for key, data in constrains %} 
+        constraints['{{ key }}'] = {{ data }};
+        {% endfor %}
+
         {% for employeeData in employees %}
 
             {% set employee = employeeData['employee'] %}
@@ -431,6 +382,7 @@
                 }
                 employee[{{ employee.idEmployerHasEmployee }}]['id'] ={{ employee.idEmployerHasEmployee }} ;
                 employee[{{ employee.idEmployerHasEmployee }}]['state'] ={{ employee.state }} ;
+                contrato[{{ employee.idEmployerHasEmployee }}]['state'] ={{ contrato.state }} ;
                 contrato[{{ employee.idEmployerHasEmployee }}]['salary'] ={{ contrato.salary }} ;
                 contrato[{{ employee.idEmployerHasEmployee }}]['timeCommitment'] = "{{ contrato.timeCommitmentTimeCommitment.code?contrato.timeCommitmentTimeCommitment.code:0 }}";
                 contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
@@ -439,8 +391,6 @@
                 producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
                 producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
         {% endfor %}
-            console.log(employee);
-            console.log(contrato);
-            console.log(producto);
+
     </script>
 {% endblock %}

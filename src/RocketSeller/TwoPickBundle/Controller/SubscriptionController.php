@@ -39,10 +39,13 @@ class SubscriptionController extends Controller
             $startDate = $date->format('Y-m-d');
 
             $data = $this->getSubscriptionCost($user, false);
+            $constrains = $this->forward('RocketSellerTwoPickBundle:CalculatorRest:getCalculatorConstraints', array('_format' => 'json'));
+            $constrains = json_decode($constrains->getContent(), true);
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
                         'employees' => $data['employees'],
                         'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
+                        'constrains' => isset($constrains['response']['smmlv']) ? $constrains['response'] : false,
                         'total' => $data['total_sin_descuentos'],
                         'total_sin_descuentos' => $data['total_sin_descuentos'],
                         'descuento_3er' => $data['descuento_3er'],
