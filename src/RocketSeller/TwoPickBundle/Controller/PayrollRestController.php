@@ -2712,7 +2712,7 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getAutoLiquidatePayrollAction()
+    public function putAutoLiquidatePayrollAction()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -2721,14 +2721,42 @@ class PayrollRestController extends FOSRestController
 
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $month = date("m");
-        $payrolls = $payrollEntity->findBy(array("month" => $month));
+        $day = date("d");
+
+        if ($day == 25) {
+            $params = array(
+                "month" => $month
+            );
+        } else  if ($day == 12) {
+            $period = 2;
+            $params = array(
+                "month" => $month,
+                "period" => $period
+            );
+        } else {
+            $view->setStatusCode(200);
+
+            $view->setData("No es dia para cerrar nominas automaticamente");
+            return $view;
+        }
+        $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
         foreach($payrolls as $payroll) {
-            $pod = $payroll->getPurchaseOrdersDescription();
+            $pods = $payroll->getPurchaseOrdersDescription();
 
-            if (count($pod) == 0) {
+            $podPN = false;
+            if (count($pods) > 0) {
+                foreach ($pods as $pod) {
+                    if ($pod->getProductProduct()->getSimpleName() == "PN") {
+                        $podPN = true;
+                        break;
+                    }
+                }
+            }
+
+            if (count($pods) == 0 || !$podPN) {
                 $empHasEmp = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
                 $idEhE = $empHasEmp->getIdEmployerHasEmployee();
 //                 Crear orden de compra
@@ -2762,10 +2790,25 @@ class PayrollRestController extends FOSRestController
 
                 $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
                 if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-                    $data = $response->getContent();
-                    $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
-                    $view->setStatusCode(410);
-                    return $view;
+//                     $data = $response->getContent();
+//                     $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
+//                     $view->setStatusCode(410);
+//                     return $view;
+
+                    $not = new Notification();
+                    $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                    $not->setType("alert");
+                    $not->setTitle("La nómina del mes " . $month . " no se pudo cerrar");
+                    $not->setStatus(1);
+                    $not->setAccion("liquidar nómina y pago a empleados");
+                    $not->setRelatedLink("/payroll");
+                    $not->setDescription("No fue posible cerrar la nómina");
+
+                    $em->persist($not);
+                    $em->flush();
+
+                    $total[] = array("EmployerHasEmployee " . $idEhE => "error en sql");
+                    continue;
                 }
 
                 $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
@@ -2811,14 +2854,42 @@ class PayrollRestController extends FOSRestController
                 $em->persist($pod);
                 $em->flush();
 
+//                 CREAR notificaciones
+                $not = new Notification();
+                $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                $not->setType("alert");
+                $not->setTitle("La nómina del mes " . $month . " fue cerrada exitosamente");
+                $not->setStatus(1);
+                $not->setAccion("pagar");
+                $not->setDescription("Pagar la aportes de seguridad social, PILA por valor de " . ($aportes["total"] + $pila["total"]));
+
+                $em->persist($not);
+                $em->flush();
+
+                $not = new Notification();
+                $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                $not->setType("alert");
+                $not->setTitle("La nómina del mes " . $month . " fue cerrada exitosamente");
+                $not->setStatus(1);
+                $not->setAccion("pagar");
+                $not->setDescription("Pagar la nómina del mes " . $month . " por valor de " . $salary);
+
+                $em->persist($not);
+                $em->flush();
+
+
 //                 ABRIR nueva nómina
 
 
 //                 CREAR EN JIRA LO QUE FALTA
 
-                $total = "proceso terminado";
+                $total[] = array("EmployerHasEmployee " . $idEhE => "proceso terminado");
 
             }
+        }
+
+        if (!isset($total)) {
+            $total = "no hay nominas pendientes por cerrar";
         }
 
 //         $result .= count($pod);

@@ -21,6 +21,17 @@ class LoadCronTaskData extends AbstractFixture implements OrderedFixtureInterfac
         $manager->persist($cronTask);
 
         $manager->flush();
+
+//         Servicio que cierra nominas automaticamente Corre los días 25 a las 22:00
+        $cronTask = new CronTask();
+        $cronTask->setName('Cerrar nominas dia 25');
+        $cronTask->setLastRun(new \DateTime());
+        $cronTask->setInterval(86400); //1 day =  24 hour * 60 min * 60 sec = 86400 seconds
+        $cronTask->setCommands(array('symplifica:payroll:close'));
+        //$cronTask->setCommands('symplifica:subscription:pay'); //ambos comandos son validos
+        $manager->persist($cronTask);
+
+        $manager->flush();
     }
 
     public function getOrder()

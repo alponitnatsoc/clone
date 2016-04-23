@@ -20,44 +20,33 @@ var dotation;
 var transportAidDaily;
 var vacations30D;
 var dotationDaily;
-function loadConstrains(type, salaryM, salaryD, numberOfDays, sisben, transport) {
-    var constraints = null;
-    var responce = 0;
-    $.ajax({
-        url: "/api/public/v1/calculator/constraints",
-        type: "GET"
-    }).done(function (data) {
-        //Extract Constraints
-        constraints = data["response"];
-        transportAid = parseFloat(constraints['auxilio transporte']);
-        smmlv = parseFloat(constraints['smmlv']);
-        EPSEmployer = parseFloat(constraints['eps empleador']);
-        EPSEmployee = parseFloat(constraints['eps empleado']);
-        PensEmployer = parseFloat(constraints['pension empleador']);
-        PensEmployee = parseFloat(constraints['pension empleado']);
-        arl = parseFloat(constraints['arl']);
-        caja = parseFloat(constraints['caja']);
-        sena = parseFloat(constraints['sena']);
-        icbf = parseFloat(constraints['icbf']);
-        vacations = parseFloat(constraints['vacaciones']);
-        taxCes = parseFloat(constraints['intereses cesantias']);
-        ces = parseFloat(constraints['cesantias']);
-        dotation = parseFloat(constraints['dotacion']);
-        transportAidDaily = transportAid / 30;
-        vacations30D = vacations / 30;
-        dotationDaily = dotation / 30;
+var total;
+var constraints = null;
 
-        return responce = calculator(type, salaryM, salaryD, numberOfDays, sisben, transport);
-    });
+function loadConstrains() {
 
-}
+    transportAid = parseFloat(constraints['auxilio transporte']);
+    smmlv = parseFloat(constraints['smmlv']);
+    EPSEmployer = parseFloat(constraints['eps empleador']);
+    EPSEmployee = parseFloat(constraints['eps empleado']);
+    PensEmployer = parseFloat(constraints['pension empleador']);
+    PensEmployee = parseFloat(constraints['pension empleado']);
+    arl = parseFloat(constraints['arl']);
+    caja = parseFloat(constraints['caja']);
+    sena = parseFloat(constraints['sena']);
+    icbf = parseFloat(constraints['icbf']);
+    vacations = parseFloat(constraints['vacaciones']);
+    taxCes = parseFloat(constraints['intereses cesantias']);
+    ces = parseFloat(constraints['cesantias']);
+    dotation = parseFloat(constraints['dotacion']);
+    transportAidDaily = transportAid / 30;
+    vacations30D = vacations / 30;
+    dotationDaily = dotation / 30;
 
-function calculatorCalculate(type, salaryM, salaryD, numberOfDays, sisben, transport) {
-    return loadConstrains(type, salaryM, salaryD, numberOfDays, sisben, transport);
 }
 
 function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
-    console.log(type + ':' + salaryM + ':' + salaryD + ':' + numberOfDays + ':' + sisben + ':' + transport);
+    //console.log("calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) ");
     var type = type;
     var salaryM = salaryM;
     var salaryD = salaryD;
@@ -230,68 +219,13 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         resposne['icbfCal'] = icbfCal;
         resposne['totalIncome'] = totalIncome;
     }
+    //console.log('calculator-responce:' + resposne['totalExpenses']);
+    //console.log('calculator-responce:' + getPrice(resposne['totalExpenses']));
+    //$("#sueldos").html(getPrice(resposne['totalExpenses']));
     return resposne;
-    var htmlRes = jsonCalcToHTML(resposne);
-    $("#calculatorResultsModal").find(".modal-body").html(htmlRes);
-
-    $("#totalExpensesVal").val(totalExpenses.toFixed(0));
-
-}
 
 
-function addListenersCalc() {
-//    $(".all").hide();
-//    $(".aid").hide();
-    $("input[name='form[tipo]']").change(function () {
-        var selected = $("input[name='form[tipo]']:checked").val();
-        if (selected == "days") {
-            $(".all").show();
-            $(".days").show();
-            $(".complete").hide();
 
-        } else {
-            $(".all").show();
-            $(".complete").show();
-            $(".days").hide();
-        }
-        $("common").show();
-    })
-    $("input[name='form[auxilio]']").change(function () {
-        var selected = $("input[name='form[auxilio]']:checked").val();
-        if (selected == 1) {
-            $(".aid").show();
-        } else {
-            $(".aid").hide();
-        }
-    })
-
-}
-
-function jsonCalcToHTML(data) {
-    var htmls = "<h2 class='modal-title'>Si su empleado tiene estas características debe pagar:</h2>" +
-            "<ul class='lista_listo clearfix'>";
-    htmls += "<li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>" + getPrice(Math.floor(data.totalExpenses)) + "</span></li>";
-    htmls += "<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>" + getPrice(Math.floor(data.totalIncome)) + "</span></li>";
-    htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyExpenses)) + "</span></li>";
-    htmls += "<li class='col-sm-6'><span class='cifra'>" + getPrice(Math.floor(data.dailyIncome)) + "</span></li>";
-    htmls += "</ul>";
-    htmls += "<h2 class='modal-title'>Detalles:</h2>" +
-            "<ul class='lista_listo_detalle'>";
-    htmls += "<li>Gastos Empleador EPS: " + getPrice(Math.floor(data.EPSEmployerCal)) + "</li>";
-    htmls += "<li>Gastos Empleador Pensión: " + getPrice(Math.floor(data.PensEmployerCal)) + "</li>";
-    htmls += "<li>Gastos Empleado ARL: " + getPrice(Math.floor(data.arlCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Cesantias: " + getPrice(Math.floor(data.cesCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Intereses/cesantias: " + getPrice(Math.floor(data.taxCesCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Caja Comp: " + getPrice(Math.floor(data.cajaCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Vacaciones: " + getPrice(Math.floor(data.vacationsCal)) + "</li>";
-    htmls += "<li>Gastos Auxilio de Trasnporte: " + getPrice(Math.floor(data.transportCal)) + "</li>";
-    htmls += "<li>Gastos Dotacion/150000 pesos trimestre: " + getPrice(Math.floor(data.dotationCal)) + "</li>";
-    htmls += "<li>Gastos SENA: " + getPrice(Math.floor(data.senaCal)) + "</li>";
-    htmls += "<li>Gastos ICBF: " + getPrice(Math.floor(data.icbfCal)) + "</li>";
-    htmls += "<li>Gastos Empleado EPS: " + getPrice(Math.floor(data.EPSEmployeeCal)) + "</li>";
-    htmls += "<li>Gastos Empleado Pensión: " + getPrice(Math.floor(data.PensEmployeeCal)) + "</li>";
-    htmls += "</ul>";
-    return htmls;
 }
 
 function getPrice(valor) {
