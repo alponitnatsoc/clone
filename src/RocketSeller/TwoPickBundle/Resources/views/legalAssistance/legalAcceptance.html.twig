@@ -1,0 +1,84 @@
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+{#  {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+   	<br /><br /><br /><br />
+	<div class="col-sm-12" >
+
+
+		<div class="roundContainer">
+			<div class="media" >
+			  <div class="media-left">
+			    <i class="glyphicon glyphicon-exclamation-sign bigIcon"></i>
+			  </div>
+			  <div class="media-body legalInCorrect">
+			    <h4 class="media-heading" style="font-weight: lighter;">De acuerdo a tus respuestas puede que en el pasado no hayas cumplido con todas las exigencias de ley en la relación laboral con tu empleado.</h4>
+			  </div>
+			  <div class="media-body legalCorrect">
+			    <h4 class="media-heading" style="font-weight: lighter;">Aparentemente la situación legal con su empleado está al día.</h4>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+    <br /><br /><br />
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center legalCorrect">
+			De acuerdo a la información suministrada por usted, puede mantener su relación laboral como la lleva a este punto o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:
+        </div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center legalInCorrect">
+			Por lo tanto puede mantener su relación laboral como la lleva a este punto, comenzar una nueva con el mismo empleado o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:        </div>
+    </div>
+	<span>video</span>
+	<label for="userAccept">
+		<div id="u285" class="text">
+			<p><span>Acepto que he leído las implicaciones expuestas por Symplifica y me hago responsable de la elección que tomaré a continuación</span></p>
+		</div>
+	</label>
+	<input id="userAccept" type="checkbox" value="checkbox">
+
+	<br />
+	<div class="row">
+		<div class="col-sm-6" style="text-align: right;">
+			<a class="btn btnPrevious notAjax" href="{{ path('legal') }}">Anterior</a>
+		</div>
+		<div class="col-sm-6 legalInCorrect">
+			<a class="btn btn-orange notAjax" href="{{ path('edit_profile') }}" >Realizar contrato nuevo</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<a class="btn btn-orange notAjax" href="{{ path('legal_assist') }}" >Solucionar la situación actual con mi empleado</a>
+		</div>
+		<div class="col-sm-6">
+			<a class="btn btn-orange notAjax" href="{{ path('change_flag') }}" >Continuar registro y acepto la responsabilidad</a>
+		</div>
+	</div>
+
+
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready(function(){
+			var state='{{ state }}';
+			if(state=="correct"){
+				$(".legalCorrect").each(function () {
+					$(this).show();
+				})
+				$(".legalInCorrect").each(function () {
+					$(this).hide();
+				})
+			}else{
+				$(".legalCorrect").each(function () {
+					$(this).hide();
+				})
+				$(".legalInCorrect").each(function () {
+					$(this).show();
+				})
+
+			}
+		});
+	</script>
+{% endblock %}

@@ -41,30 +41,35 @@
 {# 			      <label><input name="legal-status" type="checkbox" value="">Le he entregado los intereses sobre las cesantías todos los años</label>#}
 {# 			    </div></li>#}
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Contrato en regla y vigente directamente con usted y no por medio de una empresa</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Contrato vigente donde yo soy el empleador y no una empresa</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Liquidación según la ley al término de cada periodo de contratación</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Afiliación a Seguridad Social (Salud, Pensión, Riesgos Laborales, Caja de Compensación familiar)</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Pago de sueldo al día</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Pago de aportes a Seguridad Social desde el inicio de la relación laboral</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Afiliación a seguridad social</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Pago de sueldo igual o mayor al Salario Mínimo Mensual Legal Vigente, diario ($22.981,23) o mensual ($689.455) según los términos de contratación.</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Pago de aportes a segurdad social</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Otorgamiento y pago de días da vacaciones de acuerdo a la ley</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Cumplimiento de periodos de vacaciones</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Consignación de Cesantías en un Fondo de Cesantías.</label>
                 </div></li>
                 <li class="list-group-item"><div class="checkbox">
-                  <label><input name="legal-status" type="checkbox" value="" />Pago de Cesantías y sus correspondientes intereses desde que inició la contratación</label>
+                  <label><input name="legal-status" type="checkbox" value="" />Entrega de intereses sobre Cesantías todos los años</label>
                 </div></li>
-			    <!--
-			    <div class="checkbox">
-			      <label><input name="legal-status" type="checkbox" value="">No entiendo muchas cosas de las que me están preguntando acá</label>
-			    </div>-->
+				<!--
+
+			<li class="list-group-item"><div class="checkbox">
+			  <label><input name="legal-status" type="checkbox" value="" />No conozco uno, varios o ninguno de los aspectos antes mencionados</label>
+			</div></li>
+
+			<div class="checkbox">
+			  <label><input name="legal-status" type="checkbox" value="">No entiendo muchas cosas de las que me están preguntando acá</label>
+			</div>-->
 			</ul>
 			</form>
 			<br />
@@ -104,10 +109,10 @@
 	function done(){
 		validate();
 		if (flag) {
-			document.location.href = '/change-flag';
+			document.location.href ='{{ path('legal_acceptance',{state:'correct'}) }}';
 			clearForm();
 		}else{
-			document.location.href = '/legal-assist';
+			document.location.href = '{{ path('legal_acceptance',{state:'incorrect'}) }}';
 		}
 	}
 	function clearForm(){

@@ -23,6 +23,11 @@ class LegalAssistanceController extends Controller
 				)
 			);
 	}
+	public function legalAcceptanceAction($state){
+
+		return $this->render('RocketSellerTwoPickBundle:legalAssistance:legalAcceptance.html.twig',
+            array('state'=>$state));
+	}
 	public function startPaymentAction(Request $request){
         $user = $this->getUser();
         $person = $user->getPersonPerson();
