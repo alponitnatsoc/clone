@@ -698,6 +698,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(array=true,name="weekDays", nullable=true, strict=true, description="days the employee will work per week.")
      * @RequestParam(name="employeeId", nullable=false, strict=true, description="id if exist else -1.")
      * @RequestParam(name="contractId", nullable=true, strict=true, description="id of the contract.")
+     * @RequestParam(name="holidayDebt", nullable=true, strict=true, description="vacations days that are unpaid.")
      * @return View
      */
     public function postNewEmployeeSubmitStep3Action(ParamFetcher $paramFetcher)
@@ -810,7 +811,7 @@ class EmployeeRestController extends FOSRestController
             $datetime = new DateTime($startDate);
             $contract->setStartDate($datetime);
             $contract->setEndDate($endDate);
-
+            $contract->setHolidayDebt($paramFetcher->get("holidayDebt"));
             /* $workTimeStart = $paramFetcher->get('workTimeStart');
               $datetime = new DateTime();
               $datetime->setTime($workTimeStart['hour'], $workTimeStart['minute']);

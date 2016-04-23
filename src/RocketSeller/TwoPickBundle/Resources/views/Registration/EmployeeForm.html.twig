@@ -421,6 +421,16 @@
                                         {{ form_widget(form.employeeHasEmployers.endDate) }}
                                     </div>
                                 </div>
+                                {% if app.user.legalFlag==1 %}
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.holidayDebt) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.holidayDebt) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
                                 <div class="row">
                                     <div class="col-xs-6 text-right"><a class="btn btn-primary btnPrevious-form btnPrevious">Anterior</a></div>
                                     <div class="col-xs-6 text-left"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
@@ -512,6 +522,10 @@
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
+                                <div id ="arsNotAplicable" class="col-sm-12 col-xs-12">
+                                    <span>Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario minimo</span>
+                                </div>
+
                                 <div class="col-sm-12 col-xs-12 complete">
                                     <div class="col-sm-6 label-group">
                                         {{ form_label(form.employeeHasEmployers.salary) }}
@@ -590,14 +604,62 @@
                                     <div class="formulario col-xs-12">
                                         <div class="col-sm-10 col-xs-12 col-sm-push-1">
                                             <div class="introPayment" style="padding-bottom: 20px;">
-                                                <h3>Symplifica recomienda</h3>
-                                                <p>La trazabilidad de los pagos de nómina y aportes es muy importante para formalizar las relciones laborales</p>
-                                                <p>Los pagos electrónicos permiten llevar esta trazabilidad de forma muy eficiente</p>
-                                                <p>Symplifica recomienda por seguridad para el empleador y el empleado registrar un medio de pago electrónico.</p>
-                                                <img src="/img/daviplata.png" class="img-responsive" />
-                                                <p>Si su empleado no tiene una cuenta los guiamos a usted y a él para abrir de forma muy fácil una cuenta de cero costo en Daviplata </p>
-                                                <p>*Se requiere que su empleado tenga un celulara y sea el titular</p>
-                                                <p>Para usar Symplifica necesitará inscribir una cuenta bancaria desde donde debitaremos los pagos de nómina y de aportes</p>
+                                                <table>
+                                                    <tr>
+                                                        <th> </th>
+                                                        <th>Daviplata</th>
+                                                        <th>Transferencia Bancaria</th>
+                                                        <th>Efectivo</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Soporte electrónico de pagos siempre a la mano</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Seguridad de no cargar con efectivo</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Transferencias desde cualquier lugar</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Transferencias hacia cualquier lugar</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Fácil activación para el empleado</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sin costo para el empleado</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sin costo para el empleador</td>
+                                                        <td>Las transacciones tienen un costo de $5.000</td>
+                                                        <td></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Crea historia bancaria para el empleado</td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>

@@ -227,6 +227,13 @@ class ContractRegistration extends AbstractType
             ))
             ->add('workplace', new WorkPlaceRegistration(), array(
                 'mapped' => false));
+        if($this->user->getLegalFlag()=='1'){
+            $builder
+                ->add('holidayDebt', 'integer', array(
+                    'label'=>'¿Cuantos días de vaciones tiene pendientes?',
+                    'required'=>true,
+                ));
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

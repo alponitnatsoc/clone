@@ -129,6 +129,7 @@ function startEmployee() {
             $(".complete").each(function () {
                 $(this).hide();
             });
+            checkSisben();
         } else {
             $(".days").each(function () {
                 $(this).hide();
@@ -183,6 +184,7 @@ function startEmployee() {
         $(".complete").each(function () {
             $(this).hide();
         });
+        checkSisben();
     } else {
         $(".days").each(function () {
             $(this).hide();
@@ -665,7 +667,8 @@ function startEmployee() {
                 //workTimeEnd: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][hour]']").val(),
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
                 weekWorkableDays: $(form).find("#register_employee_employeeHasEmployers_weekWorkableDays").val(),
-                contractId: $(form).find("input[name='register_employee[idContract]']").val()
+                contractId: $(form).find("input[name='register_employee[idContract]']").val(),
+                holidayDebt: $(form).find("#register_employee_employeeHasEmployers_holidayDebt").val()
             }
         }).done(function (data) {
             $('#contractNav > .active').next('li').find('a').trigger('click');
@@ -1160,6 +1163,11 @@ function calculator() {
         resposne['senaCal'] = senaCal;
         resposne['icbfCal'] = icbfCal;
         resposne['totalIncome'] = totalIncome;
+        if(type=="days"&&EPSEmployerCal>0&&sisben==1){
+            $("#arsNotAplicable").show();
+        }else{
+            $("#arsNotAplicable").hide();
+        }
     }
 
     var htmlRes = jsonCalcToHTML(resposne);
@@ -1314,7 +1322,7 @@ function infoNuevoContrato(from, to, template, event) {
         $('#formNav > .active').next('li').find('a').trigger('click');
     });
 }
-function initEntitiesFields(){
+function checkSisben(){
     var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
     if(sisben==" No"){
         $("#arsBlock").hide();
@@ -1323,6 +1331,9 @@ function initEntitiesFields(){
         $("#arsBlock").show();
         $("#wealthBlock").hide();
     }
+}
+function initEntitiesFields(){
+    checkSisben
     $("#register_employee_employeeHasEmployers_sisben").on("change", function () {
         var sisben=$(this).find("input:checked").parent().text();
         if(sisben==" No") {
