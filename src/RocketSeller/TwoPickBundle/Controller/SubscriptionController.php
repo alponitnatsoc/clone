@@ -197,7 +197,7 @@ class SubscriptionController extends Controller
                             'empty_value' => 'Seleccione',
                             'choice_label' => 'name'
                         ))
-                        ->add('numberAccount', 'integer', array(
+                        ->add('numberAccount', 'text', array(
                             'label' => 'Número de la cuenta',
                             'required' => false,
                             'attr' => array(
