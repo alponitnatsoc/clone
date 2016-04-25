@@ -124,7 +124,7 @@ class LoadBankData extends AbstractFixture implements OrderedFixtureInterface
         $banco= new Bank();
         $banco->setName("BANCO PROCREDIT");
         $banco->setNovopaymentCode("51");
-        $banco->setHightechCode(58"");
+        $banco->setHightechCode("58");
         $manager->persist($banco);
 
         $banco= new Bank();
