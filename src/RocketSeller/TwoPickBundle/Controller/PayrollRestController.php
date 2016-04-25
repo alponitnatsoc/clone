@@ -2244,6 +2244,133 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Adds Pending vacation for employees with history.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds Pending vacation for employees with history.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="pending_days", nullable=false, requirements="([0-9])+(\.[0-9]+)?", strict=true, description="Number of pending vacation days, it can have decimals.")
+     *
+     * @return View
+     */
+    public function postAddPendingVacationDaysAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['pending_days'] = '([0-9])+(\.[0-9]+)?';
+        $mandatory['pending_days'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        // $unico['TIPOCON'] = 0; // Doesn't use this, not sure why.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['DIAS_PENDIENTES'] = $parameters['pending_days'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '655';
+        $parameters['clXMLSolic'] = $this->createXml($content, 655);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Adds cumulative salary, for average calculations, this web service has
+     * to be called once for each month of service in the last year.
+     * It can have the same value always.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds cumulative salary, for average calculations, this web service has
+     *                  to be called once for each month of service in the last year.
+     *                  It can have the same value always.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="units", nullable=false, requirements="([0-9])+", strict=true, description="Number of days worked, it is 30 for full time, or any other number for part time.")
+     *    (name="value", nullable=false, requirements="([0-9])+(\.[0-9]+)?", strict=true, description="Total amount payed to the employee in the month.")
+     *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year when the salary was payed.")
+     *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month when the salary was payed.")
+     *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period when the slary was payed.(2 or 4).")
+     *
+     * @return View
+     */
+    public function postAddCumulativesAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['units'] = '([0-9])+';
+        $mandatory['units'] = true;
+        $regex['value'] = '([0-9])+(\.[0-9]+)?';
+        $mandatory['value'] = true;
+        $regex['year'] = '([0-9])+';
+        $mandatory['year'] = true;
+        $regex['month'] = '([0-9])+';
+        $mandatory['month'] = true;
+        $regex['period'] = '([0-9])+';
+        $mandatory['period'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        // $unico['TIPOCON'] = 0; // Doesn't use this, not sure why.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['CON_CODIGO'] = 1; // 1 because it is salary.
+        $unico['ACUM_UNIDADES'] = $parameters['units'];
+        $unico['ACUM_VALOR'] = $parameters['value'];
+        $unico['ACUM_ANO'] = $parameters['year'];
+        $unico['ACUM_MES'] = $parameters['month'];
+        $unico['ACUM_PERIODO'] = $parameters['period'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '656';
+        $parameters['clXMLSolic'] = $this->createXml($content, 656);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
      * Modify parameters of employee liquidation(vacations).<br/>
      *
      * @ApiDoc(
