@@ -123,7 +123,7 @@ class ExpressRegistrationController extends Controller
 
         if ($insertionAnswer->getStatusCode() == 200) {
             return $this->redirectToRoute('express_success');
-        } elseif ($insertionAnswer == 404) {
+        } elseif ($insertionAnswer->getStatusCode() == 404) {
             dump("Procesando");
             exit();
         } else {
@@ -137,13 +137,13 @@ class ExpressRegistrationController extends Controller
         $user = $this->getUser();
         $role = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Role')
-                ->findByName("ROLE_BACK_OFFICE");
+                ->findOneByName("ROLE_BACK_OFFICE");
 
         $notification = new Notification();
         $notification->setPersonPerson($user->getPersonPerson());
         $notification->setType("Registro express");
         $notification->setAccion("Registrar usuario");
-        $notification->setRoleRole($role[0]);
+        $notification->setRoleRole($role);
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
         $em->flush();
@@ -157,18 +157,19 @@ class ExpressRegistrationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
         $user = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
-        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
-        if (sizeof($employer[0]->getEmployerHasEmployees()) > 0) {
-            foreach ($employer[0]->getEmployerHasEmployees() as $employerHasEmployee) {
+        $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findOneByPersonPerson($person);
+    
+        if (sizeof($employer->getEmployerHasEmployees())>0 ) {
+            foreach ($employer->getEmployerHasEmployees() as $employerHasEmployee) {
                 $suma += $employerHasEmployee->getEmployeeEmployee()->getRegisterState();
             }
 
-            $promedio = $suma / sizeof($employer[0]->getEmployerHasEmployees());
+            $promedio = $suma / sizeof($employer->getEmployerHasEmployees());
         } else {
             $promedio = -1;
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:menuEmployer.html.twig', array('employer' => $employer[0], 'employeesState' => $promedio));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:menuEmployer.html.twig', array('employer' => $employer, 'employeesState' => $promedio));
     }
 
     public function registrationAction($id, Request $request)
@@ -176,6 +177,23 @@ class ExpressRegistrationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
         $user = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($person);
+
+        $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
+        $entityTypes = $entityTypeRepo->findAll();
+        $severances = null;
+        $arls = null;
+
+
+        /** @var EntityType $entityType */
+        foreach ($entityTypes as $entityType) {
+            if ($entityType->getName() == (isset($configData['ARL']) ? $configData['ARL'] : "ARL")) {
+                $arls = $entityType->getEntities();
+            }
+            if ($entityType->getName() == (isset($configData['CC Familiar']) ? $configData['CC Familiar'] : "CC Familiar")) {
+                $severances = $entityType->getEntities();
+            }
+        }
+
         $employer = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($person);
         $workplace = new Workplace();
         $employer[0]->addWorkplace($workplace);
@@ -185,7 +203,7 @@ class ExpressRegistrationController extends Controller
                     'No news found for id ' . $id
             );
         }
-        $form = $this->createForm(new EmployerRegistration(), $employer[0]);
+        $form = $this->createForm(new EmployerRegistration($severances,$arls), $employer[0]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -202,9 +220,9 @@ class ExpressRegistrationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $personEmployer = $em->getRepository('RocketSellerTwoPickBundle:Person')->find($id);
-        $user[0] = $em->getRepository('RocketSellerTwoPickBundle:User')->findByPersonPerson($personEmployer);
-        $employerSearch = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findByPersonPerson($personEmployer);
-        $employer = $employerSearch[0];
+        $user = $em->getRepository('RocketSellerTwoPickBundle:User')->findOneByPersonPerson($personEmployer);
+        $employerSearch = $em->getRepository('RocketSellerTwoPickBundle:Employer')->findOneByPersonPerson($personEmployer);
+        $employer = $employerSearch;
         $workplaces = $employer->getWorkplaces();
         if ($idEmployee == -1) {
             $employerHasEmployee = new EmployerHasEmployee();
@@ -212,8 +230,8 @@ class ExpressRegistrationController extends Controller
             $employerHasEmployee->addContract($contract);
             $employee = new Employee();
             $person = new Person();
-            $phone = new Phone();
-            $person->addPhone($phone);
+            // $phone = new Phone();
+            // $person->addPhone($phone);
             $employee->setPersonPerson($person);
         }
         $form = $this->createForm(new BasicEmployeePersonRegistration(), $person);

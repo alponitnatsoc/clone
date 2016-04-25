@@ -43,15 +43,52 @@
 	                </div>
 	            {% endblock %}
 	        </div>
-			<div id="main" class="col-sm-9" style="color:black;">
 
-				{{ form_start(form) }}
-				<div class="form-black">
-					{{ form_widget(form) }}
-				</div>
-				
-				{{ form_end(form)}}				
+				<div id="main" class="col-sm-9">
+	            <table class="col-md-12">
+					<thead>
+					<tr>
+						<th>Usuario</th>						
+						<th>Telefono</th>
+						<th>Accion</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for notification in notifications if notification.status == 0 %}
+						<tr>
+							<td>{{ notification.personPerson.names }} {{ notification.personPerson.lastName1 }}</td>
+							<td>{{ notification.personPerson.phones[0].phoneNumber }}</td>
+							<td>
+								<div class="end-legal">
+									<span class="change-notification btn btn-xs btn-orange notAjax" value="{{notification.id}}"  href="/api/public/v1/changes/statuses">Terminar</span>
+								</div>								
+								<div class="continue-express">
+									<span class="true-express btn btn-xs btn-orange notAjax" value="{{notification.personPerson.idPerson}}" href="/api/public/v1/creates/notifications" >
+										Si
+									</span>
+									<span class="change-notification btn btn-xs notAjax">
+										No
+									</span>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>          	
 	        </div>
 	    </div>
-	</div>				
+	</div>
+				
+	
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/public/js/backOffice.js') }}"></script>
+    <script>
+    $(document).ready(function(){
+    	$('.continue-express').attr('hidden','true'); 
+    	changeNotificationStatus(); 
+    });
+
+    </script>
 {% endblock %}

@@ -66,17 +66,6 @@
         }
     </style>
 {% endblock stylesheets %}
-{#     <div class="row">#}
-{#         <div class="col-sm-12 col-xs-12 align-Resp">#}
-{#             <a href="/welcome" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" id="">#}
-{#                 <div class="col-md-12 col-xs-12 txt-AD1" id="">#}
-{#                     <div class="text-center" id="">#}
-{#                         Consultoría Juridica#}
-{#                     </div>#}
-{#                 </div>#}
-{#             </a>#}
-{#         </div>#}
-{#     </div>#}
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <br /><br />
@@ -105,10 +94,18 @@
         </div>
     </div>
     <br />
-    <div id="" class="row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
-        <hr />
-        <h3 class="text-center">Información de tu tarjeta de crédito</h3>
-        <br />
+    <div class="col-sm-8 col-sm-offset-2" style="text-align:center;">
+        <h3>Pagar con:</h3>
+        <div class="col-sm-4 col-sm-offset-2" style="text-align:rigth;">
+            <span class="creditPayBtn btn btn-symplifica">Crédito</span>
+        </div>
+        <div class="col-sm-4">
+            <span class="debitPayBtn btn btn-symplifica">Débito</span>
+        </div>
+        
+    </div>
+    <div id="" class="containerForm row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
+
         <div class="">
             <div class="">
                 {% if errno is defined %}
@@ -116,7 +113,10 @@
                         <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
                     </span>
                 {% endif %}
-                <div id='' class='col-md-12'>
+                <div id='' class='creditCardForm col-md-12' style="display:none;">
+                    <hr />
+                    <h3 class="text-center">Información de tu tarjeta de crédito</h3>
+                    <br />
                     {{ form_start(form) }}
                     <div class="form-black form-group">
                         {{form_row(form.credit_card)}}
@@ -129,7 +129,7 @@
                         {{form_row(form.documentType)}}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.document)}}
+                        {{form_row(form.documentNumber)}}
                     </div>
                     <div class="form-black form-group">
                         {{form_row(form.phoneNumber)}}
@@ -137,21 +137,49 @@
 
                     <div class="form-black form-group">
                         <div class="col-md-4">
-                            {{form_row(form.expiry_date_year)}}
+                            {{form_row(form.expiry_year)}}
                         </div>
                         <div class="col-md-4">
-                            {{form_row(form.expiry_date_month)}}
+                            {{form_row(form.expiry_month)}}
                         </div>
                         <div class="col-md-4">
                             {{form_row(form.cvv)}}
                         </div>
                     </div>
-                    <br />
                     <div class="text-center">
                         <button type="submit"  class="btn register-AS1 btn-symplifica btn">Continuar</button>
-                    </div>
-                    {{ form_end(form) }}
                 </div>
+                </div>
+                <div class="debitCardForm col-md-12" style="display:none;">
+                    <hr />
+                    <h3 class="text-center">Información de tu cuenta bancaria</h3>
+                    <br />
+                    <div class="form-black form-group">
+                        {{form_row(form.titularName)}}
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.bank)}}
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.accountType)}}
+                    </div>
+                    <div class="form-black form-group">
+                        {{form_row(form.numberAccount)}}
+                    </div>
+                    <div class="col-md-12" style="margin: 30px 0 20px 0;">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-11 center">
+                            <input type="checkbox" id="tos" name="tos">
+                            <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit"  class="btn register-AS1 btn-symplifica btn">Continuar</button>
+                </div>
+                </div>
+                <input class="methodTypeInput" name="methodType" value="" hidden="true"></input>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
@@ -176,18 +204,18 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
 
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
-                validator = $("form[name='add_credit_card']").validate({
+                validator = $("form[name='legalAssistancePay']").validate({
                     //onfocusout: true,
                     rules: {
-                        "add_credit_card[credit_card]": {required: true, number: true, min: 1, maxlength: 19},
-                        "add_credit_card[name_on_card]": {required: true},
-                        "add_credit_card[expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                        "legalAssistancePay[credit_card]": {required: true, number: true, min: 1, maxlength: 19},
+                        "legalAssistancePay[name_on_card]": {required: true},
+                        "legalAssistancePay[expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
                                 // min needs a parameter passed to it
                                 param: function () {
                                     var date = new Date();
                                     var year = date.getFullYear();
                                     var month = date.getMonth() + 2;
-                                    if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
+                                    if ($("#legalAssistancePay_expiry_year").val() == year) {
                                         return month;
                                     }
                                     return 1;
@@ -196,19 +224,19 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                                     var date = new Date();
                                     var year = date.getFullYear();
                                     var month = date.getMonth() + 2;
-                                    if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
-                                        return ($("#add_credit_card_credit_card_expiry_date_month").val() < month);
+                                    if ($("#legalAssistancePay_expiry_year").val() == year) {
+                                        return ($("#legalAssistancePay_expiry_month").val() < month);
                                     }
                                     return false;
                                 }
                             }},
-                        "add_credit_card[expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
-                        "add_credit_card[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1},
-                        "add_credit_card[documentType]": {required: true}
+                        "legalAssistancePay[expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
+                        "legalAssistancePay[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1},
+                        "legalAssistancePay[documentType]": {required: true}
 
                     },
                     messages: {
-                        "add_credit_card[credit_card]": {
+                        "legalAssistancePay[credit_card]": {
                             required: "Por favor ingrese el numero de la tarjeta",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo 19 digitos",
@@ -216,8 +244,8 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                             min: "minimo 1 digitos"
 
                         },
-                        "add_credit_card[name_on_card]": {required: "Por favor ingrese el nombre que hay en la tarjeta"},
-                        "add_credit_card[expiry_date_month]": {
+                        "legalAssistancePay[name_on_card]": {required: "Por favor ingrese el nombre que hay en la tarjeta"},
+                        "legalAssistancePay[expiry_date_month]": {
                             required: "Por favor seleccione el mes de vencimiento",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo mes de 2 digitos",
@@ -227,17 +255,17 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                                 var date = new Date();
                                 var year = date.getFullYear();
                                 var month = date.getMonth() + 1;
-                                if ($("#add_credit_card_credit_card_expiry_date_year").val() == year) {
-                                    if ($("#add_credit_card_credit_card_expiry_date_month").val() == month) {
+                                if ($("#legalAssistancePay_expiry_year").val() == year) {
+                                    if ($("#legalAssistancePay_expiry_month").val() == month) {
                                         return "Tarjeta vence este mes";
-                                    } else if ($("#add_credit_card_credit_card_expiry_date_month").val() < month) {
+                                    } else if ($("#legalAssistancePay_expiry_month").val() < month) {
                                         return "Tarjeta vencida";
                                     }
                                 }
                                 return "mes del 01 al 12";
                             }
                         },
-                        "add_credit_card[expiry_date_year]": {
+                        "legalAssistancePay[expiry_date_year]": {
                             required: "Por favor ingrese el año de vencimiento",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo año de 4 digitos",
@@ -245,7 +273,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                             max: "año maximo 9999",
                             min: "año minimo 2016"
                         },
-                        "add_credit_card[cvv]": {
+                        "legalAssistancePay[cvv]": {
                             required: "Por favor ingrese el codigo de verificación",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo 4 digitos",
@@ -253,7 +281,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                             max: "minimo 001",
                             min: "maximo 9999"
                         },
-                        "add_credit_card[documentType]": {required: "Por favor seleccione el tipo de documento"}
+                        "legalAssistancePay[documentType]": {required: "Por favor seleccione el tipo de documento"}
                     }
                 });
             });
@@ -277,6 +305,17 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                 }
                 //return false;
             });
+            $('.creditPayBtn').on("click",function(){
+                $('.creditCardForm').fadeIn("slow");
+                $('.debitCardForm').fadeOut("slow");
+                $('.methodTypeInput').val("cre");
+            });
+            $('.debitPayBtn').on("click",function(){
+                $('.debitCardForm').fadeIn("slow");
+                $('.creditCardForm').fadeOut("slow");
+                $('.methodTypeInput').val("deb");
+            });
+
         });
     </script>
 {% endblock %}

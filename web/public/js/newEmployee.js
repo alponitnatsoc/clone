@@ -129,6 +129,7 @@ function startEmployee() {
             $(".complete").each(function () {
                 $(this).hide();
             });
+            checkSisben();
         } else {
             $(".days").each(function () {
                 $(this).hide();
@@ -183,6 +184,7 @@ function startEmployee() {
         $(".complete").each(function () {
             $(this).hide();
         });
+        checkSisben();
     } else {
         $(".days").each(function () {
             $(this).hide();
@@ -367,7 +369,8 @@ function startEmployee() {
         var i = 0;
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-        if (selectedVal == " Trabajo por días") {
+        var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
             $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
                     flagValid = false;
@@ -409,6 +412,19 @@ function startEmployee() {
                 return;
             }
         });
+
+        $(form).find("select[name*='[severances]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+        $(form).find("input[name*='[severancesAC]']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
         $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -419,7 +435,7 @@ function startEmployee() {
         if (!flagValid) {
             return;
         }
-        if (selectedVal == " Trabajo por días") {
+        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
             $("#register_employee_entities_wealth").val("");
         }else{
             $("#register_employee_entities_ars").val("");
@@ -433,6 +449,7 @@ function startEmployee() {
                 pension: $("#register_employee_entities_pension").val(),
                 wealth:  $("#register_employee_entities_wealth").val(),
                 ars:  $("#register_employee_entities_ars").val(),
+                severances:  $("#register_employee_entities_severances").val(),
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -650,7 +667,8 @@ function startEmployee() {
                 //workTimeEnd: {'hour': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][hour]']").val(),
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
                 weekWorkableDays: $(form).find("#register_employee_employeeHasEmployers_weekWorkableDays").val(),
-                contractId: $(form).find("input[name='register_employee[idContract]']").val()
+                contractId: $(form).find("input[name='register_employee[idContract]']").val(),
+                holidayDebt: $(form).find("#register_employee_employeeHasEmployers_holidayDebt").val()
             }
         }).done(function (data) {
             $('#contractNav > .active').next('li').find('a').trigger('click');
@@ -1145,6 +1163,11 @@ function calculator() {
         resposne['senaCal'] = senaCal;
         resposne['icbfCal'] = icbfCal;
         resposne['totalIncome'] = totalIncome;
+        if(type=="days"&&EPSEmployerCal>0&&sisben==1){
+            $("#arsNotAplicable").show();
+        }else{
+            $("#arsNotAplicable").hide();
+        }
     }
 
     var htmlRes = jsonCalcToHTML(resposne);
@@ -1214,6 +1237,7 @@ function inquiry() {
             documentType: documentType.val(),
             document: document.val(),
             lastName1: lastName1.val(),
+            personType: '2'
         }
     }).done(function (data) {
         //alert("La cédula que nos proporcionó, ya existe en nuestro sistema, los dátos serán cargados automáticamente");
@@ -1238,7 +1262,9 @@ function inquiry() {
         $(form).find("select[name='register_employee[person][city]']").val(data["city"]["id_city"]);
         $(form).find("input[name='register_employee[personExtra][email]']").val(data["email"]);
         $(form).find("input[name='register_employee[person][mainAddress]']").val(data["mainAddress"]);
+        $(form).find("#register_employee_person_phones_0_phoneNumber").val(data["phones"]);
         $("#documentExistent").modal("show");
+        console.log(data);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         //show the other stuf
     });
@@ -1296,7 +1322,28 @@ function infoNuevoContrato(from, to, template, event) {
         $('#formNav > .active').next('li').find('a').trigger('click');
     });
 }
+function checkSisben(){
+    var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+    if(sisben==" No"){
+        $("#arsBlock").hide();
+        $("#wealthBlock").show();
+    }else if(sisben==" Si"){
+        $("#arsBlock").show();
+        $("#wealthBlock").hide();
+    }
+}
 function initEntitiesFields(){
+    checkSisben
+    $("#register_employee_employeeHasEmployers_sisben").on("change", function () {
+        var sisben=$(this).find("input:checked").parent().text();
+        if(sisben==" No") {
+            $("#arsBlock").hide();
+            $("#wealthBlock").show();
+        }else if(sisben==" Si"){
+            $("#arsBlock").show();
+            $("#wealthBlock").hide();
+        }
+    });
     var dataPen=[];
     $("#register_employee_entities_pension").find("> option").each(function() {
         dataPen.push({'label':this.text,'value':this.value});
@@ -1362,6 +1409,34 @@ function initEntitiesFields(){
         $(this).autocomplete({
             source: function(request, response) {
                 var results = $.ui.autocomplete.filter(dataArs, request.term);
+
+                response(results.slice(0, 5));
+            },                minLength: 0,
+            select: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+            },
+            focus: function(event, ui) {
+                event.preventDefault();
+                autoTo.val(ui.item.label);
+
+            }
+        });
+        $(this).on("focus",function () {
+            $(autoTo).autocomplete("search", $(autoTo).val());
+        });
+
+    });
+    var dataSeverances=[];
+    $("#register_employee_entities_severances").find("> option").each(function() {
+        dataSeverances.push({'label':this.text,'value':this.value});
+    });
+    $(".autocomCes").each(function () {
+        var autoTo=$(this);
+        $(this).autocomplete({
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(dataSeverances, request.term);
 
                 response(results.slice(0, 5));
             },                minLength: 0,

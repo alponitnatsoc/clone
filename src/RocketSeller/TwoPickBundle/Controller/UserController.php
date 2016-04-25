@@ -57,8 +57,8 @@ class UserController extends Controller
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////
-        /*
 
+/*
         if($this->addToHighTech($user)){
             dump("suscrito o actualizado en HighTech");
         }else{
@@ -78,13 +78,14 @@ class UserController extends Controller
         ////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////
 
-
+            /*
         if($this->addToSQL($user)){
             dump("suscrito o actualizado en sql");
         }else{
             dump("no se pudo inscribir o actualizar en sql");
 
         }
+            */
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
@@ -144,8 +145,27 @@ class UserController extends Controller
                 /** @var Contract $contract */
                 foreach ($contracts as $contract) {
                     if($contract->getState()==1){
-                        $wdm=$contract->getWorkableDaysMonth();
-                        $amountToPay+= $wdm<=10 ? $productSymp1->getPrice():$wdm<=19 ? $productSymp2->getPrice():$productSymp3->getPrice();
+                        $wdm = $contract->getWorkableDaysMonth();
+
+                        /** @var Product $product */
+                        if ($wdm <= 10) {
+                            $product = $productSymp1;
+                        } else if ($wdm <= 19) {
+                            $product = $productSymp2;
+                        } else {
+                            $product = $productSymp3;
+                        }
+                        $prodPrice = $product->getPrice();
+
+                        /** @var \RocketSeller\TwoPickBundle\Entity\Tax $tax */
+                        $tax = $product->getTaxTax();
+                        if ($tax->getName() == "IVA") {
+                            $taxVal = $tax->getValue();
+                            $prodPrice += ($prodPrice * $taxVal);
+                        }
+
+                        $amountToPay += $prodPrice;
+
                         if(!$wdm<=19)
                             $fullTime++;
                         else

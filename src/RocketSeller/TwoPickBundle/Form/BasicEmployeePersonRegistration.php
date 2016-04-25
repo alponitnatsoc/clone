@@ -70,12 +70,12 @@ class BasicEmployeePersonRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank()
                 ),'label' => 'Dirección Principal*'))
-            ->add('phones', 'collection', array(
-                'type' => new PhoneRegistration(),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false
-            ))
+            // ->add('phones', 'collection', array(
+            //     'type' => new PhoneRegistration(),
+            //     'allow_add'    => true,
+            //     'allow_delete' => true,
+            //     'by_reference' => false
+            // ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'property' => 'name',

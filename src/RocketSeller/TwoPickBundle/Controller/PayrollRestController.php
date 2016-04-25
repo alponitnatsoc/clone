@@ -21,6 +21,10 @@ use DateTime;
 use GuzzleHttp\Client;
 use RocketSeller\TwoPickBundle\Traits\LiquidationMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
+use RocketSeller\TwoPickBundle\Traits\PayrollMethodsTrait;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 
 /**
  * Contains all the web services to call the payroll system.
@@ -35,8 +39,9 @@ use RocketSeller\TwoPickBundle\Traits\NoveltyTypeMethodsTrait;
  */
 class PayrollRestController extends FOSRestController
 {
-    use LiquidationMethodsTrait;
-    use NoveltyTypeMethodsTrait;
+//     use LiquidationMethodsTrait;
+//     use NoveltyTypeMethodsTrait;
+    use PayrollMethodsTrait;
 
     public function validateParamters($parameters, $regex, $mandatory)
     {
@@ -188,7 +193,7 @@ class PayrollRestController extends FOSRestController
         } else {
             $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
         }
-        $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
+         $url_request = "http://SRHADMIN:SRHADMIN@52.3.249.135:9090/WS_Xchange/Kic_Adm_Ice.Pic_Proc_Int_SW_Publ";
 
         $response = null;
         $options = array(
@@ -200,7 +205,7 @@ class PayrollRestController extends FOSRestController
         str_replace("%20", "", $test);
         $test = trim(preg_replace('/\s\s+/', '', $test));
         $response = $client->request('GET', $url_request . '?' . str_replace("%20", "", urldecode($test))); //, ['query' => urldecode($test)]);
-        //die($url_request . '?' . str_replace( "%20", "",urldecode($test)));
+        // die ($url_request . '?' . str_replace( "%20", "",urldecode($test)));
         // We parse the xml recieved into an xml object, that we will transform.
         $plain_text = (String) $response->getBody();
 
@@ -1153,7 +1158,7 @@ class PayrollRestController extends FOSRestController
         $unico['NOV_FECHA_HASTA_CAUSA'] = isset($parameters['novelty_end_date']) ? $parameters['novelty_end_date'] : "";
         $unico['COD_PROC'] = '1'; // Always process as payroll.
         $unico['USUARIO'] = 'SRHADMIN'; // This may change in the future.
-        //$unico['NOV_BASE'] = isset($parameters['novelty_base']) ? $parameters['novelty_base'] : "";
+        $unico['NOV_BASE'] = isset($parameters['novelty_base']) ? $parameters['novelty_base'] : "";
 
         $content[] = $unico;
         $parameters = array();
@@ -1993,7 +1998,6 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="username", nullable=false, requirements="(.*)", strict=true, description="Username of the employer.")
      *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
      *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
      *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
@@ -2011,8 +2015,6 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['username'] = '(.*)';
-        $mandatory['username'] = true;
         $regex['year'] = '([0-9])+';
         $mandatory['year'] = true;
         $regex['month'] = '([0-9])+';
@@ -2026,8 +2028,6 @@ class PayrollRestController extends FOSRestController
         $regex['retirementCause'] = '([0-9])+';
         $mandatory['retirementCause'] = true;
 
-
-
         $this->validateParamters($parameters, $regex, $mandatory);
 
         $content = array();
@@ -2035,7 +2035,7 @@ class PayrollRestController extends FOSRestController
 
         $unico['TIPOCON'] = 0;
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
-        $unico['USERNAME'] = $parameters['username'];
+        $unico['USERNAME'] = 'SRHADMIN';
         $unico['PDEF_ANO'] = $parameters['year'];
         $unico['PDEF_MES'] = $parameters['month'];
         $unico['PDEF_PERIODO'] = $parameters['period'];
@@ -2073,7 +2073,6 @@ class PayrollRestController extends FOSRestController
      * Rest Parameters:
      *
      *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
-     *    (name="username", nullable=true, requirements="(.*)", strict=true, description="Username of the person generating the parameters.")
      *    (name="year", nullable=true, requirements="([0-9])+", strict=true, description="Year of the process execution(format: DD-MM-YYYY)")
      *    (name="month", nullable=true, requirements="([0-9])+", strict=true, description="Month of the process execution(format: DD-MM-YYYY)")
      *    (name="period", nullable=true, requirements="([0-9])+", strict=true, description="Period of the process execution(format: DD-MM-YYYY)")
@@ -2091,8 +2090,6 @@ class PayrollRestController extends FOSRestController
         // Set all the parameters info.
         $regex['employee_id'] = '([0-9])+';
         $mandatory['employee_id'] = true;
-        $regex['username'] = '(.*)';
-        $mandatory['username'] = false;
         $regex['year'] = '([0-9])+';
         $mandatory['year'] = false;
         $regex['month'] = '([0-9])+';
@@ -2114,7 +2111,8 @@ class PayrollRestController extends FOSRestController
         $info = $this->getFinalLiquidationParametersAction($parameters['employee_id'])->getData();
 
         $unico['TIPOCON'] = 1;
-        $unico['USERNAME'] = isset($parameters['username']) ? $parameters['username'] : $info['USERNAME'];
+        $unico['USERNAME'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] =  $parameters['employee_id'];
         $unico['PDEF_ANO'] = isset($parameters['year']) ? $parameters['year'] : $info['PDEF_ANO'];
         $unico['PDEF_MES'] = isset($parameters['month']) ? $parameters['month'] : $info['PDEF_MES'];
         $unico['PDEF_PERIODO'] = isset($parameters['period']) ? $parameters['period'] : $info['PDEF_PERIODO'];
@@ -2215,6 +2213,13 @@ class PayrollRestController extends FOSRestController
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
+        // We first execute the pending days.
+        $request2 =  new Request();
+        $request2->request->set("employee_id", $parameters['employee_id']);
+        $request2->request->set("execution_type", "P");
+
+        $this->postExecutePendingVacationDaysAction($request2);
+
         $content = array();
         $unico = array();
 
@@ -2231,6 +2236,133 @@ class PayrollRestController extends FOSRestController
         $parameters = array();
         $parameters['inInexCod'] = '625';
         $parameters['clXMLSolic'] = $this->createXml($content, 625);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Adds Pending vacation for employees with history.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds Pending vacation for employees with history.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="pending_days", nullable=false, requirements="([0-9])+(\.[0-9]+)?", strict=true, description="Number of pending vacation days, it can have decimals.")
+     *
+     * @return View
+     */
+    public function postAddPendingVacationDaysAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['pending_days'] = '([0-9])+(\.[0-9]+)?';
+        $mandatory['pending_days'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        // $unico['TIPOCON'] = 0; // Doesn't use this, not sure why.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['DIAS_PENDIENTES'] = $parameters['pending_days'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '655';
+        $parameters['clXMLSolic'] = $this->createXml($content, 655);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Adds cumulative salary, for average calculations, this web service has
+     * to be called once for each month of service in the last year.
+     * It can have the same value always.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds cumulative salary, for average calculations, this web service has
+     *                  to be called once for each month of service in the last year.
+     *                  It can have the same value always.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="units", nullable=false, requirements="([0-9])+", strict=true, description="Number of days worked, it is 30 for full time, or any other number for part time.")
+     *    (name="value", nullable=false, requirements="([0-9])+(\.[0-9]+)?", strict=true, description="Total amount payed to the employee in the month.")
+     *    (name="year", nullable=false, requirements="([0-9])+", strict=true, description="Year when the salary was payed.")
+     *    (name="month", nullable=false, requirements="([0-9])+", strict=true, description="Month when the salary was payed.")
+     *    (name="period", nullable=false, requirements="([0-9])+", strict=true, description="Period when the slary was payed.(2 or 4).")
+     *
+     * @return View
+     */
+    public function postAddCumulativesAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['units'] = '([0-9])+';
+        $mandatory['units'] = true;
+        $regex['value'] = '([0-9])+(\.[0-9]+)?';
+        $mandatory['value'] = true;
+        $regex['year'] = '([0-9])+';
+        $mandatory['year'] = true;
+        $regex['month'] = '([0-9])+';
+        $mandatory['month'] = true;
+        $regex['period'] = '([0-9])+';
+        $mandatory['period'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+        // $unico['TIPOCON'] = 0; // Doesn't use this, not sure why.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['CON_CODIGO'] = 1; // 1 because it is salary.
+        $unico['ACUM_UNIDADES'] = $parameters['units'];
+        $unico['ACUM_VALOR'] = $parameters['value'];
+        $unico['ACUM_ANO'] = $parameters['year'];
+        $unico['ACUM_MES'] = $parameters['month'];
+        $unico['ACUM_PERIODO'] = $parameters['period'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '656';
+        $parameters['clXMLSolic'] = $this->createXml($content, 656);
 
         /** @var View $res */
         $responseView = $this->callApi($parameters);
@@ -2636,6 +2768,62 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Executes the vacation pending days.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Executes the vacation pending days.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="execution_type", nullable=false, requirements="(P|D|C)", strict=true, description="P for process, D for unprocess and C for close")
+     *
+     * @return View
+     */
+    public function postExecutePendingVacationDaysAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['execution_type'] = '(P|D|C)';
+        $mandatory['execution_type'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['COD_PROC'] = 201; // pending days is always 201.
+        $unico['USUARIO'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['TIP_EJEC'] = $parameters['execution_type'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '611';
+        $parameters['clXMLSolic'] = $this->createXml($content, 611);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+
+    /**
      * Process to liquidate the payroll at the end of the month
      *
      * @ApiDoc(
@@ -2651,40 +2839,188 @@ class PayrollRestController extends FOSRestController
      *
      * @return View
      */
-    public function getAutoLiquidatePayrollAction()
+    public function putAutoLiquidatePayrollAction()
     {
+        $em = $this->getDoctrine()->getManager();
+
         $view = View::create();
         $format = array('_format' => 'json');
 
         $payrollEntity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
         $month = date("m");
-        $payrolls = $payrollEntity->findBy(array("month" => $month));
+        $day = date("d");
+
+        if ($day == 25) {
+            $params = array(
+                "month" => $month
+            );
+        } else  if ($day == 12) {
+            $period = 2;
+            $params = array(
+                "month" => $month,
+                "period" => $period
+            );
+        } else {
+            $view->setStatusCode(200);
+
+            $view->setData("No es dia para cerrar nominas automaticamente");
+            return $view;
+        }
+        $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
         foreach($payrolls as $payroll) {
-            $pod = $payroll->getPurchaseOrdersDescription();
+            $pods = $payroll->getPurchaseOrdersDescription();
 
-            if (count($pod) == 0) {
-                $idEhE = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee();
+            $podPN = false;
+            if (count($pods) > 0) {
+                foreach ($pods as $pod) {
+                    if ($pod->getProductProduct()->getSimpleName() == "PN") {
+                        $podPN = true;
+                        break;
+                    }
+                }
+            }
+
+            if (count($pods) == 0 || !$podPN) {
+                $empHasEmp = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee();
+                $idEhE = $empHasEmp->getIdEmployerHasEmployee();
 //                 Crear orden de compra
 //                 Liquidacion en SQL
 //                 $period = 4;
 //                 $response = $this->getGeneralPayrollAction($idEhE, $period);
-                $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
-                        'employeeId' => $idEhE
-                    ),
-                    $format
-                );
+//                 $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+//                         'employeeId' => $idEhE
+//                     ),
+//                     $format
+//                 );
 
-                $result = json_decode($response->getContent(), true);
-                $total[] = $this->totalLiquidation($result);
-                // Generar notificacion
-                // Enviar correo
+//                 $result = json_decode($response->getContent(), true);
+//                 $total[] = $this->totalLiquidation($result);
+
+//                 $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
+//                 $infoPayroll = $this->getInfoPayroll($employer, array($payroll->getIdPayroll()));
+//                 $total[] = $infoPayroll;
+
+                $dataNomina = $this->getInfoNominaSQL($empHasEmp);
+                $salary = $this->getSalary($dataNomina);
+                $aportes = $this->getTotalAportes($dataNomina);
+                $pila = $this->getTotalPILA($empHasEmp);
+
+//                 $data[] = array("salary" => $salary, "aportes" => $aportes, "pila" => $pila);
+
+//                 CERRAR nomina en sql
+                $req = new Request();
+                $req->request->set("employee_id", $idEhE);
+                $req->request->set("execution_type", "C");
+
+                $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+                if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+//                     $data = $response->getContent();
+//                     $view->setData("2 - " . $idEhE . " - " . $req->request->get("execution_type") . " -- " . $data);
+//                     $view->setStatusCode(410);
+//                     return $view;
+
+                    $not = new Notification();
+                    $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                    $not->setType("alert");
+                    $not->setTitle("La nómina del mes " . $month . " no se pudo cerrar");
+                    $not->setStatus(1);
+                    $not->setAccion("liquidar nómina y pago a empleados");
+                    $not->setRelatedLink("/payroll");
+                    $not->setDescription("No fue posible cerrar la nómina");
+
+                    $em->persist($not);
+                    $em->flush();
+
+                    $total[] = array("EmployerHasEmployee " . $idEhE => "error en sql");
+                    continue;
+                }
+
+                $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+                $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
+
+//                 CREAR orden de compra
+                $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+                $idUser = $userRepo->findOneBy(array("personPerson" => $empHasEmp->getEmployerEmployer()->getPersonPerson()));
+                $purchaseOrder = new PurchaseOrders();
+                $now = new \DateTime();
+                $purchaseOrder->setDateCreated($now);
+                $purchaseOrder->setIdUser($idUser);
+                $purchaseOrder->setName("Cierre nómina mes " . $month);
+                $purchaseOrder->setPurchaseOrdersStatus($pos);
+
+                $em->persist($purchaseOrder);
+                $em->flush();
+
+//                 CREAR Descripciones de ordenes de compra
+                $pod = new PurchaseOrdersDescription();
+                $pod->setDescription("Pago de nómina mes " . $month);
+                $pod->setPayrollPayroll($payroll);
+                $pod->setPurchaseOrders($purchaseOrder);
+                $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                $product = $prodRepo->findOneBy(array("simpleName" => "PN"));
+                $pod->setProductProduct($product);
+                $pod->setValue($salary);
+                $pod->setPurchaseOrdersStatus($pos);
+
+                $em->persist($pod);
+                $em->flush();
+
+                $pod = new PurchaseOrdersDescription();
+                $pod->setDescription("Pago de PILA mes " . $month);
+                $pod->setPayrollPayroll($payroll);
+                $pod->setPurchaseOrders($purchaseOrder);
+                $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                $product = $prodRepo->findOneBy(array("simpleName" => "PP"));
+                $pod->setProductProduct($product);
+                $pod->setValue($aportes["total"] + $pila["total"]);
+                $pod->setPurchaseOrdersStatus($pos);
+
+                $em->persist($pod);
+                $em->flush();
+
+//                 CREAR notificaciones
+                $not = new Notification();
+                $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                $not->setType("alert");
+                $not->setTitle("La nómina del mes " . $month . " fue cerrada exitosamente");
+                $not->setStatus(1);
+                $not->setAccion("pagar");
+                $not->setDescription("Pagar la aportes de seguridad social, PILA por valor de " . ($aportes["total"] + $pila["total"]));
+
+                $em->persist($not);
+                $em->flush();
+
+                $not = new Notification();
+                $not->setPersonPerson($empHasEmp->getEmployerEmployer()->getPersonPerson());
+                $not->setType("alert");
+                $not->setTitle("La nómina del mes " . $month . " fue cerrada exitosamente");
+                $not->setStatus(1);
+                $not->setAccion("pagar");
+                $not->setDescription("Pagar la nómina del mes " . $month . " por valor de " . $salary);
+
+                $em->persist($not);
+                $em->flush();
+
+
+//                 ABRIR nueva nómina
+
+
+//                 CREAR EN JIRA LO QUE FALTA
+
+                $total[] = array("EmployerHasEmployee " . $idEhE => "proceso terminado");
+
             }
         }
 
+        if (!isset($total)) {
+            $total = "no hay nominas pendientes por cerrar";
+        }
+
 //         $result .= count($pod);
+//         $total = $data;
 
         $view->setStatusCode(200);
 

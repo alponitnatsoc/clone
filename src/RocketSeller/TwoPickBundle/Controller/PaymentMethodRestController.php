@@ -6,6 +6,7 @@ use DateTime;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\AccountType;
 use RocketSeller\TwoPickBundle\Entity\Bank;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Product;
@@ -44,7 +45,7 @@ class PaymentMethodRestController extends FOSRestController
      * @RequestParam(name="accountNumber", nullable=false,  requirements="\d+", strict=true, description="Account Number")
      * @RequestParam(name="bankId", nullable=false,  requirements="\d+", strict=true, description="the bank id")
      * @RequestParam(name="accountTypeId", nullable=false, strict=true, description="Account type ID")
-     * @RequestParam(name="userId", nullable=false,  requirements="\d+", strict=true, description="Account type ID")
+     * @RequestParam(name="userId", nullable=false  , strict=true, description="Account type ID")
      */
     public function postAddDebitAccountAction(ParamFetcher $paramFetcher)
     {
@@ -52,6 +53,12 @@ class PaymentMethodRestController extends FOSRestController
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         //TODO buscar en la bd los codigos de hightec
         $person = $user->getPersonPerson();
+        $bankRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank");
+        $accountTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType");
+        /** @var Bank $realBank */
+        $realBank=$bankRepo->find($paramFetcher->get("bankId"));
+        /** @var AccountType $realAccountType */
+        $realAccountType=$accountTypeRepo->find($paramFetcher->get("accountTypeId"));
 
         $employer=$person->getEmployer();
         $view = View::create();
@@ -59,8 +66,8 @@ class PaymentMethodRestController extends FOSRestController
         $request->setMethod("POST");
         $request->request->add(array(
             "accountNumber" => $employer->getIdHighTech(),
-            "bankCode" => $paramFetcher->get("bankId"),
-            "accountType" => $paramFetcher->get("accountTypeId"),
+            "bankCode" => $realBank->getHightechCode(),
+            "accountType" => $realAccountType->getName()=='Ahorros'?"AH":"CC",
             "bankAccountNumber" => $paramFetcher->get("accountNumber"),
             "expirationDate" => date('Y-m-d', strtotime('+1 years')),
             "authorizationDocumentName" => $person->getFullName().".txt",
@@ -208,7 +215,7 @@ class PaymentMethodRestController extends FOSRestController
                 $realPayMethods[]=array(
                   'payment-type'=>$value["payment-type"]==3?"VISA":"MasterC",
                   'account'=>$value["account"],
-                  'method-id'=>$value["method-id"],
+                  'method-id'=>'0-'.$value["method-id"],
                   'bank'=>'',
                   'id-provider'=>'0',
                 );
@@ -221,7 +228,7 @@ class PaymentMethodRestController extends FOSRestController
                 $realPayMethods[]=array(
                   'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
                   'account'=>$value["numeroCuenta"],
-                  'method-id'=>$value["idCuenta"],
+                  'method-id'=>'1-'.$value["idCuenta"],
                   'bank'=>$bank->getName(),
                   'id-provider'=>'1',
                 );
@@ -343,6 +350,13 @@ class PaymentMethodRestController extends FOSRestController
         $user = $purchaseOrder->getIdUser();
         $person = $user->getPersonPerson();
         $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
+        $pmid=$purchaseOrder->getPayMethodId();
+        $pmArray=explode('-',$pmid);
+        $purchaseOrder->setPayMethodId($pmArray[1]);
+        $purchaseOrder->setProviderId($pmArray[0]);
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($purchaseOrder);
+        $em->flush();
         $extractAnswer=$this->extractMoney($purchaseOrder,$person);
         if($extractAnswer['code']!=200){
             return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
@@ -513,7 +527,6 @@ class PaymentMethodRestController extends FOSRestController
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postClientGscPayment';
 
         }
-
         $insertionAnswer = $this->forward($methodToCall, array('_format' => 'json'));
 
         if($purchaseOrder->getProviderId()==0) {

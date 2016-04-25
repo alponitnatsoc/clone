@@ -24,7 +24,11 @@ class LiquidationType extends AbstractType
                 'constraints' => array(
                     new NotBlank()
                 ),
-                'label' => 'Último día de trabajo de tu empleado'
+                'label' => 'Último día de trabajo de tu empleado',
+//                 'placeholder' => array(
+//                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Día'
+//                 ),
+                'format' => 'dd MMMM yyyy',
             ))
             ->add('cost')
             ->add('idPurchaseOrder', 'entity', array(
@@ -52,8 +56,12 @@ class LiquidationType extends AbstractType
             ->add('liquidationReason', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:LiquidationReason',
                 'property' => 'name',
+                'choice_value' => 'payrollCode',
                 'multiple' => false,
-                'expanded' => true
+                'expanded' => true,
+                'attr' => array(
+                    'class' => 'col-sm-8 col-sm-offset-2'
+                )
             ))
             ->add('employerHasEmployee', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:EmployerHasEmployee',

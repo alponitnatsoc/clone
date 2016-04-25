@@ -37,6 +37,18 @@ class RegistrationController extends BaseController
 
     public function registerAction(Request $request)
     {
+        //Redirecting if the user is already logged
+        $authChecker = $this->container->get('security.authorization_checker');
+        $router = $this->container->get('router');
+
+        if ($authChecker->isGranted('ROLE_ADMIN')) {
+            return new RedirectResponse($router->generate('sonata_admin_dashboard'), 307);
+        }
+
+        if ($authChecker->isGranted('ROLE_USER')) {
+            return new RedirectResponse($router->generate('show_dashboard'), 307);
+        }
+
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */

@@ -251,12 +251,24 @@ class LiquidationRestController extends FOSRestController
         }
 
         $format = array('_format' => 'json');
+
+        /**
+         * Verificar si ya se han enviado parametros para la liquidacion final
+         */
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getFinalLiquidationParameters", array("employeeId" => $employee_id), $format);
+        //         var_dump("getFinalLiquidationParameters " . $response->getContent());
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201 && $response->getStatusCode() != 404){
+            $data = $response->getContent();
+            $view->setData("0 - " . $employee_id . " - " . $response->getStatusCode());
+            $view->setStatusCode(410);
+            return $view;
+        }
+
         /**
          * Enviar a SQL los parametros para calcular la liquidacion
          */
         $req = new Request();
         $req->request->set("employee_id", $employee_id);
-        $req->request->set("username", $username);
         $req->request->set("year", $year);
         $req->request->set("month", $month);
         $req->request->set("period", $period);
@@ -264,28 +276,41 @@ class LiquidationRestController extends FOSRestController
         $req->request->set("processDate", $processDate);
         $req->request->set("retirementCause", $retirementCause);
 
-        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postAddFinalLiquidationParameters", array("request" => $req), $format);
-        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-            $data = $response->getContent();
-            $view->setData("1 - " . $employee_id . " - " . $response->getStatusCode());
-            $view->setStatusCode(410);
-            return $view;
+        if ($response->getStatusCode() == 404) {
+            $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postAddFinalLiquidationParameters", array("request" => $req), $format);
+            if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+                $data = $response->getContent();
+                $view->setData("1.a - " . $employee_id . " - " . $response->getStatusCode());
+                $view->setStatusCode(410);
+                return $view;
+            }
+        } else {
+            /**
+             * Actualizar los parametros para calcular la liquidacion
+             */
+            $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postModifyFinalLiquidationParameters", array("request" => $req), $format);
+            if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+                $data = $response->getContent();
+                $view->setData("1.m - " . $employee_id . " - " . $response->getStatusCode());
+                $view->setStatusCode(410);
+                return $view;
+            }
         }
 
         /**
          * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
          */
-        $req = new Request();
-        $req->request->set("employee_id", $employee_id);
-        $req->request->set("execution_type", "P");
+//         $req = new Request();
+//         $req->request->set("employee_id", $employee_id);
+//         $req->request->set("execution_type", "P");
 
-        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
-        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-            $data = $response->getContent();
-            $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
-            $view->setStatusCode(410);
-            return $view;
-        }
+//         $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+//         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+//             $data = $response->getContent();
+//             $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
+//             $view->setStatusCode(410);
+//             return $view;
+//         }
 
         /**
          * Obtener datos de la preliquidacion antes de consolidarla
@@ -372,12 +397,21 @@ class LiquidationRestController extends FOSRestController
         }
 
         $format = array('_format' => 'json');
+
         /**
-         * Enviar a SQL los parametros para calcular la liquidacion
+         * Verificar si ya se han enviado parametros para la liquidacion final
          */
+        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:getFinalLiquidationParameters", array("employeeId" => $employee_id), $format);
+//         var_dump("getFinalLiquidationParameters " . $response->getContent());
+        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+            $data = $response->getContent();
+            $view->setData("0 - " . $employee_id . " - " . $response->getStatusCode());
+            $view->setStatusCode(410);
+            return $view;
+        }
+
         $req = new Request();
         $req->request->set("employee_id", $employee_id);
-        $req->request->set("username", $username);
         $req->request->set("year", $year);
         $req->request->set("month", $month);
         $req->request->set("period", $period);
@@ -385,28 +419,54 @@ class LiquidationRestController extends FOSRestController
         $req->request->set("processDate", $processDate);
         $req->request->set("retirementCause", $retirementCause);
 
-        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postAddFinalLiquidationParameters", array("request" => $req), $format);
-        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-            $data = $response->getContent();
-            $view->setData("1 - " . $employee_id . " - " . $response->getStatusCode());
-            $view->setStatusCode(410);
-            return $view;
+        if ($response->getContent() == null) {
+            /**
+             * Enviar a SQL los parametros para calcular la liquidacion
+             */
+            $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postAddFinalLiquidationParameters", array("request" => $req), $format);
+            if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+                $data = $response->getContent();
+                $view->setData("1.a - " . $employee_id . " - " . $response->getStatusCode());
+                $view->setStatusCode(410);
+                return $view;
+            }
+        } else {
+            /**
+             * Actualizar los parametros para calcular la liquidacion
+             */
+            $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postModifyFinalLiquidationParameters", array("request" => $req), $format);
+            if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+                $data = $response->getContent();
+                $view->setData("1.m - " . $employee_id . " - " . $response->getStatusCode());
+                $view->setStatusCode(410);
+                return $view;
+            }
         }
 
         /**
          * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
          */
-        $req = new Request();
-        $req->request->set("employee_id", $employee_id);
-        $req->request->set("execution_type", "P");
+//         $req = new Request();
+//         $req->request->set("employee_id", $employee_id);
+//         $req->request->set("execution_type", "P");
 
-        $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
-        if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
-            $data = $response->getContent();
-            $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
-            $view->setStatusCode(410);
-            return $view;
-        }
+//         $response = $this->forward("RocketSellerTwoPickBundle:PayrollRest:postExecuteFinalLiquidation", array("request" => $req), $format);
+//         if($response->getStatusCode() != 200 && $response->getStatusCode() != 201){
+//             $data = $response->getContent();
+//             $view->setData("2 - " . $employee_id . " - " . $req->request->get("execution_type") . " -- " . $data);
+//             $view->setStatusCode(410);
+//             return $view;
+//         }
+
+        /**
+         * Obtener datos de la preliquidacion antes de consolidarla
+         */
+        $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+                'employeeId' => $employee_id,
+                'period' => $period
+            ),
+            $format
+        );
 //         Desprocesar
 
         $data = array(
@@ -458,7 +518,7 @@ class LiquidationRestController extends FOSRestController
         $format = array('_format' => 'json');
 
         /**
-         * Solicitar que se procese la liquidacion, antes de ser consolidada, preliquidacion
+         * Solicitar que se procese la liquidacion y se consolida
          */
         $req = new Request();
         $req->request->set("employee_id", $employee_id);
@@ -471,6 +531,16 @@ class LiquidationRestController extends FOSRestController
             $view->setStatusCode(410);
             return $view;
         }
+
+//         /**
+//          * Consultar la liquidacion
+//          */
+//         $response = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+//                 'employeeId' => $employee_id,
+//                 'period' => $period
+//             ),
+//             $format
+//         );
 
         $data = array(
             "data" => $response->getContent()

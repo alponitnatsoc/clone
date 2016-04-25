@@ -586,6 +586,7 @@ function checkExistance(){
             documentType: documentType.val(),
             document: document.val(),
             lastName1: lastName1.val(),
+            personType: '1'
         }
     }).done(function (data) {
 

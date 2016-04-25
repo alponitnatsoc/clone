@@ -2,6 +2,8 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use RocketSeller\TwoPickBundle\Entity\City;
+use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -261,7 +263,7 @@ class PersonRestController extends FOSRestController
         $employer->addWorkplace($tempWorkplace);
         $em->persist($employer);
         $em->flush();
-        return $view->setStatusCode(200)->setData(array("idWorkplace"=>$tempWorkplace->getIdWorkplace()));
+        return $view->setStatusCode(200)->setData(array("idWorkplace" => $tempWorkplace->getIdWorkplace()));
 
     }
 
@@ -455,6 +457,7 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="lastName1", nullable=false,   strict=true, description="lastName1.")
      * @RequestParam(name="documentType", nullable=false, strict=true, description="documentType.")
      * @RequestParam(name="document", nullable=false, strict=true, description="document.")
+     * @RequestParam(name="personType", nullable=false, strict=true, description="Employer 1 or employee 2.")
      * @return View
      */
     public function postInquiryDocumentAction(ParamFetcher $paramFetcher)
@@ -516,7 +519,50 @@ class PersonRestController extends FOSRestController
             ))->setStatusCode(200);
             return $view;
         } else {
-            $view->setStatusCode(404)->setHeader("error", "The person does not exist");
+            //consume DataCredito
+            $request = $this->container->get('request');
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientLocationService',
+                array(
+                    'documentNumber' => $document,
+                    'identificationType' => $documentType,
+                    'surname' => $paramFetcher->get("lastName1")
+                ), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                $view->setStatusCode(404)->setHeader("error", "The person does not exist in data Credit");
+                return $view;
+            }
+            $answer = json_decode($insertionAnswer->getContent(), true);
+
+            $view->setData(array(
+                'names' => isset($answer['nombres']) ? $answer['nombres'] : "",
+                'lastName2' => isset($answer['segundoApellido']) ? $answer['segundoApellido'] : "",
+                'civilStatus' => "",
+                'gender' => $answer['genero']=='F' ? "FEM" : "MAS",
+                'documentExpeditionDate' => isset($answer['fechaExpedicionAno']) ? array(
+                    'year' => $answer['fechaExpedicionAno'],
+                    'month' => $answer['fechaExpedicionMes'],
+                    'day' => intval($answer['fechaExpedicionDia'])) : array(
+                    'year' => "",
+                    'month' => "",
+                    'day' => "",
+                ),
+                'birthDate' => array(
+                    'year' => "",
+                    'month' => "",
+                    'day' => "",
+                ),
+                'documentExpeditionPlace' => isset($answer['ciudadExpedicion']) ? $answer['ciudadExpedicion'] : "",
+                'birthCountry' => "",
+                'birthDepartment' => "",
+                'birthCity' => "",
+                'mainAddress' => isset($answer['direccion']) ? $answer['direccion'] : "",
+                'department' =>"",
+                'city' => "",
+                'email' => isset($answer['mail']) ? $answer['mail'] : "",
+                'phones' => isset($answer['telefono']) ? $answer['telefono'] : "",
+                'idEmployee' => "-1"
+            ))->setStatusCode(200);
             return $view;
         }
     }

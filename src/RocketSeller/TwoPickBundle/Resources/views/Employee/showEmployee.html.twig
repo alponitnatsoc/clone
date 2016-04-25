@@ -178,7 +178,7 @@
                     
                 </div>
                 <div class="col-sm-4 col-sm-offset-5">
-                    <span class="edit-employee-save btn btn-orange notAjax" href="">Guardar</span>
+                    <span class="edit-employee-save btn btn-orange notAjax" href="/api/public/v1/edits/employees">Guardar</span>
                     {{form_end(form2)}}
                 </div>
                 
@@ -584,18 +584,11 @@
 {% endblock fos_user_content %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('/public/js/manageEmployees.js') }}"></script>
-    <script src="{{ asset('/public/js/newBeneficiary.js') }}"></script>
-    <script>
-    $(document).ready(function(){
-        manageEmployees();
-        addBeneficiary(); 
-        editEmployee();      
-    });
-
-    </script>
+        <script src="{{ asset('public/js/manageEmployees.js') }}"></script>
         <script type="text/javascript">
         $(document).ready(function () {
+            manageEmployee();
+            editEmployee();
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
                 validator = $("form[name='register_beneficiary']").validate({

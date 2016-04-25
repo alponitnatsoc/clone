@@ -38,9 +38,9 @@ trait LiquidationMethodsTrait
             }
         }
         return array(
-            "total" => floor($total),
-            "totalDed" => floor($totalDed),
-            "totalDev" => floor($totalDev)
+            "total" => ceil($total),
+            "totalDed" => ceil($totalDed),
+            "totalDev" => ceil($totalDev)
         );
     }
 

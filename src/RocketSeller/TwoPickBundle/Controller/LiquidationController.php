@@ -257,6 +257,14 @@ class LiquidationController extends Controller
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
 
+        $nowDate = new \DateTime();
+        $diff = $nowDate->diff($contract[0]->getTestPeriod());
+
+        $isTestPeriod = true;
+        if ($diff->invert > 0) {
+            $isTestPeriod = false;
+        }
+
         $frec = $contract[0]->getFrequencyFrequency();
         $frequency = null;
         if ($frec){
@@ -273,7 +281,8 @@ class LiquidationController extends Controller
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
             'startDate' => $startDate,
             'idEmperHasEmpee' => $employerHasEmployee->getIdEmployerHasEmployee(),
-            'frequency' => $frequency
+            'frequency' => $frequency,
+            'testPeriod' => $isTestPeriod
         );
 
         $form = $this->createForm(new LiquidationType());
@@ -433,6 +442,11 @@ class LiquidationController extends Controller
         /** @var \RocketSeller\TwoPickBundle\Entity\Contract $contract */
         $contract = $this->getActiveContract($id);
         $startDate = $contract[0]->getStartDate();
+        $endDate = $contract[0]->getEndDate();
+        $endDay = null;
+        if ($endDate) {
+            $endDay = strftime("%d de %B de %Y", $endDate->getTimestamp());
+        }
 
         $contractInfo = array(
             'contractType' => $contract[0]->getContractTypeContractType()->getName(),
@@ -441,6 +455,8 @@ class LiquidationController extends Controller
             'vacationDays' => "",
             'startDay' => strftime("%d de %B de %Y", $startDate->getTimestamp()),
             'startDate' => $startDate,
+            'endDay' => $endDay,
+            'endDate' => $endDate,
             'id' => $contract[0]->getIdContract()
         );
 
@@ -489,10 +505,26 @@ class LiquidationController extends Controller
         $em->persist($liquidation);
         $em->flush();
 
-        $documentNumber = $employerInfo["document"];
-        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+        $lastWorkDay = $liquidation->getLastWorkDay();
 
-        $responcePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+//         $documentNumber = $employerInfo["document"];
+//         $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
+//         $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
+        $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
+        $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
+        $paymentMethodsType = array();
+
+        if (isset($responsePaymentsMethods["payment-methods"]) && is_array($responsePaymentsMethods["payment-methods"])) {
+            foreach ($responsePaymentsMethods["payment-methods"] as $pmt) {
+                if (isset($pmt['bank']) && $pmt['bank'] != null) {
+                    $paymentMethodsType['bankAccounts'][] = $pmt;
+                } else {
+                    $paymentMethodsType['creditCards'][] = $pmt;
+                }
+            }
+        }
 
         $html = $this->render("RocketSellerTwoPickBundle:Liquidation:detail-liquidation.html.twig", array(
             'data' => $data,
@@ -506,8 +538,10 @@ class LiquidationController extends Controller
             'totalDeducciones' => $totalLiq["totalDed"],
             'totalDevengos' => $totalLiq["totalDev"],
             'employer' => $employerInfo,
-            'paymentMethods' => isset($responcePaymentsMethods["payment-methods"]) ? $responcePaymentsMethods["payment-methods"] : false,
-            'id_liq' => $id_liq
+//             'paymentMethods' => isset($responsePaymentsMethods["payment-methods"]) ? $responsePaymentsMethods["payment-methods"] : false,
+            'paymentMethods' => $paymentMethodsType,
+            'id_liq' => $id_liq,
+            'lastWorkDay' => $lastWorkDay
         ));
 
         return $html;
@@ -578,6 +612,7 @@ class LiquidationController extends Controller
 
         $totalLiq = $this->totalLiquidation($data);
 
+        $tmp = $devengos = $deducciones = null;
         foreach ($data as $key => $liq) {
             $payroll_code = $liq["CON_CODIGO"];
             /** @var NoveltyType $noveltyType */

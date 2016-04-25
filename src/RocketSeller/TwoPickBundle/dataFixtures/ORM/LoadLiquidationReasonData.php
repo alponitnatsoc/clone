@@ -60,11 +60,11 @@ class LiquidationReasonData extends AbstractFixture implements OrderedFixtureInt
 //         $vencimientoContrato->setPayrollCode('8');
 //         $manager->persist($vencimientoContrato);
 
-//         $periodoPrueba = new LiquidationReason();
-//         $periodoPrueba->setName('Periodo de prueba');
-//         $periodoPrueba->setDescription('Periodo de prueba');
-//         $periodoPrueba->setPayrollCode('9');
-//         $manager->persist($periodoPrueba);
+        $periodoPrueba = new LiquidationReason();
+        $periodoPrueba->setName('Despido en periodo de prueba');
+        $periodoPrueba->setDescription('Despido durante el periodo de prueba');
+        $periodoPrueba->setPayrollCode('9');
+        $manager->persist($periodoPrueba);
 
         $LiquidationReasonAcuerdo = new LiquidationReason();
         $LiquidationReasonAcuerdo->setName('Mutuo acuerdo');

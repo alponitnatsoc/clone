@@ -105,6 +105,11 @@ class Contract
     private $salary;
 
     /**
+     * @ORM\Column(type="smallint",  nullable=TRUE)
+     */
+    private $holidayDebt;
+
+    /**
      * @ORM\OneToMany(targetEntity="WeekWorkableDays", mappedBy="contractContract", cascade={"persist"})
      */
     private $weekWorkableDays;
@@ -169,6 +174,11 @@ class Contract
      * @ORM\Column(type="date", nullable=TRUE)
      */
     private $endDate;
+
+    /**
+     * @ORM\Column(type="date", nullable=TRUE)
+     */
+    private $testPeriod;
 
     /**
      * @ORM\Column(type="time", nullable=TRUE)
@@ -826,5 +836,53 @@ class Contract
     public function getTransportAid()
     {
         return $this->transportAid;
+    }
+
+    /**
+     * Set testPeriod
+     *
+     * @param \DateTime $testPeriod
+     *
+     * @return Contract
+     */
+    public function setTestPeriod($testPeriod)
+    {
+        $this->testPeriod = $testPeriod;
+
+        return $this;
+    }
+
+    /**
+     * Get testPeriod
+     *
+     * @return \DateTime
+     */
+    public function getTestPeriod()
+    {
+        return $this->testPeriod;
+    }
+
+    /**
+     * Set holidayDebt
+     *
+     * @param integer $holidayDebt
+     *
+     * @return Contract
+     */
+    public function setHolidayDebt($holidayDebt)
+    {
+        $this->holidayDebt = $holidayDebt;
+
+        return $this;
+    }
+
+    /**
+     * Get holidayDebt
+     *
+     * @return integer
+     */
+    public function getHolidayDebt()
+    {
+        return $this->holidayDebt;
     }
 }

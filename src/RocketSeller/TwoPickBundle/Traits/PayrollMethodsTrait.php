@@ -79,7 +79,8 @@ trait PayrollMethodsTrait
                             $employeesData[$payroll->getIdPayroll()]['payMethod'] = $contract->getPayMethodPayMethod();
 
                             $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
-
+                            dump('SQL');
+                            dump($detailNomina);
                             $employeesData[$payroll->getIdPayroll()]['detailNomina'] = $detailNomina;
 
                             $totalLiquidation = $this->totalLiquidation($detailNomina);
@@ -91,20 +92,20 @@ trait PayrollMethodsTrait
                             $totalAportes = $this->getTotalAportes($detailNomina);
                             $employeesData[$payroll->getIdPayroll()]['totalAportes'] = $totalAportes;
 
-                            //$pila = $this->getInfoPilaSQL($employerHasEmployee);
-                            //dump($pila);
-                            //die;
 
                             if ($payroll->getPeriod() == 4) {
-                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($salary);
+                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($employerHasEmployee);
                             } else {
-                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA(0);
+                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA(false);
                                 ;
                             }
                         }
                     }
                 }
             }
+        } else {
+            dump('employerHasEmployee inactivo');
+            dump($employerHasEmployee);
         }
         return $employeesData;
     }
@@ -165,14 +166,39 @@ trait PayrollMethodsTrait
         return false;
     }
 
-    private function getTotalPILA($salary)
+    private function getTotalPILA($employerHasEmployee)
     {
+        $total = $pension = $salud = $arl = $parafiscales = 0;
+        if ($employerHasEmployee) {
+            $pila = $this->getInfoPilaSQL($employerHasEmployee);
+            dump('PILA');
+            dump($pila);
+            if ($pila) {
+                foreach ($pila as $key => $value) {
+                    $total += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                    $total +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    if ($value['TENT_CODIGO'] == 'AFP') {
+                        $pension +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $pension +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    } elseif ($value['TENT_CODIGO'] == 'ARP') {
+                        $arl +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $arl +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    } elseif ($value['TENT_CODIGO'] == 'EPS' || $value['TENT_CODIGO'] == 'ARS') {
+                        $salud +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $salud +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    } elseif ($value['TENT_CODIGO'] == 'PARAFISCAL') {
+                        $parafiscales +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $parafiscales +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    }
+                }
+            }
+        }
         return array(
-            'total' => (int) ceil(($salary * 0.12) + ceil($salary * 0.085) + ceil($salary * 0.00348) + ceil($salary * 0.09)),
-            'pension' => (int) ceil($salary * 0.12),
-            'salud' => (int) ceil($salary * 0.085),
-            'arl' => (int) ceil($salary * 0.00348),
-            'parafiscales' => (int) ceil($salary * 0.09)
+            'total' => (int) ceil($total),
+            'pension' => (int) ceil($pension),
+            'salud' => (int) ceil($salud),
+            'arl' => (int) ceil($arl),
+            'parafiscales' => (int) ceil($parafiscales)
         );
     }
 
@@ -186,7 +212,7 @@ trait PayrollMethodsTrait
     {
         $employeeId = $employerHasEmployee->getIdEmployerHasEmployee();
 
-        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+        $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollMethodRest:getGeneralPayrolls', array(
             'employeeId' => $employeeId,
             'period' => null,
             'month' => null,

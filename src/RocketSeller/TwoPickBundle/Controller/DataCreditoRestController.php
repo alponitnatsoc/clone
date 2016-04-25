@@ -134,7 +134,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         $view = View::create();
         $errorCode = 200;
-        if (isset($array["respuesta"]) && $array["respuesta"] != 0 && $array["respuesta"] != 1)
+        if (isset($array["respuesta"]) && $array["respuesta"] != 13)
             $errorCode = 404;
 
         // Set status code of view with http codes.
@@ -232,6 +232,106 @@ public function fixArrayLocalizacion($array, &$new_array) {
        return $view;
   }
 
+    public function adaptLocationService($json) {
+      $array = json_decode($json, true);
+      $res = array();
+      // Nombres y apellidos.
+      if(isset($array['NaturalNacional'])) {
+        if(isset($array['NaturalNacional']['nombres'])) {
+          $res['nombres'] = $array['NaturalNacional']['nombres'];
+        } else {
+          $res['nombres'] = '';
+        }
+          isset($array['NaturalNacional']['primerApellido']) ?
+            $res['primerApellido'] = $array['NaturalNacional']['primerApellido'] : '';
+          isset($array['NaturalNacional']['segundoApellido']) ?
+            $res['segundoApellido'] = $array['NaturalNacional']['segundoApellido'] : '';
+
+          // Identificacion which is inside NaturalNacional.
+          if(isset($array['NaturalNacional']['Identificacion'])) {
+            $fecha = isset($array['NaturalNacional']['Identificacion']['fechaExpedicion']) ? $array['NaturalNacional']['Identificacion']['fechaExpedicion'] : '';
+            if($fecha != '') {
+              $fecha = explode('-', $fecha);
+              $res['fechaExpedicionAno'] = $fecha[0];
+              $res['fechaExpedicionMes'] = $fecha[1];
+              $res['fechaExpedicionDia'] = $fecha[2];
+            }
+
+            $res['ciudadExpedicion'] = isset($array['NaturalNacional']['Identificacion']['ciudad']) ? $array['NaturalNacional']['Identificacion']['ciudad'] : '';
+          } else {
+            $res['fechaExpedicion'] = '';
+            $res['ciudadExpedicion'] = '';
+          }
+
+          // Genero.
+          if(isset($array['NaturalNacional']['genero'])) {
+            $codGenero = $array['NaturalNacional']['genero'];
+            if($codGenero == 1 || $codGenero == 2 || $codGenero == 3) {
+              $res['genero'] = 'F';
+            } elseif($codGenero == '4') {
+              $res['genero'] = 'M';
+            } else {
+              $res['genero'] = '';
+            }
+          } else {
+            $res['genero'] = '';
+          }
+        } else {
+          // If we don't have NaturalNacional we set everything in null.
+          $res['primerNombre'] = '';
+          $res['segundoNombre'] = '';
+          $res['primerApellido'] = '';
+          $res['segundoApellido'] = '';
+          $res['fechaExpedicion'] = '';
+          $res['ciudadExpedicion'] = '';
+          $res['genero'] = '';
+       }
+
+       if(isset($array['Direccion'])) {
+         if(isset($array['Direccion'][1]))
+          $array_direccion = $array['Direccion'][1];
+         else
+          $array_direccion = $array['Direccion'];
+         $res['direccion'] = isset($array_direccion['direccion']) ? $array_direccion['direccion'] : '';
+         $res['ciudad'] = isset($array_direccion['nombreCiudad']) ? $array_direccion['nombreCiudad'] : '';
+         $res['departamento'] = isset($array_direccion['nombreDepartamento']) ? $array_direccion['nombreDepartamento'] : '';
+       } else {
+         $res['direccion'] = '';
+         $res['ciudad'] = '';
+         $res['departamento'] = '';
+       }
+
+
+
+       if(isset($array['Celular'])) {
+         if(isset($array['Celular'][1]))
+          $array_direccion = $array['Celular'][1];
+        else
+          $array_direccion = $array['Celular'];
+         $res['telefono'] = isset($array_direccion['celular']) ? $array_direccion['celular'] : '';
+       }
+       if(!isset($res['telefono']) || $res['telefono'] == null) {
+         if(isset($array['Telefono'])) {
+           $array_direccion = $array['Telefono'][1];
+           $res['telefono'] = isset($array_direccion['telefono']) ? $array_direccion['telefono'] : '';
+         }
+       }
+       if(!isset($res['telefono']))$res['telefono'] = '';
+
+
+       if(isset($array['Email'])) {
+         if(isset($array['Email'][1]))
+          $array_direccion = $array['Email'][1];
+         else
+          $array_direccion = $array['Email'];
+         $res['mail'] = isset($array_direccion['email']) ? $array_direccion['email'] : '';
+       } else {
+         $res['mail'] = '';
+       }
+       return $res;
+    }
+
+
     /**
      * Get the client information from the datacredito service.
      * Servicio reconocer<br/>
@@ -272,7 +372,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
           $identificationType == "CE" ) {
             $identificationType = 4;
         }
-
+        $surname = mb_strtoupper ($surname, 'utf-8');
         $parameters["tipoIdentificacion"] = $identificationType;
         $parameters["identificacion"] = $documentNumber;
         $parameters["primerApellido"] = $surname;
@@ -290,7 +390,17 @@ public function fixArrayLocalizacion($array, &$new_array) {
         /** @var View $responseView */
         $responseView = $this->callApi($parameters, "http://52.73.111.160:8080/localizacion2/services/ServicioLocalizacion2");
 
-        return $responseView;
+        $temp = $this->handleView($responseView);
+        //$data = json_decode($temp->getContent(), true);
+        $code = json_decode($temp->getStatusCode(), true);
+
+        $newinfo = $this->adaptLocationService($temp->getContent());
+
+        $view = View::create();
+        $view->setStatusCode($code);
+        $view->setData($newinfo);
+
+        return $view;
     }
 
     /**
@@ -314,10 +424,11 @@ public function fixArrayLocalizacion($array, &$new_array) {
      * @param String $identificationType The type of the document.
      * @param String $surname The last name of the client.
      * @param Int $names The first and middle name of the client.
+     * @param String $documentExpeditionDate format DD-MM-YYYY.
      *
      * @return View
      */
-    public function getClientIdentificationServiceExperianValidarAction($documentNumber,$identificationType, $surname, $names)
+    public function getClientIdentificationServiceExperianValidarAnswersAction($documentNumber,$identificationType, $surname, $names, $documentExpeditionDate)
     {
         $parameters = array();
         $regex = array();
@@ -341,6 +452,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
         $parameters["identificacion"] = $documentNumber;
         $parameters["primerApellido"] = $surname;
         $parameters["nombres"] = $names;
+        $parameters["documentExpeditionDate"] = $documentExpeditionDate;
 
         // Set all the parameters info.
         $regex['tipoIdentificacion'] = '(.)*';
@@ -351,14 +463,21 @@ public function fixArrayLocalizacion($array, &$new_array) {
         $mandatory['primerApellido'] = true;
         $regex['nombres'] = '(.)*';
         $mandatory['nombres'] = true;
+        $regex['documentExpeditionDate'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['nombres'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
+
+        // We adapt the date to the new format.
+        $newFormated = new DateTime($parameters["documentExpeditionDate"],  new \DateTimeZone('UTC'));
+        $parameters["documentExpeditionDate"]  = $newFormated->getTimestamp();
+        $parameters["documentExpeditionDate"] .= '000'; // Not sure why we need this, but this is the format in datacredito.
 
         // TODO(daniel.serrano): Change the timestamp to real value.
         $request = '<?xml version="1.0" encoding="UTF-8"?> <DatosValidacion>
                     <Identificacion numero="' . $parameters["identificacion"] .'" tipo="' . $parameters["tipoIdentificacion"] .
                     '" /> <PrimerApellido>' . $parameters["primerApellido"] . '</PrimerApellido> <Nombres>' . $parameters["nombres"] . '</Nombres>
-                    <FechaExpedicion timestamp="503017122714" />
+                    <FechaExpedicion timestamp="' . $parameters["documentExpeditionDate"] . '" />
                     </DatosValidacion>';
 
         /** @var View $responseView */
@@ -462,7 +581,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
      * (name="idQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner, it is returned in the questions method in the field: id.")
      * (name="regQuestions", nullable=false, requirements="[0-9]+", strict=true, description="Id of the questioner regitery, it is returned int he questions method in the field: registro.")
      * (name="answers", nullable=false, requirements="", strict=true, description="This is an array containing the answers to the questions it must be in the form:
-     *                                                                             ["id_question"=>"id_answer"].")
+     *                                                                             ["id_question"=>"id_answer"]. id_question is in the field order.")
      *
      * @return View
      */

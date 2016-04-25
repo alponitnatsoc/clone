@@ -1,240 +1,197 @@
 {% extends '::base.html.twig' %}
 {% block title %}Symplifica - Liquidación final del empleado{% endblock %}
 {% block fos_user_content %}
-{% block stylesheets %}
-    <style>
-        .glyphicon-th-large{
-            color:#00CDCC;
-        }
-        .glyphicon-th-large:hover{
-            color:#00CDCC;
-            cursor: pointer;
-        }
-        .glyphicon-th-list{
-            color:#00CDCC;
-        }
-        .employee_data_info{
-            padding: 5px 30px 5px 30px;
-            display: inline-block;
-            text-align: center;
-        }
-        .employee_head_liquidation{
-            width: 100%;
-            padding: 10px;
-            display: -webkit-inline-box;
-            border-bottom: solid #efefef;
-            border-top: solid #efefef;
-            border-width: 2px;
-        }
-        #liquidationStep2 {
-            width: 100%;
-        }
-        h5 {
-            width: 100%;
-            font-weight: bold;
-            font-size: 17px;
-        }
-        .employee_data_info {
-            border-right: 1px solid #E6E6E7;
-            min-height: 130px;
-        }
-        .employee_data_info:last-child {
-            border-right: none;
-        }
-        .contador_logo{
-            height: 50px;
-        }
-        a:hover{
-            text-decoration: none;
-        }
-        .liq-container {
-            width: 100%;
-            padding: 10px;
-        }
-        #btnAddNovelty {
-            width: 100%;
-            padding: 20px 0px;
-            background: 0;
-            border: 2px dashed #FD9224;
-            color: #FD9224;
-            font-size: 21px;
-        }
-    </style>
-{% endblock %}
-<div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
-    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
-        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-            <img src="/img/block-complete.png" class="center-block">
-        </div>
-        <div id="" class="col-md-10 col-xs-12 txt-AD1">
-            <div id="" class="text-left">
-                <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>
-            </div>
-        </div>
-    </div>
-</div>
+{# <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">#}
+{#     <div id="" class="col-sm-12 col-xs-12 blockStep inline">#}
+{#         <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">#}
+{#             <img src="/img/block-complete.png" class="center-block">#}
+{#         </div>#}
+{#         <div id="" class="col-md-10 col-xs-12 txt-AD1">#}
+{#             <div id="" class="text-left">#}
+{#                 <strong>Liquidación final</strong><br /><span style="font-weight: 200; font-size: 24px;">del empleado</span>#}
+{#             </div>#}
+{#         </div>#}
+{#     </div>#}
+{# </div>#}
+{% include 'RocketSellerTwoPickBundle:Liquidation:header-liquidation.html.twig' %}
+<style>
+.no-border {
+    border: 0 !important;
+}
+</style>
 <form action="{{ path('api_public_post_final_pre_liquidation_submit') }}" method="post" {{ form_enctype(form) }} name="rocketseller_twopickbundle_liquidation">
 {{ form_errors(form) }}
-    <div class="col-xs-12">
-        <div class="col-xs-12">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h4><strong>{{ employeeInfo.name }}</strong><br />{{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</h4>
+    <div class="col-sm-12">
+        {% include 'RocketSellerTwoPickBundle:Liquidation:header-info-liquidation.html.twig' %}
+        <div id="liquidationStep2" class="col-sm-12">
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-center">
+                    <h4>1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} <br />¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h4>
                 </div>
-            </div>
-        </div>
-        <div class="employee_head_liquidation">
-            <div class="col-sm-12 employee_data">
-                <div class="row">
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp text-left"><h5 class="text-left">Documento</h5><p>{{ employeeInfo.documentType }} {{ employeeInfo.document }}<br />{{ employeeInfo.docExpeditionPlace }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Tipo de contrato</h5><p>{{ contractInfo.contractType }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Duración contrato</h5><p>{{ contractInfo.contractPeriod }}</p></span>
-                    </div>
-                    <div class="col-sm-3 employee_data_info">
-                        <span class="txthelp"><h5>Salario</h5><p>${{ contractInfo.salary|number_format }}</p></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="liquidationStep2">
-            <div class="liq-container">
-                <div class="col-xs-12 text-center">
-                    <h4 style="font-weight: 200; text-align: center;">1. Estas son las novedades vigentes asociadas a {{ employeeInfo.name }} <br />¿Desea reportar alguna otra como vacaciones, auxilios, licencias, etc.?</h4>
-                </div>
-                <br />
-                <div class="middle-content" style="border: none;">
-                    <div class="col-sm-12" style="text-align:center; margin-top: 40px;">
-                            <div class="col-sm-3">
-                                <p><strong>Fecha inicio</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Fecha fin</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Estado</strong></p>
-                            </div>
-                            <div class="col-sm-3">
-                                <p><strong>Detalle</strong></p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12" style="text-align:center;">
-                    {% if novelties is not empty %}
-                        {% for novelty in novelties %}
-                            {% if novelty.name != "Llegada tarde" and novelty.name != "Abandono puesto de trabajo" %}
-                                <div class="col-sm-12 row-novelty" style="text-align:center;">
-                                               <div class=" element-table col-sm-3">
-                                                   {% if novelty.dateStart %}
-                                                       <p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
-                                                   {% else %}
-                                                       <p><strong>-</strong></p>
-                                                   {% endif %}
-
-                                               </div>
-                                               <div class="element-table col-sm-3">
-                                                   {% if novelty.dateEnd %}
-                                                       <p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
-                                                   {% else %}
-                                                       <p><strong>-</strong></p>
-                                                   {% endif %}
-                                               </div>
-                                               <div class="element-table col-sm-3">
-                                                   <p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
-                                               </div>
-
-                                               <div class="element-detail col-sm-3">
-                                                   <p><strong>ver detalle</strong></p>
-                                               </div>
-                                           </div>
-                            {% endif %}
-                        {% endfor %}
+                <div class="col-sm-12 text-center table-responsive" style="margin-top: 40px;">
+                    {% if novelties is not empty and llamadosAtencion is empty %}
+                        <table class="table record_properties table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="no-border">Fecha</th>
+                                    <th class="no-border">Novedad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for novelty in novelties %}
+                                {% if novelty.name not in ["Llegada tarde", "Abandono puesto de trabajo"] %}
+                                    <tr>
+                                        <td>
+                                            {% if novelty.dateStart %}
+                                                <i>{{ novelty.dateStart|date('d/m/Y') }}</i>
+                                            {% else %}
+                                                <i>-</i>
+                                            {% endif %}
+                                        </td><td>
+                                            <i>{{ novelty.noveltyTypeNoveltyType.name}}</i>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
-                        <li>No hay novedades reportadas</li>
+                        <div class="element-table col-sm-12">No hay novedades reportadas</div>
                     {% endif %}
-                    </div>
                 </div>
                 {% if liquidationReason != 2 %}
-                    <button type="button" id="btnAddNovelty" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle"></i> Agregar novedades</button>
+{#                     <div class="col-sm-12">#}
+{#                         <button class="btn btn-symplifica" type="button" id="btnAddNovelty" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')"><i class="fa fa-plus-circle"></i> Agregar novedades</button>#}
+{#                     </div>#}
+                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px; margin-top: 20px;">
+                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')" href="javascript:void(0)"><i class="fa fa-plus-circle"></i> <i>Agregar novedad</i></a>
+                    </div>
                 {% endif %}
             </div>
             {% if liquidationReason == 2 %}
-                <div class="liq-container" id="liqJustaCausa">
+                <div class="col-sm-12 text-center" id="liqJustaCausa" style="margin-top: 30px;">
                     <div class="col-sm-12">
-                        <h4 style="font-weight: 200; text-align: center; margin-top: 30px;">2. Razones para liquidación con justa causa</h4>
+                        <h4>2. Razones para liquidación con justa causa</h4>
                     </div>
-                    <br/>
-                    <div class="col-sm-12">
-                        <span class="txthelp">Para finalizar el contrato con un empleado de forma unilateral
+                    <div class="col-sm-10 col-sm-offset-1" style="text-align: justify;">
+                        <h5>Para finalizar el contrato con un empleado de forma unilateral
                         debido a una razón que vaya en contra del reglamento interno de trabajo, lo cual exime al
                         empleador del pago de indemnización, debe tener el <strong>documento donde se le haya llamado la
-                        atención</strong> así como también sus correspondientes <strong>descargos</strong>.</span>
+                        atención</strong> así como también sus correspondientes <strong>descargos</strong>.</h5>
                     </div>
-                    {% if llamadosAtencion %}
-                    <div class="col-sm-12">
-                        <ul class="list-group">
-                            {% for llamado in llamadosAtencion %}
-                                <li class="list-group-item">
-                                    {{ llamado.name }}
-                                    {% if llamado.dateStart %}
-                                        {{ llamado.dateStart.date }}
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                    <div class="col-sm-12 table-responsive text-center" style="margin-top: 40px;">
+                        {% if llamadosAtencion %}
+                            <table class="table record_properties table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="no-border">Fecha</th>
+                                        <th class="no-border">Novedad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for llamado in llamadosAtencion %}
+                                    <tr>
+                                        <td>
+                                            {% if llamado.dateStart %}
+                                                <i>{{ llamado.dateStart|date('d/m/Y') }}</i>
+                                            {% else %}
+                                                <i>-</i>
+                                            {% endif %}
+                                        </td><td>
+                                            <i>{{ llamado.noveltyTypeNoveltyType.name }}</i>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="col-sm-10 col-sm-offset-1">No tiene llamados de atencion reportados</div>
+                        {% endif %}
                     </div>
-                    {% else %}
-                    <div class="col-sm-12">No tiene llamados de atencion reportados</div>
-                    {% endif %}
-                    <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>
+{#                     <button type="button" class="btn btn-info btn-lg" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')">Agregar novedades</button>#}
+                    <div class="col-sm-12 text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px; margin-top: 20px;">
+                        <a type="button" id="btnAddNovelty" class="" value="Agregar" onclick="loadNovelty('/novelty/select/{{ payroll.idPayroll }}')" href="javascript:void(0)"><i class="fa fa-plus-circle"></i> <i>Agregar novedad</i></a>
+                    </div>
                 </div>
             {% elseif liquidationReason in [7,10] %}
-                <div class="liq-container" id="liqSinJustaCausa">
+                <div class="col-sm-12 text-center" id="liqSinJustaCausa" style="margin-top: 30px;">
                     <div class="col-sm-12">
-                        <h3>2. Descagar el documento para ser firmado por el empleado</h3>
+                        <h4>2. Descagar el documento para ser firmado por el empleado</h4>
                     </div>
-                    <br />
-                    <div class="col-sm-12">
-                        <span class="txthelp">Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
-                        Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</span>
+                    <div class="col-sm-10 col-sm-offset-1" style="text-align: justify;">
+                        <h5>Encontrará el formato de la carta de retiro que deberá ser firmada por el empleado.
+                        Una vez lo haya hecho <b>deberá tomarle una foto al documento firmado</b> y guardarlo en Symplifica.</h5>
                     </div>
-                    <br />
                     <div class="col-sm-12 col-xs-12 center" style="margin-top:30px; margin-bottom:30px; ">
                         <div class="col-sm-6 col-sm-push-3">
-                            <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia <br />
-                            <button type="button" id="btnDownloadRenuncia" class="btn btn-orange" onclick="downloadCartaRenuncia(this);"><i class="fa fa-cloud-download"></i>Descargar documento</a></button>
+                            <div class="col-sm-12">
+                                <input type="checkbox" name="carta_renuncia_ok" value="unit-in-group" onclick="cartaRenunciaOK()" />Ya tengo la carta de renuncia
+                            </div>
+                            <div class="col-sm-12" style="margin-top: 10px;">
+                                <button type="button" id="btnDownloadRenuncia" class="btn btn-orange" onclick="downloadCartaRenuncia(this);$(this).hide();"><i class="fa fa-cloud-download"></i>Descargar documento</a></button>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-12 col-xs-12 center" id="infoDocs" style="display: none">
-                        <div class="col-sm-8">
-                            <h4 class="txthelp">El documento fue descargado exitosamente.</h4>
-                            <span class="txthelp">Recuerde que <strong>ES MUY IMPORTANTE</strong> que lo haga firmar,
-                            <strong>le tome foto o escanee y posteriormente lo suba a Symplifica</strong> para mantener
-                            registro del manejo del empleado y así evitar futuros inconvenientes legales.
-                            </span>
+                        <div class="col-sm-12" id="okDownload">
+                            <div class="col-xs-1" style="text-align: justify;">
+                                <i class="fa fa-check-circle fa-3x" style="color: orange;" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-xs-11" style="text-align: justify;">
+                                <h4>El documento fue descargado exitosamente.</h4>
+                            </div>
+                            <div class="col-xs-12" style="text-align: justify;">
+                                <h4>Recuerde que <strong>ES MUY IMPORTANTE</strong> que lo haga firmar,
+                                <strong>le tome foto o escanee y posteriormente lo suba a Symplifica</strong> para mantener
+                                registro del manejo del empleado y así evitar futuros inconvenientes legales.
+                                </h4>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <h4 class="txthlep">¿Cómo tomar foto o escanear un documento?</h4>
-                            <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>
+                        <div class="">
                         </div>
-                        <div class="col-sm-12 col-xs-12 center">
-                            <span id="uploadLinkRenuncia" href="{{ relatedLink }}" class="btn btn-orange download-link"><i class="fa fa-upload"></i>Subir carta de renuncia</span>
-                        </div>
-                        <div class="col-sm-12 col-xs-12 center">
-                            <button type="button" id="btnDownloadAceptacion" class="btn btn-orange" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</button>
+{#                         <div class="col-sm-4">#}
+{#                             <h4 class="txthlep">¿Cómo tomar foto o escanear un documento?</h4>#}
+{#                             <span class="txthelp">Con nuestra aplicación iOS o Android también puede hacerlo fácilmente</span>#}
+{#                         </div>#}
+                        <div class="col-sm-12" id="okDownloadBtn" style="margin-top: 30px;">
+                            {% if relatedLink != null %}
+                                <div class="col-sm-6 col-xs-12 center">
+                                    <span id="uploadLinkRenuncia" href="{{ relatedLink }}" class="btn btn-orange download-link"><i class="fa fa-upload"></i>Subir carta de renuncia</span>
+                                </div>
+                                {% set style = 'col-sm-6 col-xs-12 center' %}
+                            {% else %}
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <div class="col-xs-1" style="text-align: justify;">
+                                        <i class="fa fa-check-circle fa-3x" style="color: orange;" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-xs-11" style="text-align: justify;">
+                                        <h4>El documento fue subido exitosamente.</h4>
+                                    </div>
+                                </div>
+                                {% set style = 'col-sm-12 col-xs-12 center' %}
+                            {% endif %}
+                            <div class="{{ style }}">
+                                <button type="button" id="btnDownloadAceptacion" class="btn btn-orange" onclick="downloadCartaAceptacion(this);"><i class="fa fa-cloud-download"></i>Descargar carta de aceptación</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endif %}
-
+            <div class="col-sm-12"><br /><hr/></div>
             <div class="col-sm-12 col-xs-12 center" id="contLiq">
                 <div class="col-sm-6 col-sm-push-3">
                     <button type="button" class="btn btnPrevious" onclick="history.go(-1)">Anterior</button>
                     <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#confirmLiq">Continuar</button>
-                    <br /><br />
+                </div>
+            </div>
+            <div class="col-sm-12"><hr/></div>
+            <div class="col-sm-12">
+                <div class="col-sm-4 text-right">
+                    <i class="fa fa-exclamation fa-4x" aria-hidden="true"></i>
+                </div>
+                <div class="col-sm-8">
+                    <span class="cols-sm-8" style="font-size: 20px;">¿Necesitas ayuda?</span>
+                    <span class="cols-sm-8" style="font-size: 15px;">Contamos con un Consultorio Jurídico a su disposición.</span>
                 </div>
             </div>
         </div>
@@ -246,21 +203,29 @@
                 <div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Confirmar datos para liquidación</div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-1">
+                                <i class="fa fa-check-circle fa-3x" style="color: white;" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-sm-11 col-xs-12 up-Intro" ><h4>Confirmar datos para liquidación</h4></div>
+                        </div>
                     </div>
                     <div class="row-fluid clearfix" style="padding: 30px 15px;">
-                        <p style="text-align: justify; font-size: 17px">La liquidación será calculada de acuerdo a la información suministrada por el empleador
-                        así como también asumiendo que cuenta con la documentación requerida por la ley para hacerlo.</p>
-                        <span class="txthelp" style="font-size: 13px; text-align: center;">
-                            <input type="checkbox" name="checkConfirmLiq" value="1" />
-                            Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.
-                        </span>
-                        <div class="row" style="margin-top: 30px;">
-                            <div class="col-xs-6 text-right">
-                                <button type="button" class="btn btnPrevious" data-dismiss="modal">Volver atrás</button>
+                        <div class="col-sm-10 col-sm-offset-1 center">
+                            <div class="col-sm-12">
+                                <i>La liquidación será calculada de acuerdo a la información suministrada por el empleador así como también asumiendo que cuenta con la documentación requerida por la ley para hacerlo.</i>
                             </div>
-                            <div class="col-xs-6">
-                                <button type="submit" id="rocketseller_twopickbundle_liquidation_save" name="rocketseller_twopickbundle_liquidation[save]" class="btn btn-orange" disabled="disabled">Continuar</button>
+                            <div class="col-sm-12" style="margin-top: 30px;">
+                                <input type="checkbox" name="checkConfirmLiq" value="1" />
+                                Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.
+                            </div>
+                            <div class="col-sm-12" style="margin-top: 30px;">
+                                <div class="col-xs-6 text-right">
+                                    <button type="button" class="btn btnPrevious" data-dismiss="modal">Volver atrás</button>
+                                </div>
+                                <div class="col-xs-6 text-left">
+                                    <button type="submit" id="rocketseller_twopickbundle_liquidation_save" name="rocketseller_twopickbundle_liquidation[save]" class="btn btn-orange" disabled="disabled">Continuar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -272,10 +237,8 @@
 
 <div id="agregarNovedad"></div>
 
-    <div id="myModal" class="modal fade" role="dialog">
-        <div id="modal-body">
-        </div>
-    </div>
+<div id="modal-body" class="modal fade" role="dialog"></div>
+
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
@@ -290,7 +253,7 @@ $("#uploadLinkRenuncia").on('click',function(event){
          }
     }).done(function (data) {
         $('#modal-body').html($(data).find('#cuerpoModal'));
-        $("#myModal").modal('show');
+        $("#modal-body").modal('show');
         var files;
         $('input[type=file]').on('change', prepareUpload);
 
@@ -312,17 +275,14 @@ $('input[type="checkbox"][name="checkConfirmLiq"]').change(function() {
 
 function cartaRenunciaOK() {
     $("#btnDownloadRenuncia").hide();
-    $('#infoDocs .col-sm-8').hide();
-    $('#infoDocs .col-sm-4').hide();
+    $('#infoDocs #okDownload').hide();
     $('#infoDocs').show();
-    $('#contLiq').show();
 }
 
 function downloadCartaRenuncia() {
     window.open("{{ path('cartas_liquidacion', { 'ref': 'renuncia', 'id': id_liq  }) }}");
 
     $('#infoDocs').show();
-    $('#contLiq').show();
 }
 
 function downloadCartaAceptacion() {
