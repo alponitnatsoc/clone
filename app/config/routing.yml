@@ -15,7 +15,7 @@ legal_payment:
     path:      /legal-payment
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPayment } 
 change_flag:
-    path:      /change-flag
+    path:      /change-flag/{flag}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:changeFlag}
 legal_acceptance:
     path:      /legal-acceptance/{state}

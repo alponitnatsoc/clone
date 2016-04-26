@@ -246,11 +246,11 @@ class LegalAssistanceController extends Controller
             exit();
         }
     }
-    public function changeFlagAction()
+    public function changeFlagAction($flag)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $user->setLegalFlag(1);
+        $user->setLegalFlag($flag);
         $em->persist($user);
         $em->flush();
 

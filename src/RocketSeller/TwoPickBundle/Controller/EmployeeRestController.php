@@ -1333,7 +1333,7 @@ class EmployeeRestController extends FOSRestController
             }
             $realEmployee->setAskBeneficiary($beneficiarie);
             $em->persist($realEmployee);
-            $user->setLegalFlag(0);
+            $user->setLegalFlag(-1);
             $em->persist($user);
             $em->flush();
             $flag = true;

@@ -26,10 +26,10 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions multipleRight" style="">
-			<a class="btn btn-darkblue notAjax" href="/legal-status">Si, ya inicio labores</a>
+			<a class="btn btn-darkblue notAjax" href="{{ path('legal') }}">Si, ya inicio labores</a>
 		</div>
 		<div class="col-sm-4 col-xs-12 multipleOptions">
-			<a class="btn btn-grey notAjax" href="/register/edit">No, aún no ha iniciado labores</a>
+			<a class="btn btn-grey notAjax" href="{{ path('change_flag',{'flag':0}) }}">No, aún no ha iniciado labores</a>
 		</div>
 	</div>
     <div class="col-sm-12">
