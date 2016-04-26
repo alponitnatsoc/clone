@@ -18,13 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
 
-trait SubscriptionMethodsTrait
-{
+trait SubscriptionMethodsTrait {
 
     use EmployeeMethodsTrait;
 
-    protected function findProductByNumDays($productos, $days)
-    {
+    protected function findProductByNumDays($productos, $days) {
         if ($days > 0 && $days <= 10) {
             $key = 'PS1';
         } elseif ($days >= 11 && $days <= 19) {
@@ -47,8 +45,7 @@ trait SubscriptionMethodsTrait
      * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos
      * @return array
      */
-    protected function getSubscriptionCost($user, $activeEmployee = false)
-    {
+    protected function getSubscriptionCost($user, $activeEmployee = false) {
         $idEmployer = $user->getPersonPerson()->getEmployer();
         $config = $this->getConfigData();
         /* @var $employerHasEmployee EmployerHasEmployee */
@@ -126,16 +123,14 @@ trait SubscriptionMethodsTrait
         );
     }
 
-    protected function updateProductPrice($employees, $descuentoPercent)
-    {
+    protected function updateProductPrice($employees, $descuentoPercent) {
         foreach ($employees as $key => $employe) {
             $employees[$key]['product']['price_con_descuentos'] = ceil($employe['product']['price_con_descuentos'] / (1 + $descuentoPercent));
         }
         return $employees;
     }
 
-    protected function addToSQL(User $user)
-    {
+    protected function addToSQL(User $user) {
         $person = $user->getPersonPerson();
         $employer = $person->getEmployer();
         //SQL Comsumpsion
@@ -395,8 +390,7 @@ trait SubscriptionMethodsTrait
         return true;
     }
 
-    protected function addToNovo(User $user)
-    {
+    protected function addToNovo(User $user) {
         /* @var $person Person */
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
@@ -488,8 +482,7 @@ trait SubscriptionMethodsTrait
         return true;
     }
 
-    protected function addToHighTech(User $user)
-    {
+    protected function addToHighTech(User $user) {
         /* @var $person Person */
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
@@ -584,8 +577,7 @@ trait SubscriptionMethodsTrait
         return true;
     }
 
-    protected function redimirReferidos($data)
-    {
+    protected function redimirReferidos($data) {
         $em = $this->getDoctrine()->getManager();
         if ($data['descuento_isRefered']['object']) {
             /* @var $refered Referred */
@@ -603,8 +595,7 @@ trait SubscriptionMethodsTrait
         $em->flush();
     }
 
-    protected function getDaysSince($sinceDate, $toDate)
-    {
+    protected function getDaysSince($sinceDate, $toDate) {
         $dDiff = true;
         if ($sinceDate !== null && $toDate !== null) {
             $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));
@@ -614,8 +605,7 @@ trait SubscriptionMethodsTrait
         return $dDiff;
     }
 
-    protected function getDaysSinceCreated()
-    {
+    protected function getDaysSinceCreated() {
         /* @var $user User */
         $user = $this->getUser();
         $dateCreated = $user->getDateCreated();
@@ -625,8 +615,7 @@ trait SubscriptionMethodsTrait
         return $dDiff->days;
     }
 
-    protected function getDaysSinceLastPay()
-    {
+    protected function getDaysSinceLastPay() {
         /* @var $user User */
         $user = $this->getUser();
         $lastPayDate = $user->getLastPayDate();
@@ -636,8 +625,7 @@ trait SubscriptionMethodsTrait
         return $dDiff->days;
     }
 
-    protected function isFree()
-    {
+    protected function isFree() {
         /* @var $user User */
         $user = $this->getUser();
 
@@ -671,8 +659,7 @@ trait SubscriptionMethodsTrait
      * @param User $user
      * @return Referred
      */
-    protected function userIsRefered(User $user = null)
-    {
+    protected function userIsRefered(User $user = null) {
         /* @var $isRefered Referred */
         $isRefered = $this->getdoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Referred')
@@ -689,8 +676,7 @@ trait SubscriptionMethodsTrait
      * @param User $user
      * @return array
      */
-    protected function userHaveValidRefered(User $user = null)
-    {
+    protected function userHaveValidRefered(User $user = null) {
         /* @var $haveRefered Referred */
         $haveRefered = $this->getdoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Referred')
@@ -704,8 +690,7 @@ trait SubscriptionMethodsTrait
         return $responce;
     }
 
-    protected function getConfigData()
-    {
+    protected function getConfigData() {
         #$configRepo = new Config();
         $configRepo = $this->getdoctrine()->getRepository("RocketSellerTwoPickBundle:Config");
         $configDataTmp = $configRepo->findAll();
@@ -718,8 +703,7 @@ trait SubscriptionMethodsTrait
         return $configData;
     }
 
-    public function sendEmailPaySuccess($idUser, $idPurchaseOrder)
-    {
+    public function sendEmailPaySuccess($idUser, $idPurchaseOrder) {
         /* @var $user User */
         $user = $this->getUserById($idUser);
         $path = null;
@@ -751,15 +735,13 @@ trait SubscriptionMethodsTrait
      * @param int $idUser id del usuario a buscar
      * @return User|null
      */
-    protected function getUserById($idUser)
-    {
+    protected function getUserById($idUser) {
         return $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
                         array('id' => $idUser)
         );
     }
 
-    protected function createPurchaceOrder(User $user, $paymethodId, $methodId = false)
-    {
+    protected function createPurchaceOrder(User $user, $paymethodId, $methodId = false) {
         $em = $this->getDoctrine()->getManager();
         if (!$methodId) {
             $methodId = $this->getMethodId($user->getPersonPerson()->getDocument());
@@ -824,8 +806,7 @@ trait SubscriptionMethodsTrait
         return false;
     }
 
-    protected function procesosLuegoPagoExitoso(User $user)
-    {
+    protected function procesosLuegoPagoExitoso(User $user) {
         $em = $this->getDoctrine()->getManager();
         $user->setStatus(2);
         $user->setPaymentState(1);
@@ -841,8 +822,8 @@ trait SubscriptionMethodsTrait
         /* @var $ProcedureType ProcedureType */
         $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-            '$employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
-            '$idProcedureType' => $ProcedureType->getIdProcedureType()
+            'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
+            'idProcedureType' => $ProcedureType->getIdProcedureType()
                 ), array('_format' => 'json')
         );
         $this->validateDocuments($user);
@@ -852,98 +833,96 @@ trait SubscriptionMethodsTrait
         return true;
     }
 
-    protected function getMethodId($documentNumber)
-    {
+    protected function getMethodId($documentNumber) {
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
         $listPaymentMethods = json_decode($response->getContent(), true);
         return isset($listPaymentMethods['payment-methods'][0]['method-id']) ? ($listPaymentMethods['payment-methods'][0]['method-id']) : false;
     }
-    
-    public function procedureAction($employerId,$idProcedureType)
-    {
+
+    public function procedureAction($employerId, $idProcedureType) {
         $em = $this->getDoctrine()->getManager();
         $em2 = $this->getDoctrine()->getManager();
-        $employerSearch = $this->loadClassById($employerId,"Employer");
-        $procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
+        $employerSearch = $this->loadClassById($employerId, "Employer");
+        $procedureType = $this->loadClassById($idProcedureType, "ProcedureType");
         $employerHasEmployees = $employerSearch->getEmployerHasEmployees();
         if ($procedureType->getName() == "Registro empleador y empleados") {
             $procedure = new RealProcedure();
             $procedure->setCreatedAt(new \DateTime());
             $procedure->setProcedureTypeProcedureType($procedureType);
-            $procedure->setEmployerEmployer($employerSearch);           
+            $procedure->setEmployerEmployer($employerSearch);
             $em2->persist($procedure);
 
-                $action = new Action();             
-                $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);             
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
-                $action->setPersonPerson($employerSearch->getPersonPerson());
-                $em->persist($action);
-                $em->flush();
+            $action = new Action();
+            $action->setStatus('Nuevo');
+            $action->setRealProcedureRealProcedure($procedure);
+            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
+            $action->setPersonPerson($employerSearch->getPersonPerson());
+            $em->persist($action);
+            $em->flush();
 
-                $action = new Action();             
-                $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);             
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar cliente'),"ActionType"));
-                $action->setPersonPerson($employerSearch->getPersonPerson());
-                $em->persist($action);
-                $em->flush();                       
+            $action = new Action();
+            $action->setStatus('Nuevo');
+            $action->setRealProcedureRealProcedure($procedure);
+            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar cliente'), "ActionType"));
+            $action->setPersonPerson($employerSearch->getPersonPerson());
+            $em->persist($action);
+            $em->flush();
             foreach ($employerSearch->getEntities() as $entities) {
 
-                $action = new Action();             
+                $action = new Action();
                 $action->setStatus('Nuevo');
                 $action->setRealProcedureRealProcedure($procedure);
                 $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
 
-                $action = new Action();             
+                $action = new Action();
                 $action->setStatus('Nuevo');
                 $action->setRealProcedureRealProcedure($procedure);
                 $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
                 $procedure->addAction($action);
             }
             foreach ($employerHasEmployees as $employerHasEmployee) {
-            //agregar la validacion del estado del employee                 
-                    $action = new Action();             
+                //agregar la validacion del estado del employee                 
+                $action = new Action();
+                $action->setStatus('Nuevo');
+                $action->setRealProcedureRealProcedure($procedure);
+                //$action->setEntityEntity($entities->getEntityEntity());
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
+                $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                $em->persist($action);
+                $em->flush();
+                $procedure->addAction($action);
+                foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
+                    $action = new Action();
                     $action->setStatus('Nuevo');
                     $action->setRealProcedureRealProcedure($procedure);
-                    //$action->setEntityEntity($entities->getEntityEntity());
-                    $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
+                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
                     $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
                     $em->persist($action);
                     $em->flush();
                     $procedure->addAction($action);
-                foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
-                        $action = new Action();             
-                        $action->setStatus('Nuevo');
-                        $action->setRealProcedureRealProcedure($procedure);
-                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
-                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                        $em->persist($action);
-                        $em->flush();
-                        $procedure->addAction($action);
 
-                        $action = new Action();             
-                        $action->setStatus('Nuevo');
-                        $action->setRealProcedureRealProcedure($procedure);
-                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
-                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                        $em->persist($action);
-                        $em->flush();
-                        $procedure->addAction($action);
+                    $action = new Action();
+                    $action->setStatus('Nuevo');
+                    $action->setRealProcedureRealProcedure($procedure);
+                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
+                    $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                    $em->persist($action);
+                    $em->flush();
+                    $procedure->addAction($action);
                 }
             }
             $em2->flush();
-        }else{
+        } else {
             $em2->remove($procedure);
             $em2->flush();
         }

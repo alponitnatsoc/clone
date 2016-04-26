@@ -149,7 +149,7 @@ class Payments2RestController extends FOSRestController
     {
 
       ini_set("soap.wsdl_cache_enabled", 1);
-      $url_base = "http://52.86.183.212:8080/dssp/services/";
+      $url_base = "https://cpsuite.htsoft.co:8080/dssp/services/";
        $opts = array(
            //"ssl" => array("ciphers" => "RC4-SHA")
        );
@@ -159,6 +159,7 @@ class Payments2RestController extends FOSRestController
                "trace" => true,
                "exceptions" => true,
                "stream_context" => stream_context_create($opts),
+               'location' => 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/'
                //"login" => $login,
                //"password" => $pass
         ));
