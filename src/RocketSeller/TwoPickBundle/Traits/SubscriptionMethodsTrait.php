@@ -330,13 +330,14 @@ trait SubscriptionMethodsTrait {
                             $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
                             return $view;
                         }
-                        //TODO ESTOE S TEMORAL POR EL FONDO NACIONAL DEL AHORRO
+                    }
+                    if ($eType->getPayrollCode() == "FCES") {
                         $request->setMethod("POST");
                         $request->request->add(array(
                             "employee_id" => $eHE->getIdEmployerHasEmployee(),
                             "entity_type_code" => "FCES",
                             "coverage_code" => 1, //DONT change this is forever and ever
-                            "entity_code" => intval($entity->getPayrollCode()) + 100,
+                            "entity_code" => intval($entity->getPayrollCode()),
                             "start_date" => $actContract->getStartDate()->format("d-m-Y"),
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
