@@ -249,12 +249,18 @@ class LegalAssistanceController extends Controller
     public function changeFlagAction($flag)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
         $user = $this->getUser();
+        if($user->getLegalFlag()!=-1){
+            $urlToSend='edit_profile';
+        }else{
+            $urlToSend='register_employee';
+        }
         $user->setLegalFlag($flag);
         $em->persist($user);
         $em->flush();
 
-        return $this->redirectToRoute('edit_profile');
+        return $this->redirectToRoute($urlToSend);
     }
     public function successExpress()
     {
