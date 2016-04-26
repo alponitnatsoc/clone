@@ -48,7 +48,8 @@ function editEmployee(){
                 $("select[name='form[birthDepartment]']").val(birthDepartment);
                 $("select[name='form[birthCity]']").val(birthCity);
                 $("select[name='form[birthCountry]']").val(birthCountry);
-            });     
+            });
+
     });
     $('.edit-employee-save').click(function (e) {
             e.preventDefault();
@@ -92,6 +93,37 @@ function editEmployee(){
                 alert("hizo algo mal");
             });
         });
+    $(".edit-contract").on("click",function(e){
+        e.preventDefault();
+        $(".contract-info").fadeOut("slow");
+        $(".contract-edit-form").fadeIn("slow");
+        $(this).fadeOut("slow");
+        $(".edit-contract").show();
+                
+    });
+    $("#form_contract_method_type").on("change",function(){
+
+        
+        var payMethod = $("select[name='contract[method_type]']");
+        $.ajax({
+            url: '/pay/method/fields/' + payMethod.val(),
+            type: 'GET'
+        }).done(function (data) {
+            
+            var formFields = $(data).find("#formFields");
+            $(".paymethod-fields").html(""); 
+            $(".paymethod-fields").append(formFields);
+            // var $putFields = $('#putFields_' + payMethod.val()).html(
+            //     // ... with the returned one from the AJAX response.
+            //     $(data).find('#formFields'));
+            // $('#putFields_' + payTypeChecked.val()).html("");
+            // if ($(payMethod).parent().text() == " Daviplata") {
+            //     payMethodListener();
+            // }
+            // payTypeChecked = payMethod;
+
+        });
+    }); 
 }
 
 

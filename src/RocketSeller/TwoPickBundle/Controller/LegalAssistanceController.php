@@ -157,13 +157,7 @@ class LegalAssistanceController extends Controller
             $user = $this->getUser();
             /** @var Person $person */
             $methodType = $request->get('methodType');
-            if ($methodType == "cre") {
-                dump("se quiere pagar con credito");
-                exit();
-            }else if($methodType == "deb"){
-                dump("se quiere pagar con debito");
-                exit();
-            }
+            
             $person = $user->getPersonPerson();
             $person->setDocumentType($form->get("documentType")->getData());
             $person->setDocument($form->get("documentNumber")->getData());
@@ -181,33 +175,46 @@ class LegalAssistanceController extends Controller
             $em->flush();
 
             $data = $form->getData();
-
-            //TODO NovoPayment
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "documentType" => $person->getDocumentType(),
-                "documentNumber" => $person->getDocument(),
-                "credit_card" => $form->get("credit_card")->getData(),
-                "expiry_date_year" => $form->get("expiry_year")->getData(),
-                "expiry_date_month" => $form->get("expiry_month")->getData(),
-                "cvv" => $form->get("cvv")->getData(),
-            ));
-
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
-
-            $response = json_decode($insertionAnswer->getContent());
-            $methodId = $response->{'response'}->{'method-id'};
-
-            if ($insertionAnswer->getStatusCode() != 201) {
-
-                return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
-                            'form' => $form->createView(),
-                            'errno' => "Not a valid Credit Card check the data again"
+            if ($methodType == "cre") {
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentType" => $person->getDocumentType(),
+                    "documentNumber" => $person->getDocument(),
+                    "credit_card" => $form->get("credit_card")->getData(),
+                    "expiry_date_year" => $form->get("expiry_year")->getData(),
+                    "expiry_date_month" => $form->get("expiry_month")->getData(),
+                    "cvv" => $form->get("cvv")->getData(),
                 ));
+
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
+
+                $response = json_decode($insertionAnswer->getContent());
+                $methodId = $response->{'response'}->{'method-id'};
+
+                if ($insertionAnswer->getStatusCode() != 201) {
+
+                    return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
+                                'form' => $form->createView(),
+                                'errno' => "Not a valid Credit Card check the data again"
+                    ));
+                }
+                
+                //return $this->payLegalAssistance($methodId);
+            }else if($methodType == "deb"){
+                dump("se quiere pagar con debito");
+                exit();
             }
 
+            $paymentMethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods',array($idUser => $user->getIdUser()), array('_format' => 'json'));
+            dump($paymentMethods->getContent());
+            exit();
+            // if($varios){
 
-            return $this->payLegalAssistance($methodId);
+            // }else{
+            //     return $this->payLegalAssistance($methodId);
+            // }
+            //TODO NovoPayment
+            
         }
         return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
                     'form' => $form->createView(),
@@ -238,7 +245,7 @@ class LegalAssistanceController extends Controller
             exit();
 
             //return $this->redirectToRoute('DashBoard');
-        } elseif ($insertionAnswer == 404) {
+        } elseif ($insertionAnswer->getStatusCode() == 404) {
             dump("Procesando");
             exit();
         } else {

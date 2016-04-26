@@ -468,6 +468,9 @@ class EmployeeController extends Controller
         $employee = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Employee')
                 ->find($id);
+        $payMethodTypes = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:PayType')
+                ->findAll();
         $entities = $employee->getEntities();
         $entitiesEmployer = $employer->getEntities();
         $employerHasEmployee = $this->loadClassByArray(array(
@@ -604,6 +607,8 @@ class EmployeeController extends Controller
             ))
             
             ->getForm();
+
+
         return $this->render(
                         'RocketSellerTwoPickBundle:Employee:showEmployee.html.twig', array(
                     'employee' => $employee,
@@ -614,6 +619,7 @@ class EmployeeController extends Controller
                     'nonRepeatedBenef'=>$nonRepeatedBenef,
                     'form' => $form->createView(),
                     'form2' =>$form2->createView(),
+                    'payMethodTypes'=> $payMethodTypes, 
         ));
     }
 

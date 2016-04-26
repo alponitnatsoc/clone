@@ -205,59 +205,132 @@
                     </div>
                 </div>
                 <div class="col-sm-12 bottom-box">
-                    <div class="col-sm-4 left">
-                        <ul class="col-sm-12">
-                            <li>
-                                <p class="title"><i>Tipo de empleado</i></p>
-                                <p><strong>{{ contract.positionPosition.name }}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Fecha inicion de contrato</i></p>
-                                <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Tipo de contrato</i></p>
-                                <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Sueldo diario</i></p>
-                                <p><strong>${{contract.salary}}</strong></p>
-                            </li>
-                        </ul>
+                    <div class="contract-info">
+                        <div class="col-sm-4 left">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Tipo de empleado</i></p>
+                                    <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Fecha inicion de contrato</i></p>
+                                    <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Tipo de contrato</i></p>
+                                    <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Sueldo diario</i></p>
+                                    <p><strong>${{contract.salary}}</strong></p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 right">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Cargo</i></p>
+                                    <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Fecha fin de contrato</i></p>
+                                    <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Lugar de trabajo</i></p>
+                                    <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Metodo de pago</i></p>
+                                    <p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 right">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Dedicación de tiempo</i></p>
+                                    <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Dias laborales al mes</i></p>
+                                    <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                </li>
+                            </ul>
+                        </div>                    
                     </div>
-                    <div class="col-sm-4 right">
-                        <ul class="col-sm-12">
-                            <li>
-                                <p class="title"><i>Cargo</i></p>
-                                <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Fecha fin de contrato</i></p>
-                                <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Lugar de trabajo</i></p>
-                                <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Metodo de pago</i></p>
-                                <p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
-                            </li>
-                        </ul>
+                    <div class="contract-edit-form" style="display:none;">
+                        <div class="col-sm-4 left">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Tipo de empleado</i></p>
+                                    <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Fecha inicion de contrato</i></p>
+                                    <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Tipo de contrato</i></p>
+                                    <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Sueldo diario</i></p>
+                                    <input id="contract_form_salary" name="contract_form[salary]" required="required" class="form-control" type="text">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 right">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Cargo</i></p>
+                                    <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Fecha fin de contrato</i></p>
+                                    <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                </li>
+                                <li>
+                                    {% set workplaces = employerHasEmployee.EmployerEmployer.workplaces %}
+                                    <p class="title"><i>Lugar de trabajo</i></p>
+                                    <select id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
+                                        <option value="" selected="selected">Seleccionar una opción</option>
+                                        {% for workplace in workplaces %}
+                                            <option value="{{workplace.idWorkplace}}" selected="selected">{{ workplace.name}}</option>
+                                        {% endfor %}
+                                                    
+                                    </select>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Metodo de pago</i></p>                                  
+                                    <select id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
+                                        <option value="" selected="selected">Seleccionar una opción</option>
+                                        {% for payMethodType in payMethodTypes %}
+                                            <option value="{{payMethodType.idPayType}}" selected="selected">{{ payMethodType.name}}</option>
+                                        {% endfor %}
+                                                    
+                                    </select>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 right">
+                            <ul class="col-sm-12">
+                                <li>
+                                    <p class="title"><i>Dedicación de tiempo</i></p>
+                                    <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                </li>
+                                <li>
+                                    <p class="title"><i>Dias laborales al mes</i></p>
+                                    <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-sm-4 right">
-                        <ul class="col-sm-12">
-                            <li>
-                                <p class="title"><i>Dedicación de tiempo</i></p>
-                                <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
-                            </li>
-                            <li>
-                                <p class="title"><i>Dias laborales al mes</i></p>
-                                <p><strong>{{contract.workableDaysMonth}}</strong></p>
-                            </li>
-                        </ul>
+                    <div class="col-sm-12 paymethod-fields">
+                        
                     </div>
                 </div>
+
                 <div class="col-sm-12 file-download-contract" >
                     <h4>Copia firmada del contrato</h4>
                     {% if contractEmployee %}
@@ -274,7 +347,10 @@
                     {% endif %}
                 </div>
                 <div class="col-sm-12 col-sm-offset-5">
-                    <a class="btn btn-orange notAjax" href="/register/employee/{{employee.idEmployee}}">Editar</a>
+                    <span class="edit-contract btn btn-orange notAjax" href="">Editar</span>
+                </div>
+                <div class="contract-save col-sm-12 col-sm-offset-5">
+                    <span class="edit-contract btn btn-orange notAjax" style="display:none;" href="">Salvar</span>
                 </div>
             </div>
         </div>
@@ -587,7 +663,7 @@
         <script src="{{ asset('public/js/manageEmployees.js') }}"></script>
         <script type="text/javascript">
         $(document).ready(function () {
-            manageEmployee();
+            manageEmployees();
             editEmployee();
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
