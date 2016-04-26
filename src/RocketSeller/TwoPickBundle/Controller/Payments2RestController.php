@@ -159,6 +159,7 @@ class Payments2RestController extends FOSRestController
                "trace" => true,
                "exceptions" => true,
                "stream_context" => stream_context_create($opts),
+               'location' => 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/'
                //"login" => $login,
                //"password" => $pass
         ));
