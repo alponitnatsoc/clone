@@ -16,13 +16,11 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class SubscriptionController extends Controller
-{
+class SubscriptionController extends Controller {
 
     use SubscriptionMethodsTrait;
 
-    public function subscriptionChoicesAction()
-    {
+    public function subscriptionChoicesAction() {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -68,14 +66,7 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function suscripcionConfirmPruebaAction(Request $request)
-    {
-        return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionTest.html.twig', array(
-        ));
-    }
-
-    public function suscripcionConfirmAction(Request $request)
-    {
+    public function suscripcionConfirmAction(Request $request) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -237,8 +228,7 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function suscripcionPayAction(Request $requestIn)
-    {
+    public function suscripcionPayAction(Request $requestIn) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -348,23 +338,20 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function suscripcionSuccessAction(Request $request)
-    {
+    public function suscripcionSuccessAction(Request $request) {
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
                     'user' => $this->getUser(),
                     'date' => \date('Y-m-d')
         ));
     }
 
-    public function suscripcionErrorAction(Request $request)
-    {
+    public function suscripcionErrorAction(Request $request) {
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionError.html.twig', array(
                     'user' => $this->getUser()
         ));
     }
 
-    public function suscripcionInactivaAction()
-    {
+    public function suscripcionInactivaAction() {
         $user = $this->getUser();
         return $this->render('RocketSellerTwoPickBundle:Subscription:inactive.html.twig');
     }

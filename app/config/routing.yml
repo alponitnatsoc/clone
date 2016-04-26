@@ -405,9 +405,6 @@ subscription_choices:
 subscription_confirm:
     path: /subscription/confirm
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionConfirm }
-subscription_confirm_prueba:
-    path: /subscription/prueba
-    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionConfirmPrueba }
 subscription_pay:
     path:     /subscription/pay
     defaults: { _controller: RocketSellerTwoPickBundle:Subscription:suscripcionPay }

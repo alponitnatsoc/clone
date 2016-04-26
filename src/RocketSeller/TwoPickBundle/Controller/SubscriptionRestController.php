@@ -10,13 +10,11 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
-class SubscriptionRestController extends FOSRestController
-{
+class SubscriptionRestController extends FOSRestController {
 
     use SubscriptionMethodsTrait;
 
-    private function paySubscriptionToDays($daysToPay)
-    {
+    private function paySubscriptionToDays($daysToPay) {
         $users = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findBy(
                 array('dayToPay' => $daysToPay)
         );
@@ -45,8 +43,7 @@ class SubscriptionRestController extends FOSRestController
      * @param User $user
      * @return boolean
      */
-    private function paySubscriptionUser(User $user)
-    {
+    private function paySubscriptionUser(User $user) {
         $day = $this->getDaysSince($user->getLastPayDate(), date_create(date('Y-m-d')));
         if ($day === true || ($day->d >= 28) || ($day->m >= 1)) {
             if ($this->createPurchaceOrder($user)) {
@@ -80,8 +77,7 @@ class SubscriptionRestController extends FOSRestController
      *
      * @return View
      */
-    public function postSubscriptionPayAction(ParamFetcher $paramFetcher)
-    {
+    public function postSubscriptionPayAction(ParamFetcher $paramFetcher) {
         $idUser = ($paramFetcher->get('idUser'));
         /* @var $user User */
         $user = $this->getUserById($idUser);
@@ -116,8 +112,7 @@ class SubscriptionRestController extends FOSRestController
      *
      * @return View
      */
-    public function putSubscriptionPayAction()
-    {
+    public function putSubscriptionPayAction() {
         $daysToPay = array(28, 29, 30, 31);
         //$lasDayOfMonth = intval(date("t", strtotime("2015-03-23")));
         $lasDayOfMonth = intval(date("t"));
