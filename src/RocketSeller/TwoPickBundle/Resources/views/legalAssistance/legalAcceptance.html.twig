@@ -21,40 +21,47 @@
 	</div>
 
     <br /><br /><br />
+    <!--
     <div class="row" style="margin-top: 60px;">
         <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center legalCorrect">
 			De acuerdo a la información suministrada por usted, puede mantener su relación laboral como la lleva a este punto o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:
         </div>
     </div>
+-->
     <div class="row" style="margin-top: 60px;">
-        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center legalInCorrect">
-			Por lo tanto puede mantener su relación laboral como la lleva a este punto, comenzar una nueva con el mismo empleado o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:        </div>
-    </div>
-	<span>video</span>
-	<label for="userAccept">
-		<div id="u285" class="text">
-			<p><span>Acepto que he leído las implicaciones expuestas por Symplifica y me hago responsable de la elección que tomaré a continuación</span></p>
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-left legalInCorrect">
+			Por lo tanto puede mantener su relación laboral como la lleva a este punto, comenzar una nueva con el mismo empleado o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:        
 		</div>
-	</label>
-	<input id="userAccept" type="checkbox" value="checkbox">
-
+    </div>
+    <br />
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1 col-xs-12">
+			<div class="embed-responsive embed-responsive-16by9">
+			  <iframe class="embed-responsive-item" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/ScMzIvxBSi4"></iframe>
+			</div>
+		</div>
+	</div>
 	<br />
 	<div class="row">
-		<div class="col-sm-6" style="text-align: right;">
-			<a class="btn btnPrevious notAjax" href="{{ path('legal') }}">Anterior</a>
-		</div>
-		<div class="col-sm-6 legalInCorrect">
-			<a class="btn btn-orange notAjax" href="{{ path('change_flag',{'flag':0}) }}" >Realizar contrato nuevo</a>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-6">
-			<a class="btn btn-orange notAjax" href="{{ path('legal_assist') }}" >Solucionar la situación actual con mi empleado</a>
-		</div>
-		<div class="col-sm-6">
-			<a class="btn btn-orange notAjax" href="{{ path('change_flag',{'flag':1}) }}" >Continuar registro y acepto la responsabilidad</a>
+		<div class="col-sm-10 col-sm-offset-1 col-xs-12 checkbox">
+			
+			<label for="userAccept">
+				<input id="userAccept" type="checkbox" value="checkbox">
+				<div id="u285" class="text">
+					<p><span>Acepto que he leído las implicaciones expuestas por Symplifica y me hago responsable de la elección que tomaré a continuación</span></p>
+				</div>
+			</label>
+			
 		</div>
 	</div>
+	<br />
+	<div class="row buttonsRow">
+			<a class="btn btnPrevious notAjax" style="margin" href="{{ path('legal') }}">Anterior</a>
+			<a class="btn btn-orange notAjax " href="{{ path('change_flag',{'flag':0}) }}" >Realizar contrato<br />nuevo</a>
+			<a class="btn btn-orange notAjax " href="{{ path('legal_assist') }}" >Solucionar la situación <br />actual con mi empleado</a>
+			<a class="btn btn-orange notAjax" href="{{ path('change_flag',{'flag':1}) }}" >Continuar registro y<br />acepto la responsabilidad</a>
+	</div>
+
 
 
 {% endblock %}
