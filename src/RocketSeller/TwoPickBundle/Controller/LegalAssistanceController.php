@@ -11,9 +11,11 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\AddCreditCard;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class LegalAssistanceController extends Controller
 {
+    use SubscriptionMethodsTrait;
 	public function indexAction(){
 
 		$totalValue = $this->getPaymentValue();
@@ -91,12 +93,39 @@ class LegalAssistanceController extends Controller
                                 'step' => 1
                             )
                         ))
-                        ->add('titularName', 'text', array(
-                            'label' => 'Titular de la cuenta',
+                        ->add('personName', 'text', array(
+                            'label' => 'Nombres',
                             'required' => true,
                             'attr' => array(
-                                'placeholder' => 'Nombre titular de la cuenta',
+                                'placeholder' => $user->getPersonPerson()->getNames(),
                             )
+                        ))
+                        ->add('lastName1', 'text', array(
+                            'label' => 'Primer apellido',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => $user->getPersonPerson()->getLastName1(),
+                            )
+                        ))
+                        ->add('lastName2', 'text', array(
+                            'label' => 'segundo apellido',
+                            'required' => true,
+                            'attr' => array(
+                                'placeholder' => 'Segundo apellido',
+                            )
+                        ))
+                        ->add('civilStatus','choice', array(
+                            'choices' => array(
+                                'soltero'   => 'Soltero(a)',
+                                'casado' => 'Casado(a)',
+                                'unionLibre' => 'Union Libre',
+                                'viudo' => 'Viudo(a)'
+                            ),
+                            'multiple' => false,
+                            'expanded' => false,
+                            'label' => 'Estado civil*',
+                            'placeholder' => 'Seleccionar una opción',
+                            'required' => true
                         ))
                         ->add('documentType', 'choice', array(
                                 'choices' => array(
@@ -118,12 +147,45 @@ class LegalAssistanceController extends Controller
                                 'value' => $person->getDocument()
                             )
                         ))
+                        ->add('documentExpeditionDate', 'date', array(
+                            'placeholder' => array(
+                                'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                            ),
+                            'years' => range(2015,1900),
+                            'label' => 'Fecha de expedición de documento de identidad*',
+                            'required' => true
+                        ))
                         ->add('phoneNumber', 'text', array(
                             'label' => 'Teléfono',
                             'required' => true,
                             'attr' => array(
                                 'placeholder' => 'Número de teléfono',
                             )
+                        ))
+                        ->add('department', 'entity', array(
+                            'label' => 'Departamento*',
+                            'translation_domain' => 'messages',
+                            'class' => 'RocketSellerTwoPickBundle:Department',
+                            'property' => 'name',
+                            'multiple' => false,
+                            'expanded' => false,
+                            
+                            'placeholder' => 'Seleccionar una opción',
+                            'required' => true
+                        ))
+                        ->add('mainAddress', 'text', array(
+                            'label' => 'Dirección*'
+                        ))
+                        ->add('city', 'entity', array(
+                            'label' => 'Ciudad*',
+                            'translation_domain' => 'messages',
+                            'class' => 'RocketSellerTwoPickBundle:City',
+                            'property' => 'name',
+                            'multiple' => false,
+                            'expanded' => false,
+                            
+                            'placeholder' => 'Seleccionar una opción',
+                            'required' => true
                         ))
                         ->add('bank', 'entity', array(
                             'label' => 'Banco',
@@ -157,13 +219,7 @@ class LegalAssistanceController extends Controller
             $user = $this->getUser();
             /** @var Person $person */
             $methodType = $request->get('methodType');
-            if ($methodType == "cre") {
-                dump("se quiere pagar con credito");
-                exit();
-            }else if($methodType == "deb"){
-                dump("se quiere pagar con debito");
-                exit();
-            }
+            
             $person = $user->getPersonPerson();
             $person->setDocumentType($form->get("documentType")->getData());
             $person->setDocument($form->get("documentNumber")->getData());
@@ -171,43 +227,110 @@ class LegalAssistanceController extends Controller
             $phone->setPhoneNumber($form->get("phoneNumber")->getData());
             $person->setDocument($form->get("documentNumber")->getData());
             $person->addPhone($phone);
+            
             $employer = new Employer();
             $employer->setPersonPerson($person);
             $employer->setEmployerType("Persona");
             $employer->setRegisterState(10);
-            $em->persist($employer);
-            $em->persist($phone);
-            $em->persist($person);
-            $em->flush();
-
-            $data = $form->getData();
-
-            //TODO NovoPayment
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "documentType" => $person->getDocumentType(),
-                "documentNumber" => $person->getDocument(),
-                "credit_card" => $form->get("credit_card")->getData(),
-                "expiry_date_year" => $form->get("expiry_year")->getData(),
-                "expiry_date_month" => $form->get("expiry_month")->getData(),
-                "cvv" => $form->get("cvv")->getData(),
-            ));
-
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
-
-            $response = json_decode($insertionAnswer->getContent());
-            $methodId = $response->{'response'}->{'method-id'};
-
-            if ($insertionAnswer->getStatusCode() != 201) {
-
-                return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
-                            'form' => $form->createView(),
-                            'errno' => "Not a valid Credit Card check the data again"
-                ));
+            $person->setEmployer($employer);
+            
+            $expiryMonth = $form->get("expiry_month")->getData();
+            if (strlen($expiryMonth)<2) {
+                $expiryMonth = "0".$form->get("expiry_month")->getData();
             }
+            $data = $form->getData();
+            if ($methodType == "cre") {
+                $request->setMethod("POST");
+                $request->request->add(array(
+                    "documentType" => $person->getDocumentType(),
+                    "documentNumber" => $person->getDocument(),
+                    "credit_card" => $form->get("credit_card")->getData(),
+                    "expiry_date_year" => $form->get("expiry_year")->getData(),
+                    
+                    "expiry_date_month" => $expiryMonth,
+                    "cvv" => $form->get("cvv")->getData(),
+                ));
 
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
 
-            return $this->payLegalAssistance($methodId);
+                $response = json_decode($insertionAnswer->getContent());
+                $methodId = $response->{'response'}->{'method-id'};
+
+                if ($insertionAnswer->getStatusCode() != 201) {
+
+                    return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
+                                'form' => $form->createView(),
+                                'errno' => "Not a valid Credit Card check the data again"
+                    ));
+                }
+                dump("se quiere pagar con credito");
+                //return $this->payLegalAssistance($methodId);
+            }else if($methodType == "deb"){
+                $department = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Department')
+                ->find($form->get("department")->getData());
+                $city = $this->getDoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:City')
+                ->find($form->get("city")->getData());
+                $documentExpirationDate = new \DateTime();
+                $documentExpirationDate->setDate($form->get("documentExpeditionDate")->getData()->format("Y"),$form->get("documentExpeditionDate")->getData()->format("m"),$form->get("documentExpeditionDate")->getData()->format("d"));
+                $person = $user->getPersonPerson();
+                $person->setLastName2($form->get("lastName2")->getData());
+                $person->setDocument($form->get("lastName2")->getData());
+                $person->setDocumentExpeditionDate($documentExpirationDate);
+                $person->setCivilStatus($form->get("civilStatus")->getData());
+                $person->setCity($city);
+                $person->setDepartment($department);
+                $person->setMainAddress($form->get("mainAddress")->getData());
+
+                // if ($this->addToHighTech($user)) 
+                // {
+                //    return true;
+                // }else{
+                //     return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
+                //                 'form' => $form->createView(),
+                //                 'errno' => "Tenemos un errar en el sistema, intenta mas tarde"
+                //     ));
+                // } 
+                $request->request->add(array(
+                    "accountNumber" => $form->get("numberAccount")->getData(),
+                    "bankId" => $form->get("bank")->getData(),
+                    "accountTypeId" => $form->get("accountType")->getData(),
+                    "userId" => $user->getId(),
+                ));
+                
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));                
+                // if ($insertionAnswer->getStatusCode() != 201) {
+                if(false){
+                    return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
+                                'form' => $form->createView(),
+                                'errno' => "Error agregando cuenta, intentalo mas tarde"
+                    ));
+                }
+
+                dump("se quiere pagar con debito");                
+                
+            }
+            //descomentar ojo  
+            // $em->persist($person);
+            // $em->persist($employer);
+            // $em->persist($phone);
+            // $em->flush();
+            $format = array('_format' => 'json');
+            
+            $paymentMethods = array("0-101","1-101");
+            // $paymentMethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods',array('idUser' => $user->getId()), $format);
+            
+            //if varios
+            if(true){
+                return $this->render('RocketSellerTwoPickBundle:legalAssistance:listPaymentMethod.html.twig', array(
+                        'paymentMethods' => $paymentMethods                        
+                    ));
+            }else{
+                return $this->payLegalAssistance($methodId);
+            }
+            //TODO NovoPayment
+            
         }
         return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
                     'form' => $form->createView(),
@@ -238,7 +361,7 @@ class LegalAssistanceController extends Controller
             exit();
 
             //return $this->redirectToRoute('DashBoard');
-        } elseif ($insertionAnswer == 404) {
+        } elseif ($insertionAnswer->getStatusCode() == 404) {
             dump("Procesando");
             exit();
         } else {
@@ -246,15 +369,21 @@ class LegalAssistanceController extends Controller
             exit();
         }
     }
-    public function changeFlagAction()
+    public function changeFlagAction($flag)
     {
         $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
         $user = $this->getUser();
-        $user->setLegalFlag(1);
+        if($user->getLegalFlag()!=-1){
+            $urlToSend='edit_profile';
+        }else{
+            $urlToSend='register_employee';
+        }
+        $user->setLegalFlag($flag);
         $em->persist($user);
         $em->flush();
 
-        return $this->redirectToRoute('edit_profile');
+        return $this->redirectToRoute($urlToSend);
     }
     public function successExpress()
     {

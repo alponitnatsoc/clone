@@ -73,7 +73,7 @@ class ExpressRegistrationRestController extends FOSRestController
      * 200 tiene que crearlo y lo crea.
      * 400 si no lo esta proscesando.
      */
-    public function postPayRegisterExpressAction($id, $idPayMethod,$payType)
+    public function postPayRegisterExpressAction($id, $idPayMethod)
     {
         $em = $this->getDoctrine()->getManager();
         $userRepository = $em->getRepository("RocketSellerTwoPickBundle:User");
@@ -108,8 +108,8 @@ class ExpressRegistrationRestController extends FOSRestController
             $person = $user->getPersonPerson();
             $PurchaseOrders = new PurchaseOrders();
             $PurchaseOrders->setIdUser($user);
-            $PurchaseOrders->setPayMethodId($id);
-            $PurchaseOrders->setProviderId($payType);
+            $PurchaseOrders->setPayMethodId($idPayMethod);
+            //$PurchaseOrders->setProviderId($payType);
             $PurchaseOrders->setName("Registro express");
 
             $PurchaseOrdersDescription = new PurchaseOrdersDescription();
@@ -127,7 +127,7 @@ class ExpressRegistrationRestController extends FOSRestController
             $em->persist($PurchaseOrders);
             $em->flush();
             $format = array('_format' => 'json');
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()), $format);
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getPayPurchaseOrder', array('idPurchaseOrder' => $PurchaseOrders->getIdPurchaseOrders()), $format);        
             $user->setExpress(2);
             $em->persist($user);
             $em->flush();

@@ -352,6 +352,8 @@ class PaymentMethodRestController extends FOSRestController
         $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
         $pmid=$purchaseOrder->getPayMethodId();
         $pmArray=explode('-',$pmid);
+        dump($pmArray);
+        exit();
         $purchaseOrder->setPayMethodId($pmArray[1]);
         $purchaseOrder->setProviderId($pmArray[0]);
         $em=$this->getDoctrine()->getManager();

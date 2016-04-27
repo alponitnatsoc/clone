@@ -45,7 +45,7 @@ class LoadEntityTypeData extends AbstractFixture implements OrderedFixtureInterf
         $EntityTypeCesantias->setName('Severances');
         $EntityTypeCesantias->setPayrollCode('FCES');
 
-        $manager->persist($EntityTypeARS);
+        $manager->persist($EntityTypeCesantias);
 
         $manager->flush();
 
