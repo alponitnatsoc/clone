@@ -334,76 +334,52 @@
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 30px;border-bottom: 1px solid #ccc;padding-bottom: 10px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
-                                    <p class="text-center typeQuestion" style="font-size: 20px;">Escoge el tipo de contrato que más se ajusta a tus requerimientos</p>
+                                    <p class="text-center typeQuestion" style="font-size: 20px;">Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales que le va a ofrecer</p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-10 col-md-push-1">
-                                        <div class="col-xs-6">
+
+                                <div class="row contractOptionsBox">
+                                    <div class="col-xs-6">
+                                        <h2>Término Indefinido</h2>
+                                        <div class="contractFirstList">
+                                            <ul class="">
+                                                <li>El periodo de prueba máximo es de 15 días.</li>
+                                                <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
+                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
+                                                <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
+                                            </ul>
                                         </div>
-                                        <div class="col-xs-6">
+                                        <hr />
+                                        <div class="contractSecondList">
+                                            <h4>A tener en cuenta</h4>
+                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
+                                            <br /><br />
+                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
+                                        </div>
+                                        <div class="buttonContainer">
+                                            <button type="button" id="btnToggleIndefinido" class="btn-orange btn active">Selecionar</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h2>Término Fijo</h2>
+                                        <div class="contractFirstList">    
+                                            <ul class="">
+                                                <li>No tiene una fecha determinada de terminación</li>
+                                                <li>El periodo de prueba máximo es de 2 meses</li>
+                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un largo periodo de tiempo</li>
+                                            </ul>
+                                        </div>
+                                        <hr />
+                                        <div class="contractSecondList">
+                                            <h4>A tener en cuenta</h4>
+                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
+                                        </div>
+                                        <div class="buttonContainer">
+                                            <button type="button" id="btnToggleFijo" class="btn-orange btn ">Selecionar</button>
                                         </div>
                                     </div>
                                 </div>
-                                <table>
-                                    <tr>
-                                        <th>
-                                            Término Indefinido
-                                        </th>
-                                        <th>
-                                            Término Fijo
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="row">
-                                                <p class="text-center typeQuestion">Características</p>
-                                            </div>
-                                            <div class="row">
-                                                <ul class="col-md-8 col-md-push-2">
-                                                    <li>El periodo de prueba máximo es de 15 días.</li>
-                                                    <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
-                                                    <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
-                                                    <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <p class="text-center typeQuestion">Características</p>
-                                            </div>
-                                            <div class="row">
-                                                <ul class="col-md-8 col-md-push-2">
-                                                    <li>No tiene una fecha determinada de terminación</li>
-                                                    <li>El periodo de prueba máximo es de 2 meses</li>
-                                                    <li>Recomendado para empleadores que quieran contratar a un empleado por un largo periodo de tiempo</li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="row">
-                                                <p class="text-center typeQuestion">A tener en cuenta</p>
-                                            </div>
-                                            <div class="row">
-                                                <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
-                                                    <br /><br />
-                                                    Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
-                                                </p>
-                                                <button type="button" id="btnToggleIndefinido" class="btn-default btn btn-toggle active">Selecionar</button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <p class="text-center typeQuestion">A tener en cuenta</p>
-                                            </div>
-                                            <div class="row">
-                                                <p class="col-md-8 col-md-push-2">Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
-                                                <button type="button" id="btnToggleFijo" class="btn-default btn btn-toggle ">Selecionar</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+
+                               
                                 <br/>
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
