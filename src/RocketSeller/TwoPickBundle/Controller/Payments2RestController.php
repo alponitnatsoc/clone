@@ -149,20 +149,33 @@ class Payments2RestController extends FOSRestController
     {
 
       ini_set("soap.wsdl_cache_enabled", 1);
-      $url_base = "https://cpsuite.htsoft.co:8080/dssp/services/";
+      $ambiente = '';
+      if($this->container->hasParameter('ambiente'))
+        $ambiente = $this->container->getParameter('ambiente');
+      else
+        $ambiente = 'desarrollo';
+
+      if($ambiente == 'produccion')
+        $url_base = "https://cpsuite.htsoft.co:8080/dssp/services/";
+      else
+        $url_base = "http://test.cpsuite.htsoft.co:6565/dssp/services/";
+
        $opts = array(
            //"ssl" => array("ciphers" => "RC4-SHA")
        );
 
-       $client = new \SoapClient($url_base . $path . "?wsdl",
-         array("connection_timeout" => 20,
-               "trace" => true,
-               "exceptions" => true,
-               "stream_context" => stream_context_create($opts),
-               'location' => 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/'
-               //"login" => $login,
-               //"password" => $pass
-        ));
+       $parametros_soap = array("connection_timeout" => 20,
+             "trace" => true,
+             "exceptions" => true,
+             "stream_context" => stream_context_create($opts),
+             //"login" => $login,
+             //"password" => $pass
+      );
+      // This is because of the https problem.
+      if($ambiente == 'produccion')
+        $parametros_soap['location'] = 'https://cpsuite.htsoft.co:8080/dssp/services/' . $methodName . '/';
+
+      $client = new \SoapClient($url_base . $path . "?wsdl", $parametros_soap);
 
       $res = $client->__soapCall($methodName, array($parameters));
 
