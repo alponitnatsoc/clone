@@ -367,7 +367,7 @@ trait SubscriptionMethodsTrait
                             $unitsPerPeriod = $actContract->getWorkableDaysMonth();
                             $salaryPerPeriod = $actContract->getSalary();
                         }
-                        $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . $dateToStart->format("t"));
+                        $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") ."-". $dateToStart->format("t"));
                         if ($nowDate < $dateToSend) {
                             break;
                         }
