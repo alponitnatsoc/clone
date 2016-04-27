@@ -257,7 +257,7 @@ class SubscriptionController extends Controller {
                             $request->setMethod('POST');
                             $request->request->set('credit_card', $pagoMembresia['credit_card']);
                             $request->request->set('expiry_date_year', $pagoMembresia['expiry_year']);
-                            $request->request->set('expiry_date_month', $pagoMembresia['expiry_month']);
+                            $request->request->set('expiry_date_month', strlen($pagoMembresia['expiry_month']) < 2 ? '0' . $pagoMembresia['expiry_month'] : $pagoMembresia['expiry_month']);
                             $request->request->set('cvv', $pagoMembresia['cvv']);
                             $request->request->set('name_on_card', $pagoMembresia['name_on_card']);
                             $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('request' => $request), array('_format' => 'json'));

@@ -1,0 +1,6 @@
+{% for pay in paymentMethods %}
+	<div class="paymethod">
+		<a href="/api/public/v1/pays/{{app.user.id }}/registers/{{pay}}/expresses">{{pay}}</a>		
+	</div>
+	
+{% endfor %}

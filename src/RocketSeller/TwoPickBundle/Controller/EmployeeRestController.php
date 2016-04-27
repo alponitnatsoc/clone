@@ -46,8 +46,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use DateTime;
 
-class EmployeeRestController extends FOSRestController
-{
+class EmployeeRestController extends FOSRestController {
 
     /**
      * Create a Person from the submitted data.<br/>
@@ -69,8 +68,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    public function getLiquidatePayrollAction($idEmployerHasEmployee)
-    {
+    public function getLiquidatePayrollAction($idEmployerHasEmployee) {
         $em = $this->getDoctrine()->getManager();
         $repoEmployee = $em->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var EmployerHasEmployee $realEmployerHasEmployee */
@@ -158,8 +156,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    public function postNewEmployeeSubmitAction(ParamFetcher $paramFetcher)
-    {
+    public function postNewEmployeeSubmitAction(ParamFetcher $paramFetcher) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
@@ -222,9 +219,9 @@ class EmployeeRestController extends FOSRestController
                 return $view;
             }
             $payMethod->setBankBank($tempBank);
-        }elseif(!($paramFetcher->get('cellphone')==""||$paramFetcher->get('cellphone')==null)){
-            $tempBank = $bankRepo->findOneBy(array("hightechCode"=>51));//daviviedna bank ofr daviplata
-            $tempaccounttype = $accountTypeRepo->findOneBy(array("name"=>"Ahorros"));//tipo de cuenta  bank ofr daviplata
+        } elseif (!($paramFetcher->get('cellphone') == "" || $paramFetcher->get('cellphone') == null)) {
+            $tempBank = $bankRepo->findOneBy(array("hightechCode" => 51)); //daviviedna bank ofr daviplata
+            $tempaccounttype = $accountTypeRepo->findOneBy(array("name" => "Ahorros")); //tipo de cuenta  bank ofr daviplata
             $payMethod->setBankBank($tempBank);
             $payMethod->setAccountTypeAccountType($tempaccounttype);
         }
@@ -370,8 +367,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    public function postNewEmployeeSubmitStep1Action(ParamFetcher $paramFetcher)
-    {
+    public function postNewEmployeeSubmitStep1Action(ParamFetcher $paramFetcher) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
@@ -534,8 +530,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="email", nullable=false, strict=true, description="workplace city.")
      * @return View
      */
-    public function postNewEmployeeSubmitStep2Action(ParamFetcher $paramFetcher)
-    {
+    public function postNewEmployeeSubmitStep2Action(ParamFetcher $paramFetcher) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
@@ -701,8 +696,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="holidayDebt", nullable=true, strict=true, description="vacations days that are unpaid.")
      * @return View
      */
-    public function postNewEmployeeSubmitStep3Action(ParamFetcher $paramFetcher)
-    {
+    public function postNewEmployeeSubmitStep3Action(ParamFetcher $paramFetcher) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
@@ -952,15 +946,15 @@ class EmployeeRestController extends FOSRestController
             $view = View::create();
             if (count($errors) == 0) {
 
-                if($contract->getContractTypeContractType()->getPayrollCode()==1){
-                    $endTestPeriod=new DateTime(date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
-                }else{
+                if ($contract->getContractTypeContractType()->getPayrollCode() == 1) {
+                    $endTestPeriod = new DateTime(date('Y-m-d', strtotime('+2 month', strtotime($contract->getStartDate()->format("Y-m-d")))));
+                } else {
                     /** @var DateTime $endTestPeriod2 */
-                    $endTestPeriod2=new DateTime(date ( 'Y-m-d' ,strtotime ( '+'.intval($contract->getStartDate()->diff($contract->getEndDate())->format("%a")/5).' day' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
+                    $endTestPeriod2 = new DateTime(date('Y-m-d', strtotime('+' . intval($contract->getStartDate()->diff($contract->getEndDate())->format("%a") / 5) . ' day', strtotime($contract->getStartDate()->format("Y-m-d")))));
                     /** @var DateTime $endTestPeriod */
-                    $endTestPeriod=new DateTime(date ( 'Y-m-d' ,strtotime ( '+2 month' , strtotime ( $contract->getStartDate()->format("Y-m-d") ) )));
-                    if($endTestPeriod2<$endTestPeriod){
-                        $endTestPeriod=$endTestPeriod2;
+                    $endTestPeriod = new DateTime(date('Y-m-d', strtotime('+2 month', strtotime($contract->getStartDate()->format("Y-m-d")))));
+                    if ($endTestPeriod2 < $endTestPeriod) {
+                        $endTestPeriod = $endTestPeriod2;
                     }
                 }
                 $contract->setTestPeriod($endTestPeriod);
@@ -986,6 +980,115 @@ class EmployeeRestController extends FOSRestController
     }
 
     /**
+     * Save edit contract.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors",
+     *     404 = "Returned when any Id does not exist in the DB"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     *
+     * @RequestParam(name="payTypeId", nullable=false, strict=true, description="workplace department.")
+     * @RequestParam(name="bankId", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="accountNumber", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="cellphone", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="hasIt", nullable=true, strict=true, description="workplace department.")
+     * @RequestParam(name="contractId", nullable=false, strict=true, description="id of the contract.")
+     * @RequestParam(name="idEmployer", nullable=false, strict=true, description="id of the contract.")
+     * @RequestParam(array=true, name="register_social_security", nullable=true, strict=true, description="afiliaciones")
+     *
+     * @return View
+     */
+    public function postSaveEditContractAction(ParamFetcher $paramFetcher) {
+        $view = View::create();
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $idContract = $paramFetcher->get("contractId");
+
+        //search the contract
+        $contractRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract');
+        /** @var Contract $contract */
+        $contract = $contractRepo->find($idContract);
+        if ($contract == null) {
+            $view->setStatusCode(403)->setData(array("error" => array('contract' => "You don't have that contract")));
+            return $view;
+        }
+        //payMethod repos
+        $bankRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Bank');
+        $accountTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:AccountType');
+        $payTypeRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PayType');
+        $frequencyRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Frequency');
+        $payMethod = $contract->getPayMethodPayMethod();
+        if ($payMethod != null) {
+            $payMethod->setCellPhone("");
+            $payMethod->setAccountNumber("");
+            $payMethod->setBankBank(null);
+            $payMethod->setAccountTypeAccountType(null);
+            $payMethod->setPayTypePayType(null);
+        } else {
+            $payMethod = new PayMethod();
+        }
+
+
+        if ($paramFetcher->get('bankId')) {
+            /** @var Bank $tempBank */
+            $tempBank = $bankRepo->find($paramFetcher->get('bankId'));
+            if ($tempBank == null) {
+                $view->setStatusCode(404)->setHeader("error", "The bankId ID " . $paramFetcher->get('bankId') . " is invalid");
+                return $view;
+            }
+            $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
+            $payMethod->setBankBank($tempBank);
+        } elseif (!($paramFetcher->get('cellphone') == "" || $paramFetcher->get('cellphone') == null)) {
+            $tempBank = $bankRepo->findOneBy(array("hightechCode" => 51)); //daviviedna bank ofr daviplata
+            $tempaccounttype = $accountTypeRepo->findOneBy(array("name" => "Ahorros")); //tipo de cuenta  bank ofr daviplata
+            $payMethod->setCellPhone($paramFetcher->get('cellphone'));
+            $payMethod->setBankBank($tempBank);
+            $payMethod->setAccountTypeAccountType($tempaccounttype);
+        }
+
+
+        if ($paramFetcher->get('payTypeId')) {
+            /** @var PayType $tempPayType */
+            $tempPayType = $payTypeRepo->find($paramFetcher->get('payTypeId'));
+            if ($tempPayType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The payTypeId ID " . $paramFetcher->get('payTypeId') . " is invalid");
+                return $view;
+            }
+            $payMethod->setPayTypePayType($tempPayType);
+        }
+
+        if ($paramFetcher->get('accountTypeId')) {
+            /** @var AccountType $tempAccountType */
+            $tempAccountType = $accountTypeRepo->find($paramFetcher->get('accountTypeId'));
+            if ($tempAccountType == null) {
+                $view->setStatusCode(404)->setHeader("error", "The accountTypeId ID " . $paramFetcher->get('accountTypeId') . " is invalid");
+                return $view;
+            }
+            $payMethod->setAccountTypeAccountType($tempAccountType);
+        }
+
+        $contract->setPayMethodPayMethod($payMethod);
+
+        $em->persist($contract);
+        $em->persist($payMethod);
+        $em->flush();
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * Save data<br/>
      *
      * @ApiDoc(
@@ -1005,8 +1108,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    public function postMatrixChooseSubmitAction(ParamFetcher $paramFetcher)
-    {
+    public function postMatrixChooseSubmitAction(ParamFetcher $paramFetcher) {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $view = View::create();
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
@@ -1036,8 +1138,7 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function saveMatrixChooseSubmitStep3(ParamFetcher $paramFetcher)
-    {
+    private function saveMatrixChooseSubmitStep3(ParamFetcher $paramFetcher) {
         /** @var User $user */
         $user = $this->getUser();
         if ($user == null) {
@@ -1073,8 +1174,7 @@ class EmployeeRestController extends FOSRestController
         return $view;
     }
 
-    private function validateEntitiesEmployee($realEmployee)
-    {
+    private function validateEntitiesEmployee($realEmployee) {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $personEmployee = $realEmployee->getPersonPerson();
@@ -1092,8 +1192,7 @@ class EmployeeRestController extends FOSRestController
         //}
     }
 
-    private function validateDocumentsEmployee($realEmployee)
-    {
+    private function validateDocumentsEmployee($realEmployee) {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -1126,8 +1225,7 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function validateDocumentsEmployer($idEmployer)
-    {
+    private function validateDocumentsEmployer($idEmployer) {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
@@ -1166,8 +1264,7 @@ class EmployeeRestController extends FOSRestController
         }
     }
 
-    private function createNotification($person, $descripcion, $url, $action = "Subir")
-    {
+    private function createNotification($person, $descripcion, $url, $action = "Subir") {
         $notification = new Notification();
         $notification->setPersonPerson($person);
         $notification->setStatus(1);
@@ -1204,13 +1301,11 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="severances", nullable=false, strict=true, description="benefits of the employee.")
      * @return View
      */
-    public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher)
-    {
+    public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher) {
         return $this->saveMatrixChooseSubmitStep1($paramFetcher);
     }
 
-    private function saveMatrixChooseSubmitStep1(ParamFetcher $paramFetcher)
-    {
+    private function saveMatrixChooseSubmitStep1(ParamFetcher $paramFetcher) {
         /** @var User $user */
         $user = $this->getUser();
         if ($user == null) {
@@ -1238,7 +1333,7 @@ class EmployeeRestController extends FOSRestController
 
         $beneficiarie = $paramFetcher->get('beneficiaries');
 
-        if ($tempPens == null ||( $tempWealth == null&& $tempArs==null)||$tempSeverances==null) {
+        if ($tempPens == null || ( $tempWealth == null && $tempArs == null) || $tempSeverances == null) {
             $view = View::create();
             $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
             return $view;
@@ -1271,13 +1366,13 @@ class EmployeeRestController extends FOSRestController
             $realEmployee->addEntity($employeeHasEntityCes);
             $em->persist($employeeHasEntityCes);
 
-            if($tempWealth!=null){
+            if ($tempWealth != null) {
                 $employeeHasEntityWealth = new EmployeeHasEntity();
                 $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                 $employeeHasEntityWealth->setEntityEntity($tempWealth);
                 $realEmployee->addEntity($employeeHasEntityWealth);
                 $em->persist($employeeHasEntityWealth);
-            }else{
+            } else {
                 $employeeHasEntityARS = new EmployeeHasEntity();
                 $employeeHasEntityARS->setEmployeeEmployee($realEmployee);
                 $employeeHasEntityARS->setEntityEntity($tempArs);
@@ -1295,10 +1390,10 @@ class EmployeeRestController extends FOSRestController
             /** @var EmployeeHasEntity $rEE */
             foreach ($realEmployeeEnt as $rEE) {
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
-                    if($tempWealth!=null) {
+                    if ($tempWealth != null) {
                         $rEE->setEntityEntity($tempWealth);
                         $em->persist($rEE);
-                    }else{
+                    } else {
                         $realEmployee->removeEntity($rEE);
                         $em->remove($rEE);
                         $employeeHasEntityARS = new EmployeeHasEntity();
@@ -1309,10 +1404,10 @@ class EmployeeRestController extends FOSRestController
                     }
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS") {
-                    if($tempArs!=null) {
+                    if ($tempArs != null) {
                         $rEE->setEntityEntity($tempArs);
                         $em->persist($rEE);
-                    }else{
+                    } else {
                         $em->remove($rEE);
                         $employeeHasEntityWealth = new EmployeeHasEntity();
                         $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
@@ -1370,13 +1465,11 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
      * @return View
      */
-    public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher)
-    {
+    public function postMatrixChooseSubmitStep2Action(ParamFetcher $paramFetcher) {
         return $this->saveMatrixChooseSubmitStep2($paramFetcher);
     }
 
-    private function saveMatrixChooseSubmitStep2(ParamFetcher $paramFetcher)
-    {
+    private function saveMatrixChooseSubmitStep2(ParamFetcher $paramFetcher) {
         /** @var User $user */
         $user = $this->getUser();
         $view = View::create();
@@ -1478,8 +1571,7 @@ class EmployeeRestController extends FOSRestController
      * @RequestParam(name="idContract", nullable=false, strict=true, description="the id of the contract")
      * @return View
      */
-    public function getVacationsDaysTaken(ParamFetcher $paramFetcher)
-    {
+    public function getVacationsDaysTaken(ParamFetcher $paramFetcher) {
         $contractRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Contract");
         /** @var Contract $contract */
         $contract = $contractRepo->find($paramFetcher->get("idContract"));
@@ -1531,8 +1623,7 @@ class EmployeeRestController extends FOSRestController
 
      * @return View
      */
-    public function postNewBeneficiaryAction(ParamFetcher $paramFetcher)
-    {
+    public function postNewBeneficiaryAction(ParamFetcher $paramFetcher) {
 
 
         $em = $this->getDoctrine()->getManager();
@@ -1626,8 +1717,7 @@ class EmployeeRestController extends FOSRestController
         return $view;
     }
 
-    public function getBeneficiaryAction($idBeneficiary)
-    {
+    public function getBeneficiaryAction($idBeneficiary) {
         $beneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Beneficiary')->find($idBeneficiary);
         $employeeHasBeneficiary = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EmployeeHasBeneficiary')->findOneByBeneficiaryBeneficiary($beneficiary);
         $view = View::create();
@@ -1688,8 +1778,7 @@ class EmployeeRestController extends FOSRestController
 
      * @return View
      */
-    public function postEditBeneficiaryAction(ParamFetcher $paramFetcher)
-    {
+    public function postEditBeneficiaryAction(ParamFetcher $paramFetcher) {
 
         $view = View::create();
         $em = $this->getDoctrine()->getManager();
@@ -1742,8 +1831,7 @@ class EmployeeRestController extends FOSRestController
      *
      * @return View
      */
-    protected function getErrorsView(ConstraintViolationList $errors)
-    {
+    protected function getErrorsView(ConstraintViolationList $errors) {
         $msgs = array();
         $errorIterator = $errors->getIterator();
         foreach ($errorIterator as $validationError) {
@@ -1757,8 +1845,7 @@ class EmployeeRestController extends FOSRestController
         return $view;
     }
 
-    public function getEmployeeInfoAction($idEmployee)
-    {
+    public function getEmployeeInfoAction($idEmployee) {
 
         $employee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($idEmployee);
 
@@ -1781,6 +1868,7 @@ class EmployeeRestController extends FOSRestController
         ))->setStatusCode(200);
         return $view;
     }
+
     /**
      * Edit a Beneficiary from the submitted data.<br/>
      *
@@ -1811,8 +1899,7 @@ class EmployeeRestController extends FOSRestController
 
      * @return View
      */
-    public function postEditEmployeeAction(ParamFetcher $paramFetcher)
-    {
+    public function postEditEmployeeAction(ParamFetcher $paramFetcher) {
         $view = $view = View::create();
 
         $em = $this->getDoctrine()->getManager();
@@ -1853,9 +1940,7 @@ class EmployeeRestController extends FOSRestController
         return $view;
     }
 
-
-    protected function getDaysSince($sinceDate, $toDate)
-    {
+    protected function getDaysSince($sinceDate, $toDate) {
         $dDiff = true;
         if ($sinceDate !== null && $toDate !== null) {
             $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));

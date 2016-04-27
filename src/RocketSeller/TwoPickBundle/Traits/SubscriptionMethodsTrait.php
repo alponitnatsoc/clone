@@ -53,12 +53,12 @@ trait SubscriptionMethodsTrait
         $config = $this->getConfigData();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $this->getdoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-            ->findByEmployerEmployer($idEmployer);
+                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+                ->findByEmployerEmployer($idEmployer);
 
         $productos = $this->getdoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:Product')
-            ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+                ->getRepository('RocketSellerTwoPickBundle:Product')
+                ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
 
         $employees = array();
         $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = $contInactivos = 0;
@@ -946,9 +946,9 @@ trait SubscriptionMethodsTrait
         /* @var $ProcedureType ProcedureType */
         $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-            'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
-            'idProcedureType' => $ProcedureType->getIdProcedureType()
-        ), array('_format' => 'json')
+            '$employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
+            '$idProcedureType' => $ProcedureType->getIdProcedureType()
+                ), array('_format' => 'json')
         );
         $this->validateDocuments($user);
         $this->addToSQL($user);
@@ -963,92 +963,92 @@ trait SubscriptionMethodsTrait
         $listPaymentMethods = json_decode($response->getContent(), true);
         return isset($listPaymentMethods['payment-methods'][0]['method-id']) ? ($listPaymentMethods['payment-methods'][0]['method-id']) : false;
     }
-
-    public function procedureAction($employerId, $idProcedureType)
+    
+    public function procedureAction($employerId,$idProcedureType)
     {
         $em = $this->getDoctrine()->getManager();
         $em2 = $this->getDoctrine()->getManager();
-        $employerSearch = $this->loadClassById($employerId, "Employer");
-        $procedureType = $this->loadClassById($idProcedureType, "ProcedureType");
+        $employerSearch = $this->loadClassById($employerId,"Employer");
+        $procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
         $employerHasEmployees = $employerSearch->getEmployerHasEmployees();
         if ($procedureType->getName() == "Registro empleador y empleados") {
             $procedure = new RealProcedure();
             $procedure->setCreatedAt(new \DateTime());
             $procedure->setProcedureTypeProcedureType($procedureType);
-            $procedure->setEmployerEmployer($employerSearch);
+            $procedure->setEmployerEmployer($employerSearch);           
             $em2->persist($procedure);
 
-            $action = new Action();
-            $action->setStatus('Nuevo');
-            $action->setRealProcedureRealProcedure($procedure);
-            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
-            $action->setPersonPerson($employerSearch->getPersonPerson());
-            $em->persist($action);
-            $em->flush();
-
-            $action = new Action();
-            $action->setStatus('Nuevo');
-            $action->setRealProcedureRealProcedure($procedure);
-            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar cliente'), "ActionType"));
-            $action->setPersonPerson($employerSearch->getPersonPerson());
-            $em->persist($action);
-            $em->flush();
-            foreach ($employerSearch->getEntities() as $entities) {
-
-                $action = new Action();
+                $action = new Action();             
                 $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);
-                $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
+                $action->setRealProcedureRealProcedure($procedure);             
+                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
 
-                $action = new Action();
+                $action = new Action();             
+                $action->setStatus('Nuevo');
+                $action->setRealProcedureRealProcedure($procedure);             
+                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar cliente'),"ActionType"));
+                $action->setPersonPerson($employerSearch->getPersonPerson());
+                $em->persist($action);
+                $em->flush();                       
+            foreach ($employerSearch->getEntities() as $entities) {
+
+                $action = new Action();             
                 $action->setStatus('Nuevo');
                 $action->setRealProcedureRealProcedure($procedure);
                 $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
+                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+                $action->setPersonPerson($employerSearch->getPersonPerson());
+                $em->persist($action);
+                $em->flush();
+
+                $action = new Action();             
+                $action->setStatus('Nuevo');
+                $action->setRealProcedureRealProcedure($procedure);
+                $action->setEntityEntity($entities->getEntityEntity());
+                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
                 $procedure->addAction($action);
             }
             foreach ($employerHasEmployees as $employerHasEmployee) {
-                //agregar la validacion del estado del employee                 
-                $action = new Action();
-                $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);
-                //$action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
-                $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                $em->persist($action);
-                $em->flush();
-                $procedure->addAction($action);
+            //agregar la validacion del estado del employee                 
+                    $action = new Action();             
+                    $action->setStatus('Nuevo');
+                    $action->setRealProcedureRealProcedure($procedure);
+                    //$action->setEntityEntity($entities->getEntityEntity());
+                    $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
+                    $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                    $em->persist($action);
+                    $em->flush();
+                    $procedure->addAction($action);
                 foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
-                    $action = new Action();
-                    $action->setStatus('Nuevo');
-                    $action->setRealProcedureRealProcedure($procedure);
-                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
-                    $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                    $em->persist($action);
-                    $em->flush();
-                    $procedure->addAction($action);
+                        $action = new Action();             
+                        $action->setStatus('Nuevo');
+                        $action->setRealProcedureRealProcedure($procedure);
+                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                        $em->persist($action);
+                        $em->flush();
+                        $procedure->addAction($action);
 
-                    $action = new Action();
-                    $action->setStatus('Nuevo');
-                    $action->setRealProcedureRealProcedure($procedure);
-                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
-                    $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                    $em->persist($action);
-                    $em->flush();
-                    $procedure->addAction($action);
+                        $action = new Action();             
+                        $action->setStatus('Nuevo');
+                        $action->setRealProcedureRealProcedure($procedure);
+                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
+                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                        $em->persist($action);
+                        $em->flush();
+                        $procedure->addAction($action);
                 }
             }
             $em2->flush();
-        } else {
+        }else{
             $em2->remove($procedure);
             $em2->flush();
         }

@@ -1,569 +1,646 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-<div class="employees">
-    <div class="col-sm-12 col-xs-12">
-        <div class="btn col-sm-12 col-xs-12 blockTop">
-            <div class="col-md-2">
-                <img src="/img/employ_white.png" />
-            </div>
-            <div class="col-md-6 col-xs-12 txt-top-employee">
-                <div class="" id="">
-                    <h3>Información del empleado</h3>
+    <div class="employees">
+        <div class="col-sm-12 col-xs-12">
+            <div class="btn col-sm-12 col-xs-12 blockTop">
+                <div class="col-md-2">
+                    <img src="/img/employ_white.png" />
+                </div>
+                <div class="col-md-6 col-xs-12 txt-top-employee">
+                    <div class="" id="">
+                        <h3>Información del empleado</h3>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-12 col-xs-12 ">
-        <ul class="nav nav-tabs nav-justified tab-header">
-            <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
-            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
-            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
-            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
-            <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
-            <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
-        </ul>
-    </div>
-    <div class="tab-content">
-        <div id="basicData" class="tab-pane fade in active">
-            <div class="col-sm-12 col-sm-offset-4"></div>
-            <div class="col-sm-12 top-box-employee">
-                <div class="col-sm-4 left-top-box">
-                    <div class="col-sm-12">
-                        <p><strong>{{employee.personPerson.names}}</strong></p>
-                        <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                        <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-5">
-                        {#<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>      #}
-                        <a class="btn btn-top-left notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
-                            Agregar Novedad
-                        </a>
-                    </div>
-                    <div class="col-sm-5">
-                        <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
-                    </div>
-                    <div class="col-sm-2">
-                        {% if  not employerHasEmployee.state %}
-                            <a class="btn  btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Activar</a>
-                        {% else %}
-                            <a class="btn btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Inactivar</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 middle-box">
-                <div class="col-sm-4 left">
-                    {% if employerHasEmployee.state %}
-                        <p><i class="fa fa-check-circle">Activo</i></p>
-                    {% else %}
-                        <p><i class="fa fa-check-cross">Inactivo</i></p>
-                    {% endif %}
-                </div>
-                <div class="col-sm-4 middle">
-                    <div class="col-sm-12 title" style="font-style:italic;">Vacaciones</div>
-                    <div class="col-sm-12 text-below"><strong>10 dias</strong></div>
-                </div>
-                <div class="col-sm-4 right">
-                    <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
-                    <div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
-                </div>
-            </div>
-            <div class="col-sm-12 bottom-box">
-                <div class="col-sm-4 col-sm-offset-2 left">
-                    <ul class="col-sm-12">
-                        <h4 class="col-sm-12">Datos basicos</h4>
-                        <li>
-                            <p class="title"><i>Estado civil</i></p>
-                            <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Fecha de nacimiento</i></p>
-                            <p><strong>{{ employee.personPerson.birthDate|date('F')|trans}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>País</i></p>
-                            <p><strong>{{employee.personPerson.birthCountry.name}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Departamento</i></p>
-                            <p><strong>{{employee.personPerson.birthDepartment.name}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Ciudad</i></p>
-                            <p><strong>{{employee.personPerson.birthCity.name}}</strong></p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-4 col-sm-offset-1 right">
-                    <ul class="col-sm-12">
-                        <h4 class="col-sm-12">Datos de contacto</h4>
-                        <li>
-                            <p class="title"><i>Dirección</i></p>
-                            <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Email</i></p>
-                            <p><strong>{{employee.personPerson.email}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Teléfono</i></p>
-                            <p><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Departamento</i></p>
-                            <p><strong>{{employee.personPerson.department.name}}</strong></p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Ciudad</i></p>
-                            <p><strong>{{employee.personPerson.city.name}}</strong></p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-12 bottom-box-edit" hidden="true">
-                <div class="col-sm-4 col-sm-offset-2 left">
-                    <ul class="col-sm-12">
-                        <h4 class="col-sm-12">Datos basicos</h4>
-                        <li>
-                            {{ form_start(form2)}}
-                            <p class="title"><i>Estado civil</i></p>
-                            <p>{{form_widget(form2.civilStatus) }}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Fecha de nacimiento</i></p>
-                            <p>{{form_widget(form2.birthDate) }}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>País</i></p>
-                            <p>{{form_widget(form2.birthCountry) }}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Departamento</i></p>
-                            <p>{{form_widget(form2.birthDepartment) }}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Ciudad</i></p>
-                            <p>{{form_widget(form2.birthCity) }}</p>
-                            
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-4 col-sm-offset-1 right">
-                    <ul class="col-sm-12">
-                        <h4 class="col-sm-12">Datos de contacto</h4>
-                        <li>
-                            <p class="title"><i>Dirección</i></p>
-                            <p>{{form_widget(form2.mainAddress)}}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Email</i></p>
-                            <p>{{form_widget(form2.email)}}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Teléfono</i></p>
-                            <p>{{form_widget(form2.phone)}}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Departamento</i></p>
-                            <p>{{form_widget(form2.department)}}</p>
-                        </li>
-                        <li>
-                            <p class="title"><i>Ciudad</i></p>
-                            <p>{{form_widget(form2.city)}}</p>
-                        </li>
-                    </ul>
-                    
-                </div>
-                <div class="col-sm-4 col-sm-offset-5">
-                    <span class="edit-employee-save btn btn-orange notAjax" href="/api/public/v1/edits/employees">Guardar</span>
-                    {{form_end(form2)}}
-                </div>
-                
-            </div>
-            <div class="col-sm-12 col-sm-offset-5">
-                <span class="editEmployee btn btn-orange notAjax" href="/api/public/v1/employees/{{employee.idEmployee}}/info">Editar</span>
-            </div>
+        <div class="col-sm-12 col-xs-12 ">
+            <ul class="nav nav-tabs nav-justified tab-header">
+                <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
+                <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
+            </ul>
         </div>
-        <div id="contactData" class="tab-pane">
-            <div class="col-sm-12 col-sm-offset-4"></div>
-            <div class="col-sm-12 top-box-employee">
-                <div class="col-sm-4 left-top-box">
-                    <div class="col-sm-12">
-                        <p><strong>{{employee.personPerson.names}}</strong></p>
-                        <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                        <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
+        <div class="tab-content">
+            <div id="basicData" class="tab-pane fade in active">
+                <div class="col-sm-12 col-sm-offset-4"></div>
+                <div class="col-sm-12 top-box-employee">
+                    <div class="col-sm-4 left-top-box">
+                        <div class="col-sm-12">
+                            <p><strong>{{employee.personPerson.names}}</strong></p>
+                            <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
+                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="col-sm-4 col-sm-offset-8">
+                    <div class="col-sm-8">
+                        <div class="col-sm-5">
+                            {#<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>      #}
+                            <a class="btn btn-top-left notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
+                                Agregar Novedad
+                            </a>
+                        </div>
                         <div class="col-sm-5">
                             <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
                         </div>
+                        <div class="col-sm-2">
+                            {% if  not employerHasEmployee.state %}
+                                <a class="btn  btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Activar</a>
+                            {% else %}
+                                <a class="btn btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Inactivar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 middle-box">
+                    <div class="col-sm-4 left">
+                        {% if employerHasEmployee.state %}
+                            <p><i class="fa fa-check-circle">Activo</i></p>
+                        {% else %}
+                            <p><i class="fa fa-check-cross">Inactivo</i></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-4 middle">
+                        <div class="col-sm-12 title" style="font-style:italic;">Vacaciones</div>
+                        <div class="col-sm-12 text-below"><strong>10 dias</strong></div>
+                    </div>
+                    <div class="col-sm-4 right">
+                        <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
+                        <div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
                     </div>
                 </div>
                 <div class="col-sm-12 bottom-box">
-                    <div class="col-sm-4 left">
+                    <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
+                            <h4 class="col-sm-12">Datos basicos</h4>
                             <li>
-                                <p class="title"><i>Tipo de empleado</i></p>
-                                <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                <p class="title"><i>Estado civil</i></p>
+                                <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Fecha inicion de contrato</i></p>
-                                <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                <p class="title"><i>Fecha de nacimiento</i></p>
+                                <p><strong>{{ employee.personPerson.birthDate|date('F')|trans}} {{ employee.personPerson.birthDate|date('d')}} de {{  employee.personPerson.birthDate|date('Y')}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Tipo de contrato</i></p>
-                                <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                <p class="title"><i>País</i></p>
+                                <p><strong>{{employee.personPerson.birthCountry.name}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Sueldo diario</i></p>
-                                <p><strong>${{contract.salary}}</strong></p>
+                                <p class="title"><i>Departamento</i></p>
+                                <p><strong>{{employee.personPerson.birthDepartment.name}}</strong></p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Ciudad</i></p>
+                                <p><strong>{{employee.personPerson.birthCity.name}}</strong></p>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-sm-4 right">
+                    <div class="col-sm-4 col-sm-offset-1 right">
                         <ul class="col-sm-12">
+                            <h4 class="col-sm-12">Datos de contacto</h4>
                             <li>
-                                <p class="title"><i>Cargo</i></p>
-                                <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                <p class="title"><i>Dirección</i></p>
+                                <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Fecha fin de contrato</i></p>
-                                <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                <p class="title"><i>Email</i></p>
+                                <p><strong>{{employee.personPerson.email}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Lugar de trabajo</i></p>
-                                <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
+                                <p class="title"><i>Teléfono</i></p>
+                                <p><strong>{{employee.personPerson.phones[0].phoneNumber}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Metodo de pago</i></p>
-                                <p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4 right">
-                        <ul class="col-sm-12">
-                            <li>
-                                <p class="title"><i>Dedicación de tiempo</i></p>
-                                <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                <p class="title"><i>Departamento</i></p>
+                                <p><strong>{{employee.personPerson.department.name}}</strong></p>
                             </li>
                             <li>
-                                <p class="title"><i>Dias laborales al mes</i></p>
-                                <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                <p class="title"><i>Ciudad</i></p>
+                                <p><strong>{{employee.personPerson.city.name}}</strong></p>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-12 file-download-contract" >
-                    <h4>Copia firmada del contrato</h4>
-                    {% if contractEmployee %}
-                        <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
-                            <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
-                                <div class="col-sm-1 icon-pdf">
-                                    <i class="fa fa-file-pdf-o fa-2x"></i>
-                                </div>
-                                <div class="col-sm-10" style="text-align:left;">
-                                    <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema</p>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
+                <div class="col-sm-12 bottom-box-edit" hidden="true">
+                    <div class="col-sm-4 col-sm-offset-2 left">
+                        <ul class="col-sm-12">
+                            <h4 class="col-sm-12">Datos basicos</h4>
+                            <li>
+                                {{ form_start(form2)}}
+                                <p class="title"><i>Estado civil</i></p>
+                                <p>{{form_widget(form2.civilStatus) }}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Fecha de nacimiento</i></p>
+                                <p>{{form_widget(form2.birthDate) }}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>País</i></p>
+                                <p>{{form_widget(form2.birthCountry) }}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Departamento</i></p>
+                                <p>{{form_widget(form2.birthDepartment) }}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Ciudad</i></p>
+                                <p>{{form_widget(form2.birthCity) }}</p>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-1 right">
+                        <ul class="col-sm-12">
+                            <h4 class="col-sm-12">Datos de contacto</h4>
+                            <li>
+                                <p class="title"><i>Dirección</i></p>
+                                <p>{{form_widget(form2.mainAddress)}}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Email</i></p>
+                                <p>{{form_widget(form2.email)}}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Teléfono</i></p>
+                                <p>{{form_widget(form2.phone)}}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Departamento</i></p>
+                                <p>{{form_widget(form2.department)}}</p>
+                            </li>
+                            <li>
+                                <p class="title"><i>Ciudad</i></p>
+                                <p>{{form_widget(form2.city)}}</p>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="col-sm-4 col-sm-offset-5">
+                        <span class="edit-employee-save btn btn-orange notAjax" href="/api/public/v1/edits/employees">Guardar</span>
+                        {{form_end(form2)}}
+                    </div>
+
                 </div>
                 <div class="col-sm-12 col-sm-offset-5">
-                    <a class="btn btn-orange notAjax" href="/register/employee/{{employee.idEmployee}}">Editar</a>
+                    <span class="editEmployee btn btn-orange notAjax" href="/api/public/v1/employees/{{employee.idEmployee}}/info">Editar</span>
                 </div>
             </div>
-        </div>
-        <div id="workplacesData" class="tab-pane">
-            <div class="col-sm-12 social-security" >
-                <h4>Datos de seguridad social</h4>
-                <div class="col-sm-8 col-sm-offset-2">
-                    <div class="col-sm-6 left">
-                        <p class="title"><i><strong>Eps</strong></i></p>
-                        <p class="title"><i><strong>Fondo de pensiones</strong></i></p>
-                        <p class="title"><i><strong>Arl</strong></i></p>
-                        <p class="title"><i><strong>Caja de compensación</strong></i></p>
+            <div id="contactData" class="tab-pane">
+                <div class="col-sm-12 col-sm-offset-4"></div>
+                <div class="col-sm-12 top-box-employee">
+                    <div class="col-sm-4 left-top-box">
+                        <div class="col-sm-12">
+                            <p><strong>{{employee.personPerson.names}}</strong></p>
+                            <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
+                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
+                        </div>
                     </div>
-                    <div class="col-sm-6 right">
-                        <p>{{entidades["EPS"].name}}</p>
-                        <p>{{entidades["Pension"].name}}</p>
-                        <p>{{entidades["ARL"].name}}</p>
-                        <p>{{entidades["CC"].name}}</p>
+                    <div class="col-sm-8">
+                        <div class="col-sm-4 col-sm-offset-8">
+                            <div class="col-sm-5">
+                                <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 bottom-box">
+                        <input type="hidden" id="contract-id" name="contract-id" value="{{ contract.idContract }}"/>
+                        <div class="contract-info">
+                            <div class="col-sm-4 left">
+                                <ul class="col-sm-12">
+                                    <li>
+                                        <p class="title"><i>Tipo de empleado</i></p>
+                                        <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Fecha inicion de contrato</i></p>
+                                        <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Tipo de contrato</i></p>
+                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Salario</i></p>
+                                        <p><strong>${{contract.salary}}</strong></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 right">
+                                <ul class="col-sm-12">
+                                    <li>
+                                        <p class="title"><i>Cargo</i></p>
+                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Fecha fin de contrato</i></p>
+                                        <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Lugar de trabajo</i></p>
+                                        <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Metodo de pago</i></p>
+                                        <p><strong>{{contract.payMethodPayMethod.payTypePayType.name}}</strong></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 right">
+                                <ul class="col-sm-12">
+                                    <li>
+                                        <p class="title"><i>Dedicación de tiempo</i></p>
+                                        <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Dias laborales al mes</i></p>
+                                        <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                    </li>
+                                </ul>
+                            </div>                    
+                        </div>
+                        <div class="contract-edit-form" style="display:none;">
+                            <div class="col-sm-4 left">
+                                <ul class="col-sm-12">
+                                    <li>
+                                        <p class="title"><i>Tipo de empleado</i></p>
+                                        <p><strong>{{ contract.positionPosition.name }}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Fecha inicion de contrato</i></p>
+                                        <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Tipo de contrato</i></p>
+                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Salario</i></p>
+                                        <input id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 right">
+                                <ul class="col-sm-12">
+                                    <li>
+                                        <p class="title"><i>Cargo</i></p>
+                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Fecha fin de contrato</i></p>
+                                        <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                    </li>
+                                    <li>
+                                        {% set workplaces = employerHasEmployee.EmployerEmployer.workplaces %}
+                                        <p class="title"><i>Lugar de trabajo</i></p>
+                                        <select id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
+                                            <option value="" selected="selected">Seleccionar una opción</option>
+                                            {% for workplace in workplaces %}
+                                                <option value="{{workplace.idWorkplace}}">{{ workplace.name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Metodo de pago</i></p>                                  
+                                        <select id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
+                                            <option value="" selected="selected">Seleccionar una opción</option>
+                                            {% for payMethodType in payMethodTypes %}
+                                                <option value="{{payMethodType.idPayType}}">{{ payMethodType.name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 right">
+                                <ul class="col-sm-12 ">
+                                    <li>
+                                        <p class="title"><i>Dedicación de tiempo</i></p>
+                                        <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
+                                    </li>
+                                    <li>
+                                        <p class="title"><i>Dias laborales al mes</i></p>
+                                        <p><strong>{{contract.workableDaysMonth}}</strong></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 paymethod-fields" style="color: black !important;">
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 file-download-contract" >
+                        <h4>Copia firmada del contrato</h4>
+                        {% if contractEmployee %}
+                            <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
+                                <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
+                                    <div class="col-sm-1 icon-pdf">
+                                        <i class="fa fa-file-pdf-o fa-2x"></i>
+                                    </div>
+                                    <div class="col-sm-10" style="text-align:left;">
+                                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema</p>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-12 col-sm-offset-5">
+                        <span class="edit-contract btn btn-orange notAjax" href="">Editar</span>
+                    </div>
+                    <div class="contract-save col-sm-12 col-sm-offset-5">
+                        <span class="save-contract btn btn-orange notAjax" style="display:none;" href="{{ path('api_public_post_save_edit_contract') }}">Salvar</span>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8 col-sm-offset-2 middle-content">
-                <div class="col-sm-12" style="text-align:center;">
-                    <div class="col-sm-4">
-                        <p><strong>Beneficiario</strong></p>
+            <div id="workplacesData" class="tab-pane">
+                <div class="col-sm-12 social-security" >
+                    <h4>Datos de seguridad social</h4>
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="col-sm-6 left">
+                            <p class="title"><i><strong>Eps</strong></i></p>
+                            <p class="title"><i><strong>Fondo de pensiones</strong></i></p>
+                            <p class="title"><i><strong>Arl</strong></i></p>
+                            <p class="title"><i><strong>Caja de compensación</strong></i></p>
+                        </div>
+                        <div class="col-sm-6 right">
+                            <p>{{entidades["EPS"].name}}</p>
+                            <p>{{entidades["Pension"].name}}</p>
+                            <p>{{entidades["ARL"].name}}</p>
+                            <p>{{entidades["CC"].name}}</p>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <p><strong>Entidad</strong></p>
-                    </div>
-                    <div class="col-sm-4">
-                        <p><strong>Acción</strong></p>
-                    </div>
-                </div>                
+                </div>
+                <div class="col-sm-8 col-sm-offset-2 middle-content">
+                    <div class="col-sm-12" style="text-align:center;">
+                        <div class="col-sm-4">
+                            <p><strong>Beneficiario</strong></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><strong>Entidad</strong></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><strong>Acción</strong></p>
+                        </div>
+                    </div>                
                     {% for  beneficiary in nonRepeatedBenef %}
 
                         <div class="col-sm-12 row-novelty" style="text-align:center;">
                             <div class=" element-table col-sm-4">
-                                
+
                                 <p><strong>{{beneficiary.personPerson.names}} {{ beneficiary.personPerson.lastName1}}</strong></p>
-                                
+
                             </div>
                             <div class="element-table col-sm-4">
                                 <p><strong>{{entidades["EPS"].name}} {{entidades["CC"].name}}</strong></p>
                             </div>
                             <div class="element-detail col-sm-4">
                                 <span class="editBeneficiary" style="cursor:pointer" href="/api/public/v1/beneficiaries/{{beneficiary.idBeneficiary}}"><p><strong class="editBeneficiary">Editar</strong></p></span>
-                                
+
                             </div>
                         </div>
 
                     {% endfor %}
-            </div>
-            {{ form_start(form , {'attr': {'id': 'form'}})}}
-            <div class="col-sm-12 form-upper">
-                <div class="content col-sm-8 col-sm-offset-2" style="cursor:pointer" onclick="showCreateForm()">
-                    <h4 >Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
-
                 </div>
-            </div>
-            <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
-                
-                <div class="content col-sm-6 col-sm-offset-3">
-                    
-                    <div class="col-sm-6 form-group form-black input form-dummy">
-                        <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
-                        <select id="benefType" name="relation" class="form-control valid" >
-                            <option value="" selected="true" >Seleccionar una opción</option>            
-                            <option value="Cónyugue">Cónyuge</option>            
-                            <option value="Hijo">Hijo</option>            
-                            <option value="Hermano">Hermano</option>
-                            <option value="Padre">Padre</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 form-group form-black input form-dummy">
-                        <p class="title"><i><strong>Tiene discapacidad?</strong></i></p> 
-                        <div style="text-align:left;">
-                            <input type="radio" name="disability" value="1"> Si
-                            <input type="radio" name="disability" value="0"> No
-                        </div>
-                        
-                    </div>
+                {{ form_start(form , {'attr': {'id': 'form'}})}}
+                <div class="col-sm-12 form-upper">
+                    <div class="content col-sm-8 col-sm-offset-2" style="cursor:pointer" onclick="showCreateForm()">
+                        <h4 >Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
 
-                    <br>
-
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.names)}}         
                     </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.lastName1)}}        
-                    </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.lastName2)}}        
-                    </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.civilStatus)}}        
-                    </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.documentType)}}       
-                    </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.document)}}       
-                    </div>
-                    <div class="col-sm-12 form-black form-group">
-                        {{form_row(form.birthDate)}}       
-                    </div>                    
                 </div>
-                <div class="col-sm-12">
+                <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
+
                     <div class="content col-sm-6 col-sm-offset-3">
-                        <h4>Ubicación</h4>
-                        <div class="form-black form-group">
-                            {{form_row(form.mainAddress)}}       
-                        </div>
-                        <div class="form-black form-group">
-                            {{form_row(form.department)}}     
-                        </div> 
-                        <div class="form-black form-group">
-                            {{form_row(form.city)}}       
-                        </div>       
-                        <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
-                        <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
-                        <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">
-                        <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">                                         
-                        <div class="col-sm-12 col-xs-12 center">
-                            <span id="btn-create"  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
-                            <span id="btn-edit"  href="/api/public/v1/edits/beneficiaries" class="btn btn-orange btn-edit" style="display: none;">Editar y continuar</span>
-                            <br><br>
-                        </div>
-                    </div>
-                </div>
 
-                {{ form_end(form)}}
-                
+                        <div class="col-sm-6 form-group form-black input form-dummy">
+                            <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
+                            <select id="benefType" name="relation" class="form-control valid" >
+                                <option value="" selected="true" >Seleccionar una opción</option>            
+                                <option value="Cónyugue">Cónyuge</option>            
+                                <option value="Hijo">Hijo</option>            
+                                <option value="Hermano">Hermano</option>
+                                <option value="Padre">Padre</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 form-group form-black input form-dummy">
+                            <p class="title"><i><strong>Tiene discapacidad?</strong></i></p> 
+                            <div style="text-align:left;">
+                                <input type="radio" name="disability" value="1"> Si
+                                <input type="radio" name="disability" value="0"> No
+                            </div>
 
-            </div>
-            <div class="col-sm-12 buttons-box">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <div class="col-sm-6 " style="text-align:right;">
-                          <a class="btn btn-orange btn-inverted notAjax" href="">Agregar otro beneficiario</a>
-                    </div>
-                    <div class="col-sm-6" style="text-align:left;">
-                        <a class="btn btn-orange notAjax" href="">Siguiente</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="noveltiesData" class="tab-pane">
-            <div class="col-sm-12 middle-content">
-                <div class="content col-sm-6 col-sm-offset-3">
-                    <h4>Novedades reportadas al día de hoy</h4>
-                </div>
-                <div class="col-sm-12" style="text-align:center;">
-                    <div class="col-sm-3">
-                        <p><strong>Fecha inicio</strong></p>
-                    </div>
-                    <div class="col-sm-3">
-                        <p><strong>Fecha fin</strong></p>
-                    </div>
-                    <div class="col-sm-3">
-                        <p><strong>Estado</strong></p>
-                    </div>
-                    <div class="col-sm-3">
-                        <p><strong>Detalle</strong></p>
-                    </div>
-                </div>
-                {% set payrolls = contract.payrolls %}
-                {% for payroll in payrolls %}
-                    {% set novelties = payroll.novelties %}
-                    {% for novelty in novelties %}
-                        <div class="col-sm-12 row-novelty" style="text-align:center;">
-                            <div class=" element-table col-sm-3">
-                                {% if novelty.dateStart %}
-                                    <p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
-                                {% else %}
-                                    <p><strong>-</strong></p>
-                                {% endif %}
-                            </div>
-                            <div class="element-table col-sm-3">
-                                {% if novelty.dateEnd %}
-                                    <p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
-                                {% else %}
-                                    <p><strong>-</strong></p>
-                                {% endif %}
-                            </div>
-                            <div class="element-table col-sm-3">
-                                <p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
-                            </div>
-                            <div class="element-detail col-sm-3">
-                                <p><strong>Detalle</strong></p>
-                            </div>
                         </div>
-                    {% endfor %}
-                {% endfor %}
-                <div class="col-sm-12  row-add-novelty" style="text-align:center;">
-                    <div class="col-sm-4 col-sm-offset-4">
-                        <div class="col-sm-2 plus-icon">
-                            <i class="fa fa-plus-circle fa-2x"></i>
+
+                        <br>
+
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.names)}}         
                         </div>
-                        <div class="col-sm-10 text">
-                            <a class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.lastName1)}}        
                         </div>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.lastName2)}}        
+                        </div>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.civilStatus)}}        
+                        </div>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.documentType)}}       
+                        </div>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.document)}}       
+                        </div>
+                        <div class="col-sm-12 form-black form-group">
+                            {{form_row(form.birthDate)}}       
+                        </div>                    
                     </div>
-                </div>
-            </div>
-        </div>
-        <div id="payHistory" class="tab-pane">
-            <div class="col-sm-12 payment-content">
-                <div class="col-sm-4 search-box">
-                    <h4>Buscar por:</h4>
-                    <div class="col-sm-12 form-group form-black input form-dummy">
-                        <p class="title"><i><strong>Fecha</strong></i></p>
-                        <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
-                    </div>
-                    <div class="col-sm-12 form-group form-black input form-dummy">
-                        <p class="title"><i><strong>Valor</strong></i></p>
-                        <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
-                    </div>
-                    <div class="col-sm-12 search-button">
-                        <a class="btn btn-orange notAjax" href="">Buscar</a>
-                    </div>
-                </div>
-                <div class="col-sm-8">
                     <div class="col-sm-12">
-                        <h3><strong>Pagos efectuados al día de hoy</strong></h3>
-                        <div class="col-sm-6">
-                            <p>Total pagado: $60000000</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p>Total pagos: {{ payrolls|length}}</p>
+                        <div class="content col-sm-6 col-sm-offset-3">
+                            <h4>Ubicación</h4>
+                            <div class="form-black form-group">
+                                {{form_row(form.mainAddress)}}       
+                            </div>
+                            <div class="form-black form-group">
+                                {{form_row(form.department)}}     
+                            </div> 
+                            <div class="form-black form-group">
+                                {{form_row(form.city)}}       
+                            </div>       
+                            <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
+                            <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
+                            <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">
+                            <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">                                         
+                            <div class="col-sm-12 col-xs-12 center">
+                                <span id="btn-create"  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
+                                <span id="btn-edit"  href="/api/public/v1/edits/beneficiaries" class="btn btn-orange btn-edit" style="display: none;">Editar y continuar</span>
+                                <br><br>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 table-title">
-                        <div class="col-sm-4">
-                            <p><strong>Fecha</strong></p>
+
+                    {{ form_end(form)}}
+
+
+                </div>
+                <div class="col-sm-12 buttons-box">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="col-sm-6 " style="text-align:right;">
+                            <a class="btn btn-orange btn-inverted notAjax" href="">Agregar otro beneficiario</a>
                         </div>
-                        <div class="col-sm-4">
-                            <p><strong>Valor</strong></p>
+                        <div class="col-sm-6" style="text-align:left;">
+                            <a class="btn btn-orange notAjax" href="">Siguiente</a>
                         </div>
-                        <div class="col-sm-4">
+                    </div>
+                </div>
+            </div>
+            <div id="noveltiesData" class="tab-pane">
+                <div class="col-sm-12 middle-content">
+                    <div class="content col-sm-6 col-sm-offset-3">
+                        <h4>Novedades reportadas al día de hoy</h4>
+                    </div>
+                    <div class="col-sm-12" style="text-align:center;">
+                        <div class="col-sm-3">
+                            <p><strong>Fecha inicio</strong></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p><strong>Fecha fin</strong></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p><strong>Estado</strong></p>
+                        </div>
+                        <div class="col-sm-3">
                             <p><strong>Detalle</strong></p>
                         </div>
                     </div>
+                    {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
-                        <div class="col-sm-12 row-payment">
-                            <div class="element col-sm-4">
-                                <p>{{payroll.month}}/{{payroll.year}}</p>
+                        {% set novelties = payroll.novelties %}
+                        {% for novelty in novelties %}
+                            <div class="col-sm-12 row-novelty" style="text-align:center;">
+                                <div class=" element-table col-sm-3">
+                                    {% if novelty.dateStart %}
+                                        <p><strong>{{ novelty.dateStart|date('d/m/y') }}</strong></p>
+                                    {% else %}
+                                        <p><strong>-</strong></p>
+                                    {% endif %}
+                                </div>
+                                <div class="element-table col-sm-3">
+                                    {% if novelty.dateEnd %}
+                                        <p><strong>{{ novelty.dateEnd|date('d/m/y') }}</strong></p>
+                                    {% else %}
+                                        <p><strong>-</strong></p>
+                                    {% endif %}
+                                </div>
+                                <div class="element-table col-sm-3">
+                                    <p><strong>{{ novelty.noveltyTypeNoveltyType.name}}</strong></p>
+                                </div>
+                                <div class="element-detail col-sm-3">
+                                    <p><strong>Detalle</strong></p>
+                                </div>
                             </div>
-                            <div class="element col-sm-4">
-                                <p>${{ contract.salary }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="col-sm-12  row-add-novelty" style="text-align:center;">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <div class="col-sm-2 plus-icon">
+                                <i class="fa fa-plus-circle fa-2x"></i>
                             </div>
-                            <div class="detail-element col-sm-4">
-                                <p>Ver detalles</p>
+                            <div class="col-sm-10 text">
+                                <a class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="documents" class="tab-pane">
-            <div class="documents col-sm-12">
-                <div class="documents-title col-sm-12">
-                  <h4>Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
-                </div>
-                <div class="col-sm-12 documents-content">
-                    {% set docs = employee.personPerson.docs %}
-                    {% if docs|length > 0 %}
-                        {% for doc in docs %}
-                      	    {% if doc.mediaMedia %}
-                                <div class=" element col-sm-3">
-                                    <div class="col-sm-12 icon-pdf">
-                                        <i class="fa fa-file-pdf-o fa-2x"></i>
-                                    </div>
-                                    <div class="col-sm-12 title-doc">
-                                        <p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
-                                    </div>
-                                    <div class="panel_btn_action">
-                                        <a class="btn btn-docs notAjax " value="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
-                                    </div>
+            <div id="payHistory" class="tab-pane">
+                <div class="col-sm-12 payment-content">
+                    <div class="col-sm-4 search-box">
+                        <h4>Buscar por:</h4>
+                        <div class="col-sm-12 form-group form-black input form-dummy">
+                            <p class="title"><i><strong>Fecha</strong></i></p>
+                            <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
+                        </div>
+                        <div class="col-sm-12 form-group form-black input form-dummy">
+                            <p class="title"><i><strong>Valor</strong></i></p>
+                            <input type="text" id="edit_employer_person_names" name="edit_employer[person][names]" class="form-control" aria-required="true">
+                        </div>
+                        <div class="col-sm-12 search-button">
+                            <a class="btn btn-orange notAjax" href="">Buscar</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="col-sm-12">
+                            <h3><strong>Pagos efectuados al día de hoy</strong></h3>
+                            <div class="col-sm-6">
+                                <p>Total pagado: $60000000</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>Total pagos: {{ payrolls|length}}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 table-title">
+                            <div class="col-sm-4">
+                                <p><strong>Fecha</strong></p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><strong>Valor</strong></p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><strong>Detalle</strong></p>
+                            </div>
+                        </div>
+                        {% for payroll in payrolls %}
+                            <div class="col-sm-12 row-payment">
+                                <div class="element col-sm-4">
+                                    <p>{{payroll.month}}/{{payroll.year}}</p>
                                 </div>
-                            {% endif %}
+                                <div class="element col-sm-4">
+                                    <p>${{ contract.salary }}</p>
+                                </div>
+                                <div class="detail-element col-sm-4">
+                                    <p>Ver detalles</p>
+                                </div>
+                            </div>
                         {% endfor %}
-                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div id="documents" class="tab-pane">
+                <div class="documents col-sm-12">
+                    <div class="documents-title col-sm-12">
+                        <h4>Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
+                    </div>
+                    <div class="col-sm-12 documents-content">
+                        {% set docs = employee.personPerson.docs %}
+                        {% if docs|length > 0 %}
+                            {% for doc in docs %}
+                                {% if doc.mediaMedia %}
+                                    <div class=" element col-sm-3">
+                                        <div class="col-sm-12 icon-pdf">
+                                            <i class="fa fa-file-pdf-o fa-2x"></i>
+                                        </div>
+                                        <div class="col-sm-12 title-doc">
+                                            <p><strong>{{doc.documentTypeDocumentType.name}}</strong></p>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
+                                        </div>
+                                        <div class="panel_btn_action">
+                                            <a class="btn btn-docs notAjax " value="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
     <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -571,7 +648,7 @@
                     <h4 class="modal-title" id="myModalLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>                
@@ -580,89 +657,77 @@
         </div>
     </div>
 
-<div id="agregarNovedad"></div>
+    <div id="agregarNovedad"></div>
 {% endblock fos_user_content %}
 {% block javascripts %}
     {{ parent() }}
-        <script src="{{ asset('public/js/manageEmployees.js') }}"></script>
-        <script type="text/javascript">
-        $(document).ready(function () {
-            manageEmployee();
-            editEmployee();
-            var validator = null;
-            $.getScript("/public/js/jquery.validate.min.js").done(function () {
-                validator = $("form[name='register_beneficiary']").validate({
-                    //onfocusout: true,
-                    rules: {
-                        "register_beneficiary[document]": {required: true, number: true},
-                        "register_beneficiary[documentType]": "required",
-                        "register_beneficiary[names]": {required: true},
-                        "register_beneficiary[lastName1]": {required: true},
-                        "register_beneficiary[lastName2]": {required: true},
-                        "register_beneficiary[mainAddress]": {required: true},
-                        "register_beneficiary[birthDate][year]": {required: true},
-                        "register_beneficiary[birthDate][month]": {required: true},
-                        "register_beneficiary[birthDate][day]": {required: true},
-                        "relation": {required: true},
-                        "disability": {required: true},                        
-                    },
-                    messages: {
-                        "register_beneficiary[document]": {
-                            required: "Por favor ingrese el numero de documento",
-                            number: "ingresa solamente dígitos",
-                        },
-                        "register_beneficiary[documentType]": {
-                            required: "Por favor seleccione el tipo de documento",
-                            
-                        },
-                        "register_beneficiary[names]": {
-                            required: "Por favor ingrese el nombre",
-                            
-                        },
-                        "register_beneficiary[lastName1]": {
-                            required: "Por favor ingrese el primer apellido",
-                            
-                        },
-                        "register_beneficiary[lastName2]": {
-                            required: "Por favor ingrese el segundo apellido",
-                            
-                        },
-                        "register_beneficiary[mainAddress]": {
-                            required: "Por favor ingrese la dirección",
-                            
-                        },
-                        "realation": {
-                            required: "Por favor seleccione una opción",
-                            
-                        },
-                        "disability": {
-                            required: "Por favor seleccione una opción",
-                            
-                        },
-                        "register_beneficiary[department]": {
-                            required: "Por favor seleccione el departamento",
-                            
-                        },
-                        "register_beneficiary[city]": {
-                            required: "Por favor seleccione la ciudad",
-                            
-                        },
-                        "register_beneficiary[birthDate][year]": {
-                            required: "Por favor seleccione el año de nacimiento",
-                            
-                        }, 
-                        "register_beneficiary[birthDate][month]": {
-                            required: "Por favor seleccione el mes de nacimiento",
-                            
-                        }, 
-                        "register_beneficiary[birthDate][day]": {
-                            required: "Por favor seleccione el dia de nacimiento",
-                            
-                        },                                  
-                    }
-                });
-            });            
-        });
+    <script src="{{ asset('public/js/manageEmployees.js') }}"></script>
+    <script type="text/javascript">
+                        $(document).ready(function () {
+                            manageEmployees();
+                            editEmployee();
+                            var validator = null;
+                            $.getScript("/public/js/jquery.validate.min.js").done(function () {
+                                validator = $("form[name='register_beneficiary']").validate({
+                                    //onfocusout: true,
+                                    rules: {
+                                        "register_beneficiary[document]": {required: true, number: true},
+                                        "register_beneficiary[documentType]": "required",
+                                        "register_beneficiary[names]": {required: true},
+                                        "register_beneficiary[lastName1]": {required: true},
+                                        "register_beneficiary[lastName2]": {required: true},
+                                        "register_beneficiary[mainAddress]": {required: true},
+                                        "register_beneficiary[birthDate][year]": {required: true},
+                                        "register_beneficiary[birthDate][month]": {required: true},
+                                        "register_beneficiary[birthDate][day]": {required: true},
+                                        "relation": {required: true},
+                                        "disability": {required: true},
+                                    },
+                                    messages: {
+                                        "register_beneficiary[document]": {
+                                            required: "Por favor ingrese el numero de documento",
+                                            number: "ingresa solamente dígitos",
+                                        },
+                                        "register_beneficiary[documentType]": {
+                                            required: "Por favor seleccione el tipo de documento",
+                                        },
+                                        "register_beneficiary[names]": {
+                                            required: "Por favor ingrese el nombre",
+                                        },
+                                        "register_beneficiary[lastName1]": {
+                                            required: "Por favor ingrese el primer apellido",
+                                        },
+                                        "register_beneficiary[lastName2]": {
+                                            required: "Por favor ingrese el segundo apellido",
+                                        },
+                                        "register_beneficiary[mainAddress]": {
+                                            required: "Por favor ingrese la dirección",
+                                        },
+                                        "realation": {
+                                            required: "Por favor seleccione una opción",
+                                        },
+                                        "disability": {
+                                            required: "Por favor seleccione una opción",
+                                        },
+                                        "register_beneficiary[department]": {
+                                            required: "Por favor seleccione el departamento",
+                                        },
+                                        "register_beneficiary[city]": {
+                                            required: "Por favor seleccione la ciudad",
+                                        },
+                                        "register_beneficiary[birthDate][year]": {
+                                            required: "Por favor seleccione el año de nacimiento",
+                                        },
+                                        "register_beneficiary[birthDate][month]": {
+                                            required: "Por favor seleccione el mes de nacimiento",
+                                        },
+                                        "register_beneficiary[birthDate][day]": {
+                                            required: "Por favor seleccione el dia de nacimiento",
+                                        },
+                                    }
+                                });
+                            });
+                        });
     </script>
 
 {% endblock %}
