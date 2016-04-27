@@ -6,6 +6,7 @@ security:
 
     role_hierarchy:
         ROLE_NEW: [ ROLE_USER ]
+        ROLE_BACK_OFFICE: [ ROLE_USER ]
         ROLE_ADMIN:       [ ROLE_USER , ROLE_SONATA_ADMIN ]
         ROLE_SUPER_ADMIN: [ ROLE_ADMIN , ROLE_SONATA_ADMIN ]
 
@@ -75,3 +76,4 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/login/.*, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/liquidations/.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/backoffice, roles: ROLE_BACK_OFFICE }
