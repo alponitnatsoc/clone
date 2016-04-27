@@ -797,6 +797,7 @@ function addListeners() {
             $("#sisbenUnknown").hide();
         }
     });
+    $("#arsNotAplicable").hide();
     $("#sisbenUnknown").hide();
     $("input[name='register_employee[employeeHasEmployers][transportAid]']").on("change", function () {
         calculator();
