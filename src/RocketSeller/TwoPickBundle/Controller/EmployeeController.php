@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -383,9 +384,17 @@ class EmployeeController extends Controller
                 }
             }
         }
-        $todayPlus = new \DateTime();
+        $todayPlus = new DateTime();
+        $request = $this->container->get('request');
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return false;
+        }
+        $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+
         $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
-        $form->get('employeeHasEmployers')->get("startDate")->setData(new \DateTime());
+        $form->get('employeeHasEmployers')->get("startDate")->setData($permittedDate);
         $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();

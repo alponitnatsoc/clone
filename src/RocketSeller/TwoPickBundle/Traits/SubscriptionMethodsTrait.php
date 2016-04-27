@@ -18,11 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Doctrine\ORM\EntityManager;
 
-trait SubscriptionMethodsTrait {
+trait SubscriptionMethodsTrait
+{
 
     use EmployeeMethodsTrait;
 
-    protected function findProductByNumDays($productos, $days) {
+    protected function findProductByNumDays($productos, $days)
+    {
         if ($days > 0 && $days <= 10) {
             $key = 'PS1';
         } elseif ($days >= 11 && $days <= 19) {
@@ -45,17 +47,18 @@ trait SubscriptionMethodsTrait {
      * @param boolean $activeEmployee buscar empleados solo activos = true, default=false para buscarlos todos
      * @return array
      */
-    protected function getSubscriptionCost($user, $activeEmployee = false) {
+    protected function getSubscriptionCost($user, $activeEmployee = false)
+    {
         $idEmployer = $user->getPersonPerson()->getEmployer();
         $config = $this->getConfigData();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                ->findByEmployerEmployer($idEmployer);
+            ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+            ->findByEmployerEmployer($idEmployer);
 
         $productos = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Product')
-                ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+            ->getRepository('RocketSellerTwoPickBundle:Product')
+            ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
 
         $employees = array();
         $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = $contInactivos = 0;
@@ -123,14 +126,16 @@ trait SubscriptionMethodsTrait {
         );
     }
 
-    protected function updateProductPrice($employees, $descuentoPercent) {
+    protected function updateProductPrice($employees, $descuentoPercent)
+    {
         foreach ($employees as $key => $employe) {
             $employees[$key]['product']['price_con_descuentos'] = ceil($employe['product']['price_con_descuentos'] / (1 + $descuentoPercent));
         }
         return $employees;
     }
 
-    protected function addToSQL(User $user) {
+    protected function addToSQL(User $user)
+    {
         $person = $user->getPersonPerson();
         $employer = $person->getEmployer();
         //SQL Comsumpsion
@@ -224,7 +229,7 @@ trait SubscriptionMethodsTrait {
                 $eHE->setExistentSQL(1);
                 $em->persist($eHE);
                 $em->flush();
-                if($actContract->getHolidayDebt()!=null){
+                if ($actContract->getHolidayDebt() != null) {
                     $request->setMethod("POST");
                     $request->request->add(array(
                         "employee_id" => $eHE->getIdEmployerHasEmployee(),
@@ -234,19 +239,137 @@ trait SubscriptionMethodsTrait {
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }
-                    $startDate=$actContract->getStartDate();
-                    $nowDate=new DateTime();
-                    $monthsDiff=$startDate->diff($nowDate)->m + ($startDate->diff($nowDate)->y*12);
-                    if($monthsDiff>13)
-                        $monthsDiff=13;
-                    while($monthsDiff>1){
-                        $dateToSend=new DateTime($nowDate->format("Y")."-".intval($nowDate->format("m"))-$monthsDiff."-1");
-                        if($actContract->getFrequencyFrequency()->getPayrollCode()=="Q"){
-                            $unitsPerPeriod=$actContract->getWorkableDaysMonth()/2;
-                            $salaryPerPeriod=$actContract->getSalary()/2;
+                    $startDate = $actContract->getStartDate();
+                    $nowDate = new DateTime();
+                    $monthsDiff = $startDate->diff($nowDate)->m + ($startDate->diff($nowDate)->y * 12);
+                    $dateToStart = new DateTime();
+                    if ($monthsDiff > 12) {
+                        $monthsDiff = 12;
+                        $dateToStart = new DateTime(date("Y-m-d", strtotime($nowDate->format("Y-m-d") . " -" . $monthsDiff . " months")));
+
+                    } else {
+                        $dateToStart = new DateTime($startDate->format("Y-m-d"));
+                    }
+                    //solve this month
+                    if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
+                        if ($dateToStart->format("d") < 15) {
+                            $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
+                            if ($nowDate < $dateToCheck) {
+                                $dateToStart = $dateToCheck;
+                            } else {
+                                $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                                $salaryPerPeriod = $actContract->getSalary() / 2;
+                                $request->setMethod("POST");
+                                $request->request->add(array(
+                                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                    "units" => $unitsPerPeriod,
+                                    "value" => $salaryPerPeriod,
+                                    "year" => $dateToCheck->format("Y"),
+                                    "month" => $dateToCheck->format("m"),
+                                    "period" => "2",
+                                ));
+                                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                                if ($insertionAnswer->getStatusCode() != 200) {
+                                    return false;
+                                }
+                                $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
+                                if ($nowDate < $dateToCheck) {
+                                    $dateToStart = $dateToCheck;
+                                } else {
+                                    $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                                    $salaryPerPeriod = $actContract->getSalary() / 2;
+                                    $request->setMethod("POST");
+                                    $request->request->add(array(
+                                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                        "units" => $unitsPerPeriod,
+                                        "value" => $salaryPerPeriod,
+                                        "year" => $dateToCheck->format("Y"),
+                                        "month" => $dateToCheck->format("m"),
+                                        "period" => "4",
+                                    ));
+                                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                                    if ($insertionAnswer->getStatusCode() != 200) {
+                                        return false;
+                                    }
+                                    $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
+                                }
+
+                            }
+                        } else {
+                            $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
+                            if ($nowDate < $dateToCheck) {
+                                $dateToStart = $dateToCheck;
+                            } else {
+                                $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                                $salaryPerPeriod = $actContract->getSalary() / 2;
+                                $request->setMethod("POST");
+                                $request->request->add(array(
+                                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                    "units" => $unitsPerPeriod,
+                                    "value" => $salaryPerPeriod,
+                                    "year" => $dateToCheck->format("Y"),
+                                    "month" => $dateToCheck->format("m"),
+                                    "period" => "4",
+                                ));
+                                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                                if ($insertionAnswer->getStatusCode() != 200) {
+                                    return false;
+                                }
+                                $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
+                            }
+                        }
+                    } else {
+                        $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
+                        if ($nowDate < $dateToCheck) {
+                            $dateToStart = $dateToCheck;
+                        } else {
+                            $unitsPerPeriod = $actContract->getWorkableDaysMonth();
+                            $salaryPerPeriod = $actContract->getSalary();
+                            $request->setMethod("POST");
+                            $request->request->add(array(
+                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                "units" => $unitsPerPeriod,
+                                "value" => $salaryPerPeriod,
+                                "year" => $dateToCheck->format("Y"),
+                                "month" => $dateToCheck->format("m"),
+                                "period" => "4",
+                            ));
+                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                            if ($insertionAnswer->getStatusCode() != 200) {
+                                return false;
+                            }
+                            $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
+                        }
+                    }
+                    //get to today date
+                    while (true) {
+                        if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
+                            $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
+                            if ($nowDate < $dateToSend) {
+                                break;
+                            }
+                            $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                            $salaryPerPeriod = $actContract->getSalary() / 2;
+                            $request->setMethod("POST");
+                            $request->request->add(array(
+                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                "units" => $unitsPerPeriod,
+                                "value" => $salaryPerPeriod,
+                                "year" => $dateToSend->format("Y"),
+                                "month" => $dateToSend->format("m"),
+                                "period" => "2",
+                            ));
+                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                            if ($insertionAnswer->getStatusCode() != 200) {
+                                return false;
+                            }
                         }else{
-                            $unitsPerPeriod=$actContract->getWorkableDaysMonth();
-                            $salaryPerPeriod=$actContract->getSalary();
+                            $unitsPerPeriod = $actContract->getWorkableDaysMonth();
+                            $salaryPerPeriod = $actContract->getSalary();
+                        }
+                        $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . $dateToStart->format("t"));
+                        if ($nowDate < $dateToSend) {
+                            break;
                         }
                         $request->setMethod("POST");
                         $request->request->add(array(
@@ -255,28 +378,14 @@ trait SubscriptionMethodsTrait {
                             "value" => $salaryPerPeriod,
                             "year" => $dateToSend->format("Y"),
                             "month" => $dateToSend->format("m"),
-                            "period" => $dateToSend->format("4"),
+                            "period" => "4",
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
                         if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
-                        if($actContract->getFrequencyFrequency()->getPayrollCode()=="Q") {
-                            $request->setMethod("POST");
-                            $request->request->add(array(
-                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                                "units" => $unitsPerPeriod,
-                                "value" => $salaryPerPeriod,
-                                "year" => $dateToSend->format("Y"),
-                                "month" => $dateToSend->format("m"),
-                                "period" => $dateToSend->format("2"),
-                            ));
-                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
-                            if ($insertionAnswer->getStatusCode() != 200) {
-                                return false;
-                            }
-                        }
-                        $monthsDiff--;
+                        $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m")) + 1) . "-1");
+
                     }
                 }
                 $request->setMethod("POST");
@@ -391,7 +500,8 @@ trait SubscriptionMethodsTrait {
         return true;
     }
 
-    protected function addToNovo(User $user) {
+    protected function addToNovo(User $user)
+    {
         /* @var $person Person */
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
@@ -442,7 +552,7 @@ trait SubscriptionMethodsTrait {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
                         if ($paymentMethodId) {
                             $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? 4 :
-                                    $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
+                                $payMC->getAccountTypeAccountType()->getName() == "Corriente" ? 5 : 6;
                         }
                         $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
                         $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();
@@ -458,7 +568,7 @@ trait SubscriptionMethodsTrait {
                             "dayBirth" => $employeePerson->getBirthDate()->format("d"),
                             "phone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
                             "email" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
-                                    "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
                             "companyId" => $person->getDocument(), //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
                             "companyBranch" => "0", //TODO ESTO CAMBIA CUANDO TENGAMOS EMPRESAS
                             "paymentMethodId" => $paymentMethodId,
@@ -483,7 +593,8 @@ trait SubscriptionMethodsTrait {
         return true;
     }
 
-    protected function addToHighTech(User $user) {
+    protected function addToHighTech(User $user)
+    {
         /* @var $person Person */
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
@@ -557,13 +668,13 @@ trait SubscriptionMethodsTrait {
                             "employeeAddress" => $employeePerson->getMainAddress(),
                             "employeeCellphone" => $employeePerson->getPhones()->get(0)->getPhoneNumber(),
                             "employeeMail" => $employeePerson->getEmail() == null ? $employeePerson->getDocumentType() . $person->getDocument() .
-                                    "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
+                                "@" . $employeePerson->getNames() . ".com" : $employeePerson->getEmail(),
                             "employeeAccountType" => $paymentMethodId,
                             "employeeAccountNumber" => $paymentMethodAN,
-                            "employeeBankCode" => $payMC->getBankBank()->getHightechCode()? : 23,
+                            "employeeBankCode" => $payMC->getBankBank()->getHightechCode() ?: 23,
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterBeneficiary', array('_format' => 'json'));
-                        if (!($insertionAnswer->getStatusCode() == 200 )) {
+                        if (!($insertionAnswer->getStatusCode() == 200)) {
                             $this->addFlash('error', $insertionAnswer->getContent());
 
                             return false;
@@ -578,7 +689,8 @@ trait SubscriptionMethodsTrait {
         return true;
     }
 
-    protected function redimirReferidos($data) {
+    protected function redimirReferidos($data)
+    {
         $em = $this->getDoctrine()->getManager();
         if ($data['descuento_isRefered']['object']) {
             /* @var $refered Referred */
@@ -596,7 +708,8 @@ trait SubscriptionMethodsTrait {
         $em->flush();
     }
 
-    protected function getDaysSince($sinceDate, $toDate) {
+    protected function getDaysSince($sinceDate, $toDate)
+    {
         $dDiff = true;
         if ($sinceDate !== null && $toDate !== null) {
             $dStart = new \DateTime(date_format($sinceDate, 'Y-m-d'));
@@ -606,7 +719,8 @@ trait SubscriptionMethodsTrait {
         return $dDiff;
     }
 
-    protected function getDaysSinceCreated() {
+    protected function getDaysSinceCreated()
+    {
         /* @var $user User */
         $user = $this->getUser();
         $dateCreated = $user->getDateCreated();
@@ -616,7 +730,8 @@ trait SubscriptionMethodsTrait {
         return $dDiff->days;
     }
 
-    protected function getDaysSinceLastPay() {
+    protected function getDaysSinceLastPay()
+    {
         /* @var $user User */
         $user = $this->getUser();
         $lastPayDate = $user->getLastPayDate();
@@ -626,7 +741,8 @@ trait SubscriptionMethodsTrait {
         return $dDiff->days;
     }
 
-    protected function isFree() {
+    protected function isFree()
+    {
         /* @var $user User */
         $user = $this->getUser();
 
@@ -660,11 +776,12 @@ trait SubscriptionMethodsTrait {
      * @param User $user
      * @return Referred
      */
-    protected function userIsRefered(User $user = null) {
+    protected function userIsRefered(User $user = null)
+    {
         /* @var $isRefered Referred */
         $isRefered = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Referred')
-                ->findOneBy(array('referredUserId' => $user != null ? $user : $this->getUser(), 'status' => 0));
+            ->getRepository('RocketSellerTwoPickBundle:Referred')
+            ->findOneBy(array('referredUserId' => $user != null ? $user : $this->getUser(), 'status' => 0));
 
         if ($isRefered && $isRefered->getUserId()->getPaymentState() > 0) {
             return $isRefered;
@@ -677,11 +794,12 @@ trait SubscriptionMethodsTrait {
      * @param User $user
      * @return array
      */
-    protected function userHaveValidRefered(User $user = null) {
+    protected function userHaveValidRefered(User $user = null)
+    {
         /* @var $haveRefered Referred */
         $haveRefered = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Referred')
-                ->findBy(array('userId' => $user != null ? $user : $this->getUser(), 'status' => 0));
+            ->getRepository('RocketSellerTwoPickBundle:Referred')
+            ->findBy(array('userId' => $user != null ? $user : $this->getUser(), 'status' => 0));
         $responce = array();
         foreach ($haveRefered as $key => $referedUser) {
             if ($referedUser->getReferredUserId()->getPaymentState() > 0) {
@@ -691,7 +809,8 @@ trait SubscriptionMethodsTrait {
         return $responce;
     }
 
-    protected function getConfigData() {
+    protected function getConfigData()
+    {
         #$configRepo = new Config();
         $configRepo = $this->getdoctrine()->getRepository("RocketSellerTwoPickBundle:Config");
         $configDataTmp = $configRepo->findAll();
@@ -704,7 +823,8 @@ trait SubscriptionMethodsTrait {
         return $configData;
     }
 
-    public function sendEmailPaySuccess($idUser, $idPurchaseOrder) {
+    public function sendEmailPaySuccess($idUser, $idPurchaseOrder)
+    {
         /* @var $user User */
         $user = $this->getUserById($idUser);
         $path = null;
@@ -736,13 +856,15 @@ trait SubscriptionMethodsTrait {
      * @param int $idUser id del usuario a buscar
      * @return User|null
      */
-    protected function getUserById($idUser) {
+    protected function getUserById($idUser)
+    {
         return $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
-                        array('id' => $idUser)
+            array('id' => $idUser)
         );
     }
 
-    protected function createPurchaceOrder(User $user, $paymethodId, $methodId = false) {
+    protected function createPurchaceOrder(User $user, $paymethodId, $methodId = false)
+    {
         $em = $this->getDoctrine()->getManager();
         if (!$methodId) {
             $methodId = $this->getMethodId($user->getPersonPerson()->getDocument());
@@ -807,7 +929,8 @@ trait SubscriptionMethodsTrait {
         return false;
     }
 
-    protected function procesosLuegoPagoExitoso(User $user) {
+    protected function procesosLuegoPagoExitoso(User $user)
+    {
         $em = $this->getDoctrine()->getManager();
         $user->setStatus(2);
         $user->setPaymentState(1);
@@ -825,7 +948,7 @@ trait SubscriptionMethodsTrait {
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
             'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
             'idProcedureType' => $ProcedureType->getIdProcedureType()
-                ), array('_format' => 'json')
+        ), array('_format' => 'json')
         );
         $this->validateDocuments($user);
         $this->addToSQL($user);
@@ -834,13 +957,15 @@ trait SubscriptionMethodsTrait {
         return true;
     }
 
-    protected function getMethodId($documentNumber) {
+    protected function getMethodId($documentNumber)
+    {
         $response = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $documentNumber), array('_format' => 'json'));
         $listPaymentMethods = json_decode($response->getContent(), true);
         return isset($listPaymentMethods['payment-methods'][0]['method-id']) ? ($listPaymentMethods['payment-methods'][0]['method-id']) : false;
     }
 
-    public function procedureAction($employerId, $idProcedureType) {
+    public function procedureAction($employerId, $idProcedureType)
+    {
         $em = $this->getDoctrine()->getManager();
         $em2 = $this->getDoctrine()->getManager();
         $employerSearch = $this->loadClassById($employerId, "Employer");

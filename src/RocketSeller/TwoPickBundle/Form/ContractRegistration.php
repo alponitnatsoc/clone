@@ -155,7 +155,6 @@ class ContractRegistration extends AbstractType
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
                 'label' => 'Fecha inicio de contrato*:',
-                'data' => $this->today,
                 'years' => range($this->user->getLegalFlag()!=1?$this->today->format("Y"):1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
