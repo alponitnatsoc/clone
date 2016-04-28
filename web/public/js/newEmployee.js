@@ -148,15 +148,10 @@ function startEmployee() {
                 parseInt($(this).find("#register_employee_employeeHasEmployers_startDate_month").val()) - 1,
                 $(this).find("#register_employee_employeeHasEmployers_startDate_day").val()
             ))) {
-
-            var datenow = new Date();
-            var year = datenow.getFullYear();
-            var month = datenow.getMonth();
-            var day = datenow.getDate();
-
-            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(year);
-            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(month + 1);
-            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(day);
+            var $permittedDate= $("#datePermitted");
+            $(this).find("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
+            $(this).find("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
+            $(this).find("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
         }
 
     });
@@ -1178,7 +1173,12 @@ function calculator() {
 
 }
 function checkDate(date) {
-    var dateNow = new Date();
+    var $permittedDate= $("#datePermitted");
+    var dateNow = new Date(
+        $permittedDate.find(".year").text(),
+        parseInt($permittedDate.find(".month").text())-1,
+        $permittedDate.find(".day").text()
+    );
     if (date < dateNow) {
         $("#dateContract").modal("show");
         return false;

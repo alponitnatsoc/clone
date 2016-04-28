@@ -331,6 +331,11 @@
                         </ul>
                         <div class="tab-content">
                             <div id="changeBehavior" class="hidden">{{ app.user.legalFlag }}</div>
+                            <div id="datePermitted" class="hidden">
+                                <div class="year">{{ permittedDate.y }}</div>
+                                <div class="month">{{ permittedDate.m }}</div>
+                                <div class="day">{{ permittedDate.d }}</div>
+                            </div>
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 30px;border-bottom: 1px solid #ccc;padding-bottom: 10px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
@@ -1068,7 +1073,7 @@
                     </div>
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-8 col-md-push-2">
-                            La fechas del contrato no pueden ser anteriores a el día de hoy!
+                            La fechas del contrato no pueden ser anteriores a el día sugerido por symplifica!
                         </div>
                     </div>
                 </div>
