@@ -134,46 +134,13 @@ trait SubscriptionMethodsTrait
         return $employees;
     }
 
-    protected function addToSQL(User $user)
+    protected function addEmployeeToSQL(EmployerHasEmployee $eHE)
     {
-        $person = $user->getPersonPerson();
-        $employer = $person->getEmployer();
-        //SQL Comsumpsion
-        //Create Society
-        $em = $this->getDoctrine()->getManager();
-        $dateToday = new DateTime();
-        $dateToday->setDate(2016, 02, 01); //TODO ERASE THIS SHIT
-        $request = $this->container->get('request');
-        if ($employer->getIdSqlSociety() == null) {
-            $request->setMethod("POST");
-            $request->request->add(array(
-                "society_nit" => $person->getDocument(),
-                "society_name" => $person->getNames(),
-                "society_start_date" => $dateToday->format("d-m-Y"),
-                "society_mail" => $user->getEmail(),
-            ));
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
-            if ($insertionAnswer->getStatusCode() != 200) {
-                return false;
-            }
-        }
-
-        $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
-        if ($insertionAnswer->getStatusCode() != 200) {
-            return false;
-        }
-        //$idSQL=$employer->getIdSqlSociety();
-        $idSQL = json_decode($insertionAnswer->getContent(), true)["COD_SOCIEDAD"];
-        $employer->setIdSqlSociety($idSQL);
-        $em->persist($employer);
-        $em->flush();
-        //return $view->setStatusCode(201);
         //Employee creation
-        $employerHasEmployees = $employer->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $eHE */
-        foreach ($employerHasEmployees as $eHE) {
-            if ($eHE->getState() == 1 && (!$eHE->getExistentSQL())) {
+        $request = $this->container->get('request');
+        $employer=$eHE->getEmployerEmployer();
+        $em = $this->getDoctrine()->getManager();
+        if ($eHE->getState() == 1 && (!$eHE->getExistentSQL())) {
                 $contracts = $eHE->getContracts();
                 $actContract = null;
                 /** @var Contract $c */
@@ -496,9 +463,47 @@ trait SubscriptionMethodsTrait
                     }
                 }
             }
+
+    }
+    protected function addToSQL(User $user)
+    {
+        $person = $user->getPersonPerson();
+        $employer = $person->getEmployer();
+        //SQL Comsumpsion
+        //Create Society
+        $em = $this->getDoctrine()->getManager();
+        $dateToday = new DateTime();
+        $dateToday->setDate(1970, 01, 01); //TODO DO NOT ERASE THIS SHIT
+        $request = $this->container->get('request');
+        if ($employer->getIdSqlSociety() == null) {
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "society_nit" => $person->getDocument(),
+                "society_name" => $person->getNames(),
+                "society_start_date" => $dateToday->format("d-m-Y"),
+                "society_mail" => $user->getEmail(),
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddSociety', array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
         }
+
+        $request->setMethod("GET");
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getSociety', array("societyNit" => $person->getDocument()), array('_format' => 'json'));
+        if ($insertionAnswer->getStatusCode() != 200) {
+            return false;
+        }
+        //$idSQL=$employer->getIdSqlSociety();
+        $idSQL = json_decode($insertionAnswer->getContent(), true)["COD_SOCIEDAD"];
+        $employer->setIdSqlSociety($idSQL);
+        $em->persist($employer);
+        $em->flush();
+        //return $view->setStatusCode(201);
+
         return true;
     }
+
 
     protected function addToNovo(User $user)
     {
