@@ -1,4 +1,4 @@
-
+@import (reference) "public/variables.less";
 
 /* ==========================================================================
    Symplifica CSS + FTW
@@ -694,6 +694,87 @@ a.helpTxt {
         }
     }
 }
+
+
+.contractOptionsBox {
+    /*border: 1px solid #ccc;  */
+
+    & .col-xs-6 {
+        padding: 0;
+        margin-bottom: 0;
+        margin: 0;
+        border: 1px solid #ccc; 
+    }
+
+    & h2 {
+        display: block;
+        color: #fff !important;
+        margin: 0;
+        padding: 15px 0;
+        background-color: @lightBLue;
+        text-align: center;
+        font-size: 18px !important;
+    }
+
+    & .contractFirstList {
+        display: block;
+        height: 260px;
+        margin: 10px;
+        width: auto;
+    }
+
+    & ul {
+        padding: 0 20px;
+    }
+
+    & li {
+        margin:10px 0 0;
+    }
+
+    & .contractSecondList {
+        margin: 10px 20px;
+        height: 190px;
+
+        & h4 {
+            margin: 10px 20px;
+        }
+    }
+
+    & .buttonContainer {
+        text-align: center;
+        margin: 0 0 20px 0; 
+    }
+
+    & hr {
+        width: 70%;
+    }
+
+}
+
+.introPayment {
+
+
+    & th {
+        background-color: @lightBLue;
+        color: #fff;
+        padding: 10px;
+
+    }
+
+    & td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+
+    }
+
+    & .glyphicon {
+        color: @orange;
+
+    }
+}
+
+
 .fos_user_registration_register label {
     display:none;
 }
@@ -1307,6 +1388,9 @@ ul.phones {
 }
 .paymentMethodDetail {
     margin: 25px 0 0 0;
+    background-color: @lightBackground;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .paymentMethodDetail label {
@@ -1507,7 +1591,7 @@ div#register_employee_employeeHasEmployers_weekWorkableDays > div
         outline: none!important;
     }
     &.disabled {
-        opacity: 1;
+        opacity: 0.8;
         background-color: @color_boton_disabled;
         color: #efc394;
     }
@@ -1637,7 +1721,7 @@ select {
         outline: none!important;
     }
     &.disabled {
-        opacity: 1;
+        opacity: 0.5;
         background-color: @color_boton_disabled;
         color: #efc394;
     }
@@ -1669,7 +1753,7 @@ select {
         outline: none!important;
     }
     &.disabled {
-        opacity: 1;
+        opacity: 0.5;
         background-color: @dark_blue;
         color: #efc394;
     }
@@ -1701,11 +1785,78 @@ select {
         outline: none!important;
     }
     &.disabled {
-        opacity: 1;
+        opacity: 0.5;
         background-color: @dark_blue;
         color: #efc394;
     }
 }
+
+
+.btn-lightBlue {
+    text-transform: none;
+    background-color: @btn-lightBlue;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: @darkerButtonText;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-family: @open;  
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: @darkerButtonText;
+    }
+    &:hover {
+        color: @darkerButtonText;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    &:focus {
+        color: @darkerButtonText;
+        outline: none!important;
+    }
+    &.disabled {
+        opacity: 0.5;
+        background-color: @btn-lightBlue;
+        color: #efc394;
+    }
+}
+
+.btn-mediumBlue {
+    text-transform: none;
+    background-color: @btn-mediumBlue;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    outline: none;
+    color: @darkerButtonText;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-family: @open;  
+    &:active {
+        opacity: 0.7;
+        box-shadow: 0 8px rgba(0,0,0,0.2);
+        outline: none;
+        color: @darkerButtonText;
+    }
+    &:hover {
+        color: @darkerButtonText;
+        outline: none;
+        background-color: @color_boton;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    &:focus {
+        color: @darkerButtonText;
+        outline: none!important;
+    }
+    &.disabled {
+        opacity: 0.5;
+        background-color: @btn-mediumBlue;
+        color: #efc394;
+    }
+}
+
+
 
 #novelty_fields_save {
     text-transform: none;
@@ -2002,6 +2153,7 @@ select {
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     &.disabled {
         box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        opacity: 0.5;
     }
 }
 

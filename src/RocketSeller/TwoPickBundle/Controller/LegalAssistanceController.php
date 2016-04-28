@@ -215,6 +215,9 @@ class LegalAssistanceController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
+            
+            
+
         	$em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             /** @var Person $person */
@@ -255,7 +258,7 @@ class LegalAssistanceController extends Controller
 
                 $response = json_decode($insertionAnswer->getContent());
                 $methodId = $response->{'response'}->{'method-id'};
-
+                
                 if ($insertionAnswer->getStatusCode() != 201) {
 
                     return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
