@@ -53,12 +53,12 @@ trait SubscriptionMethodsTrait
         $config = $this->getConfigData();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                ->findByEmployerEmployer($idEmployer);
+            ->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
+            ->findByEmployerEmployer($idEmployer);
 
         $productos = $this->getdoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Product')
-                ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
+            ->getRepository('RocketSellerTwoPickBundle:Product')
+            ->findBy(array('simpleName' => array('PS1', 'PS2', 'PS3')));
 
         $employees = array();
         $total_sin_descuentos = $total_con_descuentos = $valor_descuento_3er = $valor_descuento_isRefered = $valor_descuento_haveRefered = $contInactivos = 0;
@@ -134,135 +134,115 @@ trait SubscriptionMethodsTrait
         return $employees;
     }
 
+    /**
+     * @param EmployerHasEmployee $eHE
+     * @return bool
+     */
     protected function addEmployeeToSQL(EmployerHasEmployee $eHE)
     {
         //Employee creation
         $request = $this->container->get('request');
-        $employer=$eHE->getEmployerEmployer();
+        $employer = $eHE->getEmployerEmployer();
         $em = $this->getDoctrine()->getManager();
         if ($eHE->getState() == 1 && (!$eHE->getExistentSQL())) {
-                $contracts = $eHE->getContracts();
-                $actContract = null;
-                /** @var Contract $c */
-                foreach ($contracts as $c) {
-                    if ($c->getState() == 1) {
-                        $actContract = $c;
-                        break;
-                    }
+            $contracts = $eHE->getContracts();
+            $actContract = null;
+            /** @var Contract $c */
+            foreach ($contracts as $c) {
+                if ($c->getState() == 1) {
+                    $actContract = $c;
+                    break;
                 }
+            }
 //                 $liquidationType=$actContract->getPayMethodPayMethod()->getFrequencyFrequency()->getPayrollCode();
-                $liquidationType = $actContract->getFrequencyFrequency()->getPayrollCode();
-                $endDate = $actContract->getEndDate();
-                $employee = $eHE->getEmployeeEmployee();
-                $employeePerson = $employee->getPersonPerson();
-                if ($actContract->getTimeCommitmentTimeCommitment()->getCode() == "TC") {
-                    $payroll_type = 4;
-                    $value = $actContract->getSalary();
-                    $wokableDaysWeek = 6;
-                } else {
-                    $payroll_type = 6;
-                    $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
-                    $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
-                }
+            $liquidationType = $actContract->getFrequencyFrequency()->getPayrollCode();
+            $endDate = $actContract->getEndDate();
+            $employee = $eHE->getEmployeeEmployee();
+            $employeePerson = $employee->getPersonPerson();
+            if ($actContract->getTimeCommitmentTimeCommitment()->getCode() == "TC") {
+                $payroll_type = 4;
+                $value = $actContract->getSalary();
+                $wokableDaysWeek = 6;
+            } else {
+                $payroll_type = 6;
+                $value = $actContract->getSalary() / $actContract->getWorkableDaysMonth();
+                $wokableDaysWeek = $actContract->getWorkableDaysMonth() / 4;
+            }
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                "last_name" => $employeePerson->getLastName1(),
+                "first_name" => $employeePerson->getNames(),
+                "document_type" => $employeePerson->getDocumentType(),
+                "document" => $employeePerson->getDocument(),
+                "gender" => $employeePerson->getGender(),
+                "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
+                "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                "contract_number" => $actContract->getIdContract(),
+                "worked_hours_day" => 8,
+                "payment_method" => "EFE",
+                "liquidation_type" => $liquidationType,
+                "contract_type" => $actContract->getContractTypeContractType()->getPayrollCode(),
+                "transport_aux" => $actContract->getTransportAid() == 1 ? "N" : "S",
+                "worked_days_week" => $wokableDaysWeek,
+                "society" => $employer->getIdSqlSociety(),
+                "payroll_type" => $payroll_type,
+            ));
+            if ($endDate != null) {
+                $request->request->add(array(
+                    "last_contract_end_date" => $endDate->format("d-m-Y")
+                ));
+            }
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
+            $eHE->setExistentSQL(1);
+            $em->persist($eHE);
+            $em->flush();
+            if ($actContract->getHolidayDebt() != null) {
                 $request->setMethod("POST");
                 $request->request->add(array(
                     "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                    "last_name" => $employeePerson->getLastName1(),
-                    "first_name" => $employeePerson->getNames(),
-                    "document_type" => $employeePerson->getDocumentType(),
-                    "document" => $employeePerson->getDocument(),
-                    "gender" => $employeePerson->getGender(),
-                    "birth_date" => $employeePerson->getBirthDate()->format("d-m-Y"),
-                    "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                    "contract_number" => $actContract->getIdContract(),
-                    "worked_hours_day" => 8,
-                    "payment_method" => "EFE",
-                    "liquidation_type" => $liquidationType,
-                    "contract_type" => $actContract->getContractTypeContractType()->getPayrollCode(),
-                    "transport_aux" => $actContract->getTransportAid() == 1 ? "N" : "S",
-                    "worked_days_week" => $wokableDaysWeek,
-                    "society" => $employer->getIdSqlSociety(),
-                    "payroll_type" => $payroll_type,
+                    "pending_days" => $actContract->getHolidayDebt(),
                 ));
-                if ($endDate != null) {
-                    $request->request->add(array(
-                        "last_contract_end_date" => $endDate->format("d-m-Y")
-                    ));
-                }
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployee', array('_format' => 'json'));
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
                 if ($insertionAnswer->getStatusCode() != 200) {
                     return false;
                 }
-                $eHE->setExistentSQL(1);
-                $em->persist($eHE);
-                $em->flush();
-                if ($actContract->getHolidayDebt() != null) {
-                    $request->setMethod("POST");
-                    $request->request->add(array(
-                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                        "pending_days" => $actContract->getHolidayDebt(),
-                    ));
-                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddPendingVacationDays', array('_format' => 'json'));
-                    if ($insertionAnswer->getStatusCode() != 200) {
-                        return false;
-                    }
-                    $startDate = $actContract->getStartDate();
-                    $nowDate = new DateTime();
-                    $monthsDiff = $startDate->diff($nowDate)->m + ($startDate->diff($nowDate)->y * 12);
-                    $dateToStart = new DateTime();
-                    if ($monthsDiff > 12) {
-                        $monthsDiff = 12;
-                        $dateToStart = new DateTime(date("Y-m-d", strtotime($nowDate->format("Y-m-d") . " -" . $monthsDiff . " months")));
+                $startDate = $actContract->getStartDate();
+                $nowDate = new DateTime();
+                $monthsDiff = $startDate->diff($nowDate)->m + ($startDate->diff($nowDate)->y * 12);
+                $dateToStart = new DateTime();
+                if ($monthsDiff > 12) {
+                    $monthsDiff = 12;
+                    $dateToStart = new DateTime(date("Y-m-d", strtotime($nowDate->format("Y-m-d") . " -" . $monthsDiff . " months")));
 
-                    } else {
-                        $dateToStart = new DateTime($startDate->format("Y-m-d"));
-                    }
-                    //solve this month
-                    if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
-                        if ($dateToStart->format("d") < 15) {
-                            $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
-                            if ($nowDate < $dateToCheck) {
-                                $dateToStart = $dateToCheck;
-                            } else {
-                                $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
-                                $salaryPerPeriod = $actContract->getSalary() / 2;
-                                $request->setMethod("POST");
-                                $request->request->add(array(
-                                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                                    "units" => $unitsPerPeriod,
-                                    "value" => $salaryPerPeriod,
-                                    "year" => $dateToCheck->format("Y"),
-                                    "month" => $dateToCheck->format("m"),
-                                    "period" => "2",
-                                ));
-                                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
-                                if ($insertionAnswer->getStatusCode() != 200) {
-                                    return false;
-                                }
-                                $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
-                                if ($nowDate < $dateToCheck) {
-                                    $dateToStart = $dateToCheck;
-                                } else {
-                                    $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
-                                    $salaryPerPeriod = $actContract->getSalary() / 2;
-                                    $request->setMethod("POST");
-                                    $request->request->add(array(
-                                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                                        "units" => $unitsPerPeriod,
-                                        "value" => $salaryPerPeriod,
-                                        "year" => $dateToCheck->format("Y"),
-                                        "month" => $dateToCheck->format("m"),
-                                        "period" => "4",
-                                    ));
-                                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
-                                    if ($insertionAnswer->getStatusCode() != 200) {
-                                        return false;
-                                    }
-                                    $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
-                                }
-
-                            }
+                } else {
+                    $dateToStart = new DateTime($startDate->format("Y-m-d"));
+                }
+                //solve this month
+                if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
+                    if ($dateToStart->format("d") < 15) {
+                        $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
+                        if ($nowDate < $dateToCheck) {
+                            $dateToStart = $dateToCheck;
                         } else {
+                            $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                            $salaryPerPeriod = $actContract->getSalary() / 2;
+                            $request->setMethod("POST");
+                            $request->request->add(array(
+                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                                "units" => $unitsPerPeriod,
+                                "value" => $salaryPerPeriod,
+                                "year" => $dateToCheck->format("Y"),
+                                "month" => $dateToCheck->format("m"),
+                                "period" => "2",
+                            ));
+                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                            if ($insertionAnswer->getStatusCode() != 200) {
+                                return false;
+                            }
                             $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
                             if ($nowDate < $dateToCheck) {
                                 $dateToStart = $dateToCheck;
@@ -284,14 +264,15 @@ trait SubscriptionMethodsTrait
                                 }
                                 $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
                             }
+
                         }
                     } else {
                         $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
                         if ($nowDate < $dateToCheck) {
                             $dateToStart = $dateToCheck;
                         } else {
-                            $unitsPerPeriod = $actContract->getWorkableDaysMonth();
-                            $salaryPerPeriod = $actContract->getSalary();
+                            $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                            $salaryPerPeriod = $actContract->getSalary() / 2;
                             $request->setMethod("POST");
                             $request->request->add(array(
                                 "employee_id" => $eHE->getIdEmployerHasEmployee(),
@@ -308,36 +289,38 @@ trait SubscriptionMethodsTrait
                             $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
                         }
                     }
-                    //get to today date
-                    while (true) {
-                        if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
-                            $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
-                            if ($nowDate < $dateToSend) {
-                                break;
-                            }
-                            $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
-                            $salaryPerPeriod = $actContract->getSalary() / 2;
-                            $request->setMethod("POST");
-                            $request->request->add(array(
-                                "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                                "units" => $unitsPerPeriod,
-                                "value" => $salaryPerPeriod,
-                                "year" => $dateToSend->format("Y"),
-                                "month" => $dateToSend->format("m"),
-                                "period" => "2",
-                            ));
-                            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
-                            if ($insertionAnswer->getStatusCode() != 200) {
-                                return false;
-                            }
-                        }else{
-                            $unitsPerPeriod = $actContract->getWorkableDaysMonth();
-                            $salaryPerPeriod = $actContract->getSalary();
+                } else {
+                    $dateToCheck = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
+                    if ($nowDate < $dateToCheck) {
+                        $dateToStart = $dateToCheck;
+                    } else {
+                        $unitsPerPeriod = $actContract->getWorkableDaysMonth();
+                        $salaryPerPeriod = $actContract->getSalary();
+                        $request->setMethod("POST");
+                        $request->request->add(array(
+                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                            "units" => $unitsPerPeriod,
+                            "value" => $salaryPerPeriod,
+                            "year" => $dateToCheck->format("Y"),
+                            "month" => $dateToCheck->format("m"),
+                            "period" => "4",
+                        ));
+                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                        if ($insertionAnswer->getStatusCode() != 200) {
+                            return false;
                         }
-                        $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") ."-". $dateToStart->format("t"));
+                        $dateToStart = new DateTime($dateToCheck->format("Y") . "-" . (intval($dateToCheck->format("m")) + 1) . "-1");
+                    }
+                }
+                //get to today date
+                while (true) {
+                    if ($actContract->getFrequencyFrequency()->getPayrollCode() == "Q") {
+                        $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-15");
                         if ($nowDate < $dateToSend) {
                             break;
                         }
+                        $unitsPerPeriod = $actContract->getWorkableDaysMonth() / 2;
+                        $salaryPerPeriod = $actContract->getSalary() / 2;
                         $request->setMethod("POST");
                         $request->request->add(array(
                             "employee_id" => $eHE->getIdEmployerHasEmployee(),
@@ -345,126 +328,148 @@ trait SubscriptionMethodsTrait
                             "value" => $salaryPerPeriod,
                             "year" => $dateToSend->format("Y"),
                             "month" => $dateToSend->format("m"),
-                            "period" => "4",
+                            "period" => "2",
                         ));
                         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
                         if ($insertionAnswer->getStatusCode() != 200) {
                             return false;
                         }
-                        $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m")) + 1) . "-1");
+                    } else {
+                        $unitsPerPeriod = $actContract->getWorkableDaysMonth();
+                        $salaryPerPeriod = $actContract->getSalary();
+                    }
+                    $dateToSend = new DateTime($dateToStart->format("Y") . "-" . $dateToStart->format("m") . "-" . $dateToStart->format("t"));
+                    if ($nowDate < $dateToSend) {
+                        break;
+                    }
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "units" => $unitsPerPeriod,
+                        "value" => $salaryPerPeriod,
+                        "year" => $dateToSend->format("Y"),
+                        "month" => $dateToSend->format("m"),
+                        "period" => "4",
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddCumulatives', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                    $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m")) + 1) . "-1");
 
+                }
+            }
+            $request->setMethod("POST");
+            $request->request->add(array(
+                "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                "value" => $value,
+                "date_change" => $actContract->getStartDate()->format("d-m-Y"),
+            ));
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
+            //ADDING THE ENTITIES
+            $emEntities = $employee->getEntities();
+            /** @var EmployeeHasEntity $eEntity */
+            foreach ($emEntities as $eEntity) {
+                $entity = $eEntity->getEntityEntity();
+                $eType = $entity->getEntityTypeEntityType();
+                if ($eType->getPayrollCode() == "EPS" || $eType->getPayrollCode() == "ARS") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $eType->getPayrollCode() == "EPS" ? "2" : "1", //EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
                     }
                 }
-                $request->setMethod("POST");
-                $request->request->add(array(
-                    "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                    "value" => $value,
-                    "date_change" => $actContract->getStartDate()->format("d-m-Y"),
-                ));
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddFixedConcepts', array('_format' => 'json'));
-                if ($insertionAnswer->getStatusCode() != 200) {
-                    return false;
-                }
-                //ADDING THE ENTITIES
-                $emEntities = $employee->getEntities();
-                /** @var EmployeeHasEntity $eEntity */
-                foreach ($emEntities as $eEntity) {
-                    $entity = $eEntity->getEntityEntity();
-                    $eType = $entity->getEntityTypeEntityType();
-                    if ($eType->getPayrollCode() == "EPS" || $eType->getPayrollCode() == "ARS") {
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code" => $eType->getPayrollCode(),
-                            "coverage_code" => $eType->getPayrollCode() == "EPS" ? "2" : "1", //EPS ITS ALWAYS FAMILIAR SO NEVER CHANGE THIS
-                            "entity_code" => $entity->getPayrollCode(),
-                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-                            return false;
-                        }
+                if ($eType->getPayrollCode() == "AFP") {
+                    if ($entity->getPayrollCode() == 0) {
+                        $coverage = $entity->getName() == "Pensionado" ? 2 : 0; //2 si es pensionado o 0 si no amporta
+                    } else {
+                        $coverage = 1;
                     }
-                    if ($eType->getPayrollCode() == "AFP") {
-                        if ($entity->getPayrollCode() == 0) {
-                            $coverage = $entity->getName() == "Pensionado" ? 2 : 0; //2 si es pensionado o 0 si no amporta
-                        } else {
-                            $coverage = 1;
-                        }
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code" => $eType->getPayrollCode(),
-                            "coverage_code" => $coverage, //the relation coverage from SQL
-                            "entity_code" => $entity->getPayrollCode(),
-                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-                            echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
-                            die();
-                            $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
-                            return $view;
-                        }
-                    }
-                    if ($eType->getPayrollCode() == "FCES") {
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code" => "FCES",
-                            "coverage_code" => 1, //DONT change this is forever and ever
-                            "entity_code" => intval($entity->getPayrollCode()),
-                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-                            return false;
-                        }
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $coverage, //the relation coverage from SQL
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        echo "Cago insertar entidad AFP " . $eHE->getIdEmployerHasEmployee() . " SC" . $insertionAnswer->getStatusCode();
+                        die();
+                        $view->setStatusCode($insertionAnswer->getStatusCode())->setData($insertionAnswer->getContent());
+                        return $view;
                     }
                 }
-                $emEntities = $employer->getEntities();
-                $flag = false;
-                /** @var EmployerHasEntity $eEntity */
-                foreach ($emEntities as $eEntity) {
-                    $entity = $eEntity->getEntityEntity();
-                    $eType = $entity->getEntityTypeEntityType();
-                    if ($eType->getPayrollCode() == "ARP") {
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code" => $eType->getPayrollCode(),
-                            "coverage_code" => $actContract->getPositionPosition()->getPayrollCoverageCode(),
-                            "entity_code" => $entity->getPayrollCode(),
-                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-                            return false;
-                        }
-                    }
-                    if ($eType->getPayrollCode() == "PARAFISCAL") {
-                        if (!$flag) {
-                            $flag = true;
-                        } else {
-                            continue;
-                        }
-                        $request->setMethod("POST");
-                        $request->request->add(array(
-                            "employee_id" => $eHE->getIdEmployerHasEmployee(),
-                            "entity_type_code" => $eType->getPayrollCode(),
-                            "coverage_code" => "1", //Forever and ever don't change this
-                            "entity_code" => $entity->getPayrollCode(),
-                            "start_date" => $actContract->getStartDate()->format("d-m-Y"),
-                        ));
-                        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
-                        if ($insertionAnswer->getStatusCode() != 200) {
-                            return false;
-                        }
+                if ($eType->getPayrollCode() == "FCES") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => "FCES",
+                        "coverage_code" => 1, //DONT change this is forever and ever
+                        "entity_code" => intval($entity->getPayrollCode()),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
                     }
                 }
             }
+            $emEntities = $employer->getEntities();
+            $flag = false;
+            /** @var EmployerHasEntity $eEntity */
+            foreach ($emEntities as $eEntity) {
+                $entity = $eEntity->getEntityEntity();
+                $eType = $entity->getEntityTypeEntityType();
+                if ($eType->getPayrollCode() == "ARP") {
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => $actContract->getPositionPosition()->getPayrollCoverageCode(),
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+                if ($eType->getPayrollCode() == "PARAFISCAL") {
+                    if (!$flag) {
+                        $flag = true;
+                    } else {
+                        continue;
+                    }
+                    $request->setMethod("POST");
+                    $request->request->add(array(
+                        "employee_id" => $eHE->getIdEmployerHasEmployee(),
+                        "entity_type_code" => $eType->getPayrollCode(),
+                        "coverage_code" => "1", //Forever and ever don't change this
+                        "entity_code" => $entity->getPayrollCode(),
+                        "start_date" => $actContract->getStartDate()->format("d-m-Y"),
+                    ));
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:postAddEmployeeEntity', array('_format' => 'json'));
+                    if ($insertionAnswer->getStatusCode() != 200) {
+                        return false;
+                    }
+                }
+            }
+        }
 
     }
+
     protected function addToSQL(User $user)
     {
         $person = $user->getPersonPerson();
@@ -953,7 +958,7 @@ trait SubscriptionMethodsTrait
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
             '$employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
             '$idProcedureType' => $ProcedureType->getIdProcedureType()
-                ), array('_format' => 'json')
+        ), array('_format' => 'json')
         );
         $this->validateDocuments($user);
         $this->addToSQL($user);
@@ -968,92 +973,92 @@ trait SubscriptionMethodsTrait
         $listPaymentMethods = json_decode($response->getContent(), true);
         return isset($listPaymentMethods['payment-methods'][0]['method-id']) ? ($listPaymentMethods['payment-methods'][0]['method-id']) : false;
     }
-    
-    public function procedureAction($employerId,$idProcedureType)
+
+    public function procedureAction($employerId, $idProcedureType)
     {
         $em = $this->getDoctrine()->getManager();
         $em2 = $this->getDoctrine()->getManager();
-        $employerSearch = $this->loadClassById($employerId,"Employer");
-        $procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
+        $employerSearch = $this->loadClassById($employerId, "Employer");
+        $procedureType = $this->loadClassById($idProcedureType, "ProcedureType");
         $employerHasEmployees = $employerSearch->getEmployerHasEmployees();
         if ($procedureType->getName() == "Registro empleador y empleados") {
             $procedure = new RealProcedure();
             $procedure->setCreatedAt(new \DateTime());
             $procedure->setProcedureTypeProcedureType($procedureType);
-            $procedure->setEmployerEmployer($employerSearch);           
+            $procedure->setEmployerEmployer($employerSearch);
             $em2->persist($procedure);
 
-                $action = new Action();             
-                $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);             
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
-                $action->setPersonPerson($employerSearch->getPersonPerson());
-                $em->persist($action);
-                $em->flush();
+            $action = new Action();
+            $action->setStatus('Nuevo');
+            $action->setRealProcedureRealProcedure($procedure);
+            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
+            $action->setPersonPerson($employerSearch->getPersonPerson());
+            $em->persist($action);
+            $em->flush();
 
-                $action = new Action();             
-                $action->setStatus('Nuevo');
-                $action->setRealProcedureRealProcedure($procedure);             
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar cliente'),"ActionType"));
-                $action->setPersonPerson($employerSearch->getPersonPerson());
-                $em->persist($action);
-                $em->flush();                       
+            $action = new Action();
+            $action->setStatus('Nuevo');
+            $action->setRealProcedureRealProcedure($procedure);
+            $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar cliente'), "ActionType"));
+            $action->setPersonPerson($employerSearch->getPersonPerson());
+            $em->persist($action);
+            $em->flush();
             foreach ($employerSearch->getEntities() as $entities) {
 
-                $action = new Action();             
+                $action = new Action();
                 $action->setStatus('Nuevo');
                 $action->setRealProcedureRealProcedure($procedure);
                 $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
 
-                $action = new Action();             
+                $action = new Action();
                 $action->setStatus('Nuevo');
                 $action->setRealProcedureRealProcedure($procedure);
                 $action->setEntityEntity($entities->getEntityEntity());
-                $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
                 $action->setPersonPerson($employerSearch->getPersonPerson());
                 $em->persist($action);
                 $em->flush();
                 $procedure->addAction($action);
             }
             foreach ($employerHasEmployees as $employerHasEmployee) {
-            //agregar la validacion del estado del employee                 
-                    $action = new Action();             
+                //agregar la validacion del estado del employee
+                $action = new Action();
+                $action->setStatus('Nuevo');
+                $action->setRealProcedureRealProcedure($procedure);
+                //$action->setEntityEntity($entities->getEntityEntity());
+                $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Revisar registro'), "ActionType"));
+                $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                $em->persist($action);
+                $em->flush();
+                $procedure->addAction($action);
+                foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
+                    $action = new Action();
                     $action->setStatus('Nuevo');
                     $action->setRealProcedureRealProcedure($procedure);
-                    //$action->setEntityEntity($entities->getEntityEntity());
-                    $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Revisar registro'),"ActionType"));
+                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'Llamar entidad'), "ActionType"));
                     $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
                     $em->persist($action);
                     $em->flush();
                     $procedure->addAction($action);
-                foreach ($employerHasEmployee->getEmployeeEmployee()->getEntities() as $EmployeeHasEntity) {
-                        $action = new Action();             
-                        $action->setStatus('Nuevo');
-                        $action->setRealProcedureRealProcedure($procedure);
-                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'Llamar entidad'),"ActionType"));
-                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                        $em->persist($action);
-                        $em->flush();
-                        $procedure->addAction($action);
 
-                        $action = new Action();             
-                        $action->setStatus('Nuevo');
-                        $action->setRealProcedureRealProcedure($procedure);
-                        $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
-                        $action->setActionTypeActionType($this->loadClassByArray(array('name'=>'inscripcion'),"ActionType"));
-                        $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
-                        $em->persist($action);
-                        $em->flush();
-                        $procedure->addAction($action);
+                    $action = new Action();
+                    $action->setStatus('Nuevo');
+                    $action->setRealProcedureRealProcedure($procedure);
+                    $action->setEntityEntity($EmployeeHasEntity->getEntityEntity());
+                    $action->setActionTypeActionType($this->loadClassByArray(array('name' => 'inscripcion'), "ActionType"));
+                    $action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
+                    $em->persist($action);
+                    $em->flush();
+                    $procedure->addAction($action);
                 }
             }
             $em2->flush();
-        }else{
+        } else {
             $em2->remove($procedure);
             $em2->flush();
         }
