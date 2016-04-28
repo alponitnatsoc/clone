@@ -200,12 +200,12 @@
                         <div class="col-md-1">
                         </div>
                         <div class="col-md-11 center">
-                            <input type="checkbox" id="tos" name="tos">
+                            <input type="checkbox" class="tos" id="tos" name="tos">
                             <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit"  class="btn register-AS1 btn-symplifica btn">Continuar</button>
+                        <button type="submit" class="submit-debit btn register-AS1 btn-symplifica btn" disabled="true">Continuar</button>
                 </div>
                 </div>
                 <input class="methodTypeInput" name="methodType" value="" hidden="true"></input>
@@ -231,7 +231,8 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function () {
-
+            
+            
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
                 validator = $("form[name='legalAssistancePay']").validate({
@@ -345,6 +346,15 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                 $('.creditCardForm').fadeOut("slow");
                 $('.methodTypeInput').val("deb");
             });
+            $('.tos').on("click",function(){                
+                if ( $('.tos').is(':checked') ) {
+                    $(".submit-debit").removeAttr("disabled");
+                }else{
+                    $(".submit-debit").attr("disabled","true");
+                }
+            });
+
+            
 
         });
     </script>
