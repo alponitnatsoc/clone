@@ -505,14 +505,19 @@ public function fixArrayLocalizacion($array, &$new_array) {
      * @param Int $documentNumber The document number of the client.
      * @param String $identificationType The type of the document.
      * @param Int $registerValidation The id gotten on the validation method, in the field: regValidacion.
+     * @param String $surname The last name of the client.
+     * @param Int $names The first and middle name of the client.
+     * @param String $documentExpeditionDate format DD-MM-YYYY.
      *
      * @return View
      */
-    public function getClientIdentificationServiceExperianPreguntasAction($documentNumber,$identificationType,$registerValidation)
+    public function getClientIdentificationServiceExperianPreguntasAction($documentNumber, $identificationType, $surname, $names, $documentExpeditionDate)
     {
         $parameters = array();
         $regex = array();
         $mandatory = array();
+
+        $registerValidation = null;
 
         // Adapt the document type to our standars.
         if($identificationType == "cc" ||
@@ -530,17 +535,19 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         $parameters["tipoIdentificacion"] = $identificationType;
         $parameters["identificacion"] = $documentNumber;
-        $parameters["regValidacion"] = $registerValidation;
 
         // Set all the parameters info.
         $regex['tipoIdentificacion'] = '(.)*';
         $mandatory['tipoIdentificacion'] = true;
         $regex['identificacion'] = '([0-9])+';
         $mandatory['identificacion'] = true;
-        $regex['regValidacion'] = '[0-9]+';
-        $mandatory['regValidacion'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
+
+        // We call the first method to get the authorization.
+        $res = $this->getClientIdentificationServiceExperianValidarAnswersAction($documentNumber, $identificationType, $surname, $names, $documentExpeditionDate);
+        //die( print_r($res->getData()['regValidacion']));
+        $parameters["regValidacion"]= $res->getData()['regValidacion'];
 
         $request = '<?xml version="1.0" encoding="UTF-8"?>
         <SolicitudCuestionario tipoId="' . $parameters["tipoIdentificacion"] .
