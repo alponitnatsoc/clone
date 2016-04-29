@@ -529,7 +529,7 @@ class Payments2RestController extends FOSRestController
      * (name="employeeMail", nullable=true, requirements="(.)*", strict=true, description="Mail of the employee, it is optional.")
      * (name="employeeBankCode", nullable=false, requirements="([0-9]|-| )+", strict=true, description="Bank code of the employee, can be found on table Bank.")
      * (name="employeeCellphone", nullable=true, requirements="([0-9])+", strict=true, description="Cellphone of the employee, it is optional.")
-     * (name="employeeAccountType", nullable=false, requirements="(AH|CC|EN)", strict=true, description="Employee account type(Savings, checking or encargo fiduciario).")
+     * (name="employeeAccountType", nullable=false, requirements="(AH|CC|EN|DP)", strict=true, description="Employee account type(Savings, checking or encargo fiduciario).")
      * (name="employeeAccountNumber", nullable=false, requirements="([0-9]|-| )+", strict=true, description="Bank account number of the employee.")
      * (name="employeeAddress", nullable=true, requirements="(.)*", strict=true, description="Address of the employee, it is optional.")
      *
@@ -560,7 +560,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['employeeBankCode'] = true;
         $regex['employeeCelphone'] = '([0-9])+';
         $mandatory['employeeCellphone'] = false;
-        $regex['employeeAccountType'] = '(AH|CC|EN)';
+        $regex['employeeAccountType'] = '(AH|CC|EN|DP)';
         $mandatory['employeeAccountType'] = true;
         $regex['employeeAccountNumber'] = '([0-9|-]| )+';
         $mandatory['employeeAccountNumber'] = true;
@@ -828,7 +828,7 @@ class Payments2RestController extends FOSRestController
      * (name="documentTypeEmployee", nullable=false, requirements="(CC|cc|nit|NIT)", strict=true, description="Document type of the employee.")
      * (name="documentEmployee", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Document number of the employee.")
      * (name="bankCode", nullable=false, requirements="(([0-9|-]| )+|(GS|PL))", strict=true, description="Code of the bank of the employee. This can be obtained in the beneficiary.")
-     * (name="accountType", nullable=false, requirements="(AH|CC|EN)", strict=true, description="Account type of the employee savings checking.")
+     * (name="accountType", nullable=false, requirements="(AH|CC|EN|DP)", strict=true, description="Account type of the employee savings checking.")
      * (name="accountBankNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Account number of the employee, real number not internal.")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?", strict=true, description="value of the transaction.")
      * (name="reference", nullable=true, requirements="(.)*", strict=false, description="Reference number for the pila, only if its different from the document number.")
@@ -850,7 +850,7 @@ class Payments2RestController extends FOSRestController
         $mandatory['documentEmployee'] = true;
         $regex['bankCode'] = '(([0-9|-]| )+|(GS|PL))';
         $mandatory['bankCode'] = true;
-        $regex['accountType'] = '(AH|CC|EN)';
+        $regex['accountType'] = '(AH|CC|EN|DP)';
         $mandatory['accountType'] = true;
         $regex['accountBankNumber'] = '([0-9|-]| )+';
         $mandatory['accountBankNumber'] = true;
