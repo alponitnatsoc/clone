@@ -335,6 +335,44 @@ class PaymentMethodRestController extends FOSRestController
      * @param $idPurchaseOrder
      * @return View
      */
+    public function getDispersePurchaseOrderAction($idPurchaseOrder)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        /** @var PurchaseOrders $purchaseOrder */
+        $purchaseOrderId = $idPurchaseOrder;
+        $purchaseOrder = $em->getRepository("RocketSellerTwoPickBundle:PurchaseOrders")->find($purchaseOrderId);
+        $view = View::create();
+        $descriptions = $purchaseOrder->getPurchaseOrderDescriptions();
+        /** @var User $user */
+        $user = $purchaseOrder->getIdUser();
+        $person = $user->getPersonPerson();
+        /** @var PurchaseOrdersDescription $desc */
+        foreach ($descriptions as $desc) {
+            $dispersionAnswer=$this->disperseMoney($desc,$person);
+            if($dispersionAnswer['code']!=200){
+                return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
+            }
+        }
+        $view->setStatusCode(200)->setData(array());
+        return $view;
+    }
+    /**
+     * Return the overall user list.
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Return the overall User List",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @param $idPurchaseOrder
+     * @return View
+     */
     public function getPayPurchaseOrderAction($idPurchaseOrder)
     {
 
