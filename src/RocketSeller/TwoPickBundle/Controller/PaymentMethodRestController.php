@@ -51,7 +51,6 @@ class PaymentMethodRestController extends FOSRestController
     {
         /** @var User $user */
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
-        //TODO buscar en la bd los codigos de hightec
         $person = $user->getPersonPerson();
         $bankRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank");
         $accountTypeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType");
@@ -399,13 +398,6 @@ class PaymentMethodRestController extends FOSRestController
         if($extractAnswer['code']!=200){
             return $view->setStatusCode($extractAnswer['code'])->setData($extractAnswer['data']);
         }
-        /** @var PurchaseOrdersDescription $desc */
-        foreach ($descriptions as $desc) {
-            $dispersionAnswer=$this->disperseMoney($desc,$person);
-            if($dispersionAnswer['code']!=200){
-                return $view->setStatusCode($dispersionAnswer['code'])->setData($dispersionAnswer['data']);
-            }
-        }
         $view->setStatusCode(200)->setData(array());
         return $view;
     }
@@ -459,7 +451,12 @@ class PaymentMethodRestController extends FOSRestController
                 $documentEmployee ="900862831";
 
             } elseif ($purchaseOrderDescription->getProductProduct()->getSimpleName() == "PN") {
-                $accountType = $payMethod->getAccountTypeAccountType()->getName()=="Ahorros"?"AH":"CC";
+                $payType=$payMethod->getAccountTypeAccountType();
+                if($payMethod->getPayTypePayType()->getName()=="Daviplata"){
+                    $accountType="DP";
+                }else{
+                    $accountType = $payMethod->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMethod->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                }
                 $bankCode=$payMethod->getBankBank()->getHightechCode();
                 $paymentMethodAN=$payMethod->getCellPhone()!=""?$payMethod->getCellPhone():$payMethod->getAccountNumber();
                 $documentTypeEmployee=$employeePerson->getDocumentType();

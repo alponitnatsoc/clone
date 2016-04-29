@@ -663,7 +663,11 @@ trait SubscriptionMethodsTrait
                     if ($payType->getPayrollCode() != 'EFE') {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
                         if ($paymentMethodId) {
-                            $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                            if($payType->getName()=="Daviplata"){
+                                $paymentMethodId="DP";
+                            }else{
+                                $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
+                            }
                         }
                         $paymentMethodAN = $payMC->getAccountNumber() == null ? $payMC->getCellPhone() : $payMC->getAccountNumber();
                         $employeePerson = $employeeC->getEmployeeEmployee()->getPersonPerson();

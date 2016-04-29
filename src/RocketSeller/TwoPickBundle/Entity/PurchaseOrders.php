@@ -22,9 +22,9 @@ class PurchaseOrders
      */
     private $idPurchaseOrders;
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(type="integer", nullable = TRUE)
+     * @ORM\Column(type="string", nullable = TRUE)
      */
     private $payMethodId;
     /**
@@ -320,29 +320,6 @@ class PurchaseOrders
     }
 
 
-    /**
-     * Set payMethodId
-     *
-     * @param integer $payMethodId
-     *
-     * @return PurchaseOrders
-     */
-    public function setPayMethodId($payMethodId)
-    {
-        $this->payMethodId = $payMethodId;
-
-        return $this;
-    }
-
-    /**
-     * Get payMethodId
-     *
-     * @return integer
-     */
-    public function getPayMethodId()
-    {
-        return $this->payMethodId;
-    }
 
     /**
      * Set providerId
@@ -390,5 +367,29 @@ class PurchaseOrders
     public function getRadicatedNumber()
     {
         return $this->radicatedNumber;
+    }
+
+    /**
+     * Set payMethodId
+     *
+     * @param string $payMethodId
+     *
+     * @return PurchaseOrders
+     */
+    public function setPayMethodId($payMethodId)
+    {
+        $this->payMethodId = $payMethodId;
+
+        return $this;
+    }
+
+    /**
+     * Get payMethodId
+     *
+     * @return string
+     */
+    public function getPayMethodId()
+    {
+        return $this->payMethodId;
     }
 }
