@@ -832,6 +832,7 @@ class Payments2RestController extends FOSRestController
      * (name="accountBankNumber", nullable=false, requirements="([0-9|-]| )+", strict=true, description="Account number of the employee, real number not internal.")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?", strict=true, description="value of the transaction.")
      * (name="reference", nullable=true, requirements="(.)*", strict=false, description="Reference number for the pila, only if its different from the document number.")
+     * (name="payment_date", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Day when it has to be payed, can be null and will be payed inmediatley.(YYYY-MM-DD).")
      *
      * @return View
      */
@@ -858,6 +859,8 @@ class Payments2RestController extends FOSRestController
         $mandatory['value'] = true;
         $regex['reference'] = '(.)*';
         $mandatory['reference'] = false;
+        $regex['payment_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
+        $mandatory['payment_date'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
@@ -880,7 +883,10 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['valor'] = $parameters['value'];
         if(isset($parameters['reference']))
           $parameters_fixed['referencia'] = $parameters['reference'];
-
+        if(isset($parameters['payment_date']))
+          $parameters_fixed['referencia'] = $parameters['reference'];
+        else
+          $parameters_fixed['fechaPago'] = null;
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "RegistrarOrdenPago");
 
