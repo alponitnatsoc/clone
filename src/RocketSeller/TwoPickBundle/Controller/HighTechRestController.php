@@ -154,30 +154,19 @@ class HighTechRestController extends FOSRestController
     $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
 
     $this->validateParamters($parameters, $regex, $mandatory);
+    $id = $parameters['numeroRadicado'];
     // Validate that the id exists.
-    $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
+    $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
     /** @var $ehEs EmployerHasEmployee */
 
-    /*
-    $dis = $dispersion->findOneBy(array('idDispercionNovo' => $id));
+    $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
     if ($dis == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
     }
-    $status = $parameters['status'];
-    $message = isset($parameters['message']) ? $parameters['message'] : null;
 
-    $dis->setStatus($status);
-    if($message)
-      $dis->setMessage($message);
-    $em = $this->getDoctrine()->getManager();
-    $em->persist($dis);
-    $em->flush();
-    */
-    // Succesfull operation.
-    $view = View::create();
-    $view->setStatusCode(200);
-    $view->setData([]);
-    return $view;
+    $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRestController:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrder()]);
+
+    return $retorno;
   }
 
 }
