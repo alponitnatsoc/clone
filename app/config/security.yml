@@ -75,5 +75,11 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/login/.*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/welcome, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/legal, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/dashboard, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/subscription, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/manage, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/payroll, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/liquidations/.*, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/backoffice, roles: ROLE_BACK_OFFICE }
