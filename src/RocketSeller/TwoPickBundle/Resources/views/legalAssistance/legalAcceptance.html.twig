@@ -1,23 +1,26 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
-{#  {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
-   	<div class="clearfix"></div>
-   	<br />
-   	<div class="row">
-		<div class="col-sm-12" >
-			<div class="roundContainer">
-				<div class="media" >
-				  <div class="media-left">
-				    <i class="glyphicon glyphicon-exclamation-sign bigIcon"></i>
-				  </div>
-				  <div class="media-body">
-				    <h4 class="media-heading" style="font-weight: bold;">De acuerdo a tu respuesta, la situación legal con tu empleado puede tener implicaciones negativas para ti</h4>
-				    Por lo tanto puedes mantener tu relación laboral como la llevas a este punto, comenzar una nueva con el mismo empleado o consultar nuestro consultorio jurídico para asegurarse, teniendo en cuenta las siguientes implicaciones:
-				  </div>
-				</div>
-			</div>
-		</div>
-	</div>
+    {#  {% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+    <div class="clearfix"></div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="roundContainer">
+                <div class="media">
+                    <div class="media-left">
+                        <i class="glyphicon glyphicon-exclamation-sign bigIcon"></i>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" style="font-weight: bold;">De acuerdo a tu respuesta, la situación
+                            legal con tu empleado puede tener implicaciones negativas para ti</h4>
+                        Por lo tanto puedes mantener tu relación laboral como la llevas a este punto, comenzar una nueva
+                        con el mismo empleado o consultar nuestro consultorio jurídico para asegurarse, teniendo en
+                        cuenta las siguientes implicaciones:
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="clearfix "></div>
     <!--
@@ -33,75 +36,87 @@
 		</div>
     </div>
 -->
-    <br />
-	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1 col-xs-12">
-			<div class="embed-responsive embed-responsive-16by9">
-			  <iframe class="embed-responsive-item" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/ScMzIvxBSi4"></iframe>
-			</div>
-		</div>
-	</div>
-	<br />
-	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
-			<a href="javascript:return;" class="notAjax" onclick="$('.legalStatusDescription').toggle();return false;">Ver Implicaciones</a>
-			<div class="legalStatusDescription text-left" style="display:none">Pronto tendremos una descripción mucho más descriptiva de la situación legal que estas pasando</div>
-		</div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" frameborder="0" allowfullscreen
+                        src="http://www.youtube.com/embed/ScMzIvxBSi4"></iframe>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
+            <a href="javascript:return;" class="notAjax" onclick="$('.legalStatusDescription').toggle();return false;">Ver
+                Implicaciones</a>
+            <div class="legalStatusDescription text-left" style="display:none">Pronto tendremos una descripción mucho
+                más descriptiva de la situación legal que estas pasando
+            </div>
+        </div>
 
-	</div>
-	<br />
-	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1 col-xs-12 checkbox">
-			
-			<label for="userAccept">
-				<input id="userAccept" type="checkbox" value="checkbox">
-				<div id="u285" class="text">
-					<p><span>Acepto que he leído las implicaciones expuestas por Symplifica y me hago responsable de la elección que tomaré a continuación</span></p>
-				</div>
-			</label>
-			
-		</div>
-	</div>
-	<br />
-	<div class="row buttonsRow">
-		<div class=" col-sm-7 col-sm-offset-2 multipleOptions">
-			<a class=" btn btn-orange notAjax disabled" href="{{ path('legal_assist') }}" >Solucionar la situación actual con mi empleado</a><br />
-			<a class="btn btn-orange notAjax disabled " href="{{ path('change_flag',{'flag':0}) }}" >Realizar contrato nuevo</a><br />
-			
-			<a class="btn btn-orange notAjax disabled" href="{{ path('change_flag',{'flag':1}) }}" >Continuar registro y acepto la responsabilidad</a><br />
-			<a class="btn btnPrevious notAjax" style="margin" href="{{ path('legal') }}">Anterior</a>
-		</div>	
-	</div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-xs-12 checkbox">
+
+            <label for="userAccept">
+                <input id="userAccept" type="checkbox" value="checkbox">
+                <div id="u285" class="text">
+                    <p><span>Acepto que he leído las implicaciones expuestas por Symplifica y me hago responsable de la elección que tomaré a continuación</span>
+                    </p>
+                </div>
+            </label>
+
+        </div>
+    </div>
+    <br/>
+    <div class="row buttonsRow">
+        <div class=" col-sm-7 col-sm-offset-2 multipleOptions">
+            <a class=" btn btn-orange notAjax disabled" href="{{ path('legal_assist') }}">Solucionar la situación actual
+                con mi empleado</a><br/>
+            <a class="btn btn-orange notAjax disabled " href="{{ path('change_flag',{'flag':0}) }}">Realizar contrato
+                nuevo</a><br/>
+
+            <a class="btn btn-orange notAjax disabled" href="{{ path('change_flag',{'flag':1}) }}">Continuar registro y
+                acepto la responsabilidad</a><br/>
+            <a class="btn btnPrevious notAjax" style="margin" href="{{ path('legal') }}">Anterior</a>
+        </div>
+    </div>
 
 
 
 {% endblock %}
 {% block javascripts %}
-	{{ parent() }}
-	<script>
-		$(document).ready(function(){
-			var state='{{ state }}';
-			if(state=="correct"){
-				$(".legalCorrect").each(function () {
-					$(this).show();
-				})
-				$(".legalInCorrect").each(function () {
-					$(this).hide();
-				})
-			}else{
-				$(".legalCorrect").each(function () {
-					$(this).hide();
-				})
-				$(".legalInCorrect").each(function () {
-					$(this).show();
-				})
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            var state = '{{ state }}';
+            if (state == "correct") {
+                $(".legalCorrect").each(function () {
+                    $(this).show();
+                })
+                $(".legalInCorrect").each(function () {
+                    $(this).hide();
+                })
+            } else {
+                $(".legalCorrect").each(function () {
+                    $(this).hide();
+                })
+                $(".legalInCorrect").each(function () {
+                    $(this).show();
+                })
 
-			}
+            }
+            $("#userAccept").attr('checked', false);
+            $("#userAccept").change(function () {
+                if ($(this).is(':checked')) {
+                    $(".multipleOptions .btn-orange").removeClass("disabled");
+                } else {
+                    $(".multipleOptions .btn-orange").addClass("disabled");
+                }
+            });
 
-			$("#userAccept").change(function(){
-			    $(".multipleOptions .btn-orange").toggleClass("disabled");
-			});
-
-		});
-	</script>
+        });
+    </script>
 {% endblock %}
