@@ -221,7 +221,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
        $view = View::create();
        $errorCode = 200;
-       if (isset($array["resultado"]) &&  $array["resultado"] != "01")
+       if (isset($array["resultado"]) &&  !($array["resultado"] == "01" || $array["resultado"] == "true" ))
            $errorCode = 404;
 
        // Set status code of view with http codes.
@@ -546,7 +546,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         // We call the first method to get the authorization.
         $res = $this->getClientIdentificationServiceExperianValidarAnswersAction($documentNumber, $identificationType, $surname, $names, $documentExpeditionDate);
-        //die( print_r($res->getData()['regValidacion']));
+        //die( print_r($res->getData()));
         $parameters["regValidacion"]= $res->getData()['regValidacion'];
 
         $request = '<?xml version="1.0" encoding="UTF-8"?>
