@@ -9,6 +9,12 @@
 </div>
 {% endblock header %}
 {% block body %}
+        <style>
+            a {
+                text-decoration: none !important;
+                color:white;
+            }
+        </style>
                 <div class="container body-container navbar">
                     <div class="row mainContentRow">
                         <div id="sidebar" class="col-sm-3">
@@ -44,31 +50,98 @@
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
-                        	<div class="col-md-8">
-								<div class="col-md-12">
+                        	<div class="col-md-12">
+								<div class="col-md-4">
+                                    <h4>Información Básica</h4>
 									<ul>
 										<li>
-											{{ person.names}}
+                                            <p><strong>Nombres:</strong>
+                                                {{ person.names}}</p>
 										</li>
 										<li>
-											{{ person.lastName1}}
+                                            <p><strong>Apellido:</strong>
+                                            {{ person.lastName1}}</p>
+											
 										</li>
 										<li>
-											{{ person.lastName2}}
+                                            <p><strong>Segundo apellido:</strong>
+                                            {{ person.lastName2}}</p>
+											
 										</li>
 										<li>
-											{{ person.documentType}}
+                                            <p><strong>Documento:  </strong>
+                                                {{ person.documentType}} {{ person.document}}</p>
+											
 										</li>
+                                        {% if person.phones|length > 0 %}
+                                            <li>
+                                                <p><strong>Telefono:</strong>
+                                                {{ person.phones[0].phoneNumber}}</p>
+                                                
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <p><strong>Fecha de nacimiendo:</strong>
+                                            {{ person.birthDate|date('d/m/Y')}}</p>
+                                            
+                                        </li>
+
 									</ul>
 								</div>
-								<p>¿ el registro esta completo?</p>
-									<button type="button" class="btn btn-success"><a href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
-									<button type="button" class="btn btn-danger">No</button>
+                                {% if employerHasEmployee %}
+                                    <div class="col-md-4">
+                                    <h4>Información de contrato</h4>
+                                    <ul>
+                                        {% set contracts = employerHasEmployee.contracts %}
+                                        {% for contract in contracts if contract.state == 1  %}
+                                        <li>
+                                            <p><strong>Tipo de contrato:</strong> 
+                                                {{ contract.contractTypeContractType.name }}</p>
+                                            
+                                        </li>
+                                        <li>
+                                            <p><strong>Dedicación:</strong>
+                                             {{ contract.timeCommitmentTimeCommitment.name }}</p>
+                                            
+                                        </li>
+                                        <li>
+                                            <p><strong>Salario:</strong>
+                                            {{ contract.salary}}</p>
+                                            
+                                        </li>
+                                        <li>
+                                            <p><strong>Metodo de pago:</strong>
+                                            {{ contract.payMethodPayMethod.payTypePayType.name}}</p>
+                                            
+                                        </li>
+                                        <li>
+                                            <p><strong>Fecha inicio de contrato:</strong>
+                                                {{ contract.startDate|date('d/m/Y')}}</p>                                            
+                                        </li>
+                                        {% endfor %}
+                                        
 
-							</div>
-                            <div class="col-md-4">
-                                {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}    
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <h4>Estado del registro</h4>
+                                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
+                                </div>                                                                 
                             </div>
+																
+							</div>
+                            
+                            <div class="col-md-12" style="border-top:dotted 1px;">
+                                <div class="col-md-12">
+                                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}  
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="border-top:dotted 1px;margin-top:20px;text-align:center;">
+                                <a class="btn btn-default notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
+                            </div>
+                            
                             
                         </div>
                     </div>

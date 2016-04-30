@@ -19,8 +19,24 @@ class BackOfficeController extends Controller
     {    	
     	$person = $this->loadClassById($idPerson,"Person");    	
     	$user =  $this->loadClassByArray(array('personPerson'=>$person),"User");
+       
+
     	$action = $this->loadClassById($idAction,"Action");
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action));
+
+        $employee = $person->getEmployee();
+        $employer = $action->getRealProcedureRealProcedure()->getEmployerEmployer();
+
+        if ($employee) {
+            $employerHasEmployee = $this->loadClassByArray(
+                    array(
+                        "employeeEmployee" =>$employee,
+                        "employerEmployer" =>$employer,
+                    ),"EmployerHasEmployee");  
+        }else{
+            $employerHasEmployee = null;
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
     }
     public function makeAfiliationAction($idAction)
     {        
