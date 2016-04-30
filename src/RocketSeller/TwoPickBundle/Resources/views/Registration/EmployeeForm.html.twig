@@ -69,7 +69,7 @@
         </style>
     {% endblock %}
     <div class="col-sm-12 col-xs-12 align-Resp">
-        <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="">
+        <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
                 <img src="/img/block-inline.png" class="center-block">
             </div>
@@ -79,7 +79,7 @@
                     Datos de mis empleados
                 </div>
             </div>
-        </a>
+        </div>
     </div>
 
 
@@ -570,8 +570,14 @@
                                 <div class="modal fade" id="calculatorResultsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
+                                            <!--
                                             <div class="modal-header">
                                                 <h3 class="modal-title">Detalles Calculadora</h3>
+                                            </div>
+                                        -->
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                                            <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                                                <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp; Estimación del costo de tu empleado</div>
                                             </div>
                                             <div class="modal-body">
 
@@ -812,11 +818,13 @@
                                                 </div>
                                         </div>
                                         <div class="row">
+                                            <!--
                                             <div class="col-sm-6 text-right">
 {#                                                 <button type="button" class="btn btn-primary btnPrevious-form btnPrevious" data-dismiss="modal">Cerrar</button>#}
                                                 <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close" style="">Cerrar</button>
                                             </div>
-                                            <div class="col-sm-6 text-left">
+                                        -->
+                                            <div class="col-sm-12 text-center">
                                                 <a id="saveWorplaceModal" class="btn btn-orange" href="{{ path("api_public_post_add_workplace") }}">Guardar</a>
                                             </div>
 

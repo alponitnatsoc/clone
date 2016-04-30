@@ -40,7 +40,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('wealthAC', 'text', array(
                 'mapped' => false,
-                'label'=>'EPS*',
+                'label'=>'Entidad Promotora de Salud (EPS) *',
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomW',
@@ -49,7 +49,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('pensionAC', 'text', array(
                 'mapped' => false,
-                'label'=>'Pension*',
+                'label'=>'Administradora de Fondo de Pensiones (AFP) *',
                 'required' => true,
                 'attr'=>array(
                     "class"=>'autocomP',

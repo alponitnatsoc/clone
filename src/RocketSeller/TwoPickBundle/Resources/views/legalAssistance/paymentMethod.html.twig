@@ -268,7 +268,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                     },
                     messages: {
                         "legalAssistancePay[credit_card]": {
-                            required: "Por favor ingrese el numero de la tarjeta",
+                            required: "Por favor ingresa un número valido de la tarjeta",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo 19 digitos",
                             minlength: "minimo 1 digitos",
@@ -276,7 +276,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
 
                         },
                         "legalAssistancePay[name_on_card]": {required: "Por favor ingrese el nombre que hay en la tarjeta"},
-                        "legalAssistancePay[expiry_date_month]": {
+                        "legalAssistancePay[expiry_month]": {
                             required: "Por favor seleccione el mes de vencimiento",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo mes de 2 digitos",
@@ -296,7 +296,7 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                                 return "mes del 01 al 12";
                             }
                         },
-                        "legalAssistancePay[expiry_date_year]": {
+                        "legalAssistancePay[expiry_year]": {
                             required: "Por favor ingrese el año de vencimiento",
                             number: "ingresa solamente dígitos",
                             maxlength: "maximo año de 4 digitos",
@@ -313,6 +313,9 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                             min: "maximo 9999"
                         },
                         "legalAssistancePay[documentType]": {required: "Por favor seleccione el tipo de documento"}
+
+                        , "legalAssistancePay[phoneNumber]": {required: "Por favor ingresa un número de teléfono valido"}
+
                     }
                 });
             });
