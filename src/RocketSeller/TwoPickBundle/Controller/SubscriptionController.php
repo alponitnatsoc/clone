@@ -233,6 +233,11 @@ class SubscriptionController extends Controller
 
     public function askDataCreditQuestionsAction($userId,Request $request)
     {
+        dump($request);
+        die();
+        $debitData=$request->request->all();
+        /** @var Request $request */
+        $request = $this->container->get('request');
         $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
         /** @var User $user */
         $user = $userRepo->find($userId);
@@ -255,7 +260,7 @@ class SubscriptionController extends Controller
                 'documentExpeditionDate' => $expeditionDate,
             ), array('_format' => 'json'));
             if ($insertionAnswer->getStatusCode() != 200) {
-                return false;
+                return $this->redirectToRoute("subscription_error");
             }
             $user->setDataCreditStatus(1);
             $em=$this->getDoctrine()->getManager();
@@ -276,7 +281,6 @@ class SubscriptionController extends Controller
                         }
                         $j++;
                     }
-
                     $form->add('' . $questions[$p]["orden"], 'choice', array(
                         'label' => $questions[$p]["texto"],
                         'choices' => $choices,
@@ -288,18 +292,24 @@ class SubscriptionController extends Controller
             }
 
             $form
+                ->setAction( $this->generateUrl('data_credit_questions', array('userId'=>$user->getId())))
                 ->add('idQuestionnaire', 'hidden', array('data' => $questions["id"]))
+                ->add('numberAccount', 'hidden', array('data' => $debitData['pagoMembresia']["numberAccount"]))
+                ->add('bank', 'hidden', array('data' => $debitData['pagoMembresia']["bank"]))
+                ->add('accountType', 'hidden', array('data' => $debitData['pagoMembresia']["accountType"]))
                 ->add('register', 'hidden', array('data' => $questions["registro"]))
-                ->add('save', 'submit', array('label' => 'Guardar'));
+                ->add('save', 'submit', array('label' => 'Validar preguntas'));
             $realForm = $form->getForm();
-            $realForm->handleRequest($request);
 
-            return $this->render('RocketSellerTwoPickBundle:Registration:generalFormRender.html.twig', array(
+            return $this->render('RocketSellerTwoPickBundle:Registration:generalFormRenderDatacredito.html.twig', array(
                 'form' => $realForm->createView(),
             ));
         } elseif($user->getDataCreditStatus()==1) {
+            dump($request);
+            die();
             $k=1;
             $formdone=$request->request->get("form");
+
 
             $toSend=array();
             while(true){
@@ -311,18 +321,60 @@ class SubscriptionController extends Controller
                 $k++;
             }
             $request->setMethod("GET");
-            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientIdentificationServiceExperianVerifyPreguntas', array(
-                'documentNumber' => $documentNumber,
-                'documentType' => $documentType,
-                'idQuestions' => $formdone["idQuestionnaire"],
-                'regQuestions' => $formdone["register"],
-                'answers' => $toSend,
-            ), array('_format' => 'json'));
+            $requestToSend=new Request();
+            $requestToSend->setMethod("GET");
+            $requestToSend->query->set('documentNumber', $documentNumber);
+            $requestToSend->query->set('documentType' , $documentType);
+            $requestToSend->query->set('idQuestions', $formdone["idQuestionnaire"]);
+            $requestToSend->query->set('regQuestions', $formdone["register"]);
+            $requestToSend->query->set('answers' , $toSend);
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientIdentificationServiceExperianVerifyPreguntas', array('request'=>$requestToSend), array('_format' => 'json'));
+
+            $dataCreditAnswer=json_decode($insertionAnswer->getContent(),true);
+            $em=$this->getDoctrine()->getManager();
             if ($insertionAnswer->getStatusCode() != 200) {
-                return false;
+                $user->setDataCreditStatus(3);
+                $em->persist($user);
+                $em->flush();
             }
-            dump($insertionAnswer->getContent());
-            die();
+            elseif($dataCreditAnswer["aprobacion"]=="true"){
+                $user->setDataCreditStatus(2);
+                $em->persist($user);
+                $em->flush();
+                if ($this->addToHighTech($user)) {
+                    //$request = new Request ();
+                    $request = $this->container->get('request');
+                    $request->setMethod('POST');
+                    $request->request->set('accountNumber', $formdone['numberAccount']);
+                    $request->request->set('bankId', $formdone['bank']);
+                    $request->request->set('accountTypeId', $formdone['accountType']);
+                    $request->request->set('userId', $user->getId());
+                    $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('request' => $request), array('_format' => 'json'));
+                    if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                        dump($postAddCreditCard->getContent());
+                        return $this->redirectToRoute("subscription_error");
+                        //throw $this->createNotFoundException($data->getContent());
+                    } else {
+                        $this->procesosLuegoPagoExitoso($user);
+                        return $this->redirectToRoute("subscription_success");
+                    }
+                } else {
+                    dump('Error al insertar en hightec');
+                    return $this->redirectToRoute("subscription_error");
+                }
+
+            }else{
+                $user->setDataCreditStatus(3);
+                $em->persist($user);
+                $em->flush();
+            }
+            $request->setMethod("POST");
+            return $this->forward('RocketSellerTwoPickBundle:Subscription:suscripcionPay');
+
+        }else{
+            $request->setMethod("POST");
+            return $this->forward('RocketSellerTwoPickBundle:Subscription:suscripcionPay');
+
         }
 
 
@@ -330,6 +382,7 @@ class SubscriptionController extends Controller
 
     public function suscripcionPayAction(Request $requestIn)
     {
+
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -384,37 +437,15 @@ class SubscriptionController extends Controller
                             return $this->redirectToRoute("subscription_error");
                         }
                     } elseif ($typeMethod == 'debito') {
-
-                        if ($this->addToHighTech($user)) {
-                            //$request = new Request ();
-                            $request = $this->container->get('request');
-                            $request->setMethod('POST');
-                            $request->request->set('accountNumber', $pagoMembresia['numberAccount']);
-                            $request->request->set('bankId', $pagoMembresia['bank']);
-                            $request->request->set('accountTypeId', $pagoMembresia['accountType']);
-                            $request->request->set('userId', $user->getId());
-                            $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('request' => $request), array('_format' => 'json'));
-                            if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
-                                dump($postAddCreditCard->getContent());
-                                return $this->redirectToRoute("subscription_error");
-                                //throw $this->createNotFoundException($data->getContent());
-                            } else {
-                                $this->procesosLuegoPagoExitoso($user);
-                                return $this->redirectToRoute("subscription_success");
-                                /*
-                                  $methodId = json_decode($postAddCreditCard->getContent(), true);
-                                  $purchaseOrder = $this->createPurchaceOrder($user, 'hightec', isset($methodId['response']['method-id']) ? $methodId['response']['method-id'] : false);
-
-                                  if ($purchaseOrder) {
-                                  return $this->redirectToRoute("subscription_success");
-                                  }
-                                  return $this->redirectToRoute("subscription_error");
-                                 */
-                            }
-                        } else {
-                            dump('Error al insertar en hightec');
+                        if($user->getDataCreditStatus()==0){
+                            return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId'=>$user->getId(),'request'=>$requestIn));
+                        }elseif($user->getDataCreditStatus()==3){
+                            dump('Usuario no ha podido ser verificado');
+                            return $this->redirectToRoute("subscription_error");
+                        }else{
                             return $this->redirectToRoute("subscription_error");
                         }
+
                     } else {
                         dump('La opcion enviada es diferente a las opciones permitidas');
                         return $this->redirectToRoute("subscription_error");

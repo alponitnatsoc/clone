@@ -1,0 +1,28 @@
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+	<div class="row">
+		<div class="col-sm-12" >
+			<div class="roundContainer">
+				<div class="media" >
+					<div class="media-left">
+						<i class="glyphicon glyphicon glyphicon-user bigIcon"></i>
+					</div>
+					<div class="media-body legalInCorrect">
+						<h4 class="media-heading" style="font-weight: bold;">Último paso, tenemos que validar tu identidad</h4>
+						Para garantizar tu seguridad, tenemos que confirmar tus datos, por favor contesta las siguientes preguntas para poder completar tu registro, en caso que tengas problemas, o no recuerdes alguno de los datos, tendrás que comunicarte con nuestra línea de atención
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br /><br />
+	<div class="row">
+		{{ form_start(form) }}
+		{{ form_errors(form) }}
+		<div id="formFields">
+			{{ form_widget(form) }}
+		</div>
+		{{ form_end(form) }}
+	</div>
+
+{% endblock fos_user_content %}

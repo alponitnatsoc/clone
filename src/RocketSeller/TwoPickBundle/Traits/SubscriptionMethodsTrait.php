@@ -466,6 +466,8 @@ trait SubscriptionMethodsTrait
                     }
                 }
             }
+            return true;
+
         }
 
     }
