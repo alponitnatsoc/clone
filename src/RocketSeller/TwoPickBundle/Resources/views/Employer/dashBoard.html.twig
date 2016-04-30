@@ -194,7 +194,7 @@
                 padding: 10px;
                 display: -webkit-inline-box;
                 border-bottom: solid #efefef;
-                border-width: 2px;
+                border-width: 0;
             }
             .dashboard_employer_contador_type_alert{
                 background-color: #df8728;
@@ -337,15 +337,11 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <p>&nbsp;</p>
-                                <span class="glyphicon glyphicon-th-large view">
-                                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important; font-size: 12px;">Cuadricula</a>
-                                </span>
+                                <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}" style="color:#3C4B5A !important; font-size: 12px;"><span class="glyphicon glyphicon-th-large view"></span> Cuadricula</a>
                             </div>
                             <div class="col-sm-6">
                                 <p>&nbsp;</p>
-                                <span class="glyphicon glyphicon-th-list view">
-                                    <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important; font-size: 12px;">Listado</a>
-                                </span>
+                                <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}" style="color:#3C4B5A !important; font-size: 13px;"><span class="glyphicon glyphicon-th-list view"></span> Listado</a>
                             </div>
                         </div>
                     </div>
@@ -402,7 +398,7 @@
                                                 <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link">{{ notification.accion }}</span>
                                             </div>
                                         {% else %}
-                                            <div class="panel_btn_action">
+                                            <div class="">
                                                 <a href="{{ notification.relatedlink }}" class="action-link">{{ notification.accion }}</a>
                                             </div>
                                         {% endif %}
