@@ -10,6 +10,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,14 +100,14 @@ class HighTechRestController extends FOSRestController
     $id = $parameters['numeroRadicado'];
     // Validate that the id exists.
     $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
-    /** @var $ehEs EmployerHasEmployee */
 
-    $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
+      /** @var PurchaseOrders $dis */
+      $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
     if ($dis == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
     }
 
-    $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRestController:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrder()]);
+    $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
 
     return $retorno;
   }

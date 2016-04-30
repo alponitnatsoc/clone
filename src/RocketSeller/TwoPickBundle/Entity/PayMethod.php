@@ -69,7 +69,7 @@ class PayMethod
     private $accountNumber;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=11, nullable=true)
      */
     private $cellPhone;
 
@@ -230,29 +230,6 @@ class PayMethod
         return $this->accountNumber;
     }
 
-    /**
-     * Set cellPhone
-     *
-     * @param integer $cellPhone
-     *
-     * @return PayMethod
-     */
-    public function setCellPhone($cellPhone)
-    {
-        $this->cellPhone = $cellPhone;
-
-        return $this;
-    }
-
-    /**
-     * Get cellPhone
-     *
-     * @return integer
-     */
-    public function getCellPhone()
-    {
-        return $this->cellPhone;
-    }
 
 
 
@@ -278,5 +255,29 @@ class PayMethod
     public function getHasIt()
     {
         return $this->hasIt;
+    }
+
+    /**
+     * Set cellPhone
+     *
+     * @param string $cellPhone
+     *
+     * @return PayMethod
+     */
+    public function setCellPhone($cellPhone)
+    {
+        $this->cellPhone = $cellPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get cellPhone
+     *
+     * @return string
+     */
+    public function getCellPhone()
+    {
+        return $this->cellPhone;
     }
 }

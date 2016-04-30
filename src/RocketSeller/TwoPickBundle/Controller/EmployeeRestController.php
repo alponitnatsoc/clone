@@ -162,6 +162,7 @@ class EmployeeRestController extends FOSRestController {
             return $view->setStatusCode(401)->setData(array("error" => array("login" => "El usuario no está logeado"), "url" => $this->generateUrl("fos_user_security_login")));
         }
         /** @var User $user */
+        $cellphone=intval($paramFetcher->get("cellphone"));
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         /** @var Employee $employee */
@@ -206,7 +207,7 @@ class EmployeeRestController extends FOSRestController {
         //TODO check if valid??
         $payMethod->setAccountNumber($paramFetcher->get('accountNumber'));
         //TODO check if vaild??
-        $payMethod->setCellPhone($paramFetcher->get('cellphone'));
+        $payMethod->setCellPhone($cellphone);
         $payMethod->setUserUser($user);
 
         //check if the Pay Method Ids are valid: Bank payType and AccountType

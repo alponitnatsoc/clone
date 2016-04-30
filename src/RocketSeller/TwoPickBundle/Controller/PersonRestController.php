@@ -44,6 +44,9 @@ class PersonRestController extends FOSRestController
      * @RequestParam(name="year", nullable=false, strict=true, description="year.")
      * @RequestParam(name="month", nullable=false, strict=true, description="month.")
      * @RequestParam(name="day", nullable=false, strict=true, description="day.")
+     * @RequestParam(name="documentExpeditionDateYear", nullable=false, strict=true, description="document expedition year")
+     * @RequestParam(name="documentExpeditionDateMonth", nullable=false, strict=true, description="document expedition month")
+     * @RequestParam(name="documentExpeditionDateDay", nullable=false, strict=true, description="document expedition day")
      * @return View
      */
     public function postEditPersonSubmitStep1Action(ParamFetcher $paramFetcher)
@@ -75,6 +78,10 @@ class PersonRestController extends FOSRestController
             $datetime->setDate($paramFetcher->get('year'), $paramFetcher->get('month'), $paramFetcher->get('day'));
             // TODO validate Date
             $people->setBirthDate($datetime);
+
+            $datetimeDocument = new DateTime();
+            $datetimeDocument->setDate($paramFetcher->get('documentExpeditionDateYear'), $paramFetcher->get('documentExpeditionDateMonth'), $paramFetcher->get('documentExpeditionDateDay'));
+            $people->setDocumentExpeditionDate($datetimeDocument);
             $em = $this->getDoctrine()->getManager();
 
             $view = View::create();

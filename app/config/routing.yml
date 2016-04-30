@@ -22,6 +22,9 @@ legal_acceptance:
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:legalAcceptance, state: incorrect}
 
 
+data_credit_questions:
+    path:      /datacredit/check/{userId}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions}
 registration_confirmed_start:
     path:      /registration/confirmed/start
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerConfirmedStart}

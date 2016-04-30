@@ -16,11 +16,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class SubscriptionController extends Controller {
+class SubscriptionController extends Controller
+{
 
     use SubscriptionMethodsTrait;
 
-    public function subscriptionChoicesAction() {
+    public function subscriptionChoicesAction()
+    {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -41,17 +43,17 @@ class SubscriptionController extends Controller {
             $constrains = json_decode($constrains->getContent(), true);
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionChoices.html.twig', array(
-                        'employees' => $data['employees'],
-                        'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
-                        'constrains' => isset($constrains['response']['smmlv']) ? $constrains['response'] : false,
-                        'total' => $data['total_sin_descuentos'],
-                        'total_sin_descuentos' => $data['total_sin_descuentos'],
-                        'descuento_3er' => $data['descuento_3er'],
-                        'descuento_isRefered' => $data['descuento_isRefered'],
-                        'total_con_descuentos' => $data['total_con_descuentos'],
-                        'descuento_haveRefered' => $data['descuento_haveRefered'],
-                        'user' => $user,
-                        'startDate' => $startDate
+                'employees' => $data['employees'],
+                'productos' => $data['productos'], //$this->orderProducts($employees['productos']),
+                'constrains' => isset($constrains['response']['smmlv']) ? $constrains['response'] : false,
+                'total' => $data['total_sin_descuentos'],
+                'total_sin_descuentos' => $data['total_sin_descuentos'],
+                'descuento_3er' => $data['descuento_3er'],
+                'descuento_isRefered' => $data['descuento_isRefered'],
+                'total_con_descuentos' => $data['total_con_descuentos'],
+                'descuento_haveRefered' => $data['descuento_haveRefered'],
+                'user' => $user,
+                'startDate' => $startDate
             ));
         } else {
 
@@ -60,13 +62,14 @@ class SubscriptionController extends Controller {
             $startDate = $date->format('Y-m-d');
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionNoPay.html.twig', array(
-                        'user' => $user,
-                        'startDate' => $startDate
+                'user' => $user,
+                'startDate' => $startDate
             ));
         }
     }
 
-    public function suscripcionConfirmAction(Request $request) {
+    public function suscripcionConfirmAction(Request $request)
+    {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -94,123 +97,123 @@ class SubscriptionController extends Controller {
                 $minYear = $date->format('Y');
 
                 $form = $this->get('form.factory')->createNamedBuilder('pagoMembresia', 'form', array(), array(
-                            'action' => $this->generateUrl('subscription_pay'),
-                            //'action' => $this->generateUrl('subscription_confirm'),
-                            'method' => 'POST'))
-                        ->add('name_on_card', 'text', array(
-                            'label' => 'Nombre en la tarjeta',
-                            'required' => true,
-                            'attr' => array('placeholder' => 'Nombre en la tarjeta')
-                        ))
-                        ->add('credit_card', 'integer', array(
-                            'label' => 'Número tarjeta de crédito',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => '1234 5678 9012 3456',
-                                'min' => 1,
-                                'step' => 1
-                            )
-                        ))
-                        ->add('expiry_month', 'integer', array(
-                            'label' => 'Fecha de vencimiento',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => 'Mes',
-                                'min' => 01,
-                                'max' => 12,
-                                'maxlength' => 2,
-                                'minlength' => 1,
-                                'step' => 1
-                            )
-                        ))
-                        ->add('expiry_year', 'integer', array(
-                            'label' => 'Fecha de vencimiento',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => 'Año',
-                                'min' => $minYear,
-                                'max' => 9999,
-                                'maxlength' => 4,
-                                'minlength' => 4,
-                                'step' => 1
-                            )
-                        ))
-                        ->add('cvv', 'integer', array(
-                            'label' => 'Código de seguridad:',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => '123',
-                                'min' => 1,
-                                'max' => 9999,
-                                'maxlength' => 4,
-                                'minlength' => 3,
-                                'step' => 1
-                            )
-                        ))
-                        ->add('titularName', 'text', array(
-                            'label' => 'Titular de la cuenta',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => 'Nombre titular de la cuenta',
-                                'readonly' => true,
-                                'value' => $person->getNames() . ' ' . $person->getLastName1() . ' ' . $person->getLastName2()
-                            )
-                        ))
-                        ->add('documentType', 'text', array(
-                            'label' => 'Tipo de Documento',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => 'Tipo de Documento',
-                                'readonly' => true,
-                                'value' => $person->getDocumentType()
-                            )
-                        ))
-                        ->add('documentNumber', 'text', array(
-                            'label' => 'Número de documento',
-                            'required' => true,
-                            'attr' => array(
-                                'placeholder' => 'Número de documento',
-                                'readonly' => true,
-                                'value' => $person->getDocument()
-                            )
-                        ))
-                        ->add('bank', 'entity', array(
-                            'label' => 'Banco',
-                            'required' => false,
-                            'class' => 'RocketSellerTwoPickBundle:Bank',
-                            'empty_value' => 'Seleccione',
-                            'choice_label' => 'name'
-                        ))
-                        ->add('accountType', 'entity', array(
-                            'label' => 'Tipo de Cuenta',
-                            'required' => false,
-                            'class' => 'RocketSellerTwoPickBundle:AccountType',
-                            'empty_value' => 'Seleccione',
-                            'choice_label' => 'name'
-                        ))
-                        ->add('numberAccount', 'text', array(
-                            'label' => 'Número de la cuenta',
-                            'required' => false,
-                            'attr' => array(
-                                'placeholder' => 'Número de la cuenta',
-                                'min' => 1,
-                                'minlength' => 1,
-                                'step' => 1
-                            )
-                        ))
-                        ->getForm();
+                    'action' => $this->generateUrl('subscription_pay'),
+                    //'action' => $this->generateUrl('subscription_confirm'),
+                    'method' => 'POST'))
+                    ->add('name_on_card', 'text', array(
+                        'label' => 'Nombre en la tarjeta',
+                        'required' => true,
+                        'attr' => array('placeholder' => 'Nombre en la tarjeta')
+                    ))
+                    ->add('credit_card', 'integer', array(
+                        'label' => 'Número tarjeta de crédito',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => '1234 5678 9012 3456',
+                            'min' => 1,
+                            'step' => 1
+                        )
+                    ))
+                    ->add('expiry_month', 'integer', array(
+                        'label' => 'Fecha de vencimiento',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Mes',
+                            'min' => 01,
+                            'max' => 12,
+                            'maxlength' => 2,
+                            'minlength' => 1,
+                            'step' => 1
+                        )
+                    ))
+                    ->add('expiry_year', 'integer', array(
+                        'label' => 'Fecha de vencimiento',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Año',
+                            'min' => $minYear,
+                            'max' => 9999,
+                            'maxlength' => 4,
+                            'minlength' => 4,
+                            'step' => 1
+                        )
+                    ))
+                    ->add('cvv', 'integer', array(
+                        'label' => 'Código de seguridad:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => '123',
+                            'min' => 1,
+                            'max' => 9999,
+                            'maxlength' => 4,
+                            'minlength' => 3,
+                            'step' => 1
+                        )
+                    ))
+                    ->add('titularName', 'text', array(
+                        'label' => 'Titular de la cuenta',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Nombre titular de la cuenta',
+                            'readonly' => true,
+                            'value' => $person->getNames() . ' ' . $person->getLastName1() . ' ' . $person->getLastName2()
+                        )
+                    ))
+                    ->add('documentType', 'text', array(
+                        'label' => 'Tipo de Documento',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Tipo de Documento',
+                            'readonly' => true,
+                            'value' => $person->getDocumentType()
+                        )
+                    ))
+                    ->add('documentNumber', 'text', array(
+                        'label' => 'Número de documento',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Número de documento',
+                            'readonly' => true,
+                            'value' => $person->getDocument()
+                        )
+                    ))
+                    ->add('bank', 'entity', array(
+                        'label' => 'Banco',
+                        'required' => false,
+                        'class' => 'RocketSellerTwoPickBundle:Bank',
+                        'empty_value' => 'Seleccione',
+                        'choice_label' => 'name'
+                    ))
+                    ->add('accountType', 'entity', array(
+                        'label' => 'Tipo de Cuenta',
+                        'required' => false,
+                        'class' => 'RocketSellerTwoPickBundle:AccountType',
+                        'empty_value' => 'Seleccione',
+                        'choice_label' => 'name'
+                    ))
+                    ->add('numberAccount', 'text', array(
+                        'label' => 'Número de la cuenta',
+                        'required' => false,
+                        'attr' => array(
+                            'placeholder' => 'Número de la cuenta',
+                            'min' => 1,
+                            'minlength' => 1,
+                            'step' => 1
+                        )
+                    ))
+                    ->getForm();
 
                 return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionConfirm.html.twig', array(
-                            'form' => $form->createView(),
-                            'employer' => $person,
-                            'employees' => $data['employees'],
-                            'billingAdress' => $billingAdress,
-                            'total_sin_descuentos' => $data['total_sin_descuentos'],
-                            'total_con_descuentos' => $data['total_con_descuentos'],
-                            'descuento_3er' => $data['descuento_3er'],
-                            'descuento_isRefered' => $data['descuento_isRefered'],
-                            'descuento_haveRefered' => $data['descuento_haveRefered'],
-                            'startDate' => $startDate
+                    'form' => $form->createView(),
+                    'employer' => $person,
+                    'employees' => $data['employees'],
+                    'billingAdress' => $billingAdress,
+                    'total_sin_descuentos' => $data['total_sin_descuentos'],
+                    'total_con_descuentos' => $data['total_con_descuentos'],
+                    'descuento_3er' => $data['descuento_3er'],
+                    'descuento_isRefered' => $data['descuento_isRefered'],
+                    'descuento_haveRefered' => $data['descuento_haveRefered'],
+                    'startDate' => $startDate
                 ));
             } else {
                 return $this->redirectToRoute("subscription_choices");
@@ -222,13 +225,111 @@ class SubscriptionController extends Controller {
             $startDate = $date->format('Y-m-d');
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionNoPay.html.twig', array(
-                        'user' => $user,
-                        'startDate' => $startDate
+                'user' => $user,
+                'startDate' => $startDate
             ));
         }
     }
 
-    public function suscripcionPayAction(Request $requestIn) {
+    public function askDataCreditQuestionsAction($userId,Request $request)
+    {
+        $userRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
+        /** @var User $user */
+        $user = $userRepo->find($userId);
+        if ($user == null) {
+            $this->redirectToRoute("show_dashboard");
+        }
+        $person = $user->getPersonPerson();
+        $documentNumber = $person->getDocument();
+        $documentType = $person->getDocumentType();
+        if ($user->getDataCreditStatus() == 0) {
+            $lastName1 = $person->getLastName1();
+            $firstName = explode(" ", $person->getNames())[0];
+            $expeditionDate = $person->getDocumentExpeditionDate()->format("d-m-Y");
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientIdentificationServiceExperianPreguntas', array(
+                'documentNumber' => $documentNumber,
+                'identificationType' => $documentType,
+                'surname' => $lastName1,
+                'names' => $firstName,
+                'documentExpeditionDate' => $expeditionDate,
+            ), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
+            $user->setDataCreditStatus(1);
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $form = $this->createFormBuilder();
+            $questions = json_decode($insertionAnswer->getContent(), true);
+            for ($i = 0; $i < count($questions); $i++) {
+                $p = "" . $i;
+                if (isset($questions[$p])) {
+                    $j = 0;
+                    $choices = array();
+                    while (true) {
+                        if (isset($questions[$p][$j . ""])) {
+                            $choices[$questions[$p][$j . ""]["texto"]] = $questions[$p][$j . ""]["id"];
+                        } else {
+                            break;
+                        }
+                        $j++;
+                    }
+
+                    $form->add('' . $questions[$p]["orden"], 'choice', array(
+                        'label' => $questions[$p]["texto"],
+                        'choices' => $choices,
+                        'choices_as_values' => true,
+                    ));
+                } else {
+                    break;
+                }
+            }
+
+            $form
+                ->add('idQuestionnaire', 'hidden', array('data' => $questions["id"]))
+                ->add('register', 'hidden', array('data' => $questions["registro"]))
+                ->add('save', 'submit', array('label' => 'Guardar'));
+            $realForm = $form->getForm();
+            $realForm->handleRequest($request);
+
+            return $this->render('RocketSellerTwoPickBundle:Registration:generalFormRender.html.twig', array(
+                'form' => $realForm->createView(),
+            ));
+        } elseif($user->getDataCreditStatus()==1) {
+            $k=1;
+            $formdone=$request->request->get("form");
+
+            $toSend=array();
+            while(true){
+                if(isset($formdone[$k])){
+                    $toSend[$k]=$formdone[$k];
+                }else{
+                    break;
+                }
+                $k++;
+            }
+            $request->setMethod("GET");
+            $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:DataCreditoRest:getClientIdentificationServiceExperianVerifyPreguntas', array(
+                'documentNumber' => $documentNumber,
+                'documentType' => $documentType,
+                'idQuestions' => $formdone["idQuestionnaire"],
+                'regQuestions' => $formdone["register"],
+                'answers' => $toSend,
+            ), array('_format' => 'json'));
+            if ($insertionAnswer->getStatusCode() != 200) {
+                return false;
+            }
+            dump($insertionAnswer->getContent());
+            die();
+        }
+
+
+    }
+
+    public function suscripcionPayAction(Request $requestIn)
+    {
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
@@ -332,26 +433,29 @@ class SubscriptionController extends Controller {
             $startDate = $date->format('Y-m-d');
 
             return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionNoPay.html.twig', array(
-                        'user' => $user,
-                        'startDate' => $startDate
+                'user' => $user,
+                'startDate' => $startDate
             ));
         }
     }
 
-    public function suscripcionSuccessAction(Request $request) {
+    public function suscripcionSuccessAction(Request $request)
+    {
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionSuccess.html.twig', array(
-                    'user' => $this->getUser(),
-                    'date' => \date('Y-m-d')
+            'user' => $this->getUser(),
+            'date' => \date('Y-m-d')
         ));
     }
 
-    public function suscripcionErrorAction(Request $request) {
+    public function suscripcionErrorAction(Request $request)
+    {
         return $this->render('RocketSellerTwoPickBundle:Subscription:subscriptionError.html.twig', array(
-                    'user' => $this->getUser()
+            'user' => $this->getUser()
         ));
     }
 
-    public function suscripcionInactivaAction() {
+    public function suscripcionInactivaAction()
+    {
         $user = $this->getUser();
         return $this->render('RocketSellerTwoPickBundle:Subscription:inactive.html.twig');
     }

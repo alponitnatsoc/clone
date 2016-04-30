@@ -106,6 +106,22 @@ class User extends BaseUser
      */
     private $status = 1;
 
+
+    /**
+     * Columna utilizada para conocer el estado de revision en DataCredito
+     *
+     * Estados del usuario:
+     *      0 - No Enviado
+     *      1 - Enviado
+     *      2 - Aprobado
+     *      3 - No Aprobado
+     *
+     * @var SmallIntType
+     *
+     * @ORM\Column(type="smallint")
+     */
+    private $dataCreditStatus = 0;
+
     /**
      * Columna utilizada para saber cantidad de meses gratis
      *
@@ -129,7 +145,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="smallint")
      */
-    private $legalFlag = 0;
+    private $legalFlag = -1;
 
     /**
      * Columna utilizada para saber si el usuario requiere registro express
@@ -824,5 +840,29 @@ class User extends BaseUser
     public function getIsFreeTo()
     {
         return $this->isFreeTo;
+    }
+
+    /**
+     * Set dataCreditStatus
+     *
+     * @param integer $dataCreditStatus
+     *
+     * @return User
+     */
+    public function setDataCreditStatus($dataCreditStatus)
+    {
+        $this->dataCreditStatus = $dataCreditStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get dataCreditStatus
+     *
+     * @return integer
+     */
+    public function getDataCreditStatus()
+    {
+        return $this->dataCreditStatus;
     }
 }

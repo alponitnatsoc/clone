@@ -78,6 +78,7 @@ class PersonController extends Controller
             'action' => $this->generateUrl('api_public_post_edit_person_submit_step3', array('format'=>'json')),
             'method' => 'POST',
         ));
+        $form->get("documentExpeditionDate")->setData($people->getDocumentExpeditionDate());
 
         $empEntities = $employer->getEntities();
         $actualSeverances= new ArrayCollection();
