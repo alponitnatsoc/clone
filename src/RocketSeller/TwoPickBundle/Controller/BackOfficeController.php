@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class BackOfficeController extends Controller
 {
+    use SubscriptionMethodsTrait;
 
     public function indexAction()
     {
@@ -37,6 +39,17 @@ class BackOfficeController extends Controller
         }
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
+    }
+    public function addToSQLAction($idEmployerHasEmployee){
+        $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
+        $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
+
+        if ($addToSQL) {
+            
+        }else{
+
+        }
+        return true;
     }
     public function makeAfiliationAction($idAction)
     {        

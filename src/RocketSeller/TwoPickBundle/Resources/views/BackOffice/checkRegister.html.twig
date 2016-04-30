@@ -124,10 +124,16 @@
                                     </ul>
                                 </div>
                                 {% endif %}
-                                <div class="col-md-4">
+                            <div class="col-md-4">
                                 <div class="col-md-12">
                                     <h4>Estado del registro</h4>
                                     <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
+                                    {% if employerHasEmployee and (employerHasEmployee.existentSQL == 0) %}
+                                        <a class="btn btn-default notAjax" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee})}}">Agregar a SQL</a>
+
+                                    {% elseif employerHasEmployee.existentSQL == 1 %}
+                                        <p>ya esta inscrio a SQL </p>
+                                    {% endif %}                                    
                                 </div>                                                                 
                             </div>
 																
