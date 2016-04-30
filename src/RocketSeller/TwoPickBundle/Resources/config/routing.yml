@@ -64,6 +64,9 @@ call_entity:
 call_person:
     path:     /backoffice/call/person/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:callPerson }
+back_add_sql:
+    path:     /backoffice/add/sql/{idEmployerHasEmployee}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
 export_documents_person:
     path:     /backoffice/export/person/documents/{idPerson}
     defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }

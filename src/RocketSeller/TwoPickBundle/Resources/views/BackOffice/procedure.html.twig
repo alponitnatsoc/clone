@@ -54,17 +54,21 @@
 					Nadie 
 				{% endif %}
 			</p>
-		<div class="procedure-container">
-			<table style="width:100%">
-				  <tr>
-				    <td>Vuelta</td> 
-				    <td>persona</td>
-				    <td>entidad</td>
-				    <td>Estado</td>
-				    <td>Acción</td>
-				    <!--td>Reportar</td-->
-				  </tr>	  
-			  		{% for action in procedure.action %}
+		<div class="col-sm-12">
+			<h4>Empleador: {{ employerHasEmployees[0].employerEmployer.personPerson.names}} {{ employerHasEmployees[0].employerEmployer.personPerson.lastName1}}</h4>
+			<table class="table" style="width:100%">
+				  <thead>
+				  	<tr>
+					    <th>Vuelta</th> 
+					    <th>persona</th>
+					    <th>entidad</th>
+					    <th>Estado</th>
+					    <th>Acción</th>
+					  </tr>
+				  </thead>
+				  <tbody>
+
+			  		{% for action in procedure.action if action.personPerson == employerHasEmployees[0].employerEmployer.personPerson %}
 			  			{% if action.actionErrorActionError %}
 			  				{% if action.status|lower == "completado" %}
 								<tr style="background-color:#A2E383;">
@@ -112,24 +116,96 @@
 							{% else %}
 								<td>Terminaste</td>
 							{% endif %}				
-							{#
-							<td><a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Iniciado'})}}">Iniciado</a> <a href="{{ path('change_action_status',{'procedureId':procedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completado</a></td>#}
-
 					  	</tr>
 					{% endfor %}
+
+				  </tbody>
+				</table>  
+			</div>
+
+			<div class="col-sm-12">
+			<h4>Empleados</h4>
+			<table class="table" style="width:100%">
+				<thead>
+					<tr>
+					    <th>Vuelta</th> 
+					    <th>persona</th>
+					    <th>entidad</th>
+					    <th>Estado</th>
+					    <th>Acción</th>
+					</tr>	
+				</thead>
+					<tbody>
+				    
+			  		{% for action in procedure.action if not (action.personPerson == employerHasEmployees[0].employerEmployer.personPerson) %}
+			  			{% if action.actionErrorActionError %}
+			  				{% if action.status|lower == "completado" %}
+								<tr style="background-color:#A2E383;">
+			  				{% else %}
+			  					<tr style="background-color:#FF5555;">
+			  				{% endif %}							
+						{% elseif  action.status|lower == "nuevo" %}
+							<tr>
+						{% elseif  action.status|lower == "completado" %}
+							<tr style="background-color:#A2E383;">
+						{% elseif action.status|lower == "iniciado" %}
+							<tr>
+			  			{% endif %}  			
+							<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
+							<td>{{ action.personPerson.names }}</td>
+							<td>
+								{% if action.entityEntity %}
+									{{ action.entityEntity.name }}
+								{% else %}
+									-
+								{% endif %}					
+							</td>
+							<td>{% if action.actionErrorActionError %}
+									{% if action.status|lower == "completado" %}
+										{{ action.status }}
+									{% else %}
+										Error
+									{% endif %}									
+								{% else %}
+									{{ action.status}}
+								{% endif %}
+							</td>
+							{% if action.status|lower != "completado" %}
+								{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
+								<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+									<td>Validar documentos</td>
+								{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+									<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
+									<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
+								{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
+									<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								{% endif %}
+							{% else %}
+								<td>Terminaste</td>
+							{% endif %}				
+					  	</tr>
+					{% endfor %}
+					</tbody>
 				</table>  
 			</div>
 				<h3>Errores</h3>
-				<div class="procedure-container">
-					<table style="width:100%">
-					    <tr>
-					    <td>Vuelta</td> 
-					    <td>Persona</td>
-					    <td>Telefono</td>
-					    <td>Entidad</td>
-					    <td>Estado</td>
-					    <td>Reportar</td>					    
-					  </tr>	  
+				<div class="error-container">
+					<table class="table" style="width:100%">
+				    <thead>
+				    	<tr>
+						    <th>Vuelta</th> 
+						    <th>Persona</th>
+						    <th>Telefono</th>
+						    <th>Entidad</th>
+						    <th>Estado</th>
+						    <th>Reportar</th>					    
+					    </tr>	
+				    </thead>
+			    	<tbody>
+			    		
+			    	
 						{% for action in procedure.action %}
 							{% if action.actionErrorActionError %}
 								<tr>
@@ -149,6 +225,7 @@
 								</tr>
 							{% endif %}
 						{% endfor %}
+						</tbody>
 					</table>
 				</div>
 				<div class="col-sm-12">

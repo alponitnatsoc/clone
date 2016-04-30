@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
+use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class BackOfficeController extends Controller
 {
+    use SubscriptionMethodsTrait;
 
     public function indexAction()
     {
@@ -19,8 +21,35 @@ class BackOfficeController extends Controller
     {    	
     	$person = $this->loadClassById($idPerson,"Person");    	
     	$user =  $this->loadClassByArray(array('personPerson'=>$person),"User");
+       
+
     	$action = $this->loadClassById($idAction,"Action");
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action));
+
+        $employee = $person->getEmployee();
+        $employer = $action->getRealProcedureRealProcedure()->getEmployerEmployer();
+
+        if ($employee) {
+            $employerHasEmployee = $this->loadClassByArray(
+                    array(
+                        "employeeEmployee" =>$employee,
+                        "employerEmployer" =>$employer,
+                    ),"EmployerHasEmployee");  
+        }else{
+            $employerHasEmployee = null;
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
+    }
+    public function addToSQLAction($idEmployerHasEmployee){
+        $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
+        $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
+
+        if ($addToSQL) {
+            
+        }else{
+
+        }
+        return true;
     }
     public function makeAfiliationAction($idAction)
     {        

@@ -45,19 +45,52 @@
                         </div>
                         <div id="main" class="col-sm-9">
                         	<div class="col-md-8">
-                                <h1>{{ action.entityEntity.name }}</h1>
-                                <h2>{{ action.entityEntity.contact }}</h2>
-                                <p>{{ action.personPerson.names }}</p>
-                                <p>{{ action.personPerson.lastName1 }}</p>
-                                <p>{{ action.personPerson.lastName2 }}</p>
-                                <p>{{ action.personPerson.document }}</p>
-                                <p>la person:{{ action.personPerson.names }} esta en la entidad?</p>
-                                <button type="button" class="btn btn-success"><a href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
-                                <button type="button" class="btn btn-danger">No</button>
+                                <h4>Datos basicos</h4>
+                                <ul>
+                                    <li>
+                                        <p><strong>Entidad</strong>
+                                        {{ action.entityEntity.name }}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Nombres</strong>
+                                        {{ action.personPerson.names }}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Apellido</strong>
+                                        {{ action.personPerson.lastName1 }}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Segundo apellido</strong>
+                                        {{ action.personPerson.lastName2 }}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Documento</strong>
+                                            {{ action.personPerson.documentType }} {{ action.personPerson.document }}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Fecha de nacimiento</strong>
+                                        {{ action.personPerson.birthDate|date('d/m/Y') }}</p>
+                                    </li>
+                                </ul>                                                                
                             </div>
                             <div class="col-md-4">
-                            	{{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}	
+                                <div class="col-md-12">
+                                    <h4>Esta en la entidad</h4>
+                                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Correcto</a>
+                                </div>                                                                 
                             </div>
+                            <div class="col-md-12" style="border-top:dotted 1px;">
+                                <div class="col-md-12">
+                                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}  
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="border-top:dotted 1px;margin-top:20px;text-align:center;">
+                                <a class="btn btn-default notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
+                            </div>
+                                                                
+                            </div>
+                            
+                            
                             
                         </div>
                     </div>

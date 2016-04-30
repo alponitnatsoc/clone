@@ -44,27 +44,59 @@
                             {% endblock %}
                         </div>
                         <div id="main" class="col-sm-9">
-                        	<div class="col-md-8">
-								<p>{{ action.personPerson.names }}</p>
-								<p>{{ action.personPerson.lastName1 }}</p>
-								<p>{{ action.personPerson.lastName2 }}</p>
-								{% set  phones = action.personPerson.phones %}
-								{% for phone in phones %}
-									<p>{{ phone.phoneNumber }}</p>
-								{% endfor %}
-								<p>Descargar documentos</p>
-								<button type="button" class="btn btn-info"><a class="notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Si</a></button>
-								<p>Generar archivo Excel</p>
-								<button type="button" class="btn btn-info"><a class="notAjax" href="{{ path('back_person_cvs_export',{'idPerson':action.personPerson.idPerson})}}">Si</a></button>
-								
-								<p>la person:{{ action.personPerson.names }} esta en la entidad?</p>
-								<button type="button" class="btn btn-success"><a  href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Si</a></button>
-								<button type="button" class="btn btn-danger">No</button>
+                        	<div class="col-md-4">
+                                <h4>Datos basicos</h4>
+                                <ul>
+                                    <li>
+                                        <p><strong>Nombres</strong>
+                                            {{action.personPerson.names}}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Apellido</strong>
+                                            {{action.personPerson.lastName1}}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Segundo apellido</strong>
+                                        {{action.personPerson.lastName2}}</p>
+                                    </li>
+                                    <li>
+                                        <p><strong>Teléfono</strong>
+                                            {{action.personPerson.phones[0].phoneNumber}}</p>
+                                    </li>
+                                </ul>
+                                
+																
 							</div>
                             <div class="col-md-4">
-                                {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}    
+                                <h4>Descargar documentos</h4>
+                                {% set documents = action.personPerson.docs %}
+                                    {% if documents|length < 1 %}
+                                        <p>Llamar al cliente y recordar que suba los documentos de {{ action.personPerson.names }} {{action.personPerson.lastName1 }}</p>
+                                    {% else %}
+                                        <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+                                    {% endif %}
+                                    {% for doc in documents %}
+                                        <p>{{doc.documentTypeDocumentType.name}}</p>
+                                    {% endfor %}
+                                
+                                
+                                <h4>Generar archivo Excel</h4>
+                                <a class="btn btn-orange notAjax" href="{{ path('back_person_cvs_export',{'idPerson':action.personPerson.idPerson})}}">Generar</a>
                             </div>
-                            
+                            <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <h4>Terminar inscripción</h4>
+                                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Correcto</a>
+                                </div>                                                                 
+                            </div>
+                            <div class="col-md-12" style="margin-top:30px;border-top:dotted 1px;">
+                                <div class="col-md-12">
+                                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}  
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="border-top:dotted 1px;margin-top:20px;text-align:center;">
+                                <a class="btn btn-default notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
+                            </div>                                                        
                         </div>
                     </div>
                 </div>

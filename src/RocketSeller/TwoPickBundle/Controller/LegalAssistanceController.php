@@ -51,12 +51,12 @@ class LegalAssistanceController extends Controller
             'method' => 'POST'))
             ->add('name_on_card', 'text', array(
                 'label' => 'Nombre en la tarjeta',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array('placeholder' => 'Nombre en la tarjeta')
             ))
             ->add('credit_card', 'integer', array(
                 'label' => 'Número tarjeta de crédito',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => '1234 5678 9012 3456',
                     'min' => 1,
@@ -65,7 +65,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('expiry_month', 'integer', array(
                 'label' => 'Fecha de vencimiento',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => 'Mes',
                     'min' => 01,
@@ -77,7 +77,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('expiry_year', 'integer', array(
                 'label' => 'Fecha de vencimiento',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => 'Año',
                     'min' => $minYear,
@@ -89,7 +89,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('cvv', 'integer', array(
                 'label' => 'Código de seguridad:',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => '123',
                     'min' => 1,
@@ -101,7 +101,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('personName', 'text', array(
                 'label' => 'Nombres',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => $user->getPersonPerson()->getNames(),
                 )
@@ -115,7 +115,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('lastName2', 'text', array(
                 'label' => 'segundo apellido',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => 'Segundo apellido',
                 )
@@ -131,7 +131,7 @@ class LegalAssistanceController extends Controller
                 'expanded' => false,
                 'label' => 'Estado civil*',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                // 'required' => true
             ))
             ->add('documentType', 'choice', array(
                 'choices' => array(
@@ -143,11 +143,11 @@ class LegalAssistanceController extends Controller
                 'expanded' => false,
                 'label' => 'Tipo de documento*',
                 'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                // 'required' => true
             ))
             ->add('documentNumber', 'text', array(
                 'label' => 'Número de documento',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => 'Número de documento',
                     'value' => $person->getDocument()
@@ -159,11 +159,11 @@ class LegalAssistanceController extends Controller
                 ),
                 'years' => range(2015, 1900),
                 'label' => 'Fecha de expedición de documento de identidad*',
-                'required' => true
+                // 'required' => true
             ))
             ->add('phoneNumber', 'text', array(
                 'label' => 'Teléfono',
-                'required' => true,
+                // 'required' => true,
                 'attr' => array(
                     'placeholder' => 'Número de teléfono',
                 )
@@ -177,7 +177,7 @@ class LegalAssistanceController extends Controller
                 'expanded' => false,
 
                 'placeholder' => 'Seleccionar una opción',
-                'required' => true
+                // 'required' => true
             ))
             ->add('mainAddress', 'text', array(
                 'label' => 'Dirección*'
@@ -207,7 +207,7 @@ class LegalAssistanceController extends Controller
                 'empty_value' => 'Seleccione',
                 'choice_label' => 'name'
             ))
-            ->add('numberAccount', 'integer', array(
+            ->add('accountNumber', 'integer', array(
                 'label' => 'Número de la cuenta',
                 'required' => false,
                 'attr' => array(
@@ -301,14 +301,18 @@ class LegalAssistanceController extends Controller
                 //     ));
                 // } 
                 $request->request->add(array(
-                    "accountNumber" => $form->get("numberAccount")->getData(),
-                    "bankId" => $form->get("bank")->getData(),
-                    "accountTypeId" => $form->get("accountType")->getData(),
+                    "accountNumber" => $form->get("accountNumber")->getData(),
+                    "bankId" => $form->get("bank")->getData()->getIdBank(),
+                    "accountTypeId" => $form->get("accountType")->getData()->getIdAccountType(),
                     "userId" => $user->getId(),
                 ));
-
-                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddCreditCard', array('_format' => 'json'));
+                // dump($request);
+                // exit();
+                $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('_format' => 'json'));
                 // if ($insertionAnswer->getStatusCode() != 201) {
+                dump($request->get("accountNumber"));
+                dump($insertionAnswer);
+                exit();
                 if (false) {
                     return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
                         'form' => $form->createView(),
@@ -338,6 +342,7 @@ class LegalAssistanceController extends Controller
                 return $this->payLegalAssistance($methodId);
             }
             //TODO NovoPayment
+            //cambiar los campos requeridos.
 
         }
         return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
@@ -355,7 +360,6 @@ class LegalAssistanceController extends Controller
         $totalValue = $product->getPrice() * (1 + $tax);
         return $totalValue;
     }
-
     public function payLegalAssistance($id)
     {
 

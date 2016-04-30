@@ -49,6 +49,7 @@ class PaymentMethodRestController extends FOSRestController
      */
     public function postAddDebitAccountAction(ParamFetcher $paramFetcher)
     {
+        
         /** @var User $user */
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         $person = $user->getPersonPerson();

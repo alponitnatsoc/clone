@@ -82,7 +82,7 @@
             margin: 0 !important;
         }
         .padding-all-10 {
-            padding: 10px 10px 10px 10px;
+            padding: 10px 10px 0 10px;
         }        
         .margin-left-right-25-40{
             margin: 0px 40px 0px 25px;
@@ -186,8 +186,8 @@
                     cálculos de mora, etc.
                 </p>
             </div>
-            <div class="col-md-5 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 3%; margin-top: 45px;">
-                <div  id="sueldos" class="x-large font-bold dark-blue" >
+            <div class="col-md-5 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 20px; margin-top: 45px;">
+                <div  id="sueldos" class="x-large font-bold dark-blue" style="font-size:35px" >
                     $ {{ "0" }}
                 </div>
             </div>
@@ -209,7 +209,7 @@
             <div class="col-md-12 text-left">
 
                 <div class="row clearfix">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="position:absolute;bottom:0;">
                         {% for employeeData in employees %}
 
                             {% set employee = employeeData['employee'] %}
@@ -217,7 +217,7 @@
                             {% set producto = employeeData['product'] %}
 
                             <div class="row clearfix">
-                                <div class="col-md-12 padding-all-10 margin-all-right-botton-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}">
+                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}" style="min-height:90px;margin-top:20px;">
                                     <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                         <div >
                                             <b class="employee_name" style="font-size:large;">{{ employee.employeeEmployee.personPerson.names }}</b><br />
@@ -247,6 +247,7 @@
                 </div>
 
             </div>
+            
 
             <div class="col-md-12 result_ajax" style="display: none">
                 <span class="glyphicon glyphicon-ok-circle result_ajax_icon"></span>
@@ -254,6 +255,7 @@
             </div>
         </div>
     </div>
+    <hr />
     <div class="row padding-left-right-40 padding-top-botton-10">
         <div class="col-md-12 text-center">
             <b>Recibe un 10% de descuento</b> en la suscripción<br/>

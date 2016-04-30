@@ -96,11 +96,12 @@
     <br />
     <div class="col-sm-8 col-sm-offset-2" style="text-align:center;">
         <h3>Pagar con:</h3>
+        <!--
         <div class="col-sm-4 col-sm-offset-2" style="text-align:rigth;">
             <span class="creditPayBtn btn btn-symplifica">Crédito</span>
-        </div>
-        <div class="col-sm-4">
-            <span class="debitPayBtn btn btn-symplifica">Débito</span>
+        </div>-->
+        <div class="col-sm-12 text-center">
+            <span class="debitPayBtn btn btn-symplifica">Tarjeta Débito</span>
         </div>
         
     </div>
@@ -125,11 +126,8 @@
                     <div class="form-black form-group">
                         {{form_row(form.name_on_card)}}
                     </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.documentType)}}
-                    </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.documentNumber)}}
+                    <div class="fields">
+                        
                     </div>
                     <div class="form-black form-group">
                         {{form_row(form.phoneNumber)}}
@@ -154,20 +152,25 @@
                     <hr />
                     <h3 class="text-center">Información de tu cuenta bancaria</h3>
                     <br />
-                    <div class="form-black form-group">
+                    <div class="commun-fields">
+                        <div class="form-black form-group">
                         {{form_row(form.personName)}}
+                        </div>
+                        <div class="form-black form-group">
+                            {{form_row(form.lastName1)}}
+                        </div>
+                        <div class="form-black form-group">
+                            {{form_row(form.lastName2)}}
+                        </div>
+                        <div class="form-black form-group">
+                            {{form_row(form.documentType)}}
+                        </div>
+                        <div class="form-black form-group">
+                            {{form_row(form.documentNumber)}}
+                        </div>
                     </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.lastName1)}}
-                    </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.lastName2)}}
-                    </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.documentType)}}
-                    </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.documentNumber)}}
+                    <div class="fields-debit">
+                        
                     </div>
                     <div class="form-black form-group">
                         {{form_row(form.documentExpeditionDate)}}
@@ -194,7 +197,7 @@
                         {{form_row(form.accountType)}}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.numberAccount)}}
+                        {{form_row(form.accountNumber)}}
                     </div>
                     <div class="col-md-12" style="margin: 30px 0 20px 0;">
                         <div class="col-md-1">
@@ -342,11 +345,15 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
             $('.creditPayBtn').on("click",function(){
                 $('.creditCardForm').fadeIn("slow");
                 $('.debitCardForm').fadeOut("slow");
+                var commun = $(".commun-fields");
+                $(".fields").append(commun);
                 $('.methodTypeInput').val("cre");
             });
             $('.debitPayBtn').on("click",function(){
                 $('.debitCardForm').fadeIn("slow");
                 $('.creditCardForm').fadeOut("slow");
+                var commun = $(".commun-fields");
+                $(".fields-debit").append(commun);
                 $('.methodTypeInput').val("deb");
             });
             $('.tos').on("click",function(){                
