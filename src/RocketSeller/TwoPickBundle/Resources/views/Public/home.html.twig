@@ -94,7 +94,7 @@
         <section>
         	<div id="calculadora">
             	<h2 class="light grisclarofont">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2>
-                <h4 class="light grisclarofont">Calcula el valor mensual de nuestro servicio de acuerdo al número y tipo
+                <h4 style="font-size: 20px" class="light grisclarofont">Calcula el valor mensual de nuestro servicio de acuerdo al número y tipo
 de empleados que quieras administrar</h4>
                 <div class="calculadora-espacios section group"> <!--calculadora numero 1-->
                 	<div class="no-colorcont col span_1_of_5">
@@ -147,7 +147,7 @@ de empleados que quieras administrar</h4>
                 <div id="texto-finalcalculadora">
                 	<p class="light">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
                     <div id="resultado-calculadora" class="azulmedio">
-                    	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0</span></p>
+                    	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0 mensuales</span></p>
                     </div><br>
                     <p class="light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
              </div>
@@ -271,7 +271,7 @@ de empleados que quieras administrar</h4>
 				if((conta1 + conta2 + conta3) >= 3 )
 					valor = valor * 0.9;
         $("#total-empleados").text(conta1 + conta2 + conta3);
-        $("#precio").text(" = $"+numberWithCommas(valor));
+        $("#precio").text(" = $"+numberWithCommas(valor) + " mensuales");
         //$("#total-empleados").text(conta1 + conta2 + conta3);
         if((conta1 + conta2 + conta3) != 1)
             $("#palabra-empleados").text("empleados");
