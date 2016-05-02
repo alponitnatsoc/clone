@@ -1,7 +1,27 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
     {# 	{% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
+    {% block stylesheets %}
+        <style>
 
+           .list-group-item {
+                padding:0 15px !important;
+           }
+           .checkbox{
+            margin-top: 5px !important;
+           }
+           .list-group-item:first-child {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding-top: 10px !important;
+            }
+            .list-group-item:last-child {
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+                padding-bottom: 10px !important;
+            }
+        </style>
+    {% endblock %}
 
 
     <div class="col-sm-12">
@@ -13,7 +33,7 @@
             {# 				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas#}
             {# 			</h4>#}
             <h4 style="font-size: 22px;">
-                <strong><i>¿Cuáles responsabilidades ha cumplido con su empleado?</i></strong>
+                <i>¿Cuáles responsabilidades ha cumplido con su empleado?</i>
             </h4>
         </div>
     </div>
@@ -100,20 +120,20 @@
             <br/>
             <div class="col-sm-12">
                 <div class="col-sm-6" style="text-align: right;">
-                    <a class="btn btnPrevious notAjax" href="/welcome">Volver atrás</a>
+                    <a class="btn btn-grey  notAjax" href="/welcome">Volver atrás</a>
                 </div>
                 <div class="col-sm-6">
-                    <span class="btn btn-orange notAjax" href="" onclick="done()">Continuar</span>
+                    <span class="btn btn-orange notAjax" href="" onclick="done()">Validar situación actual</span>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-12">
-        <hr style="width: 75%;"/>
+        <br /><br />
     </div>
     <div class="row center">
         <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px;">
-            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer" class="blockStep"><i
+            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer" class=""><i
                         class="glyphicon glyphicon-exclamation-sign"></i> ¿Cuál es la importancia de saber esto?</h4>
             <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si una, varias, o todas las responsabilidades que tiene con su empleado son evadidas requiere un manejo legal para subsanarlo.</span>
         </div>
