@@ -1,68 +1,265 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
-		<section id="middleBannerAbout" class="txtC">
-            <div class="blockTem">
-                <h3>¿Tienes preguntas?</h3>
-                <span>Symplifica te ayuda</span>
-                <a href="#" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
-            </div>
-        </section>
-        <section id="questionBlock" class="txtC">
-            <div class="container">
-                <h2>Preguntas frecuentes</h2>
-                <h3>Si tienes dudas con respecto a nuestra herramienta, </br>aca te podemos ayudar</h3>
-                <div class="itemquestion col-md-8 col-md-offset-2 col-xs-12">
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default">
-                            <div class="panel-heading txtL" role="tab" id="headingOne">
-                              <h4 class="panel-title">
-                                <i class="fa fa-chevron-right hidden-xs "></i>
-                                <i class="fa fa-chevron-down visible-xs"></i>
-                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                  ¿Less is a CSS pre-processor, meaning that it extends?
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                <div class="panel-body txtL">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci dolor. Sed in eros euismod, dapibus mauris nec, ullamcorper risus. Aliquam iaculis ullamcorper consequat. Vestibulum ut dictum est, nec pellentesque augue. In feugiat pellentesque erat. Nulla mi massa, tempus nec elementum ut, bibendum pharetra magna. Cras a dictum lacus. Nulla odio libero, laoreet ac lacus at, faucibus sagittis ipsum. Nulla eget aliquam tortor. In laoreet pretium neque. 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading txtL" role="tab" id="headingTwo">
-                              <h4 class="panel-title">
-                                <i class="fa fa-chevron-right hidden-xs "></i>
-                                <i class="fa fa-chevron-down visible-xs"></i>
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                  ¿Less is a CSS pre-processor, meaning that it extends?
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="panel-body txtL">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci dolor. Sed in eros euismod, dapibus mauris nec, ullamcorper risus. Aliquam iaculis ullamcorper consequat. Vestibulum ut dictum est, nec pellentesque augue. In feugiat pellentesque erat. Nulla mi massa, tempus nec elementum ut, bibendum pharetra magna. Cras a dictum lacus. Nulla odio libero, laoreet ac lacus at, faucibus sagittis ipsum. Nulla eget aliquam tortor. In laoreet pretium neque. 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading txtL" role="tab" id="headingThree">
-                              <h4 class="panel-title">
-                                <i class="fa fa-chevron-right hidden-xs "></i>
-                                <i class="fa fa-chevron-down visible-xs"></i>
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                  ¿Less is a CSS pre-processor, meaning that it extends?
-                                </a>
-                              </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="panel-body txtL">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci dolor. Sed in eros euismod, dapibus mauris nec, ullamcorper risus. Aliquam iaculis ullamcorper consequat. Vestibulum ut dictum est, nec pellentesque augue. In feugiat pellentesque erat. Nulla mi massa, tempus nec elementum ut, bibendum pharetra magna. Cras a dictum lacus. Nulla odio libero, laoreet ac lacus at, faucibus sagittis ipsum. Nulla eget aliquam tortor. In laoreet pretium neque. 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preguntas frecuentes</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/preguntas.css') }}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<main>
+    	<header>
+        	<!--aca va el nav que ya esta hecho-->
+        	<div id="banner-beneficios">
+            	<div id="banner-beneficios-cont">
+                  <h1 class="bold azuloscurofont">Tus preguntas son</h1>
+                  <h1 class="light azulmediofont">importantes para nosotros</h1>
                 </div>
             </div>
+        </header>
+
+        <section>
+            <div id="breadcrumb">
+            	<h2 class="light">Preguntas frecuentes</h2>
+            	<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Preguntas frecuentes</span></div>
+            </div>
+
+            <div id="texto-descript">
+            	<h4 class="light grisclarofont">Encuentre toda la información que requiere para resolver sus dudas e inquietudes.
+Contamos con suficientes recursos que le permitirán conocer y aprender más de nuestra herramienta.</h4>
+            </div>
         </section>
+
+        <section>
+        	<div id="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta1" onClick="preguntar(this)" data-pregunta = "respuesta1"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Qué servicios provee Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta1" class="light grisclarofont">Somos el área de nómina de los pequeños empleadores y como tal hacemos entre otras
+
+                                cosas lo siguiente:
+
+                                o Generamos un contrato laboral si lo requieres
+
+                                o Calculamos de acuerdo a la ley cuánto debes pagarle y descontarle a tus empleados
+
+                                o Proveemos la posibilidad de pagar electónicamente la nómina a tus empleados y los
+
+                                o Calculamos y pagamos por ti las cesantías cada año
+
+                                o Generamos comprobantes de pago para ti y para tus empleados
+
+                                o Guardamos una carpeta con documentación de tu empleado y su historia laboral
+
+                                o Calculamos la liquidación final de un empleado cuando se termina la relación laboral
+
+                                cada mes y cuánto es el pago que debe hacerse a la seguridad social
+
+                                aportes de seguridad social desde tu celular o tu computador
+
+                                y generamos automáticamente todos los formatos que deben firmarse por las
+
+                                partes</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta2" onClick="preguntar(this)" data-pregunta = "respuesta2"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Cuánto cuesta el servicio de Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta2" class="light grisclarofont">El primer mes con Symplifica es gratis. Este mes gratis empieza a contar desde que completas
+
+satisfactoriamente el registro de tu primer empleado.
+
+Una vez se cumpla el mes de prueba se empezará a cobrar una tarifa mensual por empleado.
+
+Tenemos tres tarifas que varían de acuerdo al número de días a la semana que tus empleados
+
+trabajan para ti. Estas tarifas incluyen iva.
+
+ Tiempo completo (5 días a la semana o más) 30.000 pesos mensuales
+
+ Entre 3 y 4 días a la semana: 22.000 pesos mensuales
+
+ Entre 1 y 2 días a la semana: 17 mil pesos mensuales
+
+Los pagos electrónicos de la nómina y aportes de tus empleados tienen un fee de $7.000 pesos por
+
+transacción. Este fee lo usamos para cubrir los costos de transferencia del sistema financiero.
+
+Si necesitaras hacer una consulta legal proveemos un servicio de consultorío juridico a través de
+
+nuestro aliado Alvarez, Lievano, Laserna Abogados, que tiene un costo de 150.000 pesos por una
+
+consulta de una hora</p>
+                    </div>
+                </div>
+
+                 <!-----------pregunta 3----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta3" onClick="preguntar(this)" data-pregunta = "respuesta3"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Cómo pago por el servicio?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta3" class="light grisclarofont">Proveemos dos alternativas de pago
+
+ Cargo recurrente a tu tarjeta de crédito o
+
+ Cargo recurrente a tu cuenta corriente o de ahorros con autorización de débito automático</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 4----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta4" onClick="preguntar(this)" data-pregunta = "respuesta4"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Symplifica es para personas y para empresas?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta4" class="light grisclarofont">Si. Nuestro servicio va a ser para los dos segmentos. Sin embargo, nuestra primera versión es para
+
+empleados domésticos de personas naturales. En los siguientes meses estaremos lanzando nuestro
+
+producto para empresas</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 5---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta5" onClick="preguntar(this)" data-pregunta = "respuesta5"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Qué necesito para inscribirme como empleador?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta5" class="light grisclarofont">Para inscribirte como empleador ten a la mano la siguiente información
+
+Xxxx
+
+Y los siguietnes documentos</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 6----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta6" onClick="preguntar(this)" data-pregunta = "respuesta6"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Qué información necesito para inscribir a mi empleado?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta6" class="light grisclarofont">Para inscribir a tu empleado ten a  la mano la siguiente información
+
+Xxxx
+
+Y los siguientes documentos</p>
+                    </div>
+                </div>
+
+                 <!-----------pregunta 7----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta7" onClick="preguntar(this)" data-pregunta = "respuesta7"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Puedo afiliar a mi empleado a la seguridad social através de Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta7" class="light grisclarofont">Sí. Si tu empleado no está afiliado a la seguridad social nosotros nos hacemos cargo de afiliarlo y de
+
+afiliarte a ti como su empleador.
+
+No hacemos cambio de EPS y Fondos de Pensión si tu empleado ya está afiliado</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 8----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta8" onClick="preguntar(this)" data-pregunta = "respuesta8"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Mi empleado no se quiere afiliar a la seguridad social porque dice que tiene SISBEN o porque es beneficiario de alguien?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta8" class="light grisclarofont">Es muy importante que tengas en cuenta que como empleador es tu obligación afiliar a tus
+
+empleados a la seguridad social. Si un empleado está en el SISBEN no quiere decir que no se deba
+
+afiliar a la seguridad social.
+
+El hecho de que un empleado esté como beneficiario de otro cotizante no te exime de tus
+
+responsabilidades como empleador y por lo tanto debes afiliarlo a la seguridad social.</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 9----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta9" onClick="preguntar(this)" data-pregunta = "respuesta9"><div class="pregunta">
+                    	<p class="light-italic azulclarofont"><span class="extrabold azulmediofont">› </span>¿Si tengo dudas o algún pasivo con mi empleado Symplifica me resuelve mi situación legal actual como empleador?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta9" class="light grisclarofont">Nosotros no podemos solucionar asuntos jurídicos. Como usuario registrado de nuestra plataforma
+
+tienes acceso a unas tarifas preferenciales para tener una consulta jurídica con nuestros aliados
+
+Alvarez, Lievano, Laserna Abogados. Ellos te darán guía sobre los pasos que debes seguir para
+
+solucionar tu situación actual. Es muy importante entender que no todos los casos son iguales y que
+
+las soluciones generalmente implican el pago de pasivos al empleador y a la seguridad social</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+	});
+</script>
+
+<script type="text/javascript">
+
+	function preguntar (buttom) {
+
+		var id = buttom.getAttribute("data-pregunta");
+		var answer = document.querySelector("#" + id);
+		console.log(answer);
+		$(answer).slideToggle();
+
+
+	}
+
+</script>
+
+
+</body>
+</html>
 {% endblock %}

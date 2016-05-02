@@ -18,6 +18,9 @@ class DashBoardEmployerController extends Controller {
     public function showDashBoardAction(Request $request) {
         /** @var User $user */
         $user = $this->getUser();
+        $contractType = $this->getdoctrine()
+                    ->getRepository('RocketSellerTwoPickBundle:DocumentType')
+                    ->findOneByName("Contrato");
         if (empty($user)) {
             return $this->redirectToRoute('fos_user_security_login');
         }
@@ -29,12 +32,14 @@ class DashBoardEmployerController extends Controller {
             $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => $notifications,
-                        'user' => $user->getPersonPerson()
+                        'user' => $user->getPersonPerson(),
+                        'contractType' => $contractType
             ));
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,
-                        'user' => $user->getPersonPerson()
+                        'user' => $user->getPersonPerson(),
+                        'contractType' => $contractType
             ));
         }
     }

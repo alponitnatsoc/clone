@@ -44,11 +44,8 @@ class BackOfficeController extends Controller
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
         $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
 
-        if ($addToSQL) {
-            
-        }else{
-
-        }
+        // dump($addToSQL);
+        // exit();
         return true;
     }
     public function makeAfiliationAction($idAction)

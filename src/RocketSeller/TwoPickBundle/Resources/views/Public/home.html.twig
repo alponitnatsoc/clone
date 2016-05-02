@@ -1,173 +1,287 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
-<section id="bannerPpal">
-             <img src="img/home/bannerPpal.png" class="img-responsive" alt="Symplifica" />
-             <div class="boxBanner col-md-5 col-xs-12 txtL">La herramienta <strong>más sencilla</strong> para administrar empleados <strong>domésticos y de pequeñas empresas</strong></br><em>Nada como la tranquilidad de saber que estás haciendo las cosas bien</em></div>
-             <div class="buttonBanner col-md-3 col-xs-12">
-                 <a href="{{ path('fos_user_registration_register') }}" class="btn btn-registro an1"><em>Prueba 1 mes gratis</em></a>
-                 <a href="#" class="btn btn-registro an2"><i class="fa fa-play-circle-o"></i> <em>Ver video</em></a>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symplifica</title>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/home.css') }}"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link href="{{ asset('public/css/home/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('public/css/home/bootstrap-slider.css') }}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+	<main>
+    	<header>
+        	<!--aca va el nav que ya esta hecho-->
+        	<div id="banner">
+            	<div id="cont-banner">
+                	<div id="tbanner1">
+                    	<h1 class="bold">Somos el área de nómina de los pequeños empleadores</h1>
+                        <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos y de pequeñas empresas</p>
+                    </div>
+                    <div id="tbanner2">
+                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
+                        <a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-------------------- The Modal------------------------ -->
+
+
+        <div id="openModal" class="modalDialog">
+            <div>	<a href="#close" title="Close" class="close">X</a>
+
+                    <iframe width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+
+         <!-------------------- beneficios------------------------ -->
+        <section>
+        	<div id="beneficios" class="section group">
+            	<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
+                <div class="col span_1_of_4 beneficios">
+                	<img src="{{ asset('public/img/home/1.png') }}" alt="">
+                	<h3 class="light">Guía</h3>
+                    <span class="extrabold">de contratación</span>
+                	<p class="light-italic">Te guiamos en la correcta contratación del todos tus empleados</p>
+                </div>
+
+                <div class="col span_1_of_4 beneficios">
+                	<img src="{{ asset('public/img/home/3.png') }}" alt="">
+                	<h3 class="light">Afiliamos</h3>
+                    <span class="extrabold">a seguridad social</span>
+                	<p class="light-italic">Te afiliamos a ti y a tu empleado a las administradoras de seguridad social
+
+</p>
+                </div>
+
+                <div class="col span_1_of_4 beneficios">
+                	<img src="{{ asset('public/img/home/2.png') }}" alt="">
+                	<h3 class="light">Liquidación</h3>
+                    <span class="extrabold">de nómina y aportes</span>
+                	<p class="light-italic">Calculamos cuánto tienes que pagar a tus empleados y a la seguridad social</p>
+                </div>
+
+                <div class="col span_1_of_4 beneficios">
+                	<img src="{{ asset('public/img/home/4.png') }}" alt="">
+                	<h3 class="light">Pagos</h3>
+                    <span class="extrabold">electrónicos</span>
+                	<p class="light-italic">Te evitamos el tener que sacar dinero cada vez que pagas a tus empleados</p>
+                </div>
+            </div>
+            <a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Ver más</div></a>
+        </section>
+
+        <section>
+        	<div id="video">
+            	<div id="video-info">
+                	<a href="#openModal"><img src="{{ asset('public/img/home/play.png') }}" alt=""></a>
+                    <h3 class="naranjafont extrabold">Explora nuestro producto en 1 minuto</h3>
+                    <p class="light">Conoce cómo te hacemos la vida más fácil</p>
+                    <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+        	<div id="calculadora">
+            	<h2 class="light grisclarofont">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2>
+                <h4 style="font-size: 20px" class="light grisclarofont">Calcula el valor mensual de nuestro servicio de acuerdo al número y tipo
+de empleados que quieras administrar</h4>
+                <div class="calculadora-espacios section group"> <!--calculadora numero 1-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados</span><br>
+                        <span class="extrabold">de tiempo completo</span>
+                    </div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-value="3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="10" value="3" data-slider-step="1" data-slider-value="3"/>
+      					</div>
+                    </div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span id="emp1" class="extrabold">0</span><br>
+                        <span id="palabra-empleados1" class="extrabold">empleados</span>
+                    </div>
+                </div>
+
+                <div class="calculadora-espacios section group"> <!--calculadora numero 2-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados que van</span><br>
+                        <span class="extrabold">1 - 2 días a lasemana</span>
+                    </div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="0" data-slider-step="1" data-slider-value="0"/>
+      					</div>
+                    </div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span id="emp2" class="extrabold">0</span><br>
+                        <span id="palabra-empleados2" class="extrabold">empleados</span>
+                    </div>
+                </div>
+
+                <div class="calculadora-espacios section group"> <!--calculadora numero 3-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados que van</span><br>
+                        <span class="extrabold">3 - 4 días a lasemana</span>
+                    </div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="0"/>
+      					</div>
+                    </div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span id="emp3" class="extrabold">0</span><br>
+                        <span id="palabra-empleados3" class="extrabold">empleados</span>
+                    </div>
+                </div>
+
+                <div id="texto-finalcalculadora">
+                	<p class="light">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
+                    <div id="resultado-calculadora" class="azulmedio">
+                    	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0 mensuales</span></p>
+                    </div><br>
+                    <p class="light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
              </div>
+
+           </div>
         </section>
-        <section id="iconsHead" class="txtC">
-            <div class="container">
-                <h2>Soluciona mes a mes todo en un sólo lugar</h2>
-                <div class="iconsB col-md-12 col-xs-12">
-                    <ul>
-                        <li>
-                            <span class="icon-h1"></span>
-                            <span>Te guiamos en la correcta contratación del empleado </span>
-                            <a href="#" class="btn btn-more-min">Leer más</a>
-                        </li>
-                        <li>
-                            <span class="icon-h2"></span>
-                            <span>Generamos un contrato laboral acorde a tus necesidades </span>
-                            <a href="#" class="btn btn-more-min">Leer más</a>
-                        </li>
-                        <li>
-                            <span class="icon-h3"></span>
-                            <span>Aﬁliamos tus empleados y a ti a las administradoras de seguridad social  </span>
-                            <a href="#" class="btn btn-more-min">Leer más</a>
-                        </li>
-                        <li>
-                            <span class="icon-h4"></span>
-                            <span>Te damos la opción de pagar sueldo y planilla de aportes con un solo click  </span>
-                            <a href="#" class="btn btn-more-min">Leer más</a>
-                        </li>
-                        <li>
-                            <span class="icon-h5"></span>
-                            <span>Guardamos todos los documentos digitales de la relacion laboral  </span>
-                            <a href="#" class="btn btn-more-min">Leer más</a>
-                        </li>
-                    </ul>
+
+        <section class="fondo-section">
+        	<div id="opiniones">
+            	<h2 class="light grisclarofont">Lo que opinan nuestros usuarios</h2>
+                <div id="personas">
+                	<div class="col span_1_of_3 personascontent">
+                    	<img src="{{ asset('public/img/home/foto1.png') }}"><br>
+                        <span class="bold azuloscurofont">Sara Martinez</span><br>
+                        <span class="light azuloscurofont">Dueña de su negocio</span><br><br>
+                        <p class="light grisclarofont">"Symplifica es una gran solución para mi negocio"</p>
+                    </div>
+
+                    <div class="col span_1_of_3 personascontent">
+                    	<img src="{{ asset('public/img/home/foto2.png') }}"><br>
+                        <span class="bold azuloscurofont">Alejandra Gomez</span><br>
+                        <span class="light azuloscurofont">Pequeña empresaria</span><br><br>
+                        <p class="light grisclarofont">"Son Symplifica le puedo dedicar más tiempo a las cosas que generan más valor en mi empresa"</p>
+                    </div>
+
+                    <div class="col span_1_of_3 personascontent">
+                    	<img src="{{ asset('public/img/home/foto3.png') }}"><br>
+                        <span class="bold azuloscurofont">Ricardo Jorge</span><br>
+                        <span class="light azuloscurofont">Pensionado</span><br><br>
+                        <p class="light grisclarofont">"No tengo ser una experto en liquidación de nómina, ni tengo que estar pendiente de cuándo debo realizar el pago a mi empleada, Symplifica me dice cuánto pagar y me avisa con días de antelación"</p>
+                    </div>
+
+                </div>
+            </div>
+            <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
+        </section>
+
+        <div id="intro-pc">
+        	<span class="azuloscurofont light">Hacemos tu vida más sencilla en muy pocos pasos</span><br>
+            <span class="azuloscurofont extrabold">Inscríbete y disfruta de la tranquilidad</span>
+        </div>
+
+        <section>
+        	<div id="contenido-pc" class="section group">
+            	<div class="col span_1_of_2"><img class="img" src="{{ asset('public/img/home/pc.png') }}"></div>
+                <div class="col span_1_of_2 texto-bullets">
+                	<img class="numeros" src="{{ asset('public/img/home/numero1.png') }}"><p class="light">Completa unas preguntas<br><span class="bold">fáciles de responder</span></p><br>
+                    <img class="numeros" src="{{ asset('public/img/home/numero2.png') }}"><p class="light">Carga unos pocos documentos<br><span class="bold">fáciles  de conseguir </span></p><br>
+                    <img class="numeros" src="{{ asset('public/img/home/numero3.png') }}"><p class="light">Autorízanos a realizar por tí<br><span class="bold">los procesos que ocupan tu tiempo</span></p><br>
+                    <img class="numeros" src="{{ asset('public/img/home/numero4.png') }}"><p class="light">Y  despreocúpate...<br><span class="bold">de acá en adelante te llevamos de la mano </span></p><br>
                 </div>
             </div>
         </section>
-        <section id="middleBanner" class="txtC">
-            <div class="blockTem">
-                <i class="fa fa-play-circle-o"></i>
-                <h3>Explora nuestro producto en 1 minuto</h3>
-                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </span>
-                <a href="{{ path('fos_user_registration_register') }}" class="btn btn-registro an3"><em><strong>Prueba 1 mes gratis</strong></em></a>
-            </div>
-        </section>
-        <section id="destaquedMsg" class="txtC">
-            <div class="container">
-                <span>La tranquilidad de hacer</span>
-                <span><strong>las cosas bien por muy poco</strong></span>
-            </div>
-        </section>
-        <section id="calculateBlock" class="txtC">
-            <div class="container">
-                <h2>Calcula el valor mensual del servicio de acuerdo al número y tipo de </br>empleados que quieras administrar</h2>
-                <div class="iconsC col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo parcial</br><em>1 - 2 días/semana</em></span>
-                        <div class="lineDown"><p></p></div>
-                    </div>
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo parcial</br><em>3 - 4 días/semana</em></span>
-                        <div class="lineDown"><p></p></div>
-                    </div>
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo completo</br><em>tiempo completo</em></span>
-                        <div class="lineDown"><p></p></div>
-                    </div>
-                </div>
-                <div class="infoResult col-md-8 col-md-offset-2 col-xs-12">
-                    <span class="R1">El valor mensual del servicio</span>
-                    <span class="R2"><em>para tu caso es:</em></span>
-                    <span class="R3"><strong>3</strong> <em>empleados</em> <strong>= $25.000</strong></span>
-                    <p><em>Después del tercer empleado obtén el 10% de descuento.</em></p>
-                </div>
-            </div>
-        </section>
-        <section id="opinionBlock" class="txtC">
-            <div class="container">
-                <h2>Lo que nuestros usuarios opinan</h2>
-                <div class="iconsB col-md-12 col-xs-12">
-                    <div class="col-md-4 col-xs-12">
-                        <img src="img/home/people.png" class="img-responsive" alt="Symplifica"/>
-                        <p><strong>Martha Liliana</strong></br>Madre y esposa</p>
-                        <span>" Ahora no tengo que estar pendiente de cuándo debo realizar el pago a mi empleada, Symplifica me avisa con días de antelación "</span>
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                        <img src="img/home/people.png" class="img-responsive" alt="Symplifica"/>
-                        <p><strong>Martha Liliana</strong></br>Madre y esposa</p>
-                        <span>" Ahora no tengo que estar pendiente de cuándo debo realizar el pago a mi empleada, Symplifica me avisa con días de antelación "</span>
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                        <img src="img/home/people.png" class="img-responsive" alt="Symplifica"/>
-                        <p><strong>Martha Liliana</strong></br>Madre y esposa</p>
-                        <span>" Ahora no tengo que estar pendiente de cuándo debo realizar el pago a mi empleada, Symplifica me avisa con días de antelación "</span>
-                    </div>
-                </div>
-                <a href="{{ path('fos_user_registration_register') }}" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
-            </div>    
-        </section>
-        <section id="destaquedMsg" class="txtC">
-            <div class="container">
-                <span>Despreocúpate de gestionar a tus empleados</span>
-                <span><strong>Nosotros nos hacemos cargo del trabajo pesado</strong></span>
-            </div>
-        </section>
-        <section id="bannerDown" class="txtC">
-            <div class="container">
-                <div class="blockItem col-md-12 col-xs-12">
-                    <div class="col-md-4 col-xs-12">
-                        <div class="boxInfo">
-                            <h4>NOTIFICACIONES A TU CELULAR</h4>
-                            <span>Nunca más se te va a olvidar pagar a tu empleado a tiempo, nosotros te recordamos</span>
-                        </div>
-                        <div class="boxInfo">
-                            <h4>REGIDO POR LA LEY</h4>
-                            <span>Desde que te montas en Sympliﬁca vive con la tranquilidad de que estas haciendo todo de acuerdo a la ley</span>
-                        </div>
-                        <div class="boxInfo">
-                            <h4>PAGO DE PLANILLA</h4>
-                            <span>No tienes que recordar la clave de la planilla ni cuándo pagarla, págala en un click con Sympliﬁca</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 hidden-xs"></div>
-                    <div class="col-md-4 col-xs-12">
-                        <div class="boxInfo">
-                            <h4>FÁCIL AFILIACIÓN</h4>
-                            <span>Disfruta de tu tiempo mientras nosotros nos hacemos cargo de los complicados trámites a la aﬁliación</span>
-                        </div>
-                        <div class="boxInfo">
-                            <h4>PAGO ELECTRÓNICO</h4>
-                            <span>Olvídate de estar sacando dinero cada vez que tienes que pagar a tus empleados, pága desde tu celular</span>
-                        </div>
-                        <div class="boxInfo">
-                            <h4>LIQUIDACIÓN DE NÓMINA</h4>
-                            <span>Despreocúpate por saber si estas liquidando bien a tu empleado Sympliﬁca lo hace por tí</span>
-                        </div>
-                    </div>
-                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-registro big"><em><strong>Prueba 1 mes gratis</strong></em></a>
-                </div>
-            </div>
-        </section>
-        <section id="destaquedMsg" class="txtC">
-            <div class="container">
-                <span>Hacemos tu vida más sencilla en muy pocos pasos</span>
-                <span><strong>Inscríbete y disfruta de la tranquilidad</strong></span>
-            </div>
-        </section>
-        <section id="boxFeatures">
-            <div class="container">
-                <div class="blockItem col-md-12 col-xs-12">
-                    <div class="col-md-6 col-xs-12 txtR">
-                        <img src="img/home/img-pc-background.png" class="img-responsive" alt="Symplifica"/>
-                    </div>
-                    <div class="col-md-6 col-xs-12 txtL">
-                        <h3>¡Así de fácil!</h3>
-                        <ul>
-                            <li><span>1</span><p>Completa unas preguntas</br><strong>fáciles de responder</strong></p></li>
-                            <li><span>2</span><p>Carga unos pocos documentos</br><strong>fáciles  de conseguir </strong></p></li>
-                            <li><span>3</span><p>Autorízanos a <strong>realizar por tí</strong></br>los procesos que ocupan tu</br>tiempo</p></li>
-                            <li><span>4</span><p>Y  despreocúpate...</br><strong>de acá en adelante te </br>llevamos de la mano</strong></p></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+
+      <!--aca va el footer que ya esta hecho-->
+
+
+    </main>
+
+</body>
+<script type="text/javascript" src="{{ asset('public/js/home/bootstrap-slider.js') }}"></script>
+<script type="text/javascript">
+	$(".ex8").slider({
+		tooltip: 'always'
+	});
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+     var conta1 = 0;
+     var conta2 = 0;
+     var conta3 = 0;
+     var slider1 = $("#ex1Slider" ).slider({
+          value: 0,
+          min: 0,
+          max: 5,
+    });
+     slider1.on("slide", function(slideEvt) {
+         //console.log($('#ex1Slider').val());
+         //console.log(conta1);
+         conta1 = $('#ex1Slider').val();
+         $("#emp1").text(conta1);
+         funcion();
+         if(conta1 != 1)
+            $("#palabra-empleados1").text("empleados");
+         else
+                $("#palabra-empleados1").text("empleado");
+     });
+     var slider2 = $("#ex2Slider" ).slider({
+      value: 0,
+      min: 0,
+      max: 5,
+    });
+     slider2.on("slide", function(slideEvt) {
+         conta2 = $('#ex2Slider').val();
+         $("#emp2").text(conta2);
+         funcion();
+         if(conta2 != 1)
+            $("#palabra-empleados2").text("empleados");
+         else
+            $("#palabra-empleados2").text("empleado");
+     });
+     //var slider3 = new Slider("#ex3Slider");
+    var slider3 = $("#ex3Slider" ).slider({
+          value: 0,
+          min: 0,
+          max: 5,
+        });
+     slider3.on("slide", function(slideEvt) {
+         conta3 = $('#ex3Slider').val();
+         $("#emp3").text(conta3);
+         funcion();
+         if(conta3 != 1)
+            $("#palabra-empleados3").text("empleados");
+         else
+            $("#palabra-empleados3").text("empleado");
+     });
+    function funcion(){
+        var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
+				if((conta1 + conta2 + conta3) >= 3 )
+					valor = valor * 0.9;
+        $("#total-empleados").text(conta1 + conta2 + conta3);
+        $("#precio").text(" = $"+numberWithCommas(valor) + " mensuales");
+        //$("#total-empleados").text(conta1 + conta2 + conta3);
+        if((conta1 + conta2 + conta3) != 1)
+            $("#palabra-empleados").text("empleados");
+         else
+            $("#palabra-empleados").text("empleado");
+
+    }
+
+
+
+</script>
+</html>
 {% endblock %}

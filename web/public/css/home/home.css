@@ -1,0 +1,355 @@
+@charset "UTF-8";
+* {margin: 0; padding: 0}
+a {text-decoration: none}
+
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+
+#banner {
+	width: 100%;
+	height: 400px;
+	background: url("../../img/home/banner.png");
+	background-size:cover;
+	background-position:center;
+	padding: 100px 0 0 0;
+    box-sizing: border-box;
+}
+
+#cont-banner {
+	width: 825px;
+	margin: 0 auto;
+	align-self:center}
+
+#tbanner1 {
+	width: 100%;
+	height: 165px;
+	background: rgba(0,0,0,0.75);
+	padding: 25px 25px;
+    box-sizing: border-box;}
+
+#tbanner1 h1 {
+color: #FFFFFF;
+text-align: left;
+margin: 0}
+
+#tbanner1 p {
+color: #FFFFFF}
+
+#tbanner1 p {
+font-size: 18px}
+
+#tbanner2 {
+margin-top: 5px}
+
+#btn-prueba {
+	width: 240px;
+	float: left;
+	background: #FD9224;
+	padding: 15px 10px;
+    box-sizing: border-box;
+	color: #FFFFFF;
+	font-size: 20px;
+	margin-right: 5px;
+	border-bottom-left-radius: 25px;
+	border-top-left-radius: 25px}
+
+#btn-prueba:hover {background: #DA6E00;
+border-bottom: 3px solid #794815}
+
+.callto:hover {background: #DA6E00;
+border-bottom: 3px solid #794815}
+.callto2:hover {background: #DA6E00;
+border-bottom: 3px solid #794815}
+
+.btn-video {
+	cursor: pointer;
+	width: 170px;
+	float: left;
+	background: #FFFFFF;
+	border: 2px #FD9224 solid;
+	border-bottom-right-radius: 25px;
+	border-top-right-radius: 25px;
+	padding: 13px 10px;
+    box-sizing: border-box;
+	font-size: 20px;
+	color: #FD9224}
+
+/*empieza la seccion de beneficios*/
+
+#beneficios {width: 1100px; margin: 0 auto; text-align: center}
+#beneficios h2 {margin: 25px 0;}
+.beneficios {
+	border: #EDEEF0 1px solid;
+	text-align: center;
+	color: #5D5D5D;
+	padding: 25px 10px;
+	box-sizing: border-box}
+
+.beneficios p {
+	margin-top: 10px
+}
+
+.callto {width: 110px;
+	height: 35px;
+	margin: 0 auto;
+	border-radius: 3px;
+	border-bottom:#D3731C 3px solid; color: #FFFFFF;
+	padding: 6px 12px;
+	box-sizing: border-box;
+  text-align: center;
+}
+
+/*empieza la seccion de video*/
+
+#video {
+	width: 100%;
+	height: 450px;
+	background: url("../../img/home/video.png");
+	background-size:cover;
+	background-position:center;
+	padding: 100px 0 0 0;
+    box-sizing: border-box;
+	margin: 40px 0 0 0}
+
+#video-info {text-align: center}
+#video-info p {color: #FFFFFF; margin-bottom: 30px}
+#video-info h3 {margin-top: 30px}
+.callto2 {
+	width: 200px;
+	height: 35px;
+	margin: 0 auto;
+	border-radius: 3px;
+	border-bottom:#D3731C 3px solid; color: #FFFFFF;
+	padding: 6px 12px;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+/*empieza la seccion de calculadora*/
+
+#calculadora {width: 1100px; margin: 0 auto;}
+#calculadora h2 {text-align: center; margin: 25px 0}
+#calculadora h4 {margin: 30px 0; text-align: center}
+.middle-cont {height: 98px; border: #d8d9dd solid 1px; padding: 45px 0 0 0; text-align: center;box-sizing: border-box; border-radius:5px}
+.no-colorcont {height: 98px; box-sizing: border-box; padding: 25px 0 0 0; font-size: 18px; color: #87868a;}
+.endcont {height: 98px; background: #edeef0; padding: 25px 0 0 0; text-align: center;box-sizing: border-box; font-size: 20px; border-radius: 5px}
+#texto-finalcalculadora {text-align: center; width: 400px; margin: 20px auto; color: #6d6d71}
+#resultado-calculadora {width: 390px;border-radius: 3px;font-size: 23px;color: #FFF;}
+
+/*empieza la seccion de opiniones*/
+
+#opiniones {width: 1100px; margin: 0 auto; height:auto; overflow: hidden; padding: 20px 0}
+.personascontent {text-align: center; padding: 0 40px; font-size: 15px;box-sizing: border-box;}
+#opiniones h2 {text-align: center; margin: 25px 0}
+
+/*empieza la seccion de computador*/
+
+#intro-pc {text-align: center; height: 125px; background: #eaeaea; font-size: 20px; box-sizing: border-box; padding: 30px 0}
+#contenido-pc {width: 1100px; margin: 30px auto}
+.texto-bullets {padding: 60px 0; box-sizing: border-box;}
+.numeros { float: left;padding-right: 20px;}
+
+/*modal 2*/
+.modalDialog {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+.modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+.modalDialog > div {
+    width: 65%;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+
+}
+.close {
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+.close:hover {
+    background: #00d9ff;
+}
+
+
+/*----------------------------------------------------------grid-----------------------------------------------------------*/
+
+.span_1_of_4 {
+	width: 24%;
+}
+
+.span_1_of_3 {
+	width: 32.26%;
+}
+
+.span_1_of_2 {
+	width: 49.2%;
+}
+
+.span_3_of_5 {
+  	width: 59.36%;
+}
+
+.span_1_of_5 {
+  	width: 18.72%;
+}
+
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+/*  GRID COLUMN SETUP   ==================================================================== */
+
+.col {
+	display: block;
+	float:left;
+	margin: 1% 0 1% 1%;
+}
+
+.col:first-child { margin-left: 0; } /* all browsers except IE6 and lower */
+
+
+/*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
+
+@media only screen and (max-width: 1024px) {
+
+		#beneficios {width: 90%;}
+		.beneficios {font-size: 14px}
+		#calculadora {width: 90%;}
+		#opiniones {width: 90%;}
+		#contenido-pc {width: 90%;}
+		.img {width: 90%}
+		#video {height: 365px; padding: 50px 0 0 0;}
+
+	}
+
+@media only screen and (max-width: 980px) {}
+@media only screen and (max-width: 800px) {
+	#cont-banner {width: 90%;}
+	.span_1_of_4 {width: 49%;}}
+
+@media only screen and (max-width: 768px) {
+
+	#cont-banner {width: 90%;}
+	#tbanner1 h1 {font-size: 25px;}
+	#banner {height: 350px;padding: 60px 0 0 0;box-sizing: border-box;}
+	.span_1_of_4 {width: 49%;}
+	.span_1_of_5,.span_3_of_5  {width: 100%;}
+	.no-colorcont {text-align: center; height: 75px;padding: 10px 0 0 0;}
+	.middle-cont {height: 80px;}
+	.span_1_of_3 {width: 100%;}
+	.personascontent {padding: 15px 40px;}
+	.span_1_of_2 {width: 100%;}
+	.img {width: 50%}
+	#contenido-pc {text-align: center}
+	.numeros {float: left; padding: 20px 10px 0 190px;}
+	#contenido-pc p {width: 575px; text-align: left;}
+	.texto-bullets {padding: 5px 0;}
+	#btn-prueba {padding: 10px 10px;}
+	.btn-video {padding: 8px 10px;}
+	}
+
+	@media only screen and (max-width: 640px) {
+		.numeros {float: left; padding: 20px 10px 0 100px;}
+		#contenido-pc p {width: 90%;}
+		}
+
+@media only screen and (max-width: 480px) {
+
+	#contenido-pc p {width: 400px;}
+	.col { margin: 1% 0 1% 0%;}
+	#tbanner1 h1 {font-size: 20px;}
+	.span_1_of_4 {width: 100%; }
+	.span_1_of_3 {width: 100%;}
+	.span_1_of_2 {width: 100%;}
+	#btn-prueba {width: 100%; color: #FFFFFF;border-bottom: solid 3px #D86D00;margin-bottom: 5px;border-radius: 5px;float: none}
+#tbanner2 {width: 100%; text-align: center}
+.btn-video {width: 100%; float: none; border: 1px #FD9224 solid; border-radius: 7px;}
+#banner {padding: 40px 0 0 0;}
+#intro-pc {height: 100px;font-size: 15px;}
+.numeros {padding: 20px 10px 0 40px;}
+#resultado-calculadora {width: 90%;margin: 0 auto;}
+#texto-finalcalculadora {width: 90%}
+}
+
+@media only screen and (max-width: 414px) {
+	#contenido-pc p {width: 340px;}}
+
+@media only screen and (max-width: 375px) {
+	#contenido-pc p {width: 300px;}
+	#texto-finalcalculadora {width: 90%;}
+	#resultado-calculadora {width: 90%;}
+	#video {padding: 30px 0 0 0;}
+	#video-info {padding: 0 25px;}
+	#tbanner1 h1 {font-size: 18px;}
+	#tbanner1 {padding: 20px;}
+	#intro-pc {padding: 10px 20px;}
+	}
+
+@media only screen and (max-width: 320px) {
+	#tbanner1 p { font-size: 15px;}
+	#intro-pc {padding: 0 20px;}
+	#contenido-pc p {width: 270px;}
+	.numeros {padding: 20px 10px 0 10px;}
+	}
+
+/*----------------------------------------------------------grid-----------------------------------------------------------*/

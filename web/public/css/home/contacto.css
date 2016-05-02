@@ -1,0 +1,83 @@
+@charset "UTF-8";
+* {margin: 0; padding: 0}
+
+a {text-decoration: none}
+h1 {margin: 0}
+p{
+	margin: 0;!important
+}
+
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+/*-----------------------header------------------------*/
+
+#banner-beneficios {
+	width: 100%;
+	height: 310px;
+	background: url("../../img/home/banner5.png");
+	background-size:cover;
+	background-position:center;
+	padding: 100px 0 0 0;
+    box-sizing: border-box;
+}
+
+#banner-beneficios-cont {width: 100%;
+	margin: 0 auto;
+	text-align: center}
+
+#banner-beneficios-cont p {color: #5b5b5f; width: 300px; text-align: center; margin: 0 auto}
+#breadcrumb {width: 300px; margin: 20px auto; text-align: center;}
+.bread-style a {color: #87868a}
+
+/*---------------empieza seccion formulario-------------------*/
+
+#texto-descript {margin: 60px 0 70px 0; text-align: center}
+#texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
+
+#formulario {width: 520px; margin: 0 auto; padding: 0 0 120px 0}
+.input {width: 100%; height: 35px; border: solid 1px #BEC0C2; border-radius: 5px; margin: 10px 0}
+#submit_button {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box; border-left: 0;
+    border-right: 0;border-top: 0; font-size: 15px}
+
+
+/*---------------empieza seccion telefono-------------------*/
+
+#telefono {background: #F7F7F8; width: 100%; height: 115px}
+#datos-cont {width: 235px; margin: 0 auto; box-sizing: border-box; padding: 30px 0 0 0; color: #424242; font-size: 20px; height: auto; overflow: hidden;}
+.datos-contacto {float: left}
+
+/*responsive*/
+
+@media only screen and (max-width: 768px) {
+	#banner-beneficios {height: 210px;padding: 60px 0 0 0;}
+	#texto-descript h4 {width: 90%;}
+	}
+
+@media only screen and (max-width: 640px) {
+	#formulario {width: 85%;}
+	}
+
+@media only screen and (max-width: 480px) {
+	#banner-beneficios-cont {font-size: 14px;}
+	#banner-beneficios {height: 170px;padding: 45px 0 0 0;}
+	}
+
+@media only screen and (max-width: 375px) {
+	#banner-beneficios-cont {font-size: 11px;}
+	#banner-beneficios {height: 145px;padding: 45px 0 0 0;}
+	}
