@@ -389,17 +389,16 @@ class LegalAssistanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        if($user->getLegalFlag()!=-1){
+            $urlToSend='edit_profile';
+        }else{
+            $urlToSend='register_employee';
+        }
+
         $user->setLegalFlag($flag);
         $em->persist($user);
         $em->flush();
 
-        if ($user->getLegalFlag() == 0) {
-            $urlToSend = 'edit_profile';
-        } else if ($user->getLegalFlag() == 1) {
-            $urlToSend = 'legal';
-        } else {
-            $urlToSend = 'register_employee';
-        }
 
         return $this->redirectToRoute($urlToSend);
     }
