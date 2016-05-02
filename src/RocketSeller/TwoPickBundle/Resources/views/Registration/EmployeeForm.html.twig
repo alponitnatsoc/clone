@@ -368,10 +368,11 @@
                                         <h2>Término Fijo</h2>
                                         <div class="contractFirstList">    
                                             <ul class="">
-                                                <li>El periodo de prueba máximo es de 15 días.</li>
+                                                <li>El periodo de prueba es la quinta parte de la duración del contrato no obstante no puede superar los dos meses.</li>
                                                 <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
                                                 <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
                                                 <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
+                                                <li>Si la duración del contrato es menor a un año sepuede renovar por 3 periodos igualesl inicialmente pactado el cuarto tendrá que ser a un año</li>
                                             </ul>
                                         </div>
                                         <hr />
@@ -517,7 +518,7 @@
                                         {{ form_label(form.employeeHasEmployers.salary) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        <input id="ex7" type="text" data-slider-min="689454" data-slider-max="10000000" data-slider-step="10000" data-slider-value="{{ form.employeeHasEmployers.salary.vars.value }}"/>
+                                        <input id="ex7" type="text" data-slider-min="689455" data-slider-max="10000000" data-slider-step="10000" data-slider-value="{{ form.employeeHasEmployers.salary.vars.value }}"/>
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
                                     </div>
                                 </div>
