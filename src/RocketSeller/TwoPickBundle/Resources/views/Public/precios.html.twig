@@ -1,81 +1,215 @@
 {% extends "::new-design/public.html.twig" %}
 
 {% block body %}
-<section id="middleBannerPrice" class="txtC">
-            <div class="blockTem">
-                <h3>Soluciona mes a mes</h3>
-                <span>todo en un solo lugar</span>
-                <a href="#" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precio</title>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/precio.css') }}"/>
+<link href="{{ asset('public/css/home/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('public/css/home/bootstrap-slider.css') }}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<main>
+    	<header>
+        	<!--aca va el nav que ya esta hecho-->
+        	<div id="banner-beneficios">
+            	<div id="banner-beneficios-cont">
+                  <h1 class="bold azuloscurofont">Aquí puedes calcular</h1>
+                  <h1 class="light azulmediofont">nuestras tarifas mensuales</h1>
+                </div>
             </div>
-        </section>
-        <section id="timerBlock" class="txtC">
-            <div class="container">
-                <div class="iconsB col-md-12 col-xs-12">
-                    <div class="col-md-4 col-xs-12">
-                        <span class="icon-g1"></span>
-                        <h3>Tiempo parcial</h3>
-                        <span>Para empleados que laboran de 1 a 10 días al mes</span>
-                        <p></p>
-                        <div class="boxValue">
-                            <span><em>hasta</em></span>
-                            <span class="big">$15.000</span>
-                            <p>Por empleado</p>
-                        </div>
+        </header>
+
+        <section>
+            <div id="breadcrumb">
+            	<h2 class="light">Precio</h2>
+            	<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Precio</span></div>
+            </div>
+
+            <div id="texto-descript">
+            	<h4 class="light grisclarofont">Estas son nuestras tarifas mensuales por cada empleado contratado. Entre más empleados, más económico el servicio.</h4>
+            </div>
+
+            <div id="cont-3precios" class="section group">
+            	<div class="col span_1_of_3 centrar">
+                	<img src="{{asset('public/img/home/5.png')}}">
+                    <h3 class="light-italic">Tiempo parcial</h3><br>
+                    <p class="light">Para empleados que laboran de 1 a 10 días al mes</p>
+                    <div class="caja-precio">
+                    	<p class="bold">hasta<br><span class="extrabold span">$16.500</span><br>Por empleado</p>
                     </div>
-                    <div class="col-md-4 col-xs-12">
-                        <span class="icon-g2"></span>
-                        <h3>Medio tiempo</h3>
-                        <span>Para empleados que laboran de 11 a 19 días al mes</span>
-                        <p></p>
-                        <div class="boxValue">
-                            <span><em>hasta</em></span>
-                            <span class="big">$15.000</span>
-                            <p>Por empleado</p>
-                        </div>
+                </div>
+
+                <div class="col span_1_of_3 centrar">
+                	<img src="{{asset('public/img/home/5.png')}}">
+                    <h3 class="light-italic">Medio tiempo</h3><br>
+                    <p class="light">Para empleados que laboran de 11 a 19 días al mes</p>
+                    <div class="caja-precio">
+                    	<p class="bold">hasta<br><span class="extrabold span">$22.500</span><br>Por empleado</p>
                     </div>
-                    <div class="col-md-4 col-xs-12">
-                        <span class="icon-g3"></span>
-                        <h3>Tiempo completo</h3>
-                        <span>Para empleados que laboran más de 20 días al mes</span>
-                        <p></p>
-                        <div class="boxValue">
-                            <span><em>hasta</em></span>
-                            <span class="big">$15.000</span>
-                            <p>Por empleado</p>
-                        </div>
+                </div>
+
+                <div class="col span_1_of_3 centrar">
+                	<img src="{{asset('public/img/home/5.png')}}">
+                    <h3 class="light-italic">Tiempo Completo</h3><br>
+                    <p class="light">Para empleados que laboran más de 20 días al mes</p>
+                    <div class="caja-precio">
+                    	<p class="bold">hasta<br><span class="extrabold span">$29.500</span><br>Por empleado</p>
                     </div>
                 </div>
             </div>
         </section>
-        <section id="destaquedMsg" class="txtC">
-            <div class="container">
-                <span>La tranquilidad de hacer</span>
-                <span><strong>las cosas bien por muy poco</strong></span>
-            </div>
-        </section>
-        <section id="calculateBlock" class="txtC">
-            <div class="container">
-                <h2>Calcula el valor mensual del servicio de acuerdo al número y tipo de </br>empleados que quieras administrar</h2>
-                <div class="iconsC col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo parcial</br><em>1 - 2 días/semana</em></span>
-                        <div class="lineDown"><p></p></div>
+
+        <section class="fondo-calculadora">
+        	<div id="calculadora">
+            	<h2 class="light grisclarofont">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2>
+                <h4 class="light grisclarofont">Calcula el valor mensual de nuestro servicio de acuerdo al número y tipo
+de empleados que quieras administrar</h4>
+                <div class="calculadora-espacios section group"> <!--calculadora numero 1-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados</span><br>
+                        <span class="extrabold">de tiempo completo</span>
                     </div>
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo parcial</br><em>3 - 4 días/semana</em></span>
-                        <div class="lineDown"><p></p></div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="0"/>
+      					</div>
                     </div>
-                    <div class="col-md-3 col-xs-8">
-                        <span>Tiempo completo</br><em>tiempo completo</em></span>
-                        <div class="lineDown"><p></p></div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span  id="emp1" class="extrabold">0</span><br>
+                        <span id="palabra-empleados1" class="extrabold">empleados</span>
                     </div>
                 </div>
-                <div class="infoResult col-md-8 col-md-offset-2 col-xs-12">
-                    <span class="R1">El valor mensual del servicio</span>
-                    <span class="R2"><em>para tu caso es:</em></span>
-                    <span class="R3"><strong>3</strong> <em>empleados</em> <strong>= $25.000</strong></span>
-                    <p><em>Después del tercer empleado obtén el 10% de descuento.</em></p>
+
+                <div class="calculadora-espacios section group"> <!--calculadora numero 2-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados que van</span><br>
+                        <span class="extrabold">1 - 2 días a lasemana</span>
+                    </div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-id='ex2Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="0"/>
+      					</div>
+                    </div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span  id="emp2" class="extrabold">0</span><br>
+                        <span id="palabra-empleados2" class="extrabold">empleados</span>
+                    </div>
                 </div>
-            </div>
+
+                <div class="calculadora-espacios section group"> <!--calculadora numero 3-->
+                	<div class="no-colorcont col span_1_of_5">
+                    	<span class="light-italic">Empleados que van</span><br>
+                        <span class="extrabold">3 - 4 días a lasemana</span>
+                    </div>
+                    <div class="middle-cont col span_3_of_5">
+                    	<div class="well1">
+  							<input class="ex8" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="0"/>
+      					</div>
+                    </div>
+                    <div class="endcont grisclarofont col span_1_of_5">
+                    	<span  id="emp3" class="extrabold">0</span><br>
+                        <span id="palabra-empleados3" class="extrabold">empleados</span>
+                    </div>
+                </div>
+
+                <div id="texto-finalcalculadora">
+                	<p class="light">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
+                    <div id="resultado-calculadora" class="azulmedio">
+                        <p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold"  id="precio">= $0</span></p>
+                    </div><br>
+                    <p class="light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
+             </div>
+
+           </div>
         </section>
+        <div id="callregistro">
+                <p class="bold">Registrate ahora</p>
+                <p class="light">y obtén un mes de servicio gratis</p>
+                <a href="/register"><div class="callto naranja bold">Prueba un mes gratis</div></a>
+            </div>
+    </main>
+<script type="text/javascript" src="{{asset('public/js/home/bootstrap-slider.js')}}"></script>
+<script type="text/javascript">
+	$(".ex8").slider({
+		tooltip: 'always'
+	});
+
+       function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+     var conta1 = 0;
+     var conta2 = 0;
+     var conta3 = 0;
+     var slider1 = $("#ex1Slider" ).slider({
+          value: 0,
+          min: 0,
+          max: 5,
+    });
+     slider1.on("slide", function(slideEvt) {
+         //console.log($('#ex1Slider').val());
+         //console.log(conta1);
+         conta1 = $('#ex1Slider').val();
+         $("#emp1").text(conta1);
+         funcion();
+         if(conta1 != 1)
+            $("#palabra-empleados1").text("empleados");
+         else
+                $("#palabra-empleados1").text("empleado");
+     });
+     var slider2 = $("#ex2Slider" ).slider({
+      value: 0,
+      min: 0,
+      max: 5,
+    });
+     slider2.on("slide", function(slideEvt) {
+         conta2 = $('#ex2Slider').val();
+         $("#emp2").text(conta2);
+         funcion();
+         if(conta2 != 1)
+            $("#palabra-empleados2").text("empleados");
+         else
+            $("#palabra-empleados2").text("empleado");
+     });
+     //var slider3 = new Slider("#ex3Slider");
+    var slider3 = $("#ex3Slider" ).slider({
+          value: 0,
+          min: 0,
+          max: 5,
+        });
+     slider3.on("slide", function(slideEvt) {
+         conta3 = $('#ex3Slider').val();
+         $("#emp3").text(conta3);
+         funcion();
+         if(conta3 != 1)
+            $("#palabra-empleados3").text("empleados");
+         else
+            $("#palabra-empleados3").text("empleado");
+     });
+    function funcion(){
+        var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
+				if((conta1 + conta2 + conta3) >= 3 )
+					valor = valor * 0.9;
+        $("#total-empleados").text(conta1 + conta2 + conta3);
+        $("#precio").text(" = $"+numberWithCommas(valor));
+        //$("#total-empleados").text(conta1 + conta2 + conta3);
+        if((conta1 + conta2 + conta3) != 1)
+            $("#palabra-empleados").text("empleados");
+         else
+            $("#palabra-empleados").text("empleado");
+
+    }
+
+
+
+</script>
+</body>
+</html>
+
 {% endblock %}

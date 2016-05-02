@@ -1,0 +1,150 @@
+@charset "UTF-8";
+* {margin: 0; padding: 0}
+
+a {text-decoration: none}
+
+h1 {margin: 0}
+
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+.callto:hover {background: #DA6E00;
+border-bottom: 3px solid #794815}
+.callto2:hover {background: #DA6E00;
+border-bottom: 3px solid #794815}
+
+
+#banner-beneficios {
+	width: 100%;
+	height: 310px;
+	background: url("../../../img/home/banner2.png");
+	background-size:cover;
+	background-position:center;
+	padding: 100px 0 0 0;
+    box-sizing: border-box;
+}
+
+#banner-beneficios-cont {width: 1100px;
+	margin: 0 auto;
+	text-align: center}
+
+#banner-beneficios-cont p {color: #5b5b5f; width: 300px; text-align: center; margin: 0 auto}
+
+/*----------------empieza breadcrum y beneficios--------------*/
+
+#breadcrumb {width: 300px; margin: 20px auto; text-align: center;}
+#fondo-video {width: 100%; margin: 0 auto; text-align: center; background: #f7f7f7; padding: 10px 0}
+#slide {width: 800px; margin: 0 auto}
+.espacio {margin: 30px 0}
+.callto2 {width: 200px; height: 35px; margin: 60px auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
+.callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
+#cont-beneficios-list {width: 1100px; margin: 0 auto;}
+#beneficios-title {margin: 30px 0 90px 0}
+.centrar {text-align: center}
+.icon {width: 70%; height: auto}
+.right {text-align: right}
+.left {text-align: left}
+.rightp {margin: 0 0 0 350px}
+#cont-beneficios-list h4 {font-size: 30px; color: #5D5D5D; margin-top: 30px}
+#cont-beneficios-list p {width: 470px; font-size: 15px; color: #87868a; margin-bottom: 30px}
+.linea-punteada {border-top: #d8d9dd dashed 2px;}
+#callregistro {color: #6d6d71; margin: 50px 0 90px 0}
+.bread-style a {color: #87868a}
+
+/*grid*/
+.span_3_of_4 {
+	width: 74.6%;
+}
+
+.span_1_of_4 {
+	width: 23.8%;
+}
+
+/*  SECTIONS  ============================================================================= */
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+/*  GROUPING  ============================================================================= */
+
+
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+/*  GRID COLUMN SETUP   ==================================================================== */
+
+.col {
+	display: block;
+	float:left;
+	margin: 1% 0 1% 1.6%;
+}
+
+.col:first-child { margin-left: 0; } /* all browsers except IE6 and lower */
+
+
+/*-------------------resposive------------ */
+
+@media only screen and (max-width: 1024px) {
+	#banner-beneficios-cont {width: 100%;}
+	#cont-beneficios-list {width: 100%;}
+	.rightp {margin: 0 0 0 295px;}
+	}
+
+@media only screen and (max-width: 900px) {
+	.rightp {margin: 0 0 0 205px;}
+	#slide {width: 90%;}
+	}
+
+@media only screen and (max-width: 800px) {
+	.rightp {margin: 0 0 0 130px;}
+	}
+
+@media only screen and (max-width: 768px) {
+	.rightp {margin: 0 0 0 105px;}}
+@media only screen and (max-width: 640px) {
+	.rightp {margin: 0 0 0 0;}}
+
+
+@media only screen and (max-width: 480px) {
+	.col { margin: 1% 0 1% 0%;}
+	.span_3_of_4 {width: 100%; }
+	.icon {display: none}
+	#cont-beneficios-list {width: 85%;}
+	.left, .right {text-align: center;}
+	#cont-beneficios-list p {width: 100%;}
+	#beneficios-title {margin: 30px;}
+	#banner-beneficios {height: 230px;padding: 50px 0 0 0;}
+	#banner-beneficios-cont h1 {font-size: 25px}
+
+}
+
+@media only screen and (max-width: 375px) {}
+@media only screen and (max-width: 320px) {}
