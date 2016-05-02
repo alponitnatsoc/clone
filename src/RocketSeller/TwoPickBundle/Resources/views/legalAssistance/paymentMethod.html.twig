@@ -2,81 +2,104 @@
 
 {% block fos_user_content %}
     {% block stylesheets %}
-    {{ parent() }}
+        {{ parent() }}
 
-      <style type="text/css">
-        #add_credit_card_credit_card{
-            background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
-            background-position: 2px -117px, 233px -55px;
-            background-size: 120px 361px, 120px 361px;
-            background-repeat: no-repeat;
-            padding-left: 54px;
-            /*width: 225px;*/
-        }
-        #add_credit_card_credit_card.visa {
-            background-position: 2px -159px, 260px -61px;
-        }
-        #add_credit_card_credit_card.visa_electron {
-            background-position: 2px -201px, 260px -61px;
-        }
-        #add_credit_card_credit_card.mastercard {
-            background-position: 2px -243px, 260px -61px;
-        }
-        #add_credit_card_credit_card.maestro {
-            background-position: 2px -285px, 260px -61px;
-        }
-        #add_credit_card_credit_card.discover {
-            background-position: 2px -327px, 260px -61px;
-        }
-        #add_credit_card_credit_card.amex {
-            background-position: 2px -327px, 260px -61px;
-        }
-        #add_credit_card_credit_card.diners_club_carte_blanche {
-            background-position: 2px -327px, 260px -61px;
-        }
-        #add_credit_card_credit_card.valid.visa {
-            background-position: 2px -159px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.visa_electron {
-            background-position: 2px -201px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.mastercard {
-            background-position: 2px -243px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.maestro {
-            background-position: 2px -285px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.discover {
-            background-position: 2px -327px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.amex {
-            background-position: 2px -327px, 233px -82px;
-        }
-        #add_credit_card_credit_card.valid.diners_club_carte_blanche {
-            background-position: 2px -327px, 233px -82px;
-        }
+        <style type="text/css">
+            #add_credit_card_credit_card {
+                background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+                background-position: 2px -117px, 233px -55px;
+                background-size: 120px 361px, 120px 361px;
+                background-repeat: no-repeat;
+                padding-left: 54px;
+                /*width: 225px;*/
+            }
 
-        input[type='number'] {
-            -moz-appearance:textfield;
-        }
+            #add_credit_card_credit_card.visa {
+                background-position: 2px -159px, 260px -61px;
+            }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-    </style>
-{% endblock stylesheets %}
+            #add_credit_card_credit_card.visa_electron {
+                background-position: 2px -201px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.mastercard {
+                background-position: 2px -243px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.maestro {
+                background-position: 2px -285px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.discover {
+                background-position: 2px -327px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.amex {
+                background-position: 2px -327px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.diners_club_carte_blanche {
+                background-position: 2px -327px, 260px -61px;
+            }
+
+            #add_credit_card_credit_card.valid.visa {
+                background-position: 2px -159px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.visa_electron {
+                background-position: 2px -201px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.mastercard {
+                background-position: 2px -243px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.maestro {
+                background-position: 2px -285px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.discover {
+                background-position: 2px -327px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.amex {
+                background-position: 2px -327px, 233px -82px;
+            }
+
+            #add_credit_card_credit_card.valid.diners_club_carte_blanche {
+                background-position: 2px -327px, 233px -82px;
+            }
+
+            input[type='number'] {
+                -moz-appearance: textfield;
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+        </style>
+    {% endblock stylesheets %}
+    <div class="row">
+        {% if errno is defined %}
+            <span class="alert alert-danger">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
+                    </span>
+        {% endif %}
+    </div>
+
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-            <br /><br />
+
+            <br/><br/>
             <h3>
                 <strong><i>No corras riesgos, nuestro consultorio jurídico está listo para orientarte</i></strong>
             </h3>
-            <br />
+            <br/>
             <h5 style="font-weight: lighter;">
                 Expón tu caso y nuestros abogados podrán ofrecerte un diagnóstico que te permita saber cómo abordarlo*
             </h5>
-            <br />
+            <br/>
         </div>
     </div>
     <div class="row">
@@ -86,14 +109,15 @@
         </div>
     </div>
     <div class="row">
-    <br />
+        <br/>
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <h4>
-                <i>Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes </i><strong>24 horas hábiles</strong>
+                <i>Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes </i><strong>24
+                    horas hábiles</strong>
             </h4>
         </div>
     </div>
-    <br />
+    <br/>
     <div class="col-sm-8 col-sm-offset-2" style="text-align:center;">
         <h3>Pagar con:</h3>
         <!--
@@ -103,113 +127,110 @@
         <div class="col-sm-12 text-center">
             <span class="debitPayBtn btn btn-symplifica">Tarjeta Débito</span>
         </div>
-        
+
     </div>
     <div id="" class="containerForm row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
 
         <div class="">
             <div class="">
-                {% if errno is defined %}
-                    <span class="alert alert-danger">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
-                    </span>
-                {% endif %}
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
                 <div id='' class='creditCardForm col-md-12' style="display:none;">
-                    <hr />
+                    <hr/>
                     <h3 class="text-center">Información de tu tarjeta de crédito</h3>
-                    <br />
-                    {{ form_start(form) }}
+                    <br/>
                     <div class="form-black form-group">
-                        {{form_row(form.credit_card)}}
+                        {{ form_row(form.credit_card) }}
                     </div>
 
                     <div class="form-black form-group">
-                        {{form_row(form.name_on_card)}}
+                        {{ form_row(form.name_on_card) }}
                     </div>
                     <div class="fields">
-                        
-                    </div>
-                    <div class="form-black form-group">
-                        {{form_row(form.phoneNumber)}}
-                    </div>
 
+                    </div>
                     <div class="form-black form-group">
                         <div class="col-md-4">
-                            {{form_row(form.expiry_year)}}
+                            {{ form_row(form.expiry_year) }}
                         </div>
                         <div class="col-md-4">
-                            {{form_row(form.expiry_month)}}
+                            {{ form_row(form.expiry_month) }}
                         </div>
                         <div class="col-md-4">
-                            {{form_row(form.cvv)}}
+                            {{ form_row(form.cvv) }}
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit"  class="btn register-AS1 btn-symplifica btn">Continuar</button>
-                </div>
+                        <button type="submit" class="btn register-AS1 btn-symplifica btn">Continuar</button>
+                    </div>
                 </div>
                 <div class="debitCardForm col-md-12" style="display:none;">
-                    <hr />
+                    <hr/>
                     <h3 class="text-center">Información de tu cuenta bancaria</h3>
-                    <br />
+                    <br/>
                     <div class="commun-fields">
                         <div class="form-black form-group">
-                        {{form_row(form.personName)}}
+                            {{ form_row(form.personName) }}
                         </div>
                         <div class="form-black form-group">
-                            {{form_row(form.lastName1)}}
+                            {{ form_row(form.lastName1) }}
                         </div>
                         <div class="form-black form-group">
-                            {{form_row(form.lastName2)}}
+                            {{ form_row(form.lastName2) }}
                         </div>
                         <div class="form-black form-group">
-                            {{form_row(form.documentType)}}
+                            {{ form_row(form.documentType) }}
                         </div>
                         <div class="form-black form-group">
-                            {{form_row(form.documentNumber)}}
+                            {{ form_row(form.documentNumber) }}
                         </div>
                     </div>
                     <div class="fields-debit">
-                        
+
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.documentExpeditionDate)}}
+                        {{ form_row(form.documentExpeditionDate) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.phoneNumber)}}
+                        {{ form_row(form.phoneNumber) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.civilStatus)}}
+                        {{ form_row(form.civilStatus) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.mainAddress)}}
+                        {{ form_row(form.mainAddress) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.department)}}
+                        {{ form_row(form.department) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.city)}}
+                        {{ form_row(form.city) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.bank)}}
+                        {{ form_row(form.bank) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.accountType)}}
+                        {{ form_row(form.accountType) }}
                     </div>
                     <div class="form-black form-group">
-                        {{form_row(form.accountNumber)}}
+                        {{ form_row(form.accountNumber) }}
                     </div>
                     <div class="col-md-12" style="margin: 30px 0 20px 0;">
                         <div class="col-md-1">
                         </div>
                         <div class="col-md-11 center">
                             <input type="checkbox" class="tos" id="tos" name="tos">
-                            <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
+                            <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos
+                                    y condiciones</a> de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los
+                                servicios prestados por Symplifica y de los pagos de nómina y aportes de mis
+                                empleados</label>
                         </div>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="submit-debit btn register-AS1 btn-symplifica btn" disabled="true">Continuar</button>
-                </div>
+                        <button type="submit" class="submit-debit btn register-AS1 btn-symplifica btn" disabled="true">
+                            Continuar
+                        </button>
+                    </div>
                 </div>
                 <input class="methodTypeInput" name="methodType" value="" hidden="true"></input>
                 {{ form_end(form) }}
@@ -217,15 +238,15 @@
         </div>
     </div>
     <div class="col-sm-12">
-        <hr style="width: 75%;" />
+        <hr style="width: 75%;"/>
     </div>
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <small style="font-weight: lighter;"><i>
-                 * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se
-haga cargo lo cual también incluye completar tu registro en Symplifica</i>
+                    * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se
+                    haga cargo lo cual también incluye completar tu registro en Symplifica</i>
             </small>
-            <br />
+            <br/>
         </div>
     </div>
 {% endblock %}
@@ -233,17 +254,60 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
+        function jsonToHTML(data) {
+            var htmls = "<option value=''>Seleccionar una opción</option>";
+            for (var i = 0; i < data.length; i++) {
+                htmls += "<option value='" + data[i].id_city + "'>" + data[i].name + "</option>";
+            }
+            return htmls;
+        }
+
         $(document).ready(function () {
-            
-            
+
+            $('#legalAssistancePay_department').filter(function () {
+                return this.id.match(/department/);
+            }).change(function () {
+                var $department = $(this);
+                $("#legalAssistancePay_city").html("<option value =''>Cargando Ciudades...</option>");
+
+                // Submit data via AJAX to the form's action path.
+                $.ajax({
+                    method: "POST",
+                    url: "/api/public/v1/cities",
+                    data: {department: $department.val()}
+                }).done(function (data) {
+                    $('#legalAssistancePay_city').html(
+                            // ... with the returned one from the AJAX response.
+                            jsonToHTML(data)
+                    );
+                });
+            });
+
             var validator = null;
             $.getScript("/public/js/jquery.validate.min.js").done(function () {
                 validator = $("form[name='legalAssistancePay']").validate({
                     //onfocusout: true,
                     rules: {
+                        "legalAssistancePay[personName]": {required: true},
+                        "legalAssistancePay[lastName1]": {required: true},
+                        "legalAssistancePay[lastName2]": {required: false},
+                        "legalAssistancePay[documentType]": {required: true},
+                        "legalAssistancePay[documentNumber]": {required: true},
+                        "legalAssistancePay[documentExpeditionDate][day]": {required: true},
+                        "legalAssistancePay[documentExpeditionDate][month]": {required: true},
+                        "legalAssistancePay[documentExpeditionDate][year]": {required: true},
+                        "legalAssistancePay[civilStatus]": {required: true},
+                        "legalAssistancePay[mainAddress]": {required: true},
+                        "legalAssistancePay[department]": {required: true},
+                        "legalAssistancePay[city]": {required: true},
+                        "legalAssistancePay[bank]": {required: true},
+                        "legalAssistancePay[accountType]": {required: true},
+                        "legalAssistancePay[accountNumber]": {required: true},
+                        "legalAssistancePay[phoneNumber]": {required: true},
                         "legalAssistancePay[credit_card]": {required: true, number: true, min: 1, maxlength: 19},
                         "legalAssistancePay[name_on_card]": {required: true},
-                        "legalAssistancePay[expiry_date_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                        "legalAssistancePay[expiry_date_month]": {
+                            required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
                                 // min needs a parameter passed to it
                                 param: function () {
                                     var date = new Date();
@@ -263,13 +327,75 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                                     }
                                     return false;
                                 }
-                            }},
-                        "legalAssistancePay[expiry_date_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: 2016},
-                        "legalAssistancePay[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 1},
-                        "legalAssistancePay[documentType]": {required: true}
+                            }
+                        },
+                        "legalAssistancePay[expiry_date_year]": {
+                            required: true,
+                            number: true,
+                            maxlength: 4,
+                            minlength: 4,
+                            max: 9999,
+                            min: 2016
+                        },
+                        "legalAssistancePay[cvv]": {
+                            required: true,
+                            number: true,
+                            maxlength: 4,
+                            minlength: 3,
+                            max: 9999,
+                            min: 1
+                        },
 
                     },
                     messages: {
+                        "legalAssistancePay[personName]": {
+                            required: "Por favor ingresa tu nombre"
+                        },
+                        "legalAssistancePay[lastName1]": {
+                            required: "Por favor ingresa tu primer apellido"
+                        },
+                        "legalAssistancePay[lastName2]": {
+                            required: "Por favor ingresa tu segundo apellido"
+                        },
+                        "legalAssistancePay[documentType]": {
+                            required: "Por favor seleccione el tipo de documento"
+                        },
+                        "legalAssistancePay[documentNumber]": {
+                            required: "Por favor seleccione el número de documento"
+                        },
+                        "legalAssistancePay[documentExpeditionDate][day]": {
+                            required: "Por favor indique dia de expedición"
+                        },
+                        "legalAssistancePay[documentExpeditionDate][month]": {
+                            required: "Por favor indique mes de expedición"
+                        },
+                        "legalAssistancePay[documentExpeditionDate][year]": {
+                            required: "Por favor indique año de expedición"
+                        },
+                        "legalAssistancePay[civilStatus]": {
+                            required: "Por favor selecciona estado civil"
+                        },
+                        "legalAssistancePay[mainAddress]": {
+                            required: "Por favor ingresa dirección"
+                        },
+                        "legalAssistancePay[department]": {
+                            required: "Por favor seleccione departamento"
+                        },
+                        "legalAssistancePay[city]": {
+                            required: "Por favor selecciona ciudad"
+                        },
+                        "legalAssistancePay[bank]": {
+                            required: "Por favor selecciona banco"
+                        },
+                        "legalAssistancePay[accountType]": {
+                            required: "Por favor selecciona tipo de cuenta"
+                        },
+                        "legalAssistancePay[accountNumber]": {
+                            required: "Por favor ingresa número de cuenta"
+                        },
+                        "legalAssistancePay[phoneNumber]": {
+                            required: "Por favor ingresa un número de teléfono valido"
+                        },
                         "legalAssistancePay[credit_card]": {
                             required: "Por favor ingresa un número valido de la tarjeta",
                             number: "ingresa solamente dígitos",
@@ -315,10 +441,6 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                             max: "minimo 001",
                             min: "maximo 9999"
                         },
-                        "legalAssistancePay[documentType]": {required: "Por favor seleccione el tipo de documento"}
-
-                        , "legalAssistancePay[phoneNumber]": {required: "Por favor ingresa un número de teléfono valido"}
-
                     }
                 });
             });
@@ -333,7 +455,6 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                     } else {
                         return $(this).removeClass('valid');
                     }
-                    alert(result);
                 });
             });
             $('form').on('submit', function (event) {
@@ -342,29 +463,28 @@ haga cargo lo cual también incluye completar tu registro en Symplifica</i>
                 }
                 //return false;
             });
-            $('.creditPayBtn').on("click",function(){
+            $('.creditPayBtn').on("click", function () {
                 $('.creditCardForm').fadeIn("slow");
                 $('.debitCardForm').fadeOut("slow");
                 var commun = $(".commun-fields");
                 $(".fields").append(commun);
                 $('.methodTypeInput').val("cre");
             });
-            $('.debitPayBtn').on("click",function(){
+            $('.debitPayBtn').on("click", function () {
                 $('.debitCardForm').fadeIn("slow");
                 $('.creditCardForm').fadeOut("slow");
                 var commun = $(".commun-fields");
                 $(".fields-debit").append(commun);
                 $('.methodTypeInput').val("deb");
             });
-            $('.tos').on("click",function(){                
-                if ( $('.tos').is(':checked') ) {
+            $('.tos').on("click", function () {
+                if ($(this).is(':checked')) {
                     $(".submit-debit").removeAttr("disabled");
-                }else{
-                    $(".submit-debit").attr("disabled","true");
+                } else {
+                    $(".submit-debit").attr("disabled", "true");
                 }
             });
 
-            
 
         });
     </script>

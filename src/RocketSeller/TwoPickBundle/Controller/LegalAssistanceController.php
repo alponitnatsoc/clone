@@ -2,6 +2,8 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\City;
+use RocketSeller\TwoPickBundle\Entity\Department;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -30,7 +32,6 @@ class LegalAssistanceController extends Controller
 
     public function legalAcceptanceAction($state)
     {
-
         return $this->render('RocketSellerTwoPickBundle:legalAssistance:legalAcceptance.html.twig',
             array('state' => $state));
     }
@@ -51,12 +52,12 @@ class LegalAssistanceController extends Controller
             'method' => 'POST'))
             ->add('name_on_card', 'text', array(
                 'label' => 'Nombre en la tarjeta',
-                // 'required' => true,
+                'required' => true,
                 'attr' => array('placeholder' => 'Nombre en la tarjeta')
             ))
             ->add('credit_card', 'integer', array(
                 'label' => 'Número tarjeta de crédito',
-                // 'required' => true,
+                'required' => true,
                 'attr' => array(
                     'placeholder' => '1234 5678 9012 3456',
                     'min' => 1,
@@ -65,7 +66,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('expiry_month', 'integer', array(
                 'label' => 'Fecha de vencimiento',
-                // 'required' => true,
+                'required' => true,
                 'attr' => array(
                     'placeholder' => 'Mes',
                     'min' => 01,
@@ -77,7 +78,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('expiry_year', 'integer', array(
                 'label' => 'Fecha de vencimiento',
-                // 'required' => true,
+                'required' => true,
                 'attr' => array(
                     'placeholder' => 'Año',
                     'min' => $minYear,
@@ -89,7 +90,7 @@ class LegalAssistanceController extends Controller
             ))
             ->add('cvv', 'integer', array(
                 'label' => 'Código de seguridad:',
-                // 'required' => true,
+                'required' => true,
                 'attr' => array(
                     'placeholder' => '123',
                     'min' => 1,
@@ -100,22 +101,24 @@ class LegalAssistanceController extends Controller
                 )
             ))
             ->add('personName', 'text', array(
-                'label' => 'Nombres',
-                // 'required' => true,
+                'label' => 'Nombres*',
+                'required' => true,
                 'attr' => array(
-                    'placeholder' => $user->getPersonPerson()->getNames(),
+                    'placeholder' => 'Nombres',
+                    'value' => $user->getPersonPerson()->getNames(),
                 )
             ))
             ->add('lastName1', 'text', array(
-                'label' => 'Primer apellido',
+                'label' => 'Primer apellido*',
                 'required' => true,
                 'attr' => array(
-                    'placeholder' => $user->getPersonPerson()->getLastName1(),
+                    'placeholder' => 'Primer apellido',
+                    'value' => $user->getPersonPerson()->getLastName1(),
                 )
             ))
             ->add('lastName2', 'text', array(
-                'label' => 'segundo apellido',
-                // 'required' => true,
+                'label' => 'Segundo apellido*',
+                'required' => false,
                 'attr' => array(
                     'placeholder' => 'Segundo apellido',
                 )
@@ -131,7 +134,7 @@ class LegalAssistanceController extends Controller
                 'expanded' => false,
                 'label' => 'Estado civil*',
                 'placeholder' => 'Seleccionar una opción',
-                // 'required' => true
+                'required' => true
             ))
             ->add('documentType', 'choice', array(
                 'choices' => array(
@@ -143,11 +146,11 @@ class LegalAssistanceController extends Controller
                 'expanded' => false,
                 'label' => 'Tipo de documento*',
                 'placeholder' => 'Seleccionar una opción',
-                // 'required' => true
+                'required' => true
             ))
             ->add('documentNumber', 'text', array(
-                'label' => 'Número de documento',
-                // 'required' => true,
+                'label' => 'Número de documento*',
+                'required' => true,
                 'attr' => array(
                     'placeholder' => 'Número de documento',
                     'value' => $person->getDocument()
@@ -159,13 +162,13 @@ class LegalAssistanceController extends Controller
                 ),
                 'years' => range(2015, 1900),
                 'label' => 'Fecha de expedición de documento de identidad*',
-                // 'required' => true
+                'required' => true
             ))
             ->add('phoneNumber', 'text', array(
-                'label' => 'Teléfono',
-                // 'required' => true,
+                'label' => 'Teléfono*',
+                'required' => true,
                 'attr' => array(
-                    'placeholder' => 'Número de teléfono',
+                    'placeholder' => 'Número de teléfono celular',
                 )
             ))
             ->add('department', 'entity', array(
@@ -175,12 +178,12 @@ class LegalAssistanceController extends Controller
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-
                 'placeholder' => 'Seleccionar una opción',
-                // 'required' => true
+                'required' => true
             ))
             ->add('mainAddress', 'text', array(
-                'label' => 'Dirección*'
+                'label' => 'Dirección*',
+                'required' => true
             ))
             ->add('city', 'entity', array(
                 'label' => 'Ciudad*',
@@ -189,39 +192,41 @@ class LegalAssistanceController extends Controller
                 'property' => 'name',
                 'multiple' => false,
                 'expanded' => false,
-
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
             ->add('bank', 'entity', array(
-                'label' => 'Banco',
-                'required' => false,
+                'label' => 'Banco*',
+                'required' => true,
                 'class' => 'RocketSellerTwoPickBundle:Bank',
-                'empty_value' => 'Seleccione',
+                'placeholder' => 'Seleccionar una opción',
+                'empty_value' => 'Seleccionar una opción',
                 'choice_label' => 'name'
             ))
             ->add('accountType', 'entity', array(
-                'label' => 'Tipo de Cuenta',
-                'required' => false,
+                'label' => 'Tipo de Cuenta*',
+                'required' => true,
                 'class' => 'RocketSellerTwoPickBundle:AccountType',
-                'empty_value' => 'Seleccione',
+                'placeholder' => 'Seleccionar una opción',
+                'empty_value' => 'Seleccionar una opción',
                 'choice_label' => 'name'
             ))
-            ->add('accountNumber', 'integer', array(
-                'label' => 'Número de la cuenta',
-                'required' => false,
+            ->add('accountNumber', 'text', array(
+                'label' => 'Número de la cuenta*',
+                'required' => true,
                 'attr' => array(
                     'placeholder' => 'Número de la cuenta',
                     'min' => 1,
                     'minlength' => 1,
-                    'step' => 1
+                    'step' => 1,
+                    'pattern' => '\d*'
                 )
             ))
             ->getForm();
 
         $form->handleRequest($request);
+        dump($form->getData());
         if ($form->isValid()) {
-
 
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
@@ -231,22 +236,54 @@ class LegalAssistanceController extends Controller
             $person = $user->getPersonPerson();
             $person->setDocumentType($form->get("documentType")->getData());
             $person->setDocument($form->get("documentNumber")->getData());
-            $phone = new Phone();
-            $phone->setPhoneNumber($form->get("phoneNumber")->getData());
-            $person->setDocument($form->get("documentNumber")->getData());
-            $person->addPhone($phone);
 
-            $employer = new Employer();
-            $employer->setPersonPerson($person);
-            $employer->setEmployerType("Persona");
-            $employer->setRegisterState(10);
-            $person->setEmployer($employer);
+            /* @var $department Department */
+            //$department = $this->getDoctrine()
+            //   ->getRepository('RocketSellerTwoPickBundle:Department')
+            //   ->find($form->get("department")->getData());
+
+            /* @var $city City */
+            //$city = $this->getDoctrine()
+            //   ->getRepository('RocketSellerTwoPickBundle:City')
+            //  ->find($form->get("city")->getData());
+
+            $documentExpirationDate = new \DateTime();
+            $documentExpirationDate->setDate($form->get("documentExpeditionDate")->getData()->format("Y"), $form->get("documentExpeditionDate")->getData()->format("m"), $form->get("documentExpeditionDate")->getData()->format("d"));
+
+            $person->setLastName2($form->get("lastName2")->getData());
+            $person->setDocumentExpeditionDate($documentExpirationDate);
+            $person->setCivilStatus($form->get("civilStatus")->getData());
+            $person->setCity($form->get("city")->getData());
+            $person->setDepartment($form->get("department")->getData());
+            $person->setMainAddress($form->get("mainAddress")->getData());
+
+            if ($person->getPhones()->isEmpty()) {
+                $phone = new Phone();
+                $phone->setPhoneNumber($form->get("phoneNumber")->getData());
+                $person->addPhone($phone);
+            } else {
+                /* @var $phone Phone */
+                $phone = $person->getPhones()->first();
+                $phone->setPhoneNumber($form->get("phoneNumber")->getData());
+            }
+            $em->persist($phone);
+
+            if ($person->getEmployer() == null) {
+                $employer = new Employer();
+                $employer->setPersonPerson($person);
+                $employer->setEmployerType("Persona");
+                $employer->setRegisterState(10);
+                $person->setEmployer($employer);
+                $em->persist($employer);
+            }
+
+            $em->persist($person);
+            $em->flush();
 
             $expiryMonth = $form->get("expiry_month")->getData();
             if (strlen($expiryMonth) < 2) {
                 $expiryMonth = "0" . $form->get("expiry_month")->getData();
             }
-            $data = $form->getData();
             if ($methodType == "cre") {
                 $request->setMethod("POST");
                 $request->request->add(array(
@@ -254,7 +291,6 @@ class LegalAssistanceController extends Controller
                     "documentNumber" => $person->getDocument(),
                     "credit_card" => $form->get("credit_card")->getData(),
                     "expiry_date_year" => $form->get("expiry_year")->getData(),
-
                     "expiry_date_month" => $expiryMonth,
                     "cvv" => $form->get("cvv")->getData(),
                 ));
@@ -265,7 +301,6 @@ class LegalAssistanceController extends Controller
                 $methodId = $response->{'response'}->{'method-id'};
 
                 if ($insertionAnswer->getStatusCode() != 201) {
-
                     return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
                         'form' => $form->createView(),
                         'errno' => "Not a valid Credit Card check the data again"
@@ -274,22 +309,6 @@ class LegalAssistanceController extends Controller
                 dump("se quiere pagar con credito");
                 //return $this->payLegalAssistance($methodId);
             } else if ($methodType == "deb") {
-                $department = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:Department')
-                    ->find($form->get("department")->getData());
-                $city = $this->getDoctrine()
-                    ->getRepository('RocketSellerTwoPickBundle:City')
-                    ->find($form->get("city")->getData());
-                $documentExpirationDate = new \DateTime();
-                $documentExpirationDate->setDate($form->get("documentExpeditionDate")->getData()->format("Y"), $form->get("documentExpeditionDate")->getData()->format("m"), $form->get("documentExpeditionDate")->getData()->format("d"));
-                $person = $user->getPersonPerson();
-                $person->setLastName2($form->get("lastName2")->getData());
-                $person->setDocument($form->get("lastName2")->getData());
-                $person->setDocumentExpeditionDate($documentExpirationDate);
-                $person->setCivilStatus($form->get("civilStatus")->getData());
-                $person->setCity($city);
-                $person->setDepartment($department);
-                $person->setMainAddress($form->get("mainAddress")->getData());
 
                 // if ($this->addToHighTech($user)) 
                 // {
@@ -309,45 +328,47 @@ class LegalAssistanceController extends Controller
                 // dump($request);
                 // exit();
                 $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('_format' => 'json'));
-                // if ($insertionAnswer->getStatusCode() != 201) {
-                dump($request->get("accountNumber"));
-                dump($insertionAnswer);
-                exit();
-                if (false) {
+
+                //if (false) {
+                if ($insertionAnswer->getStatusCode() != 201 || $insertionAnswer->getStatusCode() != 200) {
                     return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
                         'form' => $form->createView(),
                         'errno' => "Error agregando cuenta, intentalo mas tarde"
                     ));
                 }
-
-                dump("se quiere pagar con debito");
-
             }
-            //descomentar ojo  
-            // $em->persist($person);
-            // $em->persist($employer);
-            // $em->persist($phone);
-            // $em->flush();
-            $format = array('_format' => 'json');
-
-            $paymentMethods = array("0-101", "1-101");
-            // $paymentMethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods',array('idUser' => $user->getId()), $format);
-
-            //if varios
-            if (true) {
-                return $this->render('RocketSellerTwoPickBundle:legalAssistance:listPaymentMethod.html.twig', array(
-                    'paymentMethods' => $paymentMethods
-                ));
-            } else {
-                return $this->payLegalAssistance($methodId);
-            }
-            //TODO NovoPayment
-            //cambiar los campos requeridos.
+            return $this->redirectToRoute('legal_payment_list');
 
         }
         return $this->render('RocketSellerTwoPickBundle:legalAssistance:paymentMethod.html.twig', array(
             'form' => $form->createView(),
         ));
+    }
+
+    public function startPaymentListAction(Request $request)
+    {
+        $user = $this->getUser();
+        if ($request->get('paymentMethod')) {
+            //dump($request->get('paymentMethod'));
+            return $this->payLegalAssistance($request->get('paymentMethod')[0]);
+        } else {
+            $format = array('_format' => 'json');
+
+            //$paymentMethods = array("0-101", "1-101");
+            $paymentMethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), $format);
+            $paymentMethodsContent = json_decode($paymentMethods->getContent(), true);
+            dump($paymentMethodsContent);
+            //die();
+            //if varios
+            dump(count($paymentMethodsContent['payment-methods']));
+            if (count($paymentMethodsContent['payment-methods']) > 1) {
+                return $this->render('RocketSellerTwoPickBundle:legalAssistance:listPaymentMethod.html.twig', array(
+                    'paymentMethods' => $paymentMethodsContent['payment-methods']
+                ));
+            } else {
+                return $this->payLegalAssistance($paymentMethodsContent['payment-methods'][0]['method-id']);
+            }
+        }
     }
 
     public function getPaymentValue()
@@ -360,6 +381,7 @@ class LegalAssistanceController extends Controller
         $totalValue = $product->getPrice() * (1 + $tax);
         return $totalValue;
     }
+
     public function payLegalAssistance($id)
     {
 
@@ -370,10 +392,10 @@ class LegalAssistanceController extends Controller
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:ExpressRegistrationRest:postPayRegisterExpress', array('id' => $user->getId(), 'idPayMethod' => $id), $format);
 
         if ($insertionAnswer->getStatusCode() == 200) {
-            $flag = $this->changeFlagAction();
-            return $this->successExpress();
+            //$flag = $this->changeFlagAction();
+            //$user->setLegalFlag(0);
+            return $this->redirectToRoute('legal_payment_success');
             exit();
-
             //return $this->redirectToRoute('DashBoard');
         } elseif ($insertionAnswer->getStatusCode() == 404) {
             dump("Procesando");
@@ -389,10 +411,10 @@ class LegalAssistanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
-        if($user->getLegalFlag()!=-1){
-            $urlToSend='edit_profile';
-        }else{
-            $urlToSend='register_employee';
+        if ($user->getLegalFlag() != -1) {
+            $urlToSend = 'edit_profile';
+        } else {
+            $urlToSend = 'register_employee';
         }
 
         $user->setLegalFlag($flag);
@@ -401,6 +423,11 @@ class LegalAssistanceController extends Controller
 
 
         return $this->redirectToRoute($urlToSend);
+    }
+
+    public function successPaymentAction()
+    {
+        return $this->successExpress();
     }
 
     public function successExpress()

@@ -1,6 +1,34 @@
-{% for pay in paymentMethods %}
-	<div class="paymethod">
-		<a href="/api/public/v1/pays/{{app.user.id }}/registers/{{pay}}/expresses">{{pay}}</a>		
-	</div>
-	
-{% endfor %}
+{% extends "::base.html.twig" %}
+
+{% block fos_user_content %}
+    {% block stylesheets %}
+        {{ parent() }}
+    {% endblock %}
+
+    <form name="listPaymethod" method="POST" action="{{ path('legal_payment_list') }}">
+        <div class="row margin-all">
+            <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+                <h4>
+                    Se han encontrado varios metodos de pago asociados a su cuenta, con cual desea realizar el pago?
+                </h4>
+            </div>
+        </div>
+        <div class="row margin-all">
+            <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+                <select name="paymentMethod[]" class="form-control paymentMethod" required="required">
+                    {% for paymentMethod in paymentMethods %}
+                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row margin-all">
+            <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+                <button type="submit" class="submit-debit btn register-AS1 btn-symplifica btn">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
