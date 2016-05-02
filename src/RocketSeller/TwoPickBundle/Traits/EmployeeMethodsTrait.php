@@ -71,11 +71,20 @@ trait EmployeeMethodsTrait
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
+        $employer = $user->getPersonPerson()->getEmployer();
         $person = $realEmployee->getPersonPerson();
+
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
-
+        $employerHasEmployee  = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
+                'employerEmployer'=> $employer,
+                'employeeEmployee'=> $emplyoee,
+                'status' => 1
+            ));
+        $contract = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
+                'employerHasEmployee'=> $employerHasEmployee,                
+                'status' => 1                
+            ));
         $docs = array('Cedula' => false, 'Contrato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
@@ -84,6 +93,7 @@ trait EmployeeMethodsTrait
                     break;
                 }
             }
+            // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
                 if ($type == 'Cedula') {
@@ -92,11 +102,15 @@ trait EmployeeMethodsTrait
                 } elseif ($type == 'Contrato') {
                     $msj = "Subir copia del contrato de " . $person->getFullName();
                     $documentType = 'Contrato';
+                    $msj = "Generar contrato con symplifica";
+                    $url = $this->generateUrl("download_documents", array('id'=>$contract->getIdContract(),'ref' => "contrato", 'type' => 'html'));
+
+                    $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Bajar");                  
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url);
+                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType);
             }
         }
     }
@@ -144,7 +158,7 @@ trait EmployeeMethodsTrait
                     $documentType = 'Cedula';
                 } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " . $person->getFullName();
-                    $documentType = 'Contrato';
+                    $documentType = 'RUT';
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $msj = "Subir carta de autorización symplifica de " . $person->getFullName();
                     $documentType = 'Carta autorización Symplifica';
@@ -152,16 +166,17 @@ trait EmployeeMethodsTrait
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url);
+                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType);
             }
         }
     }
 
-    protected function createNotification($person, $descripcion, $url, $action = "Subir")
+    protected function createNotification($person, $descripcion, $url,$documentType = null, $action = "Subir" )
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
         $notification->setStatus(1);
+        $notification->setDocumentTypeDocumentType($documentType);
         $notification->setType('alert');
         $notification->setDescription($descripcion);
         $notification->setRelatedLink($url);

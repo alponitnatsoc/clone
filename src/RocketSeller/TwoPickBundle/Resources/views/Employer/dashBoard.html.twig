@@ -440,8 +440,13 @@
                                 {% if notification.accion %}
 
                                     {% if (notification.accion|lower|trim) == "subir" %}
-
-                                        <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                        {% if notification.documentTypeDocumentType == contractType %}
+                                            <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                            <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                        {% else %}
+                                            <span href="{{ notification.relatedlink }}/{{notification.id}}" class="download-link"> {{ notification.accion }}</span>
+                                        {% endif %}
+                                        
                                         
                                     {% else %}
                                         <a href="{{ notification.relatedlink }}" class="action-link">{{ notification.accion }}</a>

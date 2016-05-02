@@ -95,6 +95,15 @@ class Notification {
     private $deadline;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\DocumentType
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\DocumentType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="document_type_id_document_type", referencedColumnName="id_document_type")
+     * })
+     */
+    private $documentTypeDocumentType;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Liquidation
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Liquidation", inversedBy="notifications")
      * @ORM\JoinColumns({
@@ -361,5 +370,29 @@ class Notification {
     public function getLiquidation()
     {
         return $this->liquidation;
+    }
+
+    /**
+     * Set documentTypeDocumentType
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType
+     *
+     * @return Notification
+     */
+    public function setDocumentTypeDocumentType(\RocketSeller\TwoPickBundle\Entity\DocumentType $documentTypeDocumentType = null)
+    {
+        $this->documentTypeDocumentType = $documentTypeDocumentType;
+
+        return $this;
+    }
+
+    /**
+     * Get documentTypeDocumentType
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\DocumentType
+     */
+    public function getDocumentTypeDocumentType()
+    {
+        return $this->documentTypeDocumentType;
     }
 }
