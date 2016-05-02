@@ -326,7 +326,7 @@ use EmployerMethodsTrait;
                     'docType' => $employeePerson->getDocumentType(),
                     'docNumber' => $employeePerson->getDocument(),
                     'residencia' => $employeePerson->getNeighborhood(),
-                    'tel' => $employeePerson->getPhones()->getValues()[0]
+                    'tel' => $employeePerson->getPhones()[0]
                 );
 
                 $employerInfo = array(
@@ -404,6 +404,8 @@ use EmployerMethodsTrait;
                     'employer' => $employerInfo,
                     'contract' => $contractInfo
                 );
+                // dump($data);
+                // exit();
                 break;
             case "otrosi":
             case "cert-laboral-activo":
