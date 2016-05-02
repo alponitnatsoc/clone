@@ -233,8 +233,6 @@ class SubscriptionController extends Controller
 
     public function askDataCreditQuestionsAction($userId,Request $request)
     {
-        dump($request);
-        die();
         $debitData=$request->request->all();
         /** @var Request $request */
         $request = $this->container->get('request');
@@ -305,8 +303,6 @@ class SubscriptionController extends Controller
                 'form' => $realForm->createView(),
             ));
         } elseif($user->getDataCreditStatus()==1) {
-            dump($request);
-            die();
             $k=1;
             $formdone=$request->request->get("form");
 
