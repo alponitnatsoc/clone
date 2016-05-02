@@ -665,9 +665,9 @@ trait SubscriptionMethodsTrait
                     if ($payType->getPayrollCode() != 'EFE') {
                         $paymentMethodId = $payMC->getAccountTypeAccountType();
                         if ($paymentMethodId) {
-                            if($payType->getName()=="Daviplata"){
-                                $paymentMethodId="DP";
-                            }else{
+                            if ($payType->getName() == "Daviplata") {
+                                $paymentMethodId = "DP";
+                            } else {
                                 $paymentMethodId = $payMC->getAccountTypeAccountType()->getName() == "Ahorros" ? "AH" : ($payMC->getAccountTypeAccountType()->getName() == "Corriente" ? "CC" : "EN");
                             }
                         }
@@ -962,10 +962,9 @@ trait SubscriptionMethodsTrait
         /* @var $ProcedureType ProcedureType */
         $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
-            '$employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
-            '$idProcedureType' => $ProcedureType->getIdProcedureType()
-        ), array('_format' => 'json')
-        );
+            'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
+            'idProcedureType' => $ProcedureType->getIdProcedureType()
+        ), array('_format' => 'json'));
         $this->validateDocuments($user);
         $this->addToSQL($user);
         $em->persist($user);
