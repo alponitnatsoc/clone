@@ -959,17 +959,23 @@ trait SubscriptionMethodsTrait
             $startDate = $date->format('Y-m-d');
             $user->setIsFreeTo($date);
         }
+        $this->crearTramites($user);
+        $this->validateDocuments($user);
+        $this->addToSQL($user);
+        $em->persist($user);
+        $em->flush();
+        return true;
+    }
+
+    protected function crearTramites(User $user)
+    {
         /* @var $ProcedureType ProcedureType */
         $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
             'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
             'idProcedureType' => $ProcedureType->getIdProcedureType()
         ), array('_format' => 'json'));
-        $this->validateDocuments($user);
-        $this->addToSQL($user);
-        $em->persist($user);
-        $em->flush();
-        return true;
+        return $procedure;
     }
 
     protected function getMethodId($documentNumber)
