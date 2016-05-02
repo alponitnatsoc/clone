@@ -13,7 +13,13 @@ legal_assist:
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:index }
 legal_payment:
     path:      /legal-payment
-    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPayment } 
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPayment }
+legal_payment_list:
+    path:      /legal-payment/list
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:startPaymentList }
+legal_payment_success:
+    path:      /legal-payment/success
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:successPayment }
 change_flag:
     path:      /change-flag/{flag}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:changeFlag}
