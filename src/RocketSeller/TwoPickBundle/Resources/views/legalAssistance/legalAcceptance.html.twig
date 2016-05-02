@@ -65,7 +65,7 @@
     <br/>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1 col-xs-12 text-center">
-            <a href="javascript:return;" class="notAjax" onclick="$('.legalStatusDescription').toggle();return false;">Ver
+            <a href="javascript:return;" class="notAjax" onclick="$('.legalStatusDescription').toggle();return false;">> Ver
                 Implicaciones</a>
             <div class="legalStatusDescription text-left" style="display:none">Pronto tendremos una descripción mucho
                 más descriptiva de la situación legal que estas pasando
@@ -90,14 +90,22 @@
     <br/>
     <div class="row buttonsRow">
         <div class=" col-sm-7 col-sm-offset-2 multipleOptions">
+        	<a class="btn btn-orange notAjax disabled legalInCorrect" href="{{ path('change_flag',{'flag':0}) }}">Realizar contrato nuevo</a><br/>
+        	<a class="btn btn-orange notAjax disabled" href="{{ path('change_flag',{'flag':1}) }}">Continuar registro y
+                acepto la responsabilidad</a><br/>
             <a class=" btn btn-orange notAjax disabled" href="{{ path('legal_payment') }}">Solucionar la situación actual
                 con mi empleado</a><br/>
-            <a class="btn btn-orange notAjax disabled legalInCorrect" href="{{ path('change_flag',{'flag':0}) }}">Realizar contrato
-                nuevo</a><br/>
+            
 
-            <a class="btn btn-orange notAjax disabled" href="{{ path('change_flag',{'flag':1}) }}">Continuar registro y
-                acepto la responsabilidad</a><br/>
-            <a class="btn btnPrevious notAjax" style="margin" href="{{ path('legal') }}">Anterior</a>
+            <br/>
+            <a class="btn btn-grey notAjax" style="width: 30%;" href="{{ path('legal') }}">Volver atrás</a>
+        </div>
+    </div>
+    <div class="row center">
+        <div class="col-sm-8 col-xs-12 col-sm-offset-2 remember" style="opacity: 0.7; border: 2px;">
+            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer" class=""><i
+                        class="glyphicon glyphicon-info-sign"></i> ¿Qué riesgos puedo correr si no soluciono la situación actual con mi empleado?</h4>
+            <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si decide asumir la responsabilidad de su situación actual y no hace lo necesario para normalizarla, está expuesto a eventuales deman- das por parte de su empleado en razón de los deberes que debiño cumplir con él/ella desde que inició a trabajar para usted</span>
         </div>
     </div>
 
