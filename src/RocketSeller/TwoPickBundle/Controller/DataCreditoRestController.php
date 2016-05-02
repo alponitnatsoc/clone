@@ -134,7 +134,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         $view = View::create();
         $errorCode = 200;
-        if (isset($array["respuesta"]) && $array["respuesta"] != 13)
+        if (isset($array["respuesta"]) && !($array["respuesta"] == 13 || $array["respuesta"] == 14))
             $errorCode = 404;
 
         // Set status code of view with http codes.
@@ -594,6 +594,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
      */
     public function getClientIdentificationServiceExperianVerifyPreguntasAction(Request $request)
     {
+      dump($request->query->all());die();
         $parameters = array();
         $regex = array();
         $mandatory = array();
