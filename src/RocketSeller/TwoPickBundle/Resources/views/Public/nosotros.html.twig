@@ -1,30 +1,92 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
-<section id="middleBannerAbout" class="txtC">
-            <div class="blockTem">
-                <h3>Symplifica</h3>
-                <span>Somos el área de recursos humanos</br>de los pequeños empleadores</span>
-            </div>
-        </section>
-        <section id="targetMsg" class="txtC">
-            <div class="container">
-                <h2>Nuestra meta</h2>
-                <span>Queremos revolucionar la formalización del trabajo en Colombia poniendo al alcance de los empleadores una herramienta que les permita cumplir con los deberes con sus empleados de la manera más sencilla y agradable, sin necesidad de ser expertos en gestión de nómina.</br></br>Nuestro objetivo es generar un alto impacto social con nuestro trabajo, construir país con nuestros clientes y sentirnos orgullosos de lo que hacemos.
-                </span>
-            </div>
-        </section>
-        <section id="ourTeamBlock" class="txtC">
-            <div class="container">
-                <h2>Nuestro equipo</h2>
-                <div class="teamSymplifica col-md-8 col-md-offset-2 col-xs-12">
-                    <ul>
-                        <li><img src="img/nosotros/people.png" class="img-responsive" alt="Symplifica"/><span><strong>Camilo Mendez</strong></br>Gerente general</span></li>
-                        <li><img src="img/nosotros/people.png" class="img-responsive" alt="Symplifica"/><span><strong>Johonson Aguirre</strong></br>Recursos humanos</span></li>
-                        <li><img src="img/nosotros/people.png" class="img-responsive" alt="Symplifica"/><span><strong>Plinio Romero</strong></br>Desarrollador</span></li>
-                        <li><img src="img/nosotros/people.png" class="img-responsive" alt="Symplifica"/><span><strong>Gabriel Montero</strong></br>Desarrollador</span></li>
-                        <li><img src="img/nosotros/people.png" class="img-responsive" alt="Symplifica"/><span><strong>Gustavo Rojas</strong></br>Diseñador web</span></li>
-                    </ul>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/nostros.css') }}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<main>
+    	<header>
+        	<!--aca va el nav que ya esta hecho-->
+        	<div id="banner-beneficios">
+            	<div id="banner-beneficios-cont">
+                  <h1 class="bold azuloscurofont">Detrás de Symplifica</h1>
+                  <h1 class="light azulmediofont">estamos nosotros</h1>
                 </div>
             </div>
+        </header>
+
+        <section>
+            <div id="breadcrumb">
+            	<h2 class="light">Nosotros</h2>
+            	<div class="bread-style"><a href="#" class="light">&rsaquo; incio</a> <span class="bold naranjafont">&rsaquo; Nosotros</span></div>
+            </div>
+
+            <div id="texto-descript">
+            	<p class="light grisclarofont">Queremos revolucionar la formalización del trabajo en Colombia poniendo al alcance de los empleadores una herramienta que les permita cumplir con los deberes con sus empleados de la manera más sencilla y agradable, sin necesidad de ser expertos en gestión de nómina.
+<br><br>
+Nuestro objetivo es generar un alto impacto social con nuestro trabajo, construir país con nuestros clientes y sentirnos orgullosos de lo que hacemos.</p>
+
+            </div>
+
+            <div id="fondo">
+                <div id="team">
+                    <h2 class="light grisclarofont">Nuestro equipo</h2>
+
+                    <div class="members" class="section group">
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/camilo.png') }}">
+                            <p class="bold azulmediofont">Camilo Mendez</p>
+                            <p class="light grisclarofont">CEO</p>
+                        </div>
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/daniels.png') }}">
+                            <p class="bold azulmediofont">Daniel Serrano</p>
+                            <p class="light grisclarofont">Ingeniero<br>de Desarrollo</p>
+                        </div>
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/gabriel.png') }}">
+                            <p class="bold azulmediofont">Gabriel Samona</p>
+                            <p class="light grisclarofont">Ingeniero<br>de Desarrollo</p>
+                        </div>
+                    </div>
+                    <div class="members" class="section group">
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/gustavo.png') }}">
+                            <p class="bold azulmediofont">Gustavo Rojas</p>
+                            <p class="light grisclarofont">Diseñador Web</p>
+                        </div>
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/johonson.png') }}">
+                            <p class="bold azulmediofont">Johonoson Aguirre</p>
+                            <p class="light grisclarofont">Coordinador<br>de Operaciones</p>
+                        </div>
+                        <div class="col span_1_of_3">
+                            <img src="{{ asset('public/img/home/andres.png') }}">
+                            <p class="bold azulmediofont">Andrés Ramírez</p>
+                            <p class="light grisclarofont">Ingeniero<br>de Desarrollo</p>
+                        </div>
+                    </div>
+                     <div id="principal">
+                        <img src="{{ asset('public/img/home/daniel.png') }}">
+                            <p class="bold azulmediofont">Daniel Rico</p>
+                            <p class="light grisclarofont">Ingeniero<br>de Desarrollo</p>
+                    </div>
+                </div>
+
+             </div>
         </section>
+
+    </main>
+</body>
+</html>
+
 {% endblock %}

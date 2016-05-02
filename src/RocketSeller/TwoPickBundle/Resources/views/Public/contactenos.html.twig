@@ -1,48 +1,75 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
-		<section id="middleBannerAbout" class="txtC">
-            <div class="blockTem">
-                <h3>Contactanos</h3>
-                <span>Symplifica te ayuda</span>
-                <a href="#" class="btn btn-registro"><em><strong>Prueba 1 mes gratis</strong></em></a>
-            </div>
-        </section>
-        <section id="infoContact" class="txtC">
-            <div class="container">
-                <h2>Nos importan tus inquietudes</h2>
-                <div class="colInfo col-md-8 col-md-offset-2 txtL col-xs-12">
-                    <div class="col-md-6 col-xs-12">
-                        <span class="icon-t1"></span>
-                        <span>Llamanos </br><p><strong>350 856 7864</strong></p></span>
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        <span class="icon-t2"></span>
-                        <span>Escribenos </br><p><strong><a href="mailto:contacto@symplifica.com">contacto@symplifica.com</a></strong></p></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="formContact" class="txtL">
-            <div class="container">
-                <div class="col-md-6 col-md-offset-3 col-xs-12">
-                    <form>
-                        <div class="form-group">
-                            <label for="input_name">Nombre</label>
-                            <input type="text" class="form-control" id="input_name"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="input_email">Email</label>
-                            <input type="email" class="form-control" id="input_email"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="input_message">Mensaje</label>
-                            <textarea type="text" class="form-control" id="input_message" rows="8"></textarea>
-                        </div>
-                        <div class="txtC">
-                            <button type="submit" class="btn btn-default send">Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contáctanos</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/contacto.css') }}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+<main>
+		<header>
+				<!--aca va el nav que ya esta hecho-->
+				<div id="banner-beneficios">
+						<div id="banner-beneficios-cont">
+								<h1 class="bold azuloscurofont">Tu opinion es importante</h1>
+								<h1 class="light azulmediofont">para nosotros, contáctanos</h1>
+							</div>
+					</div>
+			</header>
+
+			<section>
+					<div id="breadcrumb">
+						<h2 class="light">Contáctanos</h2>
+						<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Contáctanos</span></div>
+					</div>
+
+					<div id="texto-descript">
+						<h4 class="light grisclarofont">Tus inquietudes son importantes para nostros</h4>
+							<p class="light-italic grisclarofont"><img src="{{ asset('public/img/home/datos.png') }}" width="15" height="auto">Los campos marcados con * son obligatorios</p>
+					</div>
+			</section>
+
+			<section>
+				<div id="formulario">
+						<form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
+									<div class="row">
+											<label class="semi-italic grisclarofont" for="name">Nombre:</label><br />
+											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
+									</div>
+									<div class="row">
+											<label class="semi-italic grisclarofont" for="name">Teléfono:</label><br />
+											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
+									</div>
+									<div class="row">
+											<label  class="semi-italic grisclarofont" for="email">Email:</label><br />
+											<input id="email" class="input" name="email" type="text" value="" size="30" /><br />
+									</div>
+									<div class="row">
+											<label class="semi-italic grisclarofont" for="message">Mensaje:</label><br />
+											<textarea id="message" class="input" name="message" rows="7" cols="30"></textarea><br />
+									</div>
+									<input class="naranja bold" id="submit_button" type="submit" value="Enviar email" />
+							</form>
+					</div>
+
+					<div id="telefono">
+						<div id="datos-cont">
+								<div class="datos-contacto"><img src="{{ asset('public/img/home/telefono-c.png') }}"></div>
+									<div class="datos-contacto" style="padding: 10px 10px;">
+										<p class="extrabold">Llámanos</p>
+											<p class="light">350 833 0000</p>
+									</div>
+							</div>
+					</div>
+			</section>
+ </main>
+</body>
+</html>
+
 {% endblock %}
