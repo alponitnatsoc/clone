@@ -34,6 +34,8 @@ class DashBoardController extends Controller
         $user = $this->getUser();
         if($user->getStatus()>=2 )
             return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
+        if($user->getLegalFlag()==-2 )
+            return $this->forward('RocketSellerTwoPickBundle:Default:index');
         $paymentState = $user->getPaymentState();
         $stateRegister = 0;
         $stateEmployees = 0;

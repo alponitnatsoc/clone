@@ -178,13 +178,7 @@
                             {% elseif  status == 1 %}
                                 <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador"
                                      style="margin-top: 40px;">
-                                    {% if legalFlag == -1 or legalFlag == 1 %}
-                                        <a href="{{ path('welcome') }}">Inicio</a>
-                                    {% elseif legalFlag == 1 %}
-                                        <a href="{{ path('legal') }}">Inicio</a>
-                                    {% else %}
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
-                                    {% endif %}
                                 </div>
                             {% endif %}
                             <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
