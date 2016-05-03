@@ -140,6 +140,7 @@ class User extends BaseUser
      * Columna utilizada para conocer el estado del empleado
      * 0 No ha iiciado labores
      * 1 ya inicio labores
+     * -1 para preguntarle antiguadad al segundo empleado
      *
      * @var SmallIntType
      *

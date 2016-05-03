@@ -112,8 +112,8 @@ public function fixArrayLocalizacion($array, &$new_array) {
               //"login" => '900862831',
               //"password" => $pass
         ));
-        $user = "900862831";
-        $pass = "09KJS";
+        $user = "79787598";
+        $pass = "04YNJ";
 
         $request = '<?xml version="1.0" encoding="UTF-8" ?>
                     <SolicitudDatosLocalizacion tipoIdentificacion="' . $parameters["tipoIdentificacion"] .
@@ -194,13 +194,13 @@ public function fixArrayLocalizacion($array, &$new_array) {
              "exceptions" => true,
              "stream_context" => stream_context_create($opts),
              'location'      => $path,
-             "login" => '900862831',
+             "login" => '79787598',
              //"password" => $pass
        ));
 
        // var_dump($client->__getFunctions());
 
-       $paramProducto = '2940';
+       $paramProducto = '2641';
        $producto = '007';
        $canal = '001';
        $res=null;
