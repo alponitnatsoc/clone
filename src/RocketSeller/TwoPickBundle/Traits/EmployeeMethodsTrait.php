@@ -96,12 +96,15 @@ trait EmployeeMethodsTrait
             // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
+                $documentTypeRepo= $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
                 if ($type == 'Cedula') {
+                    $cedulaType=$documentTypeRepo->findOneBy(array('name'=>"Cedula"));
                     $msj = "Subir copia del documento de identidad de " . $person->getFullName();
-                    $documentType = 'Cedula';
+                    $documentType = $cedulaType;
                 } elseif ($type == 'Contrato') {
+                    $contratoType=$documentTypeRepo->findOneBy(array('name'=>"Contrato"));
+                    $documentType = $contratoType;
                     $msj = "Subir copia del contrato de " . $person->getFullName();
-                    $documentType = 'Contrato';
                     $msj = "Generar contrato con symplifica";
                     $url = $this->generateUrl("download_documents", array('id'=>$contract->getIdContract(),'ref' => "contrato", 'type' => 'html'));
 
