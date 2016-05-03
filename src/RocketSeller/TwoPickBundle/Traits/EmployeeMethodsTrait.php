@@ -78,8 +78,8 @@ trait EmployeeMethodsTrait
         $documents = $documentsRepo->findByPersonPerson($person);
         $employerHasEmployee  = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
                 'employerEmployer'=> $employer,
-                'employeeEmployee'=> $emplyoee,
-                'status' => 1
+                'employeeEmployee'=> $realEmployee,
+                'state' => 1
             ));
         $contract = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
                 'employerHasEmployee'=> $employerHasEmployee,                
