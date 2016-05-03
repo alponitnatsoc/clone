@@ -81,8 +81,8 @@ trait EmployeeMethodsTrait
                 'employeeEmployee'=> $realEmployee,
                 'state' => 1
             ));
-        $contract = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
-                'employerHasEmployee'=> $employerHasEmployee,                
+        $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
+                'employerHasEmployeeEmployerHasEmployee'=> $employerHasEmployee,
                 'status' => 1                
             ));
         $docs = array('Cedula' => false, 'Contrato' => false);
