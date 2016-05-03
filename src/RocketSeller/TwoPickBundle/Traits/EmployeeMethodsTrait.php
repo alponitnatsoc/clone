@@ -59,6 +59,8 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $employerHasEmployees->first();
         $this->validateDocumentsEmployer($employerHasEmployee->getEmployerEmployer());
         do {
+            if($employerHasEmployee->getState()!=1)
+                continue;
             $employee = $employerHasEmployee->getEmployeeEmployee();
             $this->validateDocumentsEmployee($employee);
             $this->validateEntitiesEmployee($employee);
@@ -81,9 +83,9 @@ trait EmployeeMethodsTrait
                 'employeeEmployee'=> $realEmployee,
                 'state' => 1
             ));
-        $contract = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
-                'employerHasEmployee'=> $employerHasEmployee,                
-                'status' => 1                
+        $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
+                'employerHasEmployeeEmployerHasEmployee'=> $employerHasEmployee,
+                'state' => 1
             ));
         $docs = array('Cedula' => false, 'Contrato' => false);
         foreach ($docs as $type => $status) {
@@ -96,16 +98,20 @@ trait EmployeeMethodsTrait
             // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
+                $documentTypeRepo= $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " . $person->getFullName();
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
+                    $contratoType=$documentTypeRepo->findOneBy(array('name'=>"Contrato"));
+
                     $msj = "Subir copia del contrato de " . $person->getFullName();
                     $documentType = 'Contrato';
                     $msj = "Generar contrato con symplifica";
                     $url = $this->generateUrl("download_documents", array('id'=>$contract->getIdContract(),'ref' => "contrato", 'type' => 'html'));
 
-                    $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Bajar");                  
+                    $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType,"Bajar");
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
