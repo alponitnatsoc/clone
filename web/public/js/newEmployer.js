@@ -67,7 +67,7 @@ function startEmployer() {
         });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;"></i> <span style="display: inline;">Agregar nuevo lugar de trabajo</span></a>');
+    var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar nuevo lugar de trabajo</span></a>');
     var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;margin-top:10px;display:block;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;">Agregar otra caja de compensación</span></a>');
     var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
     var $newLinkSeveranceLi = $('<li class="col-md-12 text-center" id="addSeverance"></li>').append($addSeveranceLink);
