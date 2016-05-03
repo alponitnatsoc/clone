@@ -73,11 +73,25 @@ p{
 	}
 
 @media only screen and (max-width: 480px) {
-	#banner-beneficios-cont {font-size: 14px;}
+	#banner-beneficios-cont h1 {font-size: 30px;}
 	#banner-beneficios {height: 170px;padding: 45px 0 0 0;}
 	}
 
+	@media only screen and (max-width: 414px) {
+			#banner-beneficios-cont h1 {font-size: 33px;}
+			#banner-beneficios {
+	    	height: 225px;}
+		}
+
 @media only screen and (max-width: 375px) {
-	#banner-beneficios-cont {font-size: 11px;}
-	#banner-beneficios {height: 145px;padding: 45px 0 0 0;}
+	#banner-beneficios {
+		height: 230px;}
+}
+
+	/*#banner-beneficios {height: 145px;padding: 45px 0 0 0;}
+	}*/
+
+	@media only screen and (max-width: 375px) {
+		#banner-beneficios {
+    	height: 235px;}
 	}
