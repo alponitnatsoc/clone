@@ -33,6 +33,145 @@ use EightPoints\Bundle\GuzzleBundle;
 class DataCreditoRestController extends FOSRestController
 {
 
+
+    public function mockPreguntas() {
+      $res = '{
+                "0": {
+                  "0": {
+                    "id": "001",
+                    "texto": "SI"
+                  },
+                  "1": {
+                    "id": "002",
+                    "texto": "NO"
+                  },
+                  "2": {
+                    "id": "003",
+                    "texto": "NO TENGO CUENTA DE AHORROS CON LA ENTIDAD"
+                  },
+                  "id": "004010001",
+                  "texto": "SU CUENTA DE AHORROS CON \"BANCOLOMBIA (CONAVI, BIC)\" HA TENIDO ALGUNA VEZ PROBLEMAS COMO EMBARGOS O CANCELACION O SUSPENSION?",
+                  "orden": "1",
+                  "idRespuestaCorrecta": "00",
+                  "peso": "2"
+                },
+                "1": {
+                  "0": {
+                    "id": "001",
+                    "texto": "CL 97 A 61 40"
+                  },
+                  "1": {
+                    "id": "002",
+                    "texto": "CL 96 A 63 40"
+                  },
+                  "2": {
+                    "id": "003",
+                    "texto": "CL 98 A 61 49"
+                  },
+                  "3": {
+                    "id": "004",
+                    "texto": "NINGUNA DE LAS ANTERIORES"
+                  },
+                  "id": "009001001",
+                  "texto": "DE LAS SIGUIENTES DIRECCIONES INDIQUE CON CUAL USTED HA TENIDO O TIENE ALGUN VINCULO",
+                  "orden": "2",
+                  "idRespuestaCorrecta": "00",
+                  "peso": "3"
+                },
+                "2": {
+                  "0": {
+                    "id": "001",
+                    "texto": "0 -  1   AÑOS"
+                  },
+                  "1": {
+                    "id": "002",
+                    "texto": "2 -  5   AÑOS"
+                  },
+                  "2": {
+                    "id": "003",
+                    "texto": "6 - 10   AÑOS"
+                  },
+                  "3": {
+                    "id": "004",
+                    "texto": "11 - 15   AÑOS"
+                  },
+                  "4": {
+                    "id": "005",
+                    "texto": "16 O MAS  AÑOS"
+                  },
+                  "5": {
+                    "id": "006",
+                    "texto": "NO TENGO CUENTA CORRIENTE CON LA ENTIDAD"
+                  },
+                  "id": "004006002",
+                  "texto": "HACE CUANTO TIEMPO TIENE USTED UNA CUENTA CORRIENTE CON \"BANCO CORPBANCA (SANTANDER, HELM)\"",
+                  "orden": "3",
+                  "idRespuestaCorrecta": "00",
+                  "peso": "2"
+                },
+                "3": {
+                  "0": {
+                    "id": "001",
+                    "texto": "JULIO      DE   1993"
+                  },
+                  "1": {
+                    "id": "002",
+                    "texto": "AGOSTO     DE   1995"
+                  },
+                  "2": {
+                    "id": "003",
+                    "texto": "ENERO      DE   1994"
+                  },
+                  "3": {
+                    "id": "004",
+                    "texto": "MAYO       DE   2001"
+                  },
+                  "4": {
+                    "id": "005",
+                    "texto": "DICIEMBRE  DE   2001"
+                  },
+                  "5": {
+                    "id": "006",
+                    "texto": "NINGUNA DE LAS ANTERIORES"
+                  },
+                  "id": "001009002",
+                  "texto": "EN CUAL DE LAS SIGUIENTES OPCIONES SE ENCUENTRA SU MES Y ANO DE NACIMIENTO?",
+                  "orden": "4",
+                  "idRespuestaCorrecta": "00",
+                  "peso": "1"
+                },
+                "id": "00458819",
+                "resultado": "01",
+                "registro": "108651714",
+                "excluirCliente": "false",
+                "alertas": "false",
+                "respuestaAlerta": "",
+                "codigoAlerta": "00"
+              }';
+              return $res;
+    }
+
+    public function mockRespuesta() {
+      $res = '{
+              "resultado": "true",
+              "aprobacion": "true",
+              "preguntasCompletas": "true",
+              "score": "768",
+              "codigoSeguridad": "8DX9A98",
+              "aprobado100PorCientoOK": "false"
+            }';
+      return $res;
+    }
+
+    public function mockValidacion() {
+      $res = '{
+        "tipoId": "1",
+        "identificacion": "123456",
+        "regValidacion": "1234"
+      }';
+      return $res;
+    }
+
     /**
      * Verifies that the parameters to the web services, are in place and that
      * have the ccorrect format.
@@ -182,6 +321,32 @@ public function fixArrayLocalizacion($array, &$new_array) {
     */
    public function callApiIdentificacion($parameters, $path, $methodName,$request,$differentCall=false,$timeout = 10)
    {
+       $ambiente = '';
+       if($this->container->hasParameter('ambiente'))
+         $ambiente = $this->container->getParameter('ambiente');
+       else
+         $ambiente = 'desarrollo';
+
+       if($ambiente == 'desarrollo') {
+         $view2 = View::create();
+         $view2->setStatusCode(200);
+         // Return response without the status code.
+         $view2->setData("blablabla");
+
+         if($methodName == 'validar') {
+           $view2->setData(json_decode($this->mockValidacion(), true));
+         }
+         if($methodName == 'verificar') {
+           $view2->setData(json_decode($this->mockRespuesta(), true));
+         }
+         if($methodName == 'preguntas'){
+           $view2->setData(json_decode($this->mockPreguntas(), true));
+         }
+
+         return $view2;
+       }
+
+
        ini_set("soap.wsdl_cache_enabled", 1);
        $opts = array(
            //"ssl" => array("ciphers" => "RC4-SHA")
