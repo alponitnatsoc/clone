@@ -145,7 +145,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="smallint")
      */
-    private $legalFlag = -1;
+    private $legalFlag = 0;
 
     /**
      * Columna utilizada para saber si el usuario requiere registro express
