@@ -97,18 +97,19 @@ trait EmployeeMethodsTrait
             if (!$docs[$type]) {
                 $msj = "";
                 $documentTypeRepo= $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+
                 if ($type == 'Cedula') {
-                    $cedulaType=$documentTypeRepo->findOneBy(array('name'=>"Cedula"));
                     $msj = "Subir copia del documento de identidad de " . $person->getFullName();
-                    $documentType = $cedulaType;
+                    $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
                     $contratoType=$documentTypeRepo->findOneBy(array('name'=>"Contrato"));
-                    $documentType = $contratoType;
+
                     $msj = "Subir copia del contrato de " . $person->getFullName();
+                    $documentType = 'Contrato';
                     $msj = "Generar contrato con symplifica";
                     $url = $this->generateUrl("download_documents", array('id'=>$contract->getIdContract(),'ref' => "contrato", 'type' => 'html'));
 
-                    $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Bajar");                  
+                    $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType,"Bajar");
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
