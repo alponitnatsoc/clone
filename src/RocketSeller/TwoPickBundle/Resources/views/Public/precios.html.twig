@@ -68,7 +68,7 @@
         <section class="fondo-calculadora">
         	<div id="calculadora">
             	<h2 class="light grisclarofont">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2>
-                <h4 class="light grisclarofont">Calcula el valor mensual de nuestro servicio de acuerdo al número y tipo
+                <h4 class="bold grisclarofont">Desliza para calcular el valor mensual de nuestro servicio de acuerdo al número y tipo
 de empleados que quieras administrar</h4>
                 <div class="calculadora-espacios section group"> <!--calculadora numero 1-->
                 	<div class="no-colorcont col span_1_of_5">
@@ -89,7 +89,7 @@ de empleados que quieras administrar</h4>
                 <div class="calculadora-espacios section group"> <!--calculadora numero 2-->
                 	<div class="no-colorcont col span_1_of_5">
                     	<span class="light-italic">Empleados que van</span><br>
-                        <span class="extrabold">1 - 2 días a lasemana</span>
+                        <span class="extrabold">1 - 2 días a la semana</span>
                     </div>
                     <div class="middle-cont col span_3_of_5">
                     	<div class="well1">
@@ -105,7 +105,7 @@ de empleados que quieras administrar</h4>
                 <div class="calculadora-espacios section group"> <!--calculadora numero 3-->
                 	<div class="no-colorcont col span_1_of_5">
                     	<span class="light-italic">Empleados que van</span><br>
-                        <span class="extrabold">3 - 4 días a lasemana</span>
+                        <span class="extrabold">3 - 4 días a la semana</span>
                     </div>
                     <div class="middle-cont col span_3_of_5">
                     	<div class="well1">
@@ -119,17 +119,17 @@ de empleados que quieras administrar</h4>
                 </div>
 
                 <div id="texto-finalcalculadora">
-                	<p class="light">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
+                	<p class="light pcalculadora">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
                     <div id="resultado-calculadora" class="azulmedio">
-                        <p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold"  id="precio">= $0</span></p>
+                        <p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold"  id="precio">= $0 mensuales</span></p>
                     </div><br>
-                    <p class="light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
+                    <p class="pcalculadora light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
              </div>
 
            </div>
         </section>
         <div id="callregistro">
-                <p class="bold">Registrate ahora</p>
+                <p class="bold" style="margin:0px;font-size:20px">Registrate ahora</p>
                 <p class="light">y obtén un mes de servicio gratis</p>
                 <a href="/register"><div class="callto naranja bold">Prueba un mes gratis</div></a>
             </div>
@@ -197,7 +197,7 @@ de empleados que quieras administrar</h4>
 				if((conta1 + conta2 + conta3) >= 3 )
 					valor = valor * 0.9;
         $("#total-empleados").text(conta1 + conta2 + conta3);
-        $("#precio").text(" = $"+numberWithCommas(valor));
+        $("#precio").text(" = $"+numberWithCommas(valor) + " mensuales");
         //$("#total-empleados").text(conta1 + conta2 + conta3);
         if((conta1 + conta2 + conta3) != 1)
             $("#palabra-empleados").text("empleados");

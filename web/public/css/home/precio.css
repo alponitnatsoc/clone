@@ -32,7 +32,7 @@ border-bottom: 3px solid #794815}
 #banner-beneficios {
 	width: 100%;
 	height: 310px;
-	background: url("../../../img/home/banner3.png");
+	background: url("../../img/home/banner3.png");
 	background-size:cover;
 	background-position:center;
 	padding: 100px 0 0 0;
@@ -58,14 +58,15 @@ border-bottom: 3px solid #794815}
 /*empieza la seccion de calculadora*/
 .fondo-calculadora {background: #f7f7f7; margin: 60px 0;padding: 60px 0;}
 #calculadora {width: 1100px; margin: 0 auto;}
-#calculadora h2 {text-align: center; margin: 25px 0}
+#calculadora h2 {text-align: center; margin: 25px 0; font-size: 25px}
 #calculadora h4 {margin: 30px 0; text-align: center}
 .middle-cont {height: 98px; border: #d8d9dd solid 1px; padding: 45px 0 0 0; text-align: center;box-sizing: border-box; border-radius:5px}
 .no-colorcont {height: 98px; box-sizing: border-box; padding: 25px 0 0 0; font-size: 18px; color: #87868a;}
 .endcont {height: 98px; background: #edeef0; padding: 25px 0 0 0; text-align: center;box-sizing: border-box; font-size: 20px; border-radius: 5px}
 #texto-finalcalculadora {text-align: center; width: 400px; margin: 20px auto; color: #6d6d71}
-#resultado-calculadora {width: 390px;border-radius: 3px;font-size: 30px;color: #FFF;}
+#resultado-calculadora {width: 390px;border-radius: 3px;font-size: 28px;color: #FFF;}
 #callregistro {color: #6d6d71; margin: 70px auto; width: 255px; text-align: center}
+.pcalculadora {font-size: 20px}
 .callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
 
 
@@ -127,6 +128,8 @@ border-bottom: 3px solid #794815}
 @media only screen and (max-width: 768px) {
 
 
+	#texto-descript {width: 90%; margin: 60px auto;}
+	#texto-descript h4 {width: 100%}
 
 	.no-colorcont {text-align: center; height: 75px;padding: 10px 0 0 0;}
 	.middle-cont {height: 80px;}
