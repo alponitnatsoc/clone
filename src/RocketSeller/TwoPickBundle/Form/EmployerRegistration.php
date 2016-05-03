@@ -94,10 +94,10 @@ class EmployerRegistration extends AbstractType
                 'mapped' => false,
                 'label'=>' ',
                 'required' => true,
-                'attr'=>array("class"=>'autocomA')
+                'attr'=>array("class"=>'autocomA',"placeholder" => "Por favor escribe el nombre de tu entidad")
             ))
             ->add('save', 'submit', array(
-                'label' => 'Guardar y continuar',
+                'label' => 'Siguiente: Seguridad social como empleador',
                 'attr'   =>  array(
                 'class'   => 'btn btn-orange')
             ));
