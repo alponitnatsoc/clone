@@ -563,9 +563,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-xs-12 text-center">
+                                <div class="col-sm-12 col-xs-12 text-center" style="border-top: 1px solid #e6e7e8; border-bottom: 1px solid #e6e7e8; margin-bottom: 20px;">
                                     <br />
-                                    <p style="font-weight:100">El costo mensual de este empleado es:</p>
+                                    <p style="font-weight:100">El costo mensual <br />de este empleado es:</p>
                                     <div class="priceContainer">
                                         <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                     </div>
@@ -584,11 +584,21 @@
                                     </div>-->
                                     <br />
                                 </div>
-                                <div class="col-sm-12 col-xs-12 center">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12 center">
 
-                                    <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
-                                    <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Salvar y Continuar</a>
+                                        <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
+                                        <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Salvar y Continuar</a>
+                                    </div>
                                 </div>
+                                <div class="row">
+                                    <br><br>
+                                    <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué debo saber el costo mensual del empleado?</h4>
+                                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque la forma como determina la ley que deba pagarse a un empleado implica costos adicionales al sueldo que el empleador debe asumir como es el caso de seguridad social, vacaciones, cesantías, dotaciones, etc.lo cual debe ser tenido en cuenta como una provisión que debe ser reservada para el momento en que deban aplicarse.</span>
+                                    </div>
+                                </div>
+
                                 <!-- Modal -->
                                 <!--div id="calculatorResultsModal" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
