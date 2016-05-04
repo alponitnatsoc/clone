@@ -57,36 +57,36 @@ trait EmployeeMethodsTrait
         $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $employerHasEmployees->first();
-        $this->validateDocumentsEmployer($employerHasEmployee->getEmployerEmployer());
+        $this->validateDocumentsEmployer($user, $employerHasEmployee->getEmployerEmployer());
         do {
-            if($employerHasEmployee->getState()!=1)
+            if ($employerHasEmployee->getState() != 1)
                 continue;
             $employee = $employerHasEmployee->getEmployeeEmployee();
-            $this->validateDocumentsEmployee($employee);
-            $this->validateEntitiesEmployee($employee);
+            $this->validateDocumentsEmployee($user, $employee);
+            $this->validateEntitiesEmployee($user, $employee);
         } while ($employerHasEmployee = $employerHasEmployees->next());
 
         return true;
     }
 
-    protected function validateDocumentsEmployee(Employee $realEmployee)
+    protected function validateDocumentsEmployee(User $user, Employee $realEmployee)
     {
-        $user = $this->getUser();
+        // = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $employer = $user->getPersonPerson()->getEmployer();
         $person = $realEmployee->getPersonPerson();
 
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
-        $employerHasEmployee  = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
-                'employerEmployer'=> $employer,
-                'employeeEmployee'=> $realEmployee,
-                'state' => 1
-            ));
+        $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
+            'employerEmployer' => $employer,
+            'employeeEmployee' => $realEmployee,
+            'state' => 1
+        ));
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
-                'employerHasEmployeeEmployerHasEmployee'=> $employerHasEmployee,
-                'state' => 1
-            ));
+            'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
+            'state' => 1
+        ));
         $docs = array('Cedula' => false, 'Contrato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
@@ -98,20 +98,18 @@ trait EmployeeMethodsTrait
             // {{ path('download_document', {'id': employees[0].personPerson.idPerson , 'idDocument':doc.idDocument}) }}
             if (!$docs[$type]) {
                 $msj = "";
-                $documentTypeRepo= $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+                $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
 
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " . $person->getFullName();
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
-                    $contratoType=$documentTypeRepo->findOneBy(array('name'=>"Contrato"));
-
-                    $msj = "Subir copia del contrato de " . $person->getFullName();
+                    $contratoType = $documentTypeRepo->findOneBy(array('name' => "Contrato"));
                     $documentType = 'Contrato';
                     $msj = "Generar contrato con symplifica";
-                    $url = $this->generateUrl("download_documents", array('id'=>$contract->getIdContract(),'ref' => "contrato", 'type' => 'html'));
-
-                    $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType,"Bajar");
+                    $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                    $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
+                    $msj = "Subir copia del contrato de " . $person->getFullName();
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
@@ -121,28 +119,28 @@ trait EmployeeMethodsTrait
         }
     }
 
-    protected function validateEntitiesEmployee(Employee $realEmployee)
+    protected function validateEntitiesEmployee(User $user, Employee $realEmployee)
     {
-        $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
+        //$user = $this->getUser();
+        //$em = $this->getDoctrine()->getManager();
         $personEmployee = $realEmployee->getPersonPerson();
-        $employeeHasEntityRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity');
-        $entities_b = $employeeHasEntityRepo->findByEmployeeEmployee($realEmployee);
-        if (gettype($entities_b) != "array") {
-            $entities[] = $entities;
-        } else {
-            $entities = $entities_b;
-        }
+        //$employeeHasEntityRepo = $em->getRepository('RocketSellerTwoPickBundle:EmployeeHasEntity');
+        //$entities_b = $employeeHasEntityRepo->findByEmployeeEmployee($realEmployee);
+        //if (gettype($entities_b) != "array") {
+        //    $entities[] = $entities_b;
+        //} else {
+        //    $entities = $entities_b;
+        //}
         //foreach ($entities as $key => $value) {
         $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a las entidades.";
         $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
-        $this->createNotification($user->getPersonPerson(), $msj, $url);
+        $this->createNotification($user->getPersonPerson(), $msj, $url, null, "Ir");
         //}
     }
 
-    protected function validateDocumentsEmployer(Employer $realEmployer)
+    protected function validateDocumentsEmployer(User $user, Employer $realEmployer)
     {
-        $user = $this->getUser();
+        //$user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $person = $realEmployer->getPersonPerson();
@@ -177,7 +175,7 @@ trait EmployeeMethodsTrait
         }
     }
 
-    protected function createNotification($person, $descripcion, $url,$documentType = null, $action = "Subir" )
+    protected function createNotification($person, $descripcion, $url, $documentType = null, $action = "Subir")
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);

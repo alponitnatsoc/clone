@@ -86,8 +86,19 @@ class SubscriptionRestController extends FOSRestController
         /* @var $user User */
         $user = $this->getUserById($idUser);
         $tramites = $this->crearTramites($user);
+        $documents = $this->validateDocuments($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $user->setStatus(2);
+        $user->setPaymentState(1);
+        $user->setDayToPay(date('d'));
+        $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
+        $em->persist($user);
+        $em->flush();
+
+
         $view = View::create();
-        $view->setData($tramites);
+        $view->setData(array('tramites' => $tramites->getContent(), 'documents' => $documents));
         $view->setStatusCode(200);
         return $view;
     }
