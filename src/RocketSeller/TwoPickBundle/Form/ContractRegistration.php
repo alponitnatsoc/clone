@@ -117,13 +117,13 @@ class ContractRegistration extends AbstractType
             ))
             ->add('salary', 'money', array(
                 'currency'=>'COP',
-                'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
+                'label'=>'¿Cuánto será el sueldo mensual que recibirá tu empleado?*',
                 'required'=>false,
                 'scale'=>0
             ))
             ->add('salaryD', 'money', array(
                 'currency'=>'COP',
-                'label'=>'Salario Diario',
+                'label'=>'¿Cuanto será el sueldo diario que recibirá?*',
                 'required'=>false,
                 'mapped'=>false,
                 'scale'=>0
@@ -179,7 +179,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
-                'label'=>'Días laborales de la semana*:'
+                'label'=>'¿Que días de la semana trabajará?*:'
             ))
             ->add('weekDays', 'choice', array(
                 'choices' => array(
@@ -194,7 +194,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' =>false,
-                'label'=>'Días laborales de la semana*:'
+                'label'=>'¿Que días de la semana trabajará?*:'
             ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',

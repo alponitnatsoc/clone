@@ -90,13 +90,13 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Defina el cargo que asignará a su empleado:*',
+                'label'=>'Defina el cargo que asignará a tu empleado:*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
             ->add('salary', 'money', array(
                 'currency'=>'COP',
-                'label'=>'¿Cuánto le paga a su empleado mensualmente?*',
+                'label'=>'¿Cuánto será el sueldo mensual que recibirá tu empleado?*',
                 'required'=>false,
                 'attr' => array(
                     'onclick' => 'formatMoney($(this))'
@@ -104,7 +104,7 @@ class expressContractRegistration extends AbstractType
             ))
             ->add('salaryD', 'money', array(
                 'currency'=>'COP',
-                'label'=>'Salario Diario',
+                'label'=>'¿Cuanto será el sueldo diario que recibirá?*',
                 'required'=>false,
                 'attr' => array(
                     'onclick' => 'formatMoney($(this))'
@@ -153,7 +153,7 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
-                'label'=>'Días laborales de la semana*:'
+                'label'=>'¿Que días de la semana trabajará?*:'
             ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',
