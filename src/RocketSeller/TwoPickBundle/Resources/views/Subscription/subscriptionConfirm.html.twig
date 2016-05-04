@@ -206,24 +206,30 @@
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
-    <div class="col-md-12 align-Resp">
-        <div id="" class="col-md-12 blockStep inline">
-            <div id="" class="col-md-2 txt-AD0" style="text-align: left;">
-                <img src="/img/block-inline.png" class="center-block">
-            </div>
-            <div id="" class="col-md-10 txt-AD1">
-                <div id="" class="text-left">
-                    <span class="step">Paso 3 de 3</span>
-                    Subscripción a Symplifica
+    <div class="row">
+        <div class="col-md-12 align-Resp">
+            <div id="" class="col-md-12 blockStep inline">
+                <div id="" class="col-md-2 txt-AD0" style="text-align: left;">
+                    <img src="/img/block-inline.png" class="center-block">
+                </div>
+                <div id="" class="col-md-10 txt-AD1">
+                    <div id="" class="text-left">
+                        <span class="step">Paso 3 de 3</span>
+                        Medio de pago
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
+            <div class="col-sm-12 remember">
+                <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+            </div>
+        </div>
     </div>
-
     {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-        <div class="col-md-12 text-center" style="padding: 50px 200px 0px 200px;">
+        <div class="col-sm-8 col-sm-offset-2 text-center" style="padding: 20px">
             Para que puedas realizar los pagos de nómina, aportes y nuestro
             servicio necesitamos que registres un medio de pago del cuál te
             haremos el cargo mensual
@@ -231,26 +237,28 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 text-center" style="padding: 20px 200px 0px 200px;">
-            <div style="font-weight: bold">Selecciona el medio de pago</div>
+        <div class="col-md-12 text-center" style="padding: 10px 200px 2px 200px;">
+            <h4><strong>Selecciona el medio de pago</strong></h4>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
-            <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" checked="true"/>
-            <label for="creditCard_radio" style="font-weight: normal;">Tarjeta de Crédito</label>
+        <div class="col-md-3 col-sm-offset-3 text-center" style="padding: 5px 5px 5px 5px;">
+            <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" class="disabled" disabled />
+            <label for="creditCard_radio" style="font-weight: normal;"><em>Tarjeta de Crédito</em></label>
         </div>
-        <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px;">
-            <input type="radio" id="debito_radio" name="typeMethod" value="debito"/>
-            <label for="debito_radio" style="font-weight: normal;">Cuenta de Ahorros</label>                
+        <div class="col-md-3 text-center" style="padding: 5px 5px 5px 5px;">
+            <input type="radio" id="debito_radio" name="typeMethod" value="debito" checked="true"/>
+            <label for="debito_radio" style="font-weight: normal;"><em>Cuenta de Ahorros</em></label>                
         </div>
-        <div class="col-md-12 text-center" style="padding: 5px 5px 5px 5px;"> 
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center text-muted" style="padding: 5px 5px 5px 5px;font-size:12px"> 
             Por su seguridad el medio de pago debe estar a nombre del empleador
         </div>
     </div>
     <hr>
-    <div id="infoTarjeta" class="infoTarjeta blockUpData content-input">
+    <div id="infoTarjeta" class="infoTarjeta blockUpData content-input" style="display: none">
         <div class="col-md-12 text-center">
             <span style="margin-top: 20px"><h4>Información de la tarjeta de credito*</h4></span>
             <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
@@ -304,7 +312,7 @@
         </div>
     </div>
 
-    <div id="infoDebito" class="infoDebito blockUpData content-input" style="display: none">
+    <div id="infoDebito" class="infoDebito blockUpData content-input" style="display: block">
         <div class="col-md-12 text-center">
             <span style="margin-top: 20px"><h4>Información de la cuenta bancaria*</h4></span>
             <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>

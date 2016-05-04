@@ -40,7 +40,7 @@
             color: lightslategray;
         }
         .x-large{
-            font-size: x-large;
+            font-size: 18px;
         }
         .border-all-darkGray{
             border: 1px solid #CCC;
@@ -104,7 +104,6 @@
 
         }
         .btn-change-state-contract.off{
-            background-color: #B8B2AC;
             width: 100px;
         }
         .codigo_referido_valido{
@@ -131,6 +130,13 @@
         }
         .margin-top-bottom-10{
             margin: 10px 0px 10px 0px;
+        }
+
+        #divSubtotal {
+            font-size: 35px;
+        }
+        .subtotalTitle {
+            font-size: 16px;
         }
     </style>
     {#
@@ -163,6 +169,7 @@
     #}
     <div class="row padding-left-right-20">
         <div class="col-md-12 text-center border-botton-darkGray ">
+            <br />
             <div class="col-md-12">
                 <b class="x-large">Resumen de pago mensual</b>
             </div>
@@ -178,7 +185,7 @@
     <div class="row padding-left-right-40">
         <div class="col-md-12 nopadding text-left border-botton-darkGray">
             <div class="col-md-6 padding-top-botton-20">
-                <span class="x-large" style="padding: 10px 0px 10px 0px;">Sueldos y Seguridad social</span>
+                <span class="x-large" style="padding: 10px 0px 10px 0px;"><em>Sueldos y Seguridad social</em></span>
                 <p>
                     El cálculo se basa en la información ingresada por
                     concepto de sueldos y puede variar mes a mes por cada
@@ -197,7 +204,7 @@
     <div class="row padding-left-right-40">
         <div class="col-md-12 nopadding">
             <div class="col-md-12 text-left padding-top-botton-20">
-                <span class="x-large" style="padding: 10px 0px 10px 0px;">Suscripción a Symplifica</span>
+                <span class="x-large" style="padding: 10px 0px 10px 0px;"><em>Suscripción a Symplifica</em></span>
                 <p>
                     El cálculo se basa en la información ingresada por
                     concepto de sueldos y puede variar mes a mes por cada
@@ -209,7 +216,7 @@
             <div class="col-md-12 text-left">
 
                 <div class="row clearfix">
-                    <div class="col-md-6" style="position:absolute;bottom:0;">
+                    <div class="col-md-6" style="{% if employees|length < 2 %}position:absolute;bottom:0;{% endif %}">
                         {% for employeeData in employees %}
 
                             {% set employee = employeeData['employee'] %}
@@ -217,7 +224,7 @@
                             {% set producto = employeeData['product'] %}
 
                             <div class="row clearfix">
-                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}" style="min-height:90px;margin-top:20px;">
+                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}" style="min-height:90px;margin-top:17px;">
                                     <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                         <div >
                                             <b class="employee_name" style="font-size:large;">{{ employee.employeeEmployee.personPerson.names }}</b><br />
@@ -229,7 +236,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3 div-btn-change-state-contract">
-                                        <div class="btn btn-orange btn-change-state-contract {{ employee.state>0 ?'on':'off' }}" data-id="{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}" >{{ employee.state?'Inactivar':'Activar' }}</div>
+                                        <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}" data-id="{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}" >{{ employee.state?'Inactivar':'Activar' }}</div>
                                     </div>
                                 </div> 
                             </div>
@@ -238,9 +245,9 @@
                     </div>
                     <div class="col-md-5 pull-right text-center">
                         <div class="col-md-12">
-                            Este es el valor por:<br><b id="count_employee">{{ employees|length }} Empleados</b>
+                            <span class="subtotalTitle"><em>Este es el valor por:</em><br><b id="count_employee">{{ employees|length }} Empleados</b></span>
                         </div>
-                        <div class="col-md-12 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 8%; margin-top: 20px;">
+                        <div class="col-md-12 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 17px; margin-top: 20px;">
                             <div  id="divSubtotal" class="x-large font-bold dark-blue" >$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>                            
                         </div>
                     </div>
@@ -256,10 +263,10 @@
         </div>
     </div>
     <hr />
-    <div class="row padding-left-right-40 padding-top-botton-10">
+    <div class="row padding-left-right-40" style="margin-bottom:10px;">
         <div class="col-md-12 text-center">
             <b>Recibe un 10% de descuento</b> en la suscripción<br/>
-            después del tercer empleado
+            después del tercer empleado.
         </div>
     </div>
 
@@ -293,7 +300,7 @@
             <div class="col-md-12 border-botton-darkGray2 padding-top-botton-10">
                 <div class="col-md-8 " style="padding-top: 5px;">
                     <div style="color:#314A5A; font-style: italic;">El primer mes de servicio</div>
-                    <div style="color:#777;">(Symplifica le ha obsequiado un mes de servicio)</div>
+                    <div style="color:#777;">(Symplifica te ha obsequiado un mes de servicio)</div>
                 </div>
                 <div class="col-md-4 " style="
                      padding-top: 10px;
@@ -327,16 +334,34 @@
         </div>
     </form>
 
+    <div class="row">
+        <br />
+        <div class="col-sm-12 remember text-center" style="opacity: 0.7;">
+            <h4 style="font-size: 14px;">* El valor puede variar según las novedades ingresadas mes a mes por cada empleado así como también <br />la cantidad de empleados que registre en el sistema</h4>
+        </div>
+    </div>
+
+
+    
+
     <!-- Modal Confirm-->
     <div class="modal fade"  role="dialog" id="modal_confirm">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content"><div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
-                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-md-12 up-Intro" style="font-size: 26px;">Confirmación de inactivación de empleado</div>
+              
+
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="padding: 10px;">
+                        <div class="col-sm-2 " style="width: 40px;">
+                            <i class="glyphicon glyphicon-ok-sign" style="color:#fff;font-size:27px"></i>
+                        </div>
+                        <div class="col-sm-10 col-xs-12 up-Intro" style="font-size: 20px;">Confirmación de inactivación de empleado<span>
+                        </div>
                     </div>
+
+
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-8 col-md-push-2">
+                        <div class="col-md-10 col-md-push-1">
                             <p class="text-center">
                                 Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de sueldo ni aportes a seguridad social así como tampoco se gestionará la información relacionada con él.
                             </p>
