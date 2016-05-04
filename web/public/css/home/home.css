@@ -164,7 +164,8 @@ border-bottom: 3px solid #794815}
 
 #intro-pc {text-align: center; height: 125px; background: #eaeaea; font-size: 20px; box-sizing: border-box; padding: 30px 0}
 #contenido-pc {width: 1100px; margin: 30px auto}
-.texto-bullets {padding: 60px 0; box-sizing: border-box;}
+.texto-bullets {padding: 60px 0; box-sizing: border-box; font-size: 17px}
+.texto-bullets p {margin: 0}
 .numeros { float: left;padding-right: 20px;}
 
 /*modal 2*/
@@ -283,7 +284,10 @@ border-bottom: 3px solid #794815}
 
 	}
 
-@media only screen and (max-width: 980px) {}
+@media only screen and (max-width: 980px) {
+	.numeros {padding: 0 20px 25px 0;}
+
+}
 @media only screen and (max-width: 800px) {
 	#cont-banner {width: 90%;}
 	.span_1_of_4 {width: 49%;}}
@@ -316,7 +320,7 @@ border-bottom: 3px solid #794815}
 
 @media only screen and (max-width: 480px) {
 
-	#contenido-pc p {width: 400px;}
+	#contenido-pc p {width: 375px;}
 	.col { margin: 1% 0 1% 0%;}
 	#tbanner1 h1 {font-size: 20px;}
 	.span_1_of_4 {width: 100%; }
