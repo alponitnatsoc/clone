@@ -90,10 +90,10 @@ class PilaPlainTextRestController extends FOSRestController
       $person = $personRepo->findOneBy(array('document' => $documentNumber));
 
       //die(print_r($person) . '_');
-
-      $res = '';
-
-      $res .= 'SERVICIO DOMESTICO'; // Its an array I dont know why.
+      // We first write the header.
+      $res = 'CLASIFICACION_APORTANTE,DSTIPO_DOCUMENTO,DSNUMERO_DOCUMENTO,NMDIGITO_VERIFICACION,DSRAZON_SOCIAL,DSDIRECCION,DSTELEFONO,DSFAX,DSCLASE_APORTANTE,NMNATURALEZA_JURIDICA,,DSFORMA_PRESENTACION,NMTIPO_ACCION,NMTIPO_APORTANTE,SNAPORTA_MEN,POTARIFA_MEN,SNAPORTA_ESAP,POTARIFA_ESAP,FEINICIO_ACTIVIDAD,FEFINAL_ACTIVIDAD,TD_ REPRESENTANTE LEGAL,NM_NUMERO,PRIMER NOMBRE REPRESENTANTE LEGAL,PRIMER APELLIDO REPRESENTANTE LEGAL,CDMUNICIPIO,CDACTIVIDAD_ECONOMICA,DSCORREO_ELECTRONICO,DSCELULAR,NMTIPO_PAGADOR,SNEXONERADO_PARAFISCALES';
+      $res .= "\n";
+      $res .= 'SERVICIO DOMESTICO';
       $res .= ',';
       $res .= $person->getDocumentType();
       $res .= ',';
@@ -106,11 +106,11 @@ class PilaPlainTextRestController extends FOSRestController
       $res .= ',';
       $res .= $person->getMainAddress();
       $res .= ',';
-      $res .= '7953525'; // Its an array I dont know why.
+      $res .= $person->getPhones()[0]->getPhoneNumber();
       $res .= ',';
-      $res .= '7953525'; // Fax.
+      $res .= $person->getPhones()[0]->getPhoneNumber(); //Fax.
       $res .= ',';
-      $res .= 'pequeño';
+      $res .= 'Independiente';
       $res .= ',';
       $res .= 'privada';
       $res .= ',';
@@ -141,9 +141,14 @@ class PilaPlainTextRestController extends FOSRestController
       $res .= ''; // Payment type.
       $res .= ',';
       $res .= 'S'; // Doesn't pay parafiscales.
-      die($res);
 
-      return $res;
+      // Create a new file with the csv.
+      $filename = 'pila_empleador_' . $person->getDocument() . '.csv';
+      header("Content-type: text/plain; charset=utf-8");
+      header("Content-Disposition: attachment; filename=$filename");
+
+      // Print all the content to the file created.
+      die($res);
     }
 
     /**
@@ -293,8 +298,9 @@ class PilaPlainTextRestController extends FOSRestController
       $idEmployer = $ehe->getEmployerEmployer()->getIdEmployer();
       $names = explode(' ', $person->getNames());
       $nit = $ehe->getEmployerEmployer()->getPersonPerson()->getDocument();
-
-      $res = '';
+      // We first set the header.
+      $res = 'NIT APORTANTE,Tipo Documento,Número documento,Primer nombre,Segundo nombre,Primer apellido,Segundo apellido,Salario básico,Salario integral,Tipo cotizante,Subtipo cotizante,Departamento,Municipio,Código EPS,Código AFP,Centro trabajo,Clase tarifa ARP,Tarifa ARP,Codigo CCF,Tarifa CCF,Tarifa SENA,Tarifa ICBF,Colombiano exterior,UPC Adicional,Tipo Documento Responsable UPC,Numero Documento Responsable UPC,Cotizante Exonerado Parafiscales (S/N),Codigo ARL';
+      $res .= "\n";
       $res .= $nit;//Nit empleador.
       $res .= ',';
       $res .= $person->getDocumentType();
@@ -339,8 +345,13 @@ class PilaPlainTextRestController extends FOSRestController
       $res .= ',';
       $res .= $this->codigoEntidadEmployer($idEmployer, 2) | ''; // 2 is arl.
 
+      // Create a new file with the csv.
+      $filename = 'pila_empleado_' . $person->getDocument() . '.csv';
+      header("Content-type: text/plain; charset=utf-8");
+      header("Content-Disposition: attachment; filename=$filename");
+
+      // Print all the content to the file created.
       die($res);
-      return $res;
     }
 }
 
