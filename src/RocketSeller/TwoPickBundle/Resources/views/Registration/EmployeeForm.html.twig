@@ -512,7 +512,11 @@
 
 
                             <div id="contractSalaryTab" class="tab-pane fade in">
-
+                                <div class="formulario" style="border:0">
+                                    <div class="col-sm-12 remember">
+                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12 col-xs-12 complete">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.transportAid) }}
@@ -588,7 +592,7 @@
                                     <div class="col-sm-12 col-xs-12 center">
 
                                         <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
-                                        <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Salvar y Continuar</a>
+                                        <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Siguiente: Método de pago</a>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -629,13 +633,13 @@
                                         -->
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                                             <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                                                <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp; Estimación del costo de tu empleado</div>
+                                                <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-usd" style="font-size:17px"></i>&nbsp; Estimación del costo de tu empleado</div>
                                             </div>
                                             <div class="modal-body">
 
                                             </div>
-                                            <div class="modal-footer">
-                                                <button id="employerDismiss" type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                            <div class="modal-footer" style="text-align: center;">
+                                                <button id="employerDismiss" type="button" class="btn btn-orange" data-dismiss="modal">Cerrar</button>
 
                                             </div>
                                         </div>
@@ -643,61 +647,72 @@
                                 </div>
                             </div>
                             <div id="paymentMethod" class="tab-pane fade in">
-                                <div class="formulario">
+                                <div class="formulario" style="border-bottom:0px">
+                                    <div class="row"><div class="col-sm-12">
+                                            <div class="text-center">
+                                              ¿Cuál será el metodo de pago para tu empleado?<br /><br />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="formulario row">
+                                        <div class="col-sm-12 col-xs-12 complete">
+                                            <div class="text-center">
+                                                ¿Cuál será el metodo de pago para tu empleado?
+                                            </div>
+                                        </div>
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="introPayment" style="padding-bottom: 20px;">
                                                 <table>
                                                     <tr>
-                                                        <th> </th>
+                                                        <th>Beneficios</th>
                                                         <th>Daviplata</th>
                                                         <th>Transferencia Bancaria</th>
                                                         <th>Efectivo</th>
                                                     </tr>
                                                     <tr>
-                                                        <td>Soporte electrónico de pagos siempre a la mano</td>
+                                                        <td class="text-left">Soporte electrónico de pagos siempre a la mano</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Seguridad de no cargar con efectivo</td>
+                                                        <td class="text-left">Seguridad de no cargar con efectivo</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Transferencias desde cualquier lugar</td>
+                                                        <td class="text-left">Transferencias desde cualquier lugar</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Transferencias hacia cualquier lugar</td>
+                                                        <td class="text-left">Transferencias hacia cualquier lugar</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Fácil activación para el empleado</td>
+                                                        <td class="text-left">Fácil activación para el empleado</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Sin costo para el empleado</td>
+                                                        <td class="text-left">Sin costo para el empleado</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Sin costo para el empleador</td>
+                                                        <td class="text-left">Sin costo para el empleador</td>
                                                         <td colspan="2">Las transacciones tienen un costo de $5.000</td>
                                                         
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Crea historia bancaria para el empleado</td>
+                                                        <td class="text-left">Crea historia bancaria para el empleado</td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                         <td></td>
@@ -706,14 +721,22 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="formulario row" style="border-top: none;">
-                                        <div class="col-sm-10 col-xs-12 col-sm-push-1">
-                                            <h3 class="blueFormTitle">Frecuencia de pago *</h3>
-                                            <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja cada cuanto tiempo se le van a realizar los calculos de nómina</div>
-                                            {{ form_widget(form.employeeHasEmployers.frequencyFrequency) }}
-                                            <h3 class="blueFormTitle">Destino del pago *</h3>
-                                            <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja el modelo de pago de la nómina para su empleado</div>
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <div class="col-sm-6 label-group">
+                                                
+                                                <label class="control-label required" for="register_employee_employeeHasEmployers_position" aria-required="true">Frecuencia de pago *</label>
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                {{ form_widget(form.employeeHasEmployers.frequencyFrequency) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="formulario row" style="border-top: none;border-bottom: 0px none; margin-bottom: 0px; padding-bottom: 0px;">
+                                        <div class="col-sm-12">
+                                            
+                                            <!--<h3 class="blueFormTitle">Selecciona el método para pagarle a tu empleado*</h3>
+                                            <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja el modelo de pago de la nómina para su empleado</div>-->
                                             {% for child in form.employeeHasEmployers.payMethod %}
                                                 <div class="paymentMethodDetail">
                                                     {% set index = child.vars.value %}
@@ -721,9 +744,9 @@
                                                     <img src="/img/block-active.png" class="paymentMethodImage" />
                                                     <div class="paymentMethodDescription">
                                                         {{ choices[index].descripcion }}
-                                                        <br /><br />
-                                                        <a style="color:#00cdcc;text-decoration: none;" href="#"><i style="color:#00cdcc;" class="fa fa-info-circle"></i> Más Información</a>
-                                                        <br />
+                                                        <!--<br />
+                                                        <a style="color:#00cdcc;text-decoration: none;" href="#"><i style="color:#00cdcc; font-size: 13px;" class="fa fa-info-circle"></i> Más Información</a>
+                                                        <br />-->
                                                     </div>
                                                     <div class="paymentMethodsOptions" id="putFields_{{ index }}"></div>
                                                 </div>
@@ -735,12 +758,20 @@
                                             </div>
                                             <br />
 
-                                            <div class="col-sm-12 col-xs-12 center">
-                                                <a class="btn btn-primary btnPrevious-contract btnPrevious" >Anterior</a>
-                                                <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Salvar</button>
+                                            <div class="col-sm-12 col-xs-12 center" style="border-top: 1px solid #e6e7e8; padding-top: 20px;">
+                                                <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
+                                                <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Procesar información de contrato</button>
                                                 <!--<div class="saveControl">{{ form_row(form.save) }}</div>-->
                                             </div>
 
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <br><br>
+                                        <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                                            <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cómo influye el método de pago que se escoja?</h4>
+                                            <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Cada uno de los tres métodos garantiza que el pago desde Symplifica le facilite la vida.<br>La diferencia entre cada método determina la forma como se calcula el valor del pago mes a mes y las respectivas notificaciones y recordatorios que usted recibirá. Así mismo determina el mecanismo que Symplifica usará para llevar a cabo los pagos.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -926,6 +957,9 @@
                     {% else %}
                         {% set sname = "" %}
                     {% endif %}
+                    <div class="col-sm-12 col-xs-12 remember">
+                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                    </div>
                     <div class="col-sm-10 col-xs-12 blockUpData">
                         <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                             <div class="hidden">
@@ -989,15 +1023,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xs-12 remember">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                </div>
-                <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;">
+                
+                <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;border-top: 1px solid #e6e7e8; padding-top: 20px;">
                     <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-primary btnPrevious-form btnPrevious">Anterior</a>
-                    <a id="btn-entities" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-orange disabled" >Confirmar información</a>
+                    <a class="btn btn-grey btnPrevious-form btnPrevious">Volver atrás</a>
+                    <a id="btn-entities" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-orange disabled" >Finalizar registro de empleado</a>
                     <br/>
                     <br/>
                 </div>
@@ -1012,6 +1044,14 @@
                     </div>
                     {{ form_widget(form) }}
                 </div>
+                <div class="row">
+                    <br><br>
+                    <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
+                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Todo empleado debe contar con afiliación a salud y pensión, por lo tanto se deben seleccionar<br> las administradoras que él/ella hayan seleccionado para cada uno de los dos casos</span>
+                    </div>
+                </div>
+
             </div>
         </div>
         {{ form_end(form) }}

@@ -194,7 +194,9 @@ class ContractRegistration extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:'
+                'label'=>'¿Que días de la semana trabajará?*:',
+                'attr'   =>  array(
+                'class'   => 'testing')
             ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',

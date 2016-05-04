@@ -716,16 +716,16 @@ function jsonCalcToHTML(data) {
     var htmls = "";
 
     htmls += "<div class='row'>";
-    htmls += "    <div class='col-sm-6'>";
-    htmls += "        <strong>Costo total para el empleador</strong><br />";
-    htmls += "        <small class='text-muted'>El valor estimado que tu vas vas a pagar</small><br />";
+    htmls += "    <div class='col-sm-6 text-center'>";
+    htmls += "        <strong>Costo total para el empleador</strong>:<br />";
     htmls += "        $<strong>" + getPrice(Math.floor(data.totalExpenses)) + "</strong> ($" + getPrice(Math.floor(data.dailyExpenses)) + " diarios )";
+    htmls += "        <br/><small class='text-muted'>El valor estimado que tu vas a pagar</small>";
     htmls += "    </div>";
 
-    htmls += "    <div class='col-sm-6'>";
-    htmls += "        <strong>Ingreso neto para el empleado</strong><br />";
-    htmls += "        <small class='text-muted'>El valor estimado que recibirá tu empleado</small><br />";
+    htmls += "    <div class='col-sm-6 text-center'>";
+    htmls += "        <strong>Ingreso neto para el empleado</strong>:<br />";
     htmls += "        $<strong>" + getPrice(Math.floor(data.totalIncome)) + "</strong> ($" + getPrice(Math.floor(data.dailyIncome)) + " diarios )";
+    htmls += "        <br/><small class='text-muted'>El valor estimado que recibirá tu empleado</small><br />";    
     htmls += "    </div>";
     htmls += "</div>";
 
