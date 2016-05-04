@@ -81,7 +81,7 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'¿Cuál será la modalidad de trabajo?',
+                'label'=>'¿Cuál será la modalidad de trabajo?*',
                 'required' => true
             ))
             ->add('position', 'entity', array(
@@ -90,7 +90,7 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Defina el cargo que asignará a su empleado:',
+                'label'=>'Defina el cargo que asignará a su empleado:*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))

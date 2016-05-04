@@ -448,6 +448,9 @@
 
                             <div id="employeeContractTypeTab" class="tab-pane fade in">
                                 <div class="formulario col-xs-12">
+                                    <div class="col-sm-12 remember">
+                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                                    </div>
                                     <div class="col-sm-12 col-xs-12 blockUpData">
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.position) }}
@@ -459,6 +462,7 @@
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
+                                            <i style="color:#00cdcc;" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="La forma en que contratarás a tu empleado"></i>
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
@@ -468,34 +472,34 @@
 
                                     <div class="col-sm-12 col-xs-12 days">
                                         <div class="col-sm-6 label-group">
+                                            <i style="color:#00cdcc;"  class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title=""></i>
                                             {{ form_label(form.employeeHasEmployers.sisben) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
                                         </div>
-                                        <div id="sisbenUnknown" class="col-sm-12 text-center">
-                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario">Consulta aquí</a>
+                                        <div id="sisbenUnknown" class="col-sm-6 col-sm-offset-6 text-left">
+                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">> Consultar aquí</a>
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
+                                            <i style="color:#00cdcc;" class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="El lugar principal donde se desempeñará"></i>
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
-                                            <a id="addWorplace">Agregar lugar de trabajo</a>
+                                            <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar lugar de trabajo</span></a>
                                         </div>
                                         
                                     </div>
-                                    <div class="col-sm-12 col-xs-12 remember">
-                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                                    </div>
+                                    
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-6 text-right"><a class="btn btn-grey btnPrevious-form btnPrevious" >Anterior</a></div>
-                                    <div class="col-xs-6"><a class="btn btn-orange btnNext-contract" >Siguiente</a></div>
+                                    <div class="col-xs-6 text-right"><a class="btn btn-grey btnPrevious-form btnPrevious" >Volver atrás</a></div>
+                                    <div class="col-xs-6"><a class="btn btn-orange btnNext-contract" >Siguiente: Información de pago</a></div>
                                 </div>
 
                             </div>
@@ -1140,11 +1144,11 @@
             <div class="modal-content"><div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">El peridodo de prueba</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">El periodo de prueba</div>
                     </div>
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-8 col-md-push-2">
-                            El periodo de prueba consiste en X meses en los que el empleador tiene la posiblididad de....
+                        <div class="col-md-11 col-md-push-1">
+                            El periodo de prueba consiste en 2 meses en los que el empleador tiene la posiblididad de despedir a su empleado sin indemnización.
                         </div>
                     </div>
                 </div>
