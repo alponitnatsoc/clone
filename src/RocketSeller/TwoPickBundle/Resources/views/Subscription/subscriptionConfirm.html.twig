@@ -203,6 +203,10 @@
             -moz-appearance: checkbox;    /* Firefox */
             -ms-appearance: checkbox;     /* not currently supported */
         }
+
+        #infoDebito label, #infoTarjeta label {
+            font-style: italic;
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
@@ -245,7 +249,7 @@
     <div class="row">
         <div class="col-md-3 col-sm-offset-3 text-center" style="padding: 5px 5px 5px 5px;">
             <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" class="disabled" disabled />
-            <label for="creditCard_radio" style="font-weight: normal;"><em>Tarjeta de Crédito</em></label>
+            <label for="creditCard_radio" style="font-weight: normal;"><em style="color:#ccc">Tarjeta de Crédito</em></label>
         </div>
         <div class="col-md-3 text-center" style="padding: 5px 5px 5px 5px;">
             <input type="radio" id="debito_radio" name="typeMethod" value="debito" checked="true"/>
@@ -260,12 +264,12 @@
     <hr>
     <div id="infoTarjeta" class="infoTarjeta blockUpData content-input" style="display: none">
         <div class="col-md-12 text-center">
-            <span style="margin-top: 20px"><h4>Información de la tarjeta de credito*</h4></span>
+            <span style="margin-top: 10px"><h4>Información de la tarjeta de credito*</h4></span>
             <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
             <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 10px;">
             <div class="col-md-12 ">
                 <div class="col-md-12">
                     {{ form_label(form.name_on_card) }}
@@ -303,10 +307,10 @@
             </div>
             <div class="col-md-6 ">
                 <div class="col-md-12">
-                    {{ form_label(form.cvv) }}  
+                    {{ form_label(form.cvv) }} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="Son los 3 dígitos de seguridad que encontrarás en la parte posterior de tu tarjeta"></i>
                 </div>
                 <div class="col-md-12 form-group">
-                    {{ form_widget(form.cvv) }}                             
+                    {{ form_widget(form.cvv) }}                     
                 </div>
             </div>
         </div>
@@ -314,7 +318,7 @@
 
     <div id="infoDebito" class="infoDebito blockUpData content-input" style="display: block">
         <div class="col-md-12 text-center">
-            <span style="margin-top: 20px"><h4>Información de la cuenta bancaria*</h4></span>
+            <span style="margin-top: 10px"><h4>Información de la cuenta bancaria*</h4></span>
             <!--<input type="checkbox" name="chkSameTCC" id="chkSameTCC" value="1" checked/>
             <label for="chkSameTCC" style="font-weight: normal">Usar la misma tarjeta de crédito del pago de sueldo de los empleados</label>  -->
         </div>
@@ -384,12 +388,17 @@
 
     </div>
 
-    <div class="col-md-12" style="margin: 30px 0 20px 0;">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-11 center">
-            <input type="checkbox" id="tos" name="tos">
-            <label for="tos">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</label>                
+    <div class="col-md-12" style="border-bottom: 1px solid #e6e7e8; padding-bottom: 10px; margin: 10px 0px 20px;">
+        <div class="col-md-12 center">
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="tos" name="tos"> <span style="display:inline;text-align: left; font-weight: 100; font-size: 12px;">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</span>   
+                </label>
+              </div>
+
+            
+                         
         </div>
     </div>
 
