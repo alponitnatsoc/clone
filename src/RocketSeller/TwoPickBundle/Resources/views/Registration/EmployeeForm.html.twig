@@ -360,13 +360,13 @@
                                         </div>
                                         <hr />
                                         <div class="contractSecondList">
-                                            <h4>A tener en cuenta</h4>
+                                            <h4 class="text-center">A tener en cuenta</h4>
                                             Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
                                             <br /><br />
                                             Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
                                         </div>
                                         <div class="buttonContainer">
-                                            <button type="button" id="btnToggleIndefinido" class="btn-orange btn active">Selecionar</button>
+                                            <button type="button" id="btnToggleIndefinido" class="btn-orange btn active">Seleccionar</button>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -383,11 +383,11 @@
                                         </div>
                                         <hr />
                                         <div class="contractSecondList">
-                                            <h4>A tener en cuenta</h4>
+                                            <h4 class="text-center">A tener en cuenta</h4>
                                             Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
                                         </div>
                                         <div class="buttonContainer">
-                                            <button type="button" id="btnToggleFijo" class="btn-orange btn ">Selecionar</button>
+                                            <button type="button" id="btnToggleFijo" class="btn-orange btn ">Seleccionar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -396,18 +396,18 @@
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
-                                        {{ form_label(form.employeeHasEmployers.startDate) }}<br/>
+                                        {{ form_label(form.employeeHasEmployers.startDate) }}<br/><br/>
 
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
                                         <br />
-                                        <p class="text-muted">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que<br />conviene firmar el contrato cuando ya exista afiliación a Seguridad Social</p>
+                                        <p class="text-muted" style="font-size:13px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que<br />conviene firmar el contrato cuando ya exista afiliación a Seguridad Social</p>
                                     </div>
                                 </div>
                                 <br/>
                                 <div class="row text-center definite">
                                     
                                     <div class="col-sm-12 text-center form-group">
-                                        {{ form_label(form.employeeHasEmployers.endDate) }}<br />
+                                        {{ form_label(form.employeeHasEmployers.endDate) }}<br /><br/>
 
                                         {{ form_widget(form.employeeHasEmployers.endDate) }}
                                     </div>
@@ -422,9 +422,24 @@
                                 {% endif %}
                                 <br/>
                                 <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="roundContainer">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <i class="glyphicon glyphicon-exclamation-sign bigIcon"></i>
+                                                </div>
+                                                <div class="media-body" style="font-weight:lighter;font-size:14px">
+                                                    <h4 style="font-weight: bold;font-size:16px;" class="media-heading">Importante</h4>Por tratarse de un empleado con el cual ya tiene una relación laboral, el nuevo contrato debe contemplar los términos que ya esten acordados. <a href="">> Más información</a>.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
                                     <div class="col-sm-12 text-center form-group">
-                                        <a class="btn btn-grey btnPrevious-form btnPrevious">Anterior</a>
-                                        <a class="btn btn-orange btnNext-contract" >Siguiente: Caracteristicas de contratación</a>
+                                        <a class="btn btn-grey btnPrevious-form btnPrevious">Volver atrás</a>
+                                        <a class="btn btn-orange btnNext-contract" >Siguiente: Características de contratación</a>
                                     </div>
                                 </div>
 
