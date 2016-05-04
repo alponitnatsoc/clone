@@ -296,7 +296,7 @@ class SubscriptionController extends Controller
                 ->add('bank', 'hidden', array('data' => $debitData['pagoMembresia']["bank"]))
                 ->add('accountType', 'hidden', array('data' => $debitData['pagoMembresia']["accountType"]))
                 ->add('register', 'hidden', array('data' => $questions["registro"]))
-                ->add('save', 'submit', array('label' => 'Validar preguntas'));
+                ->add('save', 'submit', array('label' => 'Validar preguntas', 'attr' => array('class' => 'btn btn-orange')));
             $realForm = $form->getForm();
 
             return $this->render('RocketSellerTwoPickBundle:Registration:generalFormRenderDatacredito.html.twig', array(
