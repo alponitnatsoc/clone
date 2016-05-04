@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/public/bootstrap.min.css">
         <link rel="stylesheet" href="/css/public/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{{ asset('public/css/home/menu.css') }}"><!--hoja de estilos del menu que hizo gustavo (esta en el folder home)-->
         <link rel="stylesheet" href="/css/public/public.css">
         <script src="/js/public/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
         <script type="text/javascript">
@@ -50,8 +51,35 @@
             </div><!--/.navbar-collapse -->
           </div>
         </div>
-        <div class="row-fluid" id="menubar">
-          <div class="container">
+        <div class="row-fluid" i="menubar">
+          <!--menu de prueba-->
+          <div id="nav-menu">
+                          	<a href="/"><div id="logo"><img src="/img/logo.png" alt=""></div></a>
+                              <div id="menu">
+                                  <ul>
+                                      <a href="/beneficios"><li class="grisclarofont light">Producto</li></a>
+                                      <a href="/precios"><li class="grisclarofont light">Precios</li></a>
+                                      <a href="/preguntas-frecuentes"><li class="grisclarofont light">Preguntas frecuentes</li></a>
+                                      <a href="/contactenos"><li class="grisclarofont light">Contáctanos</li></a>
+                                     	<a href="/nosotros"><li class="grisclarofont light">Nosotros</li></a>
+                                  </ul>
+                              </div>
+                              <div id="hamburguesa"><img src="{{ asset('public/img/home/hamburg.png') }}" alt=""></div>
+                              <a href="{{ path('fos_user_registration_register') }}"><div class="registro naranja callto3 bold">Obtén 1 mes gratis</div></a>
+                          </div>
+
+                          <div id="menu-resp">
+                          	<ul>
+                                	<a href="/beneficios"><li class="grisclarofont light">Producto</li></a>
+                                  <a href="/precios"><li class="grisclarofont light">Precios</li></a>
+                                  <a href="/preguntas-frecuentes"><li class="grisclarofont light">Preguntas frecuentes</li></a>
+                                  <a href="/contactenos"><li class="grisclarofont light">Contáctanos</li></a>
+                                 	<a href="/nosotros"><li class="grisclarofont light">Nosotros</li></a>
+                                  <a href="#"><li style="color:#FFFFFF" class="bold naranja">Obtén 1 mes gratis</li></a>
+                             </ul>
+                          </div>
+          <!--fin menu de prueba-->
+          <!--<div class="container">
             <div class="col-md-2 col-xs-6">
               <a href="/"><img src="/img/logo.png" class="img-responsive" alt="Symplifica" /></a>
             </div>
@@ -79,7 +107,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </nav>
       <div class="row-fluid">
@@ -169,5 +197,14 @@
         </div>
         {% block javascripts %}
         {% endblock %}
+        <script type="text/javascript">
+
+          	$(document).ready(function(){
+          		$("#hamburguesa").click(function(){
+          			$("#menu-resp").slideToggle("slow");
+          		});
+          	});
+
+        </script>
     </body>
 </html>
