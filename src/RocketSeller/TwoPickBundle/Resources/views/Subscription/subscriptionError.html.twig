@@ -55,9 +55,19 @@
                 <div class="padding">
                     <h4><b>El pago no puedo ser realizado</b></h4>
                 </div>
-                <div class="padding">
-                    Desafortunadamente tu pago no ha podido ser procesado, es posible que los datos de tu cuenta sean invalidos o que tuvieramos un problema con la comunicación con tu banco, por favor intenta de nuevo, y si el error persiste escríbenos un correo a ayuda@symplifica.com para evaluar tu caso.
-                </div>
+                {% if user.dataCreditStatus ==4 %}
+                    <div class="padding">
+                        Desafortunadamente tu pago no ha podido ser procesado, ya que no se pudo validar tu identidad y exediste el numero de intentos permitidos en el día intenta de nuevo otro día.
+                    </div>
+                {% elseif user.dataCreditStatus ==3  %}
+                    <div class="padding">
+                        Desafortunadamente tu pago no ha podido ser procesado, ya que no se pudo validar tu identidad.
+                    </div>
+                {% else %}
+                    <div class="padding">
+                        Desafortunadamente tu pago no ha podido ser procesado, es posible que los datos de tu cuenta sean invalidos o que tuvieramos un problema con la comunicación con tu banco, por favor intenta de nuevo, y si el error persiste escríbenos un correo a ayuda@symplifica.com para evaluar tu caso.
+                    </div>
+                {% endif %}
                 <div class="padding">
                     <input type="button" class="btn btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('subscription_choices') }}'" >
                 </div>

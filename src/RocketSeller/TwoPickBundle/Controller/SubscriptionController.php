@@ -257,11 +257,17 @@ class SubscriptionController extends Controller
                 'names' => $firstName,
                 'documentExpeditionDate' => $expeditionDate,
             ), array('_format' => 'json'));
+            $em=$this->getDoctrine()->getManager();
+
             if ($insertionAnswer->getStatusCode() != 200) {
+                if($insertionAnswer->getStatusCode()==429){
+                    $user->setDataCreditStatus(4);
+                    $em->persist($user);
+                    $em->flush();
+                }
                 return $this->redirectToRoute("subscription_error");
             }
             $user->setDataCreditStatus(1);
-            $em=$this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             $form = $this->createFormBuilder();
@@ -305,7 +311,6 @@ class SubscriptionController extends Controller
         } elseif($user->getDataCreditStatus()==1) {
             $k=1;
             $formdone=$request->request->get("form");
-
 
             $toSend=array();
             while(true){
@@ -435,11 +440,11 @@ class SubscriptionController extends Controller
                     } elseif ($typeMethod == 'debito') {
                         if($user->getDataCreditStatus()==0){
                             return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId'=>$user->getId(),'request'=>$requestIn));
-                        }elseif($user->getDataCreditStatus()==3){
-                            dump('Usuario no ha podido ser verificado');
-                            return $this->redirectToRoute("subscription_error");
                         }else{
-                            return $this->redirectToRoute("subscription_error");
+                            $user->setDataCreditStatus(0);
+                            $em->persist($user);
+                            $em->flush();
+                            return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId'=>$user->getId(),'request'=>$requestIn));
                         }
 
                     } else {
