@@ -326,7 +326,9 @@ public function fixArrayLocalizacion($array, &$new_array) {
          $ambiente = $this->container->getParameter('ambiente');
        else
          $ambiente = 'desarrollo';
-
+       // Descomentariar esta linea para probar con datacredito real. Esto tiene
+       // un costo, y ips bloqueadas, no intentar seguido.
+       //$ambiente = 'produccion';
        if($ambiente == 'desarrollo') {
          $view2 = View::create();
          $view2->setStatusCode(200);
@@ -712,7 +714,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
         // We call the first method to get the authorization.
         $res = $this->getClientIdentificationServiceExperianValidarAnswersAction($documentNumber, $identificationType, $surname, $names, $documentExpeditionDate);
         //die( print_r($res->getData()));
-        $parameters["regValidacion"]= $res->getData()['regValidacion'];
+        $parameters["regValidacion"] = $res->getData()['regValidacion'];
 
         $request = '<?xml version="1.0" encoding="UTF-8"?>
         <SolicitudCuestionario tipoId="' . $parameters["tipoIdentificacion"] .
@@ -721,6 +723,15 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         /** @var View $responseView */
         $responseView = $this->callApiIdentificacion($parameters, "http://52.73.111.160:8080/idws2/services/ServicioIdentificacion", 'preguntas', $request);
+
+        $resultado = $responseView->getData()['resultado'];
+
+        if($resultado == 10) {
+          $view = View::create();
+          $view->setStatusCode(429);
+          $view->setData([]);
+          return $view;
+        }
 
         return $responseView;
     }
