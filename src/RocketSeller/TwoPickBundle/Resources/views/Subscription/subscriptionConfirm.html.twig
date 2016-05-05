@@ -190,7 +190,7 @@
         .form-control{
             color: #555;
         }
-        .form-group input{            
+        .form-group input{
             color: #555;
         }
         .infoTarjeta, .infoDebito{
@@ -233,7 +233,7 @@
     {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2 text-center" style="padding: 20px">
+        <div class="col-sm-8 col-sm-offset-2 text-center" style="padding: 20px; font-weight: bold; color: #848484; border-radius:5px;border:1px solid #D8D8D8">
             Para que puedas realizar los pagos de nómina, aportes y nuestro
             servicio necesitamos que registres un medio de pago del cuál te
             haremos el cargo mensual
@@ -253,11 +253,11 @@
         </div>
         <div class="col-md-3 text-center" style="padding: 5px 5px 5px 5px;">
             <input type="radio" id="debito_radio" name="typeMethod" value="debito" checked="true"/>
-            <label for="debito_radio" style="font-weight: normal;"><em>Cuenta de Ahorros</em></label>                
+            <label for="debito_radio" style="font-weight: normal;"><em>Cuenta de Ahorros</em></label>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 text-center text-muted" style="padding: 5px 5px 5px 5px;font-size:12px"> 
+        <div class="col-md-12 text-center text-muted" style="padding: 5px 5px 5px 5px;font-size:12px">
             Por su seguridad el medio de pago debe estar a nombre del empleador
         </div>
     </div>
@@ -286,7 +286,7 @@
                     {{ form_label(form.credit_card) }}
                 </div>
                 <div class="col-md-12 form-group">
-                    {{ form_widget(form.credit_card) }}                        
+                    {{ form_widget(form.credit_card) }}
                 </div>
             </div>
         </div>
@@ -294,14 +294,14 @@
         <div class="col-md-12">
             <div class="col-md-6 ">
                 <div class="col-md-12">
-                    {{ form_label(form.expiry_month) }} 
+                    {{ form_label(form.expiry_month) }}
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-6 form-group">
-                        {{ form_widget(form.expiry_month) }} 
+                        {{ form_widget(form.expiry_month) }}
                     </div>
                     <div class=" col-md-6 form-group">
-                        {{ form_widget(form.expiry_year) }}                             
+                        {{ form_widget(form.expiry_year) }}
                     </div>
                 </div>
             </div>
@@ -310,7 +310,7 @@
                     {{ form_label(form.cvv) }} <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="Son los 3 dígitos de seguridad que encontrarás en la parte posterior de tu tarjeta"></i>
                 </div>
                 <div class="col-md-12 form-group">
-                    {{ form_widget(form.cvv) }}                     
+                    {{ form_widget(form.cvv) }}
                 </div>
             </div>
         </div>
@@ -325,30 +325,30 @@
         <div class="col-md-12">
             <div class="col-md-12 ">
                 <div class="col-md-12">
-                    {{ form_label(form.titularName) }}  
+                    {{ form_label(form.titularName) }}
                 </div>
-                <div class="col-md-12 form-group">                        
-                    {{ form_widget(form.titularName) }}  
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="col-md-12 ">
-                <div class="col-md-12">
-                    {{ form_label(form.documentType) }}  
-                </div>
-                <div class="col-md-12 form-group">                        
-                    {{ form_widget(form.documentType) }}  
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.titularName) }}
                 </div>
             </div>
         </div>
         <div class="col-md-12">
             <div class="col-md-12 ">
                 <div class="col-md-12">
-                    {{ form_label(form.documentNumber) }}  
+                    {{ form_label(form.documentType) }}
                 </div>
-                <div class="col-md-12 form-group">                        
-                    {{ form_widget(form.documentNumber) }}  
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.documentType) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 ">
+                <div class="col-md-12">
+                    {{ form_label(form.documentNumber) }}
+                </div>
+                <div class="col-md-12 form-group">
+                    {{ form_widget(form.documentNumber) }}
                 </div>
             </div>
         </div>
@@ -393,12 +393,12 @@
 
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" id="tos" name="tos"> <span style="display:inline;text-align: left; font-weight: 100; font-size: 12px;">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</span>   
+                  <input type="checkbox" id="tos" name="tos"> <span style="display:inline;text-align: left; font-weight: 100; font-size: 12px;">Acepto los <a target="_blank" href="{{ path('terminos_condiciones') }}">términos y condiciones</a>  de Symplifica para que se me haga el cargo a esta tarjeta de<br/>los servicios prestados por Symplifica y de los pagos de nómina y aportes de mis empleados</span>
                 </label>
               </div>
 
-            
-                         
+
+
         </div>
     </div>
 
