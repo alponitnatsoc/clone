@@ -267,7 +267,7 @@
                         <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
                     <div class="col-sm-10 col-xs-12 content-input blockUpData">
-                        
+
                         <div class="col-sm-12">
                             <div class="col-sm-6 label-group">
                                 <label>Dirección donde vive el empleado*</label>
@@ -365,9 +365,7 @@
                                         <hr />
                                         <div class="contractSecondList">
                                             <h4 class="text-center">A tener en cuenta</h4>
-                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
-                                            <br /><br />
-                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
+                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
                                         </div>
                                         <div class="buttonContainer">
                                             <button type="button" id="btnToggleIndefinido" class="btn-orange btn active">Seleccionar</button>
@@ -375,8 +373,8 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <h2>Término fijo</h2>
-                                        <div class="contractFirstList">  
-                                            <h4 class="text-center">Características</h4>  
+                                        <div class="contractFirstList">
+                                            <h4 class="text-center">Características</h4>
                                             <ul class="">
                                                 <li>El periodo de prueba es la quinta parte de la duración del contrato no obstante no puede superar los dos meses.</li>
                                                 <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
@@ -388,7 +386,9 @@
                                         <hr />
                                         <div class="contractSecondList">
                                             <h4 class="text-center">A tener en cuenta</h4>
-                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
+                                            Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
+                                            <br /><br />
+                                            Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
                                         </div>
                                         <div class="buttonContainer">
                                             <button type="button" id="btnToggleFijo" class="btn-orange btn ">Seleccionar</button>
@@ -396,7 +396,7 @@
                                     </div>
                                 </div>
 
-                               
+
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
@@ -409,7 +409,7 @@
                                 </div>
                                 <br/>
                                 <div class="row text-center definite">
-                                    
+
                                     <div class="col-sm-12 text-center form-group">
                                         {{ form_label(form.employeeHasEmployers.endDate) }}<br /><br/>
 
@@ -497,15 +497,15 @@
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
                                             <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar lugar de trabajo</span></a>
                                         </div>
-                                        
+
                                     </div>
-                                    
+
                                 </div>
 
-                                <div class="col-sm-12 col-xs-12 center">    
-                                    <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a> 
+                                <div class="col-sm-12 col-xs-12 center">
+                                    <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
                                     <a class="btn btn-orange btnNext-contract" >Siguiente: Información de pago</a>
-                                    
+
                                 </div>
 
                             </div>
@@ -648,12 +648,6 @@
                             </div>
                             <div id="paymentMethod" class="tab-pane fade in">
                                 <div class="formulario" style="border-bottom:0px">
-                                    <div class="row"><div class="col-sm-12">
-                                            <div class="text-center">
-                                              ¿Cuál será el metodo de pago para tu empleado?<br /><br />
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="formulario row">
                                         <div class="col-sm-12 col-xs-12 complete">
                                             <div class="text-center">
@@ -707,8 +701,8 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="text-left">Sin costo para el empleador</td>
-                                                        <td colspan="2">Las transacciones tienen un costo de $5.000</td>
-                                                        
+                                                        <td colspan="2">Las transacciones tienen un costo de $7.000</td>
+
                                                         <td><span class="glyphicon glyphicon-ok-sign"></span></td>
                                                     </tr>
                                                     <tr>
@@ -724,7 +718,7 @@
                                     <div class="row">
                                         <div class="col-sm-10">
                                             <div class="col-sm-6 label-group">
-                                                
+
                                                 <label class="control-label required" for="register_employee_employeeHasEmployers_position" aria-required="true">Frecuencia de pago *</label>
                                             </div>
                                             <div class="col-sm-6 form-group">
@@ -734,7 +728,7 @@
                                     </div>
                                     <div class="formulario row" style="border-top: none;border-bottom: 0px none; margin-bottom: 0px; padding-bottom: 0px;">
                                         <div class="col-sm-12">
-                                            
+
                                             <!--<h3 class="blueFormTitle">Selecciona el método para pagarle a tu empleado*</h3>
                                             <div class="row text-center" style="font-size: 15px;color: #7D7E81; font-weight: 300">Escoja el modelo de pago de la nómina para su empleado</div>-->
                                             {% for child in form.employeeHasEmployers.payMethod %}
@@ -1023,7 +1017,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;border-top: 1px solid #e6e7e8; padding-top: 20px;">
                     <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
                 </div>

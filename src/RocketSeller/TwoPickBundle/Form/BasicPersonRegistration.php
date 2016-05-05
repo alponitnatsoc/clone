@@ -43,7 +43,7 @@ class BasicPersonRegistration extends AbstractType
                 'property_path' => 'document',
                 'label' => 'Número de documento*',
                 "attr" => array(
-                    "data-toggle" => "tooltip", 
+                    "data-toggle" => "tooltip",
                     "data-placement" => "right",
                     "data-container" => "body",
                     "title" => "Texto de ayuda"
@@ -68,7 +68,7 @@ class BasicPersonRegistration extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'years' => range(intval($this->dateToday->format("Y"))-15,1900),
+                'years' => range(intval($this->dateToday->format("Y"))-18,1900),
                 'constraints' => array(
                     new NotBlank()
                 ),'label' => 'Fecha de Nacimiento*'))
