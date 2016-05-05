@@ -1,53 +1,120 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-	<div class="container col-md-12">
-		<div class="col-md-4">
-			<table class="table">
-				<thead>
-					<tr><th>Documentos</th></tr>
-				</thead>
-				<tbody>
-				  {% for documentType in documentTypeByEmployee %}	  	
-			  			<tr>
-				  			<td>
-				  				{{ documentType.name }}			
-				  			</td>
-				  		</tr>	  			
-				  {% endfor %}
-				</tbody>
-			</table>
-		</div>
-  		<div class="col-md-6">
-	  		<table class="table">
-			    <thead>
-			      <tr>	           
-			        <th>{{employee.personPerson.names}} {{employee.personPerson.lastName1}}</th>          	       
-			      </tr>		      
-			    </thead>	    	
-				    <tbody>
-				    	<tbody>
-				    		
-			    			{% set i = 0 %}
-							{% for document  in documentTypeByEmployee %}								
-								{% if document in documentsPerEmployee %}
-									<tr>											
-										<td>Ya lo tienes</td>
-										<td><a href="{{ path('edit_documents', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">Editar</a></td>
-										<td><a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">Descargar</a></td>	
-									</tr>									
-								{% else %}
-									<tr class="danger">
-										<td><a href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">Subir documento</a></td>
-										<td>-</td>
-										<td>-</td>
-									</tr>
-								{% endif %}									  							  								
-								{% set i = i + 1 %}			
-							{% endfor %}
+    <div class="container col-md-12">
+        <div class="col-md-4">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Documentos</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for documentType in documentTypeByEmployee %}
+                    <tr>
+                        <td>
+                            {{ documentType.name }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>{{ employee.personPerson.names }} {{ employee.personPerson.lastName1 }}</th>
+                </tr>
+                </thead>
+                <tbody>
 
-			  			</tbody>	          	  	     
-				    </tbody>
-	  		</table>
-  		</div>	  		
+                {% set i = 0 %}
+                {% for document  in documentTypeByEmployee %}
+                    {% if document in documentsPerEmployee %}
+                        <tr>
+                            <td>Ya lo tienes</td>
+                            <td>
+                                <span class="edit"
+                                      href="{{ path('edit_documents', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">
+                                    Editar</span>
+                            </td>
+                            <td>
+                                <a class="btn btn-success download" target="_blank"
+                                   href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':keys[i]}) }}">
+                                    Descargar</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="">
+                            <td>
+                                <span class="btn btn-danger upload"
+                                      href="{{ path('documentos_employee', {'id': employee.personPerson.idPerson , 'idDocumentType':document.idDocumentType}) }}">
+                                    Subir documento</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    {% endif %}
+                    {% set i = i + 1 %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal" role="dialog">
+        <div id="modal-body">
+        </div>
+    </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+
+            $(".upload").on('click', function (event) {
+                var btn = $(this);
+                event.preventDefault();
+                var uri = $(this).attr("href");
+                var html = '';
+
+                $(btn).attr('disabled', 'disabled');
+//                 alert(uri);
+                $.ajax({
+                    //method: "POST",
+                    url: uri,
+                    //(data: $('form[name="pago_membresia"]').serialize(),
+                    beforeSend: function (xhr) {
+                    }
+                }).done(function (data) {
+                    $(btn).removeAttr('disabled');
+                    html = data;
+                    $("#modal-body").html('');
+
+                    //$('#modal-body').replaceWith($(html).find('#main'));
+                    $('#modal-body').html($(html).find('#cuerpoModal'));
+
+                    $("#myModal").modal('show');
+                    var files;
+                    // Add events
+                    $('input[type=file]').on('change', prepareUpload);
+
+                    // Grab the files and set them to our variable
+                    function prepareUpload(event) {
+                        files = event.target.files;
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                });
+
+            });
+
+
+        });
+    </script>
+{% endblock javascripts %}
+
 

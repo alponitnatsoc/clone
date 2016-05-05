@@ -1,8 +1,11 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
     <div class="modal-dialog modal-md" role="document" id="cuerpoModal">
-        <div class="modal-content"><div class="modal-body" style="padding: 0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
+                            aria-hidden="true">&times;</span></button>
                 <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                     <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Subir documento nuevo</div>
                 </div>
@@ -11,21 +14,27 @@
                     {{ form_errors(form) }}
                     <div style="display: none;">
                         {{ form_row(form.mediaMedia.unlink) }}
-                    </div>    
-                        
-                    <div style="display: none;">        
-                        {{ form_row(form.documentTypeDocumentType) }}  
-                    </div>      
-                    <div class="col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                    </div>
+
+                    <div style="display: none;">
+                        {{ form_row(form.documentTypeDocumentType) }}
+                    </div>
+
+                    <div class="row " style="border-bottom: none;">
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group text-right">
-                                {{ form_label(form.mediaMedia.binaryContent) }}    
+                            <div class="col-sm-3 text-right">
+                                {{ form_label(form.mediaMedia.binaryContent) }}
                             </div>
-                            <div class="col-sm-6 text-left">
-                                {{ form_widget(form.mediaMedia.binaryContent,{'attr': {'accept':"application/pdf,image/jpg,image/png,image/tif"}}) }}    
+                            <div class="col-sm-9 text-left">
+                                {{ form_widget(form.mediaMedia.binaryContent,{'attr': {'accept':"application/pdf,image/jpg,image/png,image/tif"}}) }}
                             </div>
-                            <!--<img src="/img/typePerson.png">-->                        
-                        </div>  
+                            <!--<img src="/img/typePerson.png">-->
+                        </div>
+                    </div>
+                    <div class="row " style="border-bottom: none; padding-top: 20px;">
+                        <div class="col-sm-12 col-xs-12 text-center">
+                            {{ form_row(form.save) }}
+                        </div>
                     </div>
                     {{ form_end(form) }}
                 </div>
