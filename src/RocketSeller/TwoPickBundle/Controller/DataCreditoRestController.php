@@ -726,7 +726,7 @@ public function fixArrayLocalizacion($array, &$new_array) {
 
         $resultado = $responseView->getData()['resultado'];
 
-        if($resultado == 10) {
+        if($resultado >= 10 && $resultado <= 15 ) {
           $view = View::create();
           $view->setStatusCode(429);
           $view->setData([]);
