@@ -141,7 +141,7 @@ class DataCreditoRestController extends FOSRestController
                   "peso": "1"
                 },
                 "id": "00458819",
-                "resultado": "10",
+                "resultado": "01",
                 "registro": "108651714",
                 "excluirCliente": "false",
                 "alertas": "false",
