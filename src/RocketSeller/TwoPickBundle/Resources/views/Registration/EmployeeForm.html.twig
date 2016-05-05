@@ -741,7 +741,7 @@
                                                 <div class="paymentMethodDetail">
                                                     {% set index = child.vars.value %}
                                                     {{ form_widget(child) }}
-                                                    <img src="/img/block-active.png" class="paymentMethodImage" />
+                                                    <img src="{{ choices[index].image }}" class="paymentMethodImage" />
                                                     <div class="paymentMethodDescription">
                                                         {{ choices[index].descripcion }}
                                                         <!--<br />
