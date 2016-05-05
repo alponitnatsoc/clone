@@ -13,15 +13,15 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
     {
         $PayTypeRetiro = new PayType();
         $PayTypeRetiro->setName('Daviplata');
-        $PayTypeRetiro->setDescripcion('Su empleado podrá retirar sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo.','El empleado recibirá su dinero de forma segura y usted conocerá la trazabilidad de cada transacción. El empleado NO REQUIRE CUENTA BANCARIA así como tampoco asumirá costos por transacción.<br />\nIdeal para empleados que desean tener efectivo a la mano siempre\n');
-        $PayTypeRetiro->setImage('/img/icon_servibanca.png');
+        $PayTypeRetiro->setDescripcion('Retiros sin ningún costo desde los cajeros de Davivienda y sin cuotas de manejo. ');
+        $PayTypeRetiro->setImage('/img/icon_daviplata.png');
         $PayTypeRetiro->setPayrollCode('CON');
 
         $manager->persist($PayTypeRetiro);
 
         $PayTypeTransferencia = new PayType();
         $PayTypeTransferencia->setName('Transferencia bancaria');
-        $PayTypeTransferencia->setDescripcion('El empleado recibirá su dinero directamente a su cuenta bancaria.\nIdeal para empleadores que asignaron cuentas de nómina a sus empleados\n');
+        $PayTypeTransferencia->setDescripcion(' Registre la cuenta bancaria donde el empleado recibirá su pago de nómina.');
         $PayTypeTransferencia->setImage('/img/icon_transfer.png');
         $PayTypeTransferencia->setPayrollCode('CON');
 
@@ -29,7 +29,7 @@ class LoadPayTypeData extends AbstractFixture implements OrderedFixtureInterface
 
         $PayTypeEfectivo = new PayType();
         $PayTypeEfectivo->setName('En efectivo');
-        $PayTypeEfectivo->setDescripcion('El pago se realizará de forma directa al empleado, pero no podrá llevar trazabilidad de la operación. Una vez al mes deberá subir a Symplifica comprobante de pago firmado por el empleado');
+        $PayTypeEfectivo->setDescripcion('El pago se realizará de forma directa al empleado.');
         $PayTypeEfectivo->setImage('/img/icon_cash.png');
         $PayTypeEfectivo->setPayrollCode('EFE');
 
