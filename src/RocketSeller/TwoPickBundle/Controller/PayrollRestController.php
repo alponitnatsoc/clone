@@ -1981,6 +1981,50 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Gets the general external entities history.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the external entities history.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     * @param Int $period Period of the liquidation, 2 or 4 if it is bimonthly,
+     *        depending on the week to be paid, monthly always 4.
+     * @param Int $month Month of the liquidation.
+     * @param Int $year Year of the liquidation.
+     *
+     * @return View
+     */
+    public function getExternalEntitiesCumulativeAction($employeeId, $period = null, $month = null, $year = null)
+    {
+        $content = array();
+        $unico = array();
+
+        $unico['EMPCODIGO'] = $employeeId;
+        $unico['APR_PERIODO'] = $period;
+        $unico['APR_MES'] = $month;
+        $unico['APR_ANO'] = $year;
+
+        $content[] = $unico;
+        $parameters = array();
+
+        $parameters['inInexCod'] = '657';
+        $parameters['clXMLSolic'] = $this->createXml($content, 657, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
      * Adds final liquidation parameters.<br/>
      *
      * @ApiDoc(
