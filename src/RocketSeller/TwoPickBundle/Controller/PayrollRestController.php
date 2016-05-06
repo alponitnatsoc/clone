@@ -1981,6 +1981,50 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Gets the general external entities history.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the external entities history.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Int $employeeId The id of the employee to be queried.
+     * @param Int $period Period of the liquidation, 2 or 4 if it is bimonthly,
+     *        depending on the week to be paid, monthly always 4.
+     * @param Int $month Month of the liquidation.
+     * @param Int $year Year of the liquidation.
+     *
+     * @return View
+     */
+    public function getExternalEntitiesCumulativeAction($employeeId, $period = null, $month = null, $year = null)
+    {
+        $content = array();
+        $unico = array();
+
+        $unico['EMPCODIGO'] = $employeeId;
+        $unico['APR_PERIODO'] = $period;
+        $unico['APR_MES'] = $month;
+        $unico['APR_ANO'] = $year;
+
+        $content[] = $unico;
+        $parameters = array();
+
+        $parameters['inInexCod'] = '657';
+        $parameters['clXMLSolic'] = $this->createXml($content, 657, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
      * Adds final liquidation parameters.<br/>
      *
      * @ApiDoc(
@@ -2540,6 +2584,64 @@ class PayrollRestController extends FOSRestController
 
         $parameters['inInexCod'] = '628';
         $parameters['clXMLSolic'] = $this->createXml($content, 628, 2);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Adds the partial cesantias parameters.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds the partial cesantias parameters.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="value", nullable=false, requirements="\d+(\.\d+)?", strict=true, description="Value of the cesantias to be given to the employee.")
+     *    (name="payment_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="When is it going to be payed(DD-MM-YYYY)")
+     *
+     * @return View
+     */
+    public function postAddPartialCesantiasAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['value'] = '\d+(\.\d+)?';
+        $mandatory['value'] = true;
+        $regex['payment_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['payment_date'] = false;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['TIPOCON'] = 0; // 0 is create.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['PCES_VALOR_SOL'] = $parameters['value'];
+        $unico['PCES_FECHA_PAGO'] = $parameters['payment_date'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '630';
+        $parameters['clXMLSolic'] = $this->createXml($content, 630);
 
         /** @var View $res */
         $responseView = $this->callApi($parameters);
