@@ -74,7 +74,7 @@ class PayMethod
     private $cellPhone;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $hasIt;
 
@@ -234,30 +234,6 @@ class PayMethod
 
 
     /**
-     * Set hasIt
-     *
-     * @param boolean $hasIt
-     *
-     * @return PayMethod
-     */
-    public function setHasIt($hasIt)
-    {
-        $this->hasIt = $hasIt;
-
-        return $this;
-    }
-
-    /**
-     * Get hasIt
-     *
-     * @return boolean
-     */
-    public function getHasIt()
-    {
-        return $this->hasIt;
-    }
-
-    /**
      * Set cellPhone
      *
      * @param string $cellPhone
@@ -279,5 +255,29 @@ class PayMethod
     public function getCellPhone()
     {
         return $this->cellPhone;
+    }
+
+    /**
+     * Set hasIt
+     *
+     * @param integer $hasIt
+     *
+     * @return PayMethod
+     */
+    public function setHasIt($hasIt)
+    {
+        $this->hasIt = $hasIt;
+
+        return $this;
+    }
+
+    /**
+     * Get hasIt
+     *
+     * @return integer
+     */
+    public function getHasIt()
+    {
+        return $this->hasIt;
     }
 }

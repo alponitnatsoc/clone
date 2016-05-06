@@ -303,7 +303,7 @@ class EmployeeRestController extends FOSRestController {
             $em->persist($contract);
             $em->persist($payMethod);
             $em->flush();
-            if (!$hasIt) {
+            if ($hasIt==-1) {
                 $notification = new Notification();
                 $notification->setPersonPerson($user->getPersonPerson());
                 $notification->setStatus(1);

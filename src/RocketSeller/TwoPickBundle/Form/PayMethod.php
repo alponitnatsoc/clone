@@ -36,7 +36,7 @@ class PayMethod extends AbstractType
                     ->add($field->getColumnName(), $field->getDataType(), array(
                         'choices' => array(
                             1 => 'Si',
-                            0 => 'No'
+                            -1 => 'No'
                         ),
                         'multiple' => false,
                         'expanded' => false,
