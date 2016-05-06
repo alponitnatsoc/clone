@@ -334,7 +334,8 @@ class SubscriptionController extends Controller
             $dataCreditAnswer=json_decode($insertionAnswer->getContent(),true);
             $em=$this->getDoctrine()->getManager();
             if ($insertionAnswer->getStatusCode() != 200) {
-                $user->setDataCreditStatus(3);
+                dump($dataCreditAnswer);
+                $user->setDataCreditStatus(5);
                 $em->persist($user);
                 $em->flush();
             }
@@ -365,19 +366,16 @@ class SubscriptionController extends Controller
                 }
 
             }else{
+                dump($dataCreditAnswer);
                 $user->setDataCreditStatus(3);
                 $em->persist($user);
                 $em->flush();
             }
-            $request->setMethod("POST");
-            return $this->forward('RocketSellerTwoPickBundle:Subscription:suscripcionPay');
+            return $this->redirectToRoute("subscription_error");
 
         }else{
-            $request->setMethod("POST");
-            return $this->forward('RocketSellerTwoPickBundle:Subscription:suscripcionPay');
-
+            return $this->redirectToRoute("subscription_error");
         }
-
 
     }
 

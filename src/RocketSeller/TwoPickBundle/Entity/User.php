@@ -116,6 +116,7 @@ class User extends BaseUser
      *      2 - Aprobado
      *      3 - No Aprobado
      *      4 - Exedio el numero de intentos
+     *      5 - DataCredito Toteo
      *
      * @var SmallIntType
      *
