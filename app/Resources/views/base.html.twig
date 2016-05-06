@@ -420,7 +420,7 @@
             });
         }
         function addClick() {
-            $("#main").find(".nav-link").on("click", function (e) {
+            $("#main").find(".nav-link").not(".notAjax").on("click", function (e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
                 history.pushState({}, '', href);

@@ -1430,7 +1430,7 @@ function checkSisben(){
     }
 }
 function initEntitiesFields(){
-    checkSisben
+    checkSisben();
     $("#register_employee_employeeHasEmployers_sisben").on("change", function () {
         var sisben=$(this).find("input:checked").parent().text();
         if(sisben==" No") {
