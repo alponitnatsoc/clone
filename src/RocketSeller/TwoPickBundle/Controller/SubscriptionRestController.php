@@ -86,19 +86,45 @@ class SubscriptionRestController extends FOSRestController
         /* @var $user User */
         $user = $this->getUserById($idUser);
         $tramites = $this->crearTramites($user);
-        $documents = $this->validateDocuments($user);
 
-        $em = $this->getDoctrine()->getManager();
-        $user->setStatus(2);
-        $user->setPaymentState(1);
-        $user->setDayToPay(date('d'));
-        $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
-        $em->persist($user);
-        $em->flush();
+        $view = View::create();
+        $view->setData(array('tramites' => $tramites->getContent()));
+        $view->setStatusCode(200);
+        return $view;
+    }
+
+
+    /**
+     * crear notificaciones iniciales
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "crear tramites para backOffice",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the mail no send"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="idUser", description="Recibe el id del usuario")
+     *
+     *
+     *
+     * @return View
+     */
+    public function postCrearNotificacionesAction(ParamFetcher $paramFetcher)
+    {
+        $idUser = ($paramFetcher->get('idUser'));
+        /* @var $user User */
+        $user = $this->getUserById($idUser);
+        $documents = $this->validateDocuments($user);
 
 
         $view = View::create();
-        $view->setData(array('tramites' => $tramites->getContent(), 'documents' => $documents));
+        $view->setData(array('documents' => $documents));
         $view->setStatusCode(200);
         return $view;
     }
