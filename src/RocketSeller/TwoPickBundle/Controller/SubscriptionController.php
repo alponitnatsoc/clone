@@ -438,6 +438,30 @@ class SubscriptionController extends Controller
                     } elseif ($typeMethod == 'debito') {
                         if($user->getDataCreditStatus()==0){
                             return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId'=>$user->getId(),'request'=>$requestIn));
+                        }elseif($user->getDataCreditStatus()==2){
+                            if ($this->addToHighTech($user)) {
+                                $debitData=$requestIn->request->all();
+
+                                //$request = new Request ();
+                                $request = $this->container->get('request');
+                                $request->setMethod('POST');
+                                $request->request->set('accountNumber', $debitData['pagoMembresia']["numberAccount"]);
+                                $request->request->set('bankId',  $debitData['pagoMembresia']["bank"]);
+                                $request->request->set('accountTypeId',  $debitData['pagoMembresia']["accountType"]);
+                                $request->request->set('userId', $user->getId());
+                                $postAddCreditCard = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:postAddDebitAccount', array('request' => $request), array('_format' => 'json'));
+                                if ($postAddCreditCard->getStatusCode() != Response::HTTP_CREATED) {
+                                    dump($postAddCreditCard->getContent());
+                                    return $this->redirectToRoute("subscription_error");
+                                    //throw $this->createNotFoundException($data->getContent());
+                                } else {
+                                    $this->procesosLuegoPagoExitoso($user);
+                                    return $this->redirectToRoute("subscription_success");
+                                }
+                            } else {
+                                dump('Error al insertar en hightec');
+                                return $this->redirectToRoute("subscription_error");
+                            }
                         }else{
                             $user->setDataCreditStatus(0);
                             $em->persist($user);
