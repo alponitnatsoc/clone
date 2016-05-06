@@ -291,12 +291,12 @@ class EmployeeController extends Controller
         }
         /** @var User $user */
         $user = $this->getUser();
-        if($user->getLegalFlag()==-1){
-            return $this->redirectToRoute("welcome");
-        }
         $employee = null;
         $employerHasEmployee = null;
         if ($id == -1) {
+            if($user->getLegalFlag()==-1){
+                return $this->redirectToRoute("welcome");
+            }
             $employee = new Employee();
             $tab = 1;
         } else {
