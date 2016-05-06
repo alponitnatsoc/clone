@@ -32,11 +32,11 @@ border-bottom: 3px solid #794815}
 
 #banner-beneficios {
 	width: 100%;
-	height: 310px;
+	height: 375px;
 	background: url("../../img/home/banner2.png");
 	background-size:cover;
 	background-position:center;
-	padding: 100px 0 0 0;
+	padding: 175px 0 0 0;
     box-sizing: border-box;
 }
 
@@ -141,7 +141,7 @@ border-bottom: 3px solid #794815}
 	.left, .right {text-align: center;}
 	#cont-beneficios-list p {width: 100%;}
 	#beneficios-title {margin: 30px;}
-	#banner-beneficios {height: 230px;padding: 50px 0 0 0;}
+	#banner-beneficios {height: 295px;padding: 145px 0 0 0;}
 	#banner-beneficios-cont h1 {font-size: 25px}
 
 }

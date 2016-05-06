@@ -28,11 +28,11 @@ p{
 
 #banner-beneficios {
 	width: 100%;
-	height: 310px;
+	height: 360px;
 	background: url("../../img/home/banner5.png");
 	background-size:cover;
 	background-position:center;
-	padding: 100px 0 0 0;
+	padding: 175px 0 0 0;
     box-sizing: border-box;
 }
 
@@ -64,7 +64,7 @@ p{
 /*responsive*/
 
 @media only screen and (max-width: 768px) {
-	#banner-beneficios {height: 210px;padding: 60px 0 0 0;}
+	#banner-beneficios {height: 300px;padding: 155px 0 0 0;}
 	#texto-descript h4 {width: 90%;}
 	}
 
@@ -74,24 +74,23 @@ p{
 
 @media only screen and (max-width: 480px) {
 	#banner-beneficios-cont h1 {font-size: 30px;}
-	#banner-beneficios {height: 170px;padding: 45px 0 0 0;}
+	#banner-beneficios {height: 270px;padding: 145px 0 0 0;}
 	}
 
 	@media only screen and (max-width: 414px) {
-			#banner-beneficios-cont h1 {font-size: 33px;}
+			#banner-beneficios-cont h1 {font-size: 34px;}
 			#banner-beneficios {
-	    	height: 225px;}
+	    	height: 330px;}
 		}
 
 @media only screen and (max-width: 375px) {
 	#banner-beneficios {
-		height: 230px;}
+		height: 325px;}
 }
 
 	/*#banner-beneficios {height: 145px;padding: 45px 0 0 0;}
 	}*/
 
-	@media only screen and (max-width: 375px) {
-		#banner-beneficios {
-    	height: 235px;}
+	@media only screen and (max-width: 320px) {
+		#banner-beneficios {}
 	}
