@@ -99,7 +99,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityProteccion = new Entity();
         $EntityProteccion->setName('Protección');
         $EntityProteccion->setPayrollCode('330');
-        $EntityPorvenir->setPilaCode('230201');
+        $EntityProteccion->setPilaCode('230201');
  		    $EntityProteccion->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
         $manager->persist($EntityProteccion);
@@ -107,10 +107,10 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityColfondos = new Entity();
         $EntityColfondos->setName('Colfondos');
         $EntityColfondos->setPayrollCode('330');
-        $EntityPorvenir->setPilaCode('231001');
+        $EntityColfondos->setPilaCode('231001');
  		    $EntityColfondos->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
-        $manager->persist($EntityProteccion);
+        $manager->persist($EntityColfondos);
 
         $EntityNoAporta = new Entity();
         $EntityNoAporta->setName('No aporta');
@@ -123,7 +123,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityPensionado = new Entity();
         $EntityPensionado->setName('Pensionado');
         $EntityPensionado->setPayrollCode('0');
-        $EntityNoAporta->setPilaCode('0');
+        $EntityPensionado->setPilaCode('0');
  		    $EntityPensionado->setEntityTypeEntityType($this->getReference('entityType-pensiones'));
 
         $manager->persist($EntityPensionado);
@@ -132,7 +132,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityComfacundi = new Entity();
         $EntityComfacundi->setName('Comfacundi');
         $EntityComfacundi->setPayrollCode('548');
-        $EntityNoAporta->setPilaCode('CCF26');
+        $EntityComfacundi->setPilaCode('CCF26');
  		    $EntityComfacundi->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
         $manager->persist($EntityComfacundi);
@@ -140,7 +140,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityCafam = new Entity();
         $EntityCafam->setName('Cafam');
         $EntityCafam->setPayrollCode('507');
-        $EntityNoAporta->setPilaCode('CCF21');
+        $EntityCafam->setPilaCode('CCF21');
         $EntityCafam->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
         $manager->persist($EntityCafam);
@@ -148,7 +148,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityColsubsidio = new Entity();
         $EntityColsubsidio->setName('COLSUBSIDIO');
         $EntityColsubsidio->setPayrollCode('500');
-        $EntityNoAporta->setPilaCode('CCF22');
+        $EntityColsubsidio->setPilaCode('CCF22');
         $EntityColsubsidio->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
         $manager->persist($EntityColsubsidio);
@@ -156,7 +156,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityAfidro = new Entity();
         $EntityAfidro->setName('AFIDRO - BOGOTA');
         $EntityAfidro->setPayrollCode('502');
-        $EntityNoAporta->setPilaCode('CCF24');
+        $EntityAfidro->setPilaCode('CCF24');
         $EntityAfidro->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
         $manager->persist($EntityAfidro);
@@ -164,10 +164,60 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityAseguradores= new Entity();
         $EntityAseguradores->setName('ASEGURADORES');
         $EntityAseguradores->setPayrollCode('504');
-        $EntityNoAporta->setPilaCode('CCF24');
+        $EntityAseguradores->setPilaCode('CCF24');
         $EntityAseguradores->setEntityTypeEntityType($this->getReference('entityType-cajacomp'));
 
         $manager->persist($EntityAseguradores);
+
+        //FCES
+        $EntityPorvenirCesantias = new Entity();
+        $EntityPorvenirCesantias->setName('Porvenir Cesantias');
+        $EntityPorvenirCesantias->setPayrollCode('400');
+        $EntityPorvenirCesantias->setPilaCode('230301');
+        $EntityPorvenirCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntityPorvenirCesantias);
+
+        $EntityColfondosCesantias = new Entity();
+        $EntityColfondosCesantias->setName('ColFondos Cesantias');
+        $EntityColfondosCesantias->setPayrollCode('410');
+        $EntityColfondosCesantias->setPilaCode('231001');
+        $EntityColfondosCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntityColfondosCesantias);
+
+        $EntityProteccionCesantias = new Entity();
+        $EntityProteccionCesantias->setName('Protección Cesantias');
+        $EntityProteccionCesantias->setPayrollCode('430');
+        $EntityProteccionCesantias->setPilaCode('230201');
+        $EntityProteccionCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntityProteccionCesantias);
+
+        $EntitySkandiaCesantias = new Entity();
+        $EntitySkandiaCesantias->setName('Skandia Cesantias');
+        $EntitySkandiaCesantias->setPayrollCode('450');
+        $EntitySkandiaCesantias->setPilaCode('230901');
+        $EntitySkandiaCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntitySkandiaCesantias);
+
+        $EntityFondoNacionalAhorroCesantias = new Entity();
+        $EntityFondoNacionalAhorroCesantias->setName('Fondo Nacional del Ahorro');
+        $EntityFondoNacionalAhorroCesantias->setPayrollCode('460');
+        //TODO Find PilaCode for Fondo Nacional del Ahorro
+        $EntityFondoNacionalAhorroCesantias->setPilaCode('0');
+        $EntityFondoNacionalAhorroCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntityFondoNacionalAhorroCesantias);
+
+        $EntityNoSeCesantias = new Entity();
+        $EntityNoSeCesantias->setName('No se');
+        $EntityNoSeCesantias->setPayrollCode('0');
+        $EntityNoSeCesantias->setPilaCode('0');
+        $EntityNoSeCesantias->setEntityTypeEntityType($this->getReference('entityType-fces'));
+
+        $manager->persist($EntityNoSeCesantias);
 
         $manager->flush();
 
@@ -197,6 +247,15 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-colsubsidio', $EntityColsubsidio);
         $this->addReference('entity-afidro', $EntityAfidro);
         $this->addReference('entity-aseguradores', $EntityAseguradores);
+
+        //FCES
+        $this->addReference('entity-porvenirCes', $EntityPorvenirCesantias);
+        $this->addReference('entity-colfondosCes', $EntityColfondosCesantias);
+        $this->addReference('entity-proteccionCes', $EntityProteccionCesantias);
+        $this->addReference('entity-skandiaCes', $EntitySkandiaCesantias);
+        $this->addReference('entity-fondoNacionalAhorroCes', $EntityFondoNacionalAhorroCesantias);
+        $this->addReference('entity-noSeCes', $EntityNoSeCesantias);
+
     }
     public function getOrder()
     {
