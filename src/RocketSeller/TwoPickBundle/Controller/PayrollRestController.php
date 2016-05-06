@@ -2548,6 +2548,64 @@ class PayrollRestController extends FOSRestController
     }
 
     /**
+     * Adds the partial cesantias parameters.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Adds the partial cesantias parameters.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="employee_id", nullable=false, requirements="([0-9])+", strict=true, description="Employee id")
+     *    (name="value", nullable=false, requirements="\d+(\.\d+)?", strict=true, description="Value of the cesantias to be given to the employee.")
+     *    (name="payment_date", nullable=true, requirements="[0-9]{2}-[0-9]{2}-[0-9]{4}", strict=true, description="When is it going to be payed(DD-MM-YYYY)")
+     *
+     * @return View
+     */
+    public function postAddPartialCesantiasAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['employee_id'] = '([0-9])+';
+        $mandatory['employee_id'] = true;
+        $regex['value'] = '\d+(\.\d+)?';
+        $mandatory['value'] = true;
+        $regex['payment_date'] = '[0-9]{2}-[0-9]{2}-[0-9]{4}';
+        $mandatory['payment_date'] = false;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['TIPOCON'] = 0; // 0 is create.
+        $unico['EMP_CODIGO'] = $parameters['employee_id'];
+        $unico['PCES_VALOR_SOL'] = $parameters['value'];
+        $unico['PCES_FECHA_PAGO'] = $parameters['payment_date'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '630';
+        $parameters['clXMLSolic'] = $this->createXml($content, 630);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
      * Executes the final liquidation process.<br/>
      *
      * @ApiDoc(
