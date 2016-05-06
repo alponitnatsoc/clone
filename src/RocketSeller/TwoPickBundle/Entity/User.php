@@ -115,6 +115,7 @@ class User extends BaseUser
      *      1 - Enviado
      *      2 - Aprobado
      *      3 - No Aprobado
+     *      4 - Exedio el numero de intentos
      *
      * @var SmallIntType
      *

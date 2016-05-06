@@ -355,8 +355,8 @@ trait SubscriptionMethodsTrait
                     if ($insertionAnswer->getStatusCode() != 200) {
                         return false;
                     }
-                    $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m")) + 1) . "-1");
-
+                    $dateToStart = new DateTime($dateToSend->format("Y") . "-" . (intval($dateToSend->format("m"))) . "-1");
+                    $dateToStart = new DateTime(date ( 'Y-m-d' , strtotime ( '+1 month' , strtotime ( $dateToStart->format("Y-m-d") ) ) ));
                 }
             }
             $request->setMethod("POST");
