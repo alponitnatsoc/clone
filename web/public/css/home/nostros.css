@@ -26,11 +26,11 @@ h1 {margin: 0}
 
 #banner-beneficios {
 	width: 100%;
-	height: 310px;
+	height: 360px;
 	background: url("../../img/home/banner6.png");
 	background-size:cover;
 	background-position:center;
-	padding: 100px 0 0 0;
+	padding: 175px 0 0 0;
     box-sizing: border-box;
 }
 
@@ -98,7 +98,7 @@ h1 {margin: 0}
 
 @media only screen and (max-width: 800px) {
 
-	#banner-beneficios {height: 245px; padding: 70px 0 0 0;}
+	#banner-beneficios {height: 345px; padding: 170px 0 0 0;}
 	#texto-descript p {width: 90%;}
 
 	}
