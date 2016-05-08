@@ -1,6 +1,9 @@
-{% extends "::base.html.twig" %}
+{% extends "::new-design/public.html.twig" %}
 {% block stylesheet %}
 {{ parent() }}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
 <style>
 .calculator-block {
     width: 100%;
@@ -72,7 +75,7 @@
 }
 </style>
 {% endblock %}
-{% block fos_user_content %}
+{% block body %}
 <div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
     <div id="" class="col-sm-12 col-xs-12 blockStep inline">
         <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
@@ -139,4 +142,23 @@
         </div>
     </div>
 </div>
-{% endblock fos_user_content %}
+{% endblock %}
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{{ asset('public/js/accounting.min.js') }}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+            $.getScript("{{ asset('public/js/calculator.js') }}").done(function () {
+                calculatorCalculate();
+            });
+        });
+
+
+    </script>
+
+
+{% endblock %}

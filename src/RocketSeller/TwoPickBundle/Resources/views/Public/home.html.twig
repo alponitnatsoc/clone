@@ -1,7 +1,7 @@
 {% extends "::new-design/public.html.twig" %}
 {% block body %}
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -150,7 +150,10 @@ de empleados que quieras administrar</h4>
                     	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0 mensuales</span></p>
                     </div><br>
                     <p class="pcalculadora light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
-             </div>
+                    <br/>
+                    <p class="pcalculadora light">Calcula el salario de tus empleados<br><span class="semi-italic"><a href="{{ path('show_calculator_form') }}">Calculadora</a></span></p><br>
+
+                </div>
 
            </div>
         </section>
