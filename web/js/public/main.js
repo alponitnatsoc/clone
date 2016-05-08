@@ -37,8 +37,7 @@ $(document).ready(function() {
            			btn.button('reset');
             	} else {
             	    btn.button('complete');
-            		location.reload();
-            	}
+					window.location.href = '/';            	}
             },
            	error: function(data, status, object){
 

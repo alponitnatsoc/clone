@@ -298,7 +298,8 @@ class EmployeeRestController extends FOSRestController {
         if (count($errors) == 0) {
             $employee = $contract->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee();
             if ($employee->getRegisterState() == 75) {
-                $employee->setRegisterState(100);
+                $employee->setRegisterState(95);
+                $em->persist($employee);
             }
             $em->persist($contract);
             $em->persist($payMethod);
@@ -1434,6 +1435,11 @@ class EmployeeRestController extends FOSRestController {
             $em->flush();
             $flag = true;
         }
+        if ($realEmployee->getRegisterState() == 95) {
+            $realEmployee->setRegisterState(100);
+            $em->persist($realEmployee);
+            $em->flush();
+        }
 
         if ($flag) {
             $view = View::create();
@@ -1543,6 +1549,11 @@ class EmployeeRestController extends FOSRestController {
                     $counter++;
                 }
             }
+            $em->persist($realEmployer);
+            $em->flush();
+        }
+        if ($realEmployer->getRegisterState() == 95) {
+            $realEmployer->setRegisterState(100);
             $em->persist($realEmployer);
             $em->flush();
         }

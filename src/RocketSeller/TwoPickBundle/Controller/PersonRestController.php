@@ -388,7 +388,7 @@ class PersonRestController extends FOSRestController
                             return $view;
                         }
                     }*/
-                    $employer->setRegisterState(100);
+                    $employer->setRegisterState(95);
                 }
                 $em->persist($user);
                 $em->flush();
@@ -547,8 +547,8 @@ class PersonRestController extends FOSRestController
                 'civilStatus' => "",
                 'gender' => $answer['genero']=='F' ? "FEM" : "MAS",
                 'documentExpeditionDate' => isset($answer['fechaExpedicionAno']) ? array(
-                    'year' => $answer['fechaExpedicionAno'],
-                    'month' => $answer['fechaExpedicionMes'],
+                    'year' => intval($answer['fechaExpedicionAno']),
+                    'month' => intval($answer['fechaExpedicionMes']),
                     'day' => intval($answer['fechaExpedicionDia'])) : array(
                     'year' => "",
                     'month' => "",
