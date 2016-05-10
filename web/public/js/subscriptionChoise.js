@@ -152,7 +152,7 @@ function startSubscriptionChoise() {
                 transport = contrato[key]['transportAid'];
                 resultado = calculator(type, salaryM, salaryD, numberOfDays, sisben, transport);
 
-                total = total + resultado['totalExpenses'];
+                total = total + resultado['totalExpenses2'];
 
                 $("#sueldos").html(getPrice(total));
                 $("#primerPago").html(getPrice(total));

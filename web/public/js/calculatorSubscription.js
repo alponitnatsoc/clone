@@ -1,4 +1,3 @@
-
 /**
  * Created by gabrielsamoma on 11/11/15.
  */
@@ -63,6 +62,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
     var transport = transport;
 
     var totalExpenses = 0;
+    var totalExpenses2 = 0;
     var totalIncome = 0;
     var EPSEmployerCal = 0;
     var EPSEmployeeCal = 0;
@@ -96,8 +96,8 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             }
 
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
-                    PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
-                    ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+                PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
+                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             PensEmployerCal = PensEmployer * base;
@@ -112,6 +112,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             senaCal = sena * base;
             icbfCal = icbf * base;
             totalIncome = (salaryD * numberOfDays) - EPSEmployerCal - PensEmployerCal;
+            totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
         } else {
             var EPSEmployee2 = 0;
             var EPSEmployer2 = 0;
@@ -136,8 +137,8 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             }
             //then calculate arl ces and the rest
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployee2 + arl
-                    + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
-                    * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
+                + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
+                * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
             EPSEmployerCal = EPSEmployer2 * base;
             EPSEmployeeCal = EPSEmployer2 * base;
             arlCal = arl * base;
@@ -149,6 +150,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             senaCal = sena * base;
             icbfCal = icbf * base;
             totalIncome = ((salaryD + transportAidDaily) * numberOfDays) - PensEmployeeCal;
+            totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
         }
 
     } else {
@@ -160,23 +162,24 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         } else {
             transportAid2 = transportAid;
         }
-
+        base = (salaryM + aidD);
         totalExpenses = salaryM + aidD + transportAid2 + dotation + ((EPSEmployer + PensEmployer + arl + caja +
-                vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid2));
-        EPSEmployerCal = EPSEmployer * (salaryM + aidD);
-        EPSEmployeeCal = EPSEmployee * (salaryM + aidD);
-        PensEmployerCal = PensEmployer * (salaryM + aidD);
-        PensEmployeeCal = PensEmployee * (salaryM + aidD);
-        arlCal = arl * (salaryM + aidD);
-        cesCal = ces * (salaryM + aidD + transportAid2);
-        taxCesCal = taxCes * (salaryM + aidD + transportAid2);
-        cajaCal = caja * (salaryM + aidD);
-        vacationsCal = vacations30D * (salaryM + aidD);
+            vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid2));
+        EPSEmployerCal = EPSEmployer * base;
+        EPSEmployeeCal = EPSEmployee * base;
+        PensEmployerCal = PensEmployer * base;
+        PensEmployeeCal = PensEmployee * base;
+        arlCal = arl * base;
+        cesCal = ces * (base + transportAid2);
+        taxCesCal = taxCes * (base + transportAid2);
+        cajaCal = caja * base;
+        vacationsCal = vacations30D * base;
         transportCal = transportAid2;
         dotationCal = dotation;
-        senaCal = sena * (salaryM + aidD);
-        icbfCal = icbf * (salaryM + aidD);
+        senaCal = sena * base;
+        icbfCal = icbf * base;
         totalIncome = (salaryM + transportCal - EPSEmployerCal - PensEmployerCal);
+        totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
 
     }
     var resposne = [];
@@ -184,6 +187,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
     if ((type == "days" && (salaryD == 0 || numberOfDays == null || numberOfDays == 0)) || (type != "days" && (salaryM <= 0))) {
         totalExpenses = 0;
         resposne['totalExpenses'] = 0;
+        resposne['totalExpenses2'] = 0;
         resposne['dailyExpenses'] = 0;
         resposne['dailyIncome'] = 0;
         resposne['EPSEmployerCal'] = 0;
@@ -202,6 +206,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         resposne['totalIncome'] = 0;
     } else {
         resposne['totalExpenses'] = totalExpenses;
+        resposne['totalExpenses2'] = totalExpenses2;
         resposne['dailyExpenses'] = totalExpenses / numberOfDays;
         resposne['dailyIncome'] = totalIncome / numberOfDays;
         resposne['EPSEmployerCal'] = EPSEmployerCal;
@@ -225,13 +230,12 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
     return resposne;
 
 
-
 }
 
 function getPrice(valor) {
     price = parseFloat(valor.toString().replace(/,/g, ""))
-            .toFixed(0)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        .toFixed(0)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return "$ " + price;
 }
