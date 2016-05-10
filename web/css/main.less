@@ -911,6 +911,21 @@ a.helpTxt {
     }
 }
 
+.bigAddLink a {
+    width: 100%;
+    text-align: center;
+    margin: 0px; 
+    padding: 15px 0;
+    color: @color_boton;
+    display: inline-block;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    border-top: 1px solid #eee;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 .wizardAddLink a {
     width: 100%;
     text-align: center;
@@ -954,6 +969,17 @@ table.record_properties {
     tr td {
         text-align: center;
     } 
+}
+
+.blueHeadline {
+    font-family: @open;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: initial;
+    color: @dark_gray;
+    white-space: normal;
+    margin-top: 15px;
+    letter-spacing: -1px;
 }
 .blockStep {
     background-image: none;
@@ -1825,6 +1851,10 @@ select {
         background-color: @btn-lightBlue;
         color: #efc394;
     }
+}
+
+.btn-xs {
+    font-weight: 100 !important;
 }
 
 .btn-mediumBlue {
