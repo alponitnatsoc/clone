@@ -34,7 +34,10 @@
             }
             */
            .label-group{
-            text-align: right !important;
+                text-align: right !important;
+                font-size: 16px;
+                font-style: italic;
+                font-weight: 100;
            }
            .form-select{
             color: yellow !important;
@@ -42,221 +45,208 @@
         </style>
     {% endblock %}
 
-    <div class="row"></div>
-    <div class="row-fluid" id='registrationFormContainer'>
+    <div class="row">
+        <div class="col-sm-12 col-xs-12 align-Resp">
+            <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+                <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                    <img src="/img/ico-empleador.png" class="center-block">
+                </div>
+                <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                    <div id="" class="text-left">
+                        Datos del Empleador
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="" id='registrationFormContainer' style="margin-bottom:20px;overflow: hidden;">
 
         <ul class="nav nav-tabs nav-justified">
             <li class="active"><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#basicData">Datos básicos</a></li>
-            <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#contactData">Datos de contacto</a></li>
+            <!--<li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#contactData">Datos de contacto</a></li>-->
             <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#workplacesData">Lugares de trabajo</a></li>
-            <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#employerEntities">Entidades</a></li>
+            <li><a data-toggle="tab" class="notAjax tabsEnabled" data-target="#employerEntities">Seguridad Social</a></li>
         </ul>
 
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in active">
                 {# render the task's only field: description #}
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                </div>
-                <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            Tipo de Documento
-                        </div>
-                        <div class="col-md-6 form-group">
-                            {{ employer.personPerson.documentType}}
-                        </div>
-                        <!--<img src="/img/documentType.png">-->
+                <div class="col-md-10 col-md-offset-1 blockUpData content-input" style="border-bottom: none;">
+                    <div class="text-center">
+                        <span style="color:#71c8c6;font-weight:700;font-size:14px;">{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</span>
+                        <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
                     </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            Número de documento
+                    <br />
+                    <div class="row" style="background-color:#f7f7f7;padding: 20px;">
+                        <div class="row"> 
+                            <div class="col-sm-6 label-group">
+                                Fecha de Nacimiento
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ employer.personPerson.birthDate|date('Y-m-d')}}
+                            </div>                                               
                         </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ employer.personPerson.document}}
+                        <div class="row">
+                            <div class="col-sm-6 label-group">
+                                Dirección principal
+                            </div>
+                            <div class="col-sm-6 form-group input">
+                                {{ employer.personPerson.mainAddress}}
+                            </div>                    
                         </div>
-                        <!--<img src="/img/documentNumber.png">-->
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            Nombres
+                        <div class="row">
+                            <ul class="phones"  >
+                                {% for phone in employer.personPerson.phones %}
+                                    <li id="phone_{{loop.index}}" class="phoneLi">
+                                        <div class="col-sm-6 label-group">
+                                            Número
+                                        </div>
+                                        <div class="col-sm-6 form-group input">
+                                            {{ phone.phoneNumber}}
+                                        </div>                                                                        
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-6 label-group">
+                                Departamento
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ employer.personPerson.department}}
+                            </div>                    
                         </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ employer.personPerson.names}}
-                        </div>                        
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            Primer Apellido
+                        <div class="row">
+                            <div class="col-sm-6 label-group">
+                                Ciudad
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ employer.personPerson.city}}
+                            </div>                    
                         </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ employer.personPerson.lastName1}}
-                        </div>
-                        <!--<img src="/img/documentNumber.png">-->
-                    </div>
-                    <div class="col-sm-12 col-sm-push-3">
-                        <a id="btn-inquiry" href="{{ path('api_public_post_inquiry_document') }}" class="btn btn-primary btnNext" style="display: none;">Consultar</a>
-                    </div>
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            Segundo Apellido
-                        </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ employer.personPerson.lastName2}}
-                        </div>                       
-                    </div>
-                    <div class="col-sm-12 col-xs-12"> 
-                        <div class="col-sm-6 label-group">
-                            Fecha de Nacimiento
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ employer.personPerson.birthDate|date('Y-m-d')}}
-                        </div>                                               
                     </div>
                 </div>
 
                 <br /><br />
             </div>
-            
+            <!--
             <div id="contactData" class="tab-pane fade in">
+                
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <br></br>
                 <div class="col-sm-10 col-xs-12 blockUpData">
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            Dirección principal
-                        </div>
-                        <div class="col-sm-6 form-group input">
-                            {{ employer.personPerson.mainAddress}}
-                        </div>                    
-                    </div>
-                    <div class="col-sm-12">
-                        <ul class="phones"  >
-                            {% for phone in employer.personPerson.phones %}
-                                <li id="phone_{{loop.index}}" class="phoneLi">
-                                    <div class="col-sm-6 label-group">
-                                        Número
-                                    </div>
-                                    <div class="col-sm-6 form-group input">
-                                        {{ phone.phoneNumber}}
-                                    </div>                                                                        
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div> 
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            Departamento
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ employer.personPerson.department}}
-                        </div>                    
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="col-sm-6 label-group">
-                            Ciudad
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            {{ employer.personPerson.city}}
-                        </div>                    
-                    </div>                                          
+                                                              
                     
                 </div>
                 <br/><br/>
 
             </div>
+            -->
             <div id="workplacesData" class="tab-pane fade">
-
-
-                {# iterate over each existing workplaces and render its fields #}
-                <ul class="workplaces"  style="list-style: none">
-                    {% for workplace in employer.workplaces %}
-                        <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
-                            <div class="row">
-                                <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
-                                    <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
-                                            Nombre
+                <div class="col-md-10 col-md-offset-1 blockUpData content-input" style="border-bottom: none;">
+                    <div class="text-center">
+                            <span style="color:#71c8c6;font-weight:700;font-size:14px;">{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</span>
+                            <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
+                        </div>
+                    <br />
+                    <div class="row" style="background-color:#f7f7f7;padding: 20px;">
+                    {# iterate over each existing workplaces and render its fields #}
+                        <ul class="workplaces"  style="list-style: none">
+                            {% for workplace in employer.workplaces %}
+                                <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
+                                    <div class="row">
+                                        <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
+                                            <div class="col-sm-12 col-xs-12">
+                                                <div class="col-sm-6 label-group">
+                                                    Nombre
+                                                </div>
+                                                <div class="col-sm-6 form-group input">
+                                                    {{ workplace.name}}
+                                                </div>                                                                                
+                                            </div>
+                                            <div class="col-sm-12 col-xs-12">
+                                                <div class="col-sm-6 label-group">
+                                                    Dirección
+                                                </div>
+                                                <div class="col-sm-6 form-group input">
+                                                    {{ workplace.mainAddress}}
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="col-sm-6 label-group">
+                                                    Departamento
+                                                </div>
+                                                <div class="col-sm-6 form-group">
+                                                    {{ workplace.department}}
+                                                </div>                                                                            
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12">
+                                                <div class="col-sm-6 label-group">
+                                                    Ciudad
+                                                </div>
+                                                <div class="col-sm-6 form-group">
+                                                    {{ workplace.city}}
+                                                </div>                                        
+                                            </div>
+                                            
                                         </div>
-                                        <div class="col-sm-6 form-group input">
-                                            {{ workplace.name}}
-                                        </div>                                                                                
                                     </div>
-                                    <div class="col-sm-12 col-xs-12">
-                                        <div class="col-sm-6 label-group">
-                                            Dirección
-                                        </div>
-                                        <div class="col-sm-6 form-group input">
-                                            {{ workplace.mainAddress}}
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12">
-                                        <div class="col-sm-6 label-group">
-                                            Departamento
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            {{ workplace.department}}
-                                        </div>                                                                            
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12">
-                                        <div class="col-sm-6 label-group">
-                                            Ciudad
-                                        </div>
-                                        <div class="col-sm-6 form-group">
-                                            {{ workplace.city}}
-                                        </div>                                        
-                                    </div>
-                                    
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
-                                        
-                        </div>
-                    {% endfor %}                    
-                </ul>
+                                
+                            {% endfor %}                    
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div id="employerEntities" class="tab-pane fade in">
-                <div class="formulario" style="padding-top: 30px; border-bottom: 1px solid #E6E7E8;">
-                    <div class="col-sm-12 col-xs-12 text-center">
-                        <p style="font-weight:100;">
-                            La Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales estas afiliado.
-                        </p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2 col-xs-12 blockUpData" style="border-bottom:none;">
-                            <div class="col-sm-12 col-xs-12">
-                                <div class="col-sm-12 form-group">
-                                    <ul class="severances"  style="list-style: none; padding:0;">
-                                        {% for entity in employer.entities %}
-                                            <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
-                                                <div class="row">
-                                                    <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
-                                                        <div class="col-sm-12 col-xs-12">
-                                                            <div class="col-sm-6 label-group">
+                <div class="col-md-10 col-md-offset-1 blockUpData content-input" style="border-bottom: none;">
+                        <!--
+                        <div class="col-sm-12 col-xs-12 text-center">
+                            <p style="font-weight:100;">
+                                La Administradora de Riesgos Laborales y la Caja de Compensación Familiar a las cuales estas afiliado.
+                            </p>
+                        </div>-->
+                        <div class="text-center">
+                            <span style="color:#71c8c6;font-weight:700;font-size:14px;">{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</span>
+                            <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
+                        </div>
+                        <br />
+                        <div class="row" style="background-color:#f7f7f7;padding: 20px;">
+                            <div class="row">
+                                <div class="col-sm-8 col-sm-offset-2 col-xs-12 " style="border-bottom:none;">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-12 form-group">
+                                            <ul class="severances"  style="list-style: none; padding:0;">
+                                                {% for entity in employer.entities %}
+                                                    <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
+                                                        <div class="row" style="margin-bottom:10px;">
+                                                            <div style="text-align:center !important" class="col-sm-12 text-center label-group">
                                                                 {% set entityType=  entity.entityEntity.entityTypeEntityType %}
                                                                 {{ entityType.name }}
                                                             </div>
-                                                            <div class="col-sm-6 form-group input">
+                                                        </div>
+                                                        <div class="row">
+                                                            <div style="text-align:center !important" class="col-sm-12 text-center form-group input">
                                                                 {{ entity.entityEntity.name }}
                                                             </div>
                                                         </div>
+                                                         
+                                                        
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
+                                                    <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
 
-                                            </div>
-                                        {% endfor %}
-                                    </ul>
+                                                    </div>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
         <br /><br />
@@ -264,10 +254,10 @@
 
 
     </div>
-    <div class="row">
+    <div class="row" style="margin-top:20px;">
         <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 0px; margin-bottom:20px;">
-            <div class="col-sm-12 col-xs-12 button-bottom center">
-                <a btn class="btn btn-default" href="{{ path('edit_employer') }}" class="nav-link">Editar datos</a>
+           <div class="col-sm-10 col-md-offset-1 button-bottom center" style="border-top: 1px solid #eee; padding-top: 20px;">
+                <a btn class="btn btn-orange" href="{{ path('edit_employer') }}" class="nav-link">Editar datos</a>
             </div>
         </div>
 
