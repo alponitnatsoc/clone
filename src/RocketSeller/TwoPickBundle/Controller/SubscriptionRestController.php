@@ -9,14 +9,12 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class SubscriptionRestController extends FOSRestController
 {
 
     use SubscriptionMethodsTrait;
-    use EmployeeMethodsTrait;
 
     private function paySubscriptionToDays($daysToPay)
     {
@@ -94,48 +92,7 @@ class SubscriptionRestController extends FOSRestController
         $view->setData(array('tramites' => $tramites->getContent()));
         $view->setStatusCode(200);
         return $view;
-    }/**
-     * crear notificaciones iniciales  para empleador
-     *
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "crear tramites para backOffice",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when the mail no send"
-     *   }
-     * )
-     *
-     * @param ParamFetcher $paramFetcher
-     *
-     * @RequestParam(name="idUser", description="Recibe el id del usuario")
-     *
-     *
-     *
-     * @return View
-     */
-    public function postCreateInitialNotificationsAction(ParamFetcher $paramFetcher)
-    {
-        $idUser = ($paramFetcher->get('idUser'));
-        /* @var $user User */
-        $user = $this->getUserById($idUser);
-        $employer=$user->getPersonPerson()->getEmployer();
-        $this->validateDocumentsEmployer($user,$employer);
-        /** @var EmployerHasEmployee $eHE */
-        foreach ($employer->getEmployerHasEmployees() as $eHE) {
-            if($eHE->getState()==1){
-                $employee=$eHE->getEmployeeEmployee();
-                $this->validateDocumentsEmployee($user,$employee);
-            }
-        }
-
-        $view = View::create();
-        $view->setData(array());
-        $view->setStatusCode(200);
-        return $view;
     }
-
 
     /**
      * crear notificaciones iniciales
