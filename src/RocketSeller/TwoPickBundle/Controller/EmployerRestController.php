@@ -225,7 +225,7 @@ class EmployerRestController extends FOSRestController
     {
         $idUser = ($paramFetcher->get('idUser'));
         /* @var $user User */
-        $user = $this->getUserById($idUser);
+        $user = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($idUser);
         $employer=$user->getPersonPerson()->getEmployer();
         $this->validateDocumentsEmployer($user,$employer);
         /** @var EmployerHasEmployee $eHE */
