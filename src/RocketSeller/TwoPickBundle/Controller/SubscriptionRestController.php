@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
 
 class SubscriptionRestController extends FOSRestController
