@@ -16,81 +16,102 @@
             height: 20px;
             top: -8px;
         }
-        .noUi-horizontal .noUi-handle:before,.noUi-horizontal .noUi-handle:after {
+
+        .noUi-horizontal .noUi-handle:before, .noUi-horizontal .noUi-handle:after {
             display: none;
         }
 
         .noUi-target {
             box-shadow: none;
         }
-        #employees{
+
+        #employees {
             margin: 0px;
             padding: 0px;
-            padding-bottom:  30px;
+            padding-bottom: 30px;
             border-bottom: 1px solid #E6E7E8;
         }
-        .timeCommitmentTimeCommitment{
+
+        .timeCommitmentTimeCommitment {
             font-size: small;
             font-weight: 100;
             color: lightslategray;
         }
-        .labora{
+
+        .labora {
             font-size: smaller;
             font-weight: 100;
             color: lightslategray;
         }
-        .x-large{
+
+        .x-large {
             font-size: 18px;
         }
-        .border-all-darkGray{
+
+        .border-all-darkGray {
             border: 1px solid #CCC;
             border-radius: 5px;
         }
-        .border-botton-darkGray{
+
+        .border-botton-darkGray {
             border-bottom: 1px solid #E6E7E8;
         }
-        .border-botton-darkGray2{
+
+        .border-botton-darkGray2 {
             border-bottom: 1px solid #C5C8C8;
         }
-        .padding-all{
+
+        .padding-all {
             padding: 20px;
         }
+
         .center {
             margin: auto;
             width: 60%;
         }
-        .padding-left-right-20{
+
+        .padding-left-right-20 {
             padding: 0px 20px 0px 20px;
         }
-        .padding-left-right-40{
+
+        .padding-left-right-40 {
             padding: 0px 40px 0px 40px;
         }
-        .padding-top-botton-20{
+
+        .padding-top-botton-20 {
             padding: 20px 0px 20px 0px;
         }
-        .padding-top-botton-10{
+
+        .padding-top-botton-10 {
             padding: 10px 0px 10px 0px;
         }
-        .font-bold{
+
+        .font-bold {
             font-weight: bold;
         }
-        .dark-blue{
+
+        .dark-blue {
             color: #197982;
         }
-        .nopadding{
+
+        .nopadding {
             padding: 0 !important;
             margin: 0 !important;
         }
+
         .padding-all-10 {
             padding: 10px 10px 0 10px;
         }
-        .margin-left-right-25-40{
+
+        .margin-left-right-25-40 {
             margin: 0px 40px 0px 25px;
         }
-        .margin-all-right-botton-10{
+
+        .margin-all-right-botton-10 {
             margin: 0px 10px 10px 0px;
         }
-        .div-btn-change-state-contract{
+
+        .div-btn-change-state-contract {
             bottom: 0;
             position: absolute;
             margin: 0px 10px 10px 0px;
@@ -99,42 +120,52 @@
             right: 0;
             width: 100px;
         }
-        .btn-change-state-contract.on{
+
+        .btn-change-state-contract.on {
             width: 100px;
 
         }
-        .btn-change-state-contract.off{
+
+        .btn-change-state-contract.off {
             width: 100px;
         }
-        .codigo_referido_valido{
+
+        .codigo_referido_valido {
             color: green;
         }
-        .codigo_referido_invalido{
+
+        .codigo_referido_invalido {
             color: red;
         }
-        #btnRedimir.off{
+
+        #btnRedimir.off {
             background-color: #B8B2AC;
         }
-        .result_ajax_icon{
+
+        .result_ajax_icon {
             color: orange;
             font-size: 30px;
         }
-        .result_ajax{
+
+        .result_ajax {
             text-align: left;
         }
-        .result_ajax_msg{
+
+        .result_ajax_msg {
             display: inline-block;
             vertical-align: super;
             margin-left: 5px;
             color: darkgrey;
         }
-        .margin-top-bottom-10{
+
+        .margin-top-bottom-10 {
             margin: 10px 0px 10px 0px;
         }
 
         #divSubtotal {
             font-size: 35px;
         }
+
         .subtotalTitle {
             font-size: 16px;
         }
@@ -169,7 +200,7 @@
     #}
     <div class="row padding-left-right-20">
         <div class="col-md-12 text-center border-botton-darkGray ">
-            <br />
+            <br/>
             <div class="col-md-12">
                 <b class="x-large">Resumen de pago mensual</b>
             </div>
@@ -193,8 +224,9 @@
                     cálculos de mora, etc.
                 </p>
             </div>
-            <div class="col-md-5 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 20px; margin-top: 45px;">
-                <div  id="sueldos" class="x-large font-bold dark-blue" style="font-size:35px" >
+            <div class="col-md-5 pull-right text-center border-all-darkGray "
+                 style="height: 90px; vertical-align: middle; padding-top: 20px; margin-top: 45px;">
+                <div id="sueldos" class="x-large font-bold dark-blue" style="font-size:35px">
                     $ {{ "0" }}
                 </div>
             </div>
@@ -224,19 +256,26 @@
                             {% set producto = employeeData['product'] %}
 
                             <div class="row clearfix">
-                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}" style="min-height:90px;margin-top:17px;">
+                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}"
+                                     style="min-height:90px;margin-top:17px;">
                                     <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
-                                        <div >
-                                            <b class="employee_name" style="font-size:large;">{{ employee.employeeEmployee.personPerson.names }}</b><br />
-                                            <span style="font-weight:80;">{{ employee.employeeEmployee.personPerson.lastname1 ~ employee.employeeEmployee.personPerson.lastname2}}</span>
+                                        <div>
+                                            <b class="employee_name"
+                                               style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
+                                            <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1 ~ ' ' ~employee.employeeEmployee.personPerson.lastname2)|lower|capitalize }}</span>
                                         </div>
                                         {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                        <div style="font-style:italic; font-weight:100; font-size: small;" class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  " data-employeeId="{{ employee.idEmployerHasEmployee }}">
-                                            Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días al mes
+                                        <div style="font-style:italic; font-weight:100; font-size: small;"
+                                             class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  "
+                                             data-employeeId="{{ employee.idEmployerHasEmployee }}">
+                                            Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
+                                            al mes
                                         </div>
                                     </div>
                                     <div class="col-md-3 div-btn-change-state-contract">
-                                        <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}" data-id="{{ employee.idEmployerHasEmployee }}" data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}" >{{ employee.state?'Inactivar':'Activar' }}</div>
+                                        <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
+                                             data-id="{{ employee.idEmployerHasEmployee }}"
+                                             data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state?'Inactivar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -245,10 +284,13 @@
                     </div>
                     <div class="col-md-5 pull-right text-center">
                         <div class="col-md-12">
-                            <span class="subtotalTitle"><em>Este es el valor por:</em><br><b id="count_employee">{{ employees|length }} Empleados</b></span>
+                            <span class="subtotalTitle"><em>Este es el valor por:</em><br><b
+                                        id="count_employee">{{ employees|length }} Empleados</b></span>
                         </div>
-                        <div class="col-md-12 pull-right text-center border-all-darkGray " style="height: 90px; vertical-align: middle; padding-top: 17px; margin-top: 20px;">
-                            <div  id="divSubtotal" class="x-large font-bold dark-blue" >$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>
+                        <div class="col-md-12 pull-right text-center border-all-darkGray "
+                             style="height: 90px; vertical-align: middle; padding-top: 17px; margin-top: 20px;">
+                            <div id="divSubtotal" class="x-large font-bold dark-blue">
+                                $ {{ total_sin_descuentos|number_format(0,'.',',') }}</div>
                         </div>
                     </div>
                 </div>
@@ -262,7 +304,7 @@
             </div>
         </div>
     </div>
-    <hr />
+    <hr/>
     <div class="row padding-left-right-40" style="margin-bottom:10px;">
         <div class="col-md-12 text-center">
 
@@ -283,8 +325,11 @@
                 descuento en la suscripción de ese mes.<br/>
             </div>
             <div class="col-md-12 margin-top-bottom-10">
-                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10" placeholder="Ingresa un código de referido" style="width: 300px; display: inline-block;">
-                <button id="btnRedimir" class="btn btn-default" value="Redimir" style="margin-top: 0px; font-size: 13px;">Redimir</button>
+                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10"
+                       placeholder="Ingresa un código de referido" style="width: 300px; display: inline-block;">
+                <button id="btnRedimir" class="btn btn-default" value="Redimir"
+                        style="margin-top: 0px; font-size: 13px;">Redimir
+                </button>
             </div>
             <div class="col-md-12" id="codigo_referido_estado"></div>
         </div>
@@ -305,7 +350,8 @@
                      padding-top: 10px;
                      text-align: right;
                      padding-right: 100px;">
-                    <div  id="primerPago" style="font-size: x-large; font-weight: bold; color: lightgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')  }}</div>
+                    <div id="primerPago" style="font-size: x-large; font-weight: bold; color: lightgrey;">
+                        $ {{ total_sin_descuentos|number_format(0,'.',',') }}</div>
                 </div>
             </div>
             <div class="col-md-12 padding-top-botton-10">
@@ -318,7 +364,8 @@
                 <div class="col-md-4 " style="
                      text-align: right;
                      padding-right: 100px;">
-                    <div  id="segundoPago" style="font-size: x-large; font-weight: bold; color: darkgrey;">$ {{ total_sin_descuentos|number_format(0,'.',',')   }}</div>
+                    <div id="segundoPago" style="font-size: x-large; font-weight: bold; color: darkgrey;">
+                        $ {{ total_sin_descuentos|number_format(0,'.',',') }}</div>
                 </div>
             </div>
         </div>
@@ -334,9 +381,10 @@
     </form>
 
     <div class="row">
-        <br />
+        <br/>
         <div class="col-sm-12 remember text-center" style="opacity: 0.7;">
-            <h4 style="font-size: 14px;">* El valor puede variar según las novedades ingresadas mes a mes por cada empleado así como también <br />la cantidad de empleados que registre en el sistema</h4>
+            <h4 style="font-size: 14px;">* El valor puede variar según las novedades ingresadas mes a mes por cada
+                empleado así como también <br/>la cantidad de empleados que registre en el sistema</h4>
         </div>
     </div>
 
@@ -344,17 +392,21 @@
 
 
     <!-- Modal Confirm-->
-    <div class="modal fade"  role="dialog" id="modal_confirm">
+    <div class="modal fade" role="dialog" id="modal_confirm">
         <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content"><div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
+                                aria-hidden="true">&times;</span></button>
 
 
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="padding: 10px;">
                         <div class="col-sm-2 " style="width: 40px;">
                             <i class="glyphicon glyphicon-ok-sign" style="color:#fff;font-size:27px"></i>
                         </div>
-                        <div class="col-sm-10 col-xs-12 up-Intro" style="font-size: 20px;">Confirmación de inactivación de empleado<span>
+                        <div class="col-sm-10 col-xs-12 up-Intro" style="font-size: 20px;">Confirmación de inactivación
+                            de empleado<span>
                         </div>
                     </div>
 
@@ -362,7 +414,9 @@
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-10 col-md-push-1">
                             <p class="text-center">
-                                Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de sueldo ni aportes a seguridad social así como tampoco se gestionará la información relacionada con él.
+                                Si inactiva al empleado no se llevará a cabo a través de nuestra herramienta el pago de
+                                sueldo ni aportes a seguridad social así como tampoco se gestionará la información
+                                relacionada con él.
                             </p>
                             <br/>
                             <p class="text-center" style="font-style: italic;">
@@ -375,7 +429,9 @@
                                 <button type="button" class="btn btnPrevious" data-dismiss="modal">Volver atrás</button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-orange btn-change-state-contract-confirm">Confirmar</button>
+                                <button type="button" class="btn btn-orange btn-change-state-contract-confirm">
+                                    Confirmar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -390,7 +446,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="/public/js/calculatorSubscription.js"></script>
-    <script type = "text/javascript" >
+    <script type="text/javascript">
         var employee = new Array();
         var contrato = new Array();
         var producto = new Array();
@@ -401,29 +457,30 @@
 
         {% for employeeData in employees %}
 
-            {% set employee = employeeData['employee'] %}
-            {% set contrato = employeeData['contrato'] %}
-            {% set producto = employeeData['product'] %}
+        {% set employee = employeeData['employee'] %}
+        {% set contrato = employeeData['contrato'] %}
+        {% set producto = employeeData['product'] %}
 
-                if (typeof (employee[{{ employee.idEmployerHasEmployee }}]) === 'undefined'){
-                employee[{{ employee.idEmployerHasEmployee }}] = new Array();
-                }
-                if (typeof (contrato[{{ employee.idEmployerHasEmployee }}]) === 'undefined'){
-                contrato[{{ employee.idEmployerHasEmployee }}] = new Array();
-                }
-                if (typeof (producto[{{ employee.idEmployerHasEmployee }}]) === 'undefined'){
-                producto[{{ employee.idEmployerHasEmployee }}] = new Array();
-                }
-                employee[{{ employee.idEmployerHasEmployee }}]['id'] ={{ employee.idEmployerHasEmployee }} ;
-                employee[{{ employee.idEmployerHasEmployee }}]['state'] ={{ employee.state }} ;
-                contrato[{{ employee.idEmployerHasEmployee }}]['state'] ={{ contrato.state }} ;
-                contrato[{{ employee.idEmployerHasEmployee }}]['salary'] ={{ contrato.salary }} ;
-                contrato[{{ employee.idEmployerHasEmployee }}]['timeCommitment'] = "{{ contrato.timeCommitmentTimeCommitment.code?contrato.timeCommitmentTimeCommitment.code:0 }}";
-                contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
-                contrato[{{ employee.idEmployerHasEmployee }}]['transportAid'] ={{ contrato.transportAid?contrato.transportAid:0 }} ;
-                contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
-                producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
-                producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
+        if (typeof (employee[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+            employee[{{ employee.idEmployerHasEmployee }}] = new Array();
+        }
+        if (typeof (contrato[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+            contrato[{{ employee.idEmployerHasEmployee }}] = new Array();
+        }
+        if (typeof (producto[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+            producto[{{ employee.idEmployerHasEmployee }}] = new Array();
+        }
+        employee[{{ employee.idEmployerHasEmployee }}]['id'] ={{ employee.idEmployerHasEmployee }} ;
+        employee[{{ employee.idEmployerHasEmployee }}]['state'] ={{ employee.state }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['state'] ={{ contrato.state }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['salary'] ={{ contrato.salary }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['timeCommitment'] = "{{ contrato.timeCommitmentTimeCommitment.code?contrato.timeCommitmentTimeCommitment.code:0 }}";
+        contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['transportAid'] ={{ contrato.transportAid?contrato.transportAid:0 }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
+        producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
+        producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
+        producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};
         {% endfor %}
 
     </script>

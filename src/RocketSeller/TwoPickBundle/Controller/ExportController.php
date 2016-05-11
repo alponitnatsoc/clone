@@ -238,7 +238,8 @@ class ExportController extends Controller
         $person = $em->getRepository('RocketSellerTwoPickBundle:Person')
                 ->find($idPerson);
 
-		$tmp_file=$person->getNames()."_fields.csv";
+		// $tmp_file=$person->getNames()."_fields.csv";
+		$tmp_file=$this->container->getParameter('kernel.cache_dir') .$person->getNames()."_fields.csv";
 		$handle = fopen($tmp_file, 'w+');
 
 
