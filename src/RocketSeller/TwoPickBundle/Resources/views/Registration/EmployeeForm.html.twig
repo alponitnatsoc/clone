@@ -738,6 +738,9 @@
                                                     <img src="{{ choices[index].image }}" class="paymentMethodImage" />
                                                     <div class="paymentMethodDescription">
                                                         {{ choices[index].descripcion }}
+                                                          {% if choices[index].name == "Daviplata" %}
+                                                            <br><span id="daviplatamodal" style="color: #fd9224; font-weight: bold">› Más información</span>
+                                                          {% endif %}
                                                         <!--<br />
                                                         <a style="color:#00cdcc;text-decoration: none;" href="#"><i style="color:#00cdcc; font-size: 13px;" class="fa fa-info-circle"></i> Más Información</a>
                                                         <br />-->
@@ -1221,11 +1224,14 @@
             <div class="modal-content"><div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">No te preocupes</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px; padding-left: 50px">¿Tu empleado no tiene cuenta en Daviplata?</div>
                     </div>
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-8 col-md-push-2">
-                            Nosotros te enseñaremos como hacelo más adelante
+                        <div class="col-md-8 col-md-push-2" style="text-align: center">
+                            <img src="{{ asset('public/img/home/daviplata.png') }}" alt=""><br><br>
+                            <p style="font-weight: 300; font-style: italic">No te preocupes, al finalizar el proceso de registro, encontrarás en el tablero
+                              de tareas pendientes una notificación con un instructivo de como abrir una
+                              cuenta en Daviplata para tu empleado.</p>
                         </div>
                     </div>
                 </div>
