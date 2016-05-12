@@ -46,6 +46,10 @@ class Department
      * @ORM\Column(type="integer", nullable=true)
      */
     private $departmentCode;
+    /**
+     * @ORM\ManyToMany(targetEntity="Entity", mappedBy="departments")
+     */
+    private $entities;
 
     /**
      * Set idDepartment
@@ -186,5 +190,39 @@ class Department
     public function getDepartmentCode()
     {
         return $this->departmentCode;
+    }
+
+    /**
+     * Add entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     *
+     * @return Department
+     */
+    public function addEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities[] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Remove entity
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Entity $entity
+     */
+    public function removeEntity(\RocketSeller\TwoPickBundle\Entity\Entity $entity)
+    {
+        $this->entities->removeElement($entity);
+    }
+
+    /**
+     * Get entities
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 }

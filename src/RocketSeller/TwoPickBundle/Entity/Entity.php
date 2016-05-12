@@ -69,6 +69,15 @@ class Entity
     private $pila_code;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Department", inversedBy="entities", cascade={"persist"})
+     * @ORM\JoinTable(name="entity_has_department",
+     *      joinColumns={ @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")}
+     *      )
+     */
+    private $departmens;
+
+    /**
      * Set idEntity
      *
      * @param integer $idEntity
@@ -359,5 +368,39 @@ class Entity
     public function getContact()
     {
         return $this->contact;
+    }
+
+    /**
+     * Add departmen
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmen
+     *
+     * @return Entity
+     */
+    public function addDepartmen(\RocketSeller\TwoPickBundle\Entity\Department $departmen)
+    {
+        $this->departmens[] = $departmen;
+
+        return $this;
+    }
+
+    /**
+     * Remove departmen
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmen
+     */
+    public function removeDepartmen(\RocketSeller\TwoPickBundle\Entity\Department $departmen)
+    {
+        $this->departmens->removeElement($departmen);
+    }
+
+    /**
+     * Get departmens
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDepartmens()
+    {
+        return $this->departmens;
     }
 }
