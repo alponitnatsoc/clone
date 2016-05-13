@@ -262,7 +262,7 @@
                                         <div>
                                             <b class="employee_name"
                                                style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
-                                            <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1 ~ ' ' ~employee.employeeEmployee.personPerson.lastname2)|lower|capitalize }}</span>
+                                            <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
                                         </div>
                                         {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
                                         <div style="font-style:italic; font-weight:100; font-size: small;"

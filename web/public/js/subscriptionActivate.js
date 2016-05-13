@@ -1,12 +1,16 @@
 function startSubscriptionActivate() {
     var validator;
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+    $.getScript("/public/js/jquery.validate.min.js").done(function () {
         validator = $("form[name='pagoMembresia']").validate({
 //onfocusout: true,
             rules: {
+                "pagoMembresia[numberAccount]": {required: true, number: true, min: 1},
+                "pagoMembresia[bank]": {required: true},
+                "pagoMembresia[accountType]": {required: true},
                 "pagoMembresia[credit_card]": {required: true, number: true, min: 1},
                 "pagoMembresia[name_on_card]": {required: true},
-                "pagoMembresia[expiry_month]": {required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
+                "pagoMembresia[expiry_month]": {
+                    required: true, number: true, maxlength: 2, minlength: 1, max: 12, min: {
                         // min needs a parameter passed to it
                         param: function () {
                             var date = new Date();
@@ -26,17 +30,31 @@ function startSubscriptionActivate() {
                             }
                             return false;
                         }
-                    }},
-                "pagoMembresia[expiry_year]": {required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
+                    }
+                },
+                "pagoMembresia[expiry_year]": {
+                    required: true, number: true, maxlength: 4, minlength: 4, max: 9999, min: {
                         param: function () {
                             var date = new Date();
                             return date.getFullYear();
                         }
-                    }},
+                    }
+                },
                 "pagoMembresia[cvv]": {required: true, number: true, maxlength: 4, minlength: 3, max: 9999, min: 001}
 
             },
             messages: {
+                "pagoMembresia[numberAccount]": {
+                    required: "Por favor ingrese un número de cuenta",
+                    number: "Por favor ingrese un número de cuenta válido",
+                    min: "Por favor ingrese un número de cuenta válido"
+                },
+                "pagoMembresia[bank]": {
+                    required: "Por favor seleecione el banco de la cuenta"
+                },
+                "pagoMembresia[accountType]": {
+                    required: "Por favor seleecione el tipo de cuenta"
+                },
                 "pagoMembresia[credit_card]": {
                     required: "Por favor ingrese el número de la tarjeta",
                     number: "ingresa solamente dígitos",
@@ -157,6 +175,7 @@ function startSubscriptionActivate() {
                 $("#divTotal").html(html);
             }
         }
+
         $("#codigo_referido").focusout(function () {
             if ($("#esReferido").val() == 0) {
                 if ($(this).val().length >= 6) {
@@ -170,20 +189,20 @@ function startSubscriptionActivate() {
                             $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
                         }
                     }).done(function (data) {
-                        if (data == true) {
-                            $("#esReferido").val(1);
-                            $("#codigo_referido").attr('readonly', true);
-                            $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
-                            $("#codigo_referido_estado").addClass('codigo_referido_valido');
-                            $("#codigo_referido_estado").html('Código valido');
-                            $("#codigoReferido").hide();
-                            esReferido();
-                        } else {
-                            $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                            $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                            $("#codigo_referido_estado").html(data);
+                            if (data == true) {
+                                $("#esReferido").val(1);
+                                $("#codigo_referido").attr('readonly', true);
+                                $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                                $("#codigo_referido_estado").addClass('codigo_referido_valido');
+                                $("#codigo_referido_estado").html('Código valido');
+                                $("#codigoReferido").hide();
+                                esReferido();
+                            } else {
+                                $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                                $("#codigo_referido_estado").addClass('codigo_referido_invalido');
+                                $("#codigo_referido_estado").html(data);
+                            }
                         }
-                    }
                     ).fail(function (jqXHR, textStatus, errorThrown) {
                         $("#codigo_referido_estado").removeClass('codigo_referido_valido');
                         $("#codigo_referido_estado").addClass('codigo_referido_invalido');
@@ -200,9 +219,9 @@ function startSubscriptionActivate() {
 
     function getPrice(valor) {
         price = parseFloat(valor.toString().replace(/,/g, ""))
-                .toFixed(0)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return "$ " + price;
     }
 }
