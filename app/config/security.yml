@@ -57,7 +57,7 @@ security:
             anonymous:    true
             logout:
                 path:           fos_user_security_logout
-                target:         home_landing 
+                target:         home_landing
                 #where to go after logout
             #d# anonymous: ~
             # activate different ways to authenticate
@@ -83,3 +83,23 @@ security:
         - { path: ^/payroll, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/liquidations/.*, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/backoffice, roles: ROLE_BACK_OFFICE }
+        # Web services access.
+        # 190.7.130.163, is the symplifica office ip.
+        # 181.143.94.42, is the multiplica office ip.
+        # 52.73.123.224 is the real amazon server.
+        # 52.91.121.67 is the symplifica development server.
+        # cpsuite.htsoft.co is the hightech server host.
+
+        # This are the web services for hightech, they should be before the normal web services.
+        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42 ] }
+        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, host: cpsuite\.htsoft\.co$ }
+        - { path: ^/api/public/v1/notificacion, role: [ROLE_NO_ACCESS] }
+
+        # This are the web services for novopayment, they should be before the normal web services.
+        - { path: ^/api/public/v1/dispersion/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42 ] }
+        - { path: ^/api/public/v1/dispersion/[0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [72.46.255.110] }
+        - { path: ^/api/public/v1/dispersion/[0-9]+$, role: [ROLE_NO_ACCESS] }
+
+        # This two next lines are used to allow access to those ips, in any service.
+        - { path: ^/api/public/v1/secured, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67] }
+        - { path: ^/api/public/v1/secured, role: [ROLE_NO_ACCESS] }
