@@ -75,7 +75,7 @@ class Entity
      *      inverseJoinColumns={@ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")}
      *      )
      */
-    private $departmens;
+    private $departments;
 
     /**
      * Set idEntity
