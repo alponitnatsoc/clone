@@ -2012,8 +2012,14 @@ class EmployeeRestController extends FOSRestController {
       $user = $this->getUser();
       if($code == 0)
         $view->setData([])->setStatusCode(404);
-      elseif($code == $user->getSmsCode())
+      elseif($code == $user->getSmsCode()) {
+        if ($realEmployee->getRegisterState() == 99) {
+           $realEmployee->setRegisterState(100);
+           $em->persist($realEmployee);
+           $em->flush();
+       }
         $view->setData(['url' => $this->generateUrl('show_dashboard')])->setStatusCode(200);
+      }
       else
         $view->setData([])->setStatusCode(401);
 
