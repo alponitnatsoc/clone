@@ -309,7 +309,7 @@ class EmployeeRestController extends FOSRestController {
                 $notification->setPersonPerson($user->getPersonPerson());
                 $notification->setStatus(1);
                 $notification->setType('alert');
-                $notification->setDescription("Crear Cuenta DaviPlata");
+                $notification->setDescription("Crear Cuenta DaviPlata para ".$employee->getPersonPerson()->getNames());
                 $notification->setAccion("Crear Daviplata");
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($notification);

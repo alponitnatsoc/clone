@@ -35,7 +35,7 @@
                         <div class="col-xs-6 employeeInfo" 
                             style="{% if employeeStatus != 1 %}border-left:10px solid #ccc{% endif %}">
                             <b>{{ employee.fullName }}</b>
-                            {% if employeeStatus == 1 and status >= 2 %}
+                            {% if employeeStatus > 2 and status >= 2 %}
                                 <br />
                                 <a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ employee.idPayroll }}">Agregar novedad</a>
                             {% endif %}
@@ -53,7 +53,7 @@
 
                         </div>
                         <div class="col-xs-3 actionButton">
-                            {% if status < 2 %}
+                            {% if employeeStatus <= 2 %}
                                 <a href="/register/employee/{{employee.idEmployee}}">Editar</a>
                             {% else %}
                                 <!--<a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion</a>
