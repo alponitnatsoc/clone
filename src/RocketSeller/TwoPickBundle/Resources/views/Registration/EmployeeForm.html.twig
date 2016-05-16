@@ -921,133 +921,158 @@
 
 
             <div id="employeeEntities" class="formulario tab-pane fade in {%   if tab==4 %}active{% endif %}">
-                {# render the task's only field: description #}
-                <div class="forma clearfix">
-{#                     <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">#}
-{#                         <div class="col-sm-4 col-xs-12">#}
-{#                             <div class="title text-center">Salud</div>#}
-{#                         </div>#}
-{#                         <div class="col-sm-4 col-xs-12">#}
-{#                             <div class="title text-center">Pensión</div>#}
-{#                         </div>#}
-{#                         <div class="col-sm-4 col-xs-12">#}
-{#                             <div class="title text-center">¿Registrará beneficiarios?</div>#}
-{#                         </div>#}
-{#                     </div>#}
-                    {% if form.entities.wealth.vars.data.name is defined %}
-                        {% set wname = form.entities.wealth.vars.data.name %}
-                    {% else %}
-                        {% set wname = "" %}
-                    {% endif %}
-                    {% if form.entities.ars.vars.data.name is defined %}
-                        {% set arsname = form.entities.ars.vars.data.name %}
-                    {% else %}
-                        {% set arsname = "" %}
-                    {% endif %}
-                    {% if form.entities.pension.vars.data.name is defined %}
-                        {% set pname = form.entities.pension.vars.data.name %}
-                    {% else %}
-                        {% set pname = "" %}
-                    {% endif %}
-                    {% if form.entities.severances.vars.data.name is defined %}
-                        {% set sname = form.entities.severances.vars.data.name %}
-                    {% else %}
-                        {% set sname = "" %}
-                    {% endif %}
-                    <div class="col-sm-12 col-xs-12 remember">
-                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                    </div>
-                    <div class="col-sm-10 col-xs-12 blockUpData">
-                        <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
-                            <div class="hidden">
-                                {{ form_row(form.entities.wealth) }}
+                <ul id="finalStepNav" class="nav nav-tabs nav-justified">
+                    <li class="active" ><a data-toggle="tab" data-target="#employeeEntitiesTab"></a></li>
+                    <li><a data-toggle="tab" data-target="#smsConfirmationTab"></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="employeeEntitiesTab" class="tab-pane fade in active">
+                        <div class="forma clearfix">
+                            {#                     <div class="col-sm-12 col-xs-12 blockUpData" style="border: none;">#}
+                            {#                         <div class="col-sm-4 col-xs-12">#}
+                            {#                             <div class="title text-center">Salud</div>#}
+                            {#                         </div>#}
+                            {#                         <div class="col-sm-4 col-xs-12">#}
+                            {#                             <div class="title text-center">Pensión</div>#}
+                            {#                         </div>#}
+                            {#                         <div class="col-sm-4 col-xs-12">#}
+                            {#                             <div class="title text-center">¿Registrará beneficiarios?</div>#}
+                            {#                         </div>#}
+                            {#                     </div>#}
+                            {% if form.entities.wealth.vars.data.name is defined %}
+                                {% set wname = form.entities.wealth.vars.data.name %}
+                            {% else %}
+                                {% set wname = "" %}
+                            {% endif %}
+                            {% if form.entities.ars.vars.data.name is defined %}
+                                {% set arsname = form.entities.ars.vars.data.name %}
+                            {% else %}
+                                {% set arsname = "" %}
+                            {% endif %}
+                            {% if form.entities.pension.vars.data.name is defined %}
+                                {% set pname = form.entities.pension.vars.data.name %}
+                            {% else %}
+                                {% set pname = "" %}
+                            {% endif %}
+                            {% if form.entities.severances.vars.data.name is defined %}
+                                {% set sname = form.entities.severances.vars.data.name %}
+                            {% else %}
+                                {% set sname = "" %}
+                            {% endif %}
+                            <div class="col-sm-12 col-xs-12 remember">
+                                <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                             </div>
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.entities.wealthAC) }}
+                            <div class="col-sm-10 col-xs-12 blockUpData">
+                                <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
+                                    <div class="hidden">
+                                        {{ form_row(form.entities.wealth) }}
+                                    </div>
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.entities.wealthAC) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
+                                    </div>
+                                    {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
+                                </div>
+                                <div id="arsBlock"  class="col-sm-12 col-xs-12 days">
+                                    <div class="hidden">
+                                        {{ form_row(form.entities.ars) }}
+                                    </div>
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.entities.arsAC) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.entities.arsAC, { 'value' : arsname}) }}
+                                    </div>
+                                    {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
+                                </div>
+                                <div  class="col-sm-12 col-xs-12">
+                                    <div class="hidden">
+                                        {{ form_row(form.entities.severances) }}
+                                    </div>
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.entities.severancesAC) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="hidden">
+                                        {{ form_row(form.entities.pension) }}
+                                    </div>
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.entities.pensionAC) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
+                                    </div>
+                                    {#                             <div class="col-sm-12 col-xs-12">#}
+                                    {#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
+                                    {#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
+                                    {#                             </div>#}
+                                </div>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.entities.beneficiaries) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.entities.beneficiaries) }}
+                                    </div>
+                                    {#                             <div class="title text-center col-sm-6 label-group">¿Registrará beneficiarios?</div>#}
+                                    {#                             {{ form_row(form.entities.beneficiaries) }}#}
+                                </div>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
-                            </div>
-{#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                         </div>
-                        <div id="arsBlock"  class="col-sm-12 col-xs-12 days">
-                            <div class="hidden">
-                                {{ form_row(form.entities.ars) }}
-                            </div>
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.entities.arsAC) }}
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.entities.arsAC, { 'value' : arsname}) }}
-                            </div>
-{#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
-                        </div>
-                        <div  class="col-sm-12 col-xs-12">
-                            <div class="hidden">
-                                {{ form_row(form.entities.severances) }}
-                            </div>
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.entities.severancesAC) }}
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="hidden">
-                                {{ form_row(form.entities.pension) }}
-                            </div>
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.entities.pensionAC) }}
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
-                            </div>
-{#                             <div class="col-sm-12 col-xs-12">#}
-{#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
-{#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
-{#                             </div>#}
-                        </div>
-                        <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.entities.beneficiaries) }}
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.entities.beneficiaries) }}
-                            </div>
-{#                             <div class="title text-center col-sm-6 label-group">¿Registrará beneficiarios?</div>#}
-{#                             {{ form_row(form.entities.beneficiaries) }}#}
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;border-top: 1px solid #e6e7e8; padding-top: 20px;">
-                    <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
-                </div>
-                <div class="col-sm-12 col-xs-12 center">
-                    <a class="btn btn-grey btnPrevious-form btnPrevious">Volver atrás</a>
-                    <a id="btn-entities" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-orange disabled" >Finalizar registro de empleado</a>
-                    <br/>
-                    <br/>
-                </div>
-                <div id="toHide">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="col-sm-6 label-group">
-                            {{ form_label(form.employeeHasEmployers.contractType) }}
+                        <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px; margin-bottom: 20px;border-top: 1px solid #e6e7e8; padding-top: 20px;">
+                            <label><input type="checkbox" name="chkAcept" id="chkAcept"/> Acepto que la información anterior fue verificada por los empleados.</label>
                         </div>
-                        <div class="col-sm-6 form-group">
-                            {{ form_widget(form.employeeHasEmployers.contractType) }}
+                        <div class="col-sm-12 col-xs-12 center">
+                            <a class="btn btn-grey btnPrevious-form btnPrevious">Volver atrás</a>
+                            <a id="btn-entities" href="{{ path('api_public_post_matrix_choose_submit_step1') }}" class="btn btn-orange disabled" >Finalizar registro de empleado</a>
+                            <br/>
+                            <br/>
+                        </div>
+
+                        <div class="row">
+                            <br><br>
+                            <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                                <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
+                                <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Todo empleado debe contar con afiliación a salud y pensión, por lo tanto se deben seleccionar<br> las administradoras que él/ella hayan seleccionado para cada uno de los dos casos</span>
+                            </div>
                         </div>
                     </div>
-                    {{ form_widget(form) }}
-                </div>
-                <div class="row">
-                    <br><br>
-                    <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
-                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
-                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Todo empleado debe contar con afiliación a salud y pensión, por lo tanto se deben seleccionar<br> las administradoras que él/ella hayan seleccionado para cada uno de los dos casos</span>
+                    <div id="smsConfirmationTab" class="tab-pane fade in">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="col-sm-6 label-group">
+                                {{ form_label(form.verificationCode) }}
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                {{ form_widget(form.verificationCode) }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12 center">
+                            <a id="btn-verificaion" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Verificar empleado</a>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div id="toHide">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.employeeHasEmployers.contractType) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.employeeHasEmployers.contractType) }}
+                                </div>
+                            </div>
+                            {{ form_widget(form) }}
+                        </div>
                     </div>
                 </div>
+                {# render the task's only field: description #}
+
 
             </div>
         </div>

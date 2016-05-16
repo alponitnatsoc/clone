@@ -358,6 +358,25 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+    $('#btn-verificaion').click(function (e) {
+        e.preventDefault();
+        var form = $("form");
+        var url= $(this).attr('href');
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                verificationCode: $("#register_employee_verificationCode").val(),
+                contractId: $("input[name='register_employee[idContract]']").val()
+            }
+        }).done(function (data) {
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("el codigo de verificación es incorrecto");
+        });
+
+    });
     $('#btn-entities').click(function (e) {
         e.preventDefault();
         var form = $("form");
@@ -448,8 +467,12 @@ function startEmployee() {
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
-            history.pushState("", "", data["url"]);
-            sendAjax(data["url"]);
+            if(typeof data['url'] == 'undefined'){
+                $('#finalStepNav > .active').next('li').find('a').trigger('click');
+            }else{
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
