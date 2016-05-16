@@ -1981,8 +1981,8 @@ class EmployeeRestController extends FOSRestController {
       $em->persist($user);
       $em->flush();
 
-        /** @var Phone $phone */
-        $phone = $user->getPersonPerson()->getPhones()[0];
+      /** @var Phone $phone */
+      $phone = $user->getPersonPerson()->getPhones()[0];
 
       $twilio = $this->get('twilio.api');
       $cellphone = $phone;
@@ -2010,6 +2010,7 @@ class EmployeeRestController extends FOSRestController {
      * @return View
      */
     public function postVerifyVerificationCodeAction(ParamFetcher $paramFetcher) {
+      $em = $this->getDoctrine()->getManager();
       $code = $paramFetcher->get('verificationCode');
       $contract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract')->find($paramFetcher->get('contractId'));
       $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
@@ -2030,6 +2031,11 @@ class EmployeeRestController extends FOSRestController {
       }
       else
         $view->setData([])->setStatusCode(401);
+
+      if($view->getStatusCode() != 200) {
+        // If the error code was invalid we send another.
+        $this->sendVerificationCode();
+      }
 
       return $view;
     }

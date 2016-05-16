@@ -425,20 +425,6 @@
                                     </div>
                                 {% endif %}
                                 <br/>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="roundContainer">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <i class="glyphicon glyphicon-exclamation-sign bigIcon"></i>
-                                                </div>
-                                                <div class="media-body" style="font-weight:lighter;font-size:14px">
-                                                    <h4 style="font-weight: bold;font-size:16px;" class="media-heading">Importante</h4>Por tratarse de un empleado con el cual ya tiene una relación laboral, el nuevo contrato debe contemplar los términos que ya esten acordados. <a href="">> Más información</a>.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <br />
                                 <div class="row">
                                     <div class="col-sm-12 text-center form-group">
@@ -1044,7 +1030,15 @@
                             </div>
                         </div>
                     </div>
+                    <style>
+                      .formulario {
+                        border-bottom: 0;
+                       }
+                    </style>
                     <div id="smsConfirmationTab" class="tab-pane fade in">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 18px;margin-bottom: 35px;color: #A5A5A5;font-weight: 500;border: 1px solid #E4E4E4;border-radius: 5px;padding: 15px;text-align: center;">
+                          &nbsp; Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
+                        </div>
                         <div class="col-sm-12 col-xs-12">
                             <div class="col-sm-6 label-group">
                                 {{ form_label(form.verificationCode) }}
@@ -1055,6 +1049,7 @@
                         </div>
                         <div class="col-sm-12 col-xs-12 center">
                             <a id="btn-verificaion" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Verificar empleado</a>
+                            <a id="btn-reenviar" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Pedir nuevo código</a>
                             <br/>
                             <br/>
                         </div>
