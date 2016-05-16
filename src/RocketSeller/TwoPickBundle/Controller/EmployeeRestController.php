@@ -2005,11 +2005,13 @@ class EmployeeRestController extends FOSRestController {
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      * @RequestParam(name="verificationCode", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="employeeId", nullable=false, strict=true, description="documentType.")
      *
      * @return View
      */
     public function postVerifyVerificationCodeAction(ParamFetcher $paramFetcher) {
       $code = $paramFetcher->get('verificationCode');
+      $realEmployee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($paramFetcher->get('employeeId'));
       $view = View::create();
       $user = $this->getUser();
       if($code == 0)
