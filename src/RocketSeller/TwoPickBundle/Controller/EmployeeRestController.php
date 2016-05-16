@@ -1447,6 +1447,8 @@ class EmployeeRestController extends FOSRestController {
                 $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
                 return $view;
             }else{
+                // It sends here the verification code.
+                sendVerificationCode();
                 $view->setData(array())->setStatusCode(200);
                 return $view;
             }
@@ -1771,7 +1773,7 @@ class EmployeeRestController extends FOSRestController {
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
-     *     404 = "Returned when the requested Ids don't exist"     
+     *     404 = "Returned when the requested Ids don't exist"
      *   }
      * )
      *
@@ -1896,7 +1898,7 @@ class EmployeeRestController extends FOSRestController {
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
-     *     404 = "Returned when the requested Ids don't exist"     
+     *     404 = "Returned when the requested Ids don't exist"
      *   }
      * )
      *
@@ -1967,5 +1969,55 @@ class EmployeeRestController extends FOSRestController {
         }
         return $dDiff;
     }
+
+    public function sendVerificationCode() {
+      $em = $this->getDoctrine()->getManager();
+
+      $user = $this->getUser();
+      $code = rand(10100, 99999);
+      $message = "Tu codigo de confirmación de Symplifica es: " . $code;
+
+      $user->setSmsCode($code);
+
+      $phone = $user->getPersonPerson()->getPhones()[0];
+
+      $twilio = $this->get('twilio.api');
+      $cellphone = $phone;
+      $twilio->account->messages->sendMessage(
+              "+19562671001", "+57" . $cellphone, $message);
+    }
+
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="verificationCode", nullable=false, strict=true, description="documentType.")
+     *
+     * @return View
+     */
+    public function postVerifyVerificationCodeAction(ParamFetcher $paramFetcher) {
+      $code = $paramFetcher->get('verificationCode');
+      $view = View::create();
+      $user = $this->getUser();
+      if($code == 0)
+        $view->setData($resposne )->setStatusCode(404);
+      elseif($code == $user->getSmsCode())
+        $view->setData([])->setStatusCode(200);
+      else
+        $view->setData([])->setStatusCode(401);
+
+      return $view;
+    }
+
 
 }
