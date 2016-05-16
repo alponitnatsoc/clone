@@ -1436,7 +1436,7 @@ class EmployeeRestController extends FOSRestController {
             $flag = true;
         }
         if ($realEmployee->getRegisterState() == 95) {
-            $realEmployee->setRegisterState(100);
+            $realEmployee->setRegisterState(99);
             $em->persist($realEmployee);
             $em->flush();
         }
