@@ -437,7 +437,7 @@ class SubscriptionController extends Controller
                     } elseif ($typeMethod == 'debito') {
                         if ($user->getDataCreditStatus() == 0) {
                             return $this->forward('RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions', array('userId' => $user->getId(), 'request' => $requestIn));
-                        } elseif ($user->getDataCreditStatus() == 2) {
+                        } elseif ($user->getDataCreditStatus() == 2) {//this is for bypass purposes
                             if ($this->addToHighTech($user)) {
                                 $debitData = $requestIn->request->all();
 

@@ -1443,8 +1443,14 @@ class EmployeeRestController extends FOSRestController {
 
         if ($flag) {
             $view = View::create();
-            $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
-            return $view;
+            if($realEmployerHasEmployee->getState()==2){
+                $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
+                return $view;
+            }else{
+                $view->setData(array())->setStatusCode(200);
+                return $view;
+            }
+
         } else {
             $view = View::create();
             $view->setData(array('response' => array('message' => 'something went wrong')))->setStatusCode(400);

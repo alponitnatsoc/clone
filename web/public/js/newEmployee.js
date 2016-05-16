@@ -448,8 +448,12 @@ function startEmployee() {
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
-            history.pushState("", "", data["url"]);
-            sendAjax(data["url"]);
+            if(typeof data['url'] == 'undefined'){
+                $('#finalStepNav > .active').next('li').find('a').trigger('click');
+            }else{
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
