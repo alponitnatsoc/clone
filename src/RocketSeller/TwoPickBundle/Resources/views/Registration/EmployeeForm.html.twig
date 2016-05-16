@@ -739,7 +739,7 @@
                                                     <div class="paymentMethodDescription">
                                                         {{ choices[index].descripcion }}
                                                           {% if choices[index].name == "Daviplata" %}
-                                                            <br><span id="daviplatamodal" style="color: #fd9224; font-weight: bold">› Más información</span>
+                                                            <br><span id="daviplatamodal" style="color: #fd9224; font-weight: bold"><a style="color:#FD9224" href="#" onclick="$('#masinfodaviplata').modal('show');return false;">› Más información</a></span><!--boton de modal para informacion de daviplata-->
                                                           {% endif %}
                                                         <!--<br />
                                                         <a style="color:#00cdcc;text-decoration: none;" href="#"><i style="color:#00cdcc; font-size: 13px;" class="fa fa-info-circle"></i> Más Información</a>
@@ -1090,6 +1090,46 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal informacion daviplata -->
+    <div class="modal fade" id="masinfodaviplata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="padding-left:50px;background:#3a4a58; border-top-left-radius:5px;border-top-right-radius:5px; color:#FFF">
+                    <h4 style="font-weight:bold ;font-size: 20px;" class="modal-title" id="myModalLabel">Información importante</h4>
+                    <p style="font-size: 20px; font-weight:100">Como iniciar con Daviplata</p>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <div style="text-align:center">
+                      <img src="{{ asset('public/img/home/daviplata.png') }}" alt=""><br><br>
+                      <h4 style="font-weight:bold; color:#474d5b;width:60%; margin: 0 auto">Elije Daviplata como el medio por el cual tu empleado recibira su dinero</h4><br><br>
+                      <p style="color:#807f7f; width: 80%; margin:0 auto; font-weight:600">Es la forma fácil, rápida y segura de manejar su plata desde el celular y hacer transacciones desde cualquier lugar en colombia</p><br>
+                      <ul style="text-align:left; color:#807f7f;font-weight:100">
+                          <li>Puede recibir giros y pasar dinero a familiares y amigos.</li>
+                          <li>Retirar sin cargos en cajeros Davivienda.</li>
+                          <li>Regarcar el celular y pagar servicios públicos las 24 horas.</li>
+                      </ul><br>
+                      <div>
+                        <iframe width="90%" height="315" src="https://www.youtube.com/embed/prar_ltfV18" frameborder="0" allowfullscreen></iframe>
+                      </div><br>
+                      <p style="color:#807f7f; width: 80%; margin:0 auto; font-weight:600">Si tu empleado no tiene Daviplata puede activarlo en cualquier momento y lugar desde el celular.</p><br>
+                      <ul style="text-align:left; color:#807f7f; font-weight:100">
+                          <li>Activación inmediata sin tramites ni documentos.</li>
+                          <li>Sin cuotas de manejos.</li>
+                          <li>Sin cuenta de banco o tarjeta de débito.</li>
+                          <li>No consume saldo ni minutos.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer" style="text-align:center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

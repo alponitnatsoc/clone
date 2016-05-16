@@ -125,6 +125,16 @@ class User extends BaseUser
     private $dataCreditStatus = 0;
 
     /**
+     * Columna utilizada para guardar el codigo sms enviado para registrar empleado.
+     *
+     *
+     * @var Int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $smsCode = 0;
+
+    /**
      * Columna utilizada para saber cantidad de meses gratis
      *
      * Estados del usuario:
@@ -867,5 +877,29 @@ class User extends BaseUser
     public function getDataCreditStatus()
     {
         return $this->dataCreditStatus;
+    }
+
+    /**
+     * Set $smsCode
+     *
+     * @param integer $smsCode
+     *
+     * @return User
+     */
+    public function setSmsCode($smsCode)
+    {
+        $this->smsCode = $smsCode;
+
+        return $this;
+    }
+
+    /**
+     * Get $smsCode
+     *
+     * @return integer
+     */
+    public function getSmsCode()
+    {
+        return $this->smsCode;
     }
 }

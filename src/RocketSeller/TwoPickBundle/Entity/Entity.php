@@ -75,7 +75,7 @@ class Entity
      *      inverseJoinColumns={@ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")}
      *      )
      */
-    private $departmens;
+    private $departments;
 
     /**
      * Set idEntity
@@ -371,36 +371,36 @@ class Entity
     }
 
     /**
-     * Add departmen
+     * Add department
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmen
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
      *
      * @return Entity
      */
-    public function addDepartmen(\RocketSeller\TwoPickBundle\Entity\Department $departmen)
+    public function addDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department)
     {
-        $this->departmens[] = $departmen;
+        $this->departments[] = $department;
 
         return $this;
     }
 
     /**
-     * Remove departmen
+     * Remove department
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\Department $departmen
+     * @param \RocketSeller\TwoPickBundle\Entity\Department $department
      */
-    public function removeDepartmen(\RocketSeller\TwoPickBundle\Entity\Department $departmen)
+    public function removeDepartment(\RocketSeller\TwoPickBundle\Entity\Department $department)
     {
-        $this->departmens->removeElement($departmen);
+        $this->departments->removeElement($department);
     }
 
     /**
-     * Get departmens
+     * Get departments
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDepartmens()
+    public function getDepartments()
     {
-        return $this->departmens;
+        return $this->departments;
     }
 }

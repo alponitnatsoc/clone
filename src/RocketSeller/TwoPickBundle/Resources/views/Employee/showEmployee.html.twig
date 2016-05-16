@@ -43,7 +43,7 @@
                             </a>
                         </div>
                         <div class="col-sm-5">
-                            <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
+                            <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Terminar contrato</a>
                         </div>
                         <div class="col-sm-2">
                             {% if  not employerHasEmployee.state %}
@@ -200,7 +200,7 @@
                     <div class="col-sm-8">
                         <div class="col-sm-4 col-sm-offset-8">
                             <div class="col-sm-5">
-                                <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Liquidar empleado</a>
+                                <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Terminar contrato</a>
                             </div>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
                                         <p><strong>{{contract.workableDaysMonth}}</strong></p>
                                     </li>
                                 </ul>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="contract-edit-form" style="display:none;">
                             <div class="col-sm-4 left">
@@ -303,7 +303,7 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <p class="title"><i>Metodo de pago</i></p>                                  
+                                        <p class="title"><i>Metodo de pago</i></p>
                                         <select id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for payMethodType in payMethodTypes %}
@@ -384,7 +384,7 @@
                         <div class="col-sm-4">
                             <p><strong>Acción</strong></p>
                         </div>
-                    </div>                
+                    </div>
                     {% for  beneficiary in nonRepeatedBenef %}
 
                         <div class="col-sm-12 row-novelty" style="text-align:center;">
@@ -418,15 +418,15 @@
                         <div class="col-sm-6 form-group form-black input form-dummy">
                             <p class="title"><i><strong>Tipo de beneficiario</strong></i></p>
                             <select id="benefType" name="relation" class="form-control valid" >
-                                <option value="" selected="true" >Seleccionar una opción</option>            
-                                <option value="Cónyugue">Cónyuge</option>            
-                                <option value="Hijo">Hijo</option>            
+                                <option value="" selected="true" >Seleccionar una opción</option>
+                                <option value="Cónyugue">Cónyuge</option>
+                                <option value="Hijo">Hijo</option>
                                 <option value="Hermano">Hermano</option>
                                 <option value="Padre">Padre</option>
                             </select>
                         </div>
                         <div class="col-sm-6 form-group form-black input form-dummy">
-                            <p class="title"><i><strong>Tiene discapacidad?</strong></i></p> 
+                            <p class="title"><i><strong>Tiene discapacidad?</strong></i></p>
                             <div style="text-align:left;">
                                 <input type="radio" name="disability" value="1"> Si
                                 <input type="radio" name="disability" value="0"> No
@@ -437,43 +437,43 @@
                         <br>
 
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.names)}}         
+                            {{form_row(form.names)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.lastName1)}}        
+                            {{form_row(form.lastName1)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.lastName2)}}        
+                            {{form_row(form.lastName2)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.civilStatus)}}        
+                            {{form_row(form.civilStatus)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.documentType)}}       
+                            {{form_row(form.documentType)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.document)}}       
+                            {{form_row(form.document)}}
                         </div>
                         <div class="col-sm-12 form-black form-group">
-                            {{form_row(form.birthDate)}}       
-                        </div>                    
+                            {{form_row(form.birthDate)}}
+                        </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="content col-sm-6 col-sm-offset-3">
                             <h4>Ubicación</h4>
                             <div class="form-black form-group">
-                                {{form_row(form.mainAddress)}}       
+                                {{form_row(form.mainAddress)}}
                             </div>
                             <div class="form-black form-group">
-                                {{form_row(form.department)}}     
-                            </div> 
+                                {{form_row(form.department)}}
+                            </div>
                             <div class="form-black form-group">
-                                {{form_row(form.city)}}       
-                            </div>       
+                                {{form_row(form.city)}}
+                            </div>
                             <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
                             <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
                             <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">
-                            <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">                                         
+                            <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">
                             <div class="col-sm-12 col-xs-12 center">
                                 <span id="btn-create"  href="/api/public/v1/news/beneficiaries" class="btn btn-orange submit" style="display: none;">Salvar y continuar</span>
                                 <span id="btn-edit"  href="/api/public/v1/edits/beneficiaries" class="btn btn-orange btn-edit" style="display: none;">Editar y continuar</span>
@@ -651,7 +651,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>                
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
