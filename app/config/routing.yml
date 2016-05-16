@@ -32,7 +32,7 @@ data_credit_questions:
     path:      /datacredit/check/{userId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions}
 verify_sms_code:
-    path:      /sms/check/{code}
+    path:      /sms/check
     defaults:  { _controller: RocketSellerTwoPickBundle:EmployeeRestController:verifyVerificationCodeAction}
 registration_confirmed_start:
     path:      /registration/confirmed/start
