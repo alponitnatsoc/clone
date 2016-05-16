@@ -367,6 +367,7 @@ function startEmployee() {
             type: 'POST',
             data: {
                 verificationCode: $("#register_employee_verificationCode").val(),
+                employeeId: $(form).find("input[name='register_employee[idEmployee]']").val()
             }
         }).done(function (data) {
                 history.pushState("", "", data["url"]);
