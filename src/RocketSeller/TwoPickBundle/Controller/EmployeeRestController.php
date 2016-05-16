@@ -1448,7 +1448,7 @@ class EmployeeRestController extends FOSRestController {
                 return $view;
             }else{
                 // It sends here the verification code.
-                sendVerificationCode();
+                $this->sendVerificationCode();
                 $view->setData(array())->setStatusCode(200);
                 return $view;
             }
@@ -1979,12 +1979,13 @@ class EmployeeRestController extends FOSRestController {
 
       $user->setSmsCode($code);
 
-      $phone = $user->getPersonPerson()->getPhones()[0];
+        /** @var Phone $phone */
+        $phone = $user->getPersonPerson()->getPhones()[0];
 
       $twilio = $this->get('twilio.api');
       $cellphone = $phone;
       $twilio->account->messages->sendMessage(
-              "+19562671001", "+57" . $cellphone, $message);
+              "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
     }
 
     /**

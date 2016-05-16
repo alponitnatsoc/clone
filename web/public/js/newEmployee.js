@@ -358,6 +358,24 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+    $('#btn-verificaion').click(function (e) {
+        e.preventDefault();
+        var form = $("form");
+        var url= $(this).attr('href');
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                verificationCode: $("#register_employee_verificationCode").val(),
+            }
+        }).done(function (data) {
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("el codigo de verificación es incorrecto");
+        });
+
+    });
     $('#btn-entities').click(function (e) {
         e.preventDefault();
         var form = $("form");
