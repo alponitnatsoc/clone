@@ -432,7 +432,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 		h4,h2 {font-size: 1.2em}
 		.cont-gris {height: 80px; padding: 20px 10px}
 		.cuadro-precio {width: 80%; height: auto; padding: 0 10px; box-sizing: border-box}
-		footer {height: auto; padding: 25px 20px 0 20px; box-sizing: border-box;}
+		footer {height: auto; padding: 25px 20px 30px 20px; box-sizing: border-box;}
 		#footer-content {width: 100%}
 		footer .text {width: 80%; font-size:12px; text-align: center !important;     border-right: none !important; padding: 20px 40px}
 		.img-footer {float: none}
@@ -474,13 +474,14 @@ h4 {font-family: 'Open Sans', sans-serif;
 			#done1-check {margin: 0 15px; width: 25%}
 			#done1-text {padding-top: 20px; font-size: 1em}
 			#done2 {clear: both; width: 80%; margin-left: 5%}
+			form {text-align: center}
 			}
 
 			@media screen and (max-width: 414px) {
 				#logo {width: 49%}
 				h4,h2 {font-size: 0.9em}
 				header {height: 830px}
-				form {width: 300px !important}
+				form {width: 300px !important;}
 				.campos {width: 90%}
 				button {width: 95%}
 				.cont-facil li {font-size: 1em;}
