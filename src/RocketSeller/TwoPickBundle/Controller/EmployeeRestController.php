@@ -2005,21 +2005,25 @@ class EmployeeRestController extends FOSRestController {
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      * @RequestParam(name="verificationCode", nullable=false, strict=true, description="documentType.")
-     * @RequestParam(name="employeeId", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="contractId", nullable=false, strict=true, description="documentType.")
      *
      * @return View
      */
     public function postVerifyVerificationCodeAction(ParamFetcher $paramFetcher) {
       $code = $paramFetcher->get('verificationCode');
-      $realEmployee = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee')->find($paramFetcher->get('employeeId'));
+      $contract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract')->find($paramFetcher->get('contractId'));
+      $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+      $realEmployee = $ehe->getEmployeeEmployee();
       $view = View::create();
       $user = $this->getUser();
       if($code == 0)
         $view->setData([])->setStatusCode(404);
       elseif($code == $user->getSmsCode()) {
         if ($realEmployee->getRegisterState() == 99) {
+           $ehe->setState(2);
            $realEmployee->setRegisterState(100);
            $em->persist($realEmployee);
+           $em->persist($ehe);
            $em->flush();
        }
         $view->setData(['url' => $this->generateUrl('show_dashboard')])->setStatusCode(200);
