@@ -18,17 +18,18 @@ ul {list-style-type: none}
 	z-index: 1
 	}
 
-#logo {width: 50%;float: left; padding-top: 15px; text-align: left}
+#logo {width: 200px;float: left; padding-top: 15px; text-align: left}
 .calltoactionh {
 	background: #FF9523;
-	padding: 10px;
-	width: 175px;
+	padding: 6px 10px;
+	width: 140px;
 	float: left;
-	margin-left: 20px;
+	margin: 20px 5px 0 10px;
 	border-radius: 5px;
 	color:#FFF;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 700;
+	font-size: 13px
 }
 .img-logo {float: left;}
 #redes {
@@ -36,7 +37,7 @@ ul {list-style-type: none}
     font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
     float: right;
-    width: 45%;
+    width: 170px;
     text-align: right;
     padding: 20px 20px 0 0px;}
 
@@ -58,7 +59,7 @@ h3 {font-family: 'Open Sans', sans-serif;
 	font-weight: 300; color: #fff; font-size: 20px}
 
 	header {
-		  background-image: url(/public/img/landing/banner.png);
+		  background-image: url(/public/img/landing/banner3.png);
 	    background-position: center center;
 	    background-repeat: no-repeat;
 	    background-size: cover;
@@ -164,7 +165,7 @@ h4 {font-family: 'Open Sans', sans-serif;
     padding: 20px 0;
     color: #424C5A;}
 
-	#foto-hombre {background-image: url(/public/img/landing/back-man.png);
+	#foto-hombre {background-image: url(/public/img/landing/back-man1.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -398,8 +399,8 @@ h4 {font-family: 'Open Sans', sans-serif;
 		h4,h2 {font-size: 1.4em}
 		#hambur {display: block}
 		#redes-resp {background: #313842}
-		.calltoactionh {display: none}
-
+		.calltoactionh {float:right; }
+		#redes {display: none}
 		#logo-zone {background: #424C5A;
     height: auto;
     overflow: hidden;
@@ -517,4 +518,7 @@ h4 {font-family: 'Open Sans', sans-serif;
     height: auto;
     padding: 20px 10px 30px 10px;}
 		#prueba {padding-top: 75px}
+		.calltoactionh {
+			margin: 13px 5px 0 10px;
+		}
 }
