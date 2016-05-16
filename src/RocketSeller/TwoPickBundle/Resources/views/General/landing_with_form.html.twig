@@ -31,21 +31,43 @@ html,body{
     <!------------------------------------------ End Google Tag Manager ------------------------------------------>
     <header>
     	<div id="zona-logo">
-            <div id="logo"><img class="logo-size" src="{{ asset('public/img/landing/logo.png') }}" width="190" height="auto"></div>
+        <div id="logo-zone">
+            <div id="logo">
+              <img class="logo-size img-logo" src="{{ asset('public/img/landing/logo.png') }}" width="190" height="auto">
+              <a href="#formulario"><div id="btn_intencion1" class="calltoactionh">Recibe 3 meses gratis</div></a>
+            </div>
+
             <div id="redes">
                 <ul>
                 	<li>Siguenos</li>
                   <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank"><li><img src="{{ asset('public/img/landing/face.png') }}"></i></li></a>
                    <a href="https://twitter.com/symplifica_" target="_blank"><li><img src="{{ asset('public/img/landing/tweet.png') }}"></li></a>
                    <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica" target="_blank"><li class="blue redes"><li><img src="{{ asset('public/img/landing/link.png') }}"></li></a>
-                </ul></div>
+                </ul>
+              </div>
         </div>
+              <!--menu resp-->
+              <div id="hambur" style="background: #313842">
+                <img src="{{ asset('public/img/landing/hambur.png') }}">
+              </div>
+              <div id="redes-resp">
+                  <ul>
+                     <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank"><li>Facebook</i></li></a>
+                     <a href="https://twitter.com/symplifica_" target="_blank"><li>Twitter</li></a>
+                     <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica" target="_blank"><li>Linkedin</li></a>
+                     <li style=" background: #FF9523"><a style="color:#FFF;" href="#formulario" class="toggle" id="btn_intencion1">Recibe 3 meses gratis</a></li>
+                  </ul>
+                </div>
+
+              <!--menu resp-->
+        </div>
+
         <div id="prueba">
           <div id="texto-banner">
           	<h1>Somos el área de nómina de los pequeños empleadores</h1>
               <h3>Symplifica es la herramienta online más sencilla para administrar empleados domésticos y de pequeñas empresas</h2>
 
-              <a href="#formulario"><div id="btn_intencion1" class="calltoaction">Obtén 1 mes gratis por pre-inscribirte</div></a>
+              <a href="#formulario"><div id="btn_intencion1" class="calltoaction">¡Inscríbete ahora y recibe 3 meses gratis!</div></a>
           </div>
         </div>
 
@@ -53,15 +75,15 @@ html,body{
              <div id="bullets">
                 <div class="bull-text">
                     FACILIDAD
-                    <p>Convertimos los procesos complejos en simples</p>
+                    <p>Hacemos los procesos de nómina más fáciles</p>
                 </div>
                 <div class="bull-text">
                     CONVENIENCIA
-                    <p>Desde la comodidad de tu casa u oficina</p>
+                    <p>Gestiona todo desde cualquier lugar con pocos clics</p>
                 </div>
                 <div class="bull-text">
                     TRANQUILIDAD
-                    <p>Cumple los requisitos de ley sin ser un experto</p>
+                    <p>Pon en manos de expertos tus procesos de nómina</p>
                 </div>
             </div>
         </div>
@@ -93,17 +115,17 @@ html,body{
 
             <div class="cuadros-beneficios animateme scrollme" data-when="view" data-from="0.5" data-to="0.05" data-scale="0">
             	<img src="{{ asset('public/img/landing/benefit4.png') }}">
-                <p>Te damos la opción de pagar sueldo y planilla de aportes con un solo click</p>
+                <p>Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
             </div>
 
             <div class="cuadros-beneficios animateme scrollme" data-when="view" data-from="0.5" data-to="0.05" data-scale="0">
             	<img src="{{ asset('public/img/landing/benefit5.png') }}">
-                <p>Te llevamos de la mano en la administración del día a día del empleado</p>
+                <p>Administramos todos los detalles del día a día de tus empleados</p>
             </div>
 
             <div class="cuadros-beneficios animateme scrollme" data-when="view" data-from="0.5" data-to="0.05" data-scale="0">
             	<img src="{{ asset('public/img/landing/benefit6.png') }}">
-                <p>Guardamos todos los documentos digitales de la relación laboral</p>
+                <p>Te garantizamos seguridad al guardar todos los documentos digitales de la relación laboral</p>
             </div>
         </div>
 
@@ -115,8 +137,8 @@ html,body{
 
         <div id="man">
         	<div class="cont-gris">
-            	<h2>Despreocúpate de gestionar a tus empleados</h2>
-                <h4>Nosotros nos hacemos cargo del trabajo pesado</h4>
+            	<h2>¿Planillas, afiliaciones, nómina, liquidación?<br>Olvídate de los proceso tediosos y complicados,</h2>
+                <h4>Nosotros nos encargamos de gestionar a tus empleados</h4>
             </div>
 
             <div id="foto-hombre">
@@ -124,14 +146,12 @@ html,body{
             	<div id="contenedor-info">
                     <div class="seccion-hombre">
                         <div class="info-hombre">
-                            Nunca más se te va a olvidar pagar a tu empleado a tiempo, nosotros te recordamos
+                          Nunca olvidarás pagarle a tus empleados y tendrás la seguridad de hacerlo según la ley.
                         </div>
                         <div class="info-hombre">
-                            Desde que te montas en Sympliﬁca vive con la tranquilidad de que estas haciendo todo de acuerdo a la ley
+                          Realiza tus procesos de pago de nómina y aportes con un solo clic desde tu celular.
                         </div>
-                        <div class="info-hombre">
-                            No tienes que recordar la clave de la planilla ni cuándo pagarla, págala en un click con Sympliﬁca
-                        </div>
+
                     </div>
                     <div class="seccion-hombre desaparece">
                         <img src="{{ asset('public/img/landing/man-noback.png') }}" class="imghombre">
@@ -139,14 +159,12 @@ html,body{
                     </div>
                     <div class="seccion-hombre">
                         <div class="info-hombre">
-                            Disfruta de tu tiempo mientras nosotros nos hacemos cargo de los complicados trámites a la aﬁliación
+                          Cuéntanos tu necesidad de contratación, nosotros nos encargamos del resto.
                         </div>
                         <div class="info-hombre">
-                            Olvídate de estar sacando dinero cada vez que tienes que pagar a tus empleados, paga desde tu celular
+                          No te alarmes por conceptos que no conoces, desde la afiliación hasta la liquidación de tus empleados es cuestión  de Symplifica
                         </div>
-                        <div class="info-hombre">
-                            Despreocúpate por saber si estas liquidando bien a tu empleado Sympliﬁca lo hace por tí
-                        </div>
+
                     </div>
                     <div class="boton-hombre aparece">
                         <a href="#formulario"><div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div></a>
@@ -170,10 +188,10 @@ html,body{
                 <div class="cont-facil animateme" data-when="enter" data-from="0.75" data-to="0" data-opacity="0" data-translatex="400">
                 	<h1 style="color:#5D5D5D">¡Así de fácil!</h1>
                     <ul>
-                    	<img class="img" src="{{ asset('public/img/landing/1.png') }}"><li>Completa unas preguntas<span> fáciles de responder</span></li>
-                        <img class="img" src="{{ asset('public/img/landing/2.png') }}"><li>Carga unos documentos <span>fáciles de conseguir</span></li>
-                        <img class="img" src="{{ asset('public/img/landing/3.png') }}"><li>Autorízanos a <span>realizar por tí</span> los procesos que ocupan tu tiempo</li>
-                        <img class="img" src="{{ asset('public/img/landing/4.png') }}"><li>Y despreocúpate...<span>de acá en adelante te llevamos de la mano</span></li>
+                    	<img class="img" src="{{ asset('public/img/landing/1.png') }}"><li>Completa unas preguntas <span>(te aseguramos que son muy fáciles)</span></li>
+                        <img class="img" src="{{ asset('public/img/landing/2.png') }}"><li>Carga algunos documentos <span>(consíguelos en unos minutos, te guiamos)</span></li>
+                        <img class="img" src="{{ asset('public/img/landing/3.png') }}"><li>Autorízanos a realizar los procesos <span>(nosotros hacemos el trabajo duro)</span></li>
+                        <img class="img" src="{{ asset('public/img/landing/4.png') }}"><li>Y Relájate...<span>(no tendrás que preocuparte más por tus procesos contables, ve por un café)</span></li>
                     </ul>
                 </div>
             </div>
@@ -181,8 +199,8 @@ html,body{
 
         <div id="formulario">
         	<div class="titulo">
-                <h4>PRE-INSCRÍBETE Y OBTÉN 1 MES GRATIS</h4>
-                <h2>ESPERA NUESTRO GRAN LANZAMIENTO EN <span>JUNIO DE 2016</span></h2>
+                <h4>¿listo para hacer tu vida más fácil?</h4>
+                <h2>Inscríbete ahora y recibe un tres meses gratis</h2>
             </div>
 
 
@@ -226,8 +244,9 @@ html,body{
                  <img src="{{ asset('public/img/landing/logo-foot.png') }}"><br><br>
                 </div>
                 <div class="text">
-                	<h4>¿Tienes preguntas?<br>escríbenos</h4>
-                    <h3>contacto@symplifica.com</h3>
+                	<h4>¿Tienes preguntas?</h4>
+                  <h3>Email - contacto@symplifica.com</h3>
+                  <h3>Cel - 350 833 0000</h3>
                 </div>
             </div>
             <div id="derechos"> <!--añadi este div, es nuevo-->
@@ -246,6 +265,10 @@ html,body{
           document.getElementById("gracias").style.display = "block";
           document.getElementById("done").style.display = "block";
         }
+      });
+
+      $("#hambur").click(function(){
+          $("#redes-resp").slideToggle();
       });
 
     	$(document).ready(function(){

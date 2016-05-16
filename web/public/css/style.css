@@ -14,9 +14,23 @@ ul {list-style-type: none}
 	width: 100%;
 	height: 70px;
 	background: #424C5A;
+	position: fixed;
+	z-index: 1
 	}
 
 #logo {width: 50%;float: left; padding-top: 15px; text-align: left}
+.calltoactionh {
+	background: #FF9523;
+	padding: 10px;
+	width: 175px;
+	float: left;
+	margin-left: 20px;
+	border-radius: 5px;
+	color:#FFF;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 700;
+}
+.img-logo {float: left;}
 #redes {
 	color: #fff;
     font-family: 'Open Sans', sans-serif;
@@ -25,6 +39,14 @@ ul {list-style-type: none}
     width: 45%;
     text-align: right;
     padding: 20px 20px 0 0px;}
+
+#hambur {display: none}
+
+#redes-resp {display: none}
+#redes-resp li {color: #FFF;
+	padding: 10px 0;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;}
 
 .redes {font-size:25px}
 
@@ -45,6 +67,8 @@ h3 {font-family: 'Open Sans', sans-serif;
 	    text-align: center;
 		  position: relative
 	}
+
+	#prueba {padding-top: 5%;}
 
 	#texto-banner {
 	display:none;
@@ -137,7 +161,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	.cont-gris {text-align: center;
     background: #ECECEC;
     height: 100px;
-    padding-top: 20px;
+    padding: 20px 0;
     color: #424C5A;}
 
 	#foto-hombre {background-image: url(/public/img/landing/back-man.png);
@@ -155,15 +179,15 @@ h4 {font-family: 'Open Sans', sans-serif;
 .seccion-hombre {float: left; margin-top: 30px; text-align: center}
 
 .info-hombre {
-	width: 270px;
-    height: 95px;
-    margin: 100px 0;
+		width: 270px;
+    height: 100px;
+    margin: 130px 0;
     background: #3B4B5A;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     color: #fff;
     text-align: center;
-    padding: 20px 20px 0 20px;}
+    padding: 20px 20px;}
 
 .callto {text-align: center;
 	position: relative;
@@ -193,7 +217,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	font-weight: 700;}
 
 .img {float: left;
-	padding: 20px 15px 0 0}
+	padding: 20px 15px 15px 0}
 
 .cont-facil {float: left; width: 50%}
 
@@ -314,7 +338,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	#foto-hombre {height: 650px}
 	#contenedor-info {width: 1000px; height: 100%; padding-left: 0px;}
 	.seccion-hombre {padding-left: 0px}
-	.info-hombre {margin: 60px 0; width: 230px; padding: 20px 15px 0 15px}
+	.info-hombre {margin: 60px 0; width: 230px; padding: 20px 15px}
 	.callto {margin: -140px 0 0 60px}
 	#info-facil {padding-left:23px; width: 1000px}
 
@@ -329,14 +353,14 @@ h4 {font-family: 'Open Sans', sans-serif;
 		#bullets {width: 100%;}
 		.bull-text {width: 22%; padding: 0 5%}
 		.seccion-hombre {padding-left: 5px}
-		.info-hombre {margin: 15px 0; width:185px; height: 130px}
+		.info-hombre {margin: 15px 0; width:185px; height: 150px}
 		.imghombre {width: 72%}
 		.pc-width {width: 60%}
 		#info-facil {padding-left:0px; width: 900px; text-align: center; margin: 30px auto}
 		.cont-facil {float: none; width: 100%}
 		.cont-facil li {width: 585px; text-align: left}
 		.cont-facil ul {padding-left: 150px;}
-		.img {padding: 9px 15px 0 0;}}
+		.img {padding: 9px 15px 15px 0;}}
 
 @media screen and (max-width: 800px) {
 	#texto-banner {width:80%}
@@ -350,7 +374,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	.imghombre {display: none}
 	#contenedor-info {width: 100%}
 	.seccion-hombre {padding-left: 0px;}
-	.info-hombre {width: 35%; padding: 20px 40px 0px; font-size: 20px; height: 160px; float:left; margin-left: 25px}
+	.info-hombre {width: 35%; padding: 20px 40px; font-size: 20px; height: 160px; float:left; margin-left: 25px}
 	.desaparece {display: none}
 	#info-facil {width: 750px}
 	.cont-facil ul {padding-left: 90px;}
@@ -369,15 +393,28 @@ h4 {font-family: 'Open Sans', sans-serif;
 		#info-facil {width: 100%}
 		.cont-facil ul {padding-left: 150px;}
 		.cont-facil li {width: 455px; font-size: 1.2em}
-		.info-hombre {width: 35%; height: 100px; float: left; margin-left: 20px; font-size: 100%}
+		.info-hombre {width: 35%; height: 100px; float: left; margin-left: 20px; font-size: 100%; padding: 20px 40px}
 		.aparece {clear: both}
-		h4,h2 {font-size: 1.4em}}
+		h4,h2 {font-size: 1.4em}
+		#hambur {display: block}
+		#redes-resp {background: #313842}
+		.calltoactionh {display: none}
+
+		#logo-zone {background: #424C5A;
+    height: auto;
+    overflow: hidden;
+    padding: 0 0 10px 0;}
+		#prueba {padding-top: 105px}
+		header {height: 680px}
+	}
 
 	@media screen and (max-width: 690px) {
 		.bull-text {padding: 0 0px}
 		#beneficios {width: 100%}
 		.info-hombre {margin-left: 15px}
 		#info-facil {width: 100%}
+		.cont-gris {
+    padding: 20px 20px;height: auto}
 		}
 
 	@media screen and (max-width: 667px) {
@@ -387,7 +424,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 		.bull-text {float: none; padding: 15px 0; font-size: 100%; width: 95%; margin: 0 auto}
 		.calltoaction {width: 80%; font-size: 1.2em}
 		.cuadros-beneficios {width: 39%; height: 155px; padding: 25px 15px;}
-		.info-hombre {width: 40%; height: 90px; float: left; margin-left: 15px; padding: 20px 20px 0px; font-size: 90%}
+		.info-hombre {width: 40%; height: 110px; float: left; margin-left: 15px; padding: 20px 20px 0px; font-size: 90%}
 		.aparece {clear: both}
 		.cont-facil ul {padding-left: 16%;}
 		.pc-width {width: 70%}
@@ -402,6 +439,8 @@ h4 {font-family: 'Open Sans', sans-serif;
 		#done1 {height: 115px;}
 		#done1-check {margin: 30px 30px 0 10px;}
 		#done1-text {width: 50%; font-size: 1.2em;}
+		#prueba {padding-top: 75px}
+		header {height: 750px}
 		}
 
 		@media screen and (max-width: 568px) {
@@ -423,7 +462,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 			.cuadro-precio {font-size: 20px; padding-bottom: 10px}
 			.info-hombre {height: 70px; float: none;}
 			#info-facil {width: 100%}
-			.calltoaction {font-size: 1em}
+			.calltoaction {font-size: 1em; padding: 10px; height: auto; box-sizing: border-box}
 			h4,h2 {font-size: 1em}
 			.cont-facil {width: 90%; margin: 0 auto;}
 			.cont-facil ul {padding-left: 25px;}
@@ -443,20 +482,23 @@ h4 {font-family: 'Open Sans', sans-serif;
 				form {width: 300px !important}
 				.campos {width: 90%}
 				button {width: 95%}
-				.cont-facil li {font-size: 1em;}}
+				.cont-facil li {font-size: 1em;}
+				.img {padding: 9px 15px 10px 0;}
+			}
 
 @media screen and (max-width: 375px) {
 				h1 {font-size: 1.1em}
-				header {height: 700px}
+				header {height: 785px}
 				.logo-size {width: 100%}
 				#logo {width: 45%}
 				#bull-cont {height: 270px}
-				.calltoaction {height: 55px}
 				.cuadro-precio {font-size: 20px; line-height: 30px; padding-top: 10px;}
-	.cuadro-precio span {font-size: 30px}
+				.cuadro-precio span {font-size: 30px}
+				.info-hombre {padding: 15px 20px; height: auto}
 				footer .text {padding: 15px 15px}
-				.img {padding: 23px 15px 0 0}
-				#prueba {height: 55%;}
+				.img {padding: 23px 15px 15px 0}
+				#prueba {height: 55%; padding-top: 90px}
+				header {height: 730px}
 				}
 
 
@@ -464,7 +506,6 @@ h4 {font-family: 'Open Sans', sans-serif;
 	.cuadros-beneficios {height: 175px}
 	#redes {padding: 10px 20px 0 0px; width: 46%;}
 	h4,h2 {font-size: 0.9em}
-	header {height: 735px}
 	#bull-cont {height: 285px}
 	.calltoaction {font-size: 1em}
 	#precio {padding: 20px 10px 0 10px;}
@@ -472,4 +513,8 @@ h4 {font-family: 'Open Sans', sans-serif;
 	.cuadro-precio span {font-size: 30px}
 	form {width: 265px !important}
 	.cont-facil ul {padding-left: 10px;}
-	.img {padding: 23px 15px 0 0;}}
+	.cont-gris {
+    height: auto;
+    padding: 20px 10px 30px 10px;}
+		#prueba {padding-top: 75px}
+}
