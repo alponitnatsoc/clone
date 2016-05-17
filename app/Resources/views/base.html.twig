@@ -365,6 +365,12 @@
             $(window).on("popstate", function (e) {
                 sendAjax(location.href);
             });
+            $(window).keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
             // Simple ajax url manager
             var redirector = getParameterByName('redirector');
             //console.log(redirector);
