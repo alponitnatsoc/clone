@@ -71,7 +71,7 @@ class ResettingRestController extends FOSRestController
         $this->get('fos_user.user_manager')->updateUser($user);
 
         $data = array(
-            "msj" => "Fue enviado un email al email " . $username . " para resetear la contraseña",
+            "msj" => "Fue enviado un email al email " . $username . " para restablecer la contraseña",
             "tmp" => $tmp,
             "user" => $user->getEmail(),
             "ttl" => $this->container->getParameter('fos_user.resetting.token_ttl')

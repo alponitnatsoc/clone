@@ -101,7 +101,7 @@ trait EmployeeMethodsTrait
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
 
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " . $person->getFullName();
+                    $msj = "Subir copia del documento de identidad de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
                     $contratoType = $documentTypeRepo->findOneBy(array('name' => "Contrato"));
@@ -109,7 +109,7 @@ trait EmployeeMethodsTrait
                     $msj = "Generar contrato con symplifica";
                     $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                     $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
-                    $msj = "Subir copia del contrato de " . $person->getFullName();
+                    $msj = "Subir copia del contrato de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
@@ -132,7 +132,7 @@ trait EmployeeMethodsTrait
         //    $entities = $entities_b;
         //}
         //foreach ($entities as $key => $value) {
-        $msj = "Subir documentos de " . $personEmployee->getFullName() . " para afiliarlo a las entidades.";
+        $msj = "Subir documentos de " .explode(" ",$personEmployee->getNames())[0]." ". $personEmployee->getLastName1(). " para afiliarlo a las entidades.";
         $url = $this->generateUrl("show_documents", array('id' => $personEmployee->getIdPerson()));
         $this->createNotification($user->getPersonPerson(), $msj, $url, null, "Ir");
         //}
@@ -158,13 +158,13 @@ trait EmployeeMethodsTrait
             if (!$docs[$type]) {
                 $msj = "";
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " . $person->getFullName();
+                    $msj = "Subir copia del documento de identidad de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'Cedula';
                 } elseif ($type == 'RUT') {
-                    $msj = "Subir copia del RUT de " . $person->getFullName();
+                    $msj = "Subir copia del RUT de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'RUT';
                 } elseif ($type == 'Carta autorización Symplifica') {
-                    $msj = "Subir carta de autorización symplifica de " . $person->getFullName();
+                    $msj = "Subir carta de autorización symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'Carta autorización Symplifica';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];

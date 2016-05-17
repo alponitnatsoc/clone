@@ -36,14 +36,16 @@
                         </div>
                     </div>
                     <div class="col-sm-8">
-                        <div class="col-sm-5">
-                            {#<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>      #}
-                            <a class="btn btn-top-left notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
-                                Agregar Novedad
-                            </a>
-                        </div>
-                        <div class="col-sm-5">
-                            <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Terminar contrato</a>
+                        <div id="special-buttons">
+                            <div class="col-sm-5">
+                                {#<button class="btn btn-top-left btn-default addNovelty btn-add-novelty" data-employee-name="{{ employee.personPerson.names }}"  href="/novelty/select/{{ contract.activePayroll.idPayroll }}"/>Ingresar Novedad</button>      #}
+                                <a class="btn btn-top-left notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">
+                                    Agregar Novedad
+                                </a>
+                            </div>
+                            <div class="col-sm-5">
+                                <a class="btn btn-sm btn-top-red btn-primary  notAjax" href="{{ path('final_liquidation', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Terminar contrato</a>
+                            </div>
                         </div>
                         <div class="col-sm-2">
                             {% if  not employerHasEmployee.state %}
@@ -727,6 +729,9 @@
                                     }
                                 });
                             });
+                            if("{{ employerHasEmployee.state }}" <=2 ){
+                                $("#special-buttons").hide();
+                            }
                         });
     </script>
 

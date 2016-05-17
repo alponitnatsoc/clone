@@ -309,7 +309,7 @@ class EmployeeRestController extends FOSRestController {
                 $notification->setPersonPerson($user->getPersonPerson());
                 $notification->setStatus(1);
                 $notification->setType('alert');
-                $notification->setDescription("Crear Cuenta DaviPlata");
+                $notification->setDescription("Crear Cuenta DaviPlata para ".$employee->getPersonPerson()->getNames());
                 $notification->setAccion("Crear Daviplata");
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($notification);
@@ -1436,15 +1436,23 @@ class EmployeeRestController extends FOSRestController {
             $flag = true;
         }
         if ($realEmployee->getRegisterState() == 95) {
-            $realEmployee->setRegisterState(100);
+            $realEmployee->setRegisterState(99);
             $em->persist($realEmployee);
             $em->flush();
         }
 
         if ($flag) {
             $view = View::create();
-            $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
-            return $view;
+            if($realEmployerHasEmployee->getState()==2){
+                $view->setData(array('url' => $this->generateUrl('show_dashboard')))->setStatusCode(200);
+                return $view;
+            }else{
+                // It sends here the verification code.
+                $this->sendVerificationCode();
+                $view->setData(array())->setStatusCode(200);
+                return $view;
+            }
+
         } else {
             $view = View::create();
             $view->setData(array('response' => array('message' => 'something went wrong')))->setStatusCode(400);
@@ -1765,7 +1773,7 @@ class EmployeeRestController extends FOSRestController {
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
-     *     404 = "Returned when the requested Ids don't exist"     
+     *     404 = "Returned when the requested Ids don't exist"
      *   }
      * )
      *
@@ -1890,7 +1898,7 @@ class EmployeeRestController extends FOSRestController {
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors",
-     *     404 = "Returned when the requested Ids don't exist"     
+     *     404 = "Returned when the requested Ids don't exist"
      *   }
      * )
      *
@@ -1961,5 +1969,76 @@ class EmployeeRestController extends FOSRestController {
         }
         return $dDiff;
     }
+
+    public function sendVerificationCode() {
+      $em = $this->getDoctrine()->getManager();
+
+      $user = $this->getUser();
+      $code = rand(10100, 99999);
+      $message = "Tu codigo de confirmación de Symplifica es: " . $code;
+
+      $user->setSmsCode($code);
+      $em->persist($user);
+      $em->flush();
+
+      /** @var Phone $phone */
+      $phone = $user->getPersonPerson()->getPhones()[0];
+
+      $twilio = $this->get('twilio.api');
+      $cellphone = $phone;
+      $twilio->account->messages->sendMessage(
+              "+19562671001", "+57" . $cellphone->getPhoneNumber(), $message);
+    }
+
+    /**
+     * Create a Person from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @RequestParam(name="verificationCode", nullable=false, strict=true, description="documentType.")
+     * @RequestParam(name="contractId", nullable=false, strict=true, description="documentType.")
+     *
+     * @return View
+     */
+    public function postVerifyVerificationCodeAction(ParamFetcher $paramFetcher) {
+      $em = $this->getDoctrine()->getManager();
+      $code = $paramFetcher->get('verificationCode');
+      $contract = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Contract')->find($paramFetcher->get('contractId'));
+      $ehe = $contract->getEmployerHasEmployeeEmployerHasEmployee();
+      $realEmployee = $ehe->getEmployeeEmployee();
+      $view = View::create();
+      $user = $this->getUser();
+      if($code == 0)
+        $view->setData([])->setStatusCode(404);
+      elseif($code == $user->getSmsCode()) {
+        if ($realEmployee->getRegisterState() == 99) {
+           $ehe->setState(2);
+           $realEmployee->setRegisterState(100);
+           $em->persist($realEmployee);
+           $em->persist($ehe);
+           $em->flush();
+       }
+        $view->setData(['url' => $this->generateUrl('show_dashboard')])->setStatusCode(200);
+      }
+      else
+        $view->setData([])->setStatusCode(401);
+
+      if($view->getStatusCode() != 200) {
+        // If the error code was invalid we send another.
+        $this->sendVerificationCode();
+      }
+
+      return $view;
+    }
+
 
 }

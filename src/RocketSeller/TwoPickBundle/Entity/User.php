@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -22,6 +23,14 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @Assert\Regex(
+     *  pattern="/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$/",
+     *  message="Password must be seven or more characters long and contain at least one digit, one upper- and one lowercase character."
+     * )
+     */
+    protected $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
@@ -123,6 +132,16 @@ class User extends BaseUser
      * @ORM\Column(type="smallint")
      */
     private $dataCreditStatus = 0;
+
+    /**
+     * Columna utilizada para guardar el codigo sms enviado para registrar empleado.
+     *
+     *
+     * @var Int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $smsCode = 0;
 
     /**
      * Columna utilizada para saber cantidad de meses gratis
@@ -867,5 +886,29 @@ class User extends BaseUser
     public function getDataCreditStatus()
     {
         return $this->dataCreditStatus;
+    }
+
+    /**
+     * Set $smsCode
+     *
+     * @param integer $smsCode
+     *
+     * @return User
+     */
+    public function setSmsCode($smsCode)
+    {
+        $this->smsCode = $smsCode;
+
+        return $this;
+    }
+
+    /**
+     * Get $smsCode
+     *
+     * @return integer
+     */
+    public function getSmsCode()
+    {
+        return $this->smsCode;
     }
 }
