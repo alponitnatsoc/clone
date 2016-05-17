@@ -150,7 +150,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	/*-----------------------------------------------empieza seccion señor-----------------------------------------------------------------*/
 	.aparece {display: none}
 
-	.imghombre {
+	#imghombre {
 		width: 100%}
 
 	.cont-gris {text-align: center;
@@ -167,7 +167,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 
 #contenedor-info {width: 1140px;
 	padding-left: 50px;
-    height: auto;
+    height: 100%;
     overflow: hidden;
     margin: 0 auto;}
 
@@ -333,7 +333,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	.seccion-hombre {padding-left: 15px}
 	#contenedor-info {width: 1145px; padding-left: 0px;}
 	.info-hombre {margin: 80px 0}
-	.imghombre {width: 90%}
+	#imghombre {width: 90% !important}
 	.callto {margin: -110px 0 0 60px}
 	#info-facil {margin: 150px auto}
 	#prueba {display: flex; flex-direction: row; justify-content: center; align-items: center; height: 65%;}/*css para que se centre*/
@@ -346,6 +346,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	#contenedor-info {width: 1000px; height: 100%; padding-left: 0px;}
 	.seccion-hombre {padding-left: 0px}
 	.info-hombre {margin: 60px 0; width: 230px; padding: 20px 15px}
+	#imghombre {width: 85% !important}
 	.callto {margin: -140px 0 0 60px}
 	#info-facil {padding-left:23px; width: 1000px}
 
@@ -361,7 +362,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 		.bull-text {width: 22%; padding: 0 5%}
 		.seccion-hombre {padding-left: 5px}
 		.info-hombre {margin: 15px 0; width:185px; height: 150px}
-		.imghombre {width: 72%}
+		#imghombre {width: 75% !important}
 		.pc-width {width: 60%}
 		#info-facil {padding-left:0px; width: 900px; text-align: center; margin: 30px auto}
 		.cont-facil {float: none; width: 100%}
