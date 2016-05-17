@@ -56,6 +56,7 @@ class RegistrationController extends BaseController
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
         $user = $userManager->createUser();
+        //die(print_r($user));
         $user->setEnabled(true);
         $user->setUsername("atemporel_tempo_tmp");
 
