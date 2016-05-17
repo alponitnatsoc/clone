@@ -55,7 +55,6 @@ class RegistrationController extends BaseController
         $userManager = $this->get('fos_user.user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
-
         $user = $userManager->createUser();
         $user->setEnabled(true);
         $user->setUsername("atemporel_tempo_tmp");
@@ -71,7 +70,9 @@ class RegistrationController extends BaseController
         $form->setData($user);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        $exists=$userManager->findUserByEmail($user->getEmail());
+        $errorss="";
+        if ($form->isValid()&&$exists==null) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
@@ -129,6 +130,10 @@ class RegistrationController extends BaseController
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
             return $response;
+        }else{
+            $errorss="El usuario ya existe o la información ingresada es invalida";
+            $form = $formFactory->createForm();
+            $form->setData($user);
         }
 
         $queryCode = $request->query->get("c");
@@ -137,7 +142,8 @@ class RegistrationController extends BaseController
         }
 
         return $this->render('FOSUserBundle:Registration:register.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'errorss'=>$errorss
         ));
     }
 
