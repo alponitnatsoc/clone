@@ -340,7 +340,7 @@ h4 {font-family: 'Open Sans', sans-serif;
 	}
 
 	@media screen and (max-width: 1024px) {
-	header {height: 770px}
+	header {height: 100%}
 	#texto-banner {width: 90%;}
 	#foto-hombre {height: 650px}
 	#contenedor-info {width: 1000px; height: 100%; padding-left: 0px;}
