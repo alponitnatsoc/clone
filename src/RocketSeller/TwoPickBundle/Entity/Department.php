@@ -47,7 +47,7 @@ class Department
      */
     private $departmentCode;
     /**
-     * @ORM\ManyToMany(targetEntity="Entity", mappedBy="departments")
+     * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity", mappedBy="departments")
      */
     private $entities;
 
