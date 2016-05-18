@@ -22,11 +22,11 @@ class LandingRegistrationForm extends AbstractType
                   'expanded' => true,
                   'required' => true))
             ->add('name', 'text',  array('label' => false,
-                  'attr'=>array('class'=>'campos', 'placeholder'=>'Escribe tu nombre y apellidos')))
+                  'attr'=>array('class'=>'campos', 'required'=>'required', 'placeholder'=>'Escribe tu nombre y apellidos')))
             ->add('email', 'text',  array('label' => false,
-                  'attr'=>array('class'=>'campos', 'placeholder'=>'Escribe tu dirección de correo')))
+                  'attr'=>array('class'=>'campos', 'required'=>'required', 'placeholder'=>'Escribe tu dirección de correo')))
             ->add('phone', 'text',  array('label' => false,
-                  'attr'=>array('class'=>'campos', 'placeholder'=>'Escribe tu número de celular')))
+                  'attr'=>array('class'=>'campos', 'required'=>'required', 'placeholder'=>'Escribe tu número de celular')))
             ;
     }
 
