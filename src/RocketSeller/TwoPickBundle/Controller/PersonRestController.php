@@ -426,15 +426,18 @@ class PersonRestController extends FOSRestController
     public function postCitiesAction(ParamFetcher $paramFetcher)
     {
         $idDepartment = $paramFetcher->get('department');
-        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-        $query = $cityRepo->createQueryBuilder('c')
+        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+      /*$query = $cityRepo->createQueryBuilder('c')
             ->where('c.departmentDepartment = :department')
             ->setParameter('department', $idDepartment)
             ->orderBy('c.name', 'ASC')
-            ->getQuery();
+            ->getQuery();*/
 
 
-        $cities = $query->getResult();
+
+
+        $cities = $cityRepo->find($idDepartment);
+        $cities = $cities->getCitys();
         $view = View::create();
 
         if (count($cities) != 0) {
