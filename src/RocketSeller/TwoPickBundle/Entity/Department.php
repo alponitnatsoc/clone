@@ -51,18 +51,14 @@ class Department
      */
     private $entities;
 
-    /**
-     * Set idDepartment
-     *
-     * @param integer $idDepartment
-     *
-     * @return Department
-     */
-    public function setIdDepartment($idDepartment)
-    {
-        $this->idDepartment = $idDepartment;
 
-        return $this;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->citys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->entities = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -73,30 +69,6 @@ class Department
     public function getIdDepartment()
     {
         return $this->idDepartment;
-    }
-
-    /**
-     * Set countryCountry
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
-     *
-     * @return Department
-     */
-    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry)
-    {
-        $this->countryCountry = $countryCountry;
-
-        return $this;
-    }
-
-    /**
-     * Get countryCountry
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Country
-     */
-    public function getCountryCountry()
-    {
-        return $this->countryCountry;
     }
 
     /**
@@ -122,12 +94,53 @@ class Department
     {
         return $this->name;
     }
+
     /**
-     * Constructor
+     * Set departmentCode
+     *
+     * @param integer $departmentCode
+     *
+     * @return Department
      */
-    public function __construct()
+    public function setDepartmentCode($departmentCode)
     {
-        $this->citys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->departmentCode = $departmentCode;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentCode
+     *
+     * @return integer
+     */
+    public function getDepartmentCode()
+    {
+        return $this->departmentCode;
+    }
+
+    /**
+     * Set countryCountry
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Country $countryCountry
+     *
+     * @return Department
+     */
+    public function setCountryCountry(\RocketSeller\TwoPickBundle\Entity\Country $countryCountry = null)
+    {
+        $this->countryCountry = $countryCountry;
+
+        return $this;
+    }
+
+    /**
+     * Get countryCountry
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Country
+     */
+    public function getCountryCountry()
+    {
+        return $this->countryCountry;
     }
 
     /**
@@ -162,34 +175,6 @@ class Department
     public function getCitys()
     {
         return $this->citys;
-    }
-    public function __toString()
-    {
-        return (string) $this->name;
-    }
-
-    /**
-     * Set departmentCode
-     *
-     * @param integer $departmentCode
-     *
-     * @return Department
-     */
-    public function setDepartmentCode($departmentCode)
-    {
-        $this->departmentCode = $departmentCode;
-
-        return $this;
-    }
-
-    /**
-     * Get departmentCode
-     *
-     * @return integer
-     */
-    public function getDepartmentCode()
-    {
-        return $this->departmentCode;
     }
 
     /**
