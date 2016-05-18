@@ -22,6 +22,9 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('public/css/font-awesome.min.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+
+</script>
 <script src="{{ asset('public/js/jquery.scrollme.js') }}"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
@@ -207,7 +210,7 @@ html,body{
 
             {# app/Resources/views/General/landing_with_form.html.twig #}
 
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'id': 'formulario_inscripcion'}}) }}
                 {{ form_row(form.name) }}
                 {{ form_row(form.entity_type, { 'id': 'entity' }) }}
                 {{ form_row(form.email) }}
@@ -313,7 +316,36 @@ html,body{
     });
 
     	</script>
+      <script>
+      // This and the next scripts are to enable validation in safari.
+      jQuery.swap = function( elem, options, callback, args ) {
+         var ret, name, old = {};
+         // Remember the old values, and insert the new ones
+         for ( name in options ) {
+                 old[ name ] = elem.style[ name ];
+                 elem.style[ name ] = options[ name ];
+         }
 
+         ret = callback.apply( elem, args || [] );
+
+         // Revert the old values
+         for ( name in options ) {
+                 elem.style[ name ] = old[ name ];
+         }
+         return ret;
+      };
+      </script>
+      <script src="{{ asset('public/js/js-webshim/minified/polyfiller.js')}}"></script>
+
+<script>
+  webshim.setOptions('forms', {
+      //show custom styleable validation bubble
+      replaceValidationUI: true
+  });
+  webshim.activeLang('es');
+  //start polyfilling
+  webshim.polyfill('forms');
+</script>
         <!---codigo de analitics------------------------------------------------------------------->
         <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
