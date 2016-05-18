@@ -433,15 +433,24 @@ class PersonRestController extends FOSRestController
             ->orderBy('c.name', 'ASC')
             ->getQuery();*/
 
+        $respuesta = array();
 
 
 
         $cities = $cityRepo->find($idDepartment);
         $cities = $cities->getCitys();
+
+        foreach($cities as $i) {
+          $temp = array();
+          $temp['id_city'] = $i->getIdCity();
+          $temp['name'] = $i->getName();
+          $respuesta[] = $temp;
+        }
+
         $view = View::create();
 
-        if (count($cities) != 0) {
-            $view->setData($cities)->setStatusCode(200);
+        if (count($respuesta) != 0) {
+            $view->setData($respuesta)->setStatusCode(200);
             return $view;
         } else {
             $view->setStatusCode(404)->setHeader("error", "Department does't exist");
