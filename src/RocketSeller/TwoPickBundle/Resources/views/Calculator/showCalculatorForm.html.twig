@@ -4,7 +4,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
           crossorigin="anonymous">
-<style>
+<style type="text/css">
 .calculator-block {
     width: 100%;
     text-align: center;
@@ -65,35 +65,77 @@
 }
 
 .form-control {
-    
 }
 #form-sisben {
-     
 }
 #form-sisben .radio {
-     
 }
 </style>
 {% endblock %}
 {% block body %}
-<div class="col-sm-12 col-xs-12 align-Resp" style="margin-bottom: 30px;">
-    <div id="" class="col-sm-12 col-xs-12 blockStep inline">
-        <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-            <img src="/img/block-complete.png" class="center-block">
-        </div>
-        <div id="" class="col-md-10 col-xs-12 txt-AD1">
-            <div id="" class="text-left">
-                Calculadora salarial
-            </div>
+
+<style type="text/css">
+#banner7 {
+   background: url("{{ asset('public/img/home/banner7.png') }}") no-repeat;
+   background-size: cover;
+   background-position: center;
+   width: 100%;
+   height: 310px;
+}
+  #bannercal {padding-top: 100px}
+  #bannercal h1 {padding-top: 50px}
+  .col-sm-12, .col-xs-12 {
+    padding:0;
+    width: 100%
+  }
+  .header-cal p {
+    text-align: center;
+  font-size: 18px;
+  color: #808080
+}
+
+.calculator-block{
+  text-align: left
+}
+
+  .light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+  .light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+  .semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+  .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+  .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+  #estilo_calculadora {
+    width: 600px;
+    margin: 50px auto;
+    padding-bottom: 50px;
+    color: #6D6D6D
+  }
+
+  @media only screen and (max-width: 640px) {
+    #estilo_calculadora {
+      width: 85%;
+    }
+    .header-cal p {
+      width: 80%;
+      margin: 0 auto;
+  }
+}
+</style>
+
+<div class="col-sm-12 col-xs-12 align-Resp" id="bannercal" style="margin-bottom: 30px;">
+    <div id="" class="col-sm-12 col-xs-12 blockStep inline banner">
+        <div id="banner7" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+            <h1>Calculadora salarial</h1>
+            <h2>El valor mensual que debes pagar a tu empleado</h2>
         </div>
     </div>
 </div>
 <div id="registrationFormContainer" class="calculator-block">
     <div class="header-cal">
-        <p>A continuación podrá ejecutar los cálculos necesarios para estimar la forma como debe pagar a su
+        <p class="light">A continuación podrás ejecutar los cálculos necesarios para estimar<br> la forma como debes pagar a tu
         empleado de acuerdo a lo que la ley define:</p>
     </div>
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'id': 'estilo_calculadora'}}) }}
     {{ form_errors(form) }}
     <div class="tipo-empleado">
         {{ form_row(form.tipo) }}
