@@ -611,6 +611,9 @@ trait SubscriptionMethodsTrait
         $person = $user->getPersonPerson();
         /* @var $employer Employer */
         $employer = $person->getEmployer();
+        if($employer->getIdHighTech()!=null){
+            return true;
+        }
         $em = $this->getDoctrine()->getManager();
         $request = $this->container->get('request');
         $request->setMethod("POST");
@@ -628,6 +631,7 @@ trait SubscriptionMethodsTrait
             "department" => $person->getDepartment()->getName(),
             "mail" => $user->getEmail()
         ));
+
         $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:postRegisterNaturalPerson', array('_format' => 'json'));
         //dump($insertionAnswer);
         //echo "Status Code Employer: " . $person->getNames() . " -> " . $insertionAnswer->getStatusCode();
