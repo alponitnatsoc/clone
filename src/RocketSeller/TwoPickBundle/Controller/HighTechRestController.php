@@ -156,4 +156,48 @@ class HighTechRestController extends FOSRestController
 
   }
 
+  /**
+   * @POST("notificacion/registro")
+   * Get a notification of the payment, to update in our system.<br/>
+   *
+   * @ApiDoc(
+   *   resource = true,
+   *   description = "Get a notification of the payment, to update in our system.",
+   *   statusCodes = {
+   *     200 = "OK",
+   *     201 = "Accepted",
+   *     400 = "Bad Request",
+   *     401 = "Unauthorized"
+   *   }
+   * )
+   *
+   * @param Request $request.
+   * Rest Parameters:
+   *
+   * (name="numeroRadicado", nullable=false, requirements="([0-9])+", strict=true, description="the id of operation returned by HT in web service #8.")
+   * (name="estado", nullable=false, requirements="([0-9])+", strict=true, description="Status of the operation, where:
+   *                                                   0 OK, 90 Fondos Insuficientes, 91 Cuenta Embargada, 92 No Autorizada, 93 Cuenta No Existe."
+   *
+   * @return View
+   */
+  public function postPaymentSubscriptionAction(Request $request)
+  {
+    $parameters = $request->request->all();
+    $regex = array();
+    $mandatory = array();
+
+    // Set all the parameters info.
+    $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
+    $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
+
+    $this->validateParamters($parameters, $regex, $mandatory);
+
+    // Succesfull operation.
+    $view = View::create();
+    $view->setStatusCode(200);
+    $view->setData([]);
+    return $view;
+
+  }
+
 }

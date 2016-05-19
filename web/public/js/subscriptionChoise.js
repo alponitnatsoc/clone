@@ -109,6 +109,7 @@ function startSubscriptionChoise() {
             $(".btn-change-state-contract-confirm").attr('disabled', false);
         });
     }
+
     function calculatePrice(contenedor) {
         var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0, total = 0, subtotal = 0, count_employee = 0;
         if (contenedor == '_calc') {
@@ -126,17 +127,20 @@ function startSubscriptionChoise() {
         if (Tiempo_Completo > 0) {
             PS3 = parseFloat($("#PS3").val());
             PS3_IVA = 1 + parseFloat($("#PS3_IVA").val());
-            subtotal = Math.ceil(subtotal + (Tiempo_Completo * (PS3 * PS3_IVA)));
+            //subtotal = Math.ceil(subtotal + (Tiempo_Completo * (PS3 * PS3_IVA)));
+            subtotal = subtotal + (Tiempo_Completo * producto['PS3']);
         }
         if (Medio_tiempo > 0) {
             PS2 = parseFloat($("#PS2").val());
             PS2_IVA = 1 + parseFloat($("#PS2_IVA").val());
-            subtotal = Math.ceil(subtotal + (Medio_tiempo * (PS2 * PS2_IVA)));
+            //subtotal = Math.ceil(subtotal + (Medio_tiempo * (PS2 * PS2_IVA)));
+            subtotal = subtotal + (Medio_tiempo * producto['PS2']);
         }
         if (Trabajo_por_días > 0) {
             PS1 = parseFloat($("#PS1").val());
             PS1_IVA = 1 + parseFloat($("#PS1_IVA").val());
-            subtotal = Math.ceil(subtotal + (Trabajo_por_días * (PS1 * PS1_IVA)));
+            //subtotal = Math.ceil(subtotal + (Trabajo_por_días * (PS1 * PS1_IVA)));
+            subtotal = subtotal + (Trabajo_por_días * producto['PS1']);
         }
 
         for (key in contrato) {
@@ -152,7 +156,7 @@ function startSubscriptionChoise() {
                 transport = contrato[key]['transportAid'];
                 resultado = calculator(type, salaryM, salaryD, numberOfDays, sisben, transport);
 
-                total = total + resultado['totalExpenses'];
+                total = total + resultado['totalExpenses2'];
 
                 $("#sueldos").html(getPrice(total));
                 $("#primerPago").html(getPrice(total));
@@ -161,7 +165,7 @@ function startSubscriptionChoise() {
 
             }
         }
-
+        console.log(producto);
         $("#divSubtotal").html(getPrice(subtotal));
 
         if (subtotal == 0) {
@@ -174,9 +178,9 @@ function startSubscriptionChoise() {
 
     function getPrice(valor) {
         price = parseFloat(valor.toString().replace(/,/g, ""))
-                .toFixed(0)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return "$ " + price;
     }
 
@@ -192,21 +196,21 @@ function startSubscriptionChoise() {
                     $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
                 }
             }).done(function (data) {
-                if (data == true) {
-                    $("#esReferido").val(1);
-                    $("#codigo_referido").attr('readonly', true);
-                    $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
-                    $("#codigo_referido_estado").addClass('codigo_referido_valido');
-                    $("#codigo_referido_estado").html('Código valido');
-                    $("#codigoReferido").hide();
-                    $("#btnRedimir").attr('disabled', true);
-                    $("#btnRedimir").addClass('off', true);
-                } else {
-                    $("#codigo_referido_estado").removeClass('codigo_referido_valido');
-                    $("#codigo_referido_estado").addClass('codigo_referido_invalido');
-                    $("#codigo_referido_estado").html(data);
+                    if (data == true) {
+                        $("#esReferido").val(1);
+                        $("#codigo_referido").attr('readonly', true);
+                        $("#codigo_referido_estado").removeClass('codigo_referido_invalido');
+                        $("#codigo_referido_estado").addClass('codigo_referido_valido');
+                        $("#codigo_referido_estado").html('Código valido');
+                        $("#codigoReferido").hide();
+                        $("#btnRedimir").attr('disabled', true);
+                        $("#btnRedimir").addClass('off', true);
+                    } else {
+                        $("#codigo_referido_estado").removeClass('codigo_referido_valido');
+                        $("#codigo_referido_estado").addClass('codigo_referido_invalido');
+                        $("#codigo_referido_estado").html(data);
+                    }
                 }
-            }
             ).fail(function (jqXHR, textStatus, errorThrown) {
                 $("#codigo_referido_estado").removeClass('codigo_referido_valido');
                 $("#codigo_referido_estado").addClass('codigo_referido_invalido');

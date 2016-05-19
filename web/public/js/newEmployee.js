@@ -358,6 +358,44 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+    $('#btn-verificaion').click(function (e) {
+        e.preventDefault();
+        var form = $("form");
+        var url= $(this).attr('href');
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                verificationCode: $("#register_employee_verificationCode").val(),
+                contractId: $("input[name='register_employee[idContract]']").val()
+            }
+        }).done(function (data) {
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("El código de verificación es incorrecto, un nuevo código ha sido enviado");
+        });
+
+    });
+    $('#btn-reenviar').click(function (e) {
+        // We send a fake code, so that it generates a new one.
+        e.preventDefault();
+        var form = $("form");
+        var url= $(this).attr('href');
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            data: {
+                verificationCode: '01',
+                contractId: $("input[name='register_employee[idContract]']").val()
+            }
+        }).done(function (data) {
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Se ha enviado un nuevo codigo a tu celular");
+        });
+    });
     $('#btn-entities').click(function (e) {
         e.preventDefault();
         var form = $("form");
@@ -448,8 +486,12 @@ function startEmployee() {
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
-            history.pushState("", "", data["url"]);
-            sendAjax(data["url"]);
+            if(typeof data['url'] == 'undefined'){
+                $('#finalStepNav > .active').next('li').find('a').trigger('click');
+            }else{
+                history.pushState("", "", data["url"]);
+                sendAjax(data["url"]);
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -725,7 +767,7 @@ function jsonCalcToHTML(data) {
     htmls += "    <div class='col-sm-6 text-center'>";
     htmls += "        <strong>Ingreso neto para el empleado</strong>:<br />";
     htmls += "        $<strong>" + getPrice(Math.floor(data.totalIncome)) + "</strong> ($" + getPrice(Math.floor(data.dailyIncome)) + " diarios )";
-    htmls += "        <br/><small class='text-muted'>El valor estimado que recibirá tu empleado</small><br />";    
+    htmls += "        <br/><small class='text-muted'>El valor estimado que recibirá tu empleado</small><br />";
     htmls += "    </div>";
     htmls += "</div>";
 
@@ -808,7 +850,7 @@ function jsonCalcToHTML(data) {
 
     htmls += "    </tbody> ";
     htmls += "</table>    ";
-   
+
     /*
     htmls += "<ul class='lista_listo clearfix'><li class='col-sm-6'><span class='titulo'><strong>Costo total</strong><br/>para el empleador</span> <span class='cifra'>" + getPrice(Math.floor(data.totalExpenses)) + "</span></li>";
     htmls += "<li class='col-sm-6'><span class='titulo'><strong>Ingreso neto</strong><br />para el empleado</span> <span class='cifra'>" + getPrice(Math.floor(data.totalIncome)) + "</span></li>";

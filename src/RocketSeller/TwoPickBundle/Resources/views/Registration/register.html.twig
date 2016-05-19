@@ -1,6 +1,25 @@
 {% extends "::new-design/public.html.twig" %}
 
 {% block body %}
+
+<style type="text/css">
+    input {
+      margin: 10px 0
+    }
+
+    #req_pass {
+      background: #5D5D5D;
+      color: #FFF;
+      padding: 0 0 1px 0;
+      font-weight: 100;
+    }
+
+@media only screen and (max-width: 480px) {
+  .smallOrangeBox {
+    width: 90%
+    }
+  }
+</style>
 <div id="registrationContainer" class="row-fluid clearfix" style="background-color: #3c4b5a; padding: 105px 0 30px 0;">
     <div class="smallOrangeBox">
         <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle" /></div>
@@ -10,6 +29,11 @@
             <span class="light-text">El primer mes es gratis</span>
             <!--<span class="light-text">Puedes registrarte gratis de dos maneras</span>-->
             <hr class="smallDivider" />
+            <div id="errorss">
+                {% if errorss is defined %}
+                    {{ errorss }}
+                {% endif %}
+            </div>
             {% include "FOSUserBundle:Registration:register_content.html.twig" %}
             <div class="registrationSocialNetworks">
                 <hr class="smallDivider"></hr>
@@ -51,5 +75,72 @@
               textfield.setCustomValidity('Debes leer y aceptar los términos y condiciones');
             }
         });
+
+        // Verifying the password.
+        // We hide the requirements, until the user hits the password.
+        $("#req_pass").hide();
+        $('#app_user_registration_form_plainPassword').attr('oninvalid', 'setCustomValidity("Tu contraseña no cumple con nuestros parametros de seguridad")');
+        $('#app_user_registration_form_plainPassword').attr('oninput', "setCustomValidity('')");
+
+        // This function checks for all the requirements of the password.
+        function checkReq() {
+          // First show everything.
+          $("#carac8").show();
+          $("#mayus").show();
+          $("#minu").show();
+          $("#num").show();
+          $("#req_pass").show();
+
+          var completo = 0;
+          var pass = $("#app_user_registration_form_plainPassword").val();
+          // Check for size.
+          if(pass.length >= 8) {
+            $("#carac8").hide();
+            completo++;
+          }
+
+          // Check for a capital letter.
+          for(var i = 0; i < pass.length; i++){
+            character = pass.charAt(i);
+            if (character != character.toLowerCase()) {
+              // The character is uppercase.
+              $("#mayus").hide();
+              completo++;
+              break;
+            }
+          }
+          // Check for a lowercase letter.
+          for(var i = 0; i < pass.length; i++){
+            character = pass.charAt(i);
+            if (character == character.toLowerCase()) {
+              // The character is lowercase.
+              $("#minu").hide();
+              completo++;
+              break;
+            }
+          }
+          // Check for numbers.
+          var matches = pass.match(/\d+/g);
+          if (matches != null) {
+              $("#num").hide();
+              completo++;
+          }
+          if(completo == 4) {
+            $("#req_pass").hide();
+          }
+        }
+
+
+        // We show it on focus.
+        $("#app_user_registration_form_plainPassword").focus(function(){
+            checkReq();
+        });
+
+
+        $("#app_user_registration_form_plainPassword").keyup(function(event) {
+            // We check each of the conditions.
+            checkReq();
+        });
+
     </script>
 {% endblock %}

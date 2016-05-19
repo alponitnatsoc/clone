@@ -426,19 +426,31 @@ class PersonRestController extends FOSRestController
     public function postCitiesAction(ParamFetcher $paramFetcher)
     {
         $idDepartment = $paramFetcher->get('department');
-        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:City');
-        $query = $cityRepo->createQueryBuilder('c')
+        $cityRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Department');
+      /*$query = $cityRepo->createQueryBuilder('c')
             ->where('c.departmentDepartment = :department')
             ->setParameter('department', $idDepartment)
             ->orderBy('c.name', 'ASC')
-            ->getQuery();
+            ->getQuery();*/
+
+        $respuesta = array();
 
 
-        $cities = $query->getResult();
+
+        $cities = $cityRepo->find($idDepartment);
+        $cities = $cities->getCitys();
+
+        foreach($cities as $i) {
+          $temp = array();
+          $temp['id_city'] = $i->getIdCity();
+          $temp['name'] = $i->getName();
+          $respuesta[] = $temp;
+        }
+
         $view = View::create();
 
-        if (count($cities) != 0) {
-            $view->setData($cities)->setStatusCode(200);
+        if (count($respuesta) != 0) {
+            $view->setData($respuesta)->setStatusCode(200);
             return $view;
         } else {
             $view->setStatusCode(404)->setHeader("error", "Department does't exist");

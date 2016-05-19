@@ -56,6 +56,11 @@ class PersonEmployeeRegistration extends AbstractType
                 'mapped' => false))
             ->add('entities',  new EntitiesPick($this->wealthEntities,$this->pensionEntities,$this->arsEntities,$this->severancesEntities), array(
                 'mapped' => false))
+            ->add('verificationCode', 'number', array(
+                'label' => 'Codigo de verificación*',
+                'required' => true,
+                'mapped' => false,
+            ))
             ->add('save', 'submit', array(
                 'label' => 'Guardar'
             ));

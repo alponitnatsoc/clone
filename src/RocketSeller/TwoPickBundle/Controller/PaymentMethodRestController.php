@@ -105,11 +105,13 @@ class PaymentMethodRestController extends FOSRestController
      * @RequestParam(name="expiry_date_month", nullable=false,  requirements="[0-9]{2}", strict=true, description="Month in MM format.")
      * @RequestParam(name="cvv", nullable=false,  requirements="\d+", strict=true, description="CVV CC.")
      * @RequestParam(name="name_on_card", nullable=false, strict=true, description="The name on card")
+     * @RequestParam(name="userId", nullable=false  , strict=true, description="Account type ID")
+
      */
     public function postAddCreditCardAction(ParamFetcher $paramFetcher)
     {
         /** @var User $user */
-        $user = $this->getUser();
+        $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         $person = $user->getPersonPerson();
         $view = View::create();
         $request = $this->container->get('request');

@@ -4,20 +4,23 @@
 {% block stylesheet %}
     {{ parent() }}
     <style type="text/css">
-        .media{
+        .media {
             padding: 10px;
             background-color: #DDD;
             display: -webkit-box;
         }
-        .media-left{
+
+        .media-left {
             font-size: large;
             color: orange;
         }
-        .media-heading{
+
+        .media-heading {
             font-weight: bold;
         }
-        .padding{
-            padding: 50px 0px 50px 0px ;
+
+        .padding {
+            padding: 50px 0px 50px 0px;
         }
     </style>
 {% endblock stylesheet %}
@@ -37,9 +40,15 @@
     </div>
     <ul id="formNav" class="nav nav-tabs nav-justified">
         {% set tab = 2 %}
-        <li {%   if tab is defined and tab==0 %} class="active" {% endif %}><a data-toggle="tab" data-target="#newOrOldTab"></a>Validar</li>
-        <li {%   if tab is defined and tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Confirmar</li>
-        <li {%   if tab is defined and tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Finalizar</li>
+        <li {% if tab is defined and tab==0 %} class="active" {% endif %}><a data-toggle="tab"
+                                                                             data-target="#newOrOldTab"></a>Validar
+        </li>
+        <li {% if tab is defined and tab==1 %} class="active" {% endif %}><a data-toggle="tab"
+                                                                             data-target="#basicData"></a>Confirmar
+        </li>
+        <li {% if tab is defined and tab==2 %} class="active" {% endif %}><a data-toggle="tab"
+                                                                             data-target="#contactData"></a>Finalizar
+        </li>
     </ul>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
@@ -56,10 +65,12 @@
                     <h4><b>No pudimos validar tu identidad</b></h4>
                 </div>
                 <div class="padding">
-                    Por tu seguridad no podemos inscribir una cuenta sin validar tu identidad. Por favor intenta de nuevo en 15 minutos seguir el proceso de registro de tu cuenta.
+                    Por tu seguridad no podemos inscribir una cuenta sin validar tu identidad. Por favor intenta de
+                    nuevo en 15 minutos seguir el proceso de registro de tu cuenta.
                 </div>
                 <div class="padding">
-                    <input type="button" class="btn btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('subscription_choices') }}'" >
+                    <input type="button" class="btn btn-orange" value="Intentar de nuevo"
+                           onclick="window.location = '{{ path('subscription_confirm') }}'">
                 </div>
             </div>
         </div>

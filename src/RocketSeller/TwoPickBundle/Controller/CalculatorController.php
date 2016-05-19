@@ -52,7 +52,7 @@ class CalculatorController extends Controller
                     'onclick' => 'formatMoney($(this))'
                 )
             ))
-            ->add('save', 'submit', array('label' => 'Calculate'))
+            ->add('save', 'submit', array('label' => 'Calcular'))
             ->getForm();
 
         return $this->render('RocketSellerTwoPickBundle:Calculator:showCalculatorForm.html.twig',

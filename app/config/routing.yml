@@ -4,10 +4,10 @@ ajax:
     defaults:  { _controller: RocketSellerTwoPickBundle:Pages:index}
 welcome:
     path:      /welcome
-    defaults:  { _controller: RocketSellerTwoPickBundle:Default:index} 
+    defaults:  { _controller: RocketSellerTwoPickBundle:Default:index}
 legal:
     path:      /legal-status
-    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:legal} 
+    defaults:  { _controller: RocketSellerTwoPickBundle:DashBoard:legal}
 legal_assist:
     path:      /legal-assist
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:index }
@@ -212,7 +212,7 @@ payroll_error:
 payroll_success:
     path:     /payroll/success
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollSuccess }
-    
+
 show_form_entity:
     path:      /register/entity/{id}
     defaults:  { _controller: RocketSellerTwoPickBundle:Entity:printForm }
@@ -440,10 +440,10 @@ express_payment:
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:expressPayment }
 express_payment_add:
     path: /express-payment/add
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:addCreditCard }    
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:addCreditCard }
 express_pay_start:
     path: /express-pay/start/{methodId}
-    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:startExpressPay, methodId: 0 }    
+    defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:startExpressPay, methodId: 0 }
 express_success:
     path: /express-success
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:successExpress }
@@ -469,7 +469,7 @@ back_employer_menu:
 back_person_cvs_export:
     path: /back-person-cvs-export/{idPerson}
     defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByPerson }
-    
+
 express_registration_contract_employee:
     path: /express-registration/{id}/employee-contract/{idEmployee}
     defaults:  { _controller: RocketSellerTwoPickBundle:Contract:addContractExpress }

@@ -21,7 +21,13 @@ class PhoneRegistration extends AbstractType
             ->add('phoneNumber', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Teléfono*'))
+                ),'label' => 'Celular*',
+                "attr" => array(
+                    "data-toggle" => "tooltip",
+                    "data-placement" => "right",
+                    "data-container" => "body",
+                    "title" => "Te van a llegar notificaciones via SMS para temas de seguridad."
+                )))
             ->add('id', 'hidden', array(
                 'property_path' => 'idPhone'
             ));

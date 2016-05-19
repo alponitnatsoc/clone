@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -92,7 +93,6 @@ class SubscriptionRestController extends FOSRestController
         $view->setStatusCode(200);
         return $view;
     }
-
 
     /**
      * crear notificaciones iniciales

@@ -39,9 +39,8 @@ class LoadDepartmentData extends AbstractFixture implements OrderedFixtureInterf
                     $departament->setCountryCountry($this->getReference('country-code-' . $countryCode));
                     $departament->setDepartmentCode($deptoCode);
                     $departament->setName($deptoName);
-
                     $manager->persist($departament);
-
+                    
                     $this->addReference('c-code-' . $countryCode . '-d-code-' . $deptoCode, $departament);
                 }
             }

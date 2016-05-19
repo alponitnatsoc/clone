@@ -387,7 +387,7 @@ class EmployeeController extends Controller
         $todayPlus = new DateTime();
         $request = $this->container->get('request');
         $request->setMethod("GET");
-        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+        $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>4), array('_format' => 'json'));
         if ($insertionAnswer->getStatusCode() != 200) {
             return false;
         }

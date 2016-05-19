@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 use RocketSeller\TwoPickBundle\Entity\Pay;
@@ -20,6 +21,8 @@ class EmployerRestController extends FOSRestController
 {
 
     use GetTransactionDetailTrait;
+    use EmployeeMethodsTrait;
+
 
     /**
      * Obtener el detalle de una transaccion
@@ -197,5 +200,47 @@ class EmployerRestController extends FOSRestController
         //return $this->handleView($view);
         return $view;
     }
+    /**
+     * crear notificaciones iniciales  para empleador
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "crear tramites para backOffice",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the mail no send"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="idUser", description="Recibe el id del usuario")
+     *
+     *
+     *
+     * @return View
+     */
+    public function postCreateInitialNotificationsAction(ParamFetcher $paramFetcher)
+    {
+        $idUser = ($paramFetcher->get('idUser'));
+        /* @var $user User */
+        $user = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($idUser);
+        $employer=$user->getPersonPerson()->getEmployer();
+        $this->validateDocumentsEmployer($user,$employer);
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($employer->getEmployerHasEmployees() as $eHE) {
+            if($eHE->getState()==1){
+                $employee=$eHE->getEmployeeEmployee();
+                $this->validateDocumentsEmployee($user,$employee);
+            }
+        }
+
+        $view = View::create();
+        $view->setData(array());
+        $view->setStatusCode(200);
+        return $view;
+    }
+
 
 }

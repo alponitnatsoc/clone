@@ -41,11 +41,13 @@ novelty_services:
 payments_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PaymentsRest"
-    name_prefix: api_public_
+    name_prefix: api_public_secured_
+    prefix: /secured
 payments_services_2:
     type: rest
     resource: "RocketSellerTwoPickBundle:Payments2Rest"
-    name_prefix: api_public_
+    name_prefix: api_public_secured_
+    prefix: /secured
 novo_payment_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:NovoPaymentRest"
@@ -57,7 +59,8 @@ ht_payment_rest:
 datacredito_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:DataCreditoRest"
-    name_prefix: api_public_
+    name_prefix: api_public_secured_
+    prefix: /secured
 refered_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:ReferredRest"
@@ -85,6 +88,8 @@ payments_services_test:
 payroll_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRest"
+    name_prefix: api_public_secured_
+    prefix: /secured
 payroll_method_rest:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollMethodRest"
@@ -92,7 +97,8 @@ payroll_method_rest:
 pila_csv_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PilaPlainTextRest"
-    name_prefix: api_plublic_
+    name_prefix: api_plublic_secured_
+    prefix: /secured
 payroll_services_test:
     type: rest
     resource: "RocketSellerTwoPickBundle:PayrollRestTest"

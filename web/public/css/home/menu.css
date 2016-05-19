@@ -36,12 +36,12 @@ a {text-decoration: none}
 }
 #menu {
 	float: left;
-	margin: 0 35px;
+	margin: 0 30px;
 	padding: 10px 0 0 0}
 
 #menu ul li {
 	display: inline-block;
-	margin: 0 22px;
+	margin: 0 13px;
   font-size: 17px;
 }
 
