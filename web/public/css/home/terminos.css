@@ -1,0 +1,46 @@
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+#terminos p {
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #5D5D5D
+}
+
+#terminos {
+  width: 1100px;
+  margin: 0 auto;
+  text-align: justify;
+  padding: 100px 0;
+}
+
+#titulos-terminos {
+  padding: 40px;
+}
+
+h1 {
+  color: #3c4b5a;
+  text-align: center
+}
+h2 {color:#00838c;
+text-align: center;}
+
+h4 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: #00838c
+}
+
+@media only screen and (max-width: 1200px) {
+  #terminos {width: 85%;}
+}
