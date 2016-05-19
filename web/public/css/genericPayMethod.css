@@ -1,0 +1,51 @@
+
+    .infoTarjeta #credit_card {
+        background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+        background-position: 2px -117px, 233px -55px;
+        background-size: 120px 361px, 120px 361px;
+        background-repeat: no-repeat;
+        padding-left: 54px;
+        /*width: 225px;*/
+    }
+    .infoTarjeta #credit_card.visa {
+        background-position: 2px -159px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.visa_electron {
+        background-position: 2px -201px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.mastercard {
+        background-position: 2px -243px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.maestro {
+        background-position: 2px -285px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.discover {
+        background-position: 2px -327px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.amex {
+        background-position: 2px -327px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.diners_club_carte_blanche {
+        background-position: 2px -327px, 260px -61px;
+    }
+    .infoTarjeta #credit_card.valid.visa {
+        background-position: 2px -159px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.visa_electron {
+        background-position: 2px -201px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.mastercard {
+        background-position: 2px -243px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.maestro {
+        background-position: 2px -285px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.discover {
+        background-position: 2px -327px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.amex {
+        background-position: 2px -327px, 233px -82px;
+    }
+    .infoTarjeta #credit_card.valid.diners_club_carte_blanche {
+        background-position: 2px -327px, 233px -82px;
+    }

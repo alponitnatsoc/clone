@@ -49,7 +49,6 @@ class PaymentMethodRestController extends FOSRestController
      */
     public function postAddDebitAccountAction(ParamFetcher $paramFetcher)
     {
-        
         /** @var User $user */
         $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($paramFetcher->get("userId"));
         $person = $user->getPersonPerson();
@@ -178,6 +177,50 @@ class PaymentMethodRestController extends FOSRestController
         } else {
             $view->setStatusCode(201)->setData(array('response' => array("method-id" => $idPayM), "extra-data" => $insertionAnswer->getContent()));
         }
+        return $view;
+    }
+
+    /**
+     * add generic pay method function<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Based on the form, call the respective add pay method",
+     *   statusCodes = {
+     *     201 = "Added",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     406 = "Not Acceptable",
+     *     409 = "Conflict",
+     *     500 = "Novo TimeOut"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher Paramfetcher
+     *
+     * @return View
+     * @RequestParam(name="pay_method", nullable=true, strict=true, description="Account type")
+     * @RequestParam(name="userId", nullable=true, strict=true, description="Account type ID")
+     * @RequestParam(name="accountNumber", nullable=true,  requirements="\d+", strict=true, description="Account Number")
+     * @RequestParam(name="bankId", nullable=true,  requirements="\d+", strict=true, description="the bank id")
+     * @RequestParam(name="accountTypeId", nullable=true, strict=true, description="Account type ID")
+     * @RequestParam(name="name_on_card", nullable=true, strict=true, description="Name on the credit card")
+     * @RequestParam(name="credit_card", nullable=true,  requirements="\d+", strict=true, description="CC Number")
+     * @RequestParam(name="expiry_date_year", nullable=true,  requirements="[0-9]{4}", strict=true, description="YEAR in YYYY format.")
+     * @RequestParam(name="expiry_date_month", nullable=true,  requirements="[0-9]{2}", strict=true, description="Month in MM format.")
+     * @RequestParam(name="cvv", nullable=true,  requirements="\d+", strict=true, description="CVV CC.")
+     */
+    public function postAddGenericPayMethodAction(ParamFetcher $paramFetcher)
+    {
+        $payMethod = $paramFetcher->get("pay_method");
+
+        if($payMethod == "Tarjeta de Crédito"){
+          $view = $this->postAddCreditCardAction($paramFetcher);
+        }
+        elseif ($payMethod == "Cuenta Bancaria") {
+          $view = $this->postAddDebitAccountAction($paramFetcher);
+        }
+
         return $view;
     }
 
