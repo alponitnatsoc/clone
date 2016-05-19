@@ -78,6 +78,7 @@ trait EmployeeMethodsTrait
 
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
+        /** @var EmployerHasEmployee $employerHasEmployee */
         $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $realEmployee,
@@ -87,7 +88,7 @@ trait EmployeeMethodsTrait
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 1
         ));
-        $docs = array('Cedula' => false, 'Contrato' => false);
+        $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
                 if ($type == $document->getDocumentTypeDocumentType()->getName()) {
@@ -110,6 +111,13 @@ trait EmployeeMethodsTrait
                     $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                     $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
                     $msj = "Subir copia del contrato de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                } elseif ($type == 'Carta autorización Symplifica') {
+                    $cartaType = $documentTypeRepo->findOneBy(array('name' => "Carta autorización Symplifica"));
+                    $documentType = 'Carta autorización Symplifica';
+                    $msj = "Generar Carta autorización Symplifica";
+                    $url = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
+                    $this->createNotification($user->getPersonPerson(), $msj, $url, $cartaType, "Bajar");
+                    $msj = "Subir copia de la Carta autorización Symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
