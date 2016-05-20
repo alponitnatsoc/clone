@@ -10,6 +10,7 @@
 /composer.lock
 /vendor/
 /web/bundles/
+/web/app.php
 /web/30/
 *.DS_Store
 /web/uploads
@@ -21,4 +22,3 @@
 .gitignore
 .phpintel/*
 nbproject/*
-/web/app.php
