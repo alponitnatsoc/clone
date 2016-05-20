@@ -21,4 +21,4 @@
 .gitignore
 .phpintel/*
 nbproject/*
-/web/app.php
+web/app.php
