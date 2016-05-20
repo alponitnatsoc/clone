@@ -28,6 +28,10 @@ class SecurityController extends BaseController
         $authChecker = $this->container->get('security.authorization_checker');
         $router = $this->container->get('router');
 
+        if ($authChecker->isGranted('ROLE_BACK_OFFICE')){
+            return new RedirectResponse($router->generate('back_office'),307);
+        }
+
         if ($authChecker->isGranted('ROLE_ADMIN')) {
             return new RedirectResponse($router->generate('sonata_admin_dashboard'), 307);
         }

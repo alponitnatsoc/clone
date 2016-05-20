@@ -152,9 +152,10 @@
                                 <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
                             </a>
                         </div>
+
                         <div id="navbarSidebar" class="section about navbar-collapse collapse">
                             <div class="well well-lg leftColumnLogo">
-                                <a href=""><img class="hidden-sm img-responsive" alt="Symplifica"
+                                <a href="{% block clickLogo %}{% endblock %}"><img class="hidden-sm img-responsive" alt="Symplifica"
                                                 src="/img/logo-oscuro.png"></a>
                             </div>
                             {% if app.user.legalFlag is defined %}
@@ -176,10 +177,12 @@
                                     <a href="{{ path('show_dashboard_employer') }}">Tablero de control</a>
                                 </div>
                             {% elseif  status == 1 %}
+                                {% block menuInicio %}
                                 <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador"
                                      style="margin-top: 40px;">
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
                                 </div>
+                                {% endblock %}
                             {% endif %}
                             <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
@@ -223,13 +226,15 @@
                                 <div class="col-sm-12 col-xs-12 profile-Data">
                                     <div class="col-sm-4 col-xs-11 person">
                                         <div class="col-sm-12 col-xs-12">
-                                            <h4>{{ app.user.getPersonPerson().getNames() }}</h4>
+                                            <h4>{% block usrName %}{{ app.user.getPersonPerson().getNames() }}{% endblock %}</h4>
+
                                             <div class="pull-right">
-                                                <span id="profile"
+                                                {% block logout %}
+                                                    <span id="profile"
                                                       style="display: inline"> <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi
                                                         cuenta</a></span> | <span id="logout" style="display: inline"
                                                                                   id="logout"><a class="notAjax"
-                                                                                                 href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+                                                                                                 href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>{% endblock %}
                                             </div>
                                         </div>
                                     </div>
