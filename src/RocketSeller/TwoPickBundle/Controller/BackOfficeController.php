@@ -132,4 +132,13 @@ class BackOfficeController extends Controller
 		->findOneBy($array);
 		return $loadedClass;
     }
+    
+    public function showLandingAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        $landings = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+            ->findAll();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>$landings));
+    }
 }
