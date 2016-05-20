@@ -154,6 +154,11 @@
 
       <script>
       $(document).ready(function () {
+
+        $("#btnLogin").click(function(){
+          $("#slideLogin").slideToggle();
+        });
+
           $('#forgotBtn').click(function (e) {
               e.preventDefault();
               $('#loginModal').modal('hide');
