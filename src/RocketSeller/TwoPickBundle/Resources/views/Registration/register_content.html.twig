@@ -1,10 +1,26 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+
+    {{ form_widget(form.name) }}
+    {{ form_widget(form.lastName) }}
+    {{ form_widget(form.email) }}
+    {{ form_widget(form.plainPassword) }}
+    <div id="req_pass">
+      <p id="carac8t" style="background: #272525; margin: 0 0 15px 0; padding: 9px 0; font-weight: bold;">Tu contraseña debe tener:</p>
+      <p id="carac8">&#8594; Mínimo 8 caracteres</p>
+      <p id="mayus">&#8594; Una mayúscula</p>
+      <p id="minu">&#8594; Una minúscula</p>
+      <p id="num">&#8594; Un número</p>
+    </div>
+
+    {{ form_widget(form.invitation) }}
+
     {{ form_widget(form) }}
+
     <div class="form-group txt-A1-terms">
         <input type="checkbox" id="chktyc" required />
-        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}">Términos y Condiciones</a>
+        Al registrarme acepto todos los <a href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
     </div>
     <div class="col-xs-12">
 		<input type="submit" id="btnSubmit" value="{{ 'registration.submit'|trans }}" class="btn register-AS1 btn-symplifica" />

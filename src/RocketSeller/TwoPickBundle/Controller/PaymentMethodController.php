@@ -8,6 +8,7 @@ use RocketSeller\TwoPickBundle\Entity\Person;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use RocketSeller\TwoPickBundle\Form\AddPayMethod;
 
 class PaymentMethodController extends Controller
 {
@@ -68,6 +69,25 @@ class PaymentMethodController extends Controller
         ));
     }
 
+    public function addGenericPayMethodAction(Request $request)
+    {
+      $user=$this->getUser();
+
+      $bankRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank");
+      $bankEntities = $bankRepo->findAll();
+
+      $accountTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:AccountType");
+      $accountTypeEntities = $accountTypeRepo->findAll();
+
+      $form = $this->createForm(new AddPayMethod($user, $bankEntities, $accountTypeEntities), null,array(
+          'action' => $this->generateUrl('api_public_post_add_generic_pay_method', array('format'=>'json')),
+          'method' => 'POST'
+        ));
+
+      return $this->render('RocketSellerTwoPickBundle:Registration:addPayMethod.html.twig', array(
+                  'form' => $form->createView()
+      ));
+    }
 }
 
 ?>

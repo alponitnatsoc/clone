@@ -69,7 +69,7 @@ class Entity
     private $pila_code;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Department", inversedBy="entities", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Department", inversedBy="entities", cascade={"persist"})
      * @ORM\JoinTable(name="entity_has_department",
      *      joinColumns={ @ORM\JoinColumn(name="entity_id_entity", referencedColumnName="id_entity")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="department_id_department", referencedColumnName="id_department")}
