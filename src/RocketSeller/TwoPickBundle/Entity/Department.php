@@ -210,4 +210,9 @@ class Department
     {
         return $this->entities;
     }
+
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
 }
