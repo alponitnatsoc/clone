@@ -55,9 +55,9 @@ class LandingRegistration
     private $createdAt;
 
     /**
-     * Gets triggered only on insert
-
-     * @ORM\PrePersist
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     public function onPrePersist()
     {
