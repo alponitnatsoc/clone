@@ -64,6 +64,14 @@ class LandingRegistration
         $this->createdAt = new \DateTime("now");
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        
+    }
 
     /**
      * Get id
