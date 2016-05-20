@@ -43,3 +43,5 @@ parameters:
        email: servicioalcliente@symplifica.com
        representante: Camilo Méndez
        identificacion: CC XXX de Colombia
+    route_home: RocketSellerTwoPickBundle:Public:home
+
