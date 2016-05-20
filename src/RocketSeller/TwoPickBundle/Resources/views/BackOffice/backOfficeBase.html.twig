@@ -9,7 +9,13 @@
     {% block menuInicio %}
         <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg separador"
              style="margin-top: 40px;">
-            <a href="{{ path('back_office') }}">Tramites</a>
+            <a href="{{ path('back_office') }}">Back Office</a>
+        </div>
+    {% endblock %}
+
+    {% block menu %}
+        <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
+            <a href="{{ path('marketing') }}" >Marketing</a>
         </div>
     {% endblock %}
 

@@ -85,3 +85,6 @@ register_express:
 legal_ass:
     path:     /backoffice/legal
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:legalAssistance }
+marketing:
+    path:     /backoffice/marketing
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}

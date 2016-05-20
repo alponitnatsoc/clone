@@ -1,0 +1,38 @@
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
+{% block fos_user_content  %}
+
+
+    <div id="main" class="col-sm-9">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Marketing</div>
+                <div>
+                    <h4>Landing Symplifica</h4>
+                </div>
+                <table class="table-condensed">
+                    <thead>
+                    <tr>
+                        <td aria-sort="descending">Tipo de Inscripción</td>
+                        <td>Nombre</td>
+                        <td>E-Mail</td>
+                        <td>Teléfono</td>
+                        <td>Fecha Inscripción</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for landing in landings %}
+                        <tr>
+                            <td>{{ landing.entityType}}</td>
+                            <td>{{ landing.name}}</td>
+                            <td>{{ landing.email }}</td>
+                            <td>{{ landing.phone }}</td>
+                            <td>{{ landing.createdAt|date('y-m-d h:i:s a') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
