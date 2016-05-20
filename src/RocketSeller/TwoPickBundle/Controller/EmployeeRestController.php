@@ -1255,7 +1255,7 @@ class EmployeeRestController extends FOSRestController {
                     $msj = "Subir copia del RUT de " . $person->getFullName();
                     $documentType = 'Contrato';
                 } elseif ($type == 'Carta autorización Symplifica') {
-                    $msj = "Subir carta de autorización symplifica de " . $person->getFullName();
+                    $msj = "Subir carta de autorización Symplifica de " . $person->getFullName();
                     $documentType = 'Carta autorización Symplifica';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
