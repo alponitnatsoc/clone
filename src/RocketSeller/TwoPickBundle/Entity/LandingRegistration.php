@@ -55,22 +55,12 @@ class LandingRegistration
     private $createdAt;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
-     */
-    public function onPrePersist()
-    {
-        $this->createdAt = new \DateTime("now");
-    }
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        
+
     }
 
     /**
