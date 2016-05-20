@@ -10,15 +10,12 @@ use RocketSeller\TwoPickBundle\Entity\BillingAddress;
 
 class DefaultController extends Controller
 {
-    
+
     public function indexAction()
     {
-        /*
-        After login de back office temporal
         if($this->isGranted('ROLE_BACK_OFFICE')){
             return $this->redirectToRoute('back_office');
         }
-        */
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
 

@@ -479,7 +479,7 @@ express_registration_contract_employee:
 
 home_landing:
     path:     /
-    defaults: { _controller: RocketSellerTwoPickBundle:Public:home }
+    defaults: { _controller: "%route_home%" }
 
 beneficios:
     path:     /beneficios
