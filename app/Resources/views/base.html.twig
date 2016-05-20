@@ -104,22 +104,6 @@
                         {% endif %}
                     </a>
                 </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="#">Beneficios</a></li>
-                        <li><a href="{{ path('show_calculator_form') }}">Calculadora Salarial</a></li>
-                        <li><a href="#">Precios</a></li>
-                        <li><a href="{{ path('_nosotros') }}">Nosotros</a></li>
-                        <li><a href="{{ path('show_help') }}">Ayuda</a></li>
-                        <li><a href="https://medium.com/blog-symplifica" target="_blank">Blog</a></li>
-                        <li><a href="/contact">Contáctanos</a></li>
-                        <li><a href="{{ path('fos_user_registration_register') }}">Registrarse</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#loginModal" data-toggle="modal" class="btn btn-ingresar pull-right">Ingresar</a>
-                        </li>
-                    </ul>
-                </div><!--/.navbar-collapse -->
             </div>
         </nav>
     {% endif %}
@@ -157,6 +141,7 @@
                                 <a href=""><img class="hidden-sm img-responsive" alt="Symplifica"
                                                 src="/img/logo-oscuro.png"></a>
                             </div>
+                            {% block menu %}
                             {% if app.user.legalFlag is defined %}
                                 {% set legalFlag = app.user.legalFlag %}
                             {% else %}
@@ -207,7 +192,7 @@
                             <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
                             </div>
-
+                            {% endblock%}
                         </div>
                     {% endblock %}
                 </div>
