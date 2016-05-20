@@ -49,8 +49,7 @@ class LandingRegistration
     private $phone;
 
     /**
-     * @var datetime $createdAt
-     *
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
