@@ -55,11 +55,22 @@ class LandingRegistration
     private $createdAt;
 
     /**
-     * @ORM\onPrepersit
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
-    public function onPrepersist()
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
         $this->createdAt = new \DateTime();
+        
     }
 
     /**
@@ -70,6 +81,30 @@ class LandingRegistration
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return LandingRegistration
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -166,29 +201,5 @@ class LandingRegistration
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return LandingRegistration
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
     }
 }

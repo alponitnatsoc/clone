@@ -1,3 +1,23 @@
-{% extends "::base.html.twig" %}
-{% block title %}Back Office{% endblock %}
+    {% extends "::base.html.twig" %}
 
+    {% block title %}back office{% endblock %}
+
+    {% block clickLogo %}
+        /backoffice
+    {% endblock %}
+
+    {% block menuInicio %}
+        <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg separador"
+             style="margin-top: 40px;">
+            <a href="{{ path('back_office') }}">Tramites</a>
+        </div>
+    {% endblock %}
+
+    {% block usrName %}
+        BACK OFFICE
+    {% endblock %}
+
+    {% block logout %}
+        <span id="logout" style="display: inline">
+            <a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>
+    {% endblock %}
