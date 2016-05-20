@@ -15,6 +15,7 @@ class BackOfficeController extends Controller
 
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
 	public function checkRegisterAction($idPerson,$idAction)

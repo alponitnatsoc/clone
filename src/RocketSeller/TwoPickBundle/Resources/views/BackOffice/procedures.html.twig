@@ -48,6 +48,7 @@
 						<thead>
 						<tr>
 							<th>Empleador</th>
+							<th>Cedula</th>
 							<th>tipo de tramite</th>
 							<th>fecha</th>
 							<th>Accion</th>
@@ -56,7 +57,8 @@
 						<tbody>
 						{% for procedure in procedures %}
 							<tr>
-								<td>{{ procedure.employerEmployer.personPerson.names }} {{ procedure.employerEmployer.personPerson.lastName1 }}</td>
+								<td>{{ procedure.employerEmployer.personPerson.fullName}}</td>
+								<td>{{ procedure.employerEmployer.personPerson.document}}</td>
 								<td>{{ procedure.procedureTypeProcedureType.name }}</td>
 								<td>{{ procedure.createdAt|date('y-m-d h:i:s a') }}</td>
 								<td><a href="{{ path('show_procedure',{'procedureId':procedure.idProcedure})}}">Ver</a></td>
