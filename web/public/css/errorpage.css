@@ -15,7 +15,7 @@
 main  {width:100%}
 
 #nubes {
-	background: url(../img/error/nubes.png);
+	background: url("../../public/img/error/nubes.png");
     background-position: center;
     background-size: cover;
     height: 100%;
@@ -42,7 +42,7 @@ main  {width:100%}
     position: absolute;
     bottom: 50px;
 	}
-	
+
 #textoerror {
 	width: 280px;
 	border-radius: 15px;
@@ -59,14 +59,14 @@ main  {width:100%}
     font-size: 90px;
     margin: 5px 0 0 0;
 }
-	
+
 #textoerror h2 {
     font-size: 60px;
     line-height: 1;
     margin: -11px 0 0 0;
     padding-bottom: 17px;
 }
-	
+
 #nubes p {
 	margin: 70px 0 0 0;
 	color: #FFF;
@@ -74,7 +74,7 @@ main  {width:100%}
 #btn {margin: 0 auto;
 	width: 300px;
 	text-align: center}
-	
+
 button {
 	width: 200px;
     height: auto;
@@ -89,12 +89,11 @@ button {
 button:hover {
 	border: 2px solid #C4DBED
 	}
-	
+
 #blanco {
-	background: url(../img/error/nubes.png);
+	background: url("../../public/img/error/nubes.png");
     background-position: center;
     background-size: cover;
     height: 100%;
     width: 100%;
     background-repeat: no-repeat;}
-
