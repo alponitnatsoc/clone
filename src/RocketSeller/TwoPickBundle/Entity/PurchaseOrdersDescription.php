@@ -36,6 +36,11 @@ class PurchaseOrdersDescription
     private $payrollPayroll;
 
     /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", mappedBy="pila")
+     */
+    private $payrollsPila;
+
+    /**
      * @ORM\OneToMany(targetEntity="Pay", mappedBy="purchaseOrdersDescription", cascade={"persist"})
      */
     private $payPay;
@@ -77,13 +82,6 @@ class PurchaseOrdersDescription
      */
     private $value;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get idPurchaseOrdersDescription
@@ -283,7 +281,7 @@ class PurchaseOrdersDescription
     public function addPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
     {
         $this->payrollPayroll[] = $payrollPayroll;
-
+        $payrollPayroll->setPila($this);
         return $this;
     }
 
@@ -297,4 +295,46 @@ class PurchaseOrdersDescription
         $this->payrollPayroll->removeElement($payrollPayroll);
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollsPila = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add payrollsPila
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollsPila
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function addPayrollsPila(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollsPila)
+    {
+        $this->payrollsPila[] = $payrollsPila;
+
+        return $this;
+    }
+
+    /**
+     * Remove payrollsPila
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollsPila
+     */
+    public function removePayrollsPila(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollsPila)
+    {
+        $this->payrollsPila->removeElement($payrollsPila);
+    }
+
+    /**
+     * Get payrollsPila
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPayrollsPila()
+    {
+        return $this->payrollsPila;
+    }
 }
