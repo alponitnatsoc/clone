@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Documento sin título</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../css/errorpage.css"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<main>
+            <div id="cielo" style="background: #CB6D6C;">
+            	<div id="nubes">
+                	<div id="contenedor">
+                        <div id="contenedorerror">
+                            <div id="imgsenor">
+                                <img src="../img/error/senor2.png" alt="señor"/>
+                            </div>
+
+                            <div id="textoerror" style="background:#C95D59">
+                                <h1 class="extrabold">403</h1>
+                                <h2 style="color:#934540" class="extrabold">error</h2>
+                            </div>
+                            <p class="light-italic">No tienes permisos para entrar a esta página</p>
+                        </div>
+                     </div>
+
+            </div>
+        </div>
+
+        <div id="blanco">
+        	<div id="btn">
+            	<a href="#"><button style="cursor:pointer" class="bold">ir a home</button></a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+		$(document).ready(function(){
+
+			$("#imgsenor").css({
+				"width":"auto",
+				"heigth":"0px",
+				"opacity" : "0"
+
+			});
+
+			$("#imgsenor").delay(150);
+			$("#imgsenor").animate({
+				"height" : "230px",
+				"width":"auto",
+				"opacity" : "1"
+				}, 1000);
+
+		});
+</script>
+
+</body>
+</html>
