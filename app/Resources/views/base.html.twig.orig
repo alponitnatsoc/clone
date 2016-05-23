@@ -17,7 +17,7 @@
             <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
             <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
-        {% endblock %}	
+        {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         <script src="{{ asset('js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
     </head>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="container">
                         <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">    
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                                 <span class="sr-only">Toggle navigation</span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
@@ -95,7 +95,7 @@
                         <div id="sidebar" class="col-sm-3">
                             {% block sidebar %}
                                 <div class="navbar-header">
-                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">    
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">
                                         <span class="sr-only">Toggle navigation</span>
                                         <span class="icon-bar"></span>
                                         <span class="icon-bar"></span>
@@ -127,9 +127,9 @@
                                     <div class="well well-lg">
                                         <a href="">Reportes</a>
                                     </div>
-                                    <div class="well well-lg">
+                                    <!--<div class="well well-lg">
                                         <a href="">calculadora salarial</a>
-                                    </div>
+                                    </div>-->
                                     <div class="well well-lg">
                                         <a href="">Configuración</a>
                                     </div>
@@ -167,7 +167,7 @@
                 </div>
             </div>
         {% endblock %}
-    </div> 
+    </div>
     {% block footer %}
         <footer>
             <div class="container">
@@ -211,7 +211,7 @@
     {% endblock %}
     {% block javascripts %}
         <script data-main="{{ asset('js/main') }}" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
-        <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script> 
+        <script src="{{ asset('public/js/noUiSlider.8.2.1/nouislider.min.js') }}"></script>
         <script>
                 require.config({
                     shim: {

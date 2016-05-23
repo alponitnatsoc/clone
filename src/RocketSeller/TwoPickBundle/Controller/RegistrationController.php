@@ -132,7 +132,9 @@ class RegistrationController extends BaseController
 
             return $response;
         }else{
-            $errorss="El usuario ya existe o la información ingresada es invalida";
+            if ( $form->isSubmitted() ){
+              $errorss="El usuario ya existe o la información ingresada es invalida";
+            }
             $form = $formFactory->createForm();
             $form->setData($user);
         }

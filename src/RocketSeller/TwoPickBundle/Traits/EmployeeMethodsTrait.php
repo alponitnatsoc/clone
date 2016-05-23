@@ -107,7 +107,7 @@ trait EmployeeMethodsTrait
                 } elseif ($type == 'Contrato') {
                     $contratoType = $documentTypeRepo->findOneBy(array('name' => "Contrato"));
                     $documentType = 'Contrato';
-                    $msj = "Generar contrato con symplifica";
+                    $msj = "Generar contrato con Symplifica";
                     $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                     $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
                     $msj = "Subir copia del contrato de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
@@ -172,7 +172,7 @@ trait EmployeeMethodsTrait
                     $msj = "Subir copia del RUT de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'RUT';
                 } elseif ($type == 'Carta autorización Symplifica') {
-                    $msj = "Subir carta de autorización symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir carta de autorización Symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'Carta autorización Symplifica';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];

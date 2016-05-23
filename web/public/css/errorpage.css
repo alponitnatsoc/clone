@@ -1,0 +1,99 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {
+	margin: 0;
+	padding: 0
+}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+main  {width:100%}
+
+#nubes {
+	background: url("../../public/img/error/nubes.png");
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;}
+
+#cielo {
+	height: 580px;
+	width: 100%;
+	text-align:center
+}
+
+#contenedor {
+	position: relative;
+    height: 100%;
+    width: 300px;
+    margin: 0 auto;
+	}
+
+#contenedorerror {
+	width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    position: absolute;
+    bottom: 50px;
+	}
+
+#textoerror {
+	width: 280px;
+	border-radius: 15px;
+	height: auto;
+	overflow: hidden;
+	position: absolute;
+	top: 120px;
+	}
+#textoerror h1 {
+	text-shadow: 0px 1px 2px #315655;
+    color: #FFF;
+    display: block;
+    line-height: 1;
+    font-size: 90px;
+    margin: 5px 0 0 0;
+}
+
+#textoerror h2 {
+    font-size: 60px;
+    line-height: 1;
+    margin: -11px 0 0 0;
+    padding-bottom: 17px;
+}
+
+#nubes p {
+	margin: 70px 0 0 0;
+	color: #FFF;
+	font-size: 25px}
+#btn {margin: 0 auto;
+	width: 300px;
+	text-align: center}
+
+button {
+	width: 200px;
+    height: auto;
+    font-size: 20px;
+    background: #fff;
+    border: 1px solid #C4DBED;
+    margin: 15px 0 0 0;
+    border-radius: 5px;
+	color: #3c4b5a
+	}
+
+button:hover {
+	border: 2px solid #C4DBED
+	}
+
+#blanco {
+	background: url("../../public/img/error/nubes.png");
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;}
