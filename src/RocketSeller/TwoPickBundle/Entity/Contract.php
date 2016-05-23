@@ -359,7 +359,7 @@ class Contract
     public function addPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payroll)
     {
         $this->payrolls[] = $payroll;
-
+        $payroll->setContractContract($this);
         return $this;
     }
 

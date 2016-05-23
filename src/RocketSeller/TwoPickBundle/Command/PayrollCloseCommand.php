@@ -26,8 +26,7 @@ class PayrollCloseCommand extends ContainerAwareCommand
 
         $this->output = $output;
 
-        $ch = curl_init("http://localhost/api/public/v1/auto/liquidate/payroll");
-
+        $ch = curl_init("http://127.0.0.1/api/public/v1/secured/auto/liquidate/payroll");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 
