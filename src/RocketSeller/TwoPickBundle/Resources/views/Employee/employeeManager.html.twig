@@ -8,7 +8,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">                    
+                 <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -24,16 +24,16 @@
             <div class="col-md-4">Empleados Activos<br><b>{{ employees|length }}</b></div>
             <div class="col-md-4">Empleados inactivos<br><b> 0</b></div>
             <div class="col-md-4">Empleados en proceso de registro<br><b> 0</b></div>
-        </div>   
+        </div>
         <br />
-        <div class="row">     
+        <div class="row">
             <div class="col-sm-12 col-xs-12">
-        
+
                 {% for employee in employees %}
                     {% set employeeStatus= employee.state %}
                     <div class="row employeeListItem">
-                        <div class="col-xs-6 employeeInfo" 
-                            style="{% if employeeStatus != 1 %}border-left:10px solid #ccc{% endif %}">
+                        <div class="col-xs-6 employeeInfo"
+                            style="{% if employeeStatus != 1 %}border-left:3px solid #ccc{% endif %}">
                             <b>{{ employee.fullName }}</b>
                             {% if employeeStatus > 2 and status >= 2 %}
                                 <br />
@@ -62,7 +62,7 @@
                             {% endif %}
                         </div>
                     </div>
-                {% endfor %}                
+                {% endfor %}
             </div>
         </div>
     </div>

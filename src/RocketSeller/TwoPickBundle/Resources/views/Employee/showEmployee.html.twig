@@ -64,10 +64,7 @@
                             <p><i class="fa fa-check-cross">Inactivo</i></p>
                         {% endif %}
                     </div>
-                    <div class="col-sm-4 middle">
-                        <div class="col-sm-12 title" style="font-style:italic;">Vacaciones</div>
-                        <div class="col-sm-12 text-below"><strong>10 dias</strong></div>
-                    </div>
+
                     <div class="col-sm-4 right">
                         <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
                         <div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
@@ -76,7 +73,7 @@
                 <div class="col-sm-12 bottom-box">
                     <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12">Datos basicos</h4>
+                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos básicos</h4>
                             <li>
                                 <p class="title"><i>Estado civil</i></p>
                                 <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
@@ -101,7 +98,7 @@
                     </div>
                     <div class="col-sm-4 col-sm-offset-1 right">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12">Datos de contacto</h4>
+                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos de contacto</h4>
                             <li>
                                 <p class="title"><i>Dirección</i></p>
                                 <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
@@ -185,7 +182,7 @@
                     </div>
 
                 </div>
-                <div class="col-sm-12 col-sm-offset-5">
+                <div class="col-sm-12 col-sm-offset-5" style="margin-top: 20px">
                     <span class="editEmployee btn btn-orange notAjax" href="/api/public/v1/employees/{{employee.idEmployee}}/info">Editar</span>
                 </div>
             </div>
