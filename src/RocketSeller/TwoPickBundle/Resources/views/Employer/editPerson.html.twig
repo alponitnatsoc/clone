@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-sm-6 form-group input">
                             {{ form_widget(form.person.names) }}
-                        </div>                        
+                        </div>
                     </div>
                     <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
@@ -117,15 +117,15 @@
                         </div>
                         <div class="col-sm-6 form-group input">
                             {{ form_widget(form.person.lastName2) }}
-                        </div>                       
+                        </div>
                     </div>
-                    <div class="col-sm-12 col-xs-12"> 
+                    <div class="col-sm-12 col-xs-12">
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.person.birthDate)}}
                         </div>
                         <div class="col-sm-6 form-group">
                             {{ form_widget(form.person.birthDate) }}
-                        </div>                                               
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-xs-12 center">
@@ -136,7 +136,7 @@
                 </div>
                 <br /><br />
             </div>
-            
+
             <div id="contactData" class="tab-pane fade in">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
@@ -149,7 +149,7 @@
                         </div>
                         <div class="col-sm-6 form-group input">
                             {{ form_widget(form.person.mainAddress) }}
-                        </div>                    
+                        </div>
                     </div>
                     <div class="col-sm-12">
                         <ul class="phones" data-prototype="{{ form_widget(form.person.phones.vars.prototype)|e }}" >
@@ -157,22 +157,22 @@
                                 <li id="phone_{{loop.index}}" class="phoneLi">
                                     {{ form_row(phone.id) }}
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(phone.phoneNumber)}}    
+                                        {{ form_label(phone.phoneNumber)}}
                                     </div>
                                     <div class="col-sm-6 form-group input">
-                                        {{ form_widget(phone.phoneNumber)}}    
-                                    </div>                                                                        
+                                        {{ form_widget(phone.phoneNumber)}}
+                                    </div>
                                 </li>
                             {% endfor %}
                         </ul>
-                    </div> 
+                    </div>
                     <div class="col-sm-12">
                         <div class="col-sm-6 label-group">
                             {{ form_label(form.person.department)}}
                         </div>
                         <div class="col-sm-6 form-group">
                             {{ form_widget(form.person.department) }}
-                        </div>                    
+                        </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="col-sm-6 label-group">
@@ -180,26 +180,26 @@
                         </div>
                         <div class="col-sm-6 form-group">
                             {{ form_widget(form.person.city) }}
-                        </div>                    
-                    </div>                                          
-                    
+                        </div>
+                    </div>
+
                 </div>
                 <br/><br/>
                 <div class="col-sm-12 col-xs-12 center">
-                        
+
                             <a class="btn btn-primary btnPrevious">Anterior</a>
-                        
-                        
+
+
                             <a id="btn-2" href="{{ path('api_public_post_edit_person_submit_step2') }}" class="btn btn-primary btnNext btn-orange">Salvar y Continuar</a>
                             <br /><br />
-                        
+
                     </div>
             </div>
 
             <div id="workplacesData" class="tab-pane fade h3">
                 <div class="col-sm-12 col-xs-12 block-Intro">
                     <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Corresponden a los puntos donde laborará o dependerá cada empleado.</span>
+                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Se deben incluir todos los sitios de trabajo en donde tu empleado ejercerá sus labores.</span>
                 </div>
 
 
@@ -219,7 +219,7 @@
                                         </div>
                                         <div class="col-sm-6 form-group input">
                                             {{ form_widget(workplace.name) }}
-                                        </div>                                                                                
+                                        </div>
                                     </div>
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
@@ -235,7 +235,7 @@
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(workplace.department)}}
-                                        </div>                                                                            
+                                        </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-12">
                                         <div class="col-sm-6 label-group">
@@ -243,16 +243,16 @@
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(workplace.city) }}
-                                        </div>                                        
+                                        </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
-                                        
+
                         </div>
-                    {% endfor %}                    
+                    {% endfor %}
                 </ul>
                 <div class="col-sm-12 col-xs-12 center">
                     <a class="btn btn-primary btnPrevious">Anterior</a> <div class="saveControl">{{ form_row(form.save) }}</div>
