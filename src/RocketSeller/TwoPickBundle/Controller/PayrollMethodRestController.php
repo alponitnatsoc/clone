@@ -127,7 +127,7 @@ class PayrollMethodRestController extends FOSRestController
         $day = date("d");
         $period = 4;
         //TODO tengo que buscar las que no están pagas
-        if ($day == 23) {
+        if ($day == 25) {
             $params = array(
                 "month" => $month,
                 "paid" => 0
