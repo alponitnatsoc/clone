@@ -28,6 +28,14 @@ class Payroll
     private $period;
 
     /**
+     * 0 not procesed
+     * 1 already in purchase order
+     * 2 paid
+     * @ORM\Column(type="smallint" , nullable=TRUE)
+     */
+    private $paid=0;
+
+    /**
      * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     private $year;
@@ -51,6 +59,15 @@ class Payroll
     private $contractContract;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", inversedBy="payrollsPila", cascade={"persist"} )
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pila", referencedColumnName="id_purchase_orders_description")
+     * })
+     */
+    private $pila;
+
+    /**
      * @ORM\OneToMany(targetEntity="PayrollDetail", mappedBy="payrollPayroll", cascade={"persist"})
      */
     private $payrollDetails;
@@ -62,20 +79,8 @@ class Payroll
 
     /**
      * @ORM\OneToMany(targetEntity="PurchaseOrdersDescription", mappedBy="payrollPayroll", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="payrollPayroll", referencedColumnName="id_purchase_orders_description")
-     * })
      */
     private $purchaseOrdersDescription;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get idPayroll
@@ -253,30 +258,87 @@ class Payroll
         return $this->novelties;
     }
 
+
     /**
-     * Set purchaseOrdersDescription
+     * Set daysSent
      *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription
+     * @param boolean $daysSent
      *
      * @return Payroll
      */
-    public function setPurchaseOrdersDescription(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $purchaseOrdersDescription = null)
+    public function setDaysSent($daysSent)
     {
-        $this->purchaseOrdersDescription = $purchaseOrdersDescription;
+        $this->daysSent = $daysSent;
 
         return $this;
     }
 
     /**
-     * Get purchaseOrdersDescription
+     * Get daysSent
+     *
+     * @return boolean
+     */
+    public function getDaysSent()
+    {
+        return $this->daysSent;
+    }
+
+    /**
+     * Set paid
+     *
+     * @param integer $paid
+     *
+     * @return Payroll
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+
+        return $this;
+    }
+
+    /**
+     * Get paid
+     *
+     * @return integer
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->novelties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->purchaseOrdersDescription = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set pila
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $pila
+     *
+     * @return Payroll
+     */
+    public function setPila(\RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $pila = null)
+    {
+        $this->pila = $pila;
+
+        return $this;
+    }
+
+    /**
+     * Get pila
      *
      * @return \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
      */
-    public function getPurchaseOrdersDescription()
+    public function getPila()
     {
-        return $this->purchaseOrdersDescription;
+        return $this->pila;
     }
-
 
     /**
      * Add purchaseOrdersDescription
@@ -303,26 +365,12 @@ class Payroll
     }
 
     /**
-     * Set daysSent
+     * Get purchaseOrdersDescription
      *
-     * @param boolean $daysSent
-     *
-     * @return Payroll
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setDaysSent($daysSent)
+    public function getPurchaseOrdersDescription()
     {
-        $this->daysSent = $daysSent;
-
-        return $this;
-    }
-
-    /**
-     * Get daysSent
-     *
-     * @return boolean
-     */
-    public function getDaysSent()
-    {
-        return $this->daysSent;
+        return $this->purchaseOrdersDescription;
     }
 }

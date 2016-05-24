@@ -1,11 +1,16 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
-{% block fos_user_content  %}
-    <div id="main" class="col-sm-9">
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-10">
         <div class="col-md-12">
+            <div class="panel panel-title">
+                Back Office
+            </div>
+            <br>
             <div class="panel panel-default">
                 <div class="panel-heading">Tramites</div>
                 <div class="panel-body">
-                    <a href="{{ path('show_procedures')}}">Click para entrar a los tramites</a>
+                    <a class="notAjax" href="{{ path('show_procedures') }}">Click para entrar a los tramites</a>
                 </div>
             </div>
             <div class="panel panel-default">

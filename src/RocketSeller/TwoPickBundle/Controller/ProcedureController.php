@@ -18,12 +18,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class ProcedureController extends Controller
 {
     public function indexAction()
-    {   
-    	$procedures = $this->getdoctrine()
-		->getRepository('RocketSellerTwoPickBundle:RealProcedure')
-		->findAll();
-        return $this->render(
-            'RocketSellerTwoPickBundle:BackOffice:procedures.html.twig',array('procedures'=>$procedures)
+    {
+		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
+		return $this->render(
+            '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
         );
     }
     public function procedureByIdAction($procedureId)
@@ -366,8 +365,7 @@ class ProcedureController extends Controller
     			);
     		//$procedures = $this->validateAction($id_employer, $id_procedure_type, $priority, $id_user, $employees);
 	        $procedure = $this->procedureAction($id_employer, $id_procedure_type);
-	        return $this->render(
-            'RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',
+	        return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',
             array(
             		'procedures' => $procedures
             	));

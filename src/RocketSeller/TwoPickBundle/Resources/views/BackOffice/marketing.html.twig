@@ -1,20 +1,26 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
-{% block fos_user_content  %}
-    <div id="main" class="col-sm-9">
-        <div class="col-md-12">
+
+{% block title %}Marketing{% endblock %}
+
+{% block fos_user_content %}
+    <div id="main" class="col-sm-15">
+        <div class="col-md-11">
+            <div class="panel panel-title">
+                Marketing
+            </div>
+            <br>
             <div class="panel panel-default">
-                <div class="panel-heading">Marketing</div>
-                <div>
+                <div class="panel-heading">
                     <h4>Landing Symplifica</h4>
                 </div>
-                <table>
+                <table class="table">
                     <thead>
                     <tr>
-                        <td>Tipo de Inscripción</td>
-                        <td>Nombre</td>
-                        <td>E-Mail</td>
-                        <td>Teléfono</td>
-                        <td>Fecha Inscripción</td>
+                        <td class="tbHeader">Tipo de Inscripción</td>
+                        <td class="tbHeader">Nombre</td>
+                        <td class="tbHeader">E-Mail</>
+                        <td class="tbHeader">Teléfono</td>
+                        <td class="tbHeader">Fecha Inscripción</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -29,7 +35,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                </div>
             </div>
         </div>
     </div>
