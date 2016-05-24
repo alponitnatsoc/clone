@@ -5,6 +5,7 @@ a {text-decoration: none}
 
 .grisclarofont  {color: #87868A}
 .naranjafont  {color: #FD9224}
+.azuloscurisimo {color: #5D6979}
 .azuloscurofont {color: #3c4b5a}
 .azulmediofont {color: #00838c}
 .azulclarofont {color: #00cccb}
@@ -73,6 +74,53 @@ a {text-decoration: none}
 
 /*------------------fin menu-------------------*/
 
+/*-----------------------estilos footer gustavo----------------------------*/
+
+footer {
+		background: #424C5A;
+		height: auto;
+		overflow: hidden;
+		text-align: center;
+		padding: 0 40px
+		}
+
+	#footer-cont {
+		padding: 20px 0 0 0;
+		}
+	#menu-foot {
+		margin: 30px 0
+		}
+	#menu-foot li {
+		display: inline;
+		margin: 0 15px
+		}
+
+			#menu-foot a {
+				color: #FFF !important;
+				text-decoration: none;
+			}
+
+			#menu-foot a:hover {
+				color: #8693A5 !important;
+			}
+
+	#redes-foot {
+		margin: 40px 0
+		}
+
+	#redes-foot li {
+		display: inline;
+		margin: 0 15px;
+		border: 1px #323D4C solid;
+    padding: 10px;
+		}
+
+		#redes-foot li:hover {
+			background: #8693A5;
+			}
+
+/*-----------------------fin estilos footer gustavo----------------------------*/
+
 @media only screen and (max-width: 1024px) {
 		/*menu*/
 		#menu  {display: none; margin: : 0;}
@@ -96,4 +144,11 @@ a {text-decoration: none}
 		/*menu*/
 		#hamburguesa {margin: 0; float: right;}
 		.registro {display: none}
+		}
+
+		@media only screen and (max-width: 580px) {
+			#menu-foot li {
+			    display: inline-block;
+			    margin: 15px 15px;
+			}
 		}
