@@ -38,12 +38,13 @@
         <div class="row-fluid" id="topbar">
           <div class="container">
             <div id="navbar" class="text-right">
-              <span class="bold">¿Necesitas ayuda?</span> <span class="light">llámanos</span> · <span class="bold">Bogotá 350 833 0000</span> |
-              <a href="#" id="btnLogin">
-                <span class="fa-stack fa">
+              <!--<span class="bold">¿Necesitas ayuda?</span> <span class="light">llámanos</span> · <span class="bold">Bogotá 350 833 0000</span>-->
+              <span class="bold">¿Necesitas ayuda?</span>
+              <a href="#" id="btnLogin" class="boton-ingresar">
+                <!--<span class="fa-stack fa">
                   <i class="fa fa-circle fa-stack-1x"></i>
                   <i class="fa fa-caret-up fa-stack-1x fa-inverse"></i>
-                </span>Ingresa
+                </span>-->Ingresa
               </a>
               <div id="slideLogin" class="col-md-4 col-sm-12 col-xs-12">
                 {% include "RocketSellerTwoPickBundle:General:new/login.html.twig" %}
@@ -114,7 +115,36 @@
       <div class="row-fluid">
         {% block body %}{% endblock %}
       </div>
+      <!------------------------------------------footer gustavo------------------------->
       <footer>
+    	<div id="footer-cont">
+        	<img src="/img/logo-footer.png" alt="logo-symplifica"/>
+            <div id="menu-foot" class="light">
+            	<ul>
+                	<a href="/beneficios"><li>Beneficios</li></a>|
+                  <a href="/precios"><li>Precio</li></a>|
+                  <a href="/preguntas-frecuentes"><li>Preguntas</li></a>|
+                  <!--<a href="{{ path('show_calculator_form') }}"><li>Calculadora salarial</li></a>-->
+                  <a href="/nosotros"><li>Nosotros</li></a>|
+                  <a href="/contactenos"><li>Contáctenos</li></a>
+              </ul>
+            </div>
+
+            <div id="redes-foot">
+            	<p class="bold azulmediofont">Siguenos</p>
+            	<ul>
+                	<a href="https://www.facebook.com/Symplifica-1538503439800792/?ref=ts&fref=ts" target="_blank"><li><img src="{{ asset('public/img/home/face.png') }}" alt="Facebook"/></li></a>
+                  <a href="https://www.linkedin.com/company/symplifica" target="_blank"><li><img src="{{ asset('public/img/home/link.png') }}" alt="Linkedin"/></li></a>
+                  <a href="https://twitter.com/symplifica_" target="_blank"><li><img src="{{ asset('public/img/home/twee.png') }}" alt="Tweeter"/></li></a>
+              </ul>
+            </div>
+            <p class="semi-italic azuloscurisimo">Copyright © 2016 sympliﬁca.com | Aviso de Privacidad<br>
+            Prohibida su reproducción total o parcial, así como su traducción a cualquier<br>
+            idioma sin autorización escrita de su titular.</p>
+        </div>
+    </footer>
+
+      <!--<footer>
         <div class="container">
           <div class="col-md-8 col-md-push-2">
             <div class="row">
@@ -144,7 +174,7 @@
             <p>Prohibida su reproducción total o parcial, así como su traducción a cualquier idioma sin autorización escrita de su titular.</p>
           </div>
         </div>
-      </footer>
+      </footer>-->
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="/js/public/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 

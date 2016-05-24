@@ -27,7 +27,7 @@
                     </div>
                     <div id="tbanner2">
                     	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
-                        <a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>
+                        <!--<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>-->
                     </div>
                 </div>
             </div>
@@ -37,9 +37,9 @@
 
 
         <div id="openModal" class="modalDialog">
-            <div>	<a href="#close" title="Close" class="close">X</a>
+            <div>	<a href="#close" title="Close" class="close" onclick="stopVideo()">X</a>
 
-                    <iframe width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
+                <iframe id="mainVideoFrame" width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -48,36 +48,36 @@
         	<div id="beneficios" class="section group">
             	<h2 class="light grisclarofont">Soluciona cada mes, en un solo lugar todo lo relacionado a la gestión de tus empleados </h2>
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/home/1.png') }}" alt="">
-                	<h3 class="light">Guía</h3>
-                    <span class="extrabold">de contratación</span>
+                	<img src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
+                	<h3 class="light">Contratación guiada</h3>
+
                 	<p class="light-italic">Te guiamos en la correcta contratación del todos tus empleados</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/home/3.png') }}" alt="">
-                	<h3 class="light">Afiliamos</h3>
-                    <span class="extrabold">a seguridad social</span>
+                	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
+                	<h3 class="light">Fácil afiliación</h3>
+
                 	<p class="light-italic">Te afiliamos a ti y a tu empleado a las administradoras de seguridad social
 
 </p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/home/2.png') }}" alt="">
-                	<h3 class="light">Liquidación</h3>
-                    <span class="extrabold">de nómina y aportes</span>
-                	<p class="light-italic">Calculamos cuánto tienes que pagar a tus empleados y a la seguridad social</p>
+                	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
+                	<h3 class="light">Pago electrónico</h3>
+
+                	<p class="light-italic">Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/home/4.png') }}" alt="">
-                	<h3 class="light">Pagos</h3>
-                    <span class="extrabold">electrónicos</span>
-                	<p class="light-italic">Te evitamos el tener que sacar dinero cada vez que pagas a tus empleados</p>
+                	<img src="{{ asset('public/img/landing/benefit2.png') }}" alt="">
+                	<h3 class="light">Fácil administración</h3>
+
+                	<p class="light-italic">Administramos todos los detalles del día a día de tus empleados</p>
                 </div>
             </div>
-            <a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Ver más</div></a>
+            <a href="{{ path('beneficios') }}"><div class="callto naranja bold">› Beneficios</div></a>
         </section>
 
         <!--<section>
@@ -150,7 +150,7 @@ de empleados que quieras administrar</h4>
                     	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0 mensuales</span></p>
                     </div><br>
                     <p class="pcalculadora light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
-                    
+
 
                 </div>
 
@@ -282,6 +282,9 @@ de empleados que quieras administrar</h4>
 
     }
 
+		function stopVideo(){
+			$('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
+		}
 
 
 </script>

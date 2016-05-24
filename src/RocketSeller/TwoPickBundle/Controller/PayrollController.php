@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -148,14 +149,27 @@ class PayrollController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
+        //obtener la informacion de la nomina actial
         $data = $this->getInfoPayroll($this->getUser()->getPersonPerson()->getEmployer());
+        //obtener los meses de mora
+        /** @var User $user */
+        $user=$this->getUser();
+        $purchaseOrders=$user->getPurchaseOrders();
+        $owePurchaseOrders=new ArrayCollection();
+        /** @var PurchaseOrders $po */
+        foreach ($purchaseOrders as $po) {
+            if($po->getPurchaseOrdersStatus()->getIdNovoPay()=='P1'){
+                $owePurchaseOrders->add($purchaseOrders);
+            }
+        }
+
 
         $novelties = array();
         if ($data) {
             foreach ($data as $key => $value) {
                 foreach ($value["detailNomina"] as $key2 => $value2) {
                     $grupo = isset($value2["CON_CODIGO_DETAIL"]["grupo"]) ? $value2["CON_CODIGO_DETAIL"]["grupo"] : false;
-                    if ($grupo && $grupo != "no_show") {
+                    if ($grupo ) {
                         if (!isset($novelties[$key])) {
                             $novelties[$key] = array();
                         }
