@@ -24,6 +24,23 @@ a {text-decoration: none}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
 /*------------------menu-------------------*/
+nav #topbar a {
+		color: #696969;
+    font-weight: 700;
+    font-size: 14px;
+    background: #DADADA;
+    padding: 10px 40px;
+    margin: 0 20px 0 25px;
+		text-decoration: none
+	}
+
+	nav #topbar a:hover {
+			color: #FFF;
+	    background: #A7A7A7;
+			text-decoration: none
+		}
+
+
 #nav-menu {
 	width: 1100px;
 	height: 65px;
