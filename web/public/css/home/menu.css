@@ -24,7 +24,7 @@ a {text-decoration: none}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
 /*------------------menu-------------------*/
-nav #topbar a {
+.boton-ingresar {
 		color: #696969;
     font-weight: 700;
     font-size: 14px;
@@ -34,7 +34,7 @@ nav #topbar a {
 		text-decoration: none
 	}
 
-	nav #topbar a:hover {
+.boton-ingresar:hover {
 			color: #FFF;
 	    background: #A7A7A7;
 			text-decoration: none
@@ -167,5 +167,18 @@ footer {
 			#menu-foot li {
 			    display: inline-block;
 			    margin: 15px 15px;
+			}
+		}
+
+		@media only screen and (max-width: 425px) {
+		 	.container{
+				padding-right: 0;
+			}
+			.boton-ingresar {
+				margin: 0 0 0 25px;
+			}
+
+			#navbar span {
+				font-size: 12px
 			}
 		}
