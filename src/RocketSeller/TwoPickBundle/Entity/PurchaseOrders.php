@@ -75,6 +75,12 @@ class PurchaseOrders
      * @ORM\Column(type="datetime", options={"default":"CURRENT_TIMESTAMP"})
      */
     private $date_modified;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $date_paid;
 
     /**
      * @ORM\Column(type="string", length=200, nullable=TRUE)
@@ -391,5 +397,29 @@ class PurchaseOrders
     public function getPayMethodId()
     {
         return $this->payMethodId;
+    }
+
+    /**
+     * Set datePaid
+     *
+     * @param \DateTime $datePaid
+     *
+     * @return PurchaseOrders
+     */
+    public function setDatePaid($datePaid)
+    {
+        $this->date_paid = $datePaid;
+
+        return $this;
+    }
+
+    /**
+     * Get datePaid
+     *
+     * @return \DateTime
+     */
+    public function getDatePaid()
+    {
+        return $this->date_paid;
     }
 }

@@ -44,7 +44,7 @@ class PayrollMethodRestController extends FOSRestController
 {
     use PayrollMethodsTrait;
 
-    public function getGeneralPayrollsAction($employeeId){
+    public function getGeneralPayrollsAction($employeeId, $period = null, $month = null, $year = null){
        $em=$this->getDoctrine()->getManager();
        $ehERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
        /** @var EmployerHasEmployee $realEHE */
@@ -92,7 +92,12 @@ class PayrollMethodRestController extends FOSRestController
            $em->flush();
        }
        $request->setMethod("GET");
-       $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll',array('employeeId'=>$employeeId), array('_format' => 'json'));
+       $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll',array(
+           'employeeId'=>$employeeId,
+           'period' => $period,
+           'month' => $month,
+           'year' => $year),
+           array('_format' => 'json'));
        if($insertionAnswer->getStatusCode()!=200){
            return $insertionAnswer;
        }
