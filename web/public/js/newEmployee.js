@@ -1351,7 +1351,7 @@ function validateSalary() {
     } else {
         salarioMinimo = $("#salarioMinimo").val();
         if (!salarioMinimo) {
-            salarioMinimo = 689454;
+            salarioMinimo = 689455;
         }
         salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
         if (salarioMes < salarioMinimo) {
