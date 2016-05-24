@@ -27,7 +27,7 @@
                     </div>
                     <div id="tbanner2">
                     	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
-                        <a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>
+                        <!--<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>-->
                     </div>
                 </div>
             </div>
@@ -37,9 +37,9 @@
 
 
         <div id="openModal" class="modalDialog">
-            <div>	<a href="#close" title="Close" class="close">X</a>
+            <div>	<a href="#close" title="Close" class="close" onclick="stopVideo()">X</a>
 
-                    <iframe width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
+                <iframe id="mainVideoFrame" width="100%" height="400" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -282,6 +282,9 @@ de empleados que quieras administrar</h4>
 
     }
 
+		function stopVideo(){
+			$('#mainVideoFrame').attr('src', $('#mainVideoFrame').attr('src'));
+		}
 
 
 </script>
