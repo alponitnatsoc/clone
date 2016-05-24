@@ -372,95 +372,95 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
 
         /* Type arl */
 
-        $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales = new Entity();
-        $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setName('ARP POSITIVA COMPAÑÍA DE SEGUROS - INSITUTO DE SEGUROS SOCIALES');
-        $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setPayrollCode('100');
-        $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setPilaCode('14-23');
-        $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales = new Entity();
+        $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setName('ARL POSITIVA COMPAÑÍA DE SEGUROS - INSITUTO DE SEGUROS SOCIALES');
+        $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setPayrollCode('100');
+        $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setPilaCode('14-23');
+        $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales);
+        $manager->persist($EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales);
 
-        $EntityArpAlfa = new Entity();
-        $EntityArpAlfa->setName('ARP ALFA');
-        $EntityArpAlfa->setPayrollCode('600');
-        $EntityArpAlfa->setPilaCode('14-17');
-        $EntityArpAlfa->setEntityTypeEntityType($this->getReference('entityType-arl'));
-
-
-        $manager->persist($EntityArpAlfa);
-
-        $EntityArpSegurosDeVidaAurora = new Entity();
-        $EntityArpSegurosDeVidaAurora->setName('ARP SEGUROS DE VIDA AURORA');
-        $EntityArpSegurosDeVidaAurora->setPayrollCode('615');
-        $EntityArpSegurosDeVidaAurora->setPilaCode('14-8');
-        $EntityArpSegurosDeVidaAurora->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlAlfa = new Entity();
+        $EntityArlAlfa->setName('ARL ALFA');
+        $EntityArlAlfa->setPayrollCode('600');
+        $EntityArlAlfa->setPilaCode('14-17');
+        $EntityArlAlfa->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpSegurosDeVidaAurora);
+        $manager->persist($EntityArlAlfa);
 
-        $EntityArpSegurosBolivar = new Entity();
-        $EntityArpSegurosBolivar->setName('ARP SEGUROS BOLIVAR');
-        $EntityArpSegurosBolivar->setPayrollCode('625');
-        $EntityArpSegurosBolivar->setPilaCode('14-7');
-        $EntityArpSegurosBolivar->setEntityTypeEntityType($this->getReference('entityType-arl'));
-
-
-        $manager->persist($EntityArpSegurosBolivar);
-
-        $EntityArpColmena = new Entity();
-        $EntityArpColmena->setName('ARP COLMENA');
-        $EntityArpColmena->setPayrollCode('630');
-        $EntityArpColmena->setPilaCode('14-25');
-        $EntityArpColmena->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlSegurosDeVidaAurora = new Entity();
+        $EntityArlSegurosDeVidaAurora->setName('ARL SEGUROS DE VIDA AURORA');
+        $EntityArlSegurosDeVidaAurora->setPayrollCode('615');
+        $EntityArlSegurosDeVidaAurora->setPilaCode('14-8');
+        $EntityArlSegurosDeVidaAurora->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpColmena);
+        $manager->persist($EntityArlSegurosDeVidaAurora);
 
-        $EntityArpColpatria = new Entity();
-        $EntityArpColpatria->setName('ARP COLPATRIA');
-        $EntityArpColpatria->setPayrollCode('635');
-        $EntityArpColpatria->setPilaCode('14-4');
-        $EntityArpColpatria->setEntityTypeEntityType($this->getReference('entityType-arl'));
-
-
-        $manager->persist($EntityArpColpatria);
-
-        $EntityArpLaEquidad = new Entity();
-        $EntityArpLaEquidad->setName('ARP LA EQUIDAD');
-        $EntityArpLaEquidad->setPayrollCode('645');
-        $EntityArpLaEquidad->setPilaCode('14-29');
-        $EntityArpLaEquidad->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlSegurosBolivar = new Entity();
+        $EntityArlSegurosBolivar->setName('ARL SEGUROS BOLIVAR');
+        $EntityArlSegurosBolivar->setPayrollCode('625');
+        $EntityArlSegurosBolivar->setPilaCode('14-7');
+        $EntityArlSegurosBolivar->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpLaEquidad);
+        $manager->persist($EntityArlSegurosBolivar);
 
-        $EntityArpLibertySeguros = new Entity();
-        $EntityArpLibertySeguros->setName('ARP LIBERTY SEGUROS ');
-        $EntityArpLibertySeguros->setPayrollCode('655');
-        $EntityArpLibertySeguros->setPilaCode('14-18');
-        $EntityArpLibertySeguros->setEntityTypeEntityType($this->getReference('entityType-arl'));
-
-
-        $manager->persist($EntityArpLibertySeguros);
-
-        $EntityArpSuraSuratep = new Entity();
-        $EntityArpSuraSuratep->setName('ARP SURA - SURATEP');
-        $EntityArpSuraSuratep->setPayrollCode('670');
-        $EntityArpSuraSuratep->setPilaCode('14-28');
-        $EntityArpSuraSuratep->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlColmena = new Entity();
+        $EntityArlColmena->setName('ARL COLMENA');
+        $EntityArlColmena->setPayrollCode('630');
+        $EntityArlColmena->setPilaCode('14-25');
+        $EntityArlColmena->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpSuraSuratep);
+        $manager->persist($EntityArlColmena);
 
-        $EntityArpMapfre = new Entity();
-        $EntityArpMapfre->setName('ARP MAPFRE');
-        $EntityArpMapfre->setPayrollCode('');
-        $EntityArpMapfre->setPilaCode('14-30');
-        $EntityArpMapfre->setEntityTypeEntityType($this->getReference('entityType-arl'));
+        $EntityArlColpatria = new Entity();
+        $EntityArlColpatria->setName('ARL COLPATRIA');
+        $EntityArlColpatria->setPayrollCode('635');
+        $EntityArlColpatria->setPilaCode('14-4');
+        $EntityArlColpatria->setEntityTypeEntityType($this->getReference('entityType-arl'));
 
 
-        $manager->persist($EntityArpMapfre);
+        $manager->persist($EntityArlColpatria);
+
+        $EntityArlLaEquidad = new Entity();
+        $EntityArlLaEquidad->setName('ARL LA EQUIDAD');
+        $EntityArlLaEquidad->setPayrollCode('645');
+        $EntityArlLaEquidad->setPilaCode('14-29');
+        $EntityArlLaEquidad->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+
+        $manager->persist($EntityArlLaEquidad);
+
+        $EntityArlLibertySeguros = new Entity();
+        $EntityArlLibertySeguros->setName('ARL LIBERTY SEGUROS ');
+        $EntityArlLibertySeguros->setPayrollCode('655');
+        $EntityArlLibertySeguros->setPilaCode('14-18');
+        $EntityArlLibertySeguros->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+
+        $manager->persist($EntityArlLibertySeguros);
+
+        $EntityArlSuraSuratep = new Entity();
+        $EntityArlSuraSuratep->setName('ARL SURA - SURATEP');
+        $EntityArlSuraSuratep->setPayrollCode('670');
+        $EntityArlSuraSuratep->setPilaCode('14-28');
+        $EntityArlSuraSuratep->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+
+        $manager->persist($EntityArlSuraSuratep);
+
+        $EntityArlMapfre = new Entity();
+        $EntityArlMapfre->setName('ARL MAPFRE');
+        $EntityArlMapfre->setPayrollCode('');
+        $EntityArlMapfre->setPilaCode('14-30');
+        $EntityArlMapfre->setEntityTypeEntityType($this->getReference('entityType-arl'));
+
+
+        $manager->persist($EntityArlMapfre);
 
         /* Type pensiones */
 
@@ -1384,16 +1384,16 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('entity-Comfachoco-eps', $EntityEpsComfachoco);
         $this->addReference('entity-AnasWayuu-eps', $EntityEpsAnasWayuu);
         $this->addReference('entity-Comparta-eps', $EntityEpsComparta);
-        $this->addReference('entity-PositivaCompaniaDeSegurosInsitutoDeSegurosSociales-arp', $EntityArpPositivaCompaniaDeSegurosInsitutoDeSegurosSociales);
-        $this->addReference('entity-Alfa-arp', $EntityArpAlfa);
-        $this->addReference('entity-SegurosDeVidaAurora-arp', $EntityArpSegurosDeVidaAurora);
-        $this->addReference('entity-SegurosBolivar-arp', $EntityArpSegurosBolivar);
-        $this->addReference('entity-Colmena-arp', $EntityArpColmena);
-        $this->addReference('entity-Colpatria-arp', $EntityArpColpatria);
-        $this->addReference('entity-LaEquidad-arp', $EntityArpLaEquidad);
-        $this->addReference('entity-LibertySeguros-arp', $EntityArpLibertySeguros);
-        $this->addReference('entity-SuraSuratep-arp', $EntityArpSuraSuratep);
-        $this->addReference('entity-Mapfre-arp', $EntityArpMapfre);
+        $this->addReference('entity-PositivaCompaniaDeSegurosInsitutoDeSegurosSociales-arl', $EntityArlPositivaCompaniaDeSegurosInsitutoDeSegurosSociales);
+        $this->addReference('entity-Alfa-arl', $EntityArlAlfa);
+        $this->addReference('entity-SegurosDeVidaAurora-arl', $EntityArlSegurosDeVidaAurora);
+        $this->addReference('entity-SegurosBolivar-arl', $EntityArlSegurosBolivar);
+        $this->addReference('entity-Colmena-arl', $EntityArlColmena);
+        $this->addReference('entity-Colpatria-arl', $EntityArlColpatria);
+        $this->addReference('entity-LaEquidad-arl', $EntityArlLaEquidad);
+        $this->addReference('entity-LibertySeguros-arl', $EntityArlLibertySeguros);
+        $this->addReference('entity-SuraSuratep-arl', $EntityArlSuraSuratep);
+        $this->addReference('entity-Mapfre-arl', $EntityArlMapfre);
         $this->addReference('entity-NoAporta-afp', $EntityAfpNoAporta);
         $this->addReference('entity-Colpensiones-afp', $EntityAfpColpensiones);
         $this->addReference('entity-PorvenirHorizonte-afp', $EntityAfpPorvenirHorizonte);
