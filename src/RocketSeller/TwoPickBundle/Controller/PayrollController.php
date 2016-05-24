@@ -155,7 +155,7 @@ class PayrollController extends Controller
             foreach ($data as $key => $value) {
                 foreach ($value["detailNomina"] as $key2 => $value2) {
                     $grupo = isset($value2["CON_CODIGO_DETAIL"]["grupo"]) ? $value2["CON_CODIGO_DETAIL"]["grupo"] : false;
-                    if ($grupo && $grupo != "no_show") {
+                    if ($grupo ) {
                         if (!isset($novelties[$key])) {
                             $novelties[$key] = array();
                         }
