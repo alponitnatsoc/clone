@@ -256,7 +256,6 @@ class PayrollMethodRestController extends FOSRestController
                                     $podPila->addPayrollsPila($activePayrrol);
                                 }
 
-
                             }
 
                         }
