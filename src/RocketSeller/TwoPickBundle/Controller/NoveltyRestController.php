@@ -60,17 +60,20 @@ class NoveltyRestController extends FOSRestController
                     "exit_date"=>$novelty->getDateStart()->format("d-m-Y"),
                 ));
             }else{
+                $dateToday= new DateTime();
                 $methodToCall="postAddNoveltyEmployee";
                 $request->request->add(array(
                     "employee_id"=>$idEmployerHasEmployee,
                     "novelty_concept_id"=>$noveltyType->getPayrollCode(),
                     "novelty_value"=>$novelty->getAmount(),
                     "unity_numbers"=>$novelty->getUnits(),
-                    "novelty_start_date"=>$novelty->getDateStart()->format("d-m-Y"),
-                    "novelty_end_date"=>$novelty->getDateEnd()->format("d-m-Y"),
+                    "novelty_start_date"=>$novelty->getDateStart()?$novelty->getDateStart()->format("d-m-Y"):$dateToday->format("d-m-Y"),
+                    "novelty_end_date"=>$novelty->getDateEnd()?$novelty->getDateEnd()->format("d-m-Y"):null,
                 ));
             }
             $request->setMethod("POST");
+
+
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=200){
                 return $view->setStatusCode($insertionAnswer->getStatusCode())->setData(array("error"=>"No se pudo agregar la novedad"));
@@ -88,6 +91,7 @@ class NoveltyRestController extends FOSRestController
                 "absenteeism_start_date"=>$novelty->getDateStart()->format("d-m-Y"),
                 "absenteeism_end_date"=>$novelty->getDateEnd()->format("d-m-Y"),
             ));
+
 
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:PayrollRest:'.$methodToCall, array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=200){
