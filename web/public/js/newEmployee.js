@@ -403,7 +403,7 @@ function startEmployee() {
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
-        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
+        if (selectedVal == " Trabajador por días"&&sisben==" Si") {
             $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
                     flagValid = false;
@@ -468,7 +468,7 @@ function startEmployee() {
         if (!flagValid) {
             return;
         }
-        if (selectedVal == " Trabajo por días"&&sisben==" Si") {
+        if (selectedVal == " Trabajador por días"&&sisben==" Si") {
             $("#register_employee_entities_wealth").val("");
         }else{
             $("#register_employee_entities_ars").val("");
@@ -1135,7 +1135,7 @@ function calculator() {
     var aidD = 0;
     var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
     var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
-    if (type.parent().text() == " Trabajo por días") {
+    if (type.parent().text() == " Trabajador por días") {
         type = "days";
         numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
     } else {
@@ -1260,7 +1260,7 @@ function calculator() {
     }
     var resposne = [];
 
-    if ((type == "days"&&(salaryD == 0 || numberOfDays == null || numberOfDays == 0))||(type != "days"&&(salaryM<=0))) {
+    if ((type == "days"&&(salaryD <= 0 || numberOfDays == null || numberOfDays == 0))||(type != "days"&&(salaryM<=0))) {
         totalExpenses = 0;
         resposne['totalExpenses'] = 0;
         resposne['dailyExpenses'] = 0;
@@ -1332,7 +1332,7 @@ function getPrice(valor) {
 }
 function validateSalary() {
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-    if (selectedVal == " Trabajo por días") {
+    if (selectedVal == " Trabajador por días") {
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
             salarioMinimoDiario = 21000;
