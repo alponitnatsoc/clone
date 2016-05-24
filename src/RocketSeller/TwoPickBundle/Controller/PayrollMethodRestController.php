@@ -146,6 +146,7 @@ class PayrollMethodRestController extends FOSRestController
             $view->setData("No es dia para cerrar nominas automaticamente");
             return $view;
         }
+
         $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
 
@@ -252,7 +253,7 @@ class PayrollMethodRestController extends FOSRestController
 
                                 if($activePayrrol->getPila()==null){
                                     $totalPilaToPay+= $pila["total"];//TODO verificar el resultado de pila se removio $aportes["total"] +
-                                    $podPila->addPayrollPayroll($activePayrrol);
+                                    $podPila->addPayrollsPila($activePayrrol);
                                 }
 
 

@@ -141,29 +141,6 @@ class PurchaseOrdersDescription
         return $this->value;
     }
 
-    /**
-     * Set payrollPayroll
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
-    {
-        $this->payrollPayroll = $payrollPayroll;
-
-        return $this;
-    }
-
-    /**
-     * Get payrollPayroll
-     *
-     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
-     */
-    public function getPayrollPayroll()
-    {
-        return $this->payrollPayroll;
-    }
 
     /**
      * Add payPay
@@ -271,38 +248,6 @@ class PurchaseOrdersDescription
         return $this->productProduct;
     }
 
-    /**
-     * Add payrollPayroll
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
-     *
-     * @return PurchaseOrdersDescription
-     */
-    public function addPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
-    {
-        $this->payrollPayroll[] = $payrollPayroll;
-        $payrollPayroll->setPila($this);
-        return $this;
-    }
-
-    /**
-     * Remove payrollPayroll
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
-     */
-    public function removePayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll)
-    {
-        $this->payrollPayroll->removeElement($payrollPayroll);
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrollsPila = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add payrollsPila
@@ -314,7 +259,7 @@ class PurchaseOrdersDescription
     public function addPayrollsPila(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollsPila)
     {
         $this->payrollsPila[] = $payrollsPila;
-
+        $payrollsPila->setPila($this);
         return $this;
     }
 
@@ -336,5 +281,37 @@ class PurchaseOrdersDescription
     public function getPayrollsPila()
     {
         return $this->payrollsPila;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrollsPila = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payPay = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set payrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll
+     *
+     * @return PurchaseOrdersDescription
+     */
+    public function setPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $payrollPayroll = null)
+    {
+        $this->payrollPayroll = $payrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get payrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getPayrollPayroll()
+    {
+        return $this->payrollPayroll;
     }
 }

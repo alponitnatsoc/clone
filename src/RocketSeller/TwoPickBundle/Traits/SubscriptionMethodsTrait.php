@@ -144,7 +144,7 @@ trait SubscriptionMethodsTrait
         $request = $this->container->get('request');
         $employer = $eHE->getEmployerEmployer();
         $em = $this->getDoctrine()->getManager();
-        if ($eHE->getState() == 1 && (!$eHE->getExistentSQL())) {
+        if ($eHE->getState() == 2 && (!$eHE->getExistentSQL())) {
             $contracts = $eHE->getContracts();
             $actContract = null;
             /** @var Contract $c */
@@ -469,6 +469,7 @@ trait SubscriptionMethodsTrait
             return true;
 
         }
+        return false;
 
     }
 

@@ -59,11 +59,11 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $employerHasEmployees->first();
         $this->validateDocumentsEmployer($user, $employerHasEmployee->getEmployerEmployer());
         do {
-            if ($employerHasEmployee->getState() != 1)
+            if ($employerHasEmployee->getState() < 1)
                 continue;
             $employee = $employerHasEmployee->getEmployeeEmployee();
             $this->validateDocumentsEmployee($user, $employee);
-            $this->validateEntitiesEmployee($user, $employee);
+            //$this->validateEntitiesEmployee($user, $employee);
         } while ($employerHasEmployee = $employerHasEmployees->next());
 
         return true;
@@ -82,7 +82,7 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
             'employerEmployer' => $employer,
             'employeeEmployee' => $realEmployee,
-            'state' => 1
+            'state' => 2
         ));
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
