@@ -1340,6 +1340,7 @@ class LoadEntityData extends AbstractFixture implements OrderedFixtureInterface
         $EntityFcesNoSe->setPilaCode('0');
         $EntityFcesNoSe->setEntityTypeEntityType($this->getReference('entityType-fces'));
 
+        $manager->persist($EntityFcesFondoNacionalDelAhorro);
 
         $manager->persist($EntityFcesNoSe);
 

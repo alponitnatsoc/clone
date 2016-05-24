@@ -17,7 +17,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class ProcedureController extends Controller
 {
-    public function indexAction()
+	/**
+	 * Funcion que carga la pagina de tramites para el backoffice
+	 * Muestra un acceso directo a tramites pendientes de:
+	 * 		Registro empleador Empleados
+	 * 		//otros tramites futuros
+	 *
+	 * @return Response /backoffice/procedures
+     */
+	public function indexAction()
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
@@ -25,17 +33,26 @@ class ProcedureController extends Controller
             '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
         );
     }
-    public function procedureByIdAction($procedureId)
+
+	/**
+	 * Funcion que carga la informacion de un tramite por su id
+	 * muestra accesos directos a:
+	 * 		Revisar Registro
+	 * 		Contacto al Cliente
+	 * 		Contacto a entidades
+	 * 		Inscripción a Entidades
+	 *
+	 * @param $procedureId ID del real procedure que llega de la pagina de tramites
+	 * @return Response /backoffice/procedure/{procedureId}
+     */
+	public function procedureByIdAction($procedureId)
     {
     	$procedure = $this->loadClassById($procedureId,'RealProcedure');
     	$employer = $procedure->getEmployerEmployer();
     	$employerHasEmployees =  $employer->getEmployerHasEmployees();
     	$actionComplete = array();
-		//aqui voy  	
-    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig',	array('procedure'=>$procedure,
-    					'employerHasEmployees'=>$employerHasEmployees,
-    					
-    		));
+    	return $this->render('RocketSellerTwoPickBundle:BackOffice:procedure.html.twig'
+			,array('procedure'=>$procedure, 'employerHasEmployees'=>$employerHasEmployees,));
 
     }
     public function checkActionCompletation($idPerson)

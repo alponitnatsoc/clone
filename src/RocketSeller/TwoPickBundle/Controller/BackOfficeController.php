@@ -13,11 +13,22 @@ class BackOfficeController extends Controller
 {
     use SubscriptionMethodsTrait;
 
+    /**
+     * Funcion que carga la pagina de inicio del Back Office muestra un acceso rapido a:
+     *      Tramites
+     *      Consulta
+     *      Registro Express
+     *      Marketing
+     * Solo tiene permiso de acceso el rol back_office
+     * @return Response index /backoffice
+     */
     public function indexAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
+
+
 	public function checkRegisterAction($idPerson,$idAction)
     {    	
     	$person = $this->loadClassById($idPerson,"Person");    	
@@ -130,7 +141,11 @@ class BackOfficeController extends Controller
 		->findOneBy($array);
 		return $loadedClass;
     }
-    
+
+    /**
+     * Funcion que muestra la tabla de registrados en el landing
+     * @return Response /backoffice/marketing
+     */
     public function showLandingAction()
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -138,5 +153,10 @@ class BackOfficeController extends Controller
             ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
             ->findAll();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>$landings));
+    }
+    
+    public function showRequestAction(){
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+        return $this->render('@RocketSellerTwoPick/BackOffice/request.html.twig');
     }
 }

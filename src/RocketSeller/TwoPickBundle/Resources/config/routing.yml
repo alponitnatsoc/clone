@@ -46,6 +46,9 @@ show_procedures:
 show_procedure:
     path:     /backoffice/procedure/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }
+show_request:
+    path:     /backoffice/request
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRequest }
 change_action_status:
     path:     /backoffice/procedure/{procedureId}/{actionId}/{status}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
