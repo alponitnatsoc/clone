@@ -122,7 +122,7 @@ function startEmployee() {
     var timeCommitment = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']");
     timeCommitment.change(function () {
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-        if (selectedVal == " Trabajo por días") {
+        if (selectedVal == " Trabajador por días") {
             $(".days").each(function () {
                 $(this).show();
             });
@@ -172,7 +172,7 @@ function startEmployee() {
         }
     });
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
-    if (selectedVal == " Trabajo por días") {
+    if (selectedVal == " Trabajador por días") {
         $(".days").each(function () {
             $(this).show();
         });
