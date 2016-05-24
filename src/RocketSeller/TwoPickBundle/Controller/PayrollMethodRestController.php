@@ -279,6 +279,7 @@ class PayrollMethodRestController extends FOSRestController
             $not->setPersonPerson($employer->getPersonPerson());
             $not->setType("alert");
             $not->setTitle("Pagar nomina del mes ".$month." periodo ".$period);
+            $not->setDescription("Pagar nomina del mes ".$month." periodo ".$period);
             $not->setDeadline(new DateTime());
             $not->setStatus(1);
             $not->setAccion("pagar");
@@ -288,8 +289,6 @@ class PayrollMethodRestController extends FOSRestController
             $em->flush();
 
 
-            //                 ABRIR nueva nómina
-            //                 CREAR EN JIRA LO QUE FALTA
 
             $total[] = array("Empleador " . $employer->getIdEmployer() => "proceso liquidado de nomina");
 
