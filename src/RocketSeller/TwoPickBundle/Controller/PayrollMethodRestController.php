@@ -127,7 +127,7 @@ class PayrollMethodRestController extends FOSRestController
         $day = date("d");
         $period = 4;
         //TODO tengo que buscar las que no están pagas
-        if ($day == 23) {
+        if ($day == 25) {
             $params = array(
                 "month" => $month,
                 "paid" => 0
@@ -146,6 +146,7 @@ class PayrollMethodRestController extends FOSRestController
             $view->setData("No es dia para cerrar nominas automaticamente");
             return $view;
         }
+
         $payrolls = $payrollEntity->findBy($params);
 //         $result = count($payrolls);
 
@@ -252,7 +253,7 @@ class PayrollMethodRestController extends FOSRestController
 
                                 if($activePayrrol->getPila()==null){
                                     $totalPilaToPay+= $pila["total"];//TODO verificar el resultado de pila se removio $aportes["total"] +
-                                    $podPila->addPayrollPayroll($activePayrrol);
+                                    $podPila->addPayrollsPila($activePayrrol);
                                 }
 
 
@@ -278,6 +279,7 @@ class PayrollMethodRestController extends FOSRestController
             $not->setPersonPerson($employer->getPersonPerson());
             $not->setType("alert");
             $not->setTitle("Pagar nomina del mes ".$month." periodo ".$period);
+            $not->setDescription("Pagar nomina del mes ".$month." periodo ".$period);
             $not->setDeadline(new DateTime());
             $not->setStatus(1);
             $not->setAccion("pagar");
@@ -287,8 +289,6 @@ class PayrollMethodRestController extends FOSRestController
             $em->flush();
 
 
-            //                 ABRIR nueva nómina
-            //                 CREAR EN JIRA LO QUE FALTA
 
             $total[] = array("Empleador " . $employer->getIdEmployer() => "proceso liquidado de nomina");
 

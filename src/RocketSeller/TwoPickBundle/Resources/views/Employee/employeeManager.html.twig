@@ -41,7 +41,7 @@
                             {% endif %}
                         </div>
                         <div class="col-xs-3 employeeStatus">
-                            {% if employeeStatus != 1 %}
+                            {% if employeeStatus < 1 %}
                                 <i class="glyphicon glyphicon-remove-circle"></i> Inactivo
                                 <a class="removeEmployee" href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover</a>
                             {% else %}

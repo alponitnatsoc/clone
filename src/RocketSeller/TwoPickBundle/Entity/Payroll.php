@@ -60,9 +60,9 @@ class Payroll
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", inversedBy="payrollsPila")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription", inversedBy="payrollsPila", cascade={"persist"} )
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_purchase_orders_description", referencedColumnName="id_purchase_orders_description")
+     *   @ORM\JoinColumn(name="pila", referencedColumnName="id_purchase_orders_description")
      * })
      */
     private $pila;
