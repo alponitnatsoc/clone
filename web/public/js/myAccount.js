@@ -13,6 +13,7 @@ function hideAccountStuff(){
 
 }
 function addListeners(){
+
     $("#form_modify").on("click", function(e){
         e.preventDefault();
         $("#form_save").show();

@@ -31,6 +31,9 @@ legal_acceptance:
 data_credit_questions:
     path:      /datacredit/check/{userId}
     defaults:  { _controller: RocketSellerTwoPickBundle:Subscription:askDataCreditQuestions}
+add_generic_payment_method:
+    path:      /add/method/{userId}
+    defaults:  { _controller: RocketSellerTwoPickBundle:PaymentMethod:addGenericPayMethod}
 registration_confirmed_start:
     path:      /registration/confirmed/start
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:registerConfirmedStart}
