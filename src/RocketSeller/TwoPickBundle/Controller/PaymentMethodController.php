@@ -69,10 +69,12 @@ class PaymentMethodController extends Controller
         ));
     }
 
-    public function addGenericPayMethodAction(Request $request)
+    public function addGenericPayMethodAction($userId)
     {
-      $user=$this->getUser();
-
+      $user=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User")->find($userId);
+      if($user==null){
+          $this->redirectToRoute("show_dashboard");
+      }
       $bankRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Bank");
       $bankEntities = $bankRepo->findAll();
 
