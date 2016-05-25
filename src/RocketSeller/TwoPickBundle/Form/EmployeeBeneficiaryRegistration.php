@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace RocketSeller\TwoPickBundle\Form;
 
@@ -43,10 +43,9 @@ class EmployeeBeneficiaryRegistration extends AbstractType
                 'property_path' => 'document',
                 'label' => 'Número de documento*',
                 "attr" => array(
-                    "data-toggle" => "tooltip", 
+                    "data-toggle" => "tooltip",
                     "data-placement" => "right",
-                    "data-container" => "body",
-                    "title" => "Texto de ayuda"
+                    "data-container" => "body"
                 )
             ))
             ->add('names', 'text', array(
@@ -90,7 +89,7 @@ class EmployeeBeneficiaryRegistration extends AbstractType
                 'label' => 'Estado civil*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
-            ))            
+            ))
             ->add('department', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'property' => 'name',
@@ -141,10 +140,10 @@ class EmployeeBeneficiaryRegistration extends AbstractType
         	'data_class' => 'RocketSeller\TwoPickBundle\Entity\Person',
         ));
     }
-    
+
     public function getName()
     {
         return 'register_beneficiary';
     }
-} 
+}
 ?>

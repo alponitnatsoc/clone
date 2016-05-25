@@ -45,8 +45,7 @@ class BasicPersonRegistration extends AbstractType
                 "attr" => array(
                     "data-toggle" => "tooltip",
                     "data-placement" => "right",
-                    "data-container" => "body",
-                    "title" => "Texto de ayuda"
+                    "data-container" => "body"
                 )
             ))
             ->add('names', 'text', array(
