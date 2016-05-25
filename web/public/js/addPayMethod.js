@@ -195,14 +195,10 @@ function ajaxCall(form, payMethod){
           cvv:  $("#cvv").val()
       }
   }).done(function (data) {
-      history.pushState("", "", data["url"]);
-      sendAjax(data["url"]);
-      console.log(data);
-      //event.preventDefault();
-      $('#addGenericPayMethodModal').modal( 'hide' );
+      $("#addGenericPayMethodModal-modal-body").html("<h4>Agregado Exitosamente</h4>");
+      location.reload();
   }).fail(function (jqXHR, textStatus, errorThrown) {
-      if(jqXHR==errorHandleTry(jqXHR)){
-        console.log(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-      }
+      $("#addGenericPayMethodModal-modal-body").html("<h4>Falló al agregar</h4>");
+      location.reload();
   });
 }
