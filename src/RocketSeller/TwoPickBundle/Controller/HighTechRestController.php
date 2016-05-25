@@ -98,16 +98,34 @@ class HighTechRestController extends FOSRestController
 
     $this->validateParamters($parameters, $regex, $mandatory);
     $id = $parameters['numeroRadicado'];
+    $state = $parameters['estado'];
     // Validate that the id exists.
     $dispersion = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrders");
 
-      /** @var PurchaseOrders $dis */
-      $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
+    /** @var PurchaseOrders $dis */
+    $dis = $dispersion->findOneBy(array('radicatedNumber' => $id));
     if ($dis == null) {
       throw new HttpException(404, "The id: " . $id . " was not found.");
     }
-
-    $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+    $em = $this->getDoctrine()->getManager();
+    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+    $retorno = null;
+    if($state == 0) {
+      // I will update it to id 5.
+      $pos = $pos->findOneBy(array('idPurchaseOrdersStatus' => 6));
+      $dis->setPurchaseOrdersStatus($pos);
+      $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
+    } else {
+      // I will update it to id 5.
+      $pos = $pos->findOneBy(array('idPurchaseOrdersStatus' => 5));
+      $dis->setPurchaseOrdersStatus($pos);
+      $date = new DateTime('01-01-0001 00:00:00');
+      $dis->setDatePaid($date);
+      $view = View::create();
+      $retorno = $view->setStatusCode(200)->setData(array());
+    }
+    $em->persist($dis);
+    $em->flush();
 
     return $retorno;
   }
