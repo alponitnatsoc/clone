@@ -20,7 +20,7 @@ class LoadCalculatorData extends AbstractFixture implements OrderedFixtureInterf
         $calcCons=new CalculatorConstraints();
         $calcCons->setPositionPosition($domestic);
         $calcCons->setName("smmlv");
-        $calcCons->setValue("689454");
+        $calcCons->setValue("689455");
         $calcConstraints->add($calcCons);
 
         $calcCons=new CalculatorConstraints();
@@ -115,4 +115,3 @@ class LoadCalculatorData extends AbstractFixture implements OrderedFixtureInterf
         return 10;
     }
 }
-    

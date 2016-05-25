@@ -25,7 +25,7 @@ class EmployerRegistration extends AbstractType
         $builder
             ->setAction($options['action'])
             ->setMethod($options['method'])
-            ->add('youAre', 'choice', array(                
+            ->add('youAre', 'choice', array(
                 'choices' => array(
                     'persona'   => 'Una persona',
                     'empresa' => 'Una empresa (muy pronto)'
@@ -54,7 +54,7 @@ class EmployerRegistration extends AbstractType
                 'choices' => array(
                     true   => 'Si',
                     false  => 'No'
-                ),                
+                ),
                 'multiple' => false,
                 'expanded' => true,
                 'label' => '¿Tu dirección de contacto es la misma donde trabajarán tus empleados? *',
@@ -94,7 +94,7 @@ class EmployerRegistration extends AbstractType
                 'mapped' => false,
                 'label'=>' ',
                 'required' => true,
-                'attr'=>array("class"=>'autocomA',"placeholder" => "Por favor escribe el nombre de tu entidad")
+                'attr'=>array("class"=>'autocomA',"placeholder" => "Escribe el nombre de tu entidad")
             ))
             ->add('save', 'submit', array(
                 'label' => 'Siguiente: Seguridad social como empleador',

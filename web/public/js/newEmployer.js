@@ -602,8 +602,10 @@ function checkExistance(){
 function addAutoComplete(autoTo, data){
     $(autoTo).autocomplete({
         source: function(request, response) {
-            var results = $.ui.autocomplete.filter(data, request.term);
-
+            if(request.term.length != 0){
+              var results = $.ui.autocomplete.filter(data, request.term);
+            }
+            
             response(results.slice(0, 5));
         },                minLength: 0,
         select: function(event, ui) {

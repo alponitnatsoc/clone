@@ -121,7 +121,7 @@
                         </div>
                         {% endif %}
                         <div class="row text-center" style="padding: 10px; background-color: lightgray; border-radius: 5px; font-size: 15px;">
-                            <a type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_credit_card') }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
+                            <a type="button" id="addPayMethod" class="" value="Agregar" href="{{ path('add_generic_payment_method',{userId:app.user.id}) }}"><i class="fa fa-plus-circle"></i> <i>Agregar método de pago</i></a>
                         </div>
                     </div>
                 </div>
@@ -291,17 +291,12 @@
             }
         }).done(function (data) {
             //$('#modal_add_pay_method').html($(data).find("#main"));
-            $('#modal_add_pay_method').html(data);
+            $('#modal_add_pay_method').html($(data).find("#main"));
 
-            $('#modal_add_credit_card').modal({
-                show: false,
-                keyboard: false,
-                backdrop: 'static'
-            });
 
-            $('#modal_add_credit_card').modal('show');
-            $.getScript("/public/js/addCreditCard.js").done(function () {
-                startAddCreditCard();
+            $('#addGenericPayMethodModal').modal('show');
+            $.getScript("{{ asset('/public/js/addPayMethod.js') }}").done(function () {
+                payMethodLoad();
             });
         }).fail(function (data) {
             //$("#modal_body_add_novelty").html(data);

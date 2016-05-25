@@ -24,7 +24,7 @@ class AddCreditCard extends AbstractType
         }
         $builder->add('credit_card', 'text', array(
                     "attr" => array(
-                        
+
                         'placeholder' => 'Tu tarjeta de crédito',
                         'title' => 'Tu tarjeta de crédito'
                     ),
@@ -33,7 +33,7 @@ class AddCreditCard extends AbstractType
                 ))
                 ->add('expiry_date_year', 'integer', array(
                     "attr" => array(
-                        
+
                         'placeholder' => 'Año de vencimiento',
                         'title' => 'Año de vencimiento'
                     ),
@@ -67,7 +67,7 @@ class AddCreditCard extends AbstractType
                         '12' => '12',
                     ),
                     "attr" => array(
-                        
+
                         'placeholder' => 'Mes de vencimiento',
                         'title' => 'Mes de vencimiento'
                     ),
@@ -84,7 +84,7 @@ class AddCreditCard extends AbstractType
                 ))
                 ->add('name_on_card', 'text', array(
                     "attr" => array(
-                        
+
                         'placeholder' => 'Tu nombre en la tarjeta de crédito',
                         'title' => 'Tu nombre en la tarjeta de crédito'
                     ),
@@ -106,16 +106,15 @@ class AddCreditCard extends AbstractType
             ->add('document', 'text', array(
                 'label' => 'Número de documento*',
                 "attr" => array(
-                    "data-toggle" => "tooltip", 
+                    "data-toggle" => "tooltip",
                     "data-placement" => "right",
-                    "data-container" => "body",
-                    "title" => "Texto de ayuda"
+                    "data-container" => "body"
                 )
             ))
             ->add('phoneNumber', 'text', array(
                     'label' => 'Telefono'
                 )
-                    
+
                 );
          /*->add('save', 'submit', array(
           'label' => 'Continuar',

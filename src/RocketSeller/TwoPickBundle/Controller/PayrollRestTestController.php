@@ -245,7 +245,7 @@ class PayrollRestTestController extends FOSRestController
                           <UNICO>
                           <EMP_CODIGO>333333333</EMP_CODIGO>
                           <CON_CODIGO>1 </CON_CODIGO>
-                          <COF_VALOR>689454</COF_VALOR>
+                          <COF_VALOR>689455</COF_VALOR>
                           </UNICO>
                           <InfoProceso>
                           <MensajeRetorno/>
