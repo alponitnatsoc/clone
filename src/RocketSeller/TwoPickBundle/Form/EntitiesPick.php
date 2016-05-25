@@ -44,7 +44,7 @@ class EntitiesPick extends AbstractType
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomW',
-                    "placeholder" => "Seleccionar un opción"
+                    "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
             ->add('pensionAC', 'text', array(
@@ -53,7 +53,7 @@ class EntitiesPick extends AbstractType
                 'required' => true,
                 'attr'=>array(
                     "class"=>'autocomP',
-                    "placeholder" => "Seleccionar un opción"
+                    "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
             ->add('beneficiaries', 'choice', array(
@@ -83,7 +83,7 @@ class EntitiesPick extends AbstractType
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomCes',
-                    "placeholder" => "Seleccionar un opción"
+                    "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
             ->add('ars', 'entity', array(
@@ -101,7 +101,7 @@ class EntitiesPick extends AbstractType
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomArs',
-                    "placeholder" => "Seleccionar un opción"
+                    "placeholder" => "Escribe el nombre de la entidad"
                 )
             ));
     }

@@ -31,7 +31,7 @@ class CajaPick extends AbstractType
                 'mapped' => false,
                 'label'=>' ',
                 'required' => true,
-                'attr'=>array("class"=>'autocomS',"placeholder" => "Por favor escribe el nombre de tu entidad")
+                'attr'=>array("class"=>'autocomS',"placeholder" => "Escribe el nombre de tu entidad")
             ));
     }
 
