@@ -59,7 +59,7 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $employerHasEmployees->first();
         $this->validateDocumentsEmployer($user, $employerHasEmployee->getEmployerEmployer());
         do {
-            if ($employerHasEmployee->getState() < 1)
+            if ($employerHasEmployee->getState() < 3)
                 continue;
             $employee = $employerHasEmployee->getEmployeeEmployee();
             $this->validateDocumentsEmployee($user, $employee);
