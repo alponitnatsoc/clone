@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Country;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -107,20 +109,49 @@ class ProcedureController extends Controller
     	
     }
 
-    public function procedureAction($employerId,$idProcedureType)
+    /**
+     * Funcion que crea las acciones y los real procedure para una persona
+     * @param $employerId id del empleado al que se le crea el procedure
+     * @param $idProcedureType tipo del procedure que debe crearse
+     * @return bool 
+     */
+    public function procedureAction($employerId, $idProcedureType)
     {
     	$em = $this->getDoctrine()->getManager();
     	$em2 = $this->getDoctrine()->getManager();
     	$employerSearch = $this->loadClassById($employerId,"Employer");
-    	$procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
-    	$employerHasEmployees = $employerSearch->getEmployerHasEmployees();
-    	if ($procedureType->getName() == "Registro empleador y empleados") {
-			$procedure = new RealProcedure();
-			$procedure->setCreatedAt(new \DateTime());
-			$procedure->setProcedureTypeProcedureType($procedureType);
-			$procedure->setEmployerEmployer($employerSearch);			
-			$em2->persist($procedure);
+		//OJO
+        //se agrega por el momento el usuario de backoffice que sera el encargado de todos los realProcedures
+        $idPerson = $this->loadClassByArray(array('names'=>'Back'),"Person");
+        $userSearch = $this->loadClassByArray(array('personPerson'=>$idPerson),"User");
+        //fin de la busqueda del usuario de backoffice
+        
+        //se crea el procedure
+        $procedureType =  $this->loadClassById($idProcedureType,"ProcedureType");
+        $procedure = new RealProcedure();
+        $procedure->setCreatedAt(new \DateTime());
+        $procedure->setProcedureTypeProcedureType($procedureType);
+        $procedure->setEmployerEmployer($employerSearch);
+        $procedure->setUserUser($userSearch);//se asigna el usuario de backoffice
+        $em2->persist($procedure);
+        
+        switch($idProcedureType){
+            case 1:
+                $employerHasEmployees = $employerSearch->getEmployerHasEmployees();
 
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+
+    	if ($procedureType->getName() == "Registro empleador y empleados") {
+            
 				$action = new Action();	            
 	            $action->setStatus('Nuevo');
 	            $action->setRealProcedureRealProcedure($procedure);	            
