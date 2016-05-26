@@ -97,7 +97,7 @@ payroll_method_rest:
 pila_csv_services:
     type: rest
     resource: "RocketSellerTwoPickBundle:PilaPlainTextRest"
-    name_prefix: api_plublic_secured_
+    name_prefix: api_public_secured_
     prefix: /secured
 payroll_services_test:
     type: rest

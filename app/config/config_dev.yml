@@ -51,3 +51,16 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    port:      "%mailer_port%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    encryption: "%mailer_encrypt%"
+    spool:     { type: memory }
+    auth_mode:  login
+
+accord_mandrill_swift_mailer:
+    api_key: "%mandrill_api_key%"

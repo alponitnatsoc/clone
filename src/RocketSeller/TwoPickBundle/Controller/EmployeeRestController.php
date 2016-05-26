@@ -1975,7 +1975,7 @@ class EmployeeRestController extends FOSRestController {
 
       $user = $this->getUser();
       $code = rand(10100, 99999);
-      $message = "Tu codigo de confirmación de Symplifica es: " . $code;
+      $message = "Tu codigo de confirmacion de Symplifica es: " . $code;
 
       $user->setSmsCode($code);
       $em->persist($user);
