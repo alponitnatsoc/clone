@@ -34,7 +34,11 @@ class ExportController extends Controller
 			foreach ($personDocuments as $document) {
 				$files[0][$count]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
 				$files[1][$count]= $document->getMediaMedia()->getName();
-				$count+=1;
+				$count++;
+				if ($count>0){
+					echo $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+					die;
+				}
 			}
 			$valid_files = array();
 			$valid_files[0] = array();
