@@ -31,6 +31,13 @@ class EmployerHasEntity
     private $entityEntity;
 
     /**
+     * 0 - validar
+     * 1 - inscribir
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $state =0 ;
+
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employer
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employer", inversedBy="entities")
      * @ORM\JoinColumns({
@@ -111,5 +118,29 @@ class EmployerHasEntity
     public function getEmployerEmployer()
     {
         return $this->employerEmployer;
+    }
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     *
+     * @return EmployerHasEntity
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
