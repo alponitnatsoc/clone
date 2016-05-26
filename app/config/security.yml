@@ -88,10 +88,11 @@ security:
         # 181.143.94.42, is the multiplica office ip.
         # 52.73.123.224 is the real amazon server.
         # 52.91.121.67 is the symplifica development server.
+        # 190.24.91.37 is the ip office of hightech.
         # cpsuite.htsoft.co is the hightech server host.
 
         # This are the web services for hightech, they should be before the normal web services.
-        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42 ] }
+        - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: [127.0.0.1, 190.7.130.163, 52.73.123.224, 52.91.121.67, 181.143.94.42, 190.24.91.37] }
         - { path: ^/api/public/v1/notificacion, role: IS_AUTHENTICATED_ANONYMOUSLY, host: cpsuite\.htsoft\.co$ }
         - { path: ^/api/public/v1/notificacion, role: [ROLE_NO_ACCESS] }
 
