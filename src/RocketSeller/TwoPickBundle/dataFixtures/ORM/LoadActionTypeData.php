@@ -22,7 +22,7 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
         $manager->persist($actionTypeValidarRegistroEmpleado);
 
         $actionTypeValidarEntidades = new ActionType();
-        $actionTypeValidarEntidades->setName('Validar registro empleado');
+        $actionTypeValidarEntidades->setName('Validar Entidades');
         $manager->persist($actionTypeValidarEntidades);
 
         $actionTypeLlevarDocs = new ActionType();
@@ -45,6 +45,7 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
         $manager->flush();
         $this->addReference('actionType-validarEmpleador', $actionTypeValidarRegistroEmpleador);
         $this->addReference('actionType-validarEmpleado', $actionTypeValidarRegistroEmpleado);
+        $this->addReference('actionType-llevarDocs', $actionTypeValidarEntidades);
 
         $this->addReference('actionType-llevarDocs', $actionTypeLlevarDocs);
         $this->addReference('actionType-inscripcion', $actionTypeInscripcion);
