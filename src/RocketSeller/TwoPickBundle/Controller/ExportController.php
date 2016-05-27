@@ -16,8 +16,13 @@ use ZipArchive;
 
 class ExportController extends Controller
 {
-  
-	public function exportDocumentsByPersonAction($idPerson)
+
+    /**
+     * Funcion que crea el archivo zip con los documentos que ha subido el usuario para backoffice.
+     * @param $idPerson id de la persona de la que se quieren descargar documentos
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function exportDocumentsByPersonAction($idPerson)
     {
     	if($this->isGranted('EXPORT_DOCUMENTS_PERSON', $this->getUser())) {
 
@@ -30,7 +35,6 @@ class ExportController extends Controller
 			$files[0] = array();
 			$files[1] = array();
 			/** @var Document $document */
-			$count = 0;
 			foreach ($personDocuments as $document) {
 				/**
 				if($count>0){
@@ -38,7 +42,6 @@ class ExportController extends Controller
 				}**/
 				$files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
 				$files[1][]= $document->getMediaMedia()->getName();
-				$count++;
 			}
 			$valid_files = array();
 			$valid_files[0] = array();
@@ -63,7 +66,6 @@ class ExportController extends Controller
 				# loop through each file
 				for($i=0;$i<count($valid_files[0]);$i++){
 					$zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
-                    echo "el archivo es: ".$i.$valid_files[1][$i]." y el path es: ".$valid_files[0][$i]."<br>";
 				}
 				# close zip
                 

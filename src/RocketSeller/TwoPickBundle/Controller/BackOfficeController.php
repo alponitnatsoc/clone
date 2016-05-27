@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
+use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+
 
 class BackOfficeController extends Controller
 {
@@ -60,9 +62,18 @@ class BackOfficeController extends Controller
     }
     public function makeAfiliationAction($idAction)
     {        
+        /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action"); 
-
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action));	
+        $docs = $action->getPersonPerson()->getDocs();
+        $files = array();
+        $files[0] = array();
+        $files[1] = array();
+        /** @var Document $document */
+        foreach ($docs as $document) {
+            $files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+            $files[1][]= $document->getMediaMedia()->getName();
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'filePath'=>$files[0],'fileName'=>$files[1]));	
     }
     public function callPersonAction($idAction)
     {
