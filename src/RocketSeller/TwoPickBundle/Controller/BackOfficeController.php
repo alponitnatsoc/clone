@@ -73,7 +73,7 @@ class BackOfficeController extends Controller
             $files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
             $files[1][]= $document->getMediaMedia()->getName();
         }
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'filePath'=>$files[0],'fileName'=>$files[1]));	
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'filePath'=>$files[0][0],'fileName'=>$files[1][0]));	
     }
     public function callPersonAction($idAction)
     {
