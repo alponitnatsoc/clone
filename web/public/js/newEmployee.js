@@ -96,7 +96,7 @@ function startEmployee() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor seleccione una opción"
+                    required: "Por favor escribe en el campo, hasta encontrar tu entidad"
                 }
             });
         });
@@ -1491,10 +1491,14 @@ function initEntitiesFields(){
         var autoTo=$(this);
         $(this).autocomplete({
             source: function(request, response) {
-                if(request.term.length != 0){
-                  var results = $.ui.autocomplete.filter(dataPen, request.term);
-                }
-                response(results.slice(0, 5));
+              var results;
+              if(request.term.length != 0){
+                var results = $.ui.autocomplete.filter(dataPen, request.term);
+              }
+              else {
+                results = $.ui.autocomplete.filter("", request.term);
+              }
+              response(results.slice(0, 5));
             },
             minLength: 0,
             select: function(event, ui) {
@@ -1505,7 +1509,7 @@ function initEntitiesFields(){
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
@@ -1520,10 +1524,14 @@ function initEntitiesFields(){
         var autoTo=$(this);
         $(this).autocomplete({
             source: function(request, response) {
-                if(request.term.length != 0){
-                  var results = $.ui.autocomplete.filter(dataWe, request.term);
-                }
-                response(results.slice(0, 5));
+              var results;
+              if(request.term.length != 0){
+                var results = $.ui.autocomplete.filter(dataWe, request.term);
+              }
+              else {
+                results = $.ui.autocomplete.filter("", request.term);
+              }
+              response(results.slice(0, 5));
             },                minLength: 0,
             select: function(event, ui) {
                 event.preventDefault();
@@ -1533,6 +1541,7 @@ function initEntitiesFields(){
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
 
             }
         });
@@ -1549,10 +1558,14 @@ function initEntitiesFields(){
         var autoTo=$(this);
         $(this).autocomplete({
             source: function(request, response) {
-                if(request.term.length != 0){
-                  var results = $.ui.autocomplete.filter(dataArs, request.term);
-                }
-                response(results.slice(0, 5));
+              var results;
+              if(request.term.length != 0){
+                var results = $.ui.autocomplete.filter(dataArs, request.term);
+              }
+              else {
+                results = $.ui.autocomplete.filter("", request.term);
+              }
+              response(results.slice(0, 5));
             },                minLength: 0,
             select: function(event, ui) {
                 event.preventDefault();
@@ -1562,7 +1575,7 @@ function initEntitiesFields(){
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
@@ -1578,10 +1591,14 @@ function initEntitiesFields(){
         var autoTo=$(this);
         $(this).autocomplete({
             source: function(request, response) {
-                if(request.term.length != 0){
-                  var results = $.ui.autocomplete.filter(dataSeverances, request.term);
-                }
-                response(results.slice(0, 5));
+              var results;
+              if(request.term.length != 0){
+                var results = $.ui.autocomplete.filter(dataSeverances, request.term);
+              }
+              else {
+                results = $.ui.autocomplete.filter("", request.term);
+              }
+              response(results.slice(0, 5));
             },                minLength: 0,
             select: function(event, ui) {
                 event.preventDefault();
@@ -1591,13 +1608,12 @@ function initEntitiesFields(){
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-
+                $(autoTo.parent()).parent().find("select").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
             $(autoTo).autocomplete("search", $(autoTo).val());
         });
-
     });
 
 }

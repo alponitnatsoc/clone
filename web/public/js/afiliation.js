@@ -26,7 +26,7 @@ function startAfiliation() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor seleccione una opción"
+                    required: "Por favor escribe en el campo, hasta encontrar la entidad"
                 }
             });
         });
