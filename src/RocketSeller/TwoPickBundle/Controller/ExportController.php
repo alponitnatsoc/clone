@@ -52,7 +52,6 @@ class ExportController extends Controller
 						$valid_files[1][] = $files[1][$i];
 					}
 				}
-                echo count($valid_files[0])."2";die;
 			}
 
 			# create new zip opbject
