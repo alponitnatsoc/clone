@@ -62,7 +62,7 @@ class ExportController extends Controller
 			if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
 				# loop through each file
 				for($i=0;$i<count($valid_files[0]);$i++){
-					$zip->addFile($valid_files[0][$i],$i.$valid_files[1][$i]);
+					$zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
                     echo "el archivo es: ".$i.$valid_files[1][$i]." y el path es: ".$valid_files[0][$i]."<br>";
 				}
 				# close zip
