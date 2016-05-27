@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
+use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+
 
 class BackOfficeController extends Controller
 {
@@ -60,9 +62,16 @@ class BackOfficeController extends Controller
     }
     public function makeAfiliationAction($idAction)
     {        
+        /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action"); 
-
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action));	
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $pathCedula = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+        $nameCedula = $cedula->getMediaMedia()->getName();
+        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+        $nameRut = $rut->getMediaMedia()->getName();
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$pathCedula,
+            'cedulaName'=>$nameCedula,'rutPath'=>$pathRut,'rutName'=>$nameRut));
     }
     public function callPersonAction($idAction)
     {

@@ -70,6 +70,15 @@ class Employee
     private $twoFactorCode;
 
     /**
+     *  0 -- no
+     *  1 -- yes
+     *  2 -- error
+     * @var integer $employeeHasUnfinishedActions
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $employeeHasUnfinishedActions=0;
+    
+    /**
      * Set idEmployee
      *
      * @param integer $idEmployee
@@ -375,5 +384,38 @@ class Employee
     public function getRegisterExpress()
     {
         return $this->registerExpress;
+    }
+
+    /**
+     * Set employeeHasUnfinishedActions
+     *
+     * @param integer $employeeHasUnfinishedActions
+     *
+     * @return Employee
+     */
+    public function setEmployeeHasUnfinishedActions($employeeHasUnfinishedActions)
+    {
+        $this->employeeHasUnfinishedActions = $employeeHasUnfinishedActions;
+
+        return $this;
+    }
+
+    /**
+     * Get employeeHasUnfinishedActions
+     *
+     * @return integer
+     */
+    public function getEmployeeHasUnfinishedActions()
+    {
+        $actions=$this->getPersonPerson()->getAction();
+        /** @var Action $action */
+        foreach($actions as $action){
+            if ($action->getStatus() === "Nuevo"){
+                $this->setEmployeeHasUnfinishedActions(1);
+                return $this->employeeHasUnfinishedActions;
+            }
+        }
+        $this->setEmployeeHasUnfinishedActions(0);
+        return $this->employeeHasUnfinishedActions;
     }
 }

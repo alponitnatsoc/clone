@@ -603,6 +603,24 @@ class Person
     }
 
     /**
+     * Get docByType
+     * @param array $docType
+     * @return \Application\Sonata\MediaBundle\Document\
+     */
+    public function getDocByType($docType)
+    {
+        /** @var Document */
+        $documents=$this->docs;
+        foreach ($documents as $document){
+
+            if($document->getDocumentTypeDocumentType()==$docType){
+                return $document;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Add specificDatum
      *
      * @param \RocketSeller\TwoPickBundle\Entity\SpecificData $specificDatum

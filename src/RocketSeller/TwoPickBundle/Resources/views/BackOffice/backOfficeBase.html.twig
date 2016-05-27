@@ -25,6 +25,11 @@
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/subscriptionChoise.css') }}">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
+    {% endblock %}
+
+    {% block scriptImport %}
+
     {% endblock %}
 
     {% block clickLogo %}
@@ -34,25 +39,25 @@
     {% block menuInicio %}
         <div class="{% if app.request.get('_route') == 'back_office' %}activeMenu{% endif %} well well-lg"
              style="margin-top: 40px;">
-            <a href="{{ path('back_office') }}">Back Office</a>
+            <a class="notAjax" href="{{ path('back_office') }}">Back Office</a>
         </div>
     {% endblock %}
 
     {% block menu %}
         <div class="{% if app.request.get('_route') == 'show_procedures' %}activeMenu{% endif %} well well-lg">
-            <a href="{{ path('show_procedures') }}">Tramites</a>
+            <a class="notAjax" href="{{ path('show_procedures') }}">Tramites</a>
         </div>
         <div class="{% if app.request.get('_route') == 'show_request' %}activeMenu{% endif %} well well-lg">
-            <a href="{{ path('show_request') }}">Consulta</a>
+            <a class="notAjax" href="{{ path('show_request') }}">Consulta</a>
         </div>
         <div class="{% if app.request.get('_route') == 'legal_ass' %}activeMenu{% endif %} well well-lg">
-            <a href="{{ path('legal_ass') }}">Asistencia Legal</a>
+            <a class="notAjax" href="{{ path('legal_ass') }}">Asistencia Legal</a>
         </div>
         <div class="{% if app.request.get('_route') == 'register_express' %}activeMenu{% endif %} well well-lg separador">
-            <a href="{{ path('register_express') }}">Registro Express</a>
+            <a class="notAjax" href="{{ path('register_express') }}">Registro Express</a>
         </div>
         <div class="{% if app.request.get('_route') == 'marketing' %}activeMenu{% endif %} well well-lg">
-            <a href="{{ path('marketing') }}" >Marketing</a>
+            <a class="notAjax" href="{{ path('marketing') }}" >Marketing</a>
         </div>
     {% endblock %}
 
