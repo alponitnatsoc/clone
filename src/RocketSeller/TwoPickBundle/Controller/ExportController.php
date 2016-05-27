@@ -65,6 +65,7 @@ class ExportController extends Controller
 					$zip->addFile($valid_files[0][$i],$valid_files[1][$i]);
 				}
 				# close zip
+                echo $zip->numFiles." es el numero de archivos";die;
 				if($zip->close()!==TRUE)
 					echo "no permisos";
 				# send the file to the browser as a download
