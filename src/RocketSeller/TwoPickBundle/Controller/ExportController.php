@@ -43,7 +43,6 @@ class ExportController extends Controller
 			$valid_files = array();
 			$valid_files[0] = array();
 			$valid_files[1] = array();
-			echo count($files[0]);die;
 			//if files were passed in..
 			if(is_array($files[0])) {
 						//cycle through each file
@@ -53,6 +52,7 @@ class ExportController extends Controller
 						$valid_files[1][] = $files[1][$i];
 					}
 				}
+                echo count($valid_files[0]);
 			}
 
 			# create new zip opbject
