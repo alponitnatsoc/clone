@@ -1415,7 +1415,7 @@ function payMethodListener() {
         var selectedVal = $hasIt.val();
         if (selectedVal == 0) {
             $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
-                $(this).hide();
+                //$(this).hide();
             });
         } else {
             $hasIt.parent().parent().find(".form-group").each(function () {
@@ -1430,9 +1430,9 @@ function payMethodListener() {
                 })
             } else {
 
-                $hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
+                /*$hasIt.parent().parent().find(".form-group").not(".formFieldsNo").each(function () {
                     $(this).hide();
-                });
+                });*/
                 $("#noDaviplata").modal("show");
             }
         });
