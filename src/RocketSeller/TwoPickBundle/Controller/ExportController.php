@@ -32,9 +32,10 @@ class ExportController extends Controller
 			/** @var Document $document */
 			$count = 0;
 			foreach ($personDocuments as $document) {
+				/**
 				if($count>0){
 					echo $person->getFullName()."<br>".$personDocuments->count();die;
-				}
+				}**/
 				$files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
 				$files[1][]= $document->getMediaMedia()->getName();
 				$count++;
@@ -42,14 +43,14 @@ class ExportController extends Controller
 			$valid_files = array();
 			$valid_files[0] = array();
 			$valid_files[1] = array();
-
+			echo count($files[0]);die;
 			//if files were passed in..
 			if(is_array($files[0])) {
 						//cycle through each file
 				for($i=0;$i<count($files[0]);$i++){
 					if(file_exists(getcwd().$files[0][$i])) {
-						$valid_files[0][$i] = getcwd() . $files[0][$i];
-						$valid_files[1][$i] = $files[1][$i];
+						$valid_files[0][] = getcwd() . $files[0][$i];
+						$valid_files[1][] = $files[1][$i];
 					}
 				}
 			}
