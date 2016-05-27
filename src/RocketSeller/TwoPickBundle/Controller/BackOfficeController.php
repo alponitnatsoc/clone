@@ -71,10 +71,8 @@ class BackOfficeController extends Controller
         $pathRut = $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
         $nameRut = $rut->getMediaMedia()->getName();
         $prevPath = $actual_link = $_SERVER['HTTP_HOST'];
-        echo $prevPath;die;
-        $str = substr($prevPath,0,strlen($prevPath)-12);
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$str.$pathCedula,
-            'cedulaName'=>$nameCedula,'rutPath'=>$str.$pathRut,'rutName'=>$nameRut));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$prevPath.$pathCedula,
+            'cedulaName'=>$nameCedula,'rutPath'=>$prevPath.$pathRut,'rutName'=>$nameRut));
     }
     public function callPersonAction($idAction)
     {
