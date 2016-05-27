@@ -1,6 +1,6 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Tramite No {{ procedure.idProcedure }}{% endblock %}
+{% block title %}Validar{% endblock %}
 
 {% block scriptImport %}
     <script type="text/javascript" src="http://github.com/malsup/media/raw/master/jqery.media.js?v0.92"></script>
@@ -38,7 +38,9 @@
             {% if documents|length < 1 %}
                 <p>Llamar al cliente y recordar que suba los documentos de {{ action.personPerson.fullName}}</p>
             {% else %}
-
+                <div>
+                    <a href="{{ filePath }}">{{ fileName }}</a>
+                </div>
                 <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
             {% endif %}
             {% for doc in documents %}
