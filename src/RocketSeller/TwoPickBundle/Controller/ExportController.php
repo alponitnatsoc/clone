@@ -16,8 +16,13 @@ use ZipArchive;
 
 class ExportController extends Controller
 {
-  
-	public function exportDocumentsByPersonAction($idPerson)
+
+    /**
+     * Funcion que crea el archivo zip con los documentos que ha subido el usuario para backoffice.
+     * @param $idPerson id de la persona de la que se quieren descargar documentos
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function exportDocumentsByPersonAction($idPerson)
     {
     	if($this->isGranted('EXPORT_DOCUMENTS_PERSON', $this->getUser())) {
 
@@ -30,23 +35,24 @@ class ExportController extends Controller
 			$files[0] = array();
 			$files[1] = array();
 			/** @var Document $document */
-			$count = 0;
 			foreach ($personDocuments as $document) {
-				$files[0][$count]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-				$files[1][$count]= $document->getMediaMedia()->getName();
-				$count+=1;
+				/**
+				if($count>0){
+					echo $person->getFullName()."<br>".$personDocuments->count();die;
+				}**/
+				$files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+				$files[1][]= $document->getMediaMedia()->getName();
 			}
 			$valid_files = array();
 			$valid_files[0] = array();
 			$valid_files[1] = array();
-
 			//if files were passed in..
 			if(is_array($files[0])) {
 						//cycle through each file
 				for($i=0;$i<count($files[0]);$i++){
 					if(file_exists(getcwd().$files[0][$i])) {
-						$valid_files[0][$i] = getcwd() . $files[0][$i];
-						$valid_files[1][$i] = $files[1][$i];
+						$valid_files[0][] = getcwd() . $files[0][$i];
+						$valid_files[1][] = $files[1][$i];
 					}
 				}
 			}
@@ -59,9 +65,10 @@ class ExportController extends Controller
 			if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
 				# loop through each file
 				for($i=0;$i<count($valid_files[0]);$i++){
-					$zip->addFile($valid_files[0][$i],$valid_files[1][$i]);
+					$zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
 				}
 				# close zip
+                
 				if($zip->close()!==TRUE)
 					echo "no permisos";
 				# send the file to the browser as a download

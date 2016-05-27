@@ -59,15 +59,15 @@
 						</td>
 						{% if action.status|lower != "completado" %}
 							{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
-								<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
+								<td><a class="notAjax" href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 								<td>Validar documentos</td>
 							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-								<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
+								<td><a class="notAjax" href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-								<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
+								<td><a class="notAjax" href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
-								<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								<td><a class="notAjax" href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
 							{% endif %}
 						{% else %}
 							<td>Terminaste</td>
@@ -127,15 +127,15 @@
 						</td>
 						{% if action.status|lower != "completado" %}
 							{% if action.ActionTypeActionType.name|lower == "revisar registro" %}
-								<td><a href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
+								<td><a class="notAjax" href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
 								<td>Validar documentos</td>
 							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-								<td><a href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
+								<td><a class="notAjax" href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-								<td><a href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
+								<td><a class="notAjax" href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
-								<td><a href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								<td><a class="notAjax" href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
 							{% endif %}
 						{% else %}
 							<td>Terminaste</td>
@@ -169,9 +169,9 @@
 								<td>{{action.actionErrorActionError.description}}</td>
 								<td>{{action.actionErrorActionError.status}}</td>
 								{% if action.actionErrorActionError.status|lower == "sin contactar" %}
-									<td><a href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Contactado"})}}">Contactado</a></td>
+									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Contactado"})}}">Contactado</a></td>
 								{% elseif action.actionErrorActionError.status|lower =="contactado" %}
-									<td><a href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Corregido"})}}">Corregido</a></td>
+									<td><a class="notAjax" href="{{ path('change_action_error_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionError':action.actionErrorActionError.id,'status':"Corregido"})}}">Corregido</a></td>
 								{% elseif action.actionErrorActionError.status|lower == "corregido" %}
 									<td>-</td>
 								{% endif %}

@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -31,6 +32,7 @@ class ProcedureController extends Controller
     {
 		$this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 		$procedures = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:RealProcedure')->findAll();
+		
 		return $this->render(
             '@RocketSellerTwoPick/BackOffice/procedures.html.twig',array('procedures'=>$procedures)
         );
@@ -57,6 +59,7 @@ class ProcedureController extends Controller
 			,array('procedure'=>$procedure, 'employerHasEmployees'=>$employerHasEmployees,));
 
     }
+	
     public function checkActionCompletation($idPerson)
     {	
     	$person = $this->loadClassById($idPerson,'Person');

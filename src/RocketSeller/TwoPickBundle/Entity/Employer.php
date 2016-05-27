@@ -85,6 +85,17 @@ class Employer
      */
     private $entities;
 
+    /**
+     * @var integer $toFinish
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $toFinish=0;
+
+    /**
+     * @var integer $finished
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $finished=0;
 
     /**
      * Set idEmployer
@@ -453,5 +464,67 @@ class Employer
     public function getIdHighTech()
     {
         return $this->idHighTech;
+    }
+
+    /**
+     * Set toFinish
+     *
+     * @param integer $toFinish
+     *
+     * @return Employer
+     */
+    public function setToFinish($toFinish)
+    {
+        $this->toFinish = $toFinish;
+
+        return $this;
+    }
+
+    /**
+     * Get toFinish
+     *
+     * @return integer
+     */
+    public function getToFinish()
+    {
+        $employees = $this->getEmployerHasEmployees();
+        /** @var EmployerHasEmployee $employee */
+        foreach( $employees as $employee){
+            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()>0) {
+                $this->toFinish += 1;
+            }
+        }
+        return $this->toFinish;
+    }
+
+    /**
+     * Set finished
+     *
+     * @param integer $finished
+     *
+     * @return Employer
+     */
+    public function setFinished($finished)
+    {
+        $this->finished = $finished;
+
+        return $this;
+    }
+
+    /**
+     * Get finished
+     *
+     * @return integer
+     */
+    public function getFinished()
+    {
+        $employees = $this->getEmployerHasEmployees();
+        /** @var EmployerHasEmployee $employee */
+        foreach( $employees as $employee){
+            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()===0){
+                $this->finished+=1;
+            }
+        }
+        return $this->finished;
     }
 }

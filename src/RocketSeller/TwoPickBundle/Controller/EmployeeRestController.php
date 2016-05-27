@@ -1503,6 +1503,7 @@ class EmployeeRestController extends FOSRestController {
         /** @var Entity $realArl */
         $realArl = $entityRepo->find($paramFetcher->get('arl'));
         $realSeverances = new ArrayCollection();
+        echo 'hola';die;
         $severances = $paramFetcher->get('severances');
         foreach ($severances as $sever) {
             $realSeverances->add($entityRepo->find($sever));
