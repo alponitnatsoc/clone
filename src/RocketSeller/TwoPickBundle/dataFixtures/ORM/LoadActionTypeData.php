@@ -12,9 +12,18 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
 {
     public function load(ObjectManager $manager)
     {
-        $actionTypeRevisarRegistro = new ActionType();
-        $actionTypeRevisarRegistro->setName('Revisar registro');        
-        $manager->persist($actionTypeRevisarRegistro);
+
+        $actionTypeValidarRegistroEmpleador = new ActionType();
+        $actionTypeValidarRegistroEmpleador->setName('Validar registro del empleador');
+        $manager->persist($actionTypeValidarRegistroEmpleador);
+
+        $actionTypeValidarRegistroEmpleado = new ActionType();
+        $actionTypeValidarRegistroEmpleado->setName('Validar registro empleado');
+        $manager->persist($actionTypeValidarRegistroEmpleado);
+
+        $actionTypeValidarEntidades = new ActionType();
+        $actionTypeValidarEntidades->setName('Validar Entidades');
+        $manager->persist($actionTypeValidarEntidades);
 
         $actionTypeLlevarDocs = new ActionType();
         $actionTypeLlevarDocs->setName('llevar documentos a entidad');        
@@ -34,8 +43,10 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
 
         
         $manager->flush();
+        $this->addReference('actionType-validarEmpleador', $actionTypeValidarRegistroEmpleador);
+        $this->addReference('actionType-validarEmpleado', $actionTypeValidarRegistroEmpleado);
+        $this->addReference('actionType-llevarDocs', $actionTypeValidarEntidades);
 
-        $this->addReference('actionType-revisar', $actionTypeRevisarRegistro);
         $this->addReference('actionType-llevarDocs', $actionTypeLlevarDocs);
         $this->addReference('actionType-inscripcion', $actionTypeInscripcion);
         $this->addReference('actionType-llamarEntidad', $actionTypeLlamarEntidad);

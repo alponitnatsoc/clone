@@ -39,7 +39,12 @@ class EmployeeHasEntity
      */
     private $employeeEmployee;
 
-
+    /**
+     * 0 - validar
+     * 1 - inscribir
+     * @ORM\Column(type="smallint", nullable=TRUE)
+     */
+    private $state =0 ;
 
     /**
      * Set idEmployeeHasEntity
@@ -111,5 +116,29 @@ class EmployeeHasEntity
     public function getEmployeeEmployee()
     {
         return $this->employeeEmployee;
+    }
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     *
+     * @return EmployeeHasEntity
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }

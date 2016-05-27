@@ -36,8 +36,10 @@
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/subscriptionChoise.css') }}">
-    {% endblock %}
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
+    {% endblock %}
+    {% block scriptImport %}
+    {% endblock %}
     <script src="{{ asset('js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') }}"></script>
 </head>
 <body {% if body_color|default %}style="background-color: {{ body_color }}"{% endif %}>

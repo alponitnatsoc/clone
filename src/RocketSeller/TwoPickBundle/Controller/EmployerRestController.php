@@ -230,7 +230,7 @@ class EmployerRestController extends FOSRestController
         $this->validateDocumentsEmployer($user,$employer);
         /** @var EmployerHasEmployee $eHE */
         foreach ($employer->getEmployerHasEmployees() as $eHE) {
-            if($eHE->getState()==1){
+            if($eHE->getState()>=3){
                 $employee=$eHE->getEmployeeEmployee();
                 $this->validateDocumentsEmployee($user,$employee);
             }
