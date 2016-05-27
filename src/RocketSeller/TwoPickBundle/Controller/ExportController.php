@@ -62,11 +62,11 @@ class ExportController extends Controller
 			if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
 				# loop through each file
 				for($i=0;$i<count($valid_files[0]);$i++){
-					$zip->addFile($valid_files[0][$i],$valid_files[1][$i]);
+					$zip->addFile($valid_files[0][$i],$valid_files[1][$i].$i);
                     echo "el archivo es: ".$valid_files[1][$i]." y el path es: ".$valid_files[0][$i];
 				}
 				# close zip
-                die;
+                
 				if($zip->close()!==TRUE)
 					echo "no permisos";
 				# send the file to the browser as a download
