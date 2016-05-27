@@ -68,7 +68,7 @@ class BackOfficeController extends Controller
         $pathCedula = ''.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
         $nameCedula = $cedula->getMediaMedia()->getName();
         $rut = $action->getPersonPerson()->getDocByType("Rut");
-        $pathRut = ''.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+        $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
         $nameRut = $rut->getMediaMedia()->getName();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$pathCedula,
             'cedulaName'=>$nameCedula,'rutPath'=>$pathRut,'rutName'=>$nameRut));
