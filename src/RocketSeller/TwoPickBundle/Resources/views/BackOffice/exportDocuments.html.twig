@@ -3,15 +3,34 @@
 {% block title %}Validar{% endblock %}
 
 {% block scriptImport %}
-    <script type="text/javascript" src="http://github.com/malsup/media/raw/master/jqery.media.js?v0.92"></script>
-    <script type="text/javascript" src="jquery.metadata.js"></script>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.gdocsviewer.min.js"></script>
 {% endblock %}
 
 {% block fos_user_content %}
-<div id="main" class="col-sm-15">
-    <div class="col-md-4">
+<div id="main" class="col-sm-17">
+    <div class="col-md-17">
         <div class="panel panel-title">
-            <p>Datos Basicos</p>
+            <p>Validar Documentos</p>
+        </div>
+    </div>
+    <div class="col-sm-17">
+        <div class="col-sm-6">
+            {% set document = action.personPerson.docByType("Cedula") %}
+            {% if document.documentTypeDocumentType != "Cedula" %}
+                <p>Llamar al cliente y recordar que suba la cedula de {{ action.personPerson.fullName}}</p>
+            {% else %}
+                <iframe src="{{ cedulaPath }}" style="width:320px; height:420px;" frameborder="0"></iframe>
+            {% endif %}
+
+        </div>
+        <div class="col-sm-6">
+            <h4>Descargar documentos</h4>
+            <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
+            <p>{{ cedulaName }}</p>
+            <br>
+            <h4>Generar archivo Excel</h4>
+            <a class="btn btn-orange notAjax" href="{{ path('back_person_cvs_export',{'idPerson':action.personPerson.idPerson})}}">Generar</a>
             <ul>
                 <li>
                     <p><strong>Nombres</strong>
@@ -30,40 +49,23 @@
                         {{action.personPerson.phones[0].phoneNumber}}</p>
                 </li>
             </ul>
+            <br>
         </div>
-        <br>
-        <div class="col-md-4">
-            <h4>Descargar documentos</h4>
-            {% set documents = action.personPerson.docs %}
-            {% if documents|length < 1 %}
-                <p>Llamar al cliente y recordar que suba los documentos de {{ action.personPerson.fullName}}</p>
-            {% else %}
-                <div>
-                    <a href="{{ filePath }}">{{ fileName }}</a>
-                </div>
-                <a class="btn btn-orange notAjax" href="{{ path('export_documents_person',{'idPerson':action.personPerson.idPerson})}}">Descargar</a>
-            {% endif %}
-            {% for doc in documents %}
-                <p>{{doc.documentTypeDocumentType.name}}</p>
-            {% endfor %}
+    </div>
 
-
-            <h4>Generar archivo Excel</h4>
-            <a class="btn btn-orange notAjax" href="{{ path('back_person_cvs_export',{'idPerson':action.personPerson.idPerson})}}">Generar</a>
+    <div class="col-md-5">
+        <div class="col-md-12">
+            <h4>Terminar inscripción</h4>
+            <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Correcto</a>
         </div>
-        <div class="col-md-4">
-            <div class="col-md-12">
-                <h4>Terminar inscripción</h4>
-                <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Correcto</a>
-            </div>
+    </div>
+    <div class="col-md-12" style="margin-top:30px;border-top:dotted 1px;">
+        <div class="col-md-12">
+            {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
         </div>
-        <div class="col-md-12" style="margin-top:30px;border-top:dotted 1px;">
-            <div class="col-md-12">
-                {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
-            </div>
-        </div>
-        <div class="col-md-12" style="border-top:dotted 1px;margin-top:20px;text-align:center;">
-            <a class="btn btn-default notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
-        </div>
+    </div>
+    <div class="col-md-12" style="border-top:dotted 1px;margin-top:20px;text-align:center;">
+        <a class="btn btn-default notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
+    </div>
 
 {% endblock %}

@@ -64,16 +64,16 @@ class BackOfficeController extends Controller
     {        
         /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action"); 
-        $docs = $action->getPersonPerson()->getDocs();
-        $files = array();
-        $files[0] = array();
-        $files[1] = array();
-        /** @var Document $document */
-        foreach ($docs as $document) {
-            $files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-            $files[1][]= $document->getMediaMedia()->getName();
-        }
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'filePath'=>$files[0][0],'fileName'=>$files[1][0]));	
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        $pathCedula = $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+        $nameCedula = $cedula->getMediaMedia()->getName();
+        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        $pathRut = $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+        $nameRut = $rut->getMediaMedia()->getName();
+        $prevPath = getcwd().$pathCedula;
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$prevPath.$pathCedula,
+            'cedulaName'=>$nameCedula,'rutPath'=>$prevPath.$pathRut,'rutName'=>$nameRut));
     }
     public function callPersonAction($idAction)
     {
