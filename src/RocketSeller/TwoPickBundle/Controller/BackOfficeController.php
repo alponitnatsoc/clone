@@ -65,7 +65,7 @@ class BackOfficeController extends Controller
         /** @var Action $action */
     	$action = $this->loadClassById($idAction,"Action"); 
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
-        $pathCedula = ''.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+        $pathCedula = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
         $nameCedula = $cedula->getMediaMedia()->getName();
         $rut = $action->getPersonPerson()->getDocByType("Rut");
         $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
