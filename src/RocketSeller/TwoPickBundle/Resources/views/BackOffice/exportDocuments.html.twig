@@ -20,7 +20,7 @@
             {% if document.documentTypeDocumentType != "Cedula" %}
                 <p>Llamar al cliente y recordar que suba la cedula de {{ action.personPerson.fullName}}</p>
             {% else %}
-                <iframe src="{{ cedulaPath }}" style="width:320px; height:420px;" frameborder="0"></iframe>
+                <iframe class="noAjax" src="{{ cedulaPath }}" style="width:320px; height:420px;" frameborder="0"></iframe>
             {% endif %}
 
         </div>
