@@ -26,3 +26,6 @@
     letter-spacing: 1px;
     font-family: "Open Sans",Helvetica,Arial;
 }
+
+.btn-contrato:active, .btn-contrato.active {
+background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outline:none !important}
