@@ -11,6 +11,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use RocketSeller\TwoPickBundle\Entity\Workplace;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -23,11 +24,13 @@ class Item {
   var $pos_inicial;
   var $pos_final;
   var $valor;
+  var $zeros;
 
-  function __construct($pos_inicial, $pos_final, $valor) {
+  function __construct($pos_inicial, $pos_final, $valor, $zeros=false) {
      $this->pos_inicial = $pos_inicial;
      $this->pos_final = $pos_final;
      $this->valor = $valor;
+     $this->zeros = $zeros;
   }
 }
 
@@ -368,8 +371,8 @@ class PilaPlainTextRestController extends FOSRestController
 
     public $elementos = array();
 
-    public function add($a, $b, $c) {
-      $item = new Item($a, $b, $c);
+    public function add($a, $b, $c, $d=false) {
+      $item = new Item($a, $b, $c, $d);
       $elementos = &$this->elementos;
       $elementos[] = $item;
     }
@@ -390,11 +393,360 @@ class PilaPlainTextRestController extends FOSRestController
 
         for($i = 0; $i < ($length - strlen($line->valor)); $i++) {
           // We add a space in each empty position.
-          $res .= ' ';
+          if(!$line->zeros)
+            $res .= ' ';
+          else
+            $res .= '0';
         }
       }
       return $res;
     }
+
+    public function diasConDescuento($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 1) {
+          $total += $item['NOMI_UNIDADES'];
+        }
+      }
+      return $total;
+    }
+    public function diasSinDescuento($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 1 && $item['NOMI_UNIDADES'] > 0) {
+          $total += $item['NOMI_UNIDADES'];
+        }
+      }
+      return $total;
+    }
+
+    public function getIBC($employeeInfo) {
+      $salario_minio = 689455;
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 1) {
+          $total += $item['NOMI_VALOR_LOCAL'];
+        }
+      }
+      if($total < $salario_minio)return $salario_minio;
+      return $total;
+    }
+
+    public function leftZeros($value, $space) {
+      $value2 = ''.$value;
+      $value = '';
+      for($i = 0; $i < $space - strlen($value2); $i ++){
+        $value .= '0';
+      }
+      $value .= $value2;
+      return $value;
+    }
+
+    // Type is E or S.
+    // Count is the number of employees of this type.
+    public function createLineaEmpleado($employees, $exonerated=false){
+      $consecutivo = 1;
+      if($exonerated)
+        $exonerated = 'S';
+      else
+        $exonerated = 'N';
+      foreach($employees as $employee) {
+        //dump($employee);die();
+        $employee = $employee->getEmployeeEmployee();
+        // Add left zeros to count.
+        $consecutivo2 = ''.$consecutivo;
+        $consecutivo = '';
+        for($i = 0; $i < 5 - strlen($consecutivo2); $i ++){
+          $consecutivo .= '0';
+        }
+        $consecutivo .= $consecutivo2;
+
+        $tipoDocumento = $employee->getPersonPerson()->getDocumentType();
+        if($tipoDocumento == 'cc')
+          $tipoDocumento = 'CC';
+        elseif($tipoDocumento == 'ce')
+          $tipoDocumento = 'CE';
+        elseif($tipoDocumento == 'ti')
+          $tipoDocumento = 'TI';
+        elseif($tipoDocumento == 'NIT' || $tipoDocumento == 'nit')
+          $tipoDocumento = 'NI';
+
+        $documento = $employee->getPersonPerson()->getDocument();
+        $subtipoCotizante = '';
+        if($this->aporta($employee))
+            $subtipoCotizante = '';
+        else
+            $subtipoCotizante = '4';
+
+        $deparmentCode = $employee->getPersonPerson()->getDepartment()->getDepartmentCode();
+        $municipioCode = $employee->getPersonPerson()->getCity()->getCityCode();
+        $municipioCode = substr($municipioCode, -3);
+        $firstLastName = $employee->getPersonPerson()->getLastName1();
+        $secondLastName = $employee->getPersonPerson()->getLastName2() ?: '';
+        $firstFirstName = $employee->getPersonPerson()->getNames();
+        $secondFirstName = isset(explode(' ', $firstFirstName)[1]) ? explode(' ', $firstFirstName)[1] : '';
+        $firstFirstName = explode(' ', $firstFirstName)[0];
+        $codigoAFP = $this->codigoEntidad($employee->getIdEmployee(), 3); //3 is afp.
+        $codigoEPS = $this->codigoEntidad($employee->getIdEmployee(), 1); //1 is eps.
+        $codigoCCF = $this->codigoEntidadEmployer($employee->getIdEmployee(), 4); // 4 is ccf.
+
+        $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        $ehe = $eheRepo->findOneBy(array('employeeEmployee' => $employee->getIdEmployee()));
+        $idEmployerHasEmployee = $ehe->getIdEmployerHasEmployee();
+        // test only.
+        $idEmployerHasEmployee = 1002;
+        // Call SQL for the next information.
+        // General payroll, getting the employee information.
+        $employeeInfo = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
+            "employeeId" => $idEmployerHasEmployee,
+                ), array('_format' => 'json'));
+
+
+
+        if ($employeeInfo->getStatusCode() != 200) {
+          throw new \Exception('Error getting the information from SQL.');
+        }
+        $employeeInfo = json_decode($employeeInfo->getContent(), true);
+
+        // General external entities, getting the employer information.
+        $employerInfo = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getExternalEntitiesLiquidation', array(
+            'employeeId' => $idEmployerHasEmployee,
+                ), array('_format' => 'json')
+        );
+        $employerInfo = json_decode($employerInfo->getContent(), true);
+
+        // Fixed concepts, to get the salary.
+        $salary = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getFixedConcepts', array(
+            'employeeId' => $idEmployerHasEmployee,
+                ), array('_format' => 'json')
+        );
+        if ($salary->getStatusCode() != 200) {
+          throw new \Exception('Error getting the information from SQL.');
+        }
+        $salary = json_decode($salary->getContent(), true)['COF_VALOR'];
+        $salary = $this->leftZeros($salary, 9);
+
+        $diasSinDescuento = $this->diasSinDescuento($employeeInfo);
+        $diasConDescuento = $this->diasConDescuento($employeeInfo);
+        $ibc = $this->getIBC($employeeInfo);
+        $ibc = $this->leftZeros($ibc, 9);
+
+        $aporte_pension = 0;
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'AFP')
+          {
+            $aporte_pension += $item['APR_APORTE_EMP'];
+            $aporte_pension += $item['APR_APORTE_CIA'];
+            break;
+          }
+        }
+        $aporte_pension = $this->leftZeros($aporte_pension, 9);
+
+        $porcentaje_salud = '0.125';// TODO: check in employerinfo to change it to 4% in more than one employee, and 0 for part time.
+
+        $aporte_salud = 0; // TODO: adjust this to be 0 if part time.
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'EPS')
+          {
+            $aporte_salud += $item['APR_APORTE_EMP'];
+            $aporte_salud += $item['APR_APORTE_CIA'];
+            break;
+          }
+        }
+        $aporte_salud = $this->leftZeros($aporte_salud, 9);
+
+        $porcentaje_arl = 0;
+        $contracts = $ehe->getContracts();
+        foreach($contracts as $contract) {
+          if($contract->getState() != 1)
+            continue;
+          if($contract->getPositionPosition()->getPayrollCoverageCode() == 1)
+            $porcentaje_arl = 0.522;
+          elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 2)
+            $porcentaje_arl = 1.044;
+          elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 3)
+            $porcentaje_arl = 2.436;
+          elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 4)
+            $porcentaje_arl = 4.350;
+          elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 5)
+            $porcentaje_arl = 6.960;
+        }
+
+        $aporte_arl = 0;
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'ARP')
+          {
+            $aporte_arl += $item['APR_APORTE_EMP'];
+            $aporte_arl += $item['APR_APORTE_CIA'];
+          }
+        }
+
+        $aporte_arl = $this->leftZeros($aporte_arl, 9);
+        $aporte_caja = 0;
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'PARAFISCAL' && $item['COB_CODIGO'] == 1)
+          {
+            $aporte_caja += $item['APR_APORTE_EMP'];
+            $aporte_caja += $item['APR_APORTE_CIA'];
+            break;
+          }
+        }
+
+        // Novelties.
+        // Ingreso.
+
+
+        $aporte_caja = $this->leftZeros($aporte_caja, 9);
+        //Articulo 10 resolucion 1747 de 2008.
+        // Campo 1.
+        $this->add(1, 2, '02'); //02 is mandatory.
+        // Campo 2.
+        $this->add(3, 7, $consecutivo);
+        // Campo 3.
+        $this->add(8, 9, $tipoDocumento);
+        // Campo 4.
+        $this->add(10, 25, $documento);
+        // Campo 5.
+        $this->add(26, 27, '02');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
+        // Campo 6.
+        $this->add(28, 29, $subtipoCotizante); //!!!!!!!!!cambiar por 00
+        // Campo 7.
+        $this->add(30, 30, ''); // We don't accept foreigners.
+        // Campo 8.
+        $this->add(31, 31, ''); // We don't accept living abroad.
+        // Campo 9.
+        $this->add(32, 33, $deparmentCode);
+        // Campo 10.
+        $this->add(34, 36, $municipioCode);
+        // Campo 11.
+        $this->add(37, 56, $firstLastName);
+        // Campo 12.
+        $this->add(57, 86, $secondLastName);
+        // Campo 13.
+        $this->add(87, 106, $firstFirstName);
+        // Campo 14.
+        $this->add(107, 136, $secondFirstName);
+
+        /* This needs to be fixed later, but should be updated, depending on the
+        novelty, it is important. */
+        // Campo 15.
+        $this->add(137, 137, '');
+        // Campo 16.
+        $this->add(138, 138, '');
+        // Campo 17.
+        $this->add(139, 139, '');
+        // Campo 18.
+        $this->add(140, 140, '');
+        // Campo 19.
+        $this->add(141, 141, '');
+        // Campo 20.
+        $this->add(142, 142, '');
+        // Campo 21.
+        $this->add(143, 143, '');
+        // Campo 22.
+        $this->add(144, 144, '');
+        // Campo 23.
+        $this->add(145, 145, '');
+        // Campo 24.
+        $this->add(146, 146, '');
+        // Campo 25.
+        $this->add(147, 147, '');
+        // Campo 26.
+        $this->add(148, 148, '');
+        // Campo 27.
+        $this->add(149, 149, '');
+        // Campo 28.
+        $this->add(150, 150, '');
+        // Campo 29.
+        $this->add(151, 151, '');
+        // Campo 30.
+        $this->add(152, 153, '00');
+        /* Here finish the novelties */
+
+        // Campo 31.
+        $this->add(154, 159, $codigoAFP);
+        // Campo 32.
+        $this->add(160, 165, '');// Only if the employee is changing AFP.
+        // Campo 33.
+        $this->add(166, 171, $codigoEPS);
+        // Campo 34.
+        $this->add(172, 177, '');// Only if the employee is changing EPS.
+        // Campo 35.
+        $this->add(178, 183, $codigoCCF);
+        // Campo 36.
+        $this->add(184, 185, $diasSinDescuento);
+        // Campo 37.
+        $this->add(186, 187, $diasSinDescuento);
+        // Campo 38.
+        $this->add(188, 189, $diasConDescuento);
+        // Campo 39.
+        $this->add(190, 191, $diasConDescuento);
+        // Campo 40.
+        $this->add(192, 200, $salary);
+        // Campo 41.
+        $this->add(201, 201, '');
+        // Campo 42.
+        $this->add(202, 210, $ibc);
+        // Campo 43.
+        $this->add(211, 219, $ibc);
+        // Campo 44.
+        $this->add(220, 228, $ibc);
+        // Campo 45.
+        $this->add(229, 237, $ibc);
+        // Campo 46.
+        $this->add(238, 244, '0.16000', true);
+        // Campo 47.
+        $this->add(245, 253, $aporte_pension);
+        // Campo 48 a 53.
+        $this->add(254, 307, '', true);
+        // Campo 54.
+        $this->add(308, 314, $porcentaje_salud, true);
+        // Campo 55.
+        $this->add(315, 323, $aporte_salud);
+        // Campo 56.
+        $this->add(324, 332, '', true);
+        // Campo 57.
+        $this->add(333, 347, '');
+        // Campo 58.
+        $this->add(348, 356, '', true);
+        // Campo 59.
+        $this->add(357, 371, '');
+        // Campo 60.
+        $this->add(372, 380, '', true);
+        // Campo 61.
+        $this->add(381, 389, $porcentaje_arl, true);
+        // Campo 62.
+        $this->add(390, 398, '', true);
+        // Campo 63.
+        $this->add(399, 407, $aporte_arl, true);
+        // Campo 64.
+        $this->add(408, 414, '0.04', true);
+        // Campo 65.
+        $this->add(415, 423, $aporte_caja);
+        // Campo 66.
+        $this->add(424, 430, '0.0', true);
+        // Campo 67.
+        $this->add(431, 439, '', true);
+        // Campo 68.
+        $this->add(440, 446, '0.0', true);
+        // Campo 69.
+        $this->add(447, 455, '', true);
+        // Campo 70.
+        $this->add(456, 462, '0.0', true);
+        // Campo 71.
+        $this->add(463, 471, '', true);
+        // Campo 72.
+        $this->add(472, 478, '0.0', true);
+        // Campo 73.
+        $this->add(479, 487, '', true);
+        // Campo 74 Resolucion 130.
+        $this->add(488, 488, $exonerated);
+
+        return $this->executeLine();
+      }
+    }
+
 
     // Type is E or S.
     // Count is the number of employees of this type.
@@ -436,7 +788,7 @@ class PilaPlainTextRestController extends FOSRestController
       if($type == 'E')
         $tipoAportante = '1';
       else
-        $tipoAportante = '2';
+        $tipoAportante = '2';  /// Camiar debe ser 2 siempre importante cambiar, esto es inutil se debe cambiar.
 
       // Add left zeros to count.
       $count2 = ''.$count;
@@ -522,6 +874,14 @@ class PilaPlainTextRestController extends FOSRestController
       $tiempo_completo = array();
       $tiempo_parcial = array();
 
+      $numberEmployees = 0;
+      $tempEmp = $emp->getEmployerHasEmployees();
+      /** @var EmployerHasEmployee $ehe */
+      foreach($tempEmp as $ehe) {
+        if($ehe->getState() >= 3)
+          $numberEmployees ++;
+      }
+
       foreach($employees as $employee) {
         $contracts = $employee->getContracts();
         foreach($contracts as $contract) {
@@ -533,13 +893,14 @@ class PilaPlainTextRestController extends FOSRestController
             $tiempo_parcial[] = $employee->getEmployeeEmployee();
         }
       }
-
+      $exonerated = $numberEmployees > 1 ? true: false;
       if(count($tiempo_completo) > 0) {
         die($this->createEncabezado($idEmployer, 'S', count($tiempo_completo)));
       }
       if(count($tiempo_parcial) > 0) {
         // Commented for test porpouses.
-        die($this->createEncabezado($idEmployer, 'E', count($tiempo_parcial)));
+        //die($this->createEncabezado($idEmployer, 'E', count($tiempo_parcial)));
+        die($this->createLineaEmpleado($employees, $exonerated));
       }
     }
 }
