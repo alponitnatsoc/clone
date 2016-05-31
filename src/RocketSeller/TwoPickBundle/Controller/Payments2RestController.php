@@ -923,6 +923,58 @@ class Payments2RestController extends FOSRestController
 
         return $responseView;
     }
+
+    /**
+     * Call the devolution of the collected money in case that the distribution fails<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Calls for devolution",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="accountNumber", nullable=false, requirements="[0-9]+")
+     * (name="accountId", nullable=false, requirements="[0-9]+")
+     * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?")
+     *
+     * @return View
+     */
+    public function postRegisterDevolutionAction(Request $request)
+    {
+        $path = "RegistrarDevolucion";
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['accountNumber'] = '[0-9]+';
+        $mandatory['accountNumber'] = true;
+        $regex['accountId'] = '[0-9]+';
+        $mandatory['accountId'] = true;
+        $regex['value'] = '[0-9]+(\.[0-9]+)?';
+        $mandatory['value'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $parameters_fixed = array();
+        $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
+        $parameters_fixed['idCuenta'] = $parameters['accountId'];
+        $parameters_fixed['valor'] = $parameters['value'];
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "RegistrarDevolucion");
+
+        return $responseView;
+    }
 }
 
 ?>
