@@ -498,6 +498,8 @@ class EmployeeRestController extends FOSRestController {
                 }
                 $em->persist($employerEmployee);
                 $em->persist($employee);
+                $user->setLegalFlag(-1);
+                $em->persist($user);
                 $em->flush();
                 $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
                 return $view;
@@ -823,7 +825,7 @@ class EmployeeRestController extends FOSRestController {
                 $datetime = new DateTime($endDate);
                 $contract->setEndDate($datetime);
             }
-            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
+            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajador por días") {
                 $actualWeekWorkableDayss = $paramFetcher->get('weekWorkableDays');
                 $actualWeekWorkableDays = $paramFetcher->get('weekDays');
                 $sisben = $paramFetcher->get('sisben');
@@ -1430,8 +1432,6 @@ class EmployeeRestController extends FOSRestController {
             }
             $realEmployee->setAskBeneficiary($beneficiarie);
             $em->persist($realEmployee);
-            $user->setLegalFlag(-1);
-            $em->persist($user);
             $em->flush();
             $flag = true;
         }
