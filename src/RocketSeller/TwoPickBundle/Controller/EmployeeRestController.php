@@ -498,8 +498,6 @@ class EmployeeRestController extends FOSRestController {
                 }
                 $em->persist($employerEmployee);
                 $em->persist($employee);
-                $user->setLegalFlag(-1);
-                $em->persist($user);
                 $em->flush();
                 $view->setData(array('response' => array('idEmployee' => $employee->getIdEmployee())))->setStatusCode(200);
                 return $view;
@@ -825,7 +823,7 @@ class EmployeeRestController extends FOSRestController {
                 $datetime = new DateTime($endDate);
                 $contract->setEndDate($datetime);
             }
-            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajador por días") {
+            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
                 $actualWeekWorkableDayss = $paramFetcher->get('weekWorkableDays');
                 $actualWeekWorkableDays = $paramFetcher->get('weekDays');
                 $sisben = $paramFetcher->get('sisben');
@@ -1330,14 +1328,14 @@ class EmployeeRestController extends FOSRestController {
         $tempWealth = $entityRepo->find($paramFetcher->get('wealth'));
 
         /** @var Entity $tempArs */
-        $tempArs = $entityRepo->find($paramFetcher->get('ars'));
+        //$tempArs = $entityRepo->find($paramFetcher->get('ars'));
 
         /** @var Entity $tempSeverances */
         $tempSeverances = $entityRepo->find($paramFetcher->get('severances'));
 
         $beneficiarie = $paramFetcher->get('beneficiaries');
 
-        if ($tempPens == null || ( $tempWealth == null && $tempArs == null) || $tempSeverances == null) {
+        if ($tempPens == null /*|| ( $tempWealth == null && $tempArs == null)*/ || $tempSeverances == null) {
             $view = View::create();
             $view->setData(array('error' => array('entity' => 'do not exist')))->setStatusCode(404);
             return $view;
@@ -1379,7 +1377,9 @@ class EmployeeRestController extends FOSRestController {
             } else {
                 $employeeHasEntityARS = new EmployeeHasEntity();
                 $employeeHasEntityARS->setEmployeeEmployee($realEmployee);
-                $employeeHasEntityARS->setEntityEntity($tempArs);
+                $localARSRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EntityType');
+                $localARS = $localARSRepo->findOneBy(array('payroll_code' => 'ARS'));
+                $employeeHasEntityARS->setEntityEntity($localARS->getEntities()->get(0));
                 $realEmployee->addEntity($employeeHasEntityARS);
                 $em->persist($employeeHasEntityARS);
             }
@@ -1400,25 +1400,29 @@ class EmployeeRestController extends FOSRestController {
                     } else {
                         $realEmployee->removeEntity($rEE);
                         $em->remove($rEE);
+                        $em->flush();
                         $employeeHasEntityARS = new EmployeeHasEntity();
                         $employeeHasEntityARS->setEmployeeEmployee($realEmployee);
-                        $employeeHasEntityARS->setEntityEntity($tempArs);
+                        $localARSRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EntityType');
+                        $localARS = $localARSRepo->findOneBy(array('payroll_code' => 'ARS'));
+                        $employeeHasEntityARS->setEntityEntity($localARS->getEntities()->get(0));
                         $realEmployee->addEntity($employeeHasEntityARS);
                         $em->persist($employeeHasEntityARS);
                     }
                 }
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS") {
-                    if ($tempArs != null) {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS" && $tempWealth != null) {
+                    /*if ($tempArs != null) {
                         $rEE->setEntityEntity($tempArs);
                         $em->persist($rEE);
-                    } else {
+                    } else {*/
                         $em->remove($rEE);
+                        $em->flush();
                         $employeeHasEntityWealth = new EmployeeHasEntity();
                         $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                         $employeeHasEntityWealth->setEntityEntity($tempWealth);
                         $realEmployee->addEntity($employeeHasEntityWealth);
                         $em->persist($employeeHasEntityWealth);
-                    }
+                    //}
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($tempPens);
@@ -1432,6 +1436,8 @@ class EmployeeRestController extends FOSRestController {
             }
             $realEmployee->setAskBeneficiary($beneficiarie);
             $em->persist($realEmployee);
+            $user->setLegalFlag(-1);
+            $em->persist($user);
             $em->flush();
             $flag = true;
         }
