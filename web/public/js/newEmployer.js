@@ -4,6 +4,8 @@
  */
 function startEmployer() {
     var validator;
+    $("#errorSeverance").hide();
+    $("#errorARL").hide();
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='register_employer']").validate({
             rules: {
@@ -53,7 +55,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor seleciona una opción"
+                    required: "Por favor selecciona una opción"
                 }
             });
         });
@@ -61,7 +63,7 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor seleccione una opción"
+                    required: "Por favor escribe en el campo, hasta encontrar tu entidad"
                 }
             });
         });
@@ -131,22 +133,39 @@ function startEmployer() {
         e.preventDefault();
         var form = $("form");
 
+        var errors = { register_employer_severances_0_severancesAC: "La entidad no existe en nuestra base de datos, favor revisa su escritura" };
         var severances = [];
         var arl = $(form).find("#register_employer_arl");
         var arlAC = $(form).find("#register_employer_arlAC");
         var i = 0;
         var flagValid = true;
-        $(form).find("input[name*='register_employer[severances]']").not("[type='hidden']").each(function () {
+        var emptyFlag = false;
+        $(form).find("input[name*='register_employer[severances]']").not("[type='hidden']").each(function (index) {
             if (!validator.element($(this))) {
                 flagValid = false;
+                emptyFlag = true;
             }
+            var checkVar = "register_employer_severances_" + index + "_severances";
+            var checkVarOpt = "register_employer_severances_" + index + "_severances option";
+            var origVar = "register_employer_severances_" + index + "_severancesAC";
+            $("#"+checkVar).val($("#"+checkVarOpt).filter(function () { return $.trim($(this).html()) == $.trim($("#"+origVar).val()); }).val());
         });
+
+        //$("#register_employer_severances_0_severances").val($('#register_employer_severances_0_severances option').filter(function () { return $.trim($(this).html()) == $.trim($('#register_employer_severances_0_severancesAC').val()); }).val());
         i = 0;
+
         $(form).find("select[name*='register_employer[severances]']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
             }
             severances[i++] = $(this).val();
+            if($(this).val() == undefined || $(this).val() == "" && emptyFlag == false){
+              flagValid = false;
+              $("#errorSeverance").show();
+            }
+            else {
+              $("#errorSeverance").hide();
+            }
         });
         if (!flagValid) {
             return;
@@ -154,6 +173,16 @@ function startEmployer() {
         if (!( validator.element(arl)  && validator.element(arlAC))) {
             return;
         }
+        //HERE
+        $(arl).val($("#register_employer_arl option").filter(function () { return $.trim($(this).html()) == $.trim($(arlAC).val()); }).val());
+        if($(arl).val() == undefined || $(arl).val() == ""){
+          $("#errorARL").show();
+          return;
+        }
+        else {
+          $("#errorARL").hide();
+        }
+
         $('#createdModal').modal('toggle');
         $.ajax({
             url: $(this).attr('href'),
@@ -562,7 +591,7 @@ function addSeveranceForm($collectionHolderB, $newLinkLi) {
     $actualInsertion.rules("add", {
         required: true,
         messages: {
-            required: "Por favor seleccione una opción"
+            required: "Por favor, escribe el nombre de la entidad"
         }
     });
 }
@@ -602,10 +631,13 @@ function checkExistance(){
 function addAutoComplete(autoTo, data){
     $(autoTo).autocomplete({
         source: function(request, response) {
+            var results;
             if(request.term.length != 0){
-              var results = $.ui.autocomplete.filter(data, request.term);
+              results = $.ui.autocomplete.filter(data, request.term);
             }
-            
+            else {
+              results = $.ui.autocomplete.filter("", request.term);
+            }
             response(results.slice(0, 5));
         },                minLength: 0,
         select: function(event, ui) {
@@ -616,12 +648,14 @@ function addAutoComplete(autoTo, data){
         focus: function(event, ui) {
             event.preventDefault();
             $(this).val(ui.item.label);
+            $($(this).parent()).parent().find("select").val(ui.item.value);
 
         }
     });
     $(autoTo).on("focus",function () {
         $(autoTo).autocomplete("search", $(autoTo).val());
     });
+
 }
 function initEntitiesEmployerFields(){
     var dataSev=[];
