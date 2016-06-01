@@ -372,15 +372,18 @@ class EmployeeController extends Controller
             foreach ($eHEEntities as $enti) {
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
                     $employeeForm->get('wealth')->setData($enti->getEntityEntity());
+                    $employeeForm->get('wealthExists')->setData($enti->getState());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS") {
                     //$employeeForm->get('ars')->setData($enti->getEntityEntity());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $employeeForm->get('pension')->setData($enti->getEntityEntity());
+                    $employeeForm->get('pensionExists')->setData($enti->getState());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "FCES") {
                     $employeeForm->get('severances')->setData($enti->getEntityEntity());
+                    $employeeForm->get('severancesExists')->setData($enti->getState());
                 }
             }
         }

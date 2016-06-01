@@ -480,8 +480,11 @@ function startEmployee() {
                 idContract: $("input[name='register_employee[idContract]']").val(),
                 beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
+                pensionExists: $("#register_employee_entities_pensionExists").val(),
                 wealth:  $("#register_employee_entities_wealth").val(),
+                wealthExists: $("#register_employee_entities_wealthExists").val(),
                 severances:  $("#register_employee_entities_severances").val(),
+                severancesExists:  $("#register_employee_entities_severancesExists").val(),
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
