@@ -362,13 +362,13 @@
 
                                             </ul>
                                         </div>
-                                        <hr />
+
                                         <div class="contractSecondList">
                                             <h4 class="text-center">A tener en cuenta</h4>
                                             Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.
                                         </div>
                                         <div class="buttonContainer">
-                                            <button type="button" id="btnToggleIndefinido" class="btn-orange btn active">Seleccionar</button>
+                                            <button type="button" id="btnToggleIndefinido" class="btn-contrato btn active">Seleccionar</button>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -380,10 +380,10 @@
                                                 <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
                                                 <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
                                                 <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
-                                                <li>Si la duración del contrato es menor a un año sepuede renovar por 3 periodos igualesl inicialmente pactado el cuarto tendrá que ser a un año</li>
+                                                <li>Si el término fijo es inferior a un (1) año, únicamente podrá prorrogarse sucesivamente el contrato hasta por tres (3) períodos iguales o inferiores, al cabo de los cuales el término de renovación no podrá ser inferior a un (1) año.</li>
                                             </ul>
                                         </div>
-                                        <hr />
+
                                         <div class="contractSecondList">
                                             <h4 class="text-center">A tener en cuenta</h4>
                                             Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
@@ -391,7 +391,7 @@
                                             Además, este tipo de contrato debe cancelarse 30 días antes que finalice.
                                         </div>
                                         <div class="buttonContainer">
-                                            <button type="button" id="btnToggleFijo" class="btn-orange btn ">Seleccionar</button>
+                                            <button type="button" id="btnToggleFijo" class="btn-contrato btn ">Seleccionar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -938,11 +938,6 @@
                             {% else %}
                                 {% set wname = "" %}
                             {% endif %}
-                            {% if form.entities.ars.vars.data.name is defined %}
-                                {% set arsname = form.entities.ars.vars.data.name %}
-                            {% else %}
-                                {% set arsname = "" %}
-                            {% endif %}
                             {% if form.entities.pension.vars.data.name is defined %}
                                 {% set pname = form.entities.pension.vars.data.name %}
                             {% else %}
@@ -968,18 +963,14 @@
                                         {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
                                     </div>
                                     {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
-                                </div>
-                                <div id="arsBlock"  class="col-sm-12 col-xs-12 days">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.ars) }}
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.entities.wealthExists) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.entities.wealthExists) }}
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.arsAC) }}
-                                    </div>
-                                    <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.arsAC, { 'value' : arsname}) }}
-                                    </div>
-                                    {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                                 </div>
                                 <div  class="col-sm-12 col-xs-12">
                                     <div class="hidden">
@@ -990,6 +981,14 @@
                                     </div>
                                     <div class="col-sm-6 form-group">
                                         {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.entities.severancesExists) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.entities.severancesExists) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
@@ -1006,6 +1005,14 @@
                                     {#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
                                     {#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
                                     {#                             </div>#}
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.entities.pensionExists) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.entities.pensionExists) }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">

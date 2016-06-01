@@ -59,7 +59,7 @@ trait EmployeeMethodsTrait
         $employerHasEmployee = $employerHasEmployees->first();
         $this->validateDocumentsEmployer($user, $employerHasEmployee->getEmployerEmployer());
         do {
-            if ($employerHasEmployee->getState() < 3)
+            if ($employerHasEmployee->getState() < 2)
                 continue;
             $employee = $employerHasEmployee->getEmployeeEmployee();
             $this->validateDocumentsEmployee($user, $employee);
@@ -155,7 +155,7 @@ trait EmployeeMethodsTrait
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
 
-        $docs = array('Cedula' => false, 'RUT' => false, 'Carta autorización Symplifica' => false);
+        $docs = array('Cedula' => false, 'RUT' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
                 if ($type == $document->getDocumentTypeDocumentType()->getName()) {
@@ -171,9 +171,6 @@ trait EmployeeMethodsTrait
                 } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'RUT';
-                } elseif ($type == 'Carta autorización Symplifica') {
-                    $msj = "Subir carta de autorización Symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
-                    $documentType = 'Carta autorización Symplifica';
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));

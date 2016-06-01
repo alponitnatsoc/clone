@@ -527,12 +527,12 @@ class PersonRestController extends FOSRestController
                     'day' => "",
                 ),
                 'birthCountry' => $person->getBirthCountry() ?: "",
-                'birthDepartment' => $person->getBirthDepartment() ?: "",
-                'birthCity' => $person->getBirthCity() ?: "",
+                'birthDepartment' => $person->getBirthDepartment() ?array('id_department'=>$person->getBirthDepartment()->getIdDepartment()) :"",
+                'birthCity' => $person->getBirthCity() ? array('id_city'=>$person->getBirthCity()->getIdCity()) : "",
                 'mainAddress' => $person->getMainAddress(),
-                'department' => $person->getDepartment(),
+                'department' => array('id_department'=>$person->getDepartment()->getIdDepartment()),
                 'email' => $person->getEmail(),
-                'city' => $person->getCity(),
+                'city' => array('id_city'=>$person->getCity()->getIdCity()),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
                 'idEmployee' => $person->getEmployee() ? $person->getEmployee()->getIdEmployee() : "-2"
             ))->setStatusCode(200);

@@ -29,14 +29,6 @@ class EntitiesPick extends AbstractType
                 'choice_label' =>'name',
                 'mapped' => false,
                 'label'=>'EPS*'
-
-            ))
-            ->add('pension', 'entity', array(
-                'class' => 'RocketSellerTwoPickBundle:Entity',
-                'choices' => $this->pensionEntities,
-                'choice_label' =>'name',
-                'mapped' => false,
-                'label'=>'Pension*'
             ))
             ->add('wealthAC', 'text', array(
                 'mapped' => false,
@@ -47,6 +39,25 @@ class EntitiesPick extends AbstractType
                     "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
+            ->add('wealthExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tiene EPS  o realizaré el tramite por mi cuenta',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true
+            ))
+
+            ->add('pension', 'entity', array(
+                'class' => 'RocketSellerTwoPickBundle:Entity',
+                'choices' => $this->pensionEntities,
+                'choice_label' =>'name',
+                'mapped' => false,
+                'label'=>'Pension*'
+            ))
             ->add('pensionAC', 'text', array(
                 'mapped' => false,
                 'label'=>'Administradora de Fondo de Pensiones (AFP) *',
@@ -56,6 +67,18 @@ class EntitiesPick extends AbstractType
                     "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
+            ->add('pensionExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tiene AFP o realizaré el tramite por mi cuenta',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true
+            ))
+
             ->add('beneficiaries', 'choice', array(
                 'choices' => array(
                     1 => 'Si',
@@ -74,9 +97,7 @@ class EntitiesPick extends AbstractType
                 'choice_label' =>'name',
                 'mapped' => false,
                 'label'=>'Cesantias*'
-
             ))
-
             ->add('severancesAC', 'text', array(
                 'mapped' => false,
                 'label'=>'Cesantias*',
@@ -86,7 +107,19 @@ class EntitiesPick extends AbstractType
                     "placeholder" => "Escribe el nombre de la entidad"
                 )
             ))
-            ->add('ars', 'entity', array(
+            ->add('severancesExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tiene fondo de cesantias  o realizaré el tramite por mi cuenta',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true
+            ))
+
+            /*->add('ars', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
                 'choices' => $this->arsEntities,
                 'choice_label' =>'name',
@@ -94,7 +127,6 @@ class EntitiesPick extends AbstractType
                 'label'=>'ARS*'
 
             ))
-
             ->add('arsAC', 'text', array(
                 'mapped' => false,
                 'label'=>'ARS*',
@@ -103,7 +135,18 @@ class EntitiesPick extends AbstractType
                     "class"=>'autocomArs',
                     "placeholder" => "Escribe el nombre de la entidad"
                 )
-            ));
+            ))
+            ->add('arsExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tiene ARS',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true
+            ))*/;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -144,15 +144,41 @@ de empleados que quieras administrar</h4>
                     </div>
                 </div>
 
+								<!--Calculadora para medidas de menos de 800px-->
+
+                <div id="selectores-calcu">
+                	<h4 class="semi-italic azulmediofont">¿Cuantos empleados de cada tipo de contrato vas a registrar?</h4>
+                	<div id="calc">
+                    	<form action="demo_form.asp">
+                            <span class="spanForm light">Tiempo completo:<br><span class="spandescript">(mes completo)</span></span><input class="tipoContrato" type="text" name="TiempoCompleto" placeholder="Introduce el número de empleados"><br>
+                            <span class="spanForm light">Tiempo parcial:<br><span class="spandescript">(1 - 2 días a la semana)</span></span><input class="tipoContrato" type="text" name="2dias" placeholder="Introduce el número de empleados"><br>
+                            <span class="spanForm light">Tiempo parcial:<br><span class="spandescript">(3 - 4 días a la semana)</span></span><input class="tipoContrato" type="text" name="4dias" placeholder="Introduce el número de empleados"><br>
+                        </form>
+                    </div>
+
+                </div>
+
+								<!--Fin calculadora para medidas de menos de 800px-->
+
                 <div id="texto-finalcalculadora">
-                	<p class="pcalculadora light">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
+                	<p class="pcalculadora light">El valor mensual de nuestro servicio <span class="semi-italic">para tu caso es:</span></p>
                     <div id="resultado-calculadora" class="azulmedio">
                     	<p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold" id="precio">= $0 mensuales</span></p>
-                    </div><br>
-                    <p class="pcalculadora light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
+                    </div>
+                    <p class="pcalculadora light-italic">Después del tercer empleado obten el 10% de descuento en la membresía de todos tus empleados</p><br>
 
 
                 </div>
+
+								<!--esto sale si va a registar mas de 10 empleados-->
+             <div id="limite-finalcalculadora">
+                	<p class="light">Si vas a registrar<br><span class="semi-italic">más de 10 empleados</span></p><br>
+
+                    <div id="limite-calculadora" class="azulmedio">
+                    	<p class="light">Comunicate con nosotros a <span class="bold">contacto@symplifica.com</span></p>
+                    </div><br>
+
+             </div>
 
            </div>
         </section>

@@ -372,15 +372,18 @@ class EmployeeController extends Controller
             foreach ($eHEEntities as $enti) {
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
                     $employeeForm->get('wealth')->setData($enti->getEntityEntity());
+                    $employeeForm->get('wealthExists')->setData($enti->getState());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARS") {
-                    $employeeForm->get('ars')->setData($enti->getEntityEntity());
+                    //$employeeForm->get('ars')->setData($enti->getEntityEntity());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $employeeForm->get('pension')->setData($enti->getEntityEntity());
+                    $employeeForm->get('pensionExists')->setData($enti->getState());
                 }
                 if ($enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "FCES") {
                     $employeeForm->get('severances')->setData($enti->getEntityEntity());
+                    $employeeForm->get('severancesExists')->setData($enti->getState());
                 }
             }
         }
@@ -586,12 +589,12 @@ class EmployeeController extends Controller
                 'required' => true
             ))
             ->add('email', 'text', array(
-                
+
                 'property_path' => 'email',
                 'required' => false
             ))
             ->add('phone', 'text', array(
-                
+
                 'property_path' => 'email',
                 'required' => false
             ))
@@ -618,7 +621,7 @@ class EmployeeController extends Controller
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
-            
+
             ->getForm();
 
 
@@ -632,7 +635,7 @@ class EmployeeController extends Controller
                     'nonRepeatedBenef'=>$nonRepeatedBenef,
                     'form' => $form->createView(),
                     'form2' =>$form2->createView(),
-                    'payMethodTypes'=> $payMethodTypes, 
+                    'payMethodTypes'=> $payMethodTypes,
         ));
     }
 
@@ -658,7 +661,7 @@ class EmployeeController extends Controller
                 throw $this->createNotFoundException('Unable to find Beneficiaries.');
             }
         } else {
-            
+
         }
     }
 
@@ -1076,7 +1079,7 @@ filename = "certificadoLaboral.pdf"'
     {
         $em = $this->getDoctrine()->getManager();
         $beneficiary = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Beneficiary")->find($beneficiary);
-        
+
 
     }
 
