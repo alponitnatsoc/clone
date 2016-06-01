@@ -1506,12 +1506,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
@@ -1538,12 +1538,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
 
             }
         });
@@ -1605,12 +1605,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
