@@ -198,7 +198,7 @@
 					{% endfor %}
 				</p>
 				{% for employerHasEmployee in employerHasEmployees %}
-					{% if employerHasEmployee.state == 3 %}
+					{% if employerHasEmployee.state == 4 %}
 						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}Terminado</p>
 					{% else %}
 						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}<a href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}">Terminar</a> </p>
