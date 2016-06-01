@@ -1072,10 +1072,11 @@ class PilaPlainTextRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $documentNumber The id of the client in the payments system.
+     * @param Int $idEmployer id of the employer.
+     * @param Char $type meaning if is part(E) or full time(S).
      * @return String
      */
-    public function getMonthlyPlainTextAction($idEmployer) {
+    public function getMonthlyPlainTextAction($idEmployer, $type='S') {
       $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
       /** @var Employer $emp */
       $emp = $employer->findOneBy(array('idEmployer' => $idEmployer));
@@ -1104,14 +1105,16 @@ class PilaPlainTextRestController extends FOSRestController
         }
       }
       $exonerated = $numberEmployees > 1 ? true: false;
-      if(count($tiempo_completo) > 0) {
-        die($this->createEncabezado($idEmployer, 'S', count($tiempo_completo)));
-      }
-      if(count($tiempo_parcial) > 0) {
-        // Commented for test porpouses.
-        //die($this->createEncabezado($idEmployer, 'E', count($tiempo_parcial)));
-        die($this->createLineaEmpleado($employees, $exonerated));
-      }
+
+      $line = $this->createEncabezado($idEmployer, 'S', count($tiempo_completo));
+      $line .= "\n";
+      $this->elementos = array();
+      $line .= $this->createLineaEmpleado($employees, $exonerated);
+      $filename = 'PILA_' . $idEmployer . '.txt';
+      header("Content-type: text/plain; charset=utf-8");
+      header("Content-Disposition: attachment; filename=$filename");
+
+      die($line);
     }
 }
 
