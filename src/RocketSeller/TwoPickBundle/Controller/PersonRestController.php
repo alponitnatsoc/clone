@@ -482,6 +482,10 @@ class PersonRestController extends FOSRestController
     public function postInquiryDocumentAction(ParamFetcher $paramFetcher)
     {
         $view = View::create();
+        if ($this->getUser() == null) {
+            $view->setStatusCode(403)->setHeader("error", "You are not allowed to get information");
+            return $view;
+        }
 
         $documentType = $paramFetcher->get('documentType');
         $document = $paramFetcher->get('document');
