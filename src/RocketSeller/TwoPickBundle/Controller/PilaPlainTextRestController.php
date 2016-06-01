@@ -421,6 +421,74 @@ class PilaPlainTextRestController extends FOSRestController
       return $total;
     }
 
+    public function diasLicencia($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 3120 ) {
+          $total += $item['NOMI_UNIDADES'];
+        }
+      }
+      return $total;
+    }
+
+    public function valorLicencia($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 3120 ) {
+          $total += $item['NOMI_VALOR_LOCAL'];
+        }
+      }
+      return $total;
+    }
+
+    public function novedadGeneral($employeeInfo, $codigo) {
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 2) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public function variacionTransitoriaSalario($employeeInfo) {
+      // We will look for extra hours.
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] >= 45 && $item['CON_CODIGO'] <= 80) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public function suspensionTemporal($employeeInfo) {
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 3125 || $item['CON_CODIGO'] == 3120) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public function licenciaMaternidadPaternidad($employeeInfo) {
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 25 || $item['CON_CODIGO'] == 26) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public function incapacidadAccidente($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 27 || $item['CON_CODIGO'] == 28) {
+          $total += $item['NOMI_UNIDADES'];
+        }
+      }
+      return $total;
+    }
+
+
     public function getIBC($employeeInfo) {
       $salario_minio = 689455;
       $total = 0;
@@ -429,7 +497,26 @@ class PilaPlainTextRestController extends FOSRestController
           $total += $item['NOMI_VALOR_LOCAL'];
         }
       }
-      if($total < $salario_minio)return $salario_minio;
+      return $total;
+    }
+
+    public function getIBCSalud($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 3010) {
+          $total += $item['NOMI_BASE'];
+        }
+      }
+      return $total;
+    }
+
+    public function getIBCPension($employeeInfo) {
+      $total = 0;
+      foreach($employeeInfo as $item) {
+        if($item['CON_CODIGO'] == 3020) {
+          $total += $item['NOMI_BASE'];
+        }
+      }
       return $total;
     }
 
@@ -441,6 +528,159 @@ class PilaPlainTextRestController extends FOSRestController
       }
       $value .= $value2;
       return $value;
+    }
+
+
+    public function employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
+    $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
+    $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+    $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente) {
+      //Articulo 10 resolucion 1747 de 2008.
+      // Campo 1.
+      $this->add(1, 2, '02'); //02 is mandatory.
+      // Campo 2.
+      $this->add(3, 7, $consecutivo);
+      // Campo 3.
+      $this->add(8, 9, $tipoDocumento);
+      // Campo 4.
+      $this->add(10, 25, $documento);
+      // Campo 5.
+      $this->add(26, 27, '02');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
+      // Campo 6.
+      $this->add(28, 29, $subtipoCotizante); //!!!!!!!!!cambiar por 00
+      // Campo 7.
+      $this->add(30, 30, ''); // We don't accept foreigners.
+      // Campo 8.
+      $this->add(31, 31, ''); // We don't accept living abroad.
+      // Campo 9.
+      $this->add(32, 33, $deparmentCode);
+      // Campo 10.
+      $this->add(34, 36, $municipioCode);
+      // Campo 11.
+      $this->add(37, 56, $firstLastName);
+      // Campo 12.
+      $this->add(57, 86, $secondLastName);
+      // Campo 13.
+      $this->add(87, 106, $firstFirstName);
+      // Campo 14.
+      $this->add(107, 136, $secondFirstName);
+
+      /* This needs to be fixed later, but should be updated, depending on the
+      novelty, it is important. */
+      // Campo 15.
+      $this->add(137, 137, $ingreso);
+      // Campo 16.
+      $this->add(138, 138, $retiro);
+      // Campo 17.
+      $this->add(139, 139, '');
+      // Campo 18.
+      $this->add(140, 140, '');
+      // Campo 19.
+      $this->add(141, 141, '');
+      // Campo 20.
+      $this->add(142, 142, '');
+      // Campo 21.
+      $this->add(143, 143, $variacionSalario);
+      // Campo 22.
+      $this->add(144, 144, '');
+      // Campo 23.
+      $this->add(145, 145, $variacionTransitoriaSalario);
+      // Campo 24.
+      $this->add(146, 146, $suspensionTemporal);
+      // Campo 25.
+      $this->add(147, 147, $enfermedadGeneral);
+      // Campo 26.
+      $this->add(148, 148, $licenciaMaternidadPaternidad );
+      // Campo 27.
+      $this->add(149, 149, $vacaciones);
+      // Campo 28.
+      $this->add(150, 150, '');
+      // Campo 29.
+      $this->add(151, 151, '');
+      // Campo 30.
+      $this->add(152, 153, $incapacidadAccidente, true);
+      /* Here finish the novelties */
+
+      // Campo 31.
+      $this->add(154, 159, $codigoAFP);
+      // Campo 32.
+      $this->add(160, 165, '');// Only if the employee is changing AFP.
+      // Campo 33.
+      $this->add(166, 171, $codigoEPS);
+      // Campo 34.
+      $this->add(172, 177, '');// Only if the employee is changing EPS.
+      // Campo 35.
+      $this->add(178, 183, $codigoCCF);
+      // Campo 36.
+      $this->add(184, 185, $diasSinDescuento);
+      // Campo 37.
+      $this->add(186, 187, $diasSinDescuento);
+      // Campo 38.
+      $this->add(188, 189, $diasConDescuento);
+      // Campo 39.
+      $this->add(190, 191, $diasConDescuento);
+      // Campo 40.
+      $this->add(192, 200, $salary);
+      // Campo 41.
+      $this->add(201, 201, '');
+      // Campo 42.
+      $this->add(202, 210, $ibc_pension);
+      // Campo 43.
+      $this->add(211, 219, $ibc_salud);
+      // Campo 44.
+      $this->add(220, 228, $ibc_arl_caja);
+      // Campo 45.
+      $this->add(229, 237, $ibc_arl_caja);
+      // Campo 46.
+      $this->add(238, 244, $porcentaje_pension, true);
+      // Campo 47.
+      $this->add(245, 253, $aporte_pension);
+      // Campo 48 a 53.
+      $this->add(254, 307, '', true);
+      // Campo 54.
+      $this->add(308, 314, $porcentaje_salud, true);
+      // Campo 55.
+      $this->add(315, 323, $aporte_salud);
+      // Campo 56.
+      $this->add(324, 332, '', true);
+      // Campo 57.
+      $this->add(333, 347, '');
+      // Campo 58.
+      $this->add(348, 356, '', true);
+      // Campo 59.
+      $this->add(357, 371, '');
+      // Campo 60.
+      $this->add(372, 380, '', true);
+      // Campo 61.
+      $this->add(381, 389, $porcentaje_arl, true);
+      // Campo 62.
+      $this->add(390, 398, '', true);
+      // Campo 63.
+      $this->add(399, 407, $aporte_arl);
+      // Campo 64.
+      $this->add(408, 414, $porcentaje_caja, true);
+      // Campo 65.
+      $this->add(415, 423, $aporte_caja);
+      // Campo 66.
+      $this->add(424, 430, '0.0', true);
+      // Campo 67.
+      $this->add(431, 439, '', true);
+      // Campo 68.
+      $this->add(440, 446, '0.0', true);
+      // Campo 69.
+      $this->add(447, 455, '', true);
+      // Campo 70.
+      $this->add(456, 462, '0.0', true);
+      // Campo 71.
+      $this->add(463, 471, '', true);
+      // Campo 72.
+      $this->add(472, 478, '0.0', true);
+      // Campo 73.
+      $this->add(479, 487, '', true);
+      // Blank spaces.
+      $this->add(488, 505, '');
+      // Campo 74 Resolucion 130.
+      $this->add(506, 506, $exonerated);
     }
 
     // Type is E or S.
@@ -516,6 +756,7 @@ class PilaPlainTextRestController extends FOSRestController
         );
         $employerInfo = json_decode($employerInfo->getContent(), true);
 
+
         // Fixed concepts, to get the salary.
         $salary = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getFixedConcepts', array(
             'employeeId' => $idEmployerHasEmployee,
@@ -525,39 +766,55 @@ class PilaPlainTextRestController extends FOSRestController
           throw new \Exception('Error getting the information from SQL.');
         }
         $salary = json_decode($salary->getContent(), true)['COF_VALOR'];
+        $salary = $salary - $this->valorLicencia($employeeInfo);
         $salary = $this->leftZeros($salary, 9);
 
-        $diasSinDescuento = $this->diasSinDescuento($employeeInfo);
-        $diasConDescuento = $this->diasConDescuento($employeeInfo);
-        $ibc = $this->getIBC($employeeInfo);
-        $ibc = $this->leftZeros($ibc, 9);
+        // Get final liquidation parameters.
+        $finalLiquidation = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getFinalLiquidationParameters', array(
+            'employeeId' => $idEmployerHasEmployee,
+                ), array('_format' => 'json')
+        );
+        $finalLiquidation = json_decode($finalLiquidation->getContent(), true);
+        $diasSinDescuento = $this->diasSinDescuento($employeeInfo) - $this->diasLicencia($employeeInfo);
+        $diasConDescuento = $this->diasConDescuento($employeeInfo) - $this->diasLicencia($employeeInfo);
+
+        $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
+        $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
+        $ibc_arl_caja = $this->getIBC($employeeInfo) -  $this->valorLicencia($employeeInfo);
+        $ibc_arl_caja = $this->leftZeros($ibc_arl_caja, 9);
+
+        $ibc_salud = $this->getIBCSalud($employeeInfo) -  $this->valorLicencia($employeeInfo);
+        $ibc_pension= $this->getIBCPension($employeeInfo) - $this->valorLicencia($employeeInfo);
+        $ibc_salud = $this->leftZeros($ibc_salud, 9);
+        $ibc_pension = $this->leftZeros($ibc_pension, 9);
 
         $aporte_pension = 0;
+        $porcentaje_pension = '0.16';
         foreach($employerInfo as $item) {
-          if($item['TENT_CODIGO'] == 'AFP')
+          if($item['TENT_CODIGO'] == 'AFP' && $item['APR_APORTE_EMP'] != 0)
           {
             $aporte_pension += $item['APR_APORTE_EMP'];
             $aporte_pension += $item['APR_APORTE_CIA'];
-            break;
           }
         }
         $aporte_pension = $this->leftZeros($aporte_pension, 9);
 
-        $porcentaje_salud = '0.125';// TODO: check in employerinfo to change it to 4% in more than one employee, and 0 for part time.
-
-        $aporte_salud = 0; // TODO: adjust this to be 0 if part time.
+        $porcentaje_salud = '0.125';
+        if($exonerated == 'S')
+          $porcentaje_salud = '0.04';
+        $aporte_salud = 0;
         foreach($employerInfo as $item) {
-          if($item['TENT_CODIGO'] == 'EPS')
+          if($item['TENT_CODIGO'] == 'EPS' && $item['APR_APORTE_EMP'] != 0)
           {
             $aporte_salud += $item['APR_APORTE_EMP'];
             $aporte_salud += $item['APR_APORTE_CIA'];
-            break;
           }
         }
         $aporte_salud = $this->leftZeros($aporte_salud, 9);
 
         $porcentaje_arl = 0;
         $contracts = $ehe->getContracts();
+        $start_date = '';
         foreach($contracts as $contract) {
           if($contract->getState() != 1)
             continue;
@@ -571,11 +828,13 @@ class PilaPlainTextRestController extends FOSRestController
             $porcentaje_arl = 4.350;
           elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 5)
             $porcentaje_arl = 6.960;
+
+          $start_date = $contract->getStartDate();
         }
 
         $aporte_arl = 0;
         foreach($employerInfo as $item) {
-          if($item['TENT_CODIGO'] == 'ARP')
+          if($item['TENT_CODIGO'] == 'ARP' && $item['APR_APORTE_CIA'] != 0)
           {
             $aporte_arl += $item['APR_APORTE_EMP'];
             $aporte_arl += $item['APR_APORTE_CIA'];
@@ -583,167 +842,118 @@ class PilaPlainTextRestController extends FOSRestController
         }
 
         $aporte_arl = $this->leftZeros($aporte_arl, 9);
+        $porcentaje_caja = '0.04';
         $aporte_caja = 0;
+
         foreach($employerInfo as $item) {
-          if($item['TENT_CODIGO'] == 'PARAFISCAL' && $item['COB_CODIGO'] == 1)
+          if($item['TENT_CODIGO'] == 'PARAFISCAL' && $item['COB_CODIGO'] == 1  && $item['APR_APORTE_CIA'] != 0)
           {
+
             $aporte_caja += $item['APR_APORTE_EMP'];
             $aporte_caja += $item['APR_APORTE_CIA'];
+          }
+        }
+        $aporte_caja = $this->leftZeros($aporte_caja, 9);
+        // Novelties.
+        // Ingreso.
+        $start_date_month = $start_date->format('m');
+        $start_date_year = $start_date->format('y');
+        $ingreso = '';
+        if($start_date_month == date('m') && $start_date_year == date("y")) {
+          $ingreso = 'X';
+        }
+        $retiro = '';
+        if(count($finalLiquidation) > 0)
+          $retiro = 'X';
+
+        $variacionSalario = '';
+        if($this->novedadGeneral($employeeInfo, 2))
+          $variacionSalario = 'X';
+
+        $variacionTransitoriaSalario = '';
+        if($this->variacionTransitoriaSalario($employeeInfo))
+          $variacionTransitoriaSalario = 'X';
+
+        $suspensionTemporal = '';
+        if($this->suspensionTemporal($employeeInfo))
+          $suspensionTemporal = 'X';
+
+        $enfermedadGeneral = '';
+        if($this->novedadGeneral($employeeInfo, 15))
+          $enfermedadGeneral = 'X';
+
+        $licenciaMaternidadPaternidad = '';
+        if($this->licenciaMaternidadPaternidad($employeeInfo))
+          $licenciaMaternidadPaternidad = 'X';
+
+        $vacaciones = '';
+        if($this->novedadGeneral($employeeInfo, 145))
+          $vacaciones = 'X';
+
+        $incapacidadAccidente = $this->incapacidadAccidente($employeeInfo);
+
+        $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
+        $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
+        $salary,$ibc_arl_caja,$ibc_salud,$ibc_pension,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,'',$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
+        $line = $this->executeLine();
+        $this->elementos = array();
+        if($suspensionTemporal != 'X')
+          return $line;
+
+        // Here starts the second line, only if there is a non payable absentism.
+
+        $line .= "\n";
+        $diasSinDescuento = $this->diasLicencia($employeeInfo);
+        $diasSinDescuento = $this->leftZeros($diasSinDescuento, 2);
+        $diasConDescuento = $this->diasLicencia($employeeInfo);
+        $diasConDescuento = $this->leftZeros($diasConDescuento, 2);
+        $salary = $this->valorLicencia($employeeInfo);
+        $salary = $this->leftZeros($salary, 9);
+        $ibc = $salary;
+        $porcentaje_pension = '0.12';
+        $aporte_pension = 0;
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'AFP' && $item['APR_APORTE_EMP'] == 0)
+          {
+            $aporte_pension += $item['APR_APORTE_EMP'];
+            $aporte_pension += $item['APR_APORTE_CIA'];
             break;
           }
         }
+        $aporte_pension = $this->leftZeros($aporte_pension, 9);
 
-        // Novelties.
-        // Ingreso.
+        $porcentaje_salud = '0.085';
+        if($exonerated == 'S')
+          $porcentaje_salud = '0.0';
+        $aporte_salud = 0;
+        foreach($employerInfo as $item) {
+          if($item['TENT_CODIGO'] == 'EPS' && $item['APR_APORTE_EMP'] == 0)
+          {
+            $aporte_salud += $item['APR_APORTE_EMP'];
+            $aporte_salud += $item['APR_APORTE_CIA'];
+            break;
+          }
+        }
+        $aporte_salud = $this->leftZeros($aporte_salud, 9);
 
+        $porcentaje_arl = '0.0';
+        $aporte_arl = 0;
+        $aporte_arl = $this->leftZeros($aporte_arl, 9);
 
+        $aporte_caja = 0;
         $aporte_caja = $this->leftZeros($aporte_caja, 9);
-        //Articulo 10 resolucion 1747 de 2008.
-        // Campo 1.
-        $this->add(1, 2, '02'); //02 is mandatory.
-        // Campo 2.
-        $this->add(3, 7, $consecutivo);
-        // Campo 3.
-        $this->add(8, 9, $tipoDocumento);
-        // Campo 4.
-        $this->add(10, 25, $documento);
-        // Campo 5.
-        $this->add(26, 27, '02');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
-        // Campo 6.
-        $this->add(28, 29, $subtipoCotizante); //!!!!!!!!!cambiar por 00
-        // Campo 7.
-        $this->add(30, 30, ''); // We don't accept foreigners.
-        // Campo 8.
-        $this->add(31, 31, ''); // We don't accept living abroad.
-        // Campo 9.
-        $this->add(32, 33, $deparmentCode);
-        // Campo 10.
-        $this->add(34, 36, $municipioCode);
-        // Campo 11.
-        $this->add(37, 56, $firstLastName);
-        // Campo 12.
-        $this->add(57, 86, $secondLastName);
-        // Campo 13.
-        $this->add(87, 106, $firstFirstName);
-        // Campo 14.
-        $this->add(107, 136, $secondFirstName);
+        $porcentaje_caja = '0.0';
 
-        /* This needs to be fixed later, but should be updated, depending on the
-        novelty, it is important. */
-        // Campo 15.
-        $this->add(137, 137, '');
-        // Campo 16.
-        $this->add(138, 138, '');
-        // Campo 17.
-        $this->add(139, 139, '');
-        // Campo 18.
-        $this->add(140, 140, '');
-        // Campo 19.
-        $this->add(141, 141, '');
-        // Campo 20.
-        $this->add(142, 142, '');
-        // Campo 21.
-        $this->add(143, 143, '');
-        // Campo 22.
-        $this->add(144, 144, '');
-        // Campo 23.
-        $this->add(145, 145, '');
-        // Campo 24.
-        $this->add(146, 146, '');
-        // Campo 25.
-        $this->add(147, 147, '');
-        // Campo 26.
-        $this->add(148, 148, '');
-        // Campo 27.
-        $this->add(149, 149, '');
-        // Campo 28.
-        $this->add(150, 150, '');
-        // Campo 29.
-        $this->add(151, 151, '');
-        // Campo 30.
-        $this->add(152, 153, '00');
-        /* Here finish the novelties */
 
-        // Campo 31.
-        $this->add(154, 159, $codigoAFP);
-        // Campo 32.
-        $this->add(160, 165, '');// Only if the employee is changing AFP.
-        // Campo 33.
-        $this->add(166, 171, $codigoEPS);
-        // Campo 34.
-        $this->add(172, 177, '');// Only if the employee is changing EPS.
-        // Campo 35.
-        $this->add(178, 183, $codigoCCF);
-        // Campo 36.
-        $this->add(184, 185, $diasSinDescuento);
-        // Campo 37.
-        $this->add(186, 187, $diasSinDescuento);
-        // Campo 38.
-        $this->add(188, 189, $diasConDescuento);
-        // Campo 39.
-        $this->add(190, 191, $diasConDescuento);
-        // Campo 40.
-        $this->add(192, 200, $salary);
-        // Campo 41.
-        $this->add(201, 201, '');
-        // Campo 42.
-        $this->add(202, 210, $ibc);
-        // Campo 43.
-        $this->add(211, 219, $ibc);
-        // Campo 44.
-        $this->add(220, 228, $ibc);
-        // Campo 45.
-        $this->add(229, 237, $ibc);
-        // Campo 46.
-        $this->add(238, 244, '0.16000', true);
-        // Campo 47.
-        $this->add(245, 253, $aporte_pension);
-        // Campo 48 a 53.
-        $this->add(254, 307, '', true);
-        // Campo 54.
-        $this->add(308, 314, $porcentaje_salud, true);
-        // Campo 55.
-        $this->add(315, 323, $aporte_salud);
-        // Campo 56.
-        $this->add(324, 332, '', true);
-        // Campo 57.
-        $this->add(333, 347, '');
-        // Campo 58.
-        $this->add(348, 356, '', true);
-        // Campo 59.
-        $this->add(357, 371, '');
-        // Campo 60.
-        $this->add(372, 380, '', true);
-        // Campo 61.
-        $this->add(381, 389, $porcentaje_arl, true);
-        // Campo 62.
-        $this->add(390, 398, '', true);
-        // Campo 63.
-        $this->add(399, 407, $aporte_arl, true);
-        // Campo 64.
-        $this->add(408, 414, '0.04', true);
-        // Campo 65.
-        $this->add(415, 423, $aporte_caja);
-        // Campo 66.
-        $this->add(424, 430, '0.0', true);
-        // Campo 67.
-        $this->add(431, 439, '', true);
-        // Campo 68.
-        $this->add(440, 446, '0.0', true);
-        // Campo 69.
-        $this->add(447, 455, '', true);
-        // Campo 70.
-        $this->add(456, 462, '0.0', true);
-        // Campo 71.
-        $this->add(463, 471, '', true);
-        // Campo 72.
-        $this->add(472, 478, '0.0', true);
-        // Campo 73.
-        $this->add(479, 487, '', true);
-        // Campo 74 Resolucion 130.
-        $this->add(488, 488, $exonerated);
+        $this->employeeParame($consecutivo,$tipoDocumento,$documento,$subtipoCotizante,$deparmentCode,$municipioCode,
+        $firstLastName,$secondLastName,$firstFirstName,$secondFirstName,$codigoAFP,$codigoEPS,$codigoCCF,$diasSinDescuento,$diasConDescuento,
+        $salary,$ibc,$ibc,$ibc,$porcentaje_pension,$aporte_pension,$porcentaje_salud,$aporte_salud,$porcentaje_arl,$aporte_arl,$porcentaje_caja,$aporte_caja,$exonerated,
+        $ingreso,$retiro,$variacionSalario,$variacionTransitoriaSalario,$suspensionTemporal,$enfermedadGeneral,$licenciaMaternidadPaternidad,$vacaciones,$incapacidadAccidente);
 
-        return $this->executeLine();
+
+
+        return $line . $this->executeLine();
       }
     }
 
@@ -862,10 +1072,11 @@ class PilaPlainTextRestController extends FOSRestController
      *   }
      * )
      *
-     * @param Int $documentNumber The id of the client in the payments system.
+     * @param Int $idEmployer id of the employer.
+     * @param Char $type meaning if is part(E) or full time(S).
      * @return String
      */
-    public function getMonthlyPlainTextAction($idEmployer) {
+    public function getMonthlyPlainTextAction($idEmployer, $type='S') {
       $employer = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Employer");
       /** @var Employer $emp */
       $emp = $employer->findOneBy(array('idEmployer' => $idEmployer));
@@ -894,14 +1105,16 @@ class PilaPlainTextRestController extends FOSRestController
         }
       }
       $exonerated = $numberEmployees > 1 ? true: false;
-      if(count($tiempo_completo) > 0) {
-        die($this->createEncabezado($idEmployer, 'S', count($tiempo_completo)));
-      }
-      if(count($tiempo_parcial) > 0) {
-        // Commented for test porpouses.
-        //die($this->createEncabezado($idEmployer, 'E', count($tiempo_parcial)));
-        die($this->createLineaEmpleado($employees, $exonerated));
-      }
+
+      $line = $this->createEncabezado($idEmployer, 'S', count($tiempo_completo));
+      $line .= "\n";
+      $this->elementos = array();
+      $line .= $this->createLineaEmpleado($employees, $exonerated);
+      $filename = 'PILA_' . $idEmployer . '.txt';
+      header("Content-type: text/plain; charset=utf-8");
+      header("Content-Disposition: attachment; filename=$filename");
+
+      die($line);
     }
 }
 

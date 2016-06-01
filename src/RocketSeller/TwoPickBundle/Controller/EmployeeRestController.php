@@ -1298,9 +1298,12 @@ class EmployeeRestController extends FOSRestController {
      * @RequestParam(name="idEmployee", nullable=false, strict=true, description="benefits of the employee.")
      * @RequestParam(name="beneficiaries", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="pension", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="pensionExists", nullable=true, strict=true, description="checks if already have pension.")
      * @RequestParam(name="wealth", nullable=true, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="wealthExists", nullable=true, strict=true, description="checks if already have wealth.")
      * @RequestParam(name="ars", nullable=true, strict=true, description="benefits of the employee.")
      * @RequestParam(name="severances", nullable=false, strict=true, description="benefits of the employee.")
+     * @RequestParam(name="severancesExists", nullable=false, strict=true, description="checks if already have severances.")
      * @return View
      */
     public function postMatrixChooseSubmitStep1Action(ParamFetcher $paramFetcher) {
@@ -1323,15 +1326,18 @@ class EmployeeRestController extends FOSRestController {
         $flag = false;
         /** @var Entity $tempPens */
         $tempPens = $entityRepo->find($paramFetcher->get('pension'));
+        $pensionExists = $paramFetcher->get('pensionExists');
 
         /** @var Entity $tempWealth */
         $tempWealth = $entityRepo->find($paramFetcher->get('wealth'));
+        $wealthExists = $paramFetcher->get('wealthExists');
 
         /** @var Entity $tempArs */
         //$tempArs = $entityRepo->find($paramFetcher->get('ars'));
 
         /** @var Entity $tempSeverances */
         $tempSeverances = $entityRepo->find($paramFetcher->get('severances'));
+        $severancesExists = $paramFetcher->get('severancesExists');
 
         $beneficiarie = $paramFetcher->get('beneficiaries');
 
@@ -1359,12 +1365,14 @@ class EmployeeRestController extends FOSRestController {
             $employeeHasEntityPens = new EmployeeHasEntity();
             $employeeHasEntityPens->setEmployeeEmployee($realEmployee);
             $employeeHasEntityPens->setEntityEntity($tempPens);
+            $employeeHasEntityPens->setState($pensionExists);
             $realEmployee->addEntity($employeeHasEntityPens);
             $em->persist($employeeHasEntityPens);
 
             $employeeHasEntityCes = new EmployeeHasEntity();
             $employeeHasEntityCes->setEmployeeEmployee($realEmployee);
             $employeeHasEntityCes->setEntityEntity($tempSeverances);
+            $employeeHasEntityCes->setState($severancesExists);
             $realEmployee->addEntity($employeeHasEntityCes);
             $em->persist($employeeHasEntityCes);
 
@@ -1372,6 +1380,7 @@ class EmployeeRestController extends FOSRestController {
                 $employeeHasEntityWealth = new EmployeeHasEntity();
                 $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                 $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                $employeeHasEntityWealth->setState($wealthExists);
                 $realEmployee->addEntity($employeeHasEntityWealth);
                 $em->persist($employeeHasEntityWealth);
             } else {
@@ -1380,6 +1389,7 @@ class EmployeeRestController extends FOSRestController {
                 $localARSRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EntityType');
                 $localARS = $localARSRepo->findOneBy(array('payroll_code' => 'ARS'));
                 $employeeHasEntityARS->setEntityEntity($localARS->getEntities()->get(0));
+                $employeeHasEntityARS->setState(-1);
                 $realEmployee->addEntity($employeeHasEntityARS);
                 $em->persist($employeeHasEntityARS);
             }
@@ -1396,6 +1406,7 @@ class EmployeeRestController extends FOSRestController {
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "EPS") {
                     if ($tempWealth != null) {
                         $rEE->setEntityEntity($tempWealth);
+                        $rEE->setState($wealthExists);
                         $em->persist($rEE);
                     } else {
                         $realEmployee->removeEntity($rEE);
@@ -1406,6 +1417,7 @@ class EmployeeRestController extends FOSRestController {
                         $localARSRepo = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:EntityType');
                         $localARS = $localARSRepo->findOneBy(array('payroll_code' => 'ARS'));
                         $employeeHasEntityARS->setEntityEntity($localARS->getEntities()->get(0));
+                        $employeeHasEntityARS->setState(-1);
                         $realEmployee->addEntity($employeeHasEntityARS);
                         $em->persist($employeeHasEntityARS);
                     }
@@ -1420,17 +1432,20 @@ class EmployeeRestController extends FOSRestController {
                         $employeeHasEntityWealth = new EmployeeHasEntity();
                         $employeeHasEntityWealth->setEmployeeEmployee($realEmployee);
                         $employeeHasEntityWealth->setEntityEntity($tempWealth);
+                        $employeeHasEntityWealth->setState($wealthExists);
                         $realEmployee->addEntity($employeeHasEntityWealth);
                         $em->persist($employeeHasEntityWealth);
                     //}
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($tempPens);
+                    $rEE->setState($pensionExists);
                     $em->persist($rEE);
                 }
 
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "FCES") {
                     $rEE->setEntityEntity($tempSeverances);
+                    $rEE->setState($severancesExists);
                     $em->persist($rEE);
                 }
             }

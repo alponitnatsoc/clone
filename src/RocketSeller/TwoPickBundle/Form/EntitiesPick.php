@@ -41,7 +41,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('wealthExists', 'choice', array(
                 'choices' => array(
-                    0 => 'Ya tiene EPS',
+                    0 => 'Ya tiene EPS  o realizaré el tramite por mi cuenta',
                     1 => 'No, deseo que se realice la afiliación'
                 ),
                 'multiple' => false,
@@ -69,7 +69,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('pensionExists', 'choice', array(
                 'choices' => array(
-                    0 => 'Ya tiene AFP',
+                    0 => 'Ya tiene AFP o realizaré el tramite por mi cuenta',
                     1 => 'No, deseo que se realice la afiliación'
                 ),
                 'multiple' => false,
@@ -109,7 +109,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('severancesExists', 'choice', array(
                 'choices' => array(
-                    0 => 'Ya tiene fondo de cesantias',
+                    0 => 'Ya tiene fondo de cesantias  o realizaré el tramite por mi cuenta',
                     1 => 'No, deseo que se realice la afiliación'
                 ),
                 'multiple' => false,

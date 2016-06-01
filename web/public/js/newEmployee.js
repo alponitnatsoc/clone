@@ -480,8 +480,11 @@ function startEmployee() {
                 idContract: $("input[name='register_employee[idContract]']").val(),
                 beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
+                pensionExists: $("#register_employee_entities_pensionExists").val(),
                 wealth:  $("#register_employee_entities_wealth").val(),
+                wealthExists: $("#register_employee_entities_wealthExists").val(),
                 severances:  $("#register_employee_entities_severances").val(),
+                severancesExists:  $("#register_employee_entities_severancesExists").val(),
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -1503,12 +1506,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
@@ -1535,12 +1538,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
 
             }
         });
@@ -1602,12 +1605,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
+                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {
