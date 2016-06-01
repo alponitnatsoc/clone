@@ -823,7 +823,7 @@ class EmployeeRestController extends FOSRestController {
                 $datetime = new DateTime($endDate);
                 $contract->setEndDate($datetime);
             }
-            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajo por días") {
+            if ($contract->getTimeCommitmentTimeCommitment()->getName() == "Trabajador por días") {
                 $actualWeekWorkableDayss = $paramFetcher->get('weekWorkableDays');
                 $actualWeekWorkableDays = $paramFetcher->get('weekDays');
                 $sisben = $paramFetcher->get('sisben');
