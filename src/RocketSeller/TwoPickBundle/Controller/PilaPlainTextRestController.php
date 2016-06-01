@@ -547,7 +547,7 @@ class PilaPlainTextRestController extends FOSRestController
       // Campo 5.
       $this->add(26, 27, '02');   // 02 si es tiempo completo 51 si es tiempo parcial importante cambiar.!!!!!!!!!!!!!
       // Campo 6.
-      $this->add(28, 29, $subtipoCotizante); //!!!!!!!!!cambiar por 00
+      $this->add(28, 29, $subtipoCotizante, true); //!!!!!!!!!cambiar por 00
       // Campo 7.
       $this->add(30, 30, ''); // We don't accept foreigners.
       // Campo 8.
@@ -685,7 +685,7 @@ class PilaPlainTextRestController extends FOSRestController
 
     // Type is E or S.
     // Count is the number of employees of this type.
-    public function createLineaEmpleado($employees, $exonerated=false){
+    public function createLineaEmpleado($employees, $exonerated=false, $idEmployer){
       $consecutivo = 1;
       if($exonerated)
         $exonerated = 'S';
@@ -729,7 +729,7 @@ class PilaPlainTextRestController extends FOSRestController
         $firstFirstName = explode(' ', $firstFirstName)[0];
         $codigoAFP = $this->codigoEntidad($employee->getIdEmployee(), 3); //3 is afp.
         $codigoEPS = $this->codigoEntidad($employee->getIdEmployee(), 1); //1 is eps.
-        $codigoCCF = $this->codigoEntidadEmployer($employee->getIdEmployee(), 4); // 4 is ccf.
+        $codigoCCF = $this->codigoEntidadEmployer($idEmployer, 4); // 4 is ccf.
 
         $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         $ehe = $eheRepo->findOneBy(array('employeeEmployee' => $employee->getIdEmployee()));
@@ -743,7 +743,7 @@ class PilaPlainTextRestController extends FOSRestController
 
 
         if ($employeeInfo->getStatusCode() != 200) {
-          throw new \Exception('Error getting the information from SQL.');
+          throw new \Exception('Error getting the information from SQL. Id employee: ' . $idEmployerHasEmployee);
         }
         $employeeInfo = json_decode($employeeInfo->getContent(), true);
 
@@ -817,15 +817,15 @@ class PilaPlainTextRestController extends FOSRestController
           if($contract->getState() != 1)
             continue;
           if($contract->getPositionPosition()->getPayrollCoverageCode() == 1)
-            $porcentaje_arl = 0.522;
+            $porcentaje_arl = 0.00522;
           elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 2)
-            $porcentaje_arl = 1.044;
+            $porcentaje_arl = 0.01044;
           elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 3)
-            $porcentaje_arl = 2.436;
+            $porcentaje_arl = 0.02436;
           elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 4)
-            $porcentaje_arl = 4.350;
+            $porcentaje_arl = 0.04350;
           elseif($contract->getPositionPosition()->getPayrollCoverageCode() == 5)
-            $porcentaje_arl = 6.960;
+            $porcentaje_arl = 0.06960;
 
           $start_date = $contract->getStartDate();
         }
@@ -1107,7 +1107,7 @@ class PilaPlainTextRestController extends FOSRestController
       $line = $this->createEncabezado($idEmployer, 'S', count($tiempo_completo));
       $line .= "\n";
       $this->elementos = array();
-      $line .= $this->createLineaEmpleado($employees, $exonerated);
+      $line .= $this->createLineaEmpleado($employees, $exonerated, $idEmployer);
       $filename = 'PILA_' . $idEmployer . '.txt';
       header("Content-type: text/plain; charset=utf-8");
       header("Content-Disposition: attachment; filename=$filename");
