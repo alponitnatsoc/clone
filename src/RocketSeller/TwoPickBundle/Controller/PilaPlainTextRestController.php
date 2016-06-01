@@ -734,8 +734,6 @@ class PilaPlainTextRestController extends FOSRestController
         $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         $ehe = $eheRepo->findOneBy(array('employeeEmployee' => $employee->getIdEmployee()));
         $idEmployerHasEmployee = $ehe->getIdEmployerHasEmployee();
-        // test only.
-        $idEmployerHasEmployee = 1002;
         // Call SQL for the next information.
         // General payroll, getting the employee information.
         $employeeInfo = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getGeneralPayroll', array(
