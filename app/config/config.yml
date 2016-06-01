@@ -44,6 +44,7 @@ twig:
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         symplifica_info: "%symplifica_info%"
+        ambiente: "%ambiente%"
     date:
         timezone: "America/Bogota"
     number_format:
@@ -331,7 +332,7 @@ knp_snappy:
         enabled:    true
         binary:     /usr/local/bin/wkhtmltopdf #for linux
         #binary:     D:\wkhtmltopdf\bin\wkhtmltopdf.exe
-        options:    
+        options:
             lowquality: false
             dpi: 300
             orientation: portrait
@@ -343,7 +344,7 @@ knp_snappy:
         #binary:     /usr/local/bin/wkhtmltopdf #for linux
         #binary:     "\"D:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\"" #for Windows users
         binary:     D:\wkhtmltopdf\bin\wkhtmltoimage.exe
-        options:    
+        options:
             lowquality: false
             dpi: 300
             orientation: portrait
