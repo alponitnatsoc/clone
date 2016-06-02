@@ -32,6 +32,18 @@ class CajaPick extends AbstractType
                 'label'=>' ',
                 'required' => true,
                 'attr'=>array("class"=>'autocomS',"placeholder" => "Escribe el nombre de tu entidad")
+            ))
+            ->add('severancesExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tengo caja de compensación  o realizaré el tramite por mi cuenta',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'label'=>' ',
+                'property_path' => 'state',
+                'required' => true,
+                'attr'=>array("class"=>'existsS')
             ));
     }
 

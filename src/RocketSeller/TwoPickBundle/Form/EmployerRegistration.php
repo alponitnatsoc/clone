@@ -78,8 +78,6 @@ class EmployerRegistration extends AbstractType
                 'by_reference' => false,
                 'property_path' => 'entities',
                 'label'=>'Caja de compensación Familiar*',
-
-
             ))
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
@@ -95,6 +93,17 @@ class EmployerRegistration extends AbstractType
                 'label'=>' ',
                 'required' => true,
                 'attr'=>array("class"=>'autocomA',"placeholder" => "Escribe el nombre de tu entidad")
+            ))
+            ->add('arlExists', 'choice', array(
+                'choices' => array(
+                    0 => 'Ya tengo ARL  o realizaré el tramite por mi cuenta',
+                    1 => 'No, deseo que se realice la afiliación'
+                ),
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+                'label'=>' ',
+                'required' => true
             ))
             ->add('save', 'submit', array(
                 'label' => 'Siguiente: Seguridad social como empleador',

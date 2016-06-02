@@ -29,3 +29,18 @@
 
 .btn-contrato:active, .btn-contrato.active {
 background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outline:none !important}
+
+.headingazul {
+    background: #00cccb;
+    padding: 10px 0;
+    color: #FFF;
+}
+
+#recuadro-precio {
+    width: 240px;
+    margin: 0 auto;
+    background: #00838C;
+    border-radius: 5px;
+    padding: 20px 0;
+    color: #FFF;
+}
