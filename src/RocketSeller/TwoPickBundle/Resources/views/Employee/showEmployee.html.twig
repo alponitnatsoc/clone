@@ -31,7 +31,7 @@
                         <div class="col-sm-12">
                             <p><strong>{{employee.personPerson.names}}</strong></p>
                             <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
                             </p>
                         </div>
                     </div>
@@ -56,16 +56,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 middle-box">
-                    <div class="col-sm-4 left">
+                <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;">
+                    <div class="col-sm-4 left" style="border:0">
                         {% if employerHasEmployee.state %}
-                            <p><i class="fa fa-check-circle">Activo</i></p>
+                            <p><i class="fa fa-check-circle" style="font-size: 20px;padding-top: 10px;"></i>Activo</p>
                         {% else %}
-                            <p><i class="fa fa-check-cross">Inactivo</i></p>
+                            <p><i class="fa fa-check-cross"></i>Inactivo</p>
                         {% endif %}
                     </div>
 
-                    <div class="col-sm-4 right">
+                    <div class="col-sm-4 right" style="margin:0;padding: 15px 0;">
                         <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
                         <div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
                     </div>
@@ -74,7 +74,7 @@
                     <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
                             <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos básicos</h4>
-                            <li>
+                            <li style="clear: both;">
                                 <p class="title"><i>Estado civil</i></p>
                                 <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
                             </li>
@@ -99,7 +99,7 @@
                     <div class="col-sm-4 col-sm-offset-1 right">
                         <ul class="col-sm-12">
                             <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos de contacto</h4>
-                            <li>
+                            <li style="clear: both;">
                                 <p class="title"><i>Dirección</i></p>
                                 <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
                             </li>
@@ -193,7 +193,7 @@
                         <div class="col-sm-12">
                             <p><strong>{{employee.personPerson.names}}</strong></p>
                             <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
+                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -276,7 +276,7 @@
                                     </li>
                                     <li>
                                         <p class="title"><i>Salario</i></p>
-                                        <input id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
+                                        <input style="margin: 10px 0;" id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
                                     </li>
                                 </ul>
                             </div>
@@ -293,7 +293,7 @@
                                     <li>
                                         {% set workplaces = employerHasEmployee.EmployerEmployer.workplaces %}
                                         <p class="title"><i>Lugar de trabajo</i></p>
-                                        <select id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for workplace in workplaces %}
                                                 <option value="{{workplace.idWorkplace}}">{{ workplace.name}}</option>
@@ -303,7 +303,7 @@
                                     </li>
                                     <li>
                                         <p class="title"><i>Metodo de pago</i></p>
-                                        <select id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for payMethodType in payMethodTypes %}
                                                 <option value="{{payMethodType.idPayType}}">{{ payMethodType.name}}</option>
@@ -331,8 +331,9 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12 file-download-contract" >
-                        <h4>Copia firmada del contrato</h4>
+                    <div class="col-sm-12 file-download-contract downcopy" >
+                        <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
+                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema el día 10 de enero de 2015. <strong>› Colsultar</strong></p>
                         {% if contractEmployee %}
                             <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
                                 <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
