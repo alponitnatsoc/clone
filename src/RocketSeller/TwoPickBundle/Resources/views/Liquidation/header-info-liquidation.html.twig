@@ -1,15 +1,15 @@
 <div class="col-sm-12">
-    <h4><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
-    <h4>{{ employeeInfo.documentType }} {{ employeeInfo.document }} de {{ employeeInfo.docExpeditionPlace }}</h4>
+    <h4 style="color: #3C4B5A"><strong>{{ employeeInfo.name }} {{ employeeInfo.lastName1 }} {{ employeeInfo.lastName2 }}</strong></h4>
+    <h4 style="color: #8C8C8C;font-weight: lighter;">{{ employeeInfo.documentType }} {{ employeeInfo.document }} de {{ employeeInfo.docExpeditionPlace }}</h4>
 </div>
-<div class="col-sm-12 table-responsive">
+<div class="col-sm-12 table-responsive" style="margin: 20px 0 0 0">
     <table class="table table-bordered text-center">
         <tbody>
             <tr>
                 <!--<td><i>Documento</i><h4><strong>{{ employeeInfo.documentType }} {{ employeeInfo.document }} de {{ employeeInfo.docExpeditionPlace }}</strong></h4></td>-->
-                <td><i>Tipo de contrato</i><h4><strong>{{ contractInfo.contractType }}</strong></h4></td>
-                <td><i>Duración contrato</i><h4><strong>{{ contractInfo.contractPeriod }}</strong></h4></td>
-                <td><i>Sueldo</i><h4><strong>$ {{ contractInfo.salary|number_format(0) }}</strong></h4></td>
+                <td><i style="color: #8C8C8C;font-size:17px">Tipo de contrato</i><h4 style="margin: 0;color: #00838C;font-size: 15px;"><strong>{{ contractInfo.contractType }}</strong></h4></td>
+                <td><i style="color: #8C8C8C;font-size:17px">Duración contrato</i><h4 style="margin: 0;color: #00838C;font-size: 15px;"><strong>{{ contractInfo.contractPeriod }}</strong></h4></td>
+                <td><i style="color: #8C8C8C;font-size:17px">Sueldo</i><h4 style="margin: 0;color: #00838C;font-size: 15px;"><strong>$ {{ contractInfo.salary|number_format(0) }}</strong></h4></td>
             </tr>
         </tbody>
     </table>

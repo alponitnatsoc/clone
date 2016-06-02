@@ -20,21 +20,21 @@
         {% include 'RocketSellerTwoPickBundle:Liquidation:header-info-liquidation.html.twig' %}
         <div id="liquidationStep1" class="col-sm-12" style="margin-top: 35px;">
             <div class="text-center col-sm-12" style="margin-bottom: 35px;">
-                <h4 style="font-size: 23px;">Completa los siguientes datos para calcular el valor de la liquidación</h4>
+                <h4 style="font-size: 23px;color: #8C8C8C;font-weight: lighter;">Completa los siguientes datos para calcular el valor de la liquidación</h4>
             </div>
             <div class="col-sm-10 col-sm-offset-1">
                 <div class="col-sm-6 text-center">
-                    <span class="txthelp"><i>¿Cuál es el último día de trabajo de tu empleado?</i></span>
+                    <span class="txthelp" ><i style="color: #3C4B5A">¿Cuál es el último día de trabajo de tu empleado?</i></span>
                     {{ form_widget(form.lastWorkDay) }}
                 </div>
                 <div class="col-sm-6 text-center">
-                    <h5><strong>Fecha inicio del contrato</strong></h5>
-                    <span id="startDate" startdate="{{ contractInfo.startDate|date("Y-m-d")|trans }}">{{ contractInfo.startDay }}</span>
+                    <h5><strong style="color: #3C4B5A">Fecha inicio del contrato</strong></h5>
+                    <span id="startDate" style="color:#00858C" startdate="{{ contractInfo.startDate|date("Y-m-d")|trans }}">{{ contractInfo.startDay }}</span>
                 </div>
             </div>
             <div class="col-sm-10 col-sm-offset-1" style="margin-top: 35px;">
                 <div class="panel panel-default table-responsive">
-                    <div class="panel-heading text-center">¿Cuál es la razón para finalizar el contrato?</div>
+                    <div class="headingazul text-center">¿Cuál es la razón para finalizar el contrato?</div><!--estaba en class panel-heading -->
                     <table class="table table-bordered">
                         <tbody>
                             {% set i = 0 %}
@@ -74,8 +74,10 @@
                 </div>
             </div>
             <div class="col-sm-12 text-center" style="margin-top: 30px;">
+              <div id="recuadro-precio">
                 <i>El valor de la liquidación es:</i>
-                <h2 style="font-weight: 600;" id="liquidationValue">$ 0</h2>
+                <h2 style="font-weight: 600;margin:0" id="liquidationValue">$ 0</h2>
+              </div>
             </div>
             <div class="col-sm-12"><hr /></div>
             <div class="col-sm-12 col-xs-12 center" style="margin-top: 20px;">
