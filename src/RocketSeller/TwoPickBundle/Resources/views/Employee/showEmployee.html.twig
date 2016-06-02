@@ -4,7 +4,7 @@
         <div class="col-sm-12 col-xs-12">
             <div class="btn col-sm-12 col-xs-12 blockTop">
                 <div class="col-md-2">
-                    <img src="/img/employ_white.png" />
+                    <img src="/img/empleados.png" />
                 </div>
                 <div class="col-md-6 col-xs-12 txt-top-employee">
                     <div class="" id="">
@@ -15,12 +15,12 @@
         </div>
         <div class="col-sm-12 col-xs-12 ">
             <ul class="nav nav-tabs nav-justified tab-header">
-                <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
-                <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
+                <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
+                <li><a  class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#documents">Documentos</a></li>
             </ul>
         </div>
         <div class="tab-content">
@@ -59,7 +59,7 @@
                 <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;">
                     <div class="col-sm-4 left" style="border:0">
                         {% if employerHasEmployee.state %}
-                            <p><i class="fa fa-check-circle" style="font-size: 20px;padding-top: 10px;"></i>Activo</p>
+                            <p><i class="fa fa-check-circle" style="color:#FD9224;font-size: 20px;padding-top: 10px;"></i>Activo</p>
                         {% else %}
                             <p><i class="fa fa-check-cross"></i>Inactivo</p>
                         {% endif %}
@@ -502,6 +502,20 @@
                     <div class="content col-sm-6 col-sm-offset-3">
                         <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
+                    <div class="col-sm-12" style="text-align:center;">
+                        <div class="col-sm-3">
+                            <p><strong style="color: #5D5D5D;">Fecha inicio</strong></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p><strong style="color: #5D5D5D;">Fecha fin</strong></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p><strong style="color: #5D5D5D;">Estado</strong></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p><strong style="color: #5D5D5D;">Detalle</strong></p>
+                        </div>
+                     </div>
                     {% set noveltycount = 0 %}
                     {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
@@ -605,13 +619,15 @@
             <div id="documents" class="tab-pane">
                 <div class="documents col-sm-12">
                     <div class="documents-title col-sm-12">
-                        <h4>Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
+                        <h4 style="text-align:center;font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
                     </div>
                     <div class="col-sm-12 documents-content">
                         {% set docs = employee.personPerson.docs %}
+                        {% set numDocs = 0 %}
                         {% if docs|length > 0 %}
                             {% for doc in docs %}
                                 {% if doc.mediaMedia %}
+                                    {% set numDocs = numDocs+1 %}
                                     <div class=" element col-sm-3">
                                         <div class="col-sm-12 icon-pdf">
                                             <i class="fa fa-file-pdf-o fa-2x"></i>
@@ -628,8 +644,11 @@
                                     </div>
                                 {% endif %}
                             {% endfor %}
-                        {% else %}
-                            no tiene documentos
+                        {% endif %}
+                        {% if numDocs == 0  %}
+                        <div class="nonovedad">
+                            Hásta el momento no hay documentos de {{employee.personPerson.names}} disponibles
+                        </div>
                         {% endif %}
                     </div>
                 </div>
