@@ -489,6 +489,11 @@ function startEmployer() {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
+
+        restrictARL(true);
+        $( "#register_employer_arlExists" ).change(function( event ) {
+            restrictARL(false);
+        });
     });
 }
 
@@ -695,4 +700,24 @@ function initEntitiesEmployerFields(){
     var arl = $("#register_employer_arl");
     $("#register_employer_arlAC").val($(arl).children("option:selected").text());
 
+}
+
+function restrictARL(firstTime){
+  var selection = "";
+  var arlSelection = $('#register_employer_arlExists').find(":selected").val();
+
+  if(arlSelection==0){
+      $("#msgARL").hide();
+      if(!firstTime){
+          $('#register_employer_arlAC').attr("disabled",false);
+          $('#register_employer_arlAC').val("");
+          $('#register_employer_arl').val('').change();
+      }
+  }else {
+        $("#msgARL").show();
+        $('#register_employer_arlAC').attr("disabled",true);
+        $('#register_employer_arlAC').val("ARP SURA - SURATEP");
+        $('#register_employer_arl').val('48').change();
+
+  }
 }

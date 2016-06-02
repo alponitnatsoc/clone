@@ -1545,7 +1545,6 @@ class EmployeeRestController extends FOSRestController {
         $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
 
-
         if ($realEmployerEnt->count() < $realSeverances->count() + 1) {
             $counter = 0;
             $exist = false;
@@ -1584,7 +1583,7 @@ class EmployeeRestController extends FOSRestController {
             $counter = 0;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                     $rEE->setEntityEntity($realArl);
                     $rEE->setState($arlExists);
                 }
