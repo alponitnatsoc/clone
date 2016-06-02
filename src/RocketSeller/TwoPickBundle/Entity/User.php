@@ -68,6 +68,7 @@ class User extends BaseUser
         $this->date_created = new \DateTime("now");
         //@todo GABRIEL agregar id unico del usuario al momento de registrar.
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
+        $this->purchaseOrders = new \Doctrine\Common\Collections\ArrayCollection();
         // your own logic
     }
 
@@ -472,39 +473,6 @@ class User extends BaseUser
         return $this->realProcedure;
     }
 
-    /**
-     * Add purchaseOrder
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
-     *
-     * @return User
-     */
-    public function addPurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
-    {
-        $this->purchaseOrders[] = $purchaseOrder;
-
-        return $this;
-    }
-
-    /**
-     * Remove purchaseOrder
-     *
-     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
-     */
-    public function removePurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
-    {
-        $this->purchaseOrders->removeElement($purchaseOrder);
-    }
-
-    /**
-     * Get purchaseOrders
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPurchaseOrders()
-    {
-        return $this->purchaseOrders;
-    }
 
     /**
      * Set status
@@ -910,5 +878,39 @@ class User extends BaseUser
     public function getSmsCode()
     {
         return $this->smsCode;
+    }
+
+    /**
+     * Add purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     *
+     * @return User
+     */
+    public function addPurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder
+     */
+    public function removePurchaseOrder(\RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrder)
+    {
+        $this->purchaseOrders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Get purchaseOrders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchaseOrders;
     }
 }

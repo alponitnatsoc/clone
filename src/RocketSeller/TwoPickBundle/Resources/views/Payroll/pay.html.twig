@@ -27,25 +27,159 @@
 
         <div class="payroll pay">
             <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
-                {% for key,data in dataNomina %}
+                {% set pilaData=null %}
+                <table>
+                    <tr>
+                        <th>
+                            Nombre del empleado
+                        </th>
+                        <th>
+                            Novedades
+                        </th>
+                        <th>
+                            Valor a pagar
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+
+                    {% for data in dataNomina %}
+                        {% if data.payrollPayroll != null %}
+                            <tr>
+                                <td>
+                                    {%  set employeeName = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names %}
+                                    {{ employeeName }}
+                                </td>
+                                <td>
+                                    {% if data.payrollPayroll.novelties|length > 0 %}
+                                        Novedades:
+                                        {%  set novelties = data.payrollPayroll.novelties %}
+                                        {% for novelty in novelties %}
+                                            {{ novelty.name }}
+                                        {% endfor %}
+                                    {% else %}
+                                        No tiene novedades
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    Monto a pagar {{ data.value }}
+                                </td>
+                                <td>
+                                    <label><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
+                                    <label><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Ya pagué </label>
+                                </td>
+                            </tr>
+
+                        {% else %}
+                            {%  set pilaData = data %}
+                        {% endif %}
+                        <br>
+                    {% endfor %}
+                    {% if pilaData!=null %}
+                        <tr>
+                            <td>
+                                Pila de los empleados:
+                                {%  set payrolls = pilaData.payrollsPila %}
+                                <ul>
+                                    {% for payroll in payrolls %}
+                                        <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td></td>
+                            <td>
+                                Monto a pagar{{ pilaData.value }}
+                            </td>
+                            <td>
+                                <label><input type="radio" class="toPayArray" name="{{ pilaData.idPurchaseOrdersDescription }}" value="p-{{ pilaData.idPurchaseOrdersDescription }}"> Pagar </label>
+                                <label><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Ya pagué </label>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+                    <tr>
+                        <td align="center" colspan="4"> Nominas en deuda</td>
+                    </tr>
+                    {% for po in debt %}
+                        {% set pods = po.purchaseOrderDescriptions  %}
+                        {% for data in pods %}
+                            {% if data.payrollPayroll != null %}
+                                <tr>
+                                    <td>
+                                        {%  set employeeName = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names %}
+                                        Nómina de {{ employeeName }} mes {{ data.payrollPayroll.month }}
+                                    </td>
+                                    <td>
+                                        {% if data.payrollPayroll.novelties|length > 0 %}
+                                            Novedades:
+                                            {%  set novelties = data.payrollPayroll.novelties %}
+                                            {% for novelty in novelties %}
+                                                {{ novelty.name }}
+                                            {% endfor %}
+                                        {% else %}
+                                            No tiene novedades
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        Monto a pagar {{ data.value }}
+                                    </td>
+                                    <td>
+                                        <label><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
+                                        <label><input type="radio" class="alreadyPaid" name="{{ data.idPurchaseOrdersDescription }}" value="ap-{{ data.idPurchaseOrdersDescription }}"> Ya pagué </label>
+                                    </td>
+                                </tr>
+
+                            {% else %}
+                                {%  set pilaData = data %}
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                        {% if pilaData!=null %}
+                            <tr>
+                                <td>
+                                    Pila de los empleados mes {{ pilaData.payrollsPila.0.month }}:
+                                    {%  set payrolls = pilaData.payrollsPila %}
+                                    <ul>
+                                        {% for payroll in payrolls %}
+                                            <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td></td>
+                                <td>
+                                    Monto a pagar{{ pilaData.value }}
+                                </td>
+                                <td>
+                                    <label><input type="radio" class="toPayArray" name="{{ pilaData.idPurchaseOrdersDescription }}" value="p-{{ pilaData.idPurchaseOrdersDescription }}"> Pagar </label>
+                                    <label><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Ya pagué </label>
+                                </td>
+                            </tr>
+
+                        {% endif %}
+                    {% endfor %}
+                </table>
+
+                <!--
+                {# for key,data in dataNomina %}
                     {% set employerHasEmployee = data['employerHasEmployee'] %}  
                     {% set employee = employerHasEmployee.employeeEmployee %}   
                     {% set employer = employerHasEmployee.employerEmployer %}   
                     {% set personEmployee = employee.personPerson %}  
                     {% set personEmployer = employer.personPerson %}  
-                    {% set idPayroll = data['idPayroll'] %}                     
+                    {% set idPayroll = data['idPayroll']
 
                     <div class="row clearfix employee">
                         <div class="col-xs-12">
                             <div class="row initialDetail">
                                 {#<div class="col-xs-2">
                                     <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
-                                </div>#}
+                                </div>
                                 <div class="col-xs-6">
                                     <span class="name">{{ personEmployee.names }} {{ personEmployee.lastName1 }}</span>
                                 </div>
                                 <div class="col-xs-2 text-left">
-                                    Pagar <input type="checkbox" class="pay" name="payrollToPay[]" value="{{ idPayroll }}" checked="checked">
+                                    Pagar <input type="radio" class="pay" name="payrollToPay[]" value="{{ idPayroll }}" checked="checked">
                                 </div>
                                 <div class="col-xs-4 text-right" style="float:right">
                                     <span class="view_detail" data-employee-name="{{ personEmployee.names }}"  href="{{ path('payroll_detail',{'idPayroll': idPayroll}) }}">Ver detalle de la liquidación</span>
@@ -114,7 +248,8 @@
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                {% endfor %}#}
+                -->
                 <div class="row reminder">
                     <div class="media">
                         <div class="media-left">

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('.employee .pay').on('change', function (e) {
         var i = 0;
         $('.employee .pay').each(function (index, element) {
@@ -7,6 +8,12 @@ $(document).ready(function () {
             }
         });
         $('#btnCalculate').prop('disabled', i == 0);
+    });
+    $("#btnCalculate").on("click", function () {
+        var arrayToPay=[];
+        $(".toPayArray").each(function () {
+            arrayToPay.push($(this).val());
+        })
     });
     $('.btn-add-novelty').on('click', function (event) {
         event.preventDefault();
