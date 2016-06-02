@@ -73,7 +73,7 @@
                 <div class="col-sm-12 bottom-box">
                     <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos básicos</h4>
+                            <h4 class="col-sm-12" style="color:#1FCECB;; font-weight:lighter;font-size: 20px;">Datos básicos</h4>
                             <li style="clear: both;">
                                 <p class="title"><i>Estado civil</i></p>
                                 <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="col-sm-4 col-sm-offset-1 right">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos de contacto</h4>
+                            <h4 class="col-sm-12" style="color:#1FCECB; font-weight:lighter;font-size: 20px;">Datos de contacto</h4>
                             <li style="clear: both;">
                                 <p class="title"><i>Dirección</i></p>
                                 <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
@@ -358,7 +358,7 @@
             <div id="workplacesData" class="tab-pane">
                 <div class="col-sm-12 social-security" >
                     <h4>Datos de seguridad social</h4>
-                    <div class="col-sm-8 col-sm-offset-2">
+                    <div class="col-sm-8 col-sm-offset-2 recuadro-ssocial">
                         <div class="col-sm-6 left">
                             <p class="title"><i><strong>Eps</strong></i></p>
                             <p class="title"><i><strong>Fondo de pensiones</strong></i></p>
@@ -373,7 +373,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8 col-sm-offset-2 middle-content">
+                <!--<div class="col-sm-8 col-sm-offset-2 middle-content">
                     <div class="col-sm-12" style="text-align:center;">
                         <div class="col-sm-4">
                             <p><strong>Beneficiario</strong></p>
@@ -403,14 +403,14 @@
                         </div>
 
                     {% endfor %}
-                </div>
+                </div>-->
                 {{ form_start(form , {'attr': {'id': 'form'}})}}
-                <div class="col-sm-12 form-upper">
+                <!--<div class="col-sm-12 form-upper">
                     <div class="content col-sm-8 col-sm-offset-2" style="cursor:pointer" onclick="showCreateForm()">
                         <h4 >Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
 
                     </div>
-                </div>
+                </div>-->
                 <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
 
                     <div class="content col-sm-6 col-sm-offset-3">
@@ -486,7 +486,7 @@
 
 
                 </div>
-                <div class="col-sm-12 buttons-box">
+                <!--<div class="col-sm-12 buttons-box">
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="col-sm-6 " style="text-align:right;">
                             <a class="btn btn-orange btn-inverted notAjax" href="">Agregar otro beneficiario</a>
@@ -495,27 +495,14 @@
                             <a class="btn btn-orange notAjax" href="">Siguiente</a>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div id="noveltiesData" class="tab-pane">
                 <div class="col-sm-12 middle-content">
                     <div class="content col-sm-6 col-sm-offset-3">
-                        <h4>Novedades reportadas al día de hoy</h4>
+                        <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
-                    <div class="col-sm-12" style="text-align:center;">
-                        <div class="col-sm-3">
-                            <p><strong>Fecha inicio</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong>Fecha fin</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong>Estado</strong></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p><strong>Detalle</strong></p>
-                        </div>
-                    </div>
+                    {% set noveltycount = 0 %}
                     {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
                         {% set novelties = payroll.novelties %}
@@ -542,15 +529,21 @@
                                     <p><strong>Detalle</strong></p>
                                 </div>
                             </div>
+                            {% set noveltycount = noveltycount + 1 %}
                         {% endfor %}
-                    {% endfor %}
+                        {% endfor %}
+                        <div class="nonovedad">
+                          {% if noveltycount == 0 %}
+                            No tienes novedades reportadas a la fecha
+                          {% endif %}
+                        </div>
                     <div class="col-sm-12  row-add-novelty" style="text-align:center;">
                         <div class="col-sm-4 col-sm-offset-4">
                             <div class="col-sm-2 plus-icon">
                                 <i class="fa fa-plus-circle fa-2x"></i>
                             </div>
                             <div class="col-sm-10 text">
-                                <a class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
+                                <a style="color: #6F6F6F;font-size: 15px;font-weight: 400;font-style: italic;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                             </div>
                         </div>
                     </div>
