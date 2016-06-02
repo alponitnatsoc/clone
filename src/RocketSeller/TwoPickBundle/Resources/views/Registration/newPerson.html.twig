@@ -353,7 +353,15 @@
                                                 <div style="margin-top:10px;">
                                                     {{ form_widget(caja.severancesAC,{'value' : sname}) }}
                                                 </div>
-
+                                                </br>
+                                                <div class="col-sm-12 col-xs-12">
+                                                    <div class="col-sm-6 label-group">
+                                                        {{ form_label(caja.severancesExists) }}
+                                                    </div>
+                                                    <div class="col-sm-6 form-group">
+                                                        {{ form_widget(caja.severancesExists) }}
+                                                    </div>
+                                                </div>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -373,6 +381,14 @@
                                     </div>
                                 </div>
                                 <p id="errorARL" style="color:red;">Entidad no encontrada en la base de datos, por favor revisa lo escrito</p>
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="col-sm-6 label-group">
+                                        {{ form_label(form.arlExists) }}
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        {{ form_widget(form.arlExists) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
