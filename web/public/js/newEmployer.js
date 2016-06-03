@@ -716,7 +716,7 @@ function restrictARL(firstTime){
   }else {
         $("#msgARL").show();
         $('#register_employer_arlAC').attr("disabled",true);
-        $('#register_employer_arlAC').val("ARP SURA - SURATEP");
+        $('#register_employer_arlAC').val("ARL SURA - SURATEP");
         $('#register_employer_arl').val('48').change();
 
   }
