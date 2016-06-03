@@ -107,6 +107,7 @@ function startSubscriptionChoise() {
         }).always(function () {
             $(button).attr('disabled', false);
             $(".btn-change-state-contract-confirm").attr('disabled', false);
+            location.reload();
         });
     }
 
