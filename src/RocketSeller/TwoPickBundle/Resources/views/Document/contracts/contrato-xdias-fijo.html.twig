@@ -43,7 +43,7 @@ body {
 <body>
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
 <p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
@@ -84,11 +84,11 @@ body {
             </tr>
             <tr height="25px">
                 <td>Fecha de inicio labores:</td>
-                <td>{{ data.contract.startDate|localizeddate('long', 'none', local) }}</td>
+                <td>{{ data.contract.startDate|localizeddate('long', 'none', 'es-CO') }}</td>
             </tr>
             <tr height="25px">
                 <td>Fecha finalización labores:</td>
-                <td>{{ data.contract.endDate|localizeddate('long', 'none', local) }}</td>
+                <td>{{ data.contract.endDate|localizeddate('long', 'none', 'es-CO') }}</td>
             </tr>
             <tr height="25px">
                 <td>No. Días a la semana en que va a trabajar: </td>
@@ -114,7 +114,7 @@ body {
     </table>
 </div>
 
-{# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
+{# {{ data.novelty.dateStart|localizeddate('none', 'none', 'es-CO', null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
 labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, 
 el cual se regirá por las siguientes cláusulas:</p>
@@ -199,8 +199,8 @@ recursos para asuntos personales queda prohibida y será considerada como falta 
 {# horas de trabajo no exceda el promedio de cuarenta y ocho (48) horas semanales dentro de la jornada.</p>#}
 
 <p style="text-align: justify;"><strong>QUINTA: </strong>TÉRMINO DEL CONTRATO: El término de duración de este contrato es de {{ data.contract.years_months }}
-meses, {{ data.contract.days }} días, contados a partir del {{ data.contract.startDate|localizeddate('long', 'none', local) }}. Por lo anterior el contrato se
-prolongará hasta el {{ data.contract.endDate|localizeddate('long', 'none', local) }}. Se entenderá prorrogado automáticamente por un periodo igual a la inicial,
+meses, {{ data.contract.days }} días, contados a partir del {{ data.contract.startDate|localizeddate('long', 'none', 'es-CO') }}. Por lo anterior el contrato se
+prolongará hasta el {{ data.contract.endDate|localizeddate('long', 'none', 'es-CO') }}. Se entenderá prorrogado automáticamente por un periodo igual a la inicial,
 si ninguna de las partes da a conocer a la otra su intención de no renovarlo con treinta (30) días de anticipación a la fecha del vencimiento inicial o sus
 prórrogas.</p>
 
@@ -312,7 +312,7 @@ tanto, EL EMPLEADOR y SYMPLIFICA SAS podrá realizar todos los usos necesarios p
 <p style="text-align: justify;">Las partes aclaran que entre EL TRABAJADOR y SYMPLIFICA SAS no existe relación laboral ni de cualquier otro tipo, pues éste
 último sólo es el encargado de manejar los datos señalados en el presente artículo.</p>
 
-<p style="text-align: justify;">Se firma por las partes, el {{ "now"|localizeddate('none', 'none', local, null, "'día 'd 'del mes de' MMMM 'del año' Y") }}.</p>
+<p style="text-align: justify;">Se firma por las partes, el {{ "now"|localizeddate('none', 'none', 'es-CO', null, "'día 'd 'del mes de' MMMM 'del año' Y") }}.</p>
 
 <p>&nbsp;</p>
 

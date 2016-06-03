@@ -43,7 +43,7 @@ body {
 <body>
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
 <p style="text-align: center;"><strong>{{ titleContract }}</strong></p>
 <p>&nbsp;</p>
 
@@ -84,7 +84,7 @@ body {
             </tr>
             <tr height="25px">
                 <td>Fecha de inicio labores:</td>
-                <td>{{ data.contract.startDate|localizeddate('long', 'none', local) }}</td>
+                <td>{{ data.contract.startDate|localizeddate('long', 'none', 'es-CO') }}</td>
             </tr>
             <tr height="25px">
                 <td>No. Días a la semana en que va a trabajar: </td>
@@ -110,7 +110,7 @@ body {
     </table>
 </div>
 
-{# {{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
+{# {{ data.novelty.dateStart|localizeddate('none', 'none', 'es-CO', null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>#}
 <p style="text-align: justify;">Entre el empleador y el trabajador, quien para los efectos del presente contrato se entiende como trabajador dependiente que
 labora en los servicios domésticos por periodos inferiores a un mes, ambos mayores de edad, identificados como ya se anotó, se suscribe el presente {{ titleContract }}, 
 el cual se regirá por las siguientes cláusulas:</p>
@@ -310,7 +310,7 @@ tanto, EL EMPLEADOR y SYMPLIFICA SAS podrá realizar todos los usos necesarios p
 <p style="text-align: justify;">Las partes aclaran que entre EL TRABAJADOR y SYMPLIFICA SAS no existe relación laboral ni de cualquier otro tipo, pues éste
 último sólo es el encargado de manejar los datos señalados en el presente artículo.</p>
 
-<p style="text-align: justify;">Se firma por las partes, el {{ "now"|localizeddate('none', 'none', local, null, "'día 'd 'del mes de' MMMM 'del año' Y") }}.</p>
+<p style="text-align: justify;">Se firma por las partes, el {{ "now"|localizeddate('none', 'none', 'es-CO', null, "'día 'd 'del mes de' MMMM 'del año' Y") }}.</p>
 
 <p>&nbsp;</p>
 

@@ -17,8 +17,8 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>#}
 <p>&nbsp;</p>
 <p style="text-align: center;"><strong>ADICION AL CONTRATO INDIVIDUAL DE TRABAJO Al CONTRATO Nº {{ data.contract.numero }}.</strong></p>
 <p>&nbsp;</p>
@@ -38,7 +38,7 @@ del presente Otrosí, el trabajador tan solo devengará los ingresos salariales 
 <p style="text-align: justify;"><strong>CLAUSULA CUARTA:</strong> Los demás términos y condiciones del contrato de trabajo conservan vigencia,
 siempre y cuando no sean contrarios a lo estipulado en el presente documento.</p>
 <p style="text-align: justify;">En constancia de lo anterior se firma el presente documento a
-los {{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
+los {{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }}.</p>
 
 <p>&nbsp;</p>
 
