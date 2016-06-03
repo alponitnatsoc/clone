@@ -27,6 +27,13 @@ class ActionType
     private $name;
 
     /**
+     * @var string $code
+     *
+     * @ORM\Column(type="string", length=4)
+     */
+    private $code;
+    
+    /**
      * Get idActionType
      *
      * @return integer
@@ -62,5 +69,29 @@ class ActionType
     public function __toString()
     {
         return (string) $this->name;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return ActionType
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }

@@ -209,9 +209,9 @@ payroll_voucher:
 payroll_voucher_to_pdf:
     path: /payroll/voucher/to_pdf/{idPayroll}
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:voucherToPdf}
-payroll_error:
-    path:     /payroll/error
-    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollError }
+payroll_result:
+    path:     /payroll/{result}/{idPO}
+    defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollError , result: e , idPO: -1}
 payroll_success:
     path:     /payroll/success
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:payrollSuccess }
