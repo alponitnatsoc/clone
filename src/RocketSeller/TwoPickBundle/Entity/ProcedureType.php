@@ -27,6 +27,13 @@ class ProcedureType
     private $name;
 
     /**
+     * @var string $code
+     *
+     * @ORM\Column(type="string", length=4)
+     */
+    private $code;
+
+    /**
      * Get idProcedureType
      *
      * @return integer
@@ -58,5 +65,29 @@ class ProcedureType
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return ProcedureType
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }

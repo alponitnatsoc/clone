@@ -42,6 +42,8 @@ class EmployeeHasEntity
     /**
      * 0 - validar
      * 1 - inscribir
+     * 2 - error
+     * 3 - confirmada
      * @ORM\Column(type="smallint", nullable=TRUE)
      */
     private $state =0 ;
