@@ -75,7 +75,7 @@ function startSubscriptionChoise() {
                     state = "inactivado";
                 }
             } else if (data.state == 'Activo') {
-                employee[employee_id]['state'] = 1;
+                employee[employee_id]['state'] = 2;
                 $(button).html("Inactivar");
                 $(button).removeClass("off");
                 $(button).addClass("on");
