@@ -195,7 +195,7 @@ class PayrollMethodRestController extends FOSRestController
                         $activePayrrol=$realContract->getActivePayroll();
                         if($activePayrrol->getMonth()==$month&&$activePayrrol->getPeriod()==$period){
                             $payrollPods=$activePayrrol->getPurchaseOrdersDescription();
-                            if(count($payrollPods)==0&&$activePayrrol->getPaid()==0){
+                            if($activePayrrol->getPaid()==0){
                                 $empHasEmp=$ehe;
                                 $dataNomina = $this->getInfoNominaSQL($ehe);
                                 $salary = $this->totalLiquidation($dataNomina)['total'];
@@ -221,7 +221,11 @@ class PayrollMethodRestController extends FOSRestController
                                     $total[] = array("EmployerHasEmployee " . $ehe->getIdEmployerHasEmployee() => "error en sql");
                                     continue;
                                 }
-                                $pod = new PurchaseOrdersDescription();
+                                if(count($activePayrrol->getPurchaseOrdersDescription())>0){
+                                    $pod=$activePayrrol->getPurchaseOrdersDescription()->get(0);
+                                }else{
+                                    $pod = new PurchaseOrdersDescription();
+                                }
                                 $pod->setDescription("Pago de nómina mes " . $month);
                                 $pod->setPayrollPayroll($payroll);
                                 $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");

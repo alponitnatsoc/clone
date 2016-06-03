@@ -2,8 +2,10 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\PayMethod;
@@ -25,7 +27,7 @@ trait PayrollMethodsTrait
 
     /**
      * Obtener informacion de nomina
-     * 
+     *
      * @param Employer $idEmployer ID del empleador
      * @return boolean
      */
@@ -33,104 +35,139 @@ trait PayrollMethodsTrait
     {
         /* @var $employerHasEmployees \Doctrine\Common\Collections\Collection */
         $employerHasEmployees = $employer->getEmployerHasEmployees();
-        $employeesData = array();
-
+        $em = $this->getDoctrine()->getManager();
+        $pods = new ArrayCollection();
         /* @var $employerHasEmployee EmployerHasEmployee */
         $employerHasEmployee = $employerHasEmployees->first();
+        $podPila = new PurchaseOrdersDescription();
         do {
-            $employeesData = $this->getInfoEmployee($employerHasEmployee, $payrollToPay, $employeesData);
+            $tempPod = $this->getInfoEmployee($employerHasEmployee, $podPila);
+            if ($tempPod != null) {
+                $pods->add($tempPod);
+            }
         } while ($employerHasEmployee = $employerHasEmployees->next());
-        if (!empty($employeesData)) {
-            return $employeesData;
+        if (count($pods)>0) {
+            if ($podPila->getValue() > 0) {
+                if ($podPila->getPurchaseOrdersStatus()!=null&&($podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "-1" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "S2" || $podPila->getPurchaseOrdersStatus()->getIdNovoPay() == "00")){
+
+                }else {
+                        $productPILA = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PP'));
+                        $podPila->setProductProduct($productPILA);
+                        $dateToday = new \DateTime();
+                        $podPila->setDescription("Pago de PILA mes " . $dateToday->format("m"));
+                        $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+                        $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
+                        $podPila->setPurchaseOrdersStatus($pos);
+                        $pods->add($podPila);
+                    }
+            }
+            foreach ($pods as $pod) {
+                $em->persist($pod);
+            }
+            $em->flush();
+            return $pods;
+        }
+        return null;
+    }
+
+    /**
+     * Funcion que verifica si el payroll enviado es del periodo actual
+     * @param Payroll $payroll
+     * @return bool
+     */
+    private function checkActivePayroll(Payroll $payroll)
+    {
+        $dateToday = new \DateTime();
+        if($payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="M"){
+            $todayPeriod=4;
+        }else{
+            $todayPeriod = $dateToday->format("d") >= 16 ? 4 : 2;
+        }
+        if ($dateToday->format("Y") == $payroll->getYear() && $dateToday->format("m") == $payroll->getMonth() && $payroll->getPeriod() == $todayPeriod) {
+            return true;
         }
         return false;
     }
 
     /**
-     * 
+     *
      * @param EmployerHasEmployee $employerHasEmployee
+     * @param PurchaseOrdersDescription $podPila
+     * @return null|PurchaseOrdersDescription
      */
-    private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, $payrollToPay, $employeesData)
+    private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, PurchaseOrdersDescription &$podPila)
     {
-        if ($employerHasEmployee->getState() === 3) {
+        if ($employerHasEmployee->getState() >= 4) {
             $contracts = $employerHasEmployee->getContracts();
             /* @var $contract Contract */
             foreach ($contracts as $contract) {
                 if ($contract->getState() > 0) {
-                    /* @var $payroll Payroll */
+                    /* @var Payroll $payroll */
                     $payroll = $contract->getActivePayroll();
-                    if (empty($payrollToPay)) {
-                        $payrollToPay2 = array($payroll->getIdPayroll());
-                    } else {
-                        $payrollToPay2 = $payrollToPay;
+                    $payroll = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findOneBy(array('idPayroll' => $payroll->getIdPayroll()));
+                    if($payroll)
+                    if (!$this->checkActivePayroll($payroll))
+                        break;
+                    if(count($payroll->getPurchaseOrdersDescription())>0){
+                        /** @var PurchaseOrdersDescription $tempPOD */
+                        $tempPOD=$payroll->getPurchaseOrdersDescription()->get(0);
+                        //id de pago realizadoo o id de procesando no se muestra
+
+                        if($tempPOD->getPurchaseOrdersStatus()!=null&&($tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="-1"||$tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="S2"||$tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="00"))
+                            break;
+                    }else{
+                        $tempPOD = new PurchaseOrdersDescription();
                     }
-                    if (in_array($payroll->getIdPayroll(), $payrollToPay2)) {
-//PENDIENTE - validar que payroll corresponda al periodo y fecha actual, para no pagar facturas pasadas ni futuras
-                        /* @var $purchaseOrdersDescription PersistentCollection */
-                        //$purchaseOrdersDescription = $payroll->getPurchaseOrdersDescription();
-                        //$purchaseOrdersStatus = $purchaseOrdersDescription->isEmpty();
-                        $purchaseOrdersStatus = true;
+                    $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
+                    $totalLiquidation = $this->totalLiquidation($detailNomina);
+                    $productNomina = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PN'));
+                    $tempPOD->setPayrollPayroll($payroll);
+                    $tempPOD->setProductProduct($productNomina);
+                    $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
+                    $tempPOD->setDescription("Pago Nómina " . $person->getLastName1() . " mes " . $payroll->getMonth() . " periodo " . $payroll->getPeriod());
+                    $tempPOD->setValue($totalLiquidation["total"]);
 
-                        if ($purchaseOrdersStatus) {
-                            $employeesData[$payroll->getIdPayroll()] = array();
-                            $employeesData[$payroll->getIdPayroll()]['idPayroll'] = $payroll->getIdPayroll();
-                            $employeesData[$payroll->getIdPayroll()]['payroll'] = $payroll;
-                            $employeesData[$payroll->getIdPayroll()]['employerHasEmployee'] = $employerHasEmployee;
-                            $employeesData[$payroll->getIdPayroll()]['payMethod'] = $contract->getPayMethodPayMethod();
-
-                            $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
-                            dump('SQL');
-                            dump($detailNomina);
-                            $employeesData[$payroll->getIdPayroll()]['detailNomina'] = $detailNomina;
-
-                            $totalLiquidation = $this->totalLiquidation($detailNomina);
-                            $employeesData[$payroll->getIdPayroll()]['totalLiquidation'] = $totalLiquidation;
-
-                            $salary = $this->getSalary($detailNomina);
-                            $employeesData[$payroll->getIdPayroll()]['salary'] = $salary;
-
-                            $totalAportes = $this->getTotalAportes($detailNomina);
-                            $employeesData[$payroll->getIdPayroll()]['totalAportes'] = $totalAportes;
-
-
-                            if ($payroll->getPeriod() == 4) {
-                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA($employerHasEmployee);
-                            } else {
-                                $employeesData[$payroll->getIdPayroll()]['PILA'] = $this->getTotalPILA(false);
-                                ;
-                            }
+                    if ($payroll->getPeriod() == 4) {
+                        $pila=$payroll->getPila();
+                        //this is for the first case
+                        if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
+                            $podPila=$pila;
+                            $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                        }else{
+                            $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podPila->getValue());
+                            if($podPila->getIdPurchaseOrdersDescription()==null)
+                                $podPila->addPayrollsPila($payroll);
                         }
+
                     }
+                    return $tempPOD;
                 }
             }
-        } else {
-            dump('employerHasEmployee inactivo');
-            dump($employerHasEmployee);
         }
-        return $employeesData;
+        return null;
     }
 
     /**
-     * 
+     *
      * @param int $idUser id del usuario a buscar
      * @return User|null
      */
     private function getUserById($idUser)
     {
         return $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
-                        array('id' => $idUser)
+            array('id' => $idUser)
         );
     }
 
     /**
-     * 
+     *
      * @param int $idEmployer id del usuario a buscar
      * @return User|null
      */
     private function getEmployerById($idEmployer)
     {
         return $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\Employer')->findOneBy(
-                        array('idEmployer' => $idEmployer)
+            array('idEmployer' => $idEmployer)
         );
     }
 
@@ -139,7 +176,7 @@ trait PayrollMethodsTrait
         if ($dataNomina && !empty($dataNomina)) {
             foreach ($dataNomina as $key => $value) {
                 if (isset($value["CON_CODIGO"]) && $value["CON_CODIGO"] == '1') {
-                    return (int) ceil($value['NOMI_VALOR_LOCAL']);
+                    return (int)ceil($value['NOMI_VALOR_LOCAL']);
                 }
             }
         }
@@ -171,40 +208,38 @@ trait PayrollMethodsTrait
         $total = $pension = $salud = $arl = $parafiscales = 0;
         if ($employerHasEmployee) {
             $pila = $this->getInfoPilaSQL($employerHasEmployee);
-            dump('PILA');
-            dump($pila);
             if ($pila) {
                 foreach ($pila as $key => $value) {
                     $total += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                    $total +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                    $total += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     if ($value['TENT_CODIGO'] == 'AFP') {
-                        $pension +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $pension +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $pension += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $pension += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'ARP') {
-                        $arl +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $arl +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $arl += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $arl += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'EPS' || $value['TENT_CODIGO'] == 'ARS') {
-                        $salud +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $salud +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $salud += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $salud += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     } elseif ($value['TENT_CODIGO'] == 'PARAFISCAL') {
-                        $parafiscales +=isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
-                        $parafiscales +=isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
+                        $parafiscales += isset($value['APR_APORTE_EMP']) ? $value['APR_APORTE_EMP'] : 0;
+                        $parafiscales += isset($value['APR_APORTE_CIA']) ? $value['APR_APORTE_CIA'] : 0;
                     }
                 }
             }
         }
         return array(
-            'total' => (int) ceil($total),
-            'pension' => (int) ceil($pension),
-            'salud' => (int) ceil($salud),
-            'arl' => (int) ceil($arl),
-            'parafiscales' => (int) ceil($parafiscales)
+            'total' => (int)ceil($total),
+            'pension' => (int)ceil($pension),
+            'salud' => (int)ceil($salud),
+            'arl' => (int)ceil($arl),
+            'parafiscales' => (int)ceil($parafiscales)
         );
     }
 
     /**
      * Trae la informacion del empleado desde el ws de nomina de SQL
-     * 
+     *
      * @param EmployerHasEmployee $employerHasEmployee
      * @return type
      */
@@ -217,7 +252,7 @@ trait PayrollMethodsTrait
             'period' => null,
             'month' => null,
             'year' => null
-                ), array('_format' => 'json')
+        ), array('_format' => 'json')
         );
 
         return json_decode($generalPayroll->getContent(), true);
@@ -225,7 +260,7 @@ trait PayrollMethodsTrait
 
     /**
      * Trae la informacion del empleado desde el ws de nomina de SQL
-     * 
+     *
      * @param EmployerHasEmployee $employerHasEmployee
      * @return type
      */
@@ -235,10 +270,13 @@ trait PayrollMethodsTrait
 
         $generalPayroll = $this->forward('RocketSellerTwoPickBundle:PayrollRest:getExternalEntitiesLiquidation', array(
             'employeeId' => $employeeId
-                ), array('_format' => 'json')
+        ), array('_format' => 'json')
         );
 
         return json_decode($generalPayroll->getContent(), true);
+    }
+    private function caculateSymplificaFee($user){
+
     }
 
 }

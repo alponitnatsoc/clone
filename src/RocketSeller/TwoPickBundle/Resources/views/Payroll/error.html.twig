@@ -24,23 +24,45 @@
 {% block fos_user_content %}
 
     <div class="media">
-        <div class="media-left">
-            <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
-        </div>
-        <div class="media-body vertical-align-center">
-            <h4 class="media-heading">Error de pago</h4>
-        </div>
+        {% if result== 'e' %}
+            <div class="media-left">
+                <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
+            </div>
+            <div class="media-body vertical-align-center">
+                <h4 class="media-heading">Error de pago</h4>
+            </div>
+        {% else %}
+            <div class="media-left">
+                <span class="glyphicon glyphicon-ok-circle fa-2x"></span>
+            </div>
+            <div class="media-body vertical-align-center">
+                <h4 class="media-heading">Éxito de pago</h4>
+            </div>
+        {% endif %}
     </div>
     <div class="text-center">
-        <div class="padding">
-            <h4><b>El pago no puedo ser realizado</b></h4>
-        </div>
-        <div class="padding">
-            lorem ipsum
-        </div>
-        <div class="padding">
-            <input type="button" class="btn btn-default btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('payroll') }}'" >
-        </div>
+        {% if result== 'e' %}
+            <div class="padding">
+                <h4><b>El pago no puedo ser realizado</b></h4>
+            </div>
+            <div class="padding">
+                lorem ipsum
+            </div>
+            <div class="padding">
+                <input type="button" class="btn btn-default btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('payroll') }}'" >
+            </div>
+        {% else %}
+            <div class="padding">
+                <h4><b>El pago se realizó satisfactoriamente</b></h4>
+            </div>
+            <div class="padding">
+                Descarga tu vactura y comprobante de pago
+            </div>
+            <div class="padding">
+                <a href="{{ url }}" class="btn btn-default btn-orange notAjax" >Descargar Factura</a>
+            </div>
+        {% endif %}
+
     </div>
 
 {% endblock %}

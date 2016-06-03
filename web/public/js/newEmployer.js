@@ -132,14 +132,16 @@ function startEmployer() {
     $('#btn-save-entities').click(function (e) {
         e.preventDefault();
         var form = $("form");
-
         var errors = { register_employer_severances_0_severancesAC: "La entidad no existe en nuestra base de datos, favor revisa su escritura" };
         var severances = [];
+        var severancesExist = [];
         var arl = $(form).find("#register_employer_arl");
         var arlAC = $(form).find("#register_employer_arlAC");
+        var arlEx = $(form).find("#register_employer_arlExists");
         var i = 0;
         var flagValid = true;
         var emptyFlag = false;
+
         $(form).find("input[name*='register_employer[severances]']").not("[type='hidden']").each(function (index) {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -153,8 +155,8 @@ function startEmployer() {
 
         //$("#register_employer_severances_0_severances").val($('#register_employer_severances_0_severances option').filter(function () { return $.trim($(this).html()) == $.trim($('#register_employer_severances_0_severancesAC').val()); }).val());
         i = 0;
-
         $(form).find("select[name*='register_employer[severances]']").each(function () {
+          if($(this).parent().parent().attr("class") == "hidden"){
             if (!validator.element($(this))) {
                 flagValid = false;
             }
@@ -163,17 +165,25 @@ function startEmployer() {
               flagValid = false;
               $("#errorSeverance").show();
             }
-            else {
-              $("#errorSeverance").hide();
-            }
+          }
         });
+
+        if(flagValid) {
+          $("#errorSeverance").hide();
+        }
+
+        i = 0;
+        $(form).find(".existsS").each(function () {
+            severancesExist[i++] = $(this).val();
+        });
+        //alert(flagValid);
         if (!flagValid) {
             return;
         }
         if (!( validator.element(arl)  && validator.element(arlAC))) {
             return;
         }
-        //HERE
+
         $(arl).val($("#register_employer_arl option").filter(function () { return $.trim($(this).html()) == $.trim($(arlAC).val()); }).val());
         if($(arl).val() == undefined || $(arl).val() == ""){
           $("#errorARL").show();
@@ -189,7 +199,9 @@ function startEmployer() {
             type: 'POST',
             data: {
                 severances: 			severances,
+                severancesExists: severancesExist,
                 arl: 					arl.val(),
+                arlExists: arlEx.val(),
                 economicalActivity: 	$(form).find("input[name='register_social_security[economicalActivity]']").val(),
             }
         }).done(function (data) {
@@ -477,6 +489,11 @@ function startEmployer() {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
+
+        restrictARL(true);
+        $( "#register_employer_arlExists" ).change(function( event ) {
+            restrictARL(false);
+        });
     });
 }
 
@@ -643,14 +660,22 @@ function addAutoComplete(autoTo, data){
         select: function(event, ui) {
             event.preventDefault();
             $(this).val(ui.item.label);
-            $($(this).parent()).parent().find("select").val(ui.item.value);
+            $($(this).parent()).parent().find("select").each(function() {
+              if($(this).parent().parent().attr("class") == "hidden"){
+                $(this).val(ui.item.value);
+              }
+            });
         },
         focus: function(event, ui) {
             event.preventDefault();
             $(this).val(ui.item.label);
-            $($(this).parent()).parent().find("select").val(ui.item.value);
-
+            $($(this).parent()).parent().find("select").each(function() {
+              if($(this).parent().parent().attr("class") == "hidden"){
+                $(this).val(ui.item.value);
+              }
+            });
         }
+
     });
     $(autoTo).on("focus",function () {
         $(autoTo).autocomplete("search", $(autoTo).val());
@@ -675,4 +700,24 @@ function initEntitiesEmployerFields(){
     var arl = $("#register_employer_arl");
     $("#register_employer_arlAC").val($(arl).children("option:selected").text());
 
+}
+
+function restrictARL(firstTime){
+  var selection = "";
+  var arlSelection = $('#register_employer_arlExists').find(":selected").val();
+
+  if(arlSelection==0){
+      $("#msgARL").hide();
+      if(!firstTime){
+          $('#register_employer_arlAC').attr("disabled",false);
+          $('#register_employer_arlAC').val("");
+          $('#register_employer_arl').val('').change();
+      }
+  }else {
+        $("#msgARL").show();
+        $('#register_employer_arlAC').attr("disabled",true);
+        $('#register_employer_arlAC').val("ARP SURA - SURATEP");
+        $('#register_employer_arl').val('48').change();
+
+  }
 }
