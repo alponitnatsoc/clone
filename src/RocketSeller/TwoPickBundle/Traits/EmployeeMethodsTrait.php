@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -84,6 +85,7 @@ trait EmployeeMethodsTrait
             'employeeEmployee' => $realEmployee,
             'state' => 3
         ));
+        /** @var Contract $contract */
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 1

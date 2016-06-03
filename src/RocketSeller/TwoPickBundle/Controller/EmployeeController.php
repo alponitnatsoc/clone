@@ -84,11 +84,15 @@ class EmployeeController extends Controller
 //$user = $this->getUser();
         /** @var Contract $contract */
         $employerEmployee = $this->getEmployerEmployee($id);
-        $employerEmployee->setState(!$employerEmployee->getState());
+        if($employerEmployee->getState()==0){
+            $employerEmployee->setState(2);
+        }elseif ($employerEmployee->getState()>0){
+            $employerEmployee->setState(0);
+        }
         $em = $this->getDoctrine()->getManager();
         $em->persist($employerEmployee);
         $em->flush();
-        return new JsonResponse(array('state' => ($employerEmployee->getState() ? 'Activo' : 'Inactivo')));
+        return new JsonResponse(array('state' => ($employerEmployee->getState() ? 'x' : 'Inactivo')));
     }
 
     /**
