@@ -768,6 +768,7 @@ $('#radio_mensual').click(function() {
 var sueldo_plano = 0;
 
 function changeValues(data) {
+  // We call calculator to have everything fresh.
   var division = 1;
   var elementExists = document.getElementById("radio_diario");
   if(elementExists != null)
@@ -776,6 +777,8 @@ function changeValues(data) {
     }else {
       division = 1;
     }
+
+    console.log("days:  "+data.numberOfDays);
   // Plain salary is what the employee should recieve.
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
 
@@ -787,7 +790,7 @@ function changeValues(data) {
   document.getElementById('subsidio_transporte').innerHTML = getPrice(Math.floor(data.transportCal)/division);
   document.getElementById('descuento_salud').innerHTML = getPrice(Math.floor(data.EPSEmployeeCal)/division);
   document.getElementById('descuento_pension').innerHTML = getPrice(Math.floor(data.PensEmployeeCal)/division);
-  document.getElementById('pagos_netos').innerHTML = getPrice(pagos_netos/division);
+  document.getElementById('pagos_netos').innerHTML = getPrice(Math.floor(pagos_netos/division));
 
   document.getElementById('salario_ingreso_bruto2').innerHTML = getPrice(Math.floor(data.plainSalary)/division);
   document.getElementById('subsidio_transporte2').innerHTML = getPrice(Math.floor(data.transportCal)/division);
@@ -804,7 +807,21 @@ function changeValues(data) {
   document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
 
   sueldo_plano = data.plainSalary/data.numberOfDays;
-  console.log("sueldo_plano: " + sueldo_plano);
+
+    $("#totalExpensesVal").val(getPrice(Math.floor(pagos_netos/division)));
+
+    $("#totalExpensesValD").val(getPrice(Math.floor(data.plainSalary)/division));
+
+    $("#totalExpensesVal2").val(getPrice(Math.floor(total_modal)/division));
+
+
+  if($("#totalExpensesVal2").val() == 'NaN')
+    $("#totalExpensesVal2").val(getPrice(0));
+  if($("#totalExpensesValD").val() == 'NaN')
+    $("#totalExpensesValD").val(getPrice(0));
+  if($("#totalExpensesVal").val() == 'NaN')
+    $("#totalExpensesVal").val(getPrice(0));
+
 
 }
 
@@ -1296,7 +1313,7 @@ function calculator() {
     } else {
         var transportAid2=0;
         if (transport == 1) {
-            salaryM -= transportAid;
+            //salaryM -= transportAid;
         } else if (salaryM + aidD > smmlv * 2) {
             transportAid2 = 0;
         }else{
@@ -1370,12 +1387,17 @@ function calculator() {
             $("#arsNotAplicable").hide();
         }
     }
-
+    // Calculate the days again.
+    var i = 0;
+    $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
+            i++;
+        });
+    $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
     var htmlRes = jsonCalcToHTML(resposne);
     changeValues(resposne);
     //$("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
-    $("#totalExpensesVal").val(totalExpenses.toFixed(0));
+    //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
 function checkDate(date) {
