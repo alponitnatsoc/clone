@@ -88,6 +88,7 @@ class EmployeeController extends Controller
             $employerEmployee->setState(2);
         }elseif ($employerEmployee->getState()>0){
             $employerEmployee->setState(0);
+            
         }
         $em = $this->getDoctrine()->getManager();
         $em->persist($employerEmployee);
