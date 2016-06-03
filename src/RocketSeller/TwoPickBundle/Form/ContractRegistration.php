@@ -231,7 +231,7 @@ class ContractRegistration extends AbstractType
         if($this->user->getLegalFlag()=='1'){
             $builder
                 ->add('holidayDebt', 'integer', array(
-                    'label'=>'¿Cuantos días de vaciones tiene pendientes?',
+                    'label'=>'¿Cuantos días de vacaciones tiene pendientes?',
                     'required'=>true,
                 ));
         }

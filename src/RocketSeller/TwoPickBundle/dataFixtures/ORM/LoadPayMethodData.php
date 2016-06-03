@@ -48,7 +48,7 @@ class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInt
         $payMethodFields=new PayMethodFields();
         $payMethodFields->setColumnName("hasIt");
         $payMethodFields->setDataType("choice");
-        $payMethodFields->setLabel('Tu empleado tiene cuenta Daviplata?');
+        $payMethodFields->setLabel('¿Tu empleado tiene cuenta Daviplata?');
         $payMethodFields->setPayTypePayType($PayTypeRetiro);
         $manager->persist($payMethodFields);
 
