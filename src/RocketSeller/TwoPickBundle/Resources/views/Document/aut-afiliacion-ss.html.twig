@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Carta de Autorización afiliaciones a seguridad social</title>
+<title>Carta de Autorizaci&oacute;n afiliaciones a seguridad social</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -22,47 +22,64 @@ body {
 
 <p><strong>Se&ntilde;ores</strong></p>
 <p><strong>SYMPLIFICA SAS</strong></p>
-<p><strong>Bogot&aacute;</strong></p>
-<p>&nbsp;</p>
-<p style="text-align: center;"><strong>REFERENCIA: AUTORIZACIÓN PARA REALIZAR AFILIACIONES ANTE ENTIDADES DE SEGURIDAD SOCIAL</strong></p>
-<p>&nbsp;</p>
-<p style="text-align: justify;">Mediante la presente, nosotros:</p>
-<p style="text-align: justify;">
-<ol type="i">
-<li>{{ data.employer.name }}, identificado con {{ data.employer.docType }} No. {{ data.employer.docNumber }} expedida en {{ data.employer.docExpPlace }}, actuando en nombre propio, en adelante el “EMPLEADOR”.</li>
-<li>{{ data.employee.name }}, identificado con {{ data.employee.docType }} No. {{ data.employee.docNumber }} expedida en {{ data.employee.docExpPlace }}, actuando en nombre propio, en adelante el “TRABAJADOR”;</li>
-</ol>
-</p>
-<p style="text-align: justify;">Conferimos a la sociedad SYMPLIFICA SAS, identificada con NIT 900.862.831-7, y/o a las personas naturales a quienes esta sociedad
-designe,  autorización para solicitar ante las entidades del sistema de seguridad social enunciadas más abajo en la ciudad de {{ data.contract.city }}, la afiliación del
-TRABAJADOR, en calidad de dependiente del EMPLEADOR. Dicha afiliación se realizará con base en la información suministrada por el EMPLEADOR a  SYMPLIFICA SAS a
-través de la página web Symplifica.com, la cual tanto el TRABAJADOR como EL EMPLEADOR declaran conocer y aceptar. Por lo tanto, nuestro autorizado SYMPLIFICA SAS
-y/o a las personas naturales a quienes esta sociedad designe, podrán realizar todos los trámites, diligencias y suscripción de documentos que sean necesarios
-para solicitar y obtener la afiliación del TRABAJADOR como dependiente del EMPLEADOR ante las siguientes entidades:</p>
+<p><strong>Bogot&aacute; D.C</strong></p>
 
-<p style="text-align: justify;">EPS: {{ data.employee.eps.name }}</p>
-<p style="text-align: justify;">AFP: {{ data.employee.afp.name }}</p>
-<p style="text-align: justify;">ARL: {{ data.employer.arl.name }}</p>
-<p style="text-align: justify;">CAJA DE COMPENSACIÓN FAMILIAR: {{ data.employer.ccf.name }}</p>
-
-<p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a <strong>SYMPLIFICA SAS</strong> el {{ "now"|localizeddate('long', 'none', 'es-CO') }} </p>
+<p style="text-align: center;"><strong>REFERENCIA: AUTORIZACI&Oacute;N PARA REALIZAR AFILIACIONES ANTE ENTIDADES DE SEGURIDAD SOCIAL Y AUTORIZACI&Oacute;N PARA TRATAMIENTO DE DATOS PERSONALES</strong></p>
 
 <p>&nbsp;</p>
+<p style="text-align: justify;">Mediante la presente, yo, {{ data.employee.name }}, identificado como aparece al pie de mi firma, actuando en nombre propio, en adelante el “TRABAJADOR”;</p>
+<p style="text-align: justify;">1) Manifiesto que conozco y acepto la Pol&iacute;tica de Privacidad y Manejo de la Informaci&oacute;n de Symplifica SAS (la “Pol&iacute;tica”), publicada en la p&aacute;gina web
+  “Symplifica.com” (la “P&aacute;gina Web”), y acepto que esta sea aplicada a mis datos personales que sean suministrados a dicha compañ&iacute;a a trav&eacute;s de la P&aacute;gina Web o posteriormente por cualquier otro medio.</p>
+<p style="text-align: justify;">El TRABAJADOR manifiesta que ha autorizado a {{ data.employer.name }}, identificado con
+  {% if data.employer.docType == "CC" %}
+    c&eacute;dula de ciudadan&iacute;a
+  {% elseif data.employer.docType == "CE" %}
+    c&eacute;dula de extranjer&iacute;a
+  {% elseif data.employer.docType == "TI" %}
+    tarjeta de identidad
+  {% endif %}
+  Nro. {{ data.employer.docNumber }} (en adelante, “EL EMPLEADOR”) a suministrar sus datos personales a Symplifica SAS a trav&eacute;s de la P&aacute;gina Web, incluyendo su nombre completo, n&uacute;mero de c&eacute;dula de ciudadan&iacute;a y copia de la misma, datos bancarios, datos de contacto
+  (correo electr&oacute;nico, tel&eacute;fono, direcci&oacute;n, etc.), entre otros. Por lo tanto, el TRABAJADOR expresamente autoriza a Symplifica SAS a darle a sus datos personales el tratamiento establecido en la Pol&iacute;tica,
+  que consiste en recolectar, almacenar, depurar, usar, analizar, circular, actualizar y cruzar con informaci&oacute;n propia y/o de terceros autorizados, los datos personales, datos de contacto, la informaci&oacute;n
+  sobre preferencias de consumo y el comportamiento en los canales de contacto, con las finalidades indicadas en la Pol&iacute;tica. Adicionalmente, y sin limitar lo anterior, el TRABAJADOR autoriza a Symplifica SAS
+   a: (i) Compartir el perfil del TRABAJADOR, que haya sido creado por &eacute;l mismo o por el EMPLEADOR, con otros usuarios de la P&aacute;gina Web que est&eacute;n interesados en contratar, hayan contratado o en el futuro contraten
+   al TRABAJADOR; (ii) Enviar al TRABAJADOR a trav&eacute;s de los medios informados en sus datos de contacto, tales como SMS, correo electr&oacute;nico, tel&eacute;fono y cualquier otro medio reportado, informaci&oacute;n sobre los pagos
+   realizados por parte del EMPLEADOR; (iii) Enviar al TRABAJADOR informaci&oacute;n de promociones, productos y servicios, as&iacute; como material publicitario, de Symplifica SAS y sus aliados comerciales, por cualquiera de los
+   medios   informados en los datos de contacto del TRABAJADOR; (iv) Consultar, en cualquier tiempo, en Datacredito o en cualquier otra central de informaci&oacute;n de riesgo, toda la informaci&oacute;n relevante del TRABAJADOR,
+   con el fin de cruzar dicha informaci&oacute;n con aquella reportada a trav&eacute;s de la P&aacute;gina Web, complementar la informaci&oacute;n suministrada a la P&aacute;gina Web, y facilitar al EMPLEADOR, al TRABAJADOR o a otros usuarios que hayan
+   contratado o en el futuro contraten al TRABAJADOR, el diligenciamiento de los formularios disponibles en o utilizados por la P&aacute;gina Web, mediante el pre-llenado de los datos previamente reportados a las entidades mencionadas.
+   Mediante la presente, el TRABAJADOR ratifica su aceptaci&oacute;n a todas las condiciones estipuladas en la Pol&iacute;tica de Privacidad y Manejo de la Informaci&oacute;n de Symplifica.com.</p>
+<p style="text-align: justify;">2) En caso de no estar afiliado a las entidades del sistema seguridad social, confiero a la sociedad SYMPLIFICA SAS, identificada con NIT 900.862.831-7, y/o a las personas naturales a quienes esta
+  sociedad designe,  autorizaci&oacute;n para solicitar ante las entidades del sistema de seguridad social enunciadas m&aacute;s abajo, mi afiliaci&oacute;n en calidad de dependiente del EMPLEADOR. Dicha afiliaci&oacute;n se realizar&aacute; con base en la informaci&oacute;n
+  suministrada por el EMPLEADOR a SYMPLIFICA SAS a trav&eacute;s de la p&aacute;gina web Symplifica.com, la cual declaro conocer y aceptar. Por lo tanto, mi autorizado SYMPLIFICA SAS y/o a las personas naturales a quienes esta sociedad designe, podr&aacute;n
+  realizar todos los tr&aacute;mites, diligencias y suscripci&oacute;n de documentos que sean necesarios para solicitar y obtener mi afiliaci&oacute;n como dependiente del EMPLEADOR ante las siguientes entidades:</p>
 
-<p><strong>EL EMPLEADOR,</strong></p>
-
-_____________________________________
-<p>Nombre: {{ data.employer.name }}</p>
-{{ data.employer.docType }} No. {{ data.employer.docNumber }} de {{ data.employer.docExpPlace }}
-
+  <p style="text-align: justify;">
+    {% if data.employee.eps.name is defined%}
+    EPS: {{ data.employee.eps.name }}
+    {% endif %}</p>
+  <p style="text-align: justify;">AFP: {{ data.employee.afp.name }}</p>
+  <p style="text-align: justify;">ARL: {{ data.employer.arl.name }}</p>
+  <p style="text-align: justify;">CAJA DE COMPENSACI&Oacute;N FAMILIAR: {{ data.employer.ccf.name }}</p>
+  <p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a SYMPLIFICA SAS el {{ "now"|localizeddate('long', 'none', 'es-CO') }}.</p>
 <p>&nbsp;</p>
-
 <p><strong>EL TRABAJADOR,</strong></p>
 
-_______________________
-<p>Nombre: {{ data.employee.name }}</p>
-{{ data.employee.docType }} No. {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}
+<p>&nbsp;</p>
+<p>Firma:_______________________</p>
 
+<p>&nbsp;</p>
+<p>Nombre: {{ data.employee.name }}</p>
+
+<p>{% if data.employee.docType == "CC" %}
+  C.C.
+{% elseif data.employee.docType == "CE" %}
+  C.E.
+{% elseif data.employee.docType == "TI"%}
+  T.I.
+{% endif %}
+{{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}
+</p>
 <hr />
 
 </body>
