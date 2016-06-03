@@ -545,9 +545,13 @@
                                         {{ form_label(form.employeeHasEmployers.salary) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-8 col-sm-offset-2 complete" style="margin-bottom: 15px;">
-                                    <div class="text-center form-group">
+                                <div class="col-sm-8 col-sm-offset-2 complete" style="margin-bottom: 15px;width:500px">
+                                    <div class="text-center form-group" style="float: left;width: 45%;margin-right: 5px;">
+                                        <input id="ex7" type="text" data-slider-min="689455" data-slider-max="10000000" data-slider-step="10000" data-slider-value="{{ form.employeeHasEmployers.salary.vars.value }}"/>
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
+                                    </div>
+                                    <div class="priceContainer">
+                                        <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                     </div>
                                 </div>
 
@@ -556,136 +560,15 @@
                                     <div class="col-sm-12 col-xs-12 text-center resumenpagos">
                                         <br />
                                         <p style="font-weight:100">Resumen <br />del pago mensual:</p>
-                                        <div class="priceContainer">
-                                          <div>
-                                            <div class="seccionprice">
-                                              <p>Pago empleado</p>
-                                              <div class="pagoclass">
-                                                <div class="flotardia">Diario</div>
-                                                <div class="flotardia">$3.000</div>
-                                              </div>
-                                              <div class="pagoclass">
-                                                <div class="flotardia">Mensual</div>
-                                                <div class="flotardia">$3.000</div>
-                                              </div>
-                                            </div>
-                                            <div class="seccionprice">
-                                              <p>+ Seguridad social</p>
-                                              <div class="pagoclass">
-                                                <div class="flotardia">Diario</div>
-                                                <div class="flotardia">$3.000</div>
-                                              </div>
-                                              <div class="pagoclass">
-                                                <div class="flotardia">Mensual</div>
-                                                <div class="flotardia">$3.000</div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <!--div oculto-->
-                                          <div id="ocultotiempocompleto">
-                                            <div class="seccionprice">
-                                              <p>Pago empleado</p>
-                                              <div class="pagoclass">
-                                                <div>$3.000</div>
-                                              </div>
-                                            </div>
-                                            <div class="seccionprice">
-                                              <p>+ Seguridad social</p>
-                                              <div class="pagoclass">
-                                                <div>$3.000</div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                            <!--<h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>-->
+                                        <div class="priceTotal">
+
+                                            <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                         </div>
                                         <!--<a id="link_calculator" style="margin-top:10px;display:block;color: #666;font-size: 14px;font-weight: 100;text-decoration: underline;" class="notAjax">Ver detalle del costo</a>-->
 
                                         <br />
                                     </div>
-                                    <!--segudno recuadro de pagos-->
-                                    <div class="col-sm-12 col-xs-12 text-center resumenpagos">
-                                        <br />
-                                        <p style="font-weight:100">Resumen de pagos <br />no mensuales (prestaciones):</p>
-                                        <div class="priceContainer">
-                                            <div>
-                                              <div class="seccionprice">
-                                                <p>Cesantias</p>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Diario</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Mensual</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Vacaciones</p>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Diario</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Mensual</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Prima</p>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Diario</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Mensual</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Total</p>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Diario</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                                <div class="pagoclass">
-                                                  <div class="flotardia">Mensual</div>
-                                                  <div class="flotardia">$3.000</div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <!--div oculto-->
-                                            <div id="ocultotiempocompleto">
-                                              <div class="seccionprice">
-                                                <p>Cesantias</p>
-                                                <div class="pagoclass">
-                                                  <div>$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Vacaciones</p>
-                                                <div class="pagoclass">
-                                                  <div>$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Prima</p>
-                                                <div class="pagoclass">
-                                                  <div>$3.000</div>
-                                                </div>
-                                              </div>
-                                              <div class="seccionprice">
-                                                <p>Total</p>
-                                                <div class="pagoclass">
-                                                  <div>$3.000</div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <!--<h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>-->
-                                        </div>
 
-
-                                        <br />
-                                    </div>
                                       <div class="modal-resumen-pagos">
                                         <a id="link_calculator" style="; cursor: pointer; margin-top:10px;display:block;color: #666;font-size: 14px;" class="notAjax">&#155; Ver detalle del costo</a>
                                       </div>
