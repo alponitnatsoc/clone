@@ -138,6 +138,7 @@ function startEmployee() {
                 $(this).show();
             });
         }
+        calculator();
     });
     $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
         if($("#changeBehavior").text()=="1"){
@@ -1394,7 +1395,13 @@ function calculator() {
         });
     $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
     var htmlRes = jsonCalcToHTML(resposne);
+    if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
+      console.log("entre");
+      $('#radio_diario').prop('checked', true);
+      $('#radio_mensual').prop('checked', false);
+    }
     changeValues(resposne);
+
     //$("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
     //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
