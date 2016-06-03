@@ -1,13 +1,13 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Validar Informacion Empleado{% endblock %}
+{% block title %}Ver Informacion Empleado{% endblock %}
 
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
         <div class="col-md-12">
             <div class="panel panel-title">
                 {% if action.actionTypeActionType.name == 'Validar Informacion del Empleador' %}
-                    Validar Información de {{ person.fullName }}
+                    Información de {{ person.fullName }}
                 {% else %}
                     {{ action.actionTypeActionType.name }} de {{ person.fullName }}
                 {% endif %}
@@ -20,51 +20,42 @@
                         <tr>
                             <th style="vertical-align: middle" >Campo</th>
                             <th style="vertical-align: middle" >Valor</th>
-                            <th style="vertical-align: middle" >Error</th>
                         </tr>
                         </thead>
                         <tbody>
                             <tr >
                                 <td><strong>Nombre</strong></td>
                                 <td>{{ person.names}}</td>
-                                <td><button class="checked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Primer Apellido</strong></td>
                                 <td>{{ person.lastName1}}</td>
-                                <td><button class="checked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Segundo Apellido</strong></td>
                                 <td>{{ person.lastName2}}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Segundo Apellido</strong></td>
                                 <td>{{ person.lastName2}}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Dirección</strong></td>
                                 <td>{{ person.mainAddress}}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             {% for phone in person.phones %}
                             <tr>
                                 <td><strong>celular</strong></td>
                                 <td>{{ phone.phoneNumber }}</td>
-                                <td style="color: #00a65a"> Validado</td>
                             </tr>
                             {% endfor %}
                             <tr>
                                 <td><strong>Ciudad/Municipio</strong></td>
                                 <td>{{ person.city }}</td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td><strong>Departamento</strong></td>
                                 <td>{{ person.department }}</td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td>
@@ -79,22 +70,18 @@
                                     </strong>
                                 </td>
                                 <td>{{ person.document }}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Fecha de Expedición del documento</strong></td>
                                 <td>{{ person.documentExpeditionDate.format('d/m/Y') }}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Fecha de Nacimiento</strong></td>
                                 <td>{{ person.birthDate.format('d/m/Y') }}</td>
-                                <td><button class="cheked"></button></td>
                             </tr>
                             <tr>
                                 <td><strong>Correo Electrónico</strong></td>
                                 <td>{{ user.email }}</td>
-                                <td style="color: #00a65a"> Validado</td>
                             </tr>
 
                         </tbody>
@@ -143,11 +130,6 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="col-md-5" style="border-top:dotted 1px;">
-                    <div class="col-md-12">
-                        {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
-                    </div>
                 </div>
                 <div class="col-md-5" style="margin-top:40px;text-align:center;">
                     <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
