@@ -954,6 +954,12 @@ trait SubscriptionMethodsTrait
     {
         $em = $this->getDoctrine()->getManager();
         $user->setStatus(2);
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        foreach ( $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
+            if($employerHasEmployee->getState()>0 and $employerHasEmployee->getEmployeeEmployee()->getRegisterState()==100){
+                $employerHasEmployee->setState(3);
+            }
+        }
         $user->setPaymentState(1);
         $user->setDayToPay(date('d'));
         $user->setLastPayDate(date_create(date('Y-m-d H:m:s')));
@@ -975,7 +981,7 @@ trait SubscriptionMethodsTrait
     protected function crearTramites(User $user)
     {
         /* @var $ProcedureType ProcedureType */
-        $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('name' => 'Registro empleador y empleados'));
+        $ProcedureType = $this->getdoctrine()->getRepository('RocketSellerTwoPickBundle:ProcedureType')->findOneBy(array('code' => 'REE'));
         $procedure = $this->forward('RocketSellerTwoPickBundle:Procedure:procedure', array(
             'employerId' => $user->getPersonPerson()->getEmployer()->getIdEmployer(),
             'idProcedureType' => $ProcedureType->getIdProcedureType()

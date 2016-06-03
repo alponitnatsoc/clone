@@ -54,8 +54,8 @@ trait EmployeeMethodsTrait
 
     protected function validateDocuments(User $user)
     {
-        $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
         /* @var $employerHasEmployee EmployerHasEmployee */
+        $employerHasEmployees = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
         $employerHasEmployee = $employerHasEmployees->first();
         $this->validateDocumentsEmployer($user, $employerHasEmployee->getEmployerEmployer());
         do {
