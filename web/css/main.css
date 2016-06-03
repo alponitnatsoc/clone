@@ -3,37 +3,23 @@
   width: 100%
 }
 
-.pagoclass {
-    background: #FFF;
-    color: #9C9C9C;
-    height: auto;
-    overflow: hidden;
+.priceTotal {
+    background-color:#00C4C5;
+    width:100%;
+    padding:0 5px 5px 5px;
+    color:#fff;
+    text-align:center;
+    border-radius:5px;
+    height:auto;
+    overflow:hidden;
 }
-
-#ocultotiempocompleto {
-  display:none
-}
-
-.flotardia {
-    float: left;
-    width: 50%;
-    border-right: 1px solid #CCC;
-    border-bottom: 1px solid #CCC;
-}
-
-.seccionprice {
-  height: auto;
-  overflow: hidden;
-  padding: 14px 0 0 0;
-}
-
 
 #cont-resumenpagos {
   clear: both;
   border-bottom: 1px solid #CCC;
-      border-top: 1px solid #CCC;
-      padding: 0 0 20px 0;
-      margin: 0 0 35px 0;}
+  padding: 0 0 20px 0;
+  margin: 30px auto;
+  width: 500px;}
 
 .modal-resumen-pagos {
         clear: both;
