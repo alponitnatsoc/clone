@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="row details col-md-12">        
+        <div class="row details col-md-12">
             <div class="col-xs-1">
 
             </div>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Fecha Pago</h4>
-                        {{ "now"|localizeddate('long', 'short', "es") }}
+                        {{ "now"|localizeddate('long', 'short', 'es-CO'") }}
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                         {{ dataNomina|length }}
                     </div>
                 </div>
-            </div>        
+            </div>
             <div class="col-xs-1">
 
             </div>
@@ -64,12 +64,12 @@
         <div class="row">
 
             {% for key,data in dataNomina %}
-                {% set employerHasEmployee = data['employerHasEmployee'] %}  
-                {% set employee = employerHasEmployee.employeeEmployee %}   
-                {% set employer = employerHasEmployee.employerEmployer %}   
-                {% set personEmployee = employee.personPerson %}  
-                {% set personEmployer = employer.personPerson %}  
-                {% set idPayroll = data['idPayroll'] %} 
+                {% set employerHasEmployee = data['employerHasEmployee'] %}
+                {% set employee = employerHasEmployee.employeeEmployee %}
+                {% set employer = employerHasEmployee.employerEmployer %}
+                {% set personEmployee = employee.personPerson %}
+                {% set personEmployer = employer.personPerson %}
+                {% set idPayroll = data['idPayroll'] %}
 
                 <div class="col-sm-6">
                     <div class="row-fluid clearfix employee">
@@ -95,10 +95,10 @@
                                 <div class="col-md-6">
                                     <h4>Aportes Seguridad Social</h4>
                                     {% if data['PILA']['total'] is defined %}
-                                        $ {{ data['PILA']['total']|number_format }}  
-                                    {% else %}  
+                                        $ {{ data['PILA']['total']|number_format }}
+                                    {% else %}
                                         $ 0
-                                    {% endif %}   
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="total row-fluid clearfix">
@@ -107,16 +107,16 @@
                                     {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
                                         {% if data['PILA']['total'] is defined %}
                                             $ {{ data['PILA']['total']|number_format }}
-                                        {% else %}  
+                                        {% else %}
                                             $ 0
                                         {% endif %}
-                                    {% else %}  
+                                    {% else %}
                                         {% if data['PILA']['total'] is defined %}
                                             $ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format }}
-                                        {% else %}  
+                                        {% else %}
                                             $ {{ (data['totalLiquidation']['total'])|number_format }}
                                         {% endif %}
-                                    {% endif %}                                                                             
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="row novedades">
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             {% endfor %}
         </div>
         <!--<div class="row buttons center">
@@ -156,7 +156,7 @@
             border-top: 1px #000 dotted;
             border-bottom: 1px #000 dotted;
         }
-        .row .buttons{            
+        .row .buttons{
             display: inline;
         }
         .payroll.confirm .details{

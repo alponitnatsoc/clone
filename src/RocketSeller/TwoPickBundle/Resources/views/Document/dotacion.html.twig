@@ -26,15 +26,15 @@ body {
 <p><strong>Soporte entrega de dotaci&oacute;n</strong>
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-{# localizeddate('none', 'none', local, null, "cccc, d MMMM Y 'às' hh:mm aaa")#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
+{# localizeddate('none', 'none', 'es-CO', null, "cccc, d MMMM Y 'às' hh:mm aaa")#}
 
 <p>Ciudad: {{ data.contract.city }}</p>
 
 <p>Empresa usuaria: {{ data.employer.name }}</p>
-<p>Fecha ingreso: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}</p>
+<p>Fecha ingreso: {{ data.contract.fechaInicio.date|localizeddate('long', 'none', 'es-CO') }}</p>
 <p>&nbsp;</p>
-<p>Esta dotación corresponde del {{ data.novelty.dateStart|localizeddate('long', 'none', local) }} al {{ data.novelty.dateEnd|localizeddate('long', 'none', local) }}.</p>
+<p>Esta dotación corresponde del {{ data.novelty.dateStart|localizeddate('long', 'none', 'es-CO') }} al {{ data.novelty.dateEnd|localizeddate('long', 'none', 'es-CO') }}.</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">Yo {{ data.employee.name }}, identificado con la {{ data.employee.docType }} No. {{ data.employee.docNumber }} de {{ data.employee.docExpPlace }}, dejo constancia que he recibido
 el calzado - vestido y/o elementos de protección personal, para el desempeño de mis funciones, de acuerdo con lo
@@ -87,7 +87,7 @@ contratadas, de acuerdo con lo señalado en el artículo 233 de mismo estatuto.<
 y demás derechos económicos. El trabajador se compromete de utilizar la dotación e igual los elementos de protección personal
 para la realización de sus labores en el horario de trabajo (Art. 230 CST).</p>
 
-<p style="text-align: justify;">En constancia, se firma la presente a los {{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }}</p>
+<p style="text-align: justify;">En constancia, se firma la presente a los {{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }}</p>
 
 
 <div style="width: 50%; float: left;">

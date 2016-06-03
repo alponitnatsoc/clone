@@ -17,8 +17,8 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>
 <p>&nbsp;</p>
 <p>Señor(a):</p>
 <p>{{ data.employee.name }}</p>
@@ -27,7 +27,7 @@ body {
 <p style="text-align: justify;">REF: <strong>NOTIFICACION TERMINACION DE CONTRATO LABORAL</strong></p>
 <p style="text-align: justify;">Apreciado trabajador</p>
 <p style="text-align: justify;">Cordialmente me permito comunicarle que sus obligaciones laborales, por la cuales fue contrato
-finalizaran el día {{ data.novelty.dateEnd|localizeddate('long', 'none', local) }}, los motivos de la finalización del contrato fue su reiterado incumplimiento al
+finalizaran el día {{ data.novelty.dateEnd|localizeddate('long', 'none', 'es-CO') }}, los motivos de la finalización del contrato fue su reiterado incumplimiento al
 ART 58 CST dando así por terminada la relación laboral, por tanto agradecemos por el tiempo laborado.</p>
 <p style="text-align: justify;">Adicionalmente queremos informarle que usted cuenta con 5 días hábiles para realizarse el examen médico
 de egreso, dicha autorización deberá ser solicitada a su jefe directo.</p>
