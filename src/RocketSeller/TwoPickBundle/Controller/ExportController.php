@@ -253,11 +253,22 @@ class ExportController extends Controller
 
 		// Add the header of the CSV file
 		fputcsv($handle, array('sep=;'));
-		fputcsv($handle, array('Campo', 'Dato'),';');
-		fputcsv($handle, array('Persona', 'Empleador'),';');
+		fputcsv($handle, array('EMPLEADOR'),';');
+		fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),';');
 		//first the user info
 		/** @var User $user */
-		
+		fputcsv($handle, array('Nombre Completo',$person->getFullName()),';');
+		if($person->getDocumentType()=='CC'){
+			fputcsv($handle, array('Tipo de Documento','Cedula de Ciudadania'),';');
+		}elseif ($person->getDocumentType()=='CE') {
+			fputcsv($handle, array('Tipo de Documento','Cedula de Extranjeria'),';');
+		}elseif ($person->getDocByType()=='TI'){
+			fputcsv($handle, array('Tipo de Documento','Tarjeta de Identidad'),';');
+		}
+		fputcsv($handle, array('Numero de Documento',$person->getDocument()),';');
+
+
+
 		$em2 = $this->getDoctrine()->getEntityManager();
 		$connection = $em2->getConnection();
 		$statement = $connection->prepare("SELECT * FROM person WHERE id_person = :id");
