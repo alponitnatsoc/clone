@@ -765,7 +765,9 @@ $('#radio_mensual').click(function() {
     calculator();
 });
 
-function changeValues(data, division=1) {
+var sueldo_plano = 0;
+
+function changeValues(data) {
   var division = 1;
   var elementExists = document.getElementById("radio_diario");
   if(elementExists != null)
@@ -774,11 +776,8 @@ function changeValues(data, division=1) {
     }else {
       division = 1;
     }
-    console.log("division" + division);
   // Plain salary is what the employee should recieve.
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
-//  data.plainSalary = salario_bruto;
-
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
@@ -804,6 +803,8 @@ function changeValues(data, division=1) {
   document.getElementById('prima').innerHTML = getPrice(Math.floor(0/division));
   document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
 
+  sueldo_plano = data.plainSalary/data.numberOfDays;
+  console.log("sueldo_plano: " + sueldo_plano);
 
 }
 
@@ -1210,6 +1211,7 @@ function calculator() {
     var cajaCal = 0;
     var senaCal = 0;
     var icbfCal = 0;
+    var salaryM2 = 0;
     var base = 0;
     if (aid == 0) {
         aidD = 0;
@@ -1294,14 +1296,14 @@ function calculator() {
     } else {
         var transportAid2=0;
         if (transport == 1) {
-            //salaryM -= transportAid;
+            salaryM -= transportAid;
         } else if (salaryM + aidD > smmlv * 2) {
             transportAid2 = 0;
         }else{
             transportAid2=transportAid;
         }
 
-        salaryM = (salaryM - transportAid2)/(1-(EPSEmployee+PensEmployee));
+        salaryM2 = (salaryM - transportAid2)/(1-(EPSEmployee+PensEmployee));
         totalExpenses = salaryM + aidD + transportAid2 + dotation + ((EPSEmployer + PensEmployer + arl + caja +
             vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid2));
         EPSEmployerCal = EPSEmployer * (salaryM + aidD);
@@ -1361,6 +1363,7 @@ function calculator() {
         resposne['totalIncome'] = totalIncome;
         resposne['plainSalary'] = plainSalary;
         resposne['numberOfDays'] = numberOfDays;
+        resposne['salaryM2'] = salaryM2;
         if(type=="days"&&EPSEmployerCal>0&&sisben==1){
             $("#arsNotAplicable").show();
         }else{
@@ -1400,9 +1403,9 @@ function validateSalary() {
     if (selectedVal == " Trabajador por días") {
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
-            salarioMinimoDiario = 21000;
+            salarioMinimoDiario = 22982;
         }
-        salarioDias = (accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+        salarioDias = sueldo_plano;
         if (salarioDias < salarioMinimoDiario) {
             $("#salarioMinimo").find('.modal-body').html('El salario minimo diario legal es de $ ' + getPrice(salarioMinimoDiario));
             $("#salarioMinimo").modal('show');
@@ -1418,8 +1421,8 @@ function validateSalary() {
         if (!salarioMinimo) {
             salarioMinimo = 689455;
         }
-        salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
-        if (salarioMes < salarioMinimo) {
+        salarioMes = sueldo_plano;
+        if (salarioMes < (salarioMinimo/30)) {
             $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
