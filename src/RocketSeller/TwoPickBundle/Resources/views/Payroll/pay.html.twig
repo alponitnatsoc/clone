@@ -305,7 +305,11 @@
             </form>
         </div>
     {% else %}
-        <div>No hay pagos de nomina pendientes</div>
+        <div style="clear: both;height: 60px;"></div>
+        <div class="nopagospen">
+            <img src="{{ asset('img/noerror.png') }}"/>
+            <h1>No hay pagos de nómina pendientes</h1>
+        </div>
     {% endif %}
 
 

@@ -84,3 +84,20 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     border-radius: 5px;
     padding: 25px 0;
   }
+
+.nopagospen {
+  clear: both;
+    width: 80%;
+    margin: 0 auto;
+    border: 2px #EAEAEA dashed;
+    border-radius: 15px;
+    padding: 125px 0;
+    text-align: center;
+}
+
+.nopagospen h1 {
+  font-size: 20px;
+  color: #1FCECB;
+  font-weight: 100;
+  text-align: center;
+}
