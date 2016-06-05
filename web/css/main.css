@@ -85,6 +85,25 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     padding: 25px 0;
   }
 
+ .nopagospen {
+  clear: both;
+    width: 80%;
+    margin: 0 auto;
+    border: 2px #EAEAEA dashed;
+    border-radius: 15px;
+    padding: 125px 0;
+    text-align: center;
+}
+
+.nopagospen h1 {
+  font-size: 20px;
+  color: #1FCECB;
+  font-weight: 100;
+  text-align: center;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
+
 .modal-content .close{
   	position:absolute;
   	right:20px;
@@ -97,8 +116,6 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 .modal-content .close span{ font-size: 35px; }
 .modal-responsive{ padding: 0 20px !important; }
 .subir-archivo{ margin: 10px 0; }
-
-/* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
 
 @media (max-width: 990px){
 
