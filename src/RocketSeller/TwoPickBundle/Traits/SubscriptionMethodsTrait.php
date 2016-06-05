@@ -649,7 +649,7 @@ trait SubscriptionMethodsTrait
             /** @var EmployerHasEmployee $employeeC */
             foreach ($eHEes as $employeeC) {
                 //dump($employeeC);
-                if ($employeeC->getState() > 0) {
+                if ($employeeC->getState() > 1) {
                     //check if it exist
 
                     $contracts = $employeeC->getContracts();
@@ -663,7 +663,6 @@ trait SubscriptionMethodsTrait
 
                     /* @var $payMC PayMethod */
                     $payMC = $contract->getPayMethodPayMethod();
-
                     /* @var $payType PayType */
                     $payType = $payMC->getPayTypePayType();
 
