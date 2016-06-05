@@ -3,11 +3,13 @@
     <div class="modal-dialog modal-md" role="document" id="cuerpoModal">
         <div class="modal-content">
             <div class="modal-body" style="padding: 0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
-                            aria-hidden="true">&times;</span></button>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
                 <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Subir documento nuevo</div>
+                    <div class="col-sm-12 col-xs-12 up-Intro">Subir documento nuevo</div>
                 </div>
                 <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                     {{ form_start(form,{'action': path('documentos_employee',{'id': id , 'idDocumentType':idDocumentType,'idNotification':idNotification}), 'method': 'POST'}) }}
@@ -20,9 +22,9 @@
                         {{ form_row(form.documentTypeDocumentType) }}
                     </div>
 
-                    <div class="row " style="border-bottom: none;">
+                    <div class="row modal-responsive" style="border-bottom: none;">
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-3 text-right">
+                            <div class="col-sm-12 col-xs-12 subir-archivo">
                                 {{ form_label(form.mediaMedia.binaryContent) }}
                             </div>
                             <div class="col-sm-9 text-left">

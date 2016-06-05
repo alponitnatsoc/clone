@@ -14,31 +14,43 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
     {
 
         $actionTypeValidarRegistroEmpleador = new ActionType();
-        $actionTypeValidarRegistroEmpleador->setName('Validar registro del empleador');
+        $actionTypeValidarRegistroEmpleador->setName('Validar Informacion del Empleador');
+        $actionTypeValidarRegistroEmpleador->setCode('VER');
         $manager->persist($actionTypeValidarRegistroEmpleador);
 
         $actionTypeValidarRegistroEmpleado = new ActionType();
-        $actionTypeValidarRegistroEmpleado->setName('Validar registro empleado');
+        $actionTypeValidarRegistroEmpleado->setName('Validar Informacion del Empleado');
+        $actionTypeValidarRegistroEmpleado->setCode('VEE');
         $manager->persist($actionTypeValidarRegistroEmpleado);
 
         $actionTypeValidarEntidades = new ActionType();
-        $actionTypeValidarEntidades->setName('Validar Entidades');
+        $actionTypeValidarEntidades->setName('Validar Entidad');
+        $actionTypeValidarEntidades->setCode('VEN');
         $manager->persist($actionTypeValidarEntidades);
 
+        $actionTypeValidarDocumentos = new ActionType();
+        $actionTypeValidarDocumentos->setName('Validar Documentos');
+        $actionTypeValidarDocumentos->setCode('VDC');
+        $manager->persist($actionTypeValidarDocumentos);
+
         $actionTypeLlevarDocs = new ActionType();
-        $actionTypeLlevarDocs->setName('llevar documentos a entidad');        
+        $actionTypeLlevarDocs->setName('LLevar Documentos a Entidad');
+        $actionTypeLlevarDocs->setCode('LDE');
         $manager->persist($actionTypeLlevarDocs);
 
         $actionTypeInscripcion = new ActionType();
-        $actionTypeInscripcion->setName('Inscripcion');        
+        $actionTypeInscripcion->setName('Inscripcion');
+        $actionTypeInscripcion->setCode('IN');
         $manager->persist($actionTypeInscripcion);
 
-        $actionTypeLlamarEntidad = new ActionType();
-        $actionTypeLlamarEntidad->setName('Llamar entidad');        
-        $manager->persist($actionTypeLlamarEntidad);
+        $actionTypeValidarInfoRegistrada = new ActionType();
+        $actionTypeValidarInfoRegistrada->setName('Validar Informacion Registrada');
+        $actionTypeValidarInfoRegistrada->setCode('VIR');
+        $manager->persist($actionTypeValidarInfoRegistrada);
 
         $actionTypeLlamarCliente = new ActionType();
-        $actionTypeLlamarCliente->setName('Llamar cliente');        
+        $actionTypeLlamarCliente->setName('Llamar Cliente');
+        $actionTypeLlamarCliente->setCode('CCL');
         $manager->persist($actionTypeLlamarCliente);
 
         
@@ -46,10 +58,10 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
         $this->addReference('actionType-validarEmpleador', $actionTypeValidarRegistroEmpleador);
         $this->addReference('actionType-validarEmpleado', $actionTypeValidarRegistroEmpleado);
         $this->addReference('actionType-validarEntidades', $actionTypeValidarEntidades);
-
+        $this->addReference('actionType-validarDocumentos', $actionTypeValidarDocumentos);
         $this->addReference('actionType-llevarDocs', $actionTypeLlevarDocs);
         $this->addReference('actionType-inscripcion', $actionTypeInscripcion);
-        $this->addReference('actionType-llamarEntidad', $actionTypeLlamarEntidad);
+        $this->addReference('actionType-validarInfo', $actionTypeValidarInfoRegistrada);
         $this->addReference('actionType-llamarCliente', $actionTypeLlamarCliente);
 
     }

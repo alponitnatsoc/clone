@@ -17,17 +17,17 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>#}
 <p>&nbsp;</p>
 <p style="text-align: center;"><strong>CERTIFICACIÓN</strong></p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">Que el señor(a) {{ data.employee.name }}, identificado(a) con {{ data.employee.docType }}
-número {{ data.employee.docNumber }}, trabajó en nuestra empresa desde el día {{ data.contract.fechaInicio.date|localizeddate('long', 'none', local) }}
-hasta el día {{ data.contract.fechaFin.date|localizeddate('long', 'none', local) }}, mediante un contrato de trabajo {{ data.contract.type }},
+número {{ data.employee.docNumber }}, trabajó en nuestra empresa desde el día {{ data.contract.fechaInicio.date|localizeddate('long', 'none', 'es-CO') }}
+hasta el día {{ data.contract.fechaFin.date|localizeddate('long', 'none', 'es-CO') }}, mediante un contrato de trabajo {{ data.contract.type }},
 y en ejercicio del mismo fue trabajador en la empresa {{ data.employer.name }} desempeñándose en el cargo de {{ data.contract.position }}.</p>
 <p style="text-align: justify;">La presente certificación se expide en {{ data.contract.city }}, a solicitud del interesado a los
-{{ "now"|localizeddate('none', 'none', local, null, "d 'días del mes de' MMMM 'del año' Y") }} con destino a QUIEN INTERESE.</p>
+{{ "now"|localizeddate('none', 'none', 'es-CO', null, "d 'días del mes de' MMMM 'del año' Y") }} con destino a QUIEN INTERESE.</p>
 <p>&nbsp;</p>
 <p>Cordialmente,</p>
 

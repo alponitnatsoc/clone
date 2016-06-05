@@ -2,6 +2,11 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\Employee;
+use RocketSeller\TwoPickBundle\Entity\Employer;
+use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -31,16 +36,24 @@ class BackOfficeController extends Controller
     }
 
 
-	public function checkRegisterAction($idPerson,$idAction)
-    {    	
-    	$person = $this->loadClassById($idPerson,"Person");    	
-    	$user =  $this->loadClassByArray(array('personPerson'=>$person),"User");
-       
-
-    	$action = $this->loadClassById($idAction,"Action");
-
+    /**
+     * Funcion que valida la informacion del empleado
+     * @param $idAction
+     * @return Response
+     */
+    public function checkRegisterAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+    	/** @var Person $person */
+        $person = $action->getPersonPerson();
+    	/** @var User $user */
+        $user =  $action->getUserUser();
+                
+        /** @var Employee $employee */
         $employee = $person->getEmployee();
-        $employer = $action->getRealProcedureRealProcedure()->getEmployerEmployer();
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
 
         if ($employee) {
             $employerHasEmployee = $this->loadClassByArray(
@@ -54,6 +67,33 @@ class BackOfficeController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
     }
+
+    public function checkInfoAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+
+        /** @var Employee $employee */
+        $employee = $person->getEmployee();
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+
+        if ($employee) {
+            $employerHasEmployee = $this->loadClassByArray(
+                array(
+                    "employeeEmployee" =>$employee,
+                    "employerEmployer" =>$employer,
+                ),"EmployerHasEmployee");
+        }else{
+            $employerHasEmployee = null;
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkInfo.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
+    }
+
     public function addToSQLAction($idEmployerHasEmployee){
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
         $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
@@ -61,15 +101,28 @@ class BackOfficeController extends Controller
         return $this->redirectToRoute("back_office");
     }
     public function makeAfiliationAction($idAction)
-    {        
+    {
         /** @var Action $action */
-    	$action = $this->loadClassById($idAction,"Action"); 
+        $action = $this->loadClassById($idAction, "Action");
+        /** @var Document $cedula */
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
-        $pathCedula = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
-        $nameCedula = $cedula->getMediaMedia()->getName();
+        if ($cedula) {
+            $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+            $nameCedula = $cedula->getMediaMedia()->getName();
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
         $rut = $action->getPersonPerson()->getDocByType("Rut");
-        $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
-        $nameRut = $rut->getMediaMedia()->getName();
+        if ($rut){
+            $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+            $nameRut = $rut->getMediaMedia()->getName();
+        }else{
+            $pathRut = '';
+            $nameRut = '';
+        }
+
+
         return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$pathCedula,
             'cedulaName'=>$nameCedula,'rutPath'=>$pathRut,'rutName'=>$nameRut));
     }

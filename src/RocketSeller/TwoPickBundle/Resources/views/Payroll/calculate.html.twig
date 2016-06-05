@@ -7,7 +7,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -23,26 +23,26 @@
         </a>
     </div>
 
-    <div class="payroll calculate">
+    <div class="payroll calculate" style="clear:both">
 
-        <div class="calculateHeader">
+        <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
             <br />
             <h2>El cálculo final para efectuar el pago fue realizado existosamente.</h2>
-            <h3>Verifique a continuación la información.</h3>
+            <h3>Verifique a continuación la información</h3>
         </div>
-        <form method="post" action="{{ path('payroll_confirm') }}" id="formPay">
+        <form method="post" action="{{ path('payroll_confirm') }}" id="formPay" style="width: 90%;margin: 0 auto;">
 
-        <div class="row details col-xs-12">
-            <div class="col-xs-4">
-                <h4 class="media-heading">Fecha Pago</h4>
-                {{ "now"|localizeddate('long', 'short', "es") }}
+        <div class="row col-xs-12 bordertotales">
+            <div class="col-xs-4" style="padding: 20px 0;color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Fecha Pago</h4>
+                {{ "now"|localizeddate('long', 'short', false) }}
             </div>
-            <div class="col-xs-4">
-                <h4 class="media-heading">Total por pagar</h4>
+            <div class="col-xs-4 borders" style="color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Total por pagar</h4>
                 <span id="totalPay"> $ {{ toPay.value|number_format }}</span>
             </div>
-            <div class="col-xs-4">
-                <h4 class="media-heading">Método de pago</h4>
+            <div class="col-xs-4" style="padding: 20px 0 0 20px;color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Método de pago</h4>
                 <select name="paymentMethod" class="form-control paymentMethod" required="required">
                     {% for paymentMethod in payMethods %}
                         <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
@@ -62,15 +62,15 @@
                                 <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
                             </div>#}
                             <div class="col-xs-12">
-                                <div class="col-xs-2">
-                                    <span class="pull-right">
+                                <div class="col-xs-2 bold azulmediofont">
+                                    <span>
                                         Item <input type="hidden" class="pay" name="{{ pod.idPurchaseOrdersDescription }}" value="{{ pod.idPurchaseOrdersDescription }}">
                                     </span>
                                 </div>
                                 <div class="row info col-xs-11">
                                     <div class="col-md-4">
-                                        <h4>{{ pod.description }}</h4>
-                                        $ {{ pod.value|number_format }}
+                                        <h4 class="light-italic" style="color: #00858C;font-size:15px">{{ pod.description }}</h4>
+                                        <span class="extrabold azuloscurofont" style="font-size:20px;color: #3C4B5A;">$ {{ pod.value|number_format }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -79,8 +79,8 @@
                 {% endfor %}
             </div>
             <div class="row buttons center">
-                <div class="col-xs-12 center">
-                    <input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="submit" id="btnPay" class="btn btn-default btn-orange" value="Pagar $" />
+                <div class="col-xs-12 center" style="border-top: 1px solid #CCC;padding: 35px 0 0 0;">
+                    <input type="button" class="btn btn-grey btnPrevious-form btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="submit" id="btnPay" class="btn btn-orange" value="Pagar $" />
                 </div>
             </div>
         </form>

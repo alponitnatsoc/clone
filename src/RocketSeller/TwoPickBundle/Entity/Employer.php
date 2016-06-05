@@ -490,8 +490,12 @@ class Employer
         $employees = $this->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
-            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()>0) {
-                $this->toFinish += 1;
+            if ($employee->getState()>2){
+                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()>0){
+                    $this->toFinish += 1;
+                }
+            }else{
+                $this->toFinish=0;
             }
         }
         return $this->toFinish;
@@ -521,8 +525,12 @@ class Employer
         $employees = $this->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $employee */
         foreach( $employees as $employee){
-            if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()===0){
-                $this->finished+=1;
+            if ($employee->getState()>2){
+                if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()===0){
+                    $this->finished+=1;
+                }
+            }else{
+                $this->finished=0;
             }
         }
         return $this->finished;
