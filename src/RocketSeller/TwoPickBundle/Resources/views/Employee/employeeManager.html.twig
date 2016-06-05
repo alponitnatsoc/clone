@@ -5,14 +5,16 @@
     {% else %}
         {% set status = 0 %}
     {% endif %}
-    <div class="col-sm-12 col-xs-12 align-Resp">
-        <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
-            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                 <img src="/img/block-inline.png" class="center-block">
-            </div>
-            <div id="" class="col-md-10 col-xs-12 txt-AD1">
-                <div id="" class="text-left">
-                    Empleados
+    <div class="row">
+        <div class="col-sm-12 col-xs-12 align-Resp">
+            <div id="" class=" col-sm-12 col-xs-12 blockStep inline  nav-link" >
+                <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                     <img src="/img/block-inline.png" class="center-block">
+                </div>
+                <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                    <div id="" class="text-left title-center">
+                        Empleados
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,9 +23,9 @@
     <div id="agregarNovedad"></div>
     <div class="col-xs-12" id="employees">
         <div class="row employeesCount">
-            <div class="col-md-4">Empleados Activos<br><b>{{ employees|length }}</b></div>
-            <div class="col-md-4">Empleados inactivos<br><b> 0</b></div>
-            <div class="col-md-4">Empleados en proceso de registro<br><b> 0</b></div>
+            <div class="col-md-4 col-xs-3"><p><b>{{ employees|length }}</b><br>Empleados <br>activos</p></div>
+            <div class="col-md-4 col-xs-3 division-line"><p><b> 0</b><br>Empleados <br>inactivos</p></div>
+            <div class="col-md-4 col-xs-6"><p><b> 0</b><br>Empleados en proceso <br>de registro</p></div>
         </div>
         <br />
         <div class="row">
@@ -32,33 +34,34 @@
                 {% for employee in employees %}
                     {% set employeeStatus= employee.state %}
                     <div class="row employeeListItem">
-                        <div class="col-xs-6 employeeInfo"
-                            style="{% if employeeStatus != 1 %}border-left:3px solid #ccc{% endif %}">
+                        
+                        <div class="col-xxs-5 col-xs-5 col-sm-4 employeeInfo"
+                            style="{% if employeeStatus != 1 %} border-left:3px solid #41D0CB {% endif %}">
                             <b>{{ employee.fullName }}</b>
                             {% if employeeStatus > 2 and status >= 2 %}
                                 <br />
                                 <a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ employee.idPayroll }}">Agregar novedad</a>
                             {% endif %}
                         </div>
-                        <div class="col-xs-3 employeeStatus">
+                        <div class="col-xxs-3 col-xs-3 col-sm-4 employeeStatus">
                             {% if employeeStatus < 1 %}
                                 <i class="glyphicon glyphicon-remove-circle"></i> Inactivo
                                 <a class="removeEmployee" href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover</a>
                             {% else %}
-                                <i class="glyphicon glyphicon-ok-sign"></i> Activo
+                                <p class="estado-empleado"><span class="glyphicon glyphicon-ok-sign"></span> Activo</p>
                                 {% if  employee.stateRegister != 100 %}
                                     <a class="removeEmployee"  href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover</a>
                                 {% endif %}
                             {% endif %}
 
                         </div>
-                        <div class="col-xs-3 actionButton">
+                        <div class="col-xxs-4 col-xs-4 col-sm-4 actionButton">
                             {% if employeeStatus <= 2 %}
                                 <a href="/register/employee/{{employee.idEmployee}}">Editar</a>
                             {% else %}
                                 <!--<a href="{{ path('final_liquidation', { 'id': employee.idEmployerHasEmployee }) }}">Liquidacion</a>
                                 /-->
-                                <a href="/manage/employee/{{employee.idEmployee}}">> Ver detalles</a>
+                                <a href="/manage/employee/{{employee.idEmployee}}">Ver detalles <span class="fa fa-angle-right"></span></a>
                             {% endif %}
                         </div>
                     </div>
