@@ -1,1 +1,20 @@
-.basicConfirmation .blockStep .txt-AD1{margin-top:22px}.basicConfirmation .confirmationBlock{text-align:center;width:80%}.basicConfirmation h3{font-weight:700}.basicConfirmation h2{color:#e59233;margin-top:3px}.basicConfirmation h4{font-weight:100;font-size:22;color:#B2AFAD}@media only screen and (max-device-width:360px){.basicConfirmation .confirmationBlock{text-align:center;width:100%;margin:0;padding:0}}
+.basicConfirmation .blockStep .txt-AD1{margin-top:22px}.basicConfirmation .confirmationBlock{text-align:left;clear: both;width: 80%;margin: 0 auto;padding: 0;}.basicConfirmation h3{font-weight:700;color: #3C4B5A;}.basicConfirmation h2{color:#e59233;margin-top:3px}.basicConfirmation h4{font-weight:100;font-size:20px;color:#00858C}@media only screen and (max-device-width:360px){.basicConfirmation .confirmationBlock{text-align:center;width:100%;margin:0;padding:0}}
+
+.imgpaso {
+    width: 50px;
+    float: left;
+    margin-right: 10px;
+}
+
+.textpaso {
+  float: left;
+  width: 80%;
+}
+
+.border {
+    border-radius: 5px;
+    background: #F7F7F7;
+    padding: 35px 30px 20px;
+    height: auto;
+    overflow: hidden;
+}
