@@ -4,7 +4,7 @@
         <div class="col-sm-12 col-xs-12">
             <div class="btn col-sm-12 col-xs-12 blockTop">
                 <div class="col-md-2">
-                    <img src="/img/employ_white.png" />
+                    <img src="/img/empleados.png" />
                 </div>
                 <div class="col-md-6 col-xs-12 txt-top-employee">
                     <div class="" id="">
@@ -15,12 +15,12 @@
         </div>
         <div class="col-sm-12 col-xs-12 ">
             <ul class="nav nav-tabs nav-justified tab-header">
-                <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
-                <li><a class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
-                <li><a  class="notAjax tabsEnabled" style="font-size:10px;" data-toggle="tab" data-target="#documents">Documentos</a></li>
+                <li class="active"><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#basicData">Datos Basicos</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#contactData">Información de contrato</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#workplacesData">Seguridad Social</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#noveltiesData">Novedades</a></li>
+                <li><a class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#payHistory">Historico de pagos</a></li>
+                <li><a  class="notAjax tabsEnabled" style="font-size:10px;cursor: pointer;" data-toggle="tab" data-target="#documents">Documentos</a></li>
             </ul>
         </div>
         <div class="tab-content">
@@ -31,7 +31,7 @@
                         <div class="col-sm-12">
                             <p><strong>{{employee.personPerson.names}}</strong></p>
                             <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
+                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i>
                             </p>
                         </div>
                     </div>
@@ -56,16 +56,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 middle-box">
-                    <div class="col-sm-4 left">
+                <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;">
+                    <div class="col-sm-4 left" style="border:0">
                         {% if employerHasEmployee.state %}
-                            <p><i class="fa fa-check-circle">Activo</i></p>
+                            <p><i class="fa fa-check-circle" style="color:#FD9224;font-size: 20px;padding-top: 10px;"></i>Activo</p>
                         {% else %}
-                            <p><i class="fa fa-check-cross">Inactivo</i></p>
+                            <p><i class="fa fa-check-cross"></i>Inactivo</p>
                         {% endif %}
                     </div>
 
-                    <div class="col-sm-4 right">
+                    <div class="col-sm-4 right" style="margin:0;padding: 15px 0;">
                         <div class="col-sm-12 title" style="font-style:italic;">Salario</div>
                         <div class="col-sm-12 text-below"><strong>${{contract.salary}}</strong></div>
                     </div>
@@ -73,8 +73,8 @@
                 <div class="col-sm-12 bottom-box">
                     <div class="col-sm-4 col-sm-offset-2 left">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos básicos</h4>
-                            <li>
+                            <h4 class="col-sm-12" style="color:#1FCECB;; font-weight:lighter;font-size: 20px;">Datos básicos</h4>
+                            <li style="clear: both;">
                                 <p class="title"><i>Estado civil</i></p>
                                 <p><strong>{{ employee.personPerson.civilStatus}}</strong></p>
                             </li>
@@ -98,8 +98,8 @@
                     </div>
                     <div class="col-sm-4 col-sm-offset-1 right">
                         <ul class="col-sm-12">
-                            <h4 class="col-sm-12" style="color:#3C4B5A; font-weight:bold">Datos de contacto</h4>
-                            <li>
+                            <h4 class="col-sm-12" style="color:#1FCECB; font-weight:lighter;font-size: 20px;">Datos de contacto</h4>
+                            <li style="clear: both;">
                                 <p class="title"><i>Dirección</i></p>
                                 <p><strong>{{employee.personPerson.mainAddress}}</strong></p>
                             </li>
@@ -193,7 +193,7 @@
                         <div class="col-sm-12">
                             <p><strong>{{employee.personPerson.names}}</strong></p>
                             <p>{{employee.personPerson.lastName1}} {{employee.personPerson.lastName2}}</p>
-                            <p class="document-text"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
+                            <p class="document-text" style="font-weight: 100;color: #888686;"><i>{{employee.personPerson.documentType}}: {{employee.personPerson.document}} {% if employee.personPerson.documentExpeditionPlace %}de {{employee.personPerson.documentExpeditionPlace}}{% endif %}</i></p>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -276,7 +276,7 @@
                                     </li>
                                     <li>
                                         <p class="title"><i>Salario</i></p>
-                                        <input id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
+                                        <input style="margin: 10px 0;" id="form_contract_salary" name="contract[salary]" required="required" class="form-control" type="text">
                                     </li>
                                 </ul>
                             </div>
@@ -293,7 +293,7 @@
                                     <li>
                                         {% set workplaces = employerHasEmployee.EmployerEmployer.workplaces %}
                                         <p class="title"><i>Lugar de trabajo</i></p>
-                                        <select id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_workplace" name="contract[workplace]" required="required" class="form-control">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for workplace in workplaces %}
                                                 <option value="{{workplace.idWorkplace}}">{{ workplace.name}}</option>
@@ -303,7 +303,7 @@
                                     </li>
                                     <li>
                                         <p class="title"><i>Metodo de pago</i></p>
-                                        <select id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
+                                        <select style="margin: 10px 0;" id="form_contract_method_type" name="contract[method_type]" required="required" class="form-control">
                                             <option value="" selected="selected">Seleccionar una opción</option>
                                             {% for payMethodType in payMethodTypes %}
                                                 <option value="{{payMethodType.idPayType}}">{{ payMethodType.name}}</option>
@@ -331,8 +331,9 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12 file-download-contract" >
-                        <h4>Copia firmada del contrato</h4>
+                    <div class="col-sm-12 file-download-contract downcopy" >
+                        <h4 style="font-weight: bold;color: #00858C;">Copia firmada del contrato</h4>
+                        <p>Consulte aquí la copia digitalizada del contrato que usted guardó en el sistema el día 10 de enero de 2015. <strong>› Colsultar</strong></p>
                         {% if contractEmployee %}
                             <a href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':contractEmployee.idDocument}) }}">
                                 <div  class="col-sm-8 col-sm-offset-2 pdf-contract-download">
@@ -357,7 +358,7 @@
             <div id="workplacesData" class="tab-pane">
                 <div class="col-sm-12 social-security" >
                     <h4>Datos de seguridad social</h4>
-                    <div class="col-sm-8 col-sm-offset-2">
+                    <div class="col-sm-8 col-sm-offset-2 recuadro-ssocial">
                         <div class="col-sm-6 left">
                             <p class="title"><i><strong>Eps</strong></i></p>
                             <p class="title"><i><strong>Fondo de pensiones</strong></i></p>
@@ -372,7 +373,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8 col-sm-offset-2 middle-content">
+                <!--<div class="col-sm-8 col-sm-offset-2 middle-content">
                     <div class="col-sm-12" style="text-align:center;">
                         <div class="col-sm-4">
                             <p><strong>Beneficiario</strong></p>
@@ -402,14 +403,14 @@
                         </div>
 
                     {% endfor %}
-                </div>
+                </div>-->
                 {{ form_start(form , {'attr': {'id': 'form'}})}}
-                <div class="col-sm-12 form-upper">
+                <!--<div class="col-sm-12 form-upper">
                     <div class="content col-sm-8 col-sm-offset-2" style="cursor:pointer" onclick="showCreateForm()">
                         <h4 >Agregar beneficiario de {{employee.personPerson.names}} {{employee.personPerson.lastName1}}</h4>
 
                     </div>
-                </div>
+                </div>-->
                 <div id="form-beneficiary" class="col-sm-12 form-lower" style="display:none;">
 
                     <div class="content col-sm-6 col-sm-offset-3">
@@ -485,7 +486,7 @@
 
 
                 </div>
-                <div class="col-sm-12 buttons-box">
+                <!--<div class="col-sm-12 buttons-box">
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="col-sm-6 " style="text-align:right;">
                             <a class="btn btn-orange btn-inverted notAjax" href="">Agregar otro beneficiario</a>
@@ -494,27 +495,28 @@
                             <a class="btn btn-orange notAjax" href="">Siguiente</a>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div id="noveltiesData" class="tab-pane">
                 <div class="col-sm-12 middle-content">
                     <div class="content col-sm-6 col-sm-offset-3">
-                        <h4>Novedades reportadas al día de hoy</h4>
+                        <h4 style="font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Novedades reportadas al día de hoy</h4>
                     </div>
                     <div class="col-sm-12" style="text-align:center;">
                         <div class="col-sm-3">
-                            <p><strong>Fecha inicio</strong></p>
+                            <p><strong style="color: #5D5D5D;">Fecha inicio</strong></p>
                         </div>
                         <div class="col-sm-3">
-                            <p><strong>Fecha fin</strong></p>
+                            <p><strong style="color: #5D5D5D;">Fecha fin</strong></p>
                         </div>
                         <div class="col-sm-3">
-                            <p><strong>Estado</strong></p>
+                            <p><strong style="color: #5D5D5D;">Estado</strong></p>
                         </div>
                         <div class="col-sm-3">
-                            <p><strong>Detalle</strong></p>
+                            <p><strong style="color: #5D5D5D;">Detalle</strong></p>
                         </div>
-                    </div>
+                     </div>
+                    {% set noveltycount = 0 %}
                     {% set payrolls = contract.payrolls %}
                     {% for payroll in payrolls %}
                         {% set novelties = payroll.novelties %}
@@ -541,15 +543,21 @@
                                     <p><strong>Detalle</strong></p>
                                 </div>
                             </div>
+                            {% set noveltycount = noveltycount + 1 %}
                         {% endfor %}
-                    {% endfor %}
+                        {% endfor %}
+                        <div class="nonovedad">
+                          {% if noveltycount == 0 %}
+                            No tienes novedades reportadas a la fecha
+                          {% endif %}
+                        </div>
                     <div class="col-sm-12  row-add-novelty" style="text-align:center;">
                         <div class="col-sm-4 col-sm-offset-4">
                             <div class="col-sm-2 plus-icon">
                                 <i class="fa fa-plus-circle fa-2x"></i>
                             </div>
                             <div class="col-sm-10 text">
-                                <a class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
+                                <a style="color: #6F6F6F;font-size: 15px;font-weight: 400;font-style: italic;}" class="notAjax addNovelty" href="/novelty/select/{{ contract.activePayroll.idPayroll  }}">Agregar Novedad</a>
                             </div>
                         </div>
                     </div>
@@ -611,13 +619,15 @@
             <div id="documents" class="tab-pane">
                 <div class="documents col-sm-12">
                     <div class="documents-title col-sm-12">
-                        <h4>Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
+                        <h4 style="text-align:center;font-weight: 100;color: #808080;font-size: 21px;margin: 20px 0 10px 0;">Documentos asociados a {{employee.personPerson.names}} al día de hoy</h4>
                     </div>
                     <div class="col-sm-12 documents-content">
                         {% set docs = employee.personPerson.docs %}
+                        {% set numDocs = 0 %}
                         {% if docs|length > 0 %}
                             {% for doc in docs %}
                                 {% if doc.mediaMedia %}
+                                    {% set numDocs = numDocs+1 %}
                                     <div class=" element col-sm-3">
                                         <div class="col-sm-12 icon-pdf">
                                             <i class="fa fa-file-pdf-o fa-2x"></i>
@@ -634,6 +644,11 @@
                                     </div>
                                 {% endif %}
                             {% endfor %}
+                        {% endif %}
+                        {% if numDocs == 0  %}
+                        <div class="nonovedad">
+                            Hásta el momento no hay documentos de {{employee.personPerson.names}} disponibles
+                        </div>
                         {% endif %}
                     </div>
                 </div>

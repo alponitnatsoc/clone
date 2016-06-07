@@ -275,7 +275,7 @@
                                     <div class="col-md-3 div-btn-change-state-contract">
                                         <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
                                              data-id="{{ employee.idEmployerHasEmployee }}"
-                                             data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state?'Inactivar':'Activar' }}</div>
+                                             data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
                                     </div>
                                 </div>
                             </div>

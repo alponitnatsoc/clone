@@ -1497,7 +1497,9 @@ class EmployeeRestController extends FOSRestController {
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
      * @RequestParam(array=true, name="severances", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(array=true, name="severancesExists", nullable=false, strict=true, description="checks if already has Severances.")
      * @RequestParam(name="arl", nullable=false, strict=true, description="employee type.")
+     * @RequestParam(name="arlExists", nullable=false, strict=true, description="checks if already has ARL.")
      * @RequestParam(name="economicalActivity", nullable=true, strict=true, description="employee type.")
      * @return View
      */
@@ -1523,10 +1525,18 @@ class EmployeeRestController extends FOSRestController {
         $realEmployer->setEconomicalActivity($paramFetcher->get('economicalActivity')? : 2435);
         /** @var Entity $realArl */
         $realArl = $entityRepo->find($paramFetcher->get('arl'));
+        $arlExists = $paramFetcher->get('arlExists');
+
         $realSeverances = new ArrayCollection();
         $severances = $paramFetcher->get('severances');
         foreach ($severances as $sever) {
             $realSeverances->add($entityRepo->find($sever));
+        }
+
+        $realSeverancesExists = new ArrayCollection();
+        $severancesExists = $paramFetcher->get('severancesExists');
+        foreach ($severancesExists as $severExist) {
+            $realSeverancesExists->add($severExist);
         }
 
         if ($realSeverances == null || $realArl == null) {
@@ -1535,7 +1545,6 @@ class EmployeeRestController extends FOSRestController {
         $realEmployerEnt = $realEmployer->getEntities();
         $em = $this->getDoctrine()->getManager();
 
-
         if ($realEmployerEnt->count() < $realSeverances->count() + 1) {
             $counter = 0;
             $exist = false;
@@ -1543,16 +1552,19 @@ class EmployeeRestController extends FOSRestController {
             foreach ($realEmployerEnt as $rEE) {
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
                     $rEE->setEntityEntity($realArl);
+                    $rEE->setState($arlExists);
                     $exist = true;
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
+                    $rEE->setState($realSeverancesExists->get($counter));
                     $counter++;
                 }
             }
             if (!$exist) {
                 $realArlHasEmployer = new EmployerHasEntity();
                 $realArlHasEmployer->setEntityEntity($realArl);
+                $realArlHasEmployer->setState($arlExists);
                 $realArlHasEmployer->setEmployerEmployer($realEmployer);
                 $realEmployer->addEntity($realArlHasEmployer);
             }
@@ -1560,6 +1572,7 @@ class EmployeeRestController extends FOSRestController {
                 for ($i = $counter; $i < $realSeverances->count(); $i++) {
                     $realSevereancesHasEmployer = new EmployerHasEntity();
                     $realSevereancesHasEmployer->setEntityEntity($realSeverances->get($i));
+                    $realSevereancesHasEmployer->setState($realSeverancesExists->get($i));
                     $realSevereancesHasEmployer->setEmployerEmployer($realEmployer);
                     $realEmployer->addEntity($realSevereancesHasEmployer);
                 }
@@ -1570,11 +1583,13 @@ class EmployeeRestController extends FOSRestController {
             $counter = 0;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                     $rEE->setEntityEntity($realArl);
+                    $rEE->setState($arlExists);
                 }
                 if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "PARAFISCAL") {
                     $rEE->setEntityEntity($realSeverances->get($counter));
+                    $rEE->setState($realSeverancesExists->get($counter));
                     $counter++;
                 }
             }

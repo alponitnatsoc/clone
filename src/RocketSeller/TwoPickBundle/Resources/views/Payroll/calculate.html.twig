@@ -7,7 +7,7 @@
     <div class="col-sm-12 col-xs-12 align-Resp">
         <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
             <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                <img src="/img/block-inline.png" class="center-block">                    
+                <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-xs-12 txt-AD1">
                 <div id="" class="text-left">
@@ -23,39 +23,38 @@
         </a>
     </div>
 
-    <div class="payroll calculate">
+    <div class="payroll calculate" style="clear:both">
 
-        <div class="calculateHeader">
+        <div class="calculateHeader" style="margin: 30px auto;color:#00858C">
             <br />
             <h2>El cálculo final para efectuar el pago fue realizado existosamente.</h2>
-            <h3>Verifique a continuación la información.</h3>
-        </div>        
+            <h3>Verifique a continuación la información</h3>
+        </div>
+        <form method="post" action="{{ path('payroll_confirm') }}" id="formPay" style="width: 90%;margin: 0 auto;">
 
-        <div class="row details col-xs-12">
-            <div class="col-xs-4">
-                <h4 class="media-heading">Fecha Pago</h4>
-                {{ "now"|localizeddate('long', 'short', "es") }}
-
+        <div class="row col-xs-12 bordertotales">
+            <div class="col-xs-4" style="padding: 20px 0;color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Fecha Pago</h4>
+                {{ "now"|localizeddate('long', 'short', false) }}
             </div>
-            <div class="col-xs-4">
-                <h4 class="media-heading">Total por pagar</h4>
-                <span id="totalPay"></span>
+            <div class="col-xs-4 borders" style="color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Total por pagar</h4>
+                <span id="totalPay"> $ {{ toPay.value|number_format }}</span>
             </div>
-            <div class="col-xs-4">
-                <h4 class="media-heading">Total Personas</h4>
-                <span id="totalEmployees">{{ dataNomina|length }}</span>
+            <div class="col-xs-4" style="padding: 20px 0 0 20px;color:#1FCECB;">
+                <h4 class="media-heading" style="color: #00858C;font-weight: bold;font-style: italic;">Método de pago</h4>
+                <select name="paymentMethod" class="form-control paymentMethod" required="required">
+                    {% for paymentMethod in payMethods %}
+                        <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
+                    {% endfor  %}
+                </select>
             </div>
         </div>
 
-        <form method="post" action="{{ path('payroll_confirm') }}" id="formPay">
             <div class="row">
-                {% for key,data in dataNomina %}
-                    {% set employerHasEmployee = data['employerHasEmployee'] %}
-                    {% set employee = employerHasEmployee.employeeEmployee %}
-                    {% set employer = employerHasEmployee.employerEmployer %}
-                    {% set personEmployee = employee.personPerson %}
-                    {% set personEmployer = employer.personPerson %}
-                    {% set idPayroll = data['idPayroll'] %}
+                {% set dataNomina = toPay.purchaseOrderDescriptions %}
+                {% for pod in dataNomina %}
+
 
                     <div class="col-xs-12">
                         <div class="row-fluid clearfix employee">
@@ -63,55 +62,16 @@
                                 <img class="{{ personEmployee.gender == 'FEM'?'female':'male'  }}" src="{{ personEmployee.gender == 'FEM'?'/img/female.png':'/img/male.png'  }}" alt="Icono" height="42" width="42">
                             </div>#}
                             <div class="col-xs-12">
-                                <div class="col-xs-9">
-                                    <span class="name">{{ personEmployee.names }} {{ personEmployee.lastName1 }}</span>
-                                </div>
-                                <div class="col-xs-2">
-                                    <span class="pull-right">
-                                        Pagar <input type="checkbox" class="pay" name="payrollToPay[{{ idPayroll }}]" value="{{ idPayroll }}" checked="checked">
+                                <div class="col-xs-2 bold azulmediofont">
+                                    <span>
+                                        Item <input type="hidden" class="pay" name="{{ pod.idPurchaseOrdersDescription }}" value="{{ pod.idPurchaseOrdersDescription }}">
                                     </span>
                                 </div>
                                 <div class="row info col-xs-11">
-                                    <!--<div class="col-md-3">
-                                        <h4>Salario:</h4>
-                                        $ {# salaries[payroll.idPayroll]|number_format #}
-                                        <h4>Novedades:</h4>
-                                        $0
-                                    </div>-->
                                     <div class="col-md-4">
-                                        <h4>Pago a empleado:</h4>
-                                        $ {{ data['totalLiquidation']['total']|number_format }}
-                                        <h5>Forma de pago:</h5>
-                                        <span>{{ data['payMethod'].payTypePayType.name }}</span>
+                                        <h4 class="light-italic" style="color: #00858C;font-size:15px">{{ pod.description }}</h4>
+                                        <span class="extrabold azuloscurofont" style="font-size:20px;color: #3C4B5A;">$ {{ pod.value|number_format }}</span>
                                     </div>
-                                    <div class="col-md-4">
-                                        <h4>Pago aportes Seguridad Social:</h4>
-                                        $ {{ data['PILA']['total']|number_format }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h3>Pago final:</h3>
-                                        {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
-                                            <span>$ {{ data['PILA']['total']|number_format }}</span>
-                                        {% else %}
-                                            <span>$ {{ (data['totalLiquidation']['total'] + data['PILA']['total'])|number_format }}</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-xs-11">
-                                    <div class="col-xs-3" style="display: -webkit-inline-box;vertical-align: middle;">
-                                        <strong>Medio de pago: </strong>
-                                    </div>
-                                    <div class="col-xs-7" style="display: -webkit-inline-box;vertical-align: middle;">
-                                        <select name="paymentMethod[{{ idPayroll }}]" class="form-control paymentMethod" required="required">
-                                            {% for paymentMethod in paymentMethods %}
-                                                <option value="{{ paymentMethod['method-id'] }}">{{ paymentMethod['account'] }}</option>
-                                            {% endfor  %}
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-1" style="display: -webkit-inline-box;vertical-align: middle;">
-                                        <span type="button" id="addPayMethod" class="btn btn-default" value="Agregar" href="{{ path('add_credit_card') }}">Agregar</span>                                   
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -119,8 +79,8 @@
                 {% endfor %}
             </div>
             <div class="row buttons center">
-                <div class="col-xs-12 center">
-                    <input type="button" class="btn btn-default" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="button" id="btnPay" class="btn btn-default btn-orange" value="Pagar $" />
+                <div class="col-xs-12 center" style="border-top: 1px solid #CCC;padding: 35px 0 0 0;">
+                    <input type="button" class="btn btn-grey btnPrevious-form btnPrevious" id="btnBack" value="Volver Atrás" onclick="history.go(-1);"/> <input type="submit" id="btnPay" class="btn btn-orange" value="Pagar $" />
                 </div>
             </div>
         </form>
@@ -174,126 +134,6 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script>
-        $(document).ready(function () {
 
-            updateValues();
-            $('#btnPay').click(function () {
-                var total = 0;
-                $('.employee .pay').each(function (index, element) {
-                    if ($(element)[0].checked) {
-                        total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-                    }
-                });
-                var dialog = bootbox.dialog({
-                    title: "Confirmación de pago",
-                    closeButton: false,
-                    message: '<div class="row">  ' +
-                            '<div class="col-md-12 text-center"> ' +
-                            'La suma total para pago corresponde a <h2>' + numeral(total).format('$ 0,0') + '</h2>' +
-                            '</div>' +
-                            '<div class="col-md-12"> ' +
-                            ' <label id="lbl_chkAccept" for="chkAccept" ><input type="checkbox" class="chkAccept" id="chkAccept"/> Acepto que los valores calculados por Symplifica corresponden a la información que como pagador declaro que es verdadera.</label>' +
-                            '</div>  </div>',
-                    buttons: {
-                        cancel: {
-                            label: "Cancelar",
-                            className: "btn-default",
-                            callback: function () {
-                                $("#btnPay").prop('disabled', false);
-                                console.log("Prueba");
-                            }
-                        },
-                        success: {
-                            label: "Pagar",
-                            className: "btn-default btn-orange btn-pay",
-                            callback: function () {
-                                $('#formPay').submit();
-                                $("#btnPay").prop('disabled', true);
-                            }
-                        }
-                    }
-                });
-                $(dialog.find('.btn-pay')[0]).prop('disabled', true);
-                $(dialog.find('.chkAccept')).change(function (e) {
-                    $(dialog.find('.btn-pay')[0]).prop('disabled', !e.currentTarget.checked);
-                });
-                $("#btnPay").prop('disabled', true);
-            });
-            $('#addPayMethod').click(function (event) {
-                event.preventDefault();
-                url = $(this).attr('href');
-                $.ajax({
-                    url: url,
-                    //data: data,
-                    //success: success,
-                    //dataType: dataType,
-                    beforeSend: function (xhr) {
-                        $('#modal_loader').modal('show');
-                    }
-                }).done(function (data) {
-                    //$('#modal_add_pay_method').html($(data).find("#main"));
-                    $('#modal_add_pay_method').html(data);
-
-                    $('#modal_add_credit_card').modal({
-                        show: false,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
-
-                    $('#modal_add_credit_card').modal('show');
-                    $.getScript("/public/js/addCreditCard.js").done(function () {
-                        startAddCreditCard();
-                    });
-                }).fail(function (data) {
-                    //$("#modal_body_add_novelty").html(data);
-                }).always(function () {
-                    $('#modal_loader').modal('hide');
-                });
-                //document.location = "/novelty/select/" + payroll;
-            });
-        });
-        var salaries = [];
-        var aportes = [];
-        {% for key,data in dataNomina %}
-            {% if data['payMethod'].payTypePayType.name|lower == 'en efectivo' %}
-                salaries[{{data['idPayroll']}}] = 0;
-            {% else %}
-                        salaries[{{data['idPayroll']}}] = {{ data['totalLiquidation']['total'] }};
-            {% endif %}
-
-            {% if data['PILA']['total'] is defined %}
-                        aportes[{{data['idPayroll']}}] = {{ data['PILA']['total'] }};
-            {% else %}
-                        aportes[{{data['idPayroll']}}] = 0;
-            {% endif %}
-        {% endfor %}
-                    $('.employee .pay').on('change', updateValues);
-            function updateValues() {
-                var i = 0;
-                var total = 0;
-                $('.employee .pay').each(function (index, element) {
-                    if ($(element)[0].checked) {
-                        i++;
-                        total += (salaries[$(element)[0].value] + aportes[$(element)[0].value]);
-                    }
-                });
-                $('#totalPay').html(numeral(total).format('$ 0,0'));
-                $('#totalEmployees').html(i);
-                $('#btnPay').val("Pagar " + numeral(total).format('$ 0,0'));
-                $('#btnPay').prop('disabled', i == 0 || total == 0);
-            }
-            function updateListPaymentMethods(data) {
-                //console.log(data);
-                $(".paymentMethod").each(function () {
-                    $(this).html(jsonToSelect(data));
-                });
-            }
-            function jsonToSelect(data) {
-                html = '';
-                $.each(data['payment-methods'], function (key, obj) {
-                    html += '<option value="' + obj['method-id'] + '">' + obj['account'] + '</option>';
-                });
-                return html;
-            }
     </script>
 {% endblock %}

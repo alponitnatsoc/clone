@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EntityType;
@@ -19,11 +19,11 @@ use RocketSeller\TwoPickBundle\Form\PersonBeneficiaryRegistration;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class PersonController extends Controller
-{	
-	
+{
+
 
     /**
-    * Maneja la edición de una  persona con los datos básicos, 
+    * Maneja la edición de una  persona con los datos básicos,
     * @return La vista de el formulario de editar persona
     **/
     public function editPersonAction()
@@ -44,7 +44,7 @@ class PersonController extends Controller
             $employer=new Employer();
             $people->setEmployer($employer);
         }
-        
+
         if (count($employer->getWorkplaces())==0) {
             $workplace = new Workplace();
             $employer->addWorkplace($workplace);
@@ -87,6 +87,7 @@ class PersonController extends Controller
             foreach ($empEntities as $enti) {
                 if ($enti->getEntityEntity()!=null &&$enti->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                     $form->get('arl')->setData($enti->getEntityEntity());
+										$form->get('arlExists')->setData($enti->getState());
                 }else {
                     $actualSeverances->add($enti);
                 }

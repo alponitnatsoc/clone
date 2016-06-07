@@ -1891,12 +1891,20 @@ class PayrollRestController extends FOSRestController
         $code = json_decode($temp->getStatusCode(), true);
         $nuevo = array();
         foreach ($data as &$i) {
+
+            // This means there was a problem and only one item was returned.
+            $finish = false;
+            if(!is_array($i)) {
+              $i = json_decode($temp->getContent(), true);
+              $finish = true;
+            }
             // Go thorug each novelty.
             foreach ($i as $key => $val) {
                 if ($key == 'CON_CODIGO') {
                     $i['CON_CODIGO_DETAIL'] = $this->getNoveltyDetail($val);
                 }
             }
+            if($finish)break;
         }
         $view = View::create();
         $view->setStatusCode($code);
@@ -2701,6 +2709,60 @@ class PayrollRestController extends FOSRestController
         $unico['USUARIO'] = ''; // Empty by default.
         $unico['EMP_CODIGO'] = $parameters['employee_id'];
         $unico['TIP_EJEC'] = $parameters['execution_type'];
+
+        $content[] = $unico;
+        $parameters = array();
+        $parameters['inInexCod'] = '611';
+        $parameters['clXMLSolic'] = $this->createXml($content, 611);
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters);
+
+        return $responseView;
+    }
+
+    /**
+     * Liquidates all the payrolls and change active period, should be called
+     * each period to changeir, twice a month using Q, and at the end of
+     * the month using M.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Liquidates all the payrolls and change active period.",
+     *   statusCodes = {
+     *     200 = "OK",
+     *     400 = "Bad Request",
+     *     401 = "Unauthorized",
+     *     404 = "Not Found"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     *    (name="period", nullable=false, requirements="M|Q", strict=true, description="M meaning monthly and Q meaning byweekly")
+     *
+     * @return View
+     */
+    public function postChangeActivePeriodAction(Request $request)
+    {
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+        // Set all the parameters info.
+        $regex['period'] = 'M|Q';
+        $mandatory['period'] = true;
+
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $content = array();
+        $unico = array();
+
+
+        $unico['COD_PROC'] = 1; // payroll liquidation is always 1.
+        $unico['USUARIO'] = 'SRHADMIN';
+        $unico['EMP_CODIGO'] = $parameters['period'];
+        $unico['TIP_EJEC'] = 'C'; // In this case is allways C.
 
         $content[] = $unico;
         $parameters = array();

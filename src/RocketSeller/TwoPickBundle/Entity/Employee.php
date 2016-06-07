@@ -409,13 +409,16 @@ class Employee
     {
         $actions=$this->getPersonPerson()->getAction();
         /** @var Action $action */
-        foreach($actions as $action){
-            if ($action->getStatus() === "Nuevo"){
-                $this->setEmployeeHasUnfinishedActions(1);
-                return $this->employeeHasUnfinishedActions;
+        if($actions->isEmpty()){
+            $this->employeeHasUnfinishedActions = 0;
+        }else{
+            foreach($actions as $action){
+                if ($action->getStatus() === "Nuevo"){
+                    $this->setEmployeeHasUnfinishedActions(1);
+                    return $this->employeeHasUnfinishedActions;
+                }
             }
         }
-        $this->setEmployeeHasUnfinishedActions(0);
         return $this->employeeHasUnfinishedActions;
     }
 }

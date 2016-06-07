@@ -47,7 +47,7 @@ class PurchaseOrdersDescription
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders
-     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions")
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\PurchaseOrders", inversedBy="purchaseOrderDescriptions", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="purchase_orders_id_purchase_orders", referencedColumnName="id_purchase_orders")
      * })

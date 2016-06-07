@@ -79,7 +79,7 @@ class PaymentMethodRestController extends FOSRestController
             return $view;
         }
 
-        return $view->setStatusCode(201);
+        return $view->setStatusCode(201)->setData(array());
     }
     /**
      * Add the credit card<br/>
@@ -268,15 +268,17 @@ class PaymentMethodRestController extends FOSRestController
         }
         if (isset($responsePaymentsMethodsCD["payment-methods"])) {
             foreach ($responsePaymentsMethodsCD["payment-methods"] as $key=>$value ) {
-                /** @var Bank $bank */
-                $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
-                $realPayMethods[]=array(
-                  'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
-                  'account'=>$value["numeroCuenta"],
-                  'method-id'=>'1-'.$value["idCuenta"],
-                  'bank'=>$bank->getName(),
-                  'id-provider'=>'1',
-                );
+                if($value["estado"]=="DISPONIBLE"){
+                    /** @var Bank $bank */
+                    $bank=$bankRepo->findOneBy(array('hightechCode'=>$value["codBanco"]));
+                    $realPayMethods[]=array(
+                        'payment-type'=>$value["tipoCuenta"]=="AH"?"Ahorros":"Corriente",
+                        'account'=>$value["numeroCuenta"],
+                        'method-id'=>'1-'.$value["idCuenta"],
+                        'bank'=>$bank->getName(),
+                        'id-provider'=>'1',
+                    );
+                }
             }
         }
         return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
@@ -523,6 +525,7 @@ class PaymentMethodRestController extends FOSRestController
                 "accountBankNumber" => $paymentMethodAN,
                 "bankCode" => $bankCode,
                 "value" => $purchaseOrderDescription->getValue(),
+                "source" => $purchaseOrderDescription->getPurchaseOrders()->getProviderId()==1?100:101
             ));
             $methodToCall='RocketSellerTwoPickBundle:Payments2Rest:postRegisterDispersion';
         }

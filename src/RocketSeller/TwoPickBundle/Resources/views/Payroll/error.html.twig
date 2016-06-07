@@ -5,8 +5,8 @@
     {{ parent() }}
     <style type="text/css">
         .media{
-            padding: 10px;
-            background-color: #DDD;
+            padding: 25px;
+            background-color: #F7F7F7;
             display: -webkit-box;
         }
         .media-left{
@@ -19,28 +19,59 @@
         .padding{
             padding: 50px 0px 50px 0px ;
         }
+
+        .pagoconfirma {
+          border: 1px #CCC solid;
+          margin: 25px 0;
+          padding: 60px 0;
+          border-radius: 5px;
+        }
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
 
     <div class="media">
-        <div class="media-left">
-            <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
-        </div>
-        <div class="media-body vertical-align-center">
-            <h4 class="media-heading">Error de pago</h4>
-        </div>
+        {% if result== 'e' %}
+            <div class="media-left">
+                <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
+            </div>
+            <div class="vertical-align-center">
+                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Error de pago</h4>
+            </div>
+        {% else %}
+            <div class="media-left">
+                <span class="glyphicon glyphicon-ok-circle fa-2x"></span>
+            </div>
+            <div class="media-body vertical-align-center">
+                <h4 class="media-heading" style="padding: 5px 0 0 0;color: #435160;font-size:24px">Éxito de pago</h4>
+            </div>
+        {% endif %}
     </div>
     <div class="text-center">
-        <div class="padding">
-            <h4><b>El pago no puedo ser realizado</b></h4>
-        </div>
-        <div class="padding">
-            lorem ipsum
-        </div>
-        <div class="padding">
-            <input type="button" class="btn btn-default btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('payroll') }}'" >
-        </div>
+        {% if result== 'e' %}
+
+            <div class="pagoconfirma">
+              <div>
+                  <h4 style="color: #1FCECB;font-size: 20px;"><b>El pago no pudo ser realizado</b></h4>
+              </div>
+                <p style="color: #989898;font-size: 15px;">Hubo un problema en el pago por favor vuelve a intentarlo</p>
+            </div>
+            <div class="padding">
+                <input type="button" class="btn btn-orange" value="Intentar de nuevo"  onclick="window.location = '{{ path('payroll') }}'" >
+            </div>
+        {% else %}
+
+            <div class="pagoconfirma">
+              <div>
+                  <h4 style="color: #1FCECB;font-size: 20px;"><b>El pago se realizó satisfactoriamente</b></h4>
+              </div>
+                <p style="color: #989898;font-size: 15px;">Descarga tu vactura y comprobante de pago</p>
+            </div>
+            <div class="padding">
+                <a href="{{ url }}" class="btn btn-orange notAjax" >Descargar Factura</a>
+            </div>
+        {% endif %}
+
     </div>
 
 {% endblock %}

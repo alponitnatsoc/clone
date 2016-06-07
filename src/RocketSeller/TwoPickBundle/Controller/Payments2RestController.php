@@ -349,6 +349,133 @@ class Payments2RestController extends FOSRestController
     }
 
     /**
+     * Edits an employer, all the information should be provided, it will be replaced completly.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = " Registers a natural person as an employer.",
+     *   statusCodes = {
+     *     200 = "Created",
+     *     400 = "Bad Request",
+     *     404 = "Not found",
+     *     422 = "Bad parameters"
+     *   }
+     * )
+     *
+     * @param Request $request.
+     * Rest Parameters:
+     *
+     * (name="accountNumber", nullable=false, requirements="([0-9|-]| +)", strict=true, description="Global account
+     *                                                  number of the employeer, this is the employer primary key in the system.")
+     * (name="firstLastName", nullable=false, requirements="(.)*", strict=true, description="Code of the bank, can be found int he table Bank.")
+     * (name="firstLastName", nullable=false, requirements="(.)*", strict=true, description="Code of the bank, can be found int he table Bank.")
+     * (name="secondLastName", nullable=true, requirements="(.)*", strict=true, description="Checking or saving account.")
+     * (name="name", nullable=false, requirements="(.)*", strict=true, description="Name of the person.")
+     * (name="documentType", nullable=false, requirements="(CC|cc|nit|NIT)", strict=true, description="File of the letter authorizing symplifica, in base 64.")
+     * (name="documentNumber", nullable=false, requirements="\d+", strict=true, description="File of the letter authorizing symplifica, in base 64.")
+     * (name="documentExpeditionDate", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="YYYY-MM-DD")
+     * (name="civilState", nullable=true, requirements="(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)", strict=true, description="")
+     * (name="address", nullable=false, requirements="(.)*", strict=true, description="")
+     * (name="phone", nullable=false, requirements="\d+", strict=true, description="")
+     * (name="municipio", nullable=true, requirements="(.)*", strict=true, description="")
+     * (name="department", nullable=false, requirements="(.)*", strict=true, description="")
+     * (name="mail", nullable=false, requirements="(.)*", strict=true, description="")
+     *
+     * @return View
+     */
+    public function postEditNaturalPersonAction(Request $request)
+    {
+        $path = "ActualizacionPN";
+        $parameters = $request->request->all();
+        $regex = array();
+        $mandatory = array();
+
+        // Set all the parameters info.
+        $regex['accountNumber'] = '([0-9|-]| +)';
+        $mandatory['accountNumber'] = true;
+        $regex['firstLastName'] = '(.)*';
+        $mandatory['firstLastName'] = true;
+        $regex['secondLastName'] = '(.)*';
+        $mandatory['secondLastName'] = false;
+        $regex['name'] = '(.)*';
+        $mandatory['name'] = true;
+        $regex['documentType'] = '(CC|cc|nit|NIT)';
+        $mandatory['documentType'] = true;
+        $regex['documentNumber'] = '\d+';
+        $mandatory['documentNumber'] = true;
+        $regex['documentExpeditionDate'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}|(^$)';
+        $mandatory['documentExpeditionDate'] = false;
+        $regex['civilState'] = '(SOLTERO|CASADO|UNION LIBRE|VIUDO|DIVORCIADO)';
+        $mandatory['civil_state'] = false;
+        $regex['address'] = '(.)*';
+        $mandatory['address'] = true;
+        $regex['phone'] = '\d+';
+        $mandatory['phone'] = true;
+        $regex['municipio'] = '(.)*';
+        $mandatory['municipio'] = false;
+        $regex['department'] = '(.)*';
+        $mandatory['department'] = true;
+        $regex['mail'] = '(.)*';
+        $mandatory['mail'] = true;
+
+        // Separate first and second name.
+        $names = explode(' ', $parameters['name']);
+        $parameters['firstFirstName'] = $names[0];
+        $parameters['secondFirstName'] = count($names) > 1 ? $names[1] : null;
+        //die(print_r($parameters['firstFirstName']));
+        $this->validateParamters($parameters, $regex, $mandatory);
+
+        $parameters_fixed = array();
+        $info_estudio = new InfoEstudio();
+        $info_basica =
+        new InfoBasica($parameters['firstLastName'],
+                       $parameters['secondLastName'],
+                       $parameters['firstFirstName'],
+                       $parameters['secondFirstName'],
+                       $parameters['documentType'],
+                       $parameters['documentNumber'],
+                       $parameters['documentExpeditionDate'],
+                       null,
+                       $parameters['civilState'],
+                       null,
+                       $parameters['address'],
+                       $parameters['phone'],
+                       $parameters['municipio'],
+                       $parameters['department'],
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       $parameters['mail'],
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       null
+                     );
+        $parameters_fixed['info_basica'] = $info_basica;
+        $parameters_fixed['info_estudio'] = $info_estudio;
+        $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
+
+        /** @var View $res */
+        $responseView = $this->callApi($parameters_fixed, $path, "ActualizacionPN");
+
+        return $responseView;
+    }
+
+
+    /**
      * Gets the employer information.<br/>
      *
      * @ApiDoc(
@@ -833,6 +960,7 @@ class Payments2RestController extends FOSRestController
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?", strict=true, description="value of the transaction.")
      * (name="reference", nullable=true, requirements="(.)*", strict=false, description="Reference number for the pila, only if its different from the document number.")
      * (name="payment_date", nullable=true, requirements="[0-9]{4}-[0-9]{2}-[0-9]{2}", strict=true, description="Day when it has to be payed, can be null and will be payed inmediatley.(YYYY-MM-DD).")
+     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.)
      *
      * @return View
      */
@@ -861,10 +989,13 @@ class Payments2RestController extends FOSRestController
         $mandatory['reference'] = false;
         $regex['payment_date'] = '[0-9]{4}-[0-9]{2}-[0-9]{2}';
         $mandatory['payment_date'] = false;
+        $regex['source'] = '(101|100)';
+        $mandatory['source'] = false;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
-        $this->validateParamters($parameters, $regex, $mandatory);
+        if(!isset($parameters['source']))
+          $parameters['source'] = 100; // Meaning hightech.
 
         if($parameters['documentTypeEmployee'] == 'cc' || $parameters['documentTypeEmployee'] == 'CC') {
           $parameters['documentTypeEmployee'] = 'CEDULA';
@@ -881,6 +1012,7 @@ class Payments2RestController extends FOSRestController
         $parameters_fixed['tipoCuenta'] = $parameters['accountType'];
         $parameters_fixed['numeroCuenta'] = $parameters['accountBankNumber'];
         $parameters_fixed['valor'] = $parameters['value'];
+        $parameters_fixed['origen'] = $parameters['source'];
         if(isset($parameters['reference']))
           $parameters_fixed['referencia'] = $parameters['reference'];
         if(isset($parameters['payment_date']))
@@ -941,6 +1073,7 @@ class Payments2RestController extends FOSRestController
      * @param Request $request.
      * Rest Parameters:
      *
+     * (name="source", nullable=true, requirements="101|100", description="showing the source of the account 100 for hightech and 101 for novopayment, the default will be 100.)
      * (name="accountNumber", nullable=false, requirements="[0-9]+")
      * (name="accountId", nullable=false, requirements="[0-9]+")
      * (name="value", nullable=false, requirements="[0-9]+(\.[0-9]+)?")
@@ -960,15 +1093,19 @@ class Payments2RestController extends FOSRestController
         $mandatory['accountId'] = true;
         $regex['value'] = '[0-9]+(\.[0-9]+)?';
         $mandatory['value'] = true;
+        $regex['source'] = '(101|100)';
+        $mandatory['source'] = true;
 
         $this->validateParamters($parameters, $regex, $mandatory);
 
-        $this->validateParamters($parameters, $regex, $mandatory);
+        if(!isset($parameters['source']))
+          $parameters['source'] = 100; // Meaning hightech.
 
         $parameters_fixed = array();
         $parameters_fixed['cuentaGSC'] = $parameters['accountNumber'];
         $parameters_fixed['idCuenta'] = $parameters['accountId'];
         $parameters_fixed['valor'] = $parameters['value'];
+        $parameters_fixed['origen'] = $parameters['source'];
 
         /** @var View $res */
         $responseView = $this->callApi($parameters_fixed, $path, "RegistrarDevolucion");

@@ -78,24 +78,6 @@ class PaymentsRestController extends FOSRestController
         // Line bellow was working, commneted for the change of VPN.
         $client = new Client(['http_errors' => false]);
         //$sslParams = array('cert' => ['/home/ubuntu/.ssh/myKeystore.pem', 'N0v0payment']);
-        //$client->setDefaultOption('verify', '/home/ubuntu/.ssh/MyKeystore.pem');
-        /* $request = $client->get('', array(), array(
-          'cert' => array('/home/ubuntu/.ssh/MyKeystore.pem', 'N0v0payment')
-          )); */
-        // $url_request = $this->container->getParameter('novo_payments_url') ;
-        // URL used for test porpouses, the line above should be used in production.
-        if (isset($_SERVER['SERVER_NAME']) && in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1'))) {
-            if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '80') {
-                $url_request = "http://localhost/api/public/v1/mock" . $path;
-            } else {
-                $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
-            }
-        } else {
-            //$url_request = "http://10.0.0.5:8081/3_payment/1.0" . $path;
-            $url_request = "https://72.46.255.110:8003/3_payment/1.0" . $path;
-            //$url_request = "http://localhost:8001/api/public/v1/mock" . $path;
-        }
-        $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         $response = null;
         $options = array(
             'headers' => $headers,
@@ -104,6 +86,7 @@ class PaymentsRestController extends FOSRestController
             'verify' => false,
             //'cert' => ['/home/myKeystore.pem', 'N0v0payment']
         );
+        $url_request = "http://localhost:8001/api/public/v1/mock" . $path;
         $ambiente = '';
         if($this->container->hasParameter('ambiente'))
           $ambiente = $this->container->getParameter('ambiente');
@@ -421,6 +404,7 @@ class PaymentsRestController extends FOSRestController
      * (name="commissionBase", nullable=false, requirements="[0-9]+(\.)?[0-9]*(,?[0-9]+)?", strict=true, description="Commission base.")
      * (name="chargeMode", nullable=false, requirements="(1|2|3)", strict=true, description="This is to indicate where the money is going, 1 for validation, 2 for pament and 3 for fee.")
      * (name="chargeId", nullable=false, requirements="([a-zA-Z0-9])+", strict=true, description="Id of the transaction created by us.")
+     * (name="installments", nullable=false, requirements="[0-9]+", strict=true, description="Number of cuotas for the transaction, default is 1, if not sent.")
      *
      * @return View
      */
@@ -449,7 +433,12 @@ class PaymentsRestController extends FOSRestController
         $mandatory['chargeMode'] = true;
         $regex['chargeId'] = '([a-zA-Z0-9])+';
         $mandatory['chargeId'] = true;
+        $regex['installments'] = '[0-9]+';
+        $mandatory['installments'] = false;
 
+        if(!isset($parameters['installments'])) {
+          $parameters['installments'] = 1;
+        }
         $this->validateParamters($parameters, $regex, $mandatory);
 
         // This is the asigned path by NovoPayment to this action.
@@ -467,6 +456,7 @@ class PaymentsRestController extends FOSRestController
         $parameters_fixed['commission-base'] = $parameters['commissionBase'];
         $parameters_fixed['charge-mode'] = $parameters['chargeMode'];
         $parameters_fixed['charge-third-id'] = $parameters['chargeId'];
+        $parameters_fixed['installments-number'] = $parameters['installments'];
 
         /** @var View $responseView */
         //$responseView = $this->callApi($header, $parameters_fixed, $path);

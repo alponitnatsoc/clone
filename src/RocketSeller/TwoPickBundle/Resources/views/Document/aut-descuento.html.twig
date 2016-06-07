@@ -17,17 +17,17 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
 <p style="text-align: center;"><strong>ACTA DE AUTORIZACIÓN DESCUENTO</strong></p>
 
 <p><strong>Ciudad: {{ data.contract.city }}</strong></p>
-<p><strong>Fecha: {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+<p><strong>Fecha: {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">Yo, {{ data.employee.name }}, mayor de edad, identificado con {{ data.employee.docType }} número
 {{ data.employee.docNumber }}, por medio del presente documento manifiesto expresamente y de manera libre y voluntaria que
 AUTORIZO a {{ data.employer.name }} para que descuenten del total de mis salarios, compensaciones, prestaciones sociales y
 demás acreencias laborales a que tenga derecho, la suma de {{ data.novelty.amount }}, por concepto de {{ data.novelty.motivo }}.
-Esta suma la pagaré en {{ data.novelty.units }} cuotas, a partir del {{ data.novelty.dateStart|localizeddate('long', 'none', local) }}</p>
+Esta suma la pagaré en {{ data.novelty.units }} cuotas, a partir del {{ data.novelty.dateStart|localizeddate('long', 'none', 'es-CO') }}</p>
 <p style="text-align: justify;">En caso de retiro, sin importar cuál sea la causa, AUTORIZO expresamente para que el saldo que
 se encuentre pendiente, me sea descontado de mi liquidación final de prestaciones sociales y demás acreencias laborales a las
 que tenga derecho.</p>

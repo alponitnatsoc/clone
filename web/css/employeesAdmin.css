@@ -1,1 +1,73 @@
-#employees{margin:10px 0 0;padding-bottom:20px}#employees .employeeListItem{border:1px solid #ccc;height:80px;margin-bottom:10px}#employees .employeeListItem .employeeStatusAdd{display:inline-block;height:100%;line-height:70px;margin:auto;vertical-align:middle;background-color:#e59233;text-align:center}#employees .employeeListItem .employeeInfo{display:inline-block;height:100%;margin:auto;vertical-align:middle;padding-top:15px}#employees .employeeListItem .actionButton{height:100%;text-align:center;vertical-align:middle;display:inline-block;margin:auto;font-weight:700;padding-top:30px;border-left:1px solid #ccc}#employees .employeeListItem .actionButton a{color:#666}#employees .employeeListItem .employeeStatus{display:inline-block;height:100%;line-height:80px;margin:auto;vertical-align:middle;color:#e59233;border-left:1px solid #ccc}#employees .employeeListItem .employeeStatus .glyphicon{font-size:1.3em;vertical-align:sub}#employees .employee{margin-top:10px}#employees .employee>div>.col-xs-12{min-height:130px;border:1px solid #DEDFE0;padding-top:15px;padding-bottom:15px}#employees .employee .employee_name{font-weight:700;color:#314A5A;font-size:16px}#employees .employee .employee_work_time{font-size:16px;font-weight:100}#employees .employee .btn{background-color:#00CBC9;border:none}#employees .employee .btn:hover{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23)}#employees .employee.add>div>.col-xs-12:hover{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23)}#employees .employee.add a{color:#DEDFE0}#employees .employee.add a:hover{text-decoration:none}#employees .employee .inactivo .btn{background-color:#ccc}#employees .wizardAddLink a{font-size:22px;color:#00cdcc}.employeesCount{padding-bottom:10px;border-bottom:1px solid #ccc}.employeesCount .col-md-4{border-left:1px solid #ccc;font-style:italic}.employeesCount b{font-style:normal}@media only screen and (max-device-width:360px){.basicConfirmation .confirmationBlock{text-align:center;width:100%;margin:0;padding:0}}
+#employees{margin:10px 0 0;padding-bottom:20px}#employees .employeeListItem{border:1px solid #ccc;height: 80px; margin-bottom:: -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }#employees .employeeListItem .employeeStatusAdd{display:inline-block;height:100%;line-height:70px;margin:auto;vertical-align:middle;background-color:#FD9224;text-align:center}#employees .employeeListItem .employeeInfo{height: 100%; display:inline-block;margin:auto;vertical-align:middle;padding:18px 0 0 20px; }#employees .employeeListItem .actionButton{height: 100%; text-align:center;vertical-align:middle;display:inline-block;margin:auto;font-weight:700;padding-top:30px;border-left:1px solid #ccc}#employees .employeeListItem .actionButton a{color:#666}#employees .employeeListItem .employeeStatus{display:inline-block;height:100%;line-height:80px;margin:auto;vertical-align:middle;color:#FD9224;border-left:1px solid #ccc}#employees .employeeListItem .employeeStatus .glyphicon{font-size:1.3em;vertical-align:sub}#employees .employee{margin-top:10px}#employees .employee>div>.col-xs-12{min-height:130px;border:1px solid #DEDFE0;padding-top:15px;padding-bottom:15px}#employees .employee .employee_name{font-weight:700;color:#314A5A;font-size:16px}#employees .employee .employee_work_time{font-size:16px;font-weight:100}#employees .employee .btn{background-color:#00CBC9;border:none}#employees .employee .btn:hover{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23)}#employees .employee.add>div>.col-xs-12:hover{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23)}#employees .employee.add a{color:#DEDFE0}#employees .employee.add a:hover{text-decoration:none}#employees .employee .inactivo .btn{background-color:#ccc}#employees .wizardAddLink a{font-size:22px;color:#00cdcc} .employeesCount b{font-style:normal}@media only screen and (max-device-width:360px){.basicConfirmation .confirmationBlock{text-align:center;width:100%;margin:0;padding:0}}
+
+.fa-angle-right{
+	position: relative;
+    top: 1px;
+	margin-left: 10px;
+	font-size: 16px !important;
+	}
+
+.employeesCount{ text-align: center; font-style: italic; }
+
+.division-line{
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+}
+
+.contain-division{ padding: 10px 0; }
+
+.estado-empleado{
+	height: 100%;
+    padding-top: 30px;
+	text-align: center;
+	line-height: 20px;
+}
+
+p.estado-empleado{ margin-bottom: 0 !important; }
+
+/* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
+
+@media (max-width: 1200px){
+
+.employeesCount p { font-size: 13px;}
+
+}
+
+@media (max-width: 1024px){
+
+.contain-division{ width: 33.3333%; float: left; }
+
+
+@media (max-width: 990px){
+
+.title-center{ text-align: center !important; }
+
+}
+
+@media (max-width: 690px){
+
+.title-center{ font-size: 22px; }
+.employeesCount p { font-size: 11px; }
+
+#employees .employeeListItem .actionButton a{ font-size: 13px; }
+.fa-angle-right{ margin-left: 2px; font-size: 13px !important; }
+
+}
+
+@media (max-width: 400px){
+
+#employees .employeeListItem{ height: auto; overflow: hidden; text-align: center; } 
+
+.division-line{ padding: 0; }
+.employeesCount p { font-size: 10px; }
+
+#employees .employeeListItem .employeeInfo{ padding: 20px 0; border-bottom: 1px solid #ccc; }
+#employees .employeeListItem .employeeStatus{ border-left: none; }
+
+.estado-empleado, #employees .employeeListItem .actionButton{ padding: 10px 0; }
+
+.col-xxs-3, .col-xxs-4{ width: 50%; }
+.col-xxs-5{ width: 100%; }
+
+
+}

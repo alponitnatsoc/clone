@@ -13,19 +13,23 @@ class LoadProcedureTypeData extends AbstractFixture implements OrderedFixtureInt
     public function load(ObjectManager $manager)
     {
         $procedureTypeInscription = new ProcedureType();
-        $procedureTypeInscription->setName('Registro empleador y empleados');        
+        $procedureTypeInscription->setName('Registro empleador y empleados');
+        $procedureTypeInscription->setCode('REE');
         $manager->persist($procedureTypeInscription);
 
         $procedureTypePagoPila = new ProcedureType();
         $procedureTypePagoPila->setName('Pago de pila');
+        $procedureTypePagoPila->setCode('PPL');
         $manager->persist($procedureTypePagoPila);
 
         $procedureTypeSubirPlanilla = new ProcedureType();
         $procedureTypeSubirPlanilla->setName('Subir Planillas');
+        $procedureTypeSubirPlanilla->setCode('SPL');
         $manager->persist($procedureTypeSubirPlanilla);
 
         $procedureTypeEmpleado = new ProcedureType();
         $procedureTypeEmpleado->setName('Registro empleado');
+        $procedureTypeEmpleado->setCode('RE');
         $manager->persist($procedureTypeEmpleado);
         
         $manager->flush();

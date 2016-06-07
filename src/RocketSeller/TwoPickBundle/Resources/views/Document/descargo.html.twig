@@ -17,8 +17,8 @@ body {
 <hr />
 <p>&nbsp;</p>
 {% set local = "now"|date("d-m-y") %}
-{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong><br />#}
-<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', local) }}</strong></p>
+{# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
+<p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong></p>
 <p>&nbsp;</p>
 <p>Señor(a):</p>
 <p>{{ data.employee.name }}</p>
@@ -26,7 +26,7 @@ body {
 <p>&nbsp;</p>
 <p style="text-align: justify;"><strong>Acta de Descargos Nº</strong>{{ data.novelty.id }}</p>
 <p style="text-align: justify;">Estimado (a) Trabajador (a) es importante que nos mencione lo sucedido el pasado
-{{ data.novelty.dateStart|localizeddate('none', 'none', local, null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>
+{{ data.novelty.dateStart|localizeddate('none', 'none', 'es-CO', null, "d ' de' MMMM 'del año' Y") }}, por favor descríbanos brevemente los hechos:</p>
 <p>&nbsp;</p>
 <p style="text-align: justify;">______________________________________________________________________</p>
 <p style="text-align: justify;">______________________________________________________________________</p>
