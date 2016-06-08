@@ -88,7 +88,7 @@ trait EmployeeMethodsTrait
         /** @var Contract $contract */
         $contract = $em->getRepository('RocketSellerTwoPickBundle:Contract')->findOneBy(array(
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
-            'state' => 1
+            'state' => 3
         ));
         $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
         foreach ($docs as $type => $status) {
