@@ -160,10 +160,12 @@ class PayrollController extends Controller
         $owePurchaseOrders=new ArrayCollection();
         /** @var PurchaseOrders $po */
         foreach ($purchaseOrders as $po) {
+            dump($po);
             if($po->getPurchaseOrdersStatus()->getIdNovoPay()=='P1'&&$po->getPurchaseOrderDescriptions()->count()>0){
                 $owePurchaseOrders->add($po);
             }
         }
+        dump($owePurchaseOrders);
 //        $novelties = array();
 //        if ($data) {
 //            foreach ($data as $key => $value) {
