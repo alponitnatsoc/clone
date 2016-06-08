@@ -1,94 +1,19 @@
-{% extends "::base.html.twig" %}
-{% block header %}
-<div class="row-fluid up-Help-Phone">
-    <div class="container">
-        <div class="txthelp">
-            <span><em><strong>¿Necesita ayuda?</strong></em> <i class="fa fa-mobile"></i>Bogotá: 350 833 0000</span>
-        </div>
-    </div>
-</div>
-{% endblock header %}
-{% block body %}
-	<div class="container body-container navbar">
-        <div class="row mainContentRow">
-			<div id="sidebar" class="col-sm-3">
-	            {% block sidebar %}
-	                <div class="navbar-header">
-	                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSidebar" aria-expanded="false" aria-controls="navbar2">
-	                        <span class="sr-only">Toggle navigation</span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                    </button>
-	                    <a class="navbar-brand sidebar visible-xs" href="#">
-	                        <img src="{{ asset('img/logo.png') }}" alt="Sympifica"/>
-	                    </a>
-	                </div>
-	                <div id="navbarSidebar" class="section about navbar-collapse collapse">
-	                    <div class="well well-lg leftColumnLogo">
-	                        <a href=""><img class="hidden-sm img-responsive" alt="Symplifica" src="/img/logo-oscuro.png"></a>
-	                    </div>
-	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-	                        <a href="{{ path('back_office')}}">Inicio</a>
-	                    </div>
-	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-	                        <a href="{{ path('register_express')}}">Registro express</a>
-	                    </div>
-	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-                            <a href="{{ path('legal_ass')}}">Asistencia legal</a>
-                        </div>
-	                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador" style="margin-top: 40px;">
-	                        <a href="{{ path('show_procedures')}}">Tramites</a>
-	                    </div>                                      
-	                </div>
-	            {% endblock %}
-	        </div>
+{% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-				<div id="main" class="col-sm-9">
-	            <table class="col-md-12">
-					<thead>
-					<tr>
-						<th>Usuario</th>						
-						<th>Telefono</th>
-						<th>Accion</th>
-					</tr>
-					</thead>
-					<tbody>
-					{% for notification in notifications if notification.status == 0 %}
-						<tr>
-							<td>{{ notification.personPerson.names }} {{ notification.personPerson.lastName1 }}</td>
-							<td>{{ notification.personPerson.phones[0].phoneNumber }}</td>
-							<td>
-								<div class="end-legal">
-									<span class="change-notification btn btn-xs btn-orange notAjax" value="{{notification.id}}"  href="/api/public/v1/changes/statuses">Terminar</span>
-								</div>								
-								<div class="continue-express">
-									<span class="true-express btn btn-xs btn-orange notAjax" value="{{notification.personPerson.idPerson}}" href="/api/public/v1/creates/notifications" >
-										Si
-									</span>
-									<span class="change-notification btn btn-xs notAjax">
-										No
-									</span>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>          	
-	        </div>
-	    </div>
+{% block title %}Asistencia Legal{% endblock %}
+
+{% block fos_user_content %}
+	<div id="main" class="col-sm-15">
+		<div class="col-md-12">
+			<div class="panel panel-title">
+				Asistensia Legal
+			</div>
+			<br>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>Contenido</h4>
+				</div>
+			</div>
+		</div>
 	</div>
-				
-	
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('/public/js/backOffice.js') }}"></script>
-    <script>
-    $(document).ready(function(){
-    	$('.continue-express').attr('hidden','true'); 
-    	changeNotificationStatus(); 
-    });
-
-    </script>
 {% endblock %}

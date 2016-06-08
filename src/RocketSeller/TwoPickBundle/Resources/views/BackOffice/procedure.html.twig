@@ -24,6 +24,7 @@
 					</tr>
 					</thead>
 					<tbody>
+					{% set documentos = 0 %}
 					{% for action in procedure.action if action.personPerson == employerHasEmployees[0].employerEmployer.personPerson %}
 
 						{% if action.actionErrorActionError %}
@@ -38,6 +39,8 @@
 							<tr style="background-color:#A2E383;">
 						{% elseif action.status|lower == "iniciado" %}
 							<tr>
+						{% elseif action.status|lower == "error" %}
+							<tr style="background-color: #CB6D6C">
 						{% endif %}
 						<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
 						<td>{{ action.personPerson.fullName }}</td>
@@ -62,19 +65,26 @@
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
 								<td><a class="notAjax" href="{{ path('check_register',{'idAction':action.idAction})}}">Validar Datos Empleador</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-								<td>Validar documentos</td>
+								<td><a class="notAjax" href="{{ path('validate_employer_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-								<td><a class="notAjax" href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-								<td><a class="notAjax" href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
-							{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
-								<td><a class="notAjax" href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
+							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
 							{% endif %}
 						{% else %}
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
-									<td><a class="notAjax" href="{{ path('show_info',{'idAction':action.idAction})}}">Consultar Información</a></td>
+								<td><a class="notAjax" href="{{ path('show_info',{'idAction':action.idAction})}}">Consultar Información</a></td>
+							{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+								<td><a class="notAjax" href="{{ path('view_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
+								{% if documentos == 0 %}
+									{% set documentos =  1 %}
+								{% endif %}
+							{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+								<td>Inscrito</td>
+							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+								<td>Validado</td>
 							{% else %}
-							<td>Terminaste</td>
+								<td>Terminado</td>
 							{% endif %}
 						{% endif %}
 						</tr>
@@ -83,73 +93,110 @@
 				</table>
 			</div>
 			<div class="panel panel-default">
+				{% set act = 0 %}
 				{% for employerHasEmployee in employerHasEmployees %}
-					<div class="panel-heading">
-						<h4>Empleado: {{ employerHasEmployee.employeeEmployee.personPerson.fullName}}</h4>
-					</div>
-					<table class="table">
-						<thead>
-						<tr>
-							<th>Vuelta</th>
-							<th>persona</th>
-							<th>entidad</th>
-							<th>Estado</th>
-							<th>Acción</th>
-						</tr>
-						</thead>
-						<tbody>
-						{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
-							{% if action.actionErrorActionError %}
-								{% if action.status|lower == "completado" %}
-									<tr style="background-color:#A2E383;">
-								{% else %}
-									<tr style="background-color:#FF5555;">
-								{% endif %}
-							{% elseif  action.status|lower == "nuevo" %}
-								<tr>
-							{% elseif  action.status|lower == "completado" %}
-								<tr style="background-color:#A2E383;">
-							{% elseif action.status|lower == "iniciado" %}
-								<tr>
-							{% endif %}
-							<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
-							<td>{{ action.personPerson.fullName }}</td>
-							<td>
-								{% if action.entityEntity %}
-									{{ action.entityEntity.name }}
-								{% else %}
-									-
-								{% endif %}
-							</td>
-							<td>{% if action.actionErrorActionError %}
+					{% if employerHasEmployee.state >2 %}
+						{% if documentos == 2 %}
+							{% set documentos = 1 %}
+						{% endif %}
+						<div class="panel-heading">
+							<h4>Empleado: {{ employerHasEmployee.employeeEmployee.personPerson.fullName}}</h4>
+						</div>
+						<table class="table">
+							<thead>
+							<tr>
+								<th>Vuelta</th>
+								<th>persona</th>
+								<th>entidad</th>
+								<th>Estado</th>
+								<th>Acción</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for action in employerHasEmployee.employeeEmployee.personPerson.action %}
+								{% if action.actionErrorActionError %}
 									{% if action.status|lower == "completado" %}
-										{{ action.status }}
+										<tr style="background-color:#A2E383;">
 									{% else %}
-										Error
+										<tr style="background-color:#FF5555;">
+									{% endif %}
+								{% elseif  action.status|lower == "nuevo" %}
+									<tr>
+								{% elseif  action.status|lower == "completado" %}
+									<tr style="background-color:#A2E383;">
+								{% elseif action.status|lower == "iniciado" %}
+									<tr>
+								{% elseif action.status|lower == "error" %}
+									<tr style="background-color: #CB6D6C">
+								{% endif %}
+								<td class="{{action.personPerson.idPerson}}">{{ action.ActionTypeActionType.name }}</td>
+								<td>{{ action.personPerson.fullName }}</td>
+								<td>
+									{% if action.entityEntity %}
+										{{ action.entityEntity.name }}
+									{% else %}
+										-
+									{% endif %}
+								</td>
+								<td>{% if action.actionErrorActionError %}
+										{% if action.status|lower == "completado" %}
+											{{ action.status }}
+										{% else %}
+											Error
+										{% endif %}
+									{% else %}
+										{{ action.status}}
+									{% endif %}
+								</td>
+								{% if action.status|lower != "completado" %}
+									{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
+										<td><a class="notAjax" href="{{ path('check_employee',{'idAction':action.idAction})}}">Validar Datos del Empleado</a></td>
+									{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+										<td><a class="notAjax" href="{{ path('validate_employee_documents',{'idAction':action.idAction})}}">Validar Documentos</a></td>
+									{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
+									{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
 									{% endif %}
 								{% else %}
-									{{ action.status}}
+									{% if action.ActionTypeActionType.name|lower == "validar informacion del empleado" %}
+										<td><a class="notAjax" href="{{ path('show_info_employee',{'idAction':action.idAction})}}">Consultar Información</a></td>
+									{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
+										<td><a class="notAjax" href="{{ path('view_employee_documents',{'idAction':action.idAction})}}">Ver Documentos</a></td>
+										{% if documentos == 1 %}
+											{% set documentos = 2 %}
+											{% set act = action %}
+										{% endif %}
+									{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
+										<td>Inscrito</td>
+									{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+										<td>Validado</td>
+									{% else %}
+										<td>Terminado</td>
+									{% endif %}
 								{% endif %}
-							</td>
-							{% if action.status|lower != "completado" %}
-								{% if action.ActionTypeActionType.name|lower == "Validar Informacion del Empleador" %}
-									<td><a class="notAjax" href="{{ path('check_register',{'idPerson':action.personPerson.idPerson,'idAction':action.idAction})}}">Validar registro</a></td>
-								{% elseif action.ActionTypeActionType.name|lower == "validar documentos" %}
-									<td>Validar documentos</td>
-								{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
-									<td><a class="notAjax" href="{{ path('make_afiliation',{'idAction':action.idAction})}}">Hacer incripción</a></td>
-								{% elseif action.ActionTypeActionType.name|lower == "llamar entidad" %}
-									<td><a class="notAjax" href="{{ path('call_entity',{'idAction':action.idAction})}}">Llamar entidad</a></td>
-								{% elseif action.ActionTypeActionType.name|lower == "llamar cliente" %}
-									<td><a class="notAjax" href="{{ path('call_person',{'idAction':action.idAction})}}">Llamar cliente</a></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					<div style="margin-top:10px; margin-bottom:20px; text-align:center;">
+						{% if employerHasEmployee.state == 4 %}
+							<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
+						{% else %}
+							<a class="btn btn-orange noAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
+						{% endif %}
+						{% if documentos == 2 %}
+							<a class="btn btn-bitbucket notAjax" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
+							{% if employerHasEmployee and (act.personPerson.employee) %}
+								{% if employerHasEmployee.existentSQL == 0 %}
+									<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee})}}">Agregar a SQL</a>
+								{% elseif employerHasEmployee.existentSQL == 1 %}
+									<p>ya esta inscrio a SQL </p>
 								{% endif %}
-							{% else %}
-								<td>Terminaste</td>
 							{% endif %}
-							</tr>
-						{% endfor %}
-					</tbody>
-					</table>
+						{% endif %}
+					</div>
+					{% endif %}
 				{% endfor %}
 			</div>
 			<div class="panel panel-default">
@@ -204,14 +251,8 @@
 
 					{% endfor %}
 				</p>
-				{% for employerHasEmployee in employerHasEmployees %}
-					{% if employerHasEmployee.state == 4 %}
-						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}Terminado</p>
-					{% else %}
-						<p>Terminar proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}}<a href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}">Terminar</a> </p>
-					{% endif %}
-				{% endfor %}
 			</div>
+			<a class="btn btn-bitbucket notAjax" href="{{ path('show_procedures') }}">Volver a los tramites</a>
 		</div>
 	</div>
 {% endblock %}

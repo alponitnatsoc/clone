@@ -1,6 +1,6 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Ver Informacion Empleado{% endblock %}
+{% block title %}Ver Informacion Empleador{% endblock %}
 
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
@@ -14,7 +14,7 @@
             </div>
             <div class="panel panel-default">
                 <h4 class="col-md-12 panel-heading">Información Registrada</h4>
-                <div class="col-md-7">
+                <div class="col-md-12">
                     <table class="table">
                         <thead class="tab-header">
                         <tr>
@@ -131,10 +131,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-5" style="margin-top:40px;text-align:center;">
+                <div class="col-md-12" style="margin-top:20px;text-align:center;">
+                    <a class="btn btn-orange notAjax" style="background-color: #CB6D6C; border-color: #CB6D6C" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Error'})}}">Cancelar</a>
+                    <a class="btn btn-orange notAjax" style="background-color: #1b7e5a ; border-color: #1b7e5a" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Aceptar</a>
                     <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
-                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
                 </div>
+
 
             </div>
         </div>
