@@ -513,17 +513,19 @@ use EmployerMethodsTrait;
                 break;
             case "mandato":
                 //$id del empleador
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+                $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
-                $employer = $repository->find($id);
-                $employerPerson = $employer->getPersonPerson();
+                $employerPerson = $repository->find($id);
+                $employer = $repositoryE->findByPersonPerson($employerPerson);
+                
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
                     'docNumber' => $employerPerson->getDocument(),
                     'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
-                    'arl' => $this->getEmployerArl($employer->getIdEmployer()),
-                    'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
+                    'arl' => $this->getEmployerArl($employer[0]->getIdEmployer()),
+                    'ccf' => $this->getEmployerCcf($employer[0]->getIdEmployer()),
                     'tel' => $employerPerson->getPhones()->getValues()[0],
                     'address' => $employerPerson->getMainAddress(),
                     'city' => $employerPerson->getCity()->getName()
