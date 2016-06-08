@@ -3,7 +3,7 @@
 {% block title %}Pagar Nómina{% endblock %}
 
 {% block fos_user_content %}
-    {% if dataNomina or debt %}
+    {% if dataNomina or debt|length > 0 %}
 
         <div class="col-sm-12 col-xs-12 align-Resp">
             <a id="" class="btn col-sm-12 col-xs-12 blockStep inline  nav-link" href="/register/edit">
@@ -30,20 +30,6 @@
             <form method="post" action="{{ path('payroll_calculate') }}" id="form_calculate">
                 {% set pilaData=null %}
                 <div id="cont-payment">
-                    <div>
-                        <div>
-                            Nombre del empleado
-                        </div>
-                        <div>
-                            Novedades
-                        </div>
-                        <div>
-                            Valor a pagar
-                        </div>
-                        <div>
-                            Solucionar estado de pago
-                        </div>
-                    </div>
 
                     {% for data in dataNomina %}
                         {% if data.payrollPayroll != null %}
