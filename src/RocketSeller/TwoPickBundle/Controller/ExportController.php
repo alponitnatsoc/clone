@@ -74,7 +74,7 @@ class ExportController extends Controller
 					$zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
 				}
 				# close zip
-                
+
 				if($zip->close()!==TRUE)
 					echo "no permisos";
 				# send the file to the browser as a download
@@ -243,7 +243,7 @@ class ExportController extends Controller
                     fputcsv($handle, array('Telefono/celular del Empleado',$employeePhone->getPhoneNumber()),';');
                 }
                 if($employee->getEmail()) fputcsv($handle, array('Correo Electrónico del Empleado',$employee->getEmail()),';');
-                fputcsv($handle, array('ENTIDADES',''),',');
+                fputcsv($handle, array('ENTIDADES',''),';');
                 /** @var EmployeeHasEntity $employeeHasEntity */
                 foreach ($employee->getEmployee()->getEntities() as $employeeHasEntity){
                     if($employeeHasEntity->getEntityEntity()->getName()!='severances'){
@@ -325,7 +325,7 @@ class ExportController extends Controller
             throw $this->createAccessDeniedException("No tiene suficientes permisos");
         }
     }
-    
+
     public function exportDocumentsAction()
     {
 		/** @var User $user */
@@ -384,7 +384,7 @@ class ExportController extends Controller
 		}
 		return $this->redirectToRoute('ajax', array(), 301);
     }
-    
+
 	public function generateCsvAction(){
 		/** @var User $user */
 		$user = $this->getUser();
@@ -485,7 +485,7 @@ class ExportController extends Controller
         $person= $action->getUserUser()->getPersonPerson();
         /** @var Person $employee */
         $employee = $action->getPersonPerson();
-        
+
 		// $tmp_file=$person->getNames()."_fields.csv";
 		$tmp_file=$this->container->getParameter('kernel.cache_dir') .$person->getNames()."_fields.csv";
         $handle = fopen($tmp_file, 'w+');
@@ -618,4 +618,39 @@ class ExportController extends Controller
 		ignore_user_abort(true);
 		unlink($tmp_file);
 	}
+
+    public function exportLandingAction(){
+
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $landings = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:LandingRegistration')
+            ->findAll();
+        $tmp_file="Landing.csv";
+        $handle = fopen($tmp_file, 'w+');
+        fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+
+        fputcsv($handle, array('INFORMACIÓN DEL LANDING SYMPLIFICA'),',');
+        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),',');
+        foreach ($landings as $landing){
+            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->getTimestamp()),',');
+        }
+
+        fclose($handle);
+        header("Content-Disposition: attachment; filename=$tmp_file");
+        header("Content-type: application/vnd.ms-excel; charset=utf-8");
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Description: File Transfer');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        header('Content-Length: '.filesize($tmp_file));
+
+        ob_clean();
+        ob_end_flush();
+        flush();
+        readfile($tmp_file);
+        ignore_user_abort(true);
+        unlink($tmp_file);
+    }
 }

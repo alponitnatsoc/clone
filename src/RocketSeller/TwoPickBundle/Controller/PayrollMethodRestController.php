@@ -180,7 +180,7 @@ class PayrollMethodRestController extends FOSRestController
 
             /** @var EmployerHasEmployee $ehe */
             foreach ($eHEs as $ehe) {
-                if($ehe->getState()==3){
+                if($ehe->getState()>=3){
                     $employee=$ehe->getEmployeeEmployee();
                     $contracts=$ehe->getContracts();
                     $realContract=null;

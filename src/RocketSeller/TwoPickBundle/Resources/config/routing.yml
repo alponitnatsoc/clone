@@ -114,3 +114,6 @@ export_all_documents:
 complete_employee:
     path:     /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }
+export_landing:
+    path:     /backoffice/export/landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportLanding }

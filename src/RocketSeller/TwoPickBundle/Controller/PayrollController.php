@@ -160,12 +160,10 @@ class PayrollController extends Controller
         $owePurchaseOrders=new ArrayCollection();
         /** @var PurchaseOrders $po */
         foreach ($purchaseOrders as $po) {
-            dump($po);
             if($po->getPurchaseOrdersStatus()->getIdNovoPay()=='P1'&&$po->getPurchaseOrderDescriptions()->count()>0){
                 $owePurchaseOrders->add($po);
             }
         }
-        dump($owePurchaseOrders);
 //        $novelties = array();
 //        if ($data) {
 //            foreach ($data as $key => $value) {
@@ -181,6 +179,7 @@ class PayrollController extends Controller
 //            }
 //        }
         dump($pods);
+        dump($owePurchaseOrders);
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
                     'dataNomina' => $pods,
                     //'novelties' => $novelties
@@ -489,9 +488,10 @@ class PayrollController extends Controller
                                 $newPayroll->setPeriod(4);
                             }
                             $newPayroll->setMonth($nowDate->format("m"));
-                            $newPayroll->setYear($nowDate->format("y"));
-                            $newPayroll->setContractContract($pod->getPayrollPayroll());
+                            $newPayroll->setYear($nowDate->format("Y"));
+                            $newPayroll->setContractContract($actualPayroll->getContractContract());
                             $actualPayroll->getContractContract()->setActivePayroll($newPayroll);
+                            $actualPayroll->setPaid(1);
                             $em->persist($newPayroll);
                             $em->persist($actualPayroll->getContractContract());
                             $em->flush();

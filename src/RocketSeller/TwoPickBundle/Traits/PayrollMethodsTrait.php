@@ -106,11 +106,13 @@ trait PayrollMethodsTrait
                     $payroll = $contract->getActivePayroll();
                     if (!$this->checkActivePayroll($payroll))
                         break;
+                    dump($payroll);
                     if(count($payroll->getPurchaseOrdersDescription())>0){
                         /** @var PurchaseOrdersDescription $tempPOD */
                         $tempPOD=$payroll->getPurchaseOrdersDescription()->get(0);
                         //id de pago realizadoo o id de procesando no se muestra
-
+                        if($tempPOD->getPurchaseOrders()!=null&&$tempPOD->getPurchaseOrders()->getPurchaseOrdersStatus()->getIdNovoPay()=="P1")
+                            break;
                         if($tempPOD->getPurchaseOrdersStatus()!=null&&($tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="-1"||$tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="S2"||$tempPOD->getPurchaseOrdersStatus()->getIdNovoPay()=="00"))
                             break;
                     }else{
