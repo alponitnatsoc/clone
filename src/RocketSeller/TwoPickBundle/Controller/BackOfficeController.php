@@ -24,6 +24,7 @@ class BackOfficeController extends Controller
      * Funcion que carga la pagina de inicio del Back Office muestra un acceso rapido a:
      *      Tramites
      *      Consulta
+     *      Asistencia Legal
      *      Registro Express
      *      Marketing
      * Solo tiene permiso de acceso el rol back_office
@@ -55,6 +56,20 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
 
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        if ($cedula) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }else{
+                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
+
         if ($employee) {
             $employerHasEmployee = $this->loadClassByArray(
                     array(
@@ -65,9 +80,18 @@ class BackOfficeController extends Controller
             $employerHasEmployee = null;
         }
 
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
+        if($employerHasEmployee == null){
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula));
+        }else{
+            return $this->render('RocketSellerTwoPickBundle:BackOffice:checkEmployee.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula));
+        }
     }
 
+    /**
+     * Funcion para poder consultar la informacion del empleador psterior a validar la informacion de registro
+     * @param $idAction
+     * @return Response
+     */
     public function checkInfoAction($idAction)
     {
         /** @var Action $action */
@@ -94,50 +118,224 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:checkInfo.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
     }
 
+    /**
+     * Funcion para consultar la informacion del empleado posterior a validar la informacion registrada
+     * @param $idAction
+     * @return Response
+     */
+    public function checkInfoEmployeeAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+
+        /** @var Employee $employee */
+        $employee = $person->getEmployee();
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+
+        if ($employee) {
+            $employerHasEmployee = $this->loadClassByArray(
+                array(
+                    "employeeEmployee" =>$employee,
+                    "employerEmployer" =>$employer,
+                ),"EmployerHasEmployee");
+        }else{
+            $employerHasEmployee = null;
+        }
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:checkInfoEmployee.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee));
+    }
+
+    /**
+     * Funcion para validar los documentos del empleador
+     * @param $idAction
+     * @return Response
+     */
+    public function checkDocumentsAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+        
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        if ($cedula) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }else{
+                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
+        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        if ($rut) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $nameRut = $rut->getMediaMedia()->getName();
+            }else{
+                $pathRut = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $nameRut = $rut->getMediaMedia()->getName();
+            }
+        }else{
+            $pathRut='';
+            $nameRut='';
+        }
+        
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
+    }
+
+    public function viewDocumentsAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        if ($cedula) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }else{
+                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
+        $rut = $action->getPersonPerson()->getDocByType("Rut");
+        if ($rut) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $nameRut = $rut->getMediaMedia()->getName();
+            }else{
+                $pathRut = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $nameRut = $rut->getMediaMedia()->getName();
+            }
+        }else{
+            $pathRut='';
+            $nameRut='';
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula ,'rut'=>$rut,'pathRut'=>$pathRut,'nameRut'=>$nameRut));
+    }
+
+    /**
+     * Funcion para validar los documentos de cada empleado
+     * @param $idAction
+     * @return Response
+     */
+    public function checkEmployeeDocumentsAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        if ($cedula) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }else{
+                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        if ($carta) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $nameCarta = $carta->getMediaMedia()->getName();
+            }else{
+                $pathCarta = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $nameCarta = $carta->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCarta='';
+            $nameCarta='';
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ValidateEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta));
+    }
+
+    public function viewEmployeeDocumentsAction($idAction)
+    {
+        /** @var Action $action */
+        $action = $this->loadClassById($idAction,"Action");
+        /** @var Person $person */
+        $person = $action->getPersonPerson();
+        /** @var User $user */
+        $user =  $action->getUserUser();
+
+        /** @var Employer $employer */
+        $employer = $user->getPersonPerson()->getEmployer();
+        /** @var Document $cedula */
+        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        if ($cedula) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }else{
+                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $nameCedula = $cedula->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCedula='';
+            $nameCedula='';
+        }
+        $carta = $action->getPersonPerson()->getDocByType("Carta autorización Symplifica");
+        if ($carta) {
+            if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $nameCarta = $carta->getMediaMedia()->getName();
+            }else{
+                $pathCarta = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $nameCarta = $carta->getMediaMedia()->getName();
+            }
+        }else{
+            $pathCarta='';
+            $nameCarta='';
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:ViewEmployeeDocuments.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action, 'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula ,'carta'=>$carta,'pathCarta'=>$pathCarta,'nameCarta'=>$nameCarta));
+    }
+    
+
     public function addToSQLAction($idEmployerHasEmployee){
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
         $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
 
         return $this->redirectToRoute("back_office");
     }
-    public function makeAfiliationAction($idAction)
-    {
-        /** @var Action $action */
-        $action = $this->loadClassById($idAction, "Action");
-        /** @var Document $cedula */
-        $cedula = $action->getPersonPerson()->getDocByType("Cedula");
-        if ($cedula) {
-            $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
-            $nameCedula = $cedula->getMediaMedia()->getName();
-        }else{
-            $pathCedula='';
-            $nameCedula='';
-        }
-        $rut = $action->getPersonPerson()->getDocByType("Rut");
-        if ($rut){
-            $pathRut = 'http://'.$actual_link = $_SERVER['HTTP_HOST'].$this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
-            $nameRut = $rut->getMediaMedia()->getName();
-        }else{
-            $pathRut = '';
-            $nameRut = '';
-        }
 
-
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:exportDocuments.html.twig',array('action'=>$action,'cedulaPath'=>$pathCedula,
-            'cedulaName'=>$nameCedula,'rutPath'=>$pathRut,'rutName'=>$nameRut));
-    }
-    public function callPersonAction($idAction)
-    {
-    	$action = $this->loadClassById($idAction,"Action"); 
-
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:callPerson.html.twig',array('action'=>$action));
-    }
-	public function callEntityAction($idAction)
-    {    	
-    	$action = $this->loadClassById($idAction,"Action"); 
-
-        return $this->render('RocketSellerTwoPickBundle:BackOffice:callEntity.html.twig',array('action'=>$action));
-    }
+	
     public function reportErrorAction($idAction,Request $request)
     {
     	$action = $this->loadClassById($idAction,"Action");
@@ -159,6 +357,7 @@ class BackOfficeController extends Controller
     	}
     	
     }
+
     public function registerExpressAction()
     {   
         $em = $this->getDoctrine()->getManager();
@@ -169,6 +368,7 @@ class BackOfficeController extends Controller
                                         "type"=>"Registro express"));                     
         return $this->render('RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig',array('notifications'=>$notifications));    
     }
+
     public function legalAssistanceAction()
     {   
         $em = $this->getDoctrine()->getManager();
@@ -179,6 +379,7 @@ class BackOfficeController extends Controller
                                         "type"=>"Asistencia legal"));                     
         return $this->render('RocketSellerTwoPickBundle:BackOffice:legalAssistance.html.twig',array('notifications'=>$notifications));    
     }
+
     /**
      * hace un query de la clase para instanciarla
      * @param  [type] $parameter id que desea pasar
@@ -190,7 +391,8 @@ class BackOfficeController extends Controller
 		->getRepository('RocketSellerTwoPickBundle:'.$entity)
 		->find($parameter);
 		return $loadedClass;
-    }    
+    }
+
     /**
      * hace un query de la clase para instanciarla
      * @param  [type] $array  array de parametros que desea pasar
@@ -216,7 +418,11 @@ class BackOfficeController extends Controller
             ->findAll();
         return $this->render('RocketSellerTwoPickBundle:BackOffice:marketing.html.twig', array('landings'=>$landings));
     }
-    
+
+    /**
+     * Funcion para hacer las consultas
+     * @return Response /backoffice/request
+     */
     public function showRequestAction(){
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
         return $this->render('@RocketSellerTwoPick/BackOffice/request.html.twig');
