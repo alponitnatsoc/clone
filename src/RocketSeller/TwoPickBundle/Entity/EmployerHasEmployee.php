@@ -72,6 +72,13 @@ class EmployerHasEmployee
     private $isFree = 0;
 
     /**
+     * Columna para saber si es existente o no igual a la legal flag, pero ahora por empleado
+     * 0 No ha iniciado labores
+     * 1 ya inicio labores
+     * @ORM\Column(type="integer", length=1, nullable=TRUE)
+     */
+    private $legalFF = -1;
+    /**
      * Set idEmployerHasEmployee
      *
      * @param integer $idEmployerHasEmployee
@@ -299,5 +306,29 @@ class EmployerHasEmployee
     public function getExistentSQL()
     {
         return $this->existentSQL;
+    }
+
+    /**
+     * Set legalFF
+     *
+     * @param integer $legalFF
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setLegalFF($legalFF)
+    {
+        $this->legalFF = $legalFF;
+
+        return $this;
+    }
+
+    /**
+     * Get legalFF
+     *
+     * @return integer
+     */
+    public function getLegalFF()
+    {
+        return $this->legalFF;
     }
 }

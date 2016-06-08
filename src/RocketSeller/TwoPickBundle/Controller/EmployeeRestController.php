@@ -496,6 +496,11 @@ class EmployeeRestController extends FOSRestController {
                 if ($employee->getRegisterState() == 0) {
                     $employee->setRegisterState(25);
                 }
+                if($employerEmployee->getLegalFF()==-1){
+                    $employerEmployee->setLegalFF($user->getLegalFlag());
+                }
+                $user->setLegalFlag(-1);
+                $em->persist($user);
                 $em->persist($employerEmployee);
                 $em->persist($employee);
                 $em->flush();
@@ -1451,7 +1456,6 @@ class EmployeeRestController extends FOSRestController {
             }
             $realEmployee->setAskBeneficiary($beneficiarie);
             $em->persist($realEmployee);
-            $user->setLegalFlag(-1);
             $em->persist($user);
             $em->flush();
             $flag = true;
