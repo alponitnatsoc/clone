@@ -630,10 +630,10 @@ class ExportController extends Controller
         $handle = fopen($tmp_file, 'w+');
         fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
 
-        fputcsv($handle, array('INFORMACIÓN DEL LANDING SYMPLIFICA'),',');
-        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),',');
+        fputcsv($handle, array('INFORMACIÓN DEL LANDING SYMPLIFICA'),';');
+        fputcsv($handle, array('TIPO DE INSCRIPCIÓN', 'NOMBRE','E-MAIL','TELEFONO','FECHA DE INSCRIPCIÓN'),';');
         foreach ($landings as $landing){
-            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->getTimestamp()),',');
+            fputcsv($handle, array($landing->getEntityType(), $landing->getName(),$landing->getEmail(),$landing->getPhone(),$landing->getCreatedAt()->format('d/m/y')),';');
         }
 
         fclose($handle);
