@@ -325,6 +325,9 @@ class EmployeeController extends Controller
                                 'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
                             'employees' => $employeesData));
             }
+            if($employerHasEmployee->getLegalFF()==-1){
+                return $this->redirectToRoute("welcome");
+            }
         }
         $userWorkplaces = $user->getPersonPerson()->getEmployer()->getWorkplaces();
         $tempPerson = $employee->getPersonPerson();
@@ -361,7 +364,7 @@ class EmployeeController extends Controller
 
         }
         $timeCommitments = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:ContractType")->findAll();
-        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions,$ars,$severances, $timeCommitments,$user), $employee, array(
+        $form = $this->createForm(new PersonEmployeeRegistration($id, $userWorkplaces, $eps, $pensions,$ars,$severances, $timeCommitments,$id==-1?$user->getLegalFlag():$employerHasEmployee->getLegalFF()), $employee, array(
             'action' => $this->generateUrl('api_public_post_new_employee_submit'),
             'method' => 'POST',
         ));
@@ -440,6 +443,7 @@ class EmployeeController extends Controller
                     'form' => $form->createView(),
                     'tab' => $tab,
                     'choices' => $choices,
+                    'legalFlag'=>$id==-1?null:$employerHasEmployee->getLegalFF(),
                     'permittedDate'=>array(
                         'y'=>$permittedDate->format("Y"),
                         'm'=>$permittedDate->format("m"),

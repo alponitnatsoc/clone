@@ -424,6 +424,24 @@ class LegalAssistanceController extends Controller
 
         return $this->redirectToRoute($urlToSend);
     }
+    public function changeFlagEmployeeAction($employerHasEmployee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $eHERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $ehe */
+        $ehe=$eHERepo->find($employerHasEmployee);
+        /** @var User $user */
+        $user = $this->getUser();
+        if($ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$user->getPersonPerson()->getIdPerson()){
+            $ehe->setLegalFF(-2);
+            $em->persist($ehe);
+            $em->flush();
+            return $this->redirectToRoute("welcome");
+
+        }
+        return $this->redirectToRoute("show_dashboard");
+
+    }
 
     public function successPaymentAction()
     {
