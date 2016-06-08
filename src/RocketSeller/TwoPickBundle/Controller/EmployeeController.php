@@ -88,7 +88,7 @@ class EmployeeController extends Controller
             $employerEmployee->setState(2);
         }elseif ($employerEmployee->getState()>0){
             $employerEmployee->setState(0);
-            
+
         }
         $em = $this->getDoctrine()->getManager();
         $em->persist($employerEmployee);
@@ -1019,8 +1019,8 @@ filename = "certificadoLaboral.pdf"'
         $form = $this->createFormBuilder()
                 ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
                 ->setMethod('POST')
-                ->add('create', 'submit', array('label' => 'Crear Cuenta Daviplata'))
-                ->add("cellphone", "number", array('label' => "Numero Celular"))
+                ->add('create', 'submit', array('label' => 'Ir a Daviplata'))
+                ->add("cellphone", "number", array('label' => "Número Celular"))
                 ->add('save', 'submit', array('label' => 'Guardar Daviplata'))
                 ->add('discard', 'submit', array('label' => 'Descartar notificación'))
                 ->getForm();

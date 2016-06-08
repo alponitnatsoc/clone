@@ -47,51 +47,38 @@
         </div>
 
         <dir class="confirmationBlock">
-            <h3>La suscripción fue realizada exitosamente</h3>
+            <h3>¡Tus datos fueron recibidos con éxito!</h3>
             <br />
-            <p>El valor del servicio será cargado a tu medio de pago o a tu cuenta partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }} calculado de acuerdo a la información de empleados registrada en el sistema.</p>
-            <br />
-            <p><strong>Recibe un 20% de descuento por cada persona que use tu código de referido para pagar su suscripción:</strong></p>
-            <h4>Código de referido:</h4>
-            <h2>{{ user.code }}</h2>
+            <h4>¿Qué pasos siguen? Sólo debes completar las siguientes tareas:</h4>
+            <br>
+            <div class="border">
+                <div>
+                  <div class="imgpaso">
+                    <img src="{{ asset('../img/paso1.png') }}" alt="">
+                  </div>
+                  <div class="textpaso">
+                      <span style="font-weight: bold;color: #35D4D1;">Subir documentos: </span>
+                      <p style="color: #6F6F6F;">Escanea o tómale foto a los documentos solicitados en la siguiente página y sube los archivos dando clic en el botón correspondiente.</p>
+                  </div>
+                </div>
+                <br />
+                <div style="clear:both;padding-top:20px;">
+                  <div class="imgpaso">
+                    <img src="{{ asset('../img/paso2.png') }}" alt="">
+                  </div>
 
-            <section>
-                <h3>Comparte tu código de referido en redes sociales</h3>
-                <div class="fb-share-button" data-href="{{ path("fos_user_registration_register",{"c": user.code}) }}" data-layout="icon" data-text="PRIEB"></div>
+                  <div class="textpaso">
+                    <span style="font-weight: bold;color: #35D4D1;">Descargar documentos: </span>
+                    <p style="color: #6F6F6F;">Si requieres de algún documento que aún no tengas (como el Mandato Symplifa, autorización empleado o el contrato laboral si aún no lo tienes) podrás descargarlo primero, imprimirlo y firmarlo por ti y tu empleado, luego debes subirlo de nuevo.</p>
+                  </div>
+                </div>
+            </div>
 
-                {% set fbURL %}
-                    https://www.facebook.com/dialog/share?
-                    app_id=145634995501895
-                    &display=popup
-                    &href={{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}
-                    {# &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer#}
-                    &caption=Registrate en Symplifica con este codigo de referido {{ user.code }} y obten un descuento
-                    &title=Registrate en Symplifica con este codigo de referido {{ user.code }} y obten un descuento
-                    &description=Symplifica
-                {% endset %}
-
-                {% set twURL %}
-                    https://twitter.com/intent/tweet?
-                    text=Registrate en Symplifica con este codigo de referido {{ user.code }} y obten un descuento
-                    &url={{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}
-                    &via=symplifica
-                    &source={{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}
-                {% endset %}
-
-                {% set gURL %}
-                    https://plus.google.com/share?
-                    url={{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}
-                    &t=Registrate en Symplifica con este codigo de referido {{ user.code }} y obten un descuento
-                {% endset %}
-
-                {% set emailURL %}
-                    mailto:?subject=Regístrate en Symplifica&body=Registrate en Symplifica con este codigo de referido {{ user.code }} y obten un descuento:{{ absolute_url(path("fos_user_registration_register",{"c": user.code})) }}
-                {% endset %}
-                <a href="{{ fbURL }}" class="notAjax" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/facebook.png" border="0" alt="Facebook"/></a>
-                <a href="{{ twURL }}" class="notAjax" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/twitter.png" border="0" alt="Twitter"/></a>
-                <a href="{{ gURL }}" class="notAjax" target="_blank"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/google_plusone_share.png" border="0" alt="Google+"/></a>
-                <a href="{{ emailURL }}" class="notAjax"><img src="https://cache.addthiscdn.com/icons/v2/thumbs/32x32/email.png" border="0" alt="Email"/></a>
-            </section>
+            <div style="clear:both; padding: 40px 0 0 0">
+                <h4>¡Aquí empieza el trabajo de Symplifica! </h4>
+                <span style="font-weight: bold;color: #35D4D1;">Verificar documentos: </span>
+                <p style="color: #6F6F6F;">Una vez completadas tus tareas nos encargaremos de revisar tus documentos y hacer las afiliaciones si son necesarias. Muy pronto podrás gestionar a tus empleados desde la plataforma.</p>
+           </div>
 
             <hr />
             <a class="btn btn-orange" value="Continuar" href="{{ path('show_dashboard') }}" >Continuar</a>
