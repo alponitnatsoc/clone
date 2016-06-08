@@ -536,9 +536,7 @@ use EmployerMethodsTrait;
 
                 $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user), array('_format' => 'json'));
                 $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
-
-                dump($responsePaymentsMethods);
-                die();
+                
                 $data = array(
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,
