@@ -248,13 +248,11 @@ class PaymentMethodRestController extends FOSRestController
         if($user==null){
             return $view->setStatusCode(404)->setData(array("user"=>"the User Does not exist"));
         }
-
         $clientListPaymentmethodsCC = $this->forward('RocketSellerTwoPickBundle:PaymentsRest:getClientListPaymentmethods', array('documentNumber' => $user->getPersonPerson()->getDocument()), array('_format' => 'json'));
         $responsePaymentsMethodsCC = json_decode($clientListPaymentmethodsCC->getContent(), true);
         $clientListPaymentmethodsCD = $this->forward('RocketSellerTwoPickBundle:Payments2Rest:getEmployerPaymentMethods', array('accountNumber' => $user->getPersonPerson()->getEmployer()->getIdHighTech()), array('_format' => 'json'));
         $responsePaymentsMethodsCD = json_decode($clientListPaymentmethodsCD->getContent(), true);
         $realPayMethods=[];
-
         if (isset($responsePaymentsMethodsCC["payment-methods"])) {
             foreach ($responsePaymentsMethodsCC["payment-methods"] as $key=>$value ) {
                 $realPayMethods[]=array(
@@ -281,6 +279,7 @@ class PaymentMethodRestController extends FOSRestController
                 }
             }
         }
+
         return $view->setStatusCode(200)->setData(array("payment-methods"=>$realPayMethods));
 
     }

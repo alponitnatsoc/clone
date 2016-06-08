@@ -157,7 +157,7 @@ trait EmployeeMethodsTrait
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
 
-        $docs = array('Cedula' => false, 'RUT' => false);
+        $docs = array('Cedula' => false, 'RUT' => false, 'Mandato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
                 if ($type == $document->getDocumentTypeDocumentType()->getName()) {
@@ -167,12 +167,21 @@ trait EmployeeMethodsTrait
             }
             if (!$docs[$type]) {
                 $msj = "";
+                $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
+
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'Cedula';
                 } elseif ($type == 'RUT') {
                     $msj = "Subir copia del RUT de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                     $documentType = 'RUT';
+                } elseif ($type == 'Mandato'){
+                  $mandatoType = $documentTypeRepo->findOneBy(array('name' => "Mandato"));
+                  $documentType = 'Mandato';
+                  $msj = "Generar Mandato";
+                  $url = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
+                  $this->createNotification($user->getPersonPerson(), $msj, $url, $mandatoType, "Bajar");
+                  $msj = "Subir mandato firmado de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));

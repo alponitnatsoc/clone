@@ -13,7 +13,11 @@ trait BasicPersonDataMethodsTrait
         $lastName = $person->getLastName1();
         $lastName2 = $person->getLastName2();
 
-        $fullName = $names . " " . $lastName . " " . $lastName2;
+        $fullName = $names . " " . $lastName;
+
+        if($lastName2 != ""){
+          $fullName = $fullName . " " . $lastName2;
+        }
 
         return $fullName;
     }
