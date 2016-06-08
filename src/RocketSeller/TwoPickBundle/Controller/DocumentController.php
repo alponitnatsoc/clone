@@ -516,16 +516,26 @@ use EmployerMethodsTrait;
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
                 $employer = $repository->find($id);
-
                 $employerPerson = $employer->getPersonPerson();
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
                     'docNumber' => $employerPerson->getDocument(),
-                    'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+                    'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+                    'arl' => $this->getEmployerArl($employer->getIdEmployer()),
+                    'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
+                    'tel' => $employerPerson->getPhones()->getValues()[0],
+                    'address' => $employerPerson->getMainAddress(),
+                    'city' => $employerPerson->getCity()->getName()
                 );
+
+                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $id), array('_format' => 'json'));
+                $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+
                 $data = array(
-                    'employer' => $employerInfo
+                    'employer' => $employerInfo,
+                    'accountInfo' => $responsePaymentsMethods,
+                    'rootDir' => $this->get('kernel')->getRootDir().'/..'
                 );
                 break;
             case "factura":
@@ -626,10 +636,11 @@ use EmployerMethodsTrait;
                     return new JsonResponse(array("name-path" => $docName));
                 }
 
+                //return new Response($html);
                 return new Response(
                         $this->get('knp_snappy.pdf')->getOutputFromHtml($html), 200, array(
                     'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"'
+                    'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"',
                         )
                 );
                 break;

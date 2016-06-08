@@ -55,7 +55,8 @@ class EmployerHasEmployee
      * 0 - unActivated
      * 1 - active
      * 2 - Twilio Verification
-     * 3 - backoffice confirmed
+     * 3 - symplifica payed
+     * 4 - backoffice confirmed
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $state = 1;

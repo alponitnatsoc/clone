@@ -37,60 +37,83 @@ politica_privacidad:
 intro_sin_verificar:
     path: /verificar-cuenta
     defaults: { _controller: RocketSellerTwoPickBundle:Default:introSinVerificar }
+routes:
+    path:     /routes
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }
+
+#Back Office
 back_office:
     path: /backoffice
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index }
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:index}
 show_procedures:
     path:     /backoffice/procedures
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index }
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:index}
+show_request:
+    path:     /backoffice/request
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRequest}
+legal_ass:
+    path:     /backoffice/legal
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:legalAssistance}
+register_express:
+    path:     /backoffice/register
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:registerExpress}
+marketing:
+    path:     /backoffice/marketing
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}
+
+#tramites
 show_procedure:
     path:     /backoffice/procedure/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:procedureById }
-show_request:
-    path:     /backoffice/request
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showRequest }
+#empleado
+check_register:
+    path:     /backoffice/check/register/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
+validate_employer_documents:
+        path:     /backoffice/check/employer/documents/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkDocuments}
+show_info:
+    path:     /backoffice/check/info/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
+view_documents:
+    path:     /backoffice/view/emploeyer/documents/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewDocuments}
+#empleado
+check_employee:
+        path:     /backoffice/check/employee/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
+show_info_employee:
+        path:     /backoffice/check/info/employee/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfoEmployee}
+
+validate_employee_documents:
+        path:     /backoffice/check/employee/documents/{idAction}
+        defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkEmployeeDocuments}
+view_employee_documents:
+    path:     /backoffice/view/emploeyee/documents/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:viewEmployeeDocuments}
+
 change_action_status:
     path:     /backoffice/procedure/{procedureId}/{actionId}/{status}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeVueltaState }
 change_action_error_status:
     path:     /backoffice/procedure/action/error/{procedureId}/{actionError}/{status}
     defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeErrorStatus }
-check_register:
-    path:     /backoffice/check/register/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkRegister }
-show_info:
-    path:     /backoffice/check/info/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:checkInfo}
 report_error:
     path:     /backoffice/report/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
-call_entity:
-    path:     /backoffice/call/entity/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:callEntity }
-call_person:
-    path:     /backoffice/call/person/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:callPerson }
 back_add_sql:
     path:     /backoffice/add/sql/{idEmployerHasEmployee}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
 export_documents_person:
     path:     /backoffice/export/person/documents/{idPerson}
     defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentsByPerson }
-make_afiliation:
-    path:     /backoffice/afiliation/person/{idAction}
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:makeAfiliation }
+export_all_documents:
+    path:     /backoffice/export/action/documents/{idAction}
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportAllDocuments }
 complete_employee:
     path:     /backoffice/procedure/{procedureId}/complete/employee/{idEmployerHasEmployee}
-    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }    
-routes:
-    path:     /routes
-    defaults: { _controller: RocketSellerTwoPickBundle:Default:getAllRoutes }
-register_express:
-    path:     /backoffice/register
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:registerExpress }
-legal_ass:
-    path:     /backoffice/legal
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:legalAssistance }
-marketing:
-    path:     /backoffice/marketing
-    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}
+    defaults: { _controller: RocketSellerTwoPickBundle:Procedure:changeEmployeeStatus }
+export_landing:
+    path:     /backoffice/export/landing
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportLanding }

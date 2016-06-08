@@ -494,8 +494,6 @@ class Employer
                 if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()>0){
                     $this->toFinish += 1;
                 }
-            }else{
-                $this->toFinish=0;
             }
         }
         return $this->toFinish;
@@ -529,8 +527,6 @@ class Employer
                 if ($employee->getEmployeeEmployee()->getEmployeeHasUnfinishedActions()===0){
                     $this->finished+=1;
                 }
-            }else{
-                $this->finished=0;
             }
         }
         return $this->finished;

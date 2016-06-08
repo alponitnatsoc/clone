@@ -1,10 +1,9 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Validar Informacion Empleado{% endblock %}
-
+{% block title %}Validar Informacion Empleador{% endblock %}
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
-        <div class="col-md-12">
+        <div class="col-md-15">
             <div class="panel panel-title">
                 {% if action.actionTypeActionType.name == 'Validar Informacion del Empleador' %}
                     Validar Información de {{ person.fullName }}
@@ -14,7 +13,19 @@
             </div>
             <div class="panel panel-default">
                 <h4 class="col-md-12 panel-heading">Información Registrada</h4>
-                <div class="col-md-7">
+
+                    {% set document = person.docByType("Cedula") %}
+                    {% if person.docByType("Cedula")=='' %}
+                        <div class="col-md-6" style="margin-top:250px; text-align:center">
+                        <p>Llamar al cliente {{ person.fullName}} y recordarle que suba la cedula</p>
+                    {% else %}
+                        <div class="col-md-6">
+                        <embed width="400" height="500" src={{ path }}  alt=”pdf” pluginspage=”http://www.adobe.com/products/acrobat/readstep2.html”>
+                        </embed>
+                    {% endif %}
+
+                </div>
+                <div class="col-md-6">
                     <table class="table">
                         <thead class="tab-header">
                         <tr>
@@ -47,7 +58,7 @@
                             <tr>
                                 <td><strong>Dirección</strong></td>
                                 <td>{{ person.mainAddress}}</td>
-                                <td><button class="cheked"></button></td>
+                                <td></td>
                             </tr>
                             {% for phone in person.phones %}
                             <tr>
@@ -99,8 +110,13 @@
 
                         </tbody>
                     </table>
+
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6" style="margin-top:60px; text-align:center;">
+                    <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
+                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
+                </div>
+                <div class="col-md-6">
                     <table class="table">
                         <thead class="tab-header">
                         <tr>
@@ -144,19 +160,14 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-5" style="border-top:dotted 1px;">
-                    <div class="col-md-12">
-                        {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
-                    </div>
-                </div>
-                <div class="col-md-5" style="margin-top:40px;text-align:center;">
-                    <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
-                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
-                </div>
-
             </div>
-        </div>
+            <div class="col-md-12" style="border-top:dotted 1px;">
+                <div class="col-md-12">
+                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
+                </div>
+            </div>
 
+        </div>
     </div>
 {% endblock %}
 
