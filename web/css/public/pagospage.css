@@ -1,0 +1,95 @@
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+#cont-payment {
+  clear: both;
+}
+.title-span {
+  background: #F5F5F5;
+  padding: 10px 0;
+}
+.borderclass {
+  border: 1px solid #CCC;
+  border-radius: 5px;
+}
+.novelspan {padding: 10px 0}
+.tittle-pay {
+  background: #1FCECB;;
+  padding: 10px 20px;
+  height: auto;
+  overflow: hidden;
+  color: #FFF;
+  font-size: 17px
+}
+
+.tittle-pay ul {
+  list-style-type: none
+}
+.right {
+  float: left;
+  text-align: right;
+  width: 50%;
+}
+.left {
+  float: left;
+  width: 50%
+}
+
+.height {
+  height: auto;
+  overflow: hidden;
+}
+
+.borderight {
+  border-right: 1px #CCC solid
+}
+
+.span {
+  padding: 10px 0 0 10px
+}
+.precio-pay {
+    padding: 10px 15px;
+    font-size: 25px;
+    color: #3C4B5A;
+}
+.center {
+  text-align: center;
+}
+.pila-empl {
+  padding: 10px 0 0px 15px;
+  border-bottom: 1px solid #CCC;
+}
+.pila-empl ul {
+  list-style-type: none;
+  padding: 0
+}
+
+.deuda {
+  margin: 20px 0 15px 0;
+    padding: 15px 0 0 0;
+    border-top: 1px solid #CCC;
+    font-size: 20px
+}
+
+.importante {
+  margin: 10px;
+    padding: 10px;
+    background: #ECECEC;
+    border-radius: 5px;
+}

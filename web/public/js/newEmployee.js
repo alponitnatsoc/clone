@@ -138,6 +138,7 @@ function startEmployee() {
                 $(this).show();
             });
         }
+        calculator();
     });
     $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
         if($("#changeBehavior").text()=="1"){
@@ -765,7 +766,10 @@ $('#radio_mensual').click(function() {
     calculator();
 });
 
-function changeValues(data, division=1) {
+var sueldo_plano = 0;
+
+function changeValues(data) {
+  // We call calculator to have everything fresh.
   var division = 1;
   var elementExists = document.getElementById("radio_diario");
   if(elementExists != null)
@@ -774,11 +778,10 @@ function changeValues(data, division=1) {
     }else {
       division = 1;
     }
-    console.log("division" + division);
+
+    console.log("days:  "+data.numberOfDays);
   // Plain salary is what the employee should recieve.
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
-//  data.plainSalary = salario_bruto;
-
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
@@ -788,7 +791,7 @@ function changeValues(data, division=1) {
   document.getElementById('subsidio_transporte').innerHTML = getPrice(Math.floor(data.transportCal)/division);
   document.getElementById('descuento_salud').innerHTML = getPrice(Math.floor(data.EPSEmployeeCal)/division);
   document.getElementById('descuento_pension').innerHTML = getPrice(Math.floor(data.PensEmployeeCal)/division);
-  document.getElementById('pagos_netos').innerHTML = getPrice(pagos_netos/division);
+  document.getElementById('pagos_netos').innerHTML = getPrice(Math.floor(pagos_netos/division));
 
   document.getElementById('salario_ingreso_bruto2').innerHTML = getPrice(Math.floor(data.plainSalary)/division);
   document.getElementById('subsidio_transporte2').innerHTML = getPrice(Math.floor(data.transportCal)/division);
@@ -803,6 +806,22 @@ function changeValues(data, division=1) {
   document.getElementById('vacaciones').innerHTML = getPrice(Math.floor(data.vacationsCal)/division);
   document.getElementById('prima').innerHTML = getPrice(Math.floor(0/division));
   document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
+
+  sueldo_plano = data.plainSalary/data.numberOfDays;
+
+    $("#totalExpensesVal").val(getPrice(Math.floor(pagos_netos/division)));
+
+    $("#totalExpensesValD").val(getPrice(Math.floor(data.plainSalary)/division));
+
+    $("#totalExpensesVal2").val(getPrice(Math.floor(total_modal)/division));
+
+
+  if($("#totalExpensesVal2").val() == 'NaN')
+    $("#totalExpensesVal2").val(getPrice(0));
+  if($("#totalExpensesValD").val() == 'NaN')
+    $("#totalExpensesValD").val(getPrice(0));
+  if($("#totalExpensesVal").val() == 'NaN')
+    $("#totalExpensesVal").val(getPrice(0));
 
 
 }
@@ -1210,6 +1229,7 @@ function calculator() {
     var cajaCal = 0;
     var senaCal = 0;
     var icbfCal = 0;
+    var salaryM2 = 0;
     var base = 0;
     if (aid == 0) {
         aidD = 0;
@@ -1301,7 +1321,7 @@ function calculator() {
             transportAid2=transportAid;
         }
 
-        salaryM = (salaryM - transportAid2)/(1-(EPSEmployee+PensEmployee));
+        salaryM2 = (salaryM - transportAid2)/(1-(EPSEmployee+PensEmployee));
         totalExpenses = salaryM + aidD + transportAid2 + dotation + ((EPSEmployer + PensEmployer + arl + caja +
             vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid2));
         EPSEmployerCal = EPSEmployer * (salaryM + aidD);
@@ -1361,18 +1381,30 @@ function calculator() {
         resposne['totalIncome'] = totalIncome;
         resposne['plainSalary'] = plainSalary;
         resposne['numberOfDays'] = numberOfDays;
+        resposne['salaryM2'] = salaryM2;
         if(type=="days"&&EPSEmployerCal>0&&sisben==1){
             $("#arsNotAplicable").show();
         }else{
             $("#arsNotAplicable").hide();
         }
     }
-
+    // Calculate the days again.
+    var i = 0;
+    $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
+            i++;
+        });
+    $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
     var htmlRes = jsonCalcToHTML(resposne);
+    if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
+      console.log("entre");
+      $('#radio_diario').prop('checked', true);
+      $('#radio_mensual').prop('checked', false);
+    }
     changeValues(resposne);
+
     //$("#calculatorResultsModal").find(".modal-body").html(htmlRes);
 
-    $("#totalExpensesVal").val(totalExpenses.toFixed(0));
+    //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
 function checkDate(date) {
@@ -1400,9 +1432,9 @@ function validateSalary() {
     if (selectedVal == " Trabajador por días") {
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
-            salarioMinimoDiario = 21000;
+            salarioMinimoDiario = 22982;
         }
-        salarioDias = (accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+        salarioDias = sueldo_plano;
         if (salarioDias < salarioMinimoDiario) {
             $("#salarioMinimo").find('.modal-body').html('El salario minimo diario legal es de $ ' + getPrice(salarioMinimoDiario));
             $("#salarioMinimo").modal('show');
@@ -1418,8 +1450,8 @@ function validateSalary() {
         if (!salarioMinimo) {
             salarioMinimo = 689455;
         }
-        salarioMes = (accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
-        if (salarioMes < salarioMinimo) {
+        salarioMes = sueldo_plano;
+        if (salarioMes < (salarioMinimo/30)) {
             $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));

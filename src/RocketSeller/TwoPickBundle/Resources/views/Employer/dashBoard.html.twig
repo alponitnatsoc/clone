@@ -2,37 +2,39 @@
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>
-            .dashboard_employer_pending_tasks {
-                display: inline-block;
+
+            .notification_contenedor{
+                height: auto;
+                overflow: hidden;
             }
 
             .dashboard_employer_pending_tasks > .col-xs-12 {
+                height: auto;
+                overflow: hidden;
                 padding-top: 20px;
                 padding-bottom: 10px;
                 background-color: #F5F5F6;
                 border-radius: 5px;
-                margin-bottom: 30px;
+                margin-bottom: 60px;
             }
 
             .dashboard_employer_pending_tasks_list {
-                padding-left: 20px;
+                
                 border-radius: 7px;
                 padding-top: 15px;
                 display: inline-block;
                 width: 100%;
-                background: #FBFBFB;
+                background: #F8F8F8;
                 margin: 5px;
             }
 
             .panel_btn {
                 margin: 0 auto;
                 text-align: center;
-                width: 80%;
-                background-color: #BE1E2D;
+                width: 98%;
                 margin-bottom: 10px;
                 color: #000;
-                padding: 5px 5px;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+                padding: 1% 1%;
             }
 
             .panel_btn_action {
@@ -59,28 +61,31 @@
             }
 
             .download-link, .download-link:hover {
-                color: #fff;
-                background-color: #FD9224;
-                font-size: 12px;
-                padding: 5px;
+                width: 100px;
+                display: block;
+                margin: 0 auto; 
+                padding: 5px;           
                 cursor: pointer;
-                min-width: 100px;
-                border-radius: 3px;
+                background-color: #FD9224;
+                border-radius: 3px;         
+                font-size: 12px;                
+                color: #fff;             
                 font-weight: bold;
-                padding-left: 40px;
+                text-align: center;                        
             }
 
             .action-link, .action-link:hover, action-link:visited {
-                color: #fff;
-                background-color: #1fcecb;
-                font-size: 12px;
-                font-weight: bold;
-                padding: 5px;
-                cursor: pointer;
-                min-width: 107px;
+                width: 100px;
                 display: block;
-                text-align: center;
-                border-radius: 3px;
+                margin: 0 auto; 
+                padding: 5px;           
+                cursor: pointer;
+                background-color: #1fcecb;
+                border-radius: 3px;         
+                font-size: 12px;                
+                color: #fff;             
+                font-weight: bold;
+                text-align: center;  
             }
 
             .panel-title {
@@ -125,8 +130,8 @@
                 font-size: 16px;
                 display: inline-block;
                 vertical-align: -webkit-baseline-middle;
-                margin-left: 10px;
-                width: 75%;
+                width: 80%;
+                float: left;
             }
 
             .deadline {
@@ -200,8 +205,9 @@
             }
 
             .dashboard_employer_contador_div {
-                padding: 5px 30px 5px 30px;
+                padding: 35px 30px 10px 30px;
                 display: inline-block;
+                text-align: center;
             }
 
             .dashboard_employer_reminder {
@@ -222,15 +228,23 @@
             }
 
             .dashboard_employer_contador_type_alert {
-                background-color: #df8728;
+                background-color: #FD9224;
                 height: 10px;
                 width: 10px;
                 margin-top: 4px;
                 margin-right: 6px;
                 display: inline-block;
-                float: left;
+                
                 border-radius: 15px;
             }
+
+            .textoptions, .txthelp{
+                font-size: 12px;
+                padding: 0 !important;
+                text-align: center;
+            }
+
+            span.textoptions{ display: inline; margin-left: 5px }
 
             .contador_logo {
                 height: 50px;
@@ -243,7 +257,6 @@
                 margin-top: 4px;
                 margin-right: 6px;
                 display: inline-block;
-                float: left;
                 border-radius: 15px;
             }
 
@@ -285,14 +298,14 @@
             }
 
             .btn_list {
-                display: -webkit-inline-box;
-                vertical-align: -webkit-baseline-middle;
-                padding: 0 10px;
+            width: 20%;
+            float: left;
             }
 
             .deadline_list {
-                display: -webkit-inline-box;
-                vertical-align: -webkit-baseline-middle;
+                display: block;
+                height: auto;
+                overflow: hidden;
             }
 
 
@@ -318,10 +331,6 @@
                 border-left-width: 0px;
             }
 
-            .notification_contenedor {
-                display: table;
-            }
-
             #modal-body {
                 position: absolute;
                 top: 0;
@@ -336,13 +345,93 @@
                 text-align: center;
                 margin-top: 40px;
             }
+
+            .modal-responsive{
+                padding: 0 20px !important;
+            }
+
+            /* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
+
+            @media (max-width: 1200px){
+            
+                .dashboard_employer_contador_div { padding: 35px 0; }
+                .dashboard_employer_order_by_select{ font-size: 12px; } 
+
+                .description_list { font-size: 14px; width: 70%; }
+
+            }
+
+            @media (max-width: 990px){
+
+            .dashboard_employer_pending_tasks > .col-xs-12 { width: 31%; margin: 1%; }
+
+            }
+
+            @media (max-width: 768px){
+
+                .intro-text{ margin-top: 70px; }
+            
+                .dashboard_employer_contador_div { padding: 35px 10px 0 10px; }
+
+                .contain-cols {width: 70%; }
+                .contain-select {width: 40%; float: left;}
+                .contain-options {width: 60%; float: left;}
+                .center-options {width: 50%; float: left;} 
+
+            }
+
+            @media (max-width: 690px){
+
+                .dashboard_employer_head { width: 100%; }
+
+                .contain-cols, .contain-notificaciones { width: 50%; }
+
+                .contain-cols, .contain-notificaciones { margin: 10px 0; }
+
+                span.textoptions{ display: none; }
+
+                .contain-select { width: 60%; }
+                .contain-options { width: 40%; }
+                .center-options { width: 40%; } 
+
+                .contador-div-uno { width: 40%; float: left; }
+                .contador-div-dos{ width: 60%; float: left; }
+
+                .description_list { font-size: 13px; width: 60%; }
+                .btn_list{ width: 30%; }
+
+            @media (max-width: 590px){ 
+
+                .dashboard_employer_pending_tasks > .col-xs-12 { width: 48%; margin: 1%; }
+            
+            }
+
+            @media (max-width: 480px){
+
+                .dashboard_employer_head { display: block; }
+
+                .contain-cols, .contain-notificaciones { width: 100%; }
+                
+                .contain-notificaciones{ border-top: 1px solid #ccc; }     
+                
+                .contain-notificaciones .dashboard_employer_contador_div { padding: 15px 0 0 0 ; }
+
+                /* CSS lista subir - bajar archivos en cuadrícula */    
+                .dashboard_employer_pending_tasks > .col-xs-12 { width: 98%; margin: 1%; }
+                .panel-body{ padding: 0 15px; }
+                .label-group{ min-height: 30px; }
+
+             }
+
+            }
+
         </style>
     {% endblock %}
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
     {# dump(user) #}
     {% if notifications %}
         <div class="row">
-            <div class="col-sm-12 text-center">
+            <div class="col-sm-12 text-center intro-text">
                 <img src="{{ asset('/img/hola.png') }}">
                 <h3 class="blueHeadline">¡ Bienvenido {{ app.user.getPersonPerson().getNames() }} !</h3>
                 <h5>Este es tu resumen de tareas</h5>
@@ -350,11 +439,11 @@
         </div>
         {# dump(notifications) #}
         <div class="dashboard_employer_head">
-            <div class="col-sm-7" style=" font-size: 12px;">
+            <div class="col-sm-7 contain-cols" style=" font-size: 12px;">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-5 contain-select">
                         <p class="txthelp col-sm-12">Ordenar por:</p>
-                        <select class="col-sm-12 form-group form-control dashboard_employer_order_by_select"
+                        <select class="form-group form-control dashboard_employer_order_by_select"
                                 style="width: 100%;">
                             {% set view = {'view' : app.request.get('view')} %}
                             <option value="{{ path('show_dashboard_employer',  view|merge( { 'orderBy': 'deadline' })) }}"
@@ -366,35 +455,31 @@
                         </select>
                     </div>
                     {% set orderBy = {'orderBy' : app.request.get('orderBy')} %}
-                    <div class="col-sm-7">
+                    <div class="col-sm-7 contain-options">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <p>&nbsp;</p>
+                            <div class="col-sm-6 dashboard_employer_contador_div center-options"> 
                                 <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'panel' })) }}"
-                                   style="color:#3C4B5A !important; font-size: 12px;"><span
-                                            class="glyphicon glyphicon-th-large view"></span> Cuadricula</a>
+                                   style="color:#3C4B5A !important; font-size: 12px;">
+                                   <span class="glyphicon glyphicon-th-large view"></span><span class="textoptions">Cuadrícula</span>
+                                </a>
                             </div>
-                            <div class="col-sm-6">
-                                <p>&nbsp;</p>
+                            <div class="col-sm-6 dashboard_employer_contador_div center-options"> 
                                 <a href="{{ path('show_dashboard_employer', orderBy|merge( { 'view': 'list' })) }}"
-                                   style="color:#3C4B5A !important; font-size: 13px;"><span
-                                            class="glyphicon glyphicon-th-list view"></span> Listado</a>
+                                   style="color:#3C4B5A !important; font-size: 13px;">
+                                   <span class="glyphicon glyphicon-th-list view"></span><span class="textoptions">Listado</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-5" style=" font-size: 12px;">
+            <div class="col-sm-5 contain-notificaciones" style=" font-size: 12px;">
                 <div class="row">
-                    <div class="col-sm-5 dashboard_employer_contador_div">
-                        <p>&nbsp;</p>
-                        <span class="dashboard_employer_contador_type_alert"></span>
-                        <span class="txthelp" style=" font-size: 12px;"><p>Alertas</p></span>
+                    <div class="col-sm-5 dashboard_employer_contador_div contador-div-uno">
+                        <span class="txthelp"><p> <span class="dashboard_employer_contador_type_alert"></span> Alertas</p></span>
                     </div>
-                    <div class="col-sm-7 dashboard_employer_contador_div">
-                        <p>&nbsp;</p>
-                        <span class="dashboard_employer_contador_type_notification"></span>
-                        <span class="txthelp" style=" font-size: 12px;"><p>Notificaciones</p></span>
+                    <div class="col-sm-7 dashboard_employer_contador_div contador-div-dos">
+                        <span class="txthelp"><p> <span class="dashboard_employer_contador_type_notification"></span> Notificaciones</p></span>
                     </div>
                 </div>
             </div>
@@ -437,7 +522,7 @@
                                                       class="download-link">{{ notification.accion }}</span>
                                             </div>
                                         {% else %}
-                                            <div class="">
+                                            <div class="panel_btn">
                                                 <a href="{{ notification.relatedlink }}" target="_blank"
                                                    class="action-link notAjax">{{ notification.accion }}</a>
                                             </div>
@@ -476,7 +561,7 @@
                                         <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
                                     {% endif %}
                                 </div>
-                                <div class="btn_list pull-right col-md-2">
+                                <div class="btn_list col-md-2">
                                     {% if notification.accion %}
                                         {% if (notification.accion|lower|trim) == "subir" %}
                                             <span href="{{ notification.relatedlink }}/{{ notification.id }}"

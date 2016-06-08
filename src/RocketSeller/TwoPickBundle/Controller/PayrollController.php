@@ -160,10 +160,12 @@ class PayrollController extends Controller
         $owePurchaseOrders=new ArrayCollection();
         /** @var PurchaseOrders $po */
         foreach ($purchaseOrders as $po) {
+            dump($po);
             if($po->getPurchaseOrdersStatus()->getIdNovoPay()=='P1'&&$po->getPurchaseOrderDescriptions()->count()>0){
                 $owePurchaseOrders->add($po);
             }
         }
+        dump($owePurchaseOrders);
 //        $novelties = array();
 //        if ($data) {
 //            foreach ($data as $key => $value) {
@@ -472,6 +474,29 @@ class PayrollController extends Controller
                 /** @var PurchaseOrdersDescription $pod */
                 foreach ($pods as $pod) {
                     $pod->setPurchaseOrdersStatus($procesingStatus);
+                    if($pod->getPayrollPayroll()!=null){
+                        $actualPayroll=$pod->getPayrollPayroll();
+                        if($actualPayroll->getIdPayroll()==$actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()){
+                            //create next payroll
+                            $newPayroll=new Payroll();
+                            $nowDate= new DateTime();
+                            $nowDate =  new DateTime(date('Y-m-d', strtotime("+1 months", strtotime($nowDate->format("Y-m-")."1"))));
+
+                            $nowPeriod=$actualPayroll->getPeriod();
+                            if($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="Q"&&$nowPeriod==4){
+                                $newPayroll->setPeriod(2);
+                            }else{
+                                $newPayroll->setPeriod(4);
+                            }
+                            $newPayroll->setMonth($nowDate->format("m"));
+                            $newPayroll->setYear($nowDate->format("y"));
+                            $newPayroll->setContractContract($pod->getPayrollPayroll());
+                            $actualPayroll->getContractContract()->setActivePayroll($newPayroll);
+                            $em->persist($newPayroll);
+                            $em->persist($actualPayroll->getContractContract());
+                            $em->flush();
+                        }
+                    }
                 }
                 /** @var Config $ucfg */
                 $ucfg=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name'=>'ufg'));

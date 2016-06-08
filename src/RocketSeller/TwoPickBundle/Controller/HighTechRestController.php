@@ -112,12 +112,13 @@ class HighTechRestController extends FOSRestController
     $retorno = null;
     if($state == 0) {
       // I will update it to id 5.
-      $pos = $pos->findOneBy(array('idPurchaseOrdersStatus' => 6));
+      $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
+               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
       $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
     } else {
-      // I will update it to id 5.
-      $pos = $pos->findOneBy(array('idPurchaseOrdersStatus' => 5));
+      $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
       $date = new DateTime('01-01-0001 00:00:00');
       $dis->setDatePaid($date);
@@ -164,7 +165,38 @@ class HighTechRestController extends FOSRestController
     $regex['numeroRadicado'] = '([0-9])+'; $mandatory['numeroRadicado'] = true;
     $regex['estado'] = '([0-9])+'; $mandatory['estado'] = true;
 
+
+
     $this->validateParamters($parameters, $regex, $mandatory);
+
+    $id = $parameters['numeroRadicado'];
+    $state = $parameters['estado'];
+    $payRepository = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Pay");
+
+    /** @var PurchaseOrders $pay */
+    $pay = $payRepository->findOneBy(array('idDispercionNovo' => $id));
+    if ($pay == null) {
+      throw new HttpException(404, "The id: " . $id . " was not found.");
+    }
+    $em = $this->getDoctrine()->getManager();
+    $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+    $retorno = null;
+    if($state == 0) {
+      $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-1'));
+               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+      $pay->setPurchaseOrdersStatus($pos);
+    } else {
+      $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
+               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+      $pay->setPurchaseOrdersStatus($pos);
+      $view = View::create();
+
+      //TODO(gabriel.montero): Aca se debe crear una notificicacion tanto para el backoffice, como para el usuario
+      // Indicando que la transaccion no fue exitosa y se debe revisar la informacion del empleado.
+      // Esto tambien debe disparar una accion que cuente un tiempo y retorne la plata automaticamente si no hay cambios.
+    }
+    $em->persist($dis);
+    $em->flush();
 
     // Succesfull operation.
     $view = View::create();

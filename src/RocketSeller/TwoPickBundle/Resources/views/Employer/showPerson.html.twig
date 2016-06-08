@@ -33,15 +33,59 @@
                 margin-bottom: 0px;
             }
             */
-           .label-group{
+
+            .label-group{
                 text-align: right !important;
                 font-size: 16px;
                 font-style: italic;
                 font-weight: 100;
-           }
-           .form-select{
+            }
+           
+            .form-select{
             color: yellow !important;
-           }
+            }
+
+            .contain-info-tab{
+                width: 100%;
+                margin: 0 auto;
+                padding: 20px;
+                background-color:#f7f7f7;
+            }
+           
+            .line-normal{ border-bottom: 1px solid #e9e9e9; margin-top: 20px; }
+
+             .line-normal:last-child{ border-bottom: none; }
+
+           /* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
+
+            @media (max-width: 1200px){
+
+                .label-group{ font-size: 14px; }
+            }
+
+            @media (max-width: 990px){
+
+                .title-center{ text-align: center !important; }
+
+            }
+
+            @media (max-width: 768px){
+
+                .label-group{ text-align: center !important; }
+                .contain-info-tab{ width: 70%; text-align: center; }
+
+                .line-responsive{ width: 80%; margin: 0 auto; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+
+            }
+
+            @media (max-width: 690px){
+
+                .title-center{ font-size: 22px; }
+
+                .contain-info-tab{ width: 90%; text-align: center; }
+                .label-group{ font-size: 13px; }
+            }
+
         </style>
     {% endblock %}
 
@@ -52,7 +96,7 @@
                     <img src="/img/ico-empleador.png" class="center-block">
                 </div>
                 <div id="" class="col-md-10 col-xs-12 txt-AD1">
-                    <div id="" class="text-left">
+                    <div id="" class="text-left title-center">
                         Datos del Empleador
                     </div>
                 </div>
@@ -74,12 +118,12 @@
                 {# render the task's only field: description #}
                 <div class="col-md-10 col-md-offset-1 blockUpData content-input" style="border-bottom: none;">
                     <div class="text-center">
-                        <span style="color:#71c8c6;font-weight:700;font-size:14px;">{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</span>
+                        <span style="color:#71c8c6;font-weight:700;font-size:16px;">{{ employer.personPerson.names}} {{ employer.personPerson.lastName1}} {{ employer.personPerson.lastName2}}</span>
                         <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
                     </div>
                     <br />
-                    <div class="row" style="background-color:#f7f7f7;padding: 20px;">
-                        <div class="row"> 
+                    <div class="row contain-info-tab">
+                        <div class="row line-responsive"> 
                             <div class="col-sm-6 label-group">
                                 Fecha de Nacimiento
                             </div>
@@ -87,7 +131,7 @@
                                 {{ employer.personPerson.birthDate|date('Y-m-d')}}
                             </div>                                               
                         </div>
-                        <div class="row">
+                        <div class="row line-responsive">
                             <div class="col-sm-6 label-group">
                                 Dirección principal
                             </div>
@@ -95,8 +139,8 @@
                                 {{ employer.personPerson.mainAddress}}
                             </div>                    
                         </div>
-                        <div class="row">
-                            <ul class="phones"  >
+                        <div class="row line-responsive">
+                            <ul class="phones">
                                 {% for phone in employer.personPerson.phones %}
                                     <li id="phone_{{loop.index}}" class="phoneLi">
                                         <div class="col-sm-6 label-group">
@@ -109,7 +153,7 @@
                                 {% endfor %}
                             </ul>
                         </div> 
-                        <div class="row">
+                        <div class="row line-responsive">
                             <div class="col-sm-6 label-group">
                                 Departamento
                             </div>
@@ -128,7 +172,6 @@
                     </div>
                 </div>
 
-                <br /><br />
             </div>
             <!--
             <div id="contactData" class="tab-pane fade in">
@@ -152,14 +195,17 @@
                             <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
                         </div>
                     <br />
-                    <div class="row" style="background-color:#f7f7f7;padding: 20px;">
+                    <div class="row contain-info-tab">
                     {# iterate over each existing workplaces and render its fields #}
-                        <ul class="workplaces"  style="list-style: none">
+                        
+                        <ul class="workplaces" style="list-style: none; padding: 0; margin: 0">
                             {% for workplace in employer.workplaces %}
+                                
                                 <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
-                                    <div class="row">
-                                        <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none">
-                                            <div class="col-sm-12 col-xs-12">
+                                    
+                                    <div class="row contain-info-tab">
+                                    
+                                            <div class="row line-responsive">
                                                 <div class="col-sm-6 label-group">
                                                     Nombre
                                                 </div>
@@ -167,7 +213,7 @@
                                                     {{ workplace.name}}
                                                 </div>                                                                                
                                             </div>
-                                            <div class="col-sm-12 col-xs-12">
+                                            <div class="row line-responsive">
                                                 <div class="col-sm-6 label-group">
                                                     Dirección
                                                 </div>
@@ -175,7 +221,7 @@
                                                     {{ workplace.mainAddress}}
                                                 </div>
                                             </div>
-                                            <div class="col-xs-12 col-sm-12">
+                                            <div class="row line-responsive">
                                                 <div class="col-sm-6 label-group">
                                                     Departamento
                                                 </div>
@@ -192,7 +238,7 @@
                                                 </div>                                        
                                             </div>
                                             
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 
@@ -214,14 +260,14 @@
                             <span style="font-weight:700;font-size:14px;">{{ employer.personPerson.documentType}} {{ employer.personPerson.document}}</span>
                         </div>
                         <br />
-                        <div class="row" style="background-color:#f7f7f7;padding: 20px;">
-                            <div class="row">
-                                <div class="col-sm-8 col-sm-offset-2 col-xs-12 " style="border-bottom:none;">
+                        <div class="row contain-info-tab">
+                            
+                   
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-12 form-group">
                                             <ul class="severances"  style="list-style: none; padding:0;">
                                                 {% for entity in employer.entities %}
-                                                    <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi">
+                                                    <div id="workSpace_{{loop.index}}" class="col-sm-12 workSpaceLi line-normal line-responsive">
                                                         <div class="row" style="margin-bottom:10px;">
                                                             <div style="text-align:center !important" class="col-sm-12 text-center label-group">
                                                                 {% set entityType=  entity.entityEntity.entityTypeEntityType %}
@@ -232,26 +278,20 @@
                                                             <div style="text-align:center !important" class="col-sm-12 text-center form-group input">
                                                                 {{ entity.entityEntity.name }}
                                                             </div>
-                                                        </div>
-                                                         
+                                                        </div> 
                                                         
                                                     </div>
-                                                    <div class="col-sm-12" style="border-bottom: solid #ccc;border-bottom-width: 1px; margin-bottom:20px;">
-
-                                                    </div>
+                                                    
                                                 {% endfor %}
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                
+                            
                         </div>
                     </div>
             </div>
         </div>
-        <br /><br />
-
-
 
     </div>
     <div class="row" style="margin-top:20px;">
