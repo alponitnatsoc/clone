@@ -443,7 +443,7 @@ class EmployeeController extends Controller
                     'form' => $form->createView(),
                     'tab' => $tab,
                     'choices' => $choices,
-                    'legalFlag'=>$id==-1?null:$employerHasEmployee->getLegalFF(),
+                    'legalFlag'=>$id==-1?$user->getLegalFlag():$employerHasEmployee->getLegalFF(),
                     'permittedDate'=>array(
                         'y'=>$permittedDate->format("Y"),
                         'm'=>$permittedDate->format("m"),
