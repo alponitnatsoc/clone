@@ -513,25 +513,30 @@ use EmployerMethodsTrait;
                 break;
             case "mandato":
                 //$id del empleador
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+                $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repositoryU = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
-                $employer = $repository->find($id);
-                $employerPerson = $employer->getPersonPerson();
+                $employerPerson = $repository->find($id);
+                $employer = $repositoryE->findByPersonPerson($employerPerson);
+                $user = $repositoryU->findByPersonPerson($employerPerson);
+                $user = $user[0]->getId();
+
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
                     'docNumber' => $employerPerson->getDocument(),
                     'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
-                    'arl' => $this->getEmployerArl($employer->getIdEmployer()),
-                    'ccf' => $this->getEmployerCcf($employer->getIdEmployer()),
+                    'arl' => $this->getEmployerArl($employer[0]->getIdEmployer()),
+                    'ccf' => $this->getEmployerCcf($employer[0]->getIdEmployer()),
                     'tel' => $employerPerson->getPhones()->getValues()[0],
                     'address' => $employerPerson->getMainAddress(),
                     'city' => $employerPerson->getCity()->getName()
                 );
 
-                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $id), array('_format' => 'json'));
+                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user), array('_format' => 'json'));
                 $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
-
+                
                 $data = array(
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,
