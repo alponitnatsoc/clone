@@ -67,9 +67,7 @@ class Contract
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
-     * })
+     * @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
      */
     private $activePayroll;
 
