@@ -24,15 +24,15 @@ class ContractRegistration extends AbstractType
     private $workplaces;
     private $today;
     private $todayOneYear;
-    private $user;
+    private $legalFlag;
 
     /**
      * @param $workplaces
      * @param $timeCommitments
-     * @param User $user
+     * @param $legalFlag
      */
-    function __construct($workplaces,$timeCommitments,$user){
-        $this->user=$user;
+    function __construct($workplaces,$timeCommitments,$legalFlag){
+        $this->legalFlag=$legalFlag;
         $this->timeCommitments=$timeCommitments;
         $this->today= new DateTime();
         $this->todayOneYear= new DateTime((intval($this->today->format("Y"))+1)."-".$this->today->format("m")."-".$this->today->format("d"));
@@ -155,7 +155,7 @@ class ContractRegistration extends AbstractType
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
                 'label' => '¿Cual es la fecha de inicio del contrato?*:',
-                'years' => range($this->user->getLegalFlag()!=1?$this->today->format("Y"):1990,intval($this->today->format("Y"))+1),
+                'years' => range(1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
                 'placeholder' => array(
@@ -228,7 +228,7 @@ class ContractRegistration extends AbstractType
             ))
             ->add('workplace', new WorkPlaceRegistration(), array(
                 'mapped' => false));
-        if($this->user->getLegalFlag()=='1'){
+        if($this->legalFlag=='1'){
             $builder
                 ->add('holidayDebt', 'integer', array(
                     'label'=>'¿Cuantos días de vacaciones tiene pendientes?',

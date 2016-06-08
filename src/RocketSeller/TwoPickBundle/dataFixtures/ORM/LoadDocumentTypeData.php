@@ -115,6 +115,11 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $notDespido->setRefPdf('not-despido');
         $manager->persist($notDespido);
 
+        $mandato = new DocumentType();
+        $mandato->setName('Mandato');
+        $mandato->setRetPdf('mandato');
+        $manager->persist($mandato);
+
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);

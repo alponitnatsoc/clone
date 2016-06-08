@@ -43,10 +43,10 @@ class ProcedureController extends Controller
 	/**
 	 * Funcion que carga la informacion de un tramite por su id
 	 * muestra accesos directos a:
-	 * 		Revisar Registro
-	 * 		Contacto al Cliente
-	 * 		Contacto a entidades
-	 * 		Inscripción a Entidades
+	 * 		Revisar informacion del empleador y empledos
+	 * 		validar documentos
+	 * 		inscribir entidades
+	 * 		validar entidades
 	 *
 	 * @param $procedureId ID del real procedure que llega de la pagina de tramites
 	 * @return Response /backoffice/procedure/{procedureId}
@@ -95,7 +95,7 @@ class ProcedureController extends Controller
 		}*/
 		$stateActions = $this->checkActionCompletation($person->getIdPerson());
 		if ($stateActions) {
-			$employerHasEmployee->setState(3);
+			$employerHasEmployee->setState(4);
 			$em->persist($employerHasEmployee);
 			$em->flush();
 

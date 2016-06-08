@@ -1,13 +1,12 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Ver Informacion Empleador{% endblock %}
-
+{% block title %}Ver Informacion del Empleado{% endblock %}
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
-        <div class="col-md-12">
+        <div class="col-md-15">
             <div class="panel panel-title">
-                {% if action.actionTypeActionType.name == 'Validar Informacion del Empleador' %}
-                    Información de {{ person.fullName }}
+                {% if action.actionTypeActionType.name == 'Validar Informacion del Empleado' %}
+                    Ver Información de {{ person.fullName }}
                 {% else %}
                     {{ action.actionTypeActionType.name }} de {{ person.fullName }}
                 {% endif %}
@@ -76,71 +75,48 @@
                                 <td>{{ person.documentExpeditionDate.format('d/m/Y') }}</td>
                             </tr>
                             <tr>
+                                <td><strong>Lugar de Expedición del documento</strong></td>
+                                <td>{{ person.documentExpeditionPlace }}</td>
+                            </tr>
+                            <tr>
                                 <td><strong>Fecha de Nacimiento</strong></td>
                                 <td>{{ person.birthDate.format('d/m/Y') }}</td>
                             </tr>
                             <tr>
+                                <td><strong>Estdo Civil</strong></td>
+                                <td>{{ person.civilStatus}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Genero</strong></td>
+                                <td>{{ person.gender}}</td>
+                            </tr>
+                            <tr>
                                 <td><strong>Correo Electrónico</strong></td>
-                                <td>{{ user.email }}</td>
+                                {% if person.email == '' %}
+                                    <td style="color: #2f2f2f"> No tiene</td>
+                                {% else %}
+                                    <td>{{ person.email }}</td>
+                                {% endif %}
                             </tr>
 
                         </tbody>
                     </table>
+
                 </div>
-                <div class="col-md-4">
-                    <table class="table">
-                        <thead class="tab-header">
-                        <tr>
-                            <th style="vertical-align: middle" >Entidad</th>
-                            <th style="vertical-align: middle" >Estado</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><strong>Data Credito</strong></td>
-                            {% if user.dataCreditStatus == 0 %}
-                                <td style="color: #9C2F2F">No enviado</td>
-                            {% elseif user.dataCreditStatus == 1 %}
-                                <td style="color: #0f0f0f">Enviado</td>
-                            {% elseif user.dataCreditStatus == 2 %}
-                                <td style="color: #00a65a">Aprobado</td>
-                            {% elseif user.dataCreditStatus == 3 %}
-                                <td style="color: #9C2F2F">No Aprobado</td>
-                            {% elseif user.dataCreditStatus == 4 %}
-                                <td style="color: #9C2F2F">Sobrepaso número de intentos</td>
-                            {% elseif user.dataCreditStatus == 5 %}
-                                <td style="color: #9C2F2F">Error de Data Credito</td>
-                            {% endif %}
-                        </tr>
-                        <tr>
-                            <td><strong>SQL</strong></td>
-                            {% if person.employer.idSqlSociety == '' %}
-                                <td style="color: #9C2F2F">No Existe</td>
-                            {% elseif person.employer.idSqlSociety > 0 %}
-                                <td style="color: #00a65a">Existe</td>
-                            {% endif %}
-                        </tr>
-                        <tr>
-                            <td><strong>High Tech</strong></td>
-                            {% if person.employer.idHighTech== '' %}
-                                <td style="color: #9C2F2F">No Existe en High Tech</td>
-                            {% elseif person.employer.idHighTech > 0 %}
-                                <td style="color: #00a65a">Existe</td>
-                            {% endif %}
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-12" style="margin-top:20px;text-align:center;">
+                <div class="col-md-12" style="margin-top:40px;text-align:center;margin-bottom:40px">
                     <a class="btn btn-orange notAjax" style="background-color: #CB6D6C; border-color: #CB6D6C" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Error'})}}">Cancelar</a>
                     <a class="btn btn-orange notAjax" style="background-color: #1b7e5a ; border-color: #1b7e5a" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Aceptar</a>
                     <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
                 </div>
 
-
             </div>
-        </div>
+            <div class="col-md-12" style="border-top:dotted 1px;">
+                <div class="col-md-12">
+                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
+                </div>
+            </div>
 
+        </div>
     </div>
 {% endblock %}
 

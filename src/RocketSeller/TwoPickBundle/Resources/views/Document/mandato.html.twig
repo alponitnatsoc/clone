@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<title>Carta de Autorización a Symplifica SAS</title>
+<title>Carta de Autorizaci&oacuten a Symplifica SAS</title>
 <meta charset="utf-8" />
 <style>
 body {
@@ -11,6 +11,10 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+
+.payMethods {
+    text-align: center;
+}
 </style>
 <head>
 <body>
@@ -19,60 +23,169 @@ body {
 {% set local = "now"|date("d-m-y") %}
 {# <p><strong>{{ data.contract.city }}, {{ "now"|localizeddate('long', 'none', 'es-CO') }}</strong><br />#}
 
-
-<p><strong>Se&ntilde;ores</strong></p>
-<p><strong>SYMPLIFICA SAS</strong></p>
-<p><strong>Bogot&aacute;</strong></p>
-<p>&nbsp;</p>
-<p style="text-align: center;"><strong>REFERENCIA: MANDATO ESPEC&Iacute;FICO PARA EL MANEJO DE RECURSOS</strong></p>
-<p>&nbsp;</p>
-<p style="text-align: justify;">Mediante la presente, yo, <strong>{{ data.employer.name }}</strong>, identificado con {{ data.employer.docType }} No. {{ data.employer.docNumber }}
-expedida en {{ data.employer.docExpPlace }}, actuando en nombre propio, en adelante el <strong>MANDANTE</strong>, confiero a <strong>SYMPLIFICA SAS</strong>
-un mandato espec&iacute;fico para la administraci&oacute;n por parte de dicha compa&ntilde;&iacute;a, de los recursos
-transferidos por mi a trav&eacute;s de los medios de pago disponibles en la p&aacute;gina web Symplifica.com (la "P&aacute;gina Web"),  destinados
-a pagar la n&oacute;mina, otros pagos laborales y/o los aportes a las entidades de seguridad social a que est&eacute;n afiliados mis trabajadores.
-Por lo tanto, <strong>SYMPLIFICA</strong> deber&aacute; destinar dichos dineros &uacute;nicamente al pago de la n&oacute;mina, otros pagos laborales y aportes
-a seguridad social de mis trabajadores, ajust&aacute;ndose estrictamente a las instrucciones dadas por mi a trav&eacute;s de la P&aacute;gina
-Web en cuanto al valor y fecha de los pagos a los trabajadores que yo registre en la misma, y el valor y fecha de los
-aportes a cada una de las entidades de seguridad social (por medio del operador de la P.I.L.A. escogido por SYMPLIFICA).
-No obstante, el <strong>MANDANTE</strong> reconoce que dependiendo del medio de pago, la transferencia de los recursos al operador de
-la P.I.L.A. y/o a los trabajadores, seg&uacute;n el caso, no es inmediata y requerir&aacute; de cierta antelaci&oacute;n para que los pagos
-se entiendan realizados a los mismos en las fechas solicitadas por el <strong>MANDANTE</strong>.</p>
-
-<p style="text-align: justify;">Declaro que la administraci&oacute;n de pagos de n&oacute;mina, otros pagos laborales y aportes a la seguridad social de mis
-trabajadores, ser&aacute; realizada por <strong>SYMPLIFICA</strong> en calidad de mandatario y ajust&aacute;ndose a las instrucciones y a la informaci&oacute;n
-que yo le haya suministrado. Por lo tanto, en ning&uacute;n caso podr&aacute; considerarse que <strong>SYMPLIFICA</strong> act&uacute;a como patrono o empleador
-de los trabajadores del <strong>MANDANTE</strong>.</p>
-
-<p style="text-align: justify;">El presente mandato conlleva mi autorizaci&oacute;n para que <strong>SYMPLIFICA</strong> realice ante el operador de la P.I.L.A.,
-las entidades de seguridad social y entidades financieras, los tr&aacute;mites, reclamaciones, correcciones y dem&aacute;s gestiones que
-se requieran para cumplir debidamente con la actividad encomendada.</p>
-
-<p style="text-align: justify;">El presente mandato es conferido a <strong>SYMPLIFICA</strong> por t&eacute;rmino indefinido, y ser&aacute; aplicable a todos los
-pagos y aportes a seguridad social que el <strong>MANDANTE</strong> opte por efectuar a trav&eacute;s de los medios disponibles en la P&aacute;gina Web, respecto de
-cualquiera de los trabajadores registrados en la misma ahora o en el futuro por el <strong>MANDANTE</strong>.</p>
-
-<p style="text-align: justify;">Este mandato podr&aacute; terminar por la renuncia del <strong>MANDATARIO</strong> o la revocatoria del <strong>MANDANTE</strong>,
-en cualquier momento, sin que se genere la obligaci&oacute;n de indemnizar a la otra parte por dicha terminaci&oacute;n.</p>
-
-<p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a <strong>SYMPLIFICA SAS</strong> el {{ "now"|localizeddate('long', 'none', 'es-CO') }} </p>
-
+<p style="text-align: center;"><strong><u>MANDATO</u></strong></p>
+<p style="text-align: center;">MANEJO DE RECURSOS, ADMINISTRACI&OacuteN Y PAGO DE N&OacuteMINA Y AFILIACIONES Y APORTES A ENTIDADES DE SEGURIDAD SOCIAL</p>
 <p>&nbsp;</p>
 
-<p><strong>EL MANDANTE,</strong></p>
+<p style="text-align: justify;">Mediante la presente, yo, {{data.employer.name}}, identificado con
+  {% if data.employer.docType == "CC" %}
+    c&eacute;dula de ciudadan&iacute;a
+  {% elseif data.employer.docType == "CE" %}
+    c&eacute;dula de extranjer&iacute;a
+  {% elseif data.employer.docType == "TI" %}
+    tarjeta de identidad
+  {% endif %}
+   No. {{ data.employer.docNumber }}, actuando en nombre propio, en adelante el MANDANTE, confiero a SYMPLIFICA SAS, identificada con NIT 900.862.831-7
+   (“SYMPLIFICA” o el “MANDATARIO”), un mandato sin representaci&oacuten en las condiciones explicadas a continuaci&oacuten:</p>
 
-_____________________________________
-<p>Nombre: {{ data.employer.name }}</p>
-{{ data.employer.docType }} No. {{ data.employer.docNumber }} de {{ data.employer.docExpPlace }}
+<p style="text-align: justify;">1) MANDATO ESPEC&IacuteFICO PARA EL MANEJO DE RECURSOS: Confiero a SYMPLIFICA un mandato espec&iacutefico para la administraci&oacuten de
+  los recursos transferidos por mi a trav&eacutes de los medios de pago disponibles en la p&aacutegina web Symplifica.com (la “P&aacutegina Web”),  destinados a que SYMPLIFICA
+  realice pagos seg&uacuten los servicios seleccionados por mi en la P&aacutegina Web y en el punto 4 de este documento. Por lo tanto, SYMPLIFICA deber&aacute destinar dichos
+  dineros &uacutenicamente al pago de la n&oacutemina, otros pagos laborales y aportes a seguridad social de mis trabajadores que hayan sido inscritos y activados por mi
+  en la P&aacutegina Web, ajust&aacutendose estrictamente a las instrucciones dadas por mi a trav&eacutes de la P&aacutegina Web en cuanto al valor y fecha de los pagos a los trabajadores
+  que yo registre y est&eacuten activos en la misma, y el valor y fecha de los aportes a cada una de las entidades de seguridad social (por medio del operador de informaci&oacuten
+  de la P.I.L.A. escogido por SYMPLIFICA). No obstante, el MANDANTE reconoce que dependiendo del medio de pago, la transferencia de los recursos al operador de informaci&oacuten
+  de la P.I.L.A. y/o a los trabajadores, seg&uacuten el caso, no es inmediata teniendo en cuenta los ciclos bancarios y los plazos para obtener autorizaci&oacuten de las tarjetas de
+  cr&eacutedito, por lo  que se requerir&aacute  que los pagos a trav&eacutes de la P&aacutegina Web se realicen con al menos tres (3) d&iacuteas h&aacutebiles de antelaci&oacuten a las fechas de vencimiento
+  estipuladas en la normatividad vigente.</p>
+<p style="text-align: justify;">2) EL MANDANTE autoriza a SYMPLIFICA a debitar el valor de sus servicios mes anticipado, de la cuenta o tarjeta de cr&eacutedito abajo
+  indicada, al momento de debitar el valor de la n&oacutemina o de los aportes a seguridad social de los trabajadores del MANDANTE, siempre y cuando esto ocurra entre
+  el d&iacutea 26 y 30 de cada mes; en caso contrario, SYMPLIFICA debitar&aacute el valor de sus servicios el &uacuteltimo d&iacutea h&aacutebil del mes. As&iacute mismo, SYMPLIFICA queda autorizado
+  para debitar de la cuenta o tarjeta de cr&eacutedito del MANDANTE, cualquier otra tarifa que se genere por los servicios de SYMPLIFICA.</p>
+<p style="text-align: justify;">3) AUTORIZACI&OacuteN DE RECAUDO/ D&EacuteBITO A CUENTA: Como titular de la cuenta o tarjeta de cr&eacutedito abajo indicada, autorizo
+  incondicionalmente y por un t&eacutermino indefinido a la Entidad Financiera en que tengo dicha cuenta o tarjeta de cr&eacutedito, para recibir transacciones d&eacutebito enviadas
+  por SYMPLIFICA y debitar de la cuenta o tarjeta de cr&eacutedito abajo indicada, conforme a las siguientes reglas:  (i) La Entidad Financiera debitar&aacute de la cuenta aqu&iacute
+  indicada el valor que corresponde a la transacci&oacuten, y entregar&aacute dicho valor a SYMPLIFICA.  (ii) SYMPLIFICA podr&aacute conservar el presente documento en sus oficinas y
+  podr&aacute enviar a la Entidad Financiera la informaci&oacuten contenida en esta autorizaci&oacuten, de manera electr&oacutenica. (iii) En aquellos casos en los que SYMPLIFICA tenga
+  inconvenientes t&eacutecnicos u operativos que no le permitan debitar la cuenta oportunamente, la Entidad Financiera queda autorizada a debitar la cuenta aqu&iacute indicada
+  en una fecha diferente a la inicialmente prevista. (iv) Me comprometo a mantener fondos suficientes en la cuenta indicada para cubrir las operaciones autorizadas
+  a SYMPLIFICA; si la cuenta no tuviera fondos disponibles en el tiempo indicado para el d&eacutebito autorizado, este se podr&aacute hacer tan pronto existan fondos disponibles
+  en la cuenta. (v) La Entidad Financiera podr&aacute abstenerse de hacer el d&eacutebito si no existen fondos disponibles para ello o si se presenta alguna otra causal que lo
+  impida. (vi) En caso de que yo decida autorizar a otra Entidad Financiera, o a otro n&uacutemero o tipo de cuenta, me comprometo a cancelar el  presente formato y
+  diligenciar una nueva Autorizaci&oacuten de Recaudo. (vii) La presente Autorizaci&oacuten de Recaudo solamente podr&aacute ser cancelada mediante comunicaci&oacuten escrita enviada a
+  SYMPLIFICA y a la sucursal de la Entidad Financiera donde tengo la cuenta o tarjeta de cr&eacutedito, con una anticipaci&oacuten no inferior a diez (10) d&iacuteas h&aacutebiles a la
+  fecha a partir de la cual se desee hacer efectiva la cancelaci&oacuten. (viii) En caso de reclamaciones o solicitudes de devoluci&oacuten, estas deber&aacuten dirigirse a SYMPLIFICA
+  con copia a la sucursal de la Entidad Financiera donde tengo radicada la cuenta o tarjeta de cr&eacutedito, en un plazo m&aacuteximo de cuarenta y cinco (45) d&iacuteas calendario a
+  partir de la fecha de aplicaci&oacuten del d&eacutebito. (ix) Puedo dar una orden de no pago a la sucursal de la Entidad Financiera donde tengo la cuenta o tarjeta de cr&eacutedito,
+  para una transacci&oacuten espec&iacutefica, con una antelaci&oacuten no inferior a cinco (5) d&iacuteas h&aacutebiles antes de la fecha de aplicaci&oacuten del d&eacutebito; no obstante, reconozco que
+  presentar &oacuterdenes de no pago o solicitudes de devoluci&oacuten reiteradas, puede ser causal de cancelaci&oacuten del servicio por parte de SYMPLIFICA o por parte de la Entidad
+  Financiera. (x) En caso de que la cuenta abajo indicada tenga otros titulares, me obligo a proveer la autorizaci&oacuten de parte de todos los titulares de la cuenta y
+  adjuntarlas a este documento, o en caso contrario, asumir&eacute las consecuencias que se deriven de no declarar dichos titulares, liberando as&iacute a SYMPLIFICA y a la
+  Entidad Financiera de toda responsabilidad. (xi) Autorizo a SYMPLIFICA a validar mi identidad cada vez que inscriba personas como beneficiarios de los pagos que se
+  autoricen realizar a trav&eacutes de esta cuenta o tarjeta de cr&eacutedito.</p>
+
+  <table border="1" class="payMethods">
+    <tr>
+      <th>Nombre de la cuenta</td>
+      <th>N&uacutemero de la cuenta</td>
+      <th>Banco o entidad financiera</td>
+      <th>Tipo de Cuenta</td>
+      <th>Tarjeta de Cr&eacutedito</td>
+    </tr>
+    {% for account in data.accountInfo["payment-methods"] %}
+    <tr>
+      <td>{% if account["payment-type"] == "Ahorros" %}
+        Cuenta de ahorros
+      {% elseif account["payment-type"] == "Corriente" %}
+        Cuenta corriente
+      {% else %}
+        Tarjeta de cr&eacutedito
+      {% endif %}</td>
+      <td>{{account["account"]}}</td>
+      <td>{% if account["bank"] == "" %}
+        N/A
+      {% else %}
+        {{account["bank"]}}
+      {% endif %}</td>
+      <td>{% if account["payment-type"] == "Ahorros" %}
+        Ahorros
+      {% elseif account["payment-type"] == "Corriente" %}
+        Corriente
+      {% else %}
+        N/A
+      {% endif %}</td>
+      <td>{% if account["payment-type"] == "VISA" %}
+        Visa
+      {% elseif account["payment-type"] == "MasterC" %}
+        MasterCard
+      {% else %}
+        N/A
+      {% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+<p style="text-align: justify;">4 ) AFILIACIONES Y APORTES A ENTIDADES DE SEGURIDAD SOCIAL</p>
+
+<p style="text-align: justify;">(i) En caso de no estar afiliado como EMPLEADOR a las entidades del sistema de seguridad social requeridas, confiero a SYMPLIFICA
+  y/o a las personas naturales a quienes esta sociedad designe, autorizaci&oacuten para solicitar ante las entidades del sistema de seguridad social enunciadas m&aacutes abajo,
+  mi  afiliaci&oacuten como EMPLEADOR del (de los) TRABAJADOR(ES) registrados por mi en la p&aacutegina web Symplifica.com (la “P&aacutegina Web”) . Dicha afiliaci&oacuten se realizar&aacute con
+  base en la informaci&oacuten suministrada por mi a SYMPLIFICA a trav&eacutes de la P&aacutegina Web. Por lo tanto, SYMPLIFICA y/o  las personas naturales a quienes esta sociedad designe,
+  podr&aacuten realizar todos los tr&aacutemites, diligencias y suscripci&oacuten de documentos que sean necesarios para solicitar y obtener mi afiliaci&oacuten como EMPLEADOR ante las siguientes entidades,</p>
+
+<p style="text-align: justify;">ARL: {{ data.employer.arl.name }}</p>
+<p style="text-align: justify;">CAJA DE COMPENSACI&OacuteN FAMILIAR: {{ data.employer.ccf.name }}</p>
+
+<p style="text-align: justify;">(ii) Confiero a SYMPLIFICA autorizaci&oacuten para realizar la liquidaci&oacuten, administraci&oacuten y pago de aportes a las entidades de Seguridad
+  Social de mis trabajadores mediante el Operador de Informaci&oacuten elegido por SYMPLIFICA, y dem&aacutes gestiones relacionadas que se requieran ante dichas entidades,
+  conforme a los T&eacuterminos y Condiciones publicados en la P&aacutegina Web. El presente mandato conlleva mi autorizaci&oacuten para que SYMPLIFICA realice ante el Operador de
+  Informaci&oacuten de la P.I.L.A., las entidades de seguridad social y entidades financieras, los tr&aacutemites, reclamaciones, correcciones y dem&aacutes gestiones que se
+  requieran para cumplir debidamente con la actividad encomendada.</p>
+
+<p style="text-align: justify;">(iii) Confiero a SYMPLIFICA autorizaci&oacuten para administrar mi n&oacutemina de empleados a trav&eacutes de su plataforma, incluyendo, sin
+  limitarse a, la liquidaci&oacuten y administraci&oacuten de pago de salarios y otras obligaciones laborales, conforme a los T&eacuterminos y Condiciones publicados en la
+  P&aacutegina Web que sean aplicables a estos servicios.</p>
+
+<p style="text-align: justify;">5) Declaro que la administraci&oacuten de pagos de n&oacutemina, otros pagos laborales y aportes a la seguridad social de mis
+  trabajadores (seg&uacuten estos servicios hayan sido seleccionados por mi), ser&aacute realizada por SYMPLIFICA en calidad de mandatario y ajust&aacutendose a las
+  instrucciones y a la informaci&oacuten que yo le haya suministrado. Por lo tanto, en ning&uacuten caso podr&aacute considerarse que SYMPLIFICA act&uacutea como patrono o
+  empleador de los trabajadores del MANDANTE.</p>
+
+<p style="text-align: justify;">6 ) El mandato objeto de este documento es conferido a SYMPLIFICA por t&eacutermino indefinido, y ser&aacute aplicable a todos
+  los pagos y aportes a seguridad social que el MANDANTE opte por efectuar a trav&eacutes de los medios disponibles en la P&aacutegina Web o en la Aplicaci&oacuten
+  M&oacutevil, respecto de cualquiera de los trabajadores registrados en la misma ahora o en el futuro por el MANDANTE. Este mandato podr&aacute terminar por
+  la renuncia del MANDATARIO o la revocatoria del MANDANTE, en cualquier momento, sin que se genere la obligaci&oacuten de indemnizar a la otra parte
+  por dicha terminaci&oacuten.</p>
+
+<p style="text-align: justify;">7) EL MANDANTE y EL MANDATARIO acuerdan que se reconocer&aacuten entre ellos la validez de los documentos que decidan
+  firmar electr&oacutenicamente mediante herramientas tecnol&oacutegicas, siempre y cuando el m&eacutetodo utilizado cumpla los requisitos de la Ley 527 de 1999
+  y el Decreto 2364 de 2012.</p>
+
+<p style="text-align: justify;">En constancia de lo anterior se firma y env&iacute;a a SYMPLIFICA SAS el {{ "now"|localizeddate('long', 'none', 'es-CO') }} </p>
+
+<table>
+  <tr>
+    <td width="50%">EL MANDANTE,</td>
+    <td width="50%">ACEPTO,</td>
+  </tr>
+  <tr>
+    <td>Firma: _______________________</td>
+    <td>Firma representante legal SYMPLIFICA: <img src="{{ data.rootDir ~ '/web' ~ asset('img/private/rep_legal_firma.png') }}" height="40" width="200"></td>
+  </tr>
+  <tr>
+    <td>Nombre: {{ data.employer.name }} </td>
+    <td>Nombre: Camilo Andr&eacutes M&eacutendez Ram&iacuterez </td>
+  </tr>
+  <tr>
+    <td>
+      {% if data.employer.docType == "CC" %}
+        C.C.
+      {% elseif data.employer.docType == "CE" %}
+        C.E.
+      {% elseif data.employer.docType == "TI" %}
+        T.I.
+      {% endif %}
+       {{ data.employer.docNumber }}
+    </td>
+    <td>C.C 79787598</td>
+  </tr>
+</table>
 
 <p>&nbsp;</p>
-
-<p><strong>ACEPTO,</strong></p>
-
-_______________________
-<p>{{ symplifica_info.representante }}
-<p>Representante Legal Symplifica SAS</p>
-{{ symplifica_info.identificacion }}
+<p style="text-align: justify;">Direcci&oacuten: {{data.employer.address}}</p>
+<p style="text-align: justify;">Ciudad: {{data.employer.city}}</p>
+<p style="text-align: justify;">Tel&eacutefono: {{data.employer.tel.phoneNumber}}</p>
+<p>&nbsp;</p>
 
 <hr />
 
