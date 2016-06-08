@@ -175,107 +175,107 @@ class ExportController extends Controller
             fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
 
             // Add the header of the CSV file
-            fputcsv($handle, array('INFORMACIÓN DEL EMPLEADOR'),',');
-            fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),',');
+            fputcsv($handle, array('INFORMACIÓN DEL EMPLEADOR'),';');
+            fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),';');
 
             //first the user info
-            fputcsv($handle, array('Nombre Completo del Empleador',$person->getFullName()),',');
+            fputcsv($handle, array('Nombre Completo del Empleador',$person->getFullName()),';');
             if($person->getDocumentType()=='CC'){
-                fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Ciudadania'),',');
+                fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Ciudadania'),';');
             }elseif ($person->getDocumentType()=='CE') {
-                fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Extranjeria'),',');
+                fputcsv($handle, array('Tipo de Documento del Empleador','Cedula de Extranjeria'),';');
             }elseif ($person->getDocByType()=='TI'){
-                fputcsv($handle, array('Tipo de Documento del Empleador','Tarjeta de Identidad'),',');
+                fputcsv($handle, array('Tipo de Documento del Empleador','Tarjeta de Identidad'),';');
             }
-            fputcsv($handle, array(' '.'Numero de Documento del Empleador',$person->getDocument().' '),',');
-            fputcsv($handle, array('Fecha de Expedición del Documento del Empleador',$person->getDocumentExpeditionDate()->format('d/m/y')),',');
-            fputcsv($handle, array('Fecha de nacimiento del Empleador',$person->getBirthDate()->format('d/m/y')),',');
-            fputcsv($handle, array('Dirección del Empleador',$person->getMainAddress()),',');
+            fputcsv($handle, array(' '.'Numero de Documento del Empleador',$person->getDocument().' '),';');
+            fputcsv($handle, array('Fecha de Expedición del Documento del Empleador',$person->getDocumentExpeditionDate()->format('d/m/y')),';');
+            fputcsv($handle, array('Fecha de nacimiento del Empleador',$person->getBirthDate()->format('d/m/y')),';');
+            fputcsv($handle, array('Dirección del Empleador',$person->getMainAddress()),';');
             /** @var Phone $phone */
             foreach ($person->getPhones() as $phone){
-                fputcsv($handle, array('Telefono/celular del Empleador',$phone->getPhoneNumber()),',');
+                fputcsv($handle, array('Telefono/celular del Empleador',$phone->getPhoneNumber()),';');
             }
-            fputcsv($handle, array('Ciudad/Municipio del Empleador',$person->getCity()),',');
-            fputcsv($handle, array('Departamento del Empleador',$person->getDepartment()),',');
-            fputcsv($handle, array('ENTIDADES',''),',');
+            fputcsv($handle, array('Ciudad/Municipio del Empleador',$person->getCity()),';');
+            fputcsv($handle, array('Departamento del Empleador',$person->getDepartment()),';');
+            fputcsv($handle, array('ENTIDADES',''),';');
             /** @var EmployerHasEntity $employerHasEntity */
             foreach ($person->getEmployer()->getEntities() as $employerHasEntity){
                 if($employerHasEntity->getState()==0){
-                    fputcsv($handle, array($employerHasEntity->getEntityEntity()->getEntityTypeEntityType().' del Empleador',$employerHasEntity->getEntityEntity()->getName()),',');
+                    fputcsv($handle, array($employerHasEntity->getEntityEntity()->getEntityTypeEntityType().' del Empleador',$employerHasEntity->getEntityEntity()->getName()),';');
                 }elseif($employerHasEntity->getState()==1){
-                    fputcsv($handle, array($employerHasEntity->getEntityEntity()->getEntityTypeEntityType().' a la que desea inscribirse el Empleador',$employerHasEntity->getEntityEntity()->getName()),',');
+                    fputcsv($handle, array($employerHasEntity->getEntityEntity()->getEntityTypeEntityType().' a la que desea inscribirse el Empleador',$employerHasEntity->getEntityEntity()->getName()),';');
                 }
             }
-            fputcsv($handle, array('Nombre Completo del Representante Legal',$person->getFullName()),',');
+            fputcsv($handle, array('Nombre Completo del Representante Legal',$person->getFullName()),';');
             if($person->getDocumentType()=='CC'){
-                fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Ciudadania'),',');
+                fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Ciudadania'),';');
             }elseif ($person->getDocumentType()=='CE') {
-                fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Extranjeria'),',');
+                fputcsv($handle, array('Tipo de Documento del Representante Legal','Cedula de Extranjeria'),';');
             }elseif ($person->getDocByType()=='TI'){
-                fputcsv($handle, array('Tipo de Documento del Representante Legal','Tarjeta de Identidad'),',');
+                fputcsv($handle, array('Tipo de Documento del Representante Legal','Tarjeta de Identidad'),';');
             }
-            fputcsv($handle, array(' '.'Numero de Documento del Representante Legal',$person->getDocument().' '),',');
-            fputcsv($handle, array('Fecha de Expedición del Documento del Representante Legal',$person->getDocumentExpeditionDate()->format('d/m/y')),',');
-            fputcsv($handle, array('Fecha de nacimiento del Representante Legal',$person->getBirthDate()->format('d/m/y')),',');
+            fputcsv($handle, array(' '.'Numero de Documento del Representante Legal',$person->getDocument().' '),';');
+            fputcsv($handle, array('Fecha de Expedición del Documento del Representante Legal',$person->getDocumentExpeditionDate()->format('d/m/y')),';');
+            fputcsv($handle, array('Fecha de nacimiento del Representante Legal',$person->getBirthDate()->format('d/m/y')),';');
 
             if($employee->getEmployee()){
-                fputcsv($handle, array('',''),',');
-                fputcsv($handle, array('INFORMACIÓN DEL EMPLEADO',''),',');
-                fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),',');
-                fputcsv($handle, array('Nombre Completo del empleado',$employee->getFullName()),',');
+                fputcsv($handle, array('',''),';');
+                fputcsv($handle, array('INFORMACIÓN DEL EMPLEADO',''),';');
+                fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),';');
+                fputcsv($handle, array('Nombre Completo del empleado',$employee->getFullName()),';');
                 if($employee->getDocumentType()=='CC'){
-                    fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Ciudadania'),',');
+                    fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Ciudadania'),';');
                 }elseif ($employee->getDocumentType()=='CE') {
-                    fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Extranjeria'),',');
+                    fputcsv($handle, array('Tipo de Documento del Empleado','Cedula de Extranjeria'),';');
                 }elseif ($employee->getDocByType()=='TI'){
-                    fputcsv($handle, array('Tipo de Documento del Empleado','Tarjeta de Identidad'),',');
+                    fputcsv($handle, array('Tipo de Documento del Empleado','Tarjeta de Identidad'),';');
                 }
-                fputcsv($handle, array('Numero de Documento del empleado',$employee->getDocument().' '),',');
-                fputcsv($handle, array('Fecha de Expedición del Documento del empleado',$employee->getDocumentExpeditionDate()->format('d/m/y')),',');
-                fputcsv($handle, array('Fecha de nacimiento del Empleado',$employee->getBirthDate()->format('d/m/y')),',');
-                fputcsv($handle, array('Lugar de nacimiento del Empleado',$employee->getBirthCity().';'.$employee->getBirthCountry()),',');
-                fputcsv($handle, array('Genero del Empleado',$employee->getGender()),',');
-                fputcsv($handle, array('Dirección del Empleado',$employee->getMainAddress()),',');
-                fputcsv($handle, array('Ciudad/Municipio del Empleado',$employee->getCity()),',');
-                fputcsv($handle, array('Departamento del Empleado',$employee->getDepartment()),',');
+                fputcsv($handle, array('Numero de Documento del empleado',$employee->getDocument().' '),';');
+                fputcsv($handle, array('Fecha de Expedición del Documento del empleado',$employee->getDocumentExpeditionDate()->format('d/m/y')),';');
+                fputcsv($handle, array('Fecha de nacimiento del Empleado',$employee->getBirthDate()->format('d/m/y')),';');
+                fputcsv($handle, array('Lugar de nacimiento del Empleado',$employee->getBirthCity().';'.$employee->getBirthCountry()),';');
+                fputcsv($handle, array('Genero del Empleado',$employee->getGender()),';');
+                fputcsv($handle, array('Dirección del Empleado',$employee->getMainAddress()),';');
+                fputcsv($handle, array('Ciudad/Municipio del Empleado',$employee->getCity()),';');
+                fputcsv($handle, array('Departamento del Empleado',$employee->getDepartment()),';');
                 /** @var Phone $phone */
                 foreach ($employee->getPhones() as $employeePhone){
-                    fputcsv($handle, array('Telefono/celular del Empleado',$employeePhone->getPhoneNumber()),',');
+                    fputcsv($handle, array('Telefono/celular del Empleado',$employeePhone->getPhoneNumber()),';');
                 }
-                if($employee->getEmail()) fputcsv($handle, array('Correo Electrónico del Empleado',$employee->getEmail()),',');
+                if($employee->getEmail()) fputcsv($handle, array('Correo Electrónico del Empleado',$employee->getEmail()),';');
                 fputcsv($handle, array('ENTIDADES',''),',');
                 /** @var EmployeeHasEntity $employeeHasEntity */
                 foreach ($employee->getEmployee()->getEntities() as $employeeHasEntity){
                     if($employeeHasEntity->getEntityEntity()->getName()!='severances'){
                         if($employeeHasEntity->getState()==0){
-                            fputcsv($handle, array($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType().' del Empleado',$employeeHasEntity->getEntityEntity()->getName()),',');
+                            fputcsv($handle, array($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType().' del Empleado',$employeeHasEntity->getEntityEntity()->getName()),';');
                         }elseif($employeeHasEntity->getState()==1){
-                            fputcsv($handle, array($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType().' a la que desea inscribirse el Empleado',$employeeHasEntity->getEntityEntity()->getName()),',');
+                            fputcsv($handle, array($employeeHasEntity->getEntityEntity()->getEntityTypeEntityType().' a la que desea inscribirse el Empleado',$employeeHasEntity->getEntityEntity()->getName()),';');
                         }
                     }
 
                 }
 
-                fputcsv($handle, array('',''),',');
-                fputcsv($handle, array('INFORMACIÓN DEL CONTRATO',''),',');
-                fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),',');
+                fputcsv($handle, array('',''),';');
+                fputcsv($handle, array('INFORMACIÓN DEL CONTRATO',''),';');
+                fputcsv($handle, array('CAMPO', 'VALOR DEL CAMPO'),';');
                 /** @var EmployerHasEmployee $employerHasEmployee */
                 foreach ($person->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
                     if($employerHasEmployee->getEmployeeEmployee()->getIdEmployee()==$employee->getEmployee()->getIdEmployee() and $employerHasEmployee->getEmployerEmployer()->getIdEmployer()==$person->getEmployer()->getIdEmployer()){
                         /** @var Contract $contract */
                         foreach($employerHasEmployee->getContracts() as $contract){
                             if($contract->getEmployerHasEmployeeEmployerHasEmployee()->getIdEmployerHasEmployee() == $employerHasEmployee->getIdEmployerHasEmployee()){
-                                fputcsv($handle, array('Dirección de trabajo',$contract->getWorkplaceWorkplace()->getMainAddress()),',');
-                                fputcsv($handle, array('Departamento de la dirección de trabajo',$contract->getWorkplaceWorkplace()->getDepartment()),',');
-                                fputcsv($handle, array('Ciudad de la dirección de trabajo',$contract->getWorkplaceWorkplace()->getCity()),',');
-                                fputcsv($handle, array('Jornada Laboral',$contract->getContractTypeContractType()->getName()),',');
-                                fputcsv($handle, array('Tiempo de trabajo',$contract->getTimeCommitmentTimeCommitment()->getName()),',');
-                                fputcsv($handle, array('Dias que trabaja al mes',$contract->getWorkableDaysMonth()),',');
-                                fputcsv($handle, array('Salario del empleado',$contract->getSalary()),',');
-                                fputcsv($handle, array('Cargo del empleado',$contract->getPositionPosition()->getName()),',');
-                                fputcsv($handle, array('Fecha de inicio del contrato',$contract->getStartDate()->format('d/m/y')),',');
+                                fputcsv($handle, array('Dirección de trabajo',$contract->getWorkplaceWorkplace()->getMainAddress()),';');
+                                fputcsv($handle, array('Departamento de la dirección de trabajo',$contract->getWorkplaceWorkplace()->getDepartment()),';');
+                                fputcsv($handle, array('Ciudad de la dirección de trabajo',$contract->getWorkplaceWorkplace()->getCity()),';');
+                                fputcsv($handle, array('Jornada Laboral',$contract->getContractTypeContractType()->getName()),';');
+                                fputcsv($handle, array('Tiempo de trabajo',$contract->getTimeCommitmentTimeCommitment()->getName()),';');
+                                fputcsv($handle, array('Dias que trabaja al mes',$contract->getWorkableDaysMonth()),';');
+                                fputcsv($handle, array('Salario del empleado',$contract->getSalary()),';');
+                                fputcsv($handle, array('Cargo del empleado',$contract->getPositionPosition()->getName()),';');
+                                fputcsv($handle, array('Fecha de inicio del contrato',$contract->getStartDate()->format('d/m/y')),';');
                                 if($contract->getEndDate()) {
-                                    fputcsv($handle, array('Fecha de fin del contrato',$contract->getEndDate()->format('d/m/y')),',');
+                                    fputcsv($handle, array('Fecha de fin del contrato',$contract->getEndDate()->format('d/m/y')),';');
                                 }
                                 break;
                             }
