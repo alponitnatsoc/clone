@@ -338,7 +338,7 @@
                             <li><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
                         </ul>
                         <div class="tab-content">
-                            <div id="changeBehavior" class="hidden">{% if legalFlag is defined %}{% else %}{% set changeBehaviorFlag = legalFlag %}{{ legalFlag }}{% set changeBehaviorFlag = app.user.legalFlag %}{{ app.user.legalFlag }}{% endif %}</div>
+                            <div id="changeBehavior" class="hidden">{% if legalFlag is defined %}{% set changeBehaviorFlag = legalFlag %}{{ legalFlag }}{% else %}{% set changeBehaviorFlag = app.user.legalFlag %}{{ app.user.legalFlag }}{% endif %}</div>
                             <div id="datePermitted" class="hidden">
                                 <div class="year">{{ permittedDate.y }}</div>
                                 <div class="month">{{ permittedDate.m }}</div>
