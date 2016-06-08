@@ -104,8 +104,6 @@ trait PayrollMethodsTrait
                 if ($contract->getState() > 0) {
                     /* @var Payroll $payroll */
                     $payroll = $contract->getActivePayroll();
-                    $payroll = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll")->findOneBy(array('idPayroll' => $payroll->getIdPayroll()));
-                    if($payroll)
                     if (!$this->checkActivePayroll($payroll))
                         break;
                     if(count($payroll->getPurchaseOrdersDescription())>0){
