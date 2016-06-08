@@ -18,3 +18,92 @@
     height: auto;
     overflow: hidden;
 }
+
+.bordermediopay {
+  border: 1px solid #E6E7E8;
+    height: auto;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.empleadosmed {
+  clear: both;
+}
+
+.salariosmed {
+  height: auto;
+  overflow: hidden;
+}
+.infosalarios {
+  height: auto;
+    overflow: hidden;
+    background: #E6E7E8;
+    padding: 10px 20px;
+    font-weight: bold;
+    color: #5D5D5D;
+    font-size: 17px;
+}
+.empleadosmed {
+  height: auto;
+  overflow: hidden;
+}
+
+.empleadomed {
+  clear: both;
+  border-bottom: 1px #CCC solid;
+  height: auto;
+  overflow: hidden;
+  padding: 10px 20px;
+}
+
+.empleadofoot {
+  height: auto;
+    overflow: hidden;
+    background: #3C4B5A;
+    color: #FFF;
+    padding: 10px 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.suscrip-spaces {
+  width: 33.333%
+}
+
+.center {
+  text-align: center;
+}
+
+.suscripcion {
+  background: #C6C7CA
+}
+
+.lightpay {
+  font-style: italic;
+    color: #757575;
+    font-weight: 100;
+}
+
+.numberpay {
+    font-weight: normal;
+    font-size: 20px;
+    color: #9E9E9E;
+    font-style: italic;
+  }
+
+  .monto {
+      font-weight: 600;
+      font-size: 20px;
+      color: #00858C;
+      font-style: italic;
+    }
