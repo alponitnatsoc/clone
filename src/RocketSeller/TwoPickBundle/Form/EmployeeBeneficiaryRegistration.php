@@ -25,9 +25,9 @@ class EmployeeBeneficiaryRegistration extends AbstractType
         $builder
             ->add('documentType', 'choice', array(
                 'choices' => array(
-                    'CC'   => 'Cédula de ciudadanía',
+                    'CC'   => 'Cédula de ciudadanía'/*,
                     'CE' => 'Cedula de extranjería',
-                    'TI' => 'Tarjeta de identidad'
+                    'TI' => 'Tarjeta de identidad'*/
                 ),
                 'multiple' => false,
                 'expanded' => false,
