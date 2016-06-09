@@ -328,11 +328,10 @@ class BackOfficeController extends Controller
     }
     
 
-    public function addToSQLAction($idEmployerHasEmployee){
+    public function addToSQLAction($idEmployerHasEmployee,$idProcedure){
         $employerHasEmployee = $this->loadClassById($idEmployerHasEmployee,"EmployerHasEmployee");
         $addToSQL = $this->addEmployeeToSQL($employerHasEmployee);
-
-        return $this->redirectToRoute("back_office");
+        return $this->redirectToRoute('show_procedure', array('procedureId'=>$idProcedure), 301);
     }
 
 	
