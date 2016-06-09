@@ -29,11 +29,11 @@
             .register_employee_employeeHasEmployers_payMethod label input {
 
             }
-            
+
             .blockStep .txt-AD0 img{
                 margin-top: 25px;
             }
-            
+
             .paymentImage {
                 float: left;
                 margin: 0px 5px 0 0px;
@@ -65,7 +65,7 @@
                 text-align: right !important;
                 padding-top: 10px;
             }
-            
+
             .label-group > h3 {
                 text-align: left;
             }
@@ -76,34 +76,34 @@
             .form-inline .checkbox, .form-inline .radio {
                 margin-right: 20px;
             }
-            
-             
-            
+
+
+
             /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
 
             @media (max-width: 768px){
-                .label-group{ text-align: left !important; }  
- 
-            } 
-            
+                .label-group{ text-align: left !important; }
+
+            }
+
             @media (max-width: 480px){
-                .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; } 
+                .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; }
                 .nav-tabs.nav-justified > li{ font-size: 11px; line-height: 15px; }
- 
-            } 
+
+            }
 
             @media (max-width: 375px){
                h2.margin-responsive{ padding: 24px 0 !important; }
             }
-            
+
             @media (max-width: 320px){
                h2.margin-responsive{ padding: 15px 0 !important; }
             }
-                
+
         </style>
     {% endblock %}
     <div class="row">
-        
+
         <div class="col-sm-12 col-xs-12 align-Resp">
             <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
                 <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
@@ -117,7 +117,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 <!--
@@ -435,14 +435,14 @@
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
                                         <div style="height: auto; overflow:hidden; width: 80%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
-                                         
-                                        
+
+
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
-                                        
+
                                         </div>
-                                        
+
                                         <p class="text-muted" style="font-size: 16px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que conviene firmar el contrato cuando ya exista afiliación a Seguridad Social
-                                        
+
                                         </p>
                                     </div>
                                 </div>
@@ -569,11 +569,11 @@
                                         {{ form_label(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-8 col-sm-offset-2 days" style="margin-bottom: 15px;">
+                                <div class="col-sm-8 col-sm-offset-2 days price-box">
                                   <div class="priceContainer">
                                       <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                   </div>
-                                    <div class="text-center form-group">
+                                    <div class="text-center form-group right-box">
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
@@ -587,8 +587,8 @@
                                         {{ form_label(form.employeeHasEmployers.salary) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-8 col-sm-offset-2 complete" style="margin-bottom: 15px;width:500px">
-                                    <div class="text-center form-group" style="float: left;width: 45%;margin-right: 5px;">
+                                <div class="col-sm-8 col-sm-offset-2 complete price-box">
+                                    <div class="text-center form-group left-box">
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
                                     </div>
                                     <div class="priceContainer">
