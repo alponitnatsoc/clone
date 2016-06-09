@@ -411,6 +411,18 @@ class LegalAssistanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        if($user->getPersonPerson()->getEmployer()!=null){
+            $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            /** @var EmployerHasEmployee $ehe */
+            foreach ($ehes as $ehe ) {
+                if($ehe->getLegalFF()==-2){
+                    $ehe->setLegalFF($flag);
+                    $em->persist($ehe);
+                    $em->flush();
+                    return $this->redirectToRoute("register_employee",array('id'=>$ehe->getEmployeeEmployee()->getIdEmployee()));
+                }
+            }
+        }
         if ($user->getLegalFlag() != -1) {
             $urlToSend = 'edit_profile';
         } else {
@@ -424,14 +436,23 @@ class LegalAssistanceController extends Controller
 
         return $this->redirectToRoute($urlToSend);
     }
-    public function changeFlagEmployeeAction($employerHasEmployee)
+    public function changeFlagEmployeeAction($ehe)
     {
-        $em = $this->getDoctrine()->getManager();
-        $eHERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
-        /** @var EmployerHasEmployee $ehe */
-        $ehe=$eHERepo->find($employerHasEmployee);
+
         /** @var User $user */
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        if($ehe==-1){
+            $user->setLegalFlag(-1);
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute("welcome");
+        }
+        $eHERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $ehe */
+        $ehe=$eHERepo->find($ehe);
+        if($ehe==null)
+            return $this->redirectToRoute("show_dashboard");
         if($ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$user->getPersonPerson()->getIdPerson()){
             $ehe->setLegalFF(-2);
             $em->persist($ehe);

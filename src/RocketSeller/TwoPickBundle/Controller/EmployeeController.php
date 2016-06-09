@@ -444,6 +444,7 @@ class EmployeeController extends Controller
                     'tab' => $tab,
                     'choices' => $choices,
                     'legalFlag'=>$id==-1?-1:$employerHasEmployee->getLegalFF(),
+                    'id'=>$employerHasEmployee?$employerHasEmployee->getIdEmployerHasEmployee():"-1",
                     'permittedDate'=>array(
                         'y'=>$permittedDate->format("Y"),
                         'm'=>$permittedDate->format("m"),
