@@ -138,9 +138,9 @@ class LegalAssistanceController extends Controller
             ))
             ->add('documentType', 'choice', array(
                 'choices' => array(
-                    'CC' => 'Cédula de ciudadanía',
+                    'CC' => 'Cédula de ciudadanía'/*,
                     'CE' => 'Cedula de extranjería',
-                    'TI' => 'Tarjeta de identidad'
+                    'TI' => 'Tarjeta de identidad'*/
                 ),
                 'multiple' => false,
                 'expanded' => false,
@@ -310,7 +310,7 @@ class LegalAssistanceController extends Controller
                 //return $this->payLegalAssistance($methodId);
             } else if ($methodType == "deb") {
 
-                // if ($this->addToHighTech($user)) 
+                // if ($this->addToHighTech($user))
                 // {
                 //    return true;
                 // }else{
@@ -318,7 +318,7 @@ class LegalAssistanceController extends Controller
                 //                 'form' => $form->createView(),
                 //                 'errno' => "Tenemos un errar en el sistema, intenta mas tarde"
                 //     ));
-                // } 
+                // }
                 $request->request->add(array(
                     "accountNumber" => $form->get("accountNumber")->getData(),
                     "bankId" => $form->get("bank")->getData()->getIdBank(),
@@ -411,6 +411,18 @@ class LegalAssistanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        if($user->getPersonPerson()->getEmployer()!=null){
+            $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            /** @var EmployerHasEmployee $ehe */
+            foreach ($ehes as $ehe ) {
+                if($ehe->getLegalFF()==-2){
+                    $ehe->setLegalFF($flag);
+                    $em->persist($ehe);
+                    $em->flush();
+                    return $this->redirectToRoute("register_employee",array('id'=>$ehe->getEmployeeEmployee()->getIdEmployee()));
+                }
+            }
+        }
         if ($user->getLegalFlag() != -1) {
             $urlToSend = 'edit_profile';
         } else {
@@ -423,6 +435,33 @@ class LegalAssistanceController extends Controller
 
 
         return $this->redirectToRoute($urlToSend);
+    }
+    public function changeFlagEmployeeAction($ehe)
+    {
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        if($ehe==-1){
+            $user->setLegalFlag(-1);
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute("welcome");
+        }
+        $eHERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $ehe */
+        $ehe=$eHERepo->find($ehe);
+        if($ehe==null)
+            return $this->redirectToRoute("show_dashboard");
+        if($ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$user->getPersonPerson()->getIdPerson()){
+            $ehe->setLegalFF(-2);
+            $em->persist($ehe);
+            $em->flush();
+            return $this->redirectToRoute("welcome");
+
+        }
+        return $this->redirectToRoute("show_dashboard");
+
     }
 
     public function successPaymentAction()
@@ -451,4 +490,3 @@ class LegalAssistanceController extends Controller
 
 
 }
-

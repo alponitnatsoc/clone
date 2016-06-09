@@ -325,7 +325,7 @@ use EmployerMethodsTrait;
                     'name' => $this->fullName($employeePerson->getIdPerson()),
                     'docType' => $employeePerson->getDocumentType(),
                     'docNumber' => $employeePerson->getDocument(),
-                    'residencia' => $employeePerson->getNeighborhood(),
+                    'residencia' => $employeePerson->getMainAddress(),
                     'tel' => $employeePerson->getPhones()[0]
                 );
 
@@ -387,7 +387,7 @@ use EmployerMethodsTrait;
                     "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
                     "interno" => $interno,
                     "contractType" => $contractType,
-                    "workplace" => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    "workplace" => $contract->getWorkplaceWorkplace()->getMainAddress()." ".$contract->getWorkplaceWorkplace()->getCity()->getName(),
                     "numero" => $contract->getIdContract(),
                     "years" => $years,
                     "months" => $months,
@@ -515,10 +515,13 @@ use EmployerMethodsTrait;
                 //$id del empleador
                 $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
                 $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repositoryU = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
                 $employerPerson = $repository->find($id);
                 $employer = $repositoryE->findByPersonPerson($employerPerson);
-                
+                $user = $repositoryU->findByPersonPerson($employerPerson);
+                $user = $user[0]->getId();
+
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
@@ -531,9 +534,9 @@ use EmployerMethodsTrait;
                     'city' => $employerPerson->getCity()->getName()
                 );
 
-                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $id), array('_format' => 'json'));
+                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user), array('_format' => 'json'));
                 $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
-
+                
                 $data = array(
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,

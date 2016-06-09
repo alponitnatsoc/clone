@@ -23,6 +23,9 @@ legal_payment_success:
 change_flag:
     path:      /change-flag/{flag}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:changeFlag}
+change_flag_employee:
+    path:      /change-flag/employee/{ehe}
+    defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:changeFlagEmployee}
 legal_acceptance:
     path:      /legal-acceptance/{state}
     defaults:  { _controller: RocketSellerTwoPickBundle:LegalAssistance:legalAcceptance, state: incorrect}

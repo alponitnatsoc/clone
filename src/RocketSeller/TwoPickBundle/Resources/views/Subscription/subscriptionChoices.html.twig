@@ -199,20 +199,116 @@
         </ul>
     #}
     <div class="row padding-left-right-20">
-        <div class="col-md-12 text-center border-botton-darkGray ">
+        <div class="col-md-12 text-center">
             <br/>
             <div class="col-md-12">
-                <b class="x-large">Resumen de pago mensual</b>
+                <b style="color:#00858C;font-size: 25px;" class="x-large">Estimación de Cargos Mensuales</b>
             </div>
             <div class="col-md-12">
                 <div class="center padding-top-botton-20">
-                    A continuación encontrará el cálculo del pago mensual APROXIMADO* según la
-                    información ingresada hasta este momento:
+                    A continuación encontrará una estimación de los
+                    cargos que haremos al medio de pago que usted registró basada en la información registrada.
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="bordermediopay">
+        <div id="salariosmed">
+            <div class="infosalarios">
+                <div class="left">Salarios a pagar*</div>
+                <div class="right" id="">$ {{ "0" }}</div>
+            </div>
+            <div class="empleadosmed">
+                <div class="empleadomed">
+                    <div class="left lightpay">Jeferson gutierritos</div>
+                    <div class="right numberpay">$14.000</div>
+                </div>
+                <div class="empleadomed">
+                    <div class="left lightpay">Jeferson gutierritos</div>
+                    <div class="right numberpay">$14.000</div>
+                </div>
+            </div>
+        </div>
+        <div id="salariosmed">
+            <div class="infosalarios">
+                <div class="center">Aportes a seguridad social*</div>
+            </div>
+            <div class="empleadosmed">
+                <div class="empleadomed">
+                    <div class="left monto">Monto Total</div>
+                    <div class="right numberpay">$14.000</div>
+                </div>
+            </div>
+        </div>
+        <div id="salariosmed">
+            <div class="infosalarios suscripcion">
+                <div class="center">Suscripción symplifica</div>
+            </div>
+            <div class="empleadosmed">
+              <div class="empleadomed">
+                  <div class="col-md-6" style="{% if employees|length < 2 %}{% endif %}">
+                      {% for employeeData in employees %}
+
+                          {% set employee = employeeData['employee'] %}
+                          {% set contrato = employeeData['contrato'] %}
+                          {% set producto = employeeData['product'] %}
+
+                          <div class="row clearfix">
+                              <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}"
+                                   style="min-height:90px;margin-top:17px;">
+                                  <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
+                                      <div>
+                                          <b class="employee_name"
+                                             style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
+                                          <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
+                                      </div>
+                                      {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                                      <div style="font-style:italic; font-weight:100; font-size: small;"
+                                           class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  "
+                                           data-employeeId="{{ employee.idEmployerHasEmployee }}">
+                                          Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
+                                          al mes
+                                      </div>
+                                  </div>
+                                  <div class="col-md-3 div-btn-change-state-contract">
+                                      <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
+                                           data-id="{{ employee.idEmployerHasEmployee }}"
+                                           data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
+                                  </div>
+                              </div>
+                          </div>
+
+                      {% endfor %}
+                  </div>
+                  <div class="right numberpay">
+                    $29.000
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 result_ajax" style="display: none">
+            <span class="glyphicon glyphicon-ok-circle result_ajax_icon"></span>
+            <span class="result_ajax_msg"></span>
+        </div>
+        <div id="salariosmed">
+            <div class="infosalarios">
+                <div class="center">Costo de transacciones*</div>
+            </div>
+            <div class="empleadosmed">
+                <div class="empleadomed">
+                    <div class="left monto">Monto Total</div>
+                    <div class="right numberpay">$14.000</div>
+                </div>
+            </div>
+        </div>
+        <div id="salariosmed">
+            <div class="empleadofoot">
+                    <div class="left">Total</div>
+                    <div class="right">$14.000</div>
+            </div>
+        </div>
+    </div>
     <div class="row padding-left-right-40">
         <div class="col-md-12 nopadding text-left border-botton-darkGray">
             <div class="col-md-6 padding-top-botton-20">
@@ -248,40 +344,7 @@
             <div class="col-md-12 text-left">
 
                 <div class="row clearfix">
-                    <div class="col-md-6" style="{% if employees|length < 2 %}position:absolute;bottom:0;{% endif %}">
-                        {% for employeeData in employees %}
 
-                            {% set employee = employeeData['employee'] %}
-                            {% set contrato = employeeData['contrato'] %}
-                            {% set producto = employeeData['product'] %}
-
-                            <div class="row clearfix">
-                                <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}"
-                                     style="min-height:90px;margin-top:17px;">
-                                    <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
-                                        <div>
-                                            <b class="employee_name"
-                                               style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
-                                            <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
-                                        </div>
-                                        {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                        <div style="font-style:italic; font-weight:100; font-size: small;"
-                                             class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  "
-                                             data-employeeId="{{ employee.idEmployerHasEmployee }}">
-                                            Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
-                                            al mes
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 div-btn-change-state-contract">
-                                        <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
-                                             data-id="{{ employee.idEmployerHasEmployee }}"
-                                             data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        {% endfor %}
-                    </div>
                     <div class="col-md-5 pull-right text-center">
                         <div class="col-md-12">
                             <span class="subtotalTitle"><em>Este es el valor por:</em><br><b
