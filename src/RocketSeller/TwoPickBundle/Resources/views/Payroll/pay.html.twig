@@ -60,7 +60,7 @@
 
                                     <div class="left">
                                         <span class="semi-italic azulmediofont title-span">Monto a pagar</span>
-                                        <div class="bold precio-pay">${{ data.value }}</div>
+                                        <div class="bold precio-pay">${{ data.value|number_format(0, '.', ',')  }}</div>
                                     </div>
                                 </div>
 
@@ -96,7 +96,7 @@
                                   <div class="center borderight">
                                       <div class="center" style="padding: 10px 0 0 0">
                                         <span class="semi-italic azulmediofont">Monto a pagar<span>
-                                        <span class="bold precio-pay">${{ pilaData.value }}</span>
+                                        <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
                                       </div>
                                   </div>
 
@@ -139,7 +139,7 @@
                                           </div>
                                           <div class="left">
                                               <span class="semi-italic azulmediofont title-span">Monto a pagar</span>
-                                              <span class="bold precio-pay">${{ data.value }}</span>
+                                              <span class="bold precio-pay">${{ data.value|number_format(0, '.', ',')  }}</span>
                                           </div>
                                         </div>
                                 </div>
@@ -177,7 +177,7 @@
                                     <div class="center borderight">
                                       <div class="center" style="padding: 10px 0 0 0">
                                         <span class="semi-italic azulmediofont">Monto a pagar<span>
-                                        <span class="bold precio-pay">${{ pilaData.value }}</span>
+                                        <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
                                       </div>
                                     </div>
 
