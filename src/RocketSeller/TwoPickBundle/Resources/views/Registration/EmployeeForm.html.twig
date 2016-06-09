@@ -731,11 +731,11 @@
 
 /*tooltip hover*/
 
-.tooltip {
+.tooltip1 {
     position: relative;
 }
 
-.tooltip .tooltiptext {
+.tooltip1 .tooltiptext {
     visibility: hidden;
     width: 120px;
     background-color: #7DB8BE;
@@ -752,7 +752,7 @@
     margin-left: -60px;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip1:hover .tooltiptext {
     visibility: visible;
 }
 
@@ -770,7 +770,7 @@
         	<h4 style="color:#5D5D5D" class="semi-italic">¿Cómo quieres ver los datos?</h4>
         	<form action="" class="light">
                   <input id="radio_diario" type="radio" name="frecuency" value="Diario"> Diario
-                  <input id="radio_mensual" checked="checked" class="left" type="radio" name="frecuency" value="Mensual"> Mensual
+                  <input style="margin: 0 0 0 30px;" id="radio_mensual" checked="checked" type="radio" name="frecuency" value="Mensual"> Mensual
             </form>
         </div>
 
@@ -778,10 +778,10 @@
         	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td>
-                    	<table id="contenedor-tabla" align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    	<table ="contenedor-tabla" align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
                              <tr><!---------------------------------------------empieza Ingresos promedio del empleado (sin prestaciones)-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Ingresos promedio del empleado (sin prestaciones)
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
@@ -871,7 +871,7 @@
                              </tr><!------------------------------------termina Ingresos promedio del empleado (sin prestaciones)-->
                              <tr><!--------------------------------------Empieza Pagos recurrentes promedio diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Pagos recurrentes promedio diarios
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
@@ -989,7 +989,7 @@
                              </tr><!----------------------------------------------------------------termina Pagos recurrentes promedio diarios-->
                              <tr><!----------------------------------------------------------------Empieza Prestaciones promedio por diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Prestaciones promedio por diario
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
