@@ -29,6 +29,11 @@
             .register_employee_employeeHasEmployers_payMethod label input {
 
             }
+            
+            .blockStep .txt-AD0 img{
+                margin-top: 25px;
+            }
+            
             .paymentImage {
                 float: left;
                 margin: 0px 5px 0 0px;
@@ -56,10 +61,11 @@
 
             }
 
-
             .label-group{
                 text-align: right !important;
+                padding-top: 10px;
             }
+            
             .label-group > h3 {
                 text-align: left;
             }
@@ -70,20 +76,48 @@
             .form-inline .checkbox, .form-inline .radio {
                 margin-right: 20px;
             }
+            
+             
+            
+            /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
+
+            @media (max-width: 768px){
+                .label-group{ text-align: left !important; }  
+ 
+            } 
+            
+            @media (max-width: 480px){
+                .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; } 
+                .nav-tabs.nav-justified > li{ font-size: 11px; line-height: 15px; }
+ 
+            } 
+
+            @media (max-width: 375px){
+               h2.margin-responsive{ padding: 24px 0 !important; }
+            }
+            
+            @media (max-width: 320px){
+               h2.margin-responsive{ padding: 15px 0 !important; }
+            }
+                
         </style>
     {% endblock %}
-    <div class="col-sm-12 col-xs-12 align-Resp">
-        <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
-            <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                <img src="/img/block-inline.png" class="center-block">
-            </div>
-            <div id="" class="col-md-10 col-xs-12 txt-AD1">
-                <div id="" class="text-left">
-                    <span class="step">Paso 2 de 3</span>
-                    Datos de mis empleados
+    <div class="row">
+        
+        <div class="col-sm-12 col-xs-12 align-Resp">
+            <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
+                <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
+                    <img src="/img/block-inline.png" class="center-block">
+                </div>
+                <div id="" class="col-md-10 col-xs-12 txt-AD1">
+                    <div id="" class="text-left title-center">
+                        <span class="step">Paso 2 de 3</span>
+                        Datos de mis empleados
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
 
 <!--
@@ -114,44 +148,44 @@
                         <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
 
-                    <div class="col-sm-10 col-xs-12 blockUpData" style="border-bottom: none;">
+                    <div class="col-sm-11 col-xs-12 blockUpData" style="border-bottom: none;">
                         <div class="col-sm-12 col-xs-12">
                             <div class="col-xs-12 label-group">
                                 <h3>Datos básicos de tu empleado</h3>
                             </div>
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.documentType) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.documentType) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.document) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.document) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.names) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.names) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.lastName1) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.lastName1) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
@@ -163,46 +197,46 @@
                         </div>-->
 
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.lastName2) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.lastName2) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.civilStatus) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-5 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.civilStatus) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.gender) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.gender) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.documentExpeditionDate) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.documentExpeditionDate) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.documentExpeditionPlace) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.documentExpeditionPlace) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
@@ -210,44 +244,44 @@
                     </div>
                 </div>
                 <div class="formulario col-xs-12">
-                    <div class="col-sm-10 col-xs-12">
+                    <div class="col-sm-11 col-xs-12">
                         <div class="col-sm-12 col-xs-12">
                             <div class="col-xs-12 label-group">
                                 <h3>Datos de nacimiento de tu empleado</h3>
                             </div>
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.person.birthDate) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.person.birthDate) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.birthCountry) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.birthCountry) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.birthDepartment) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.birthDepartment) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
                         </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
+                            <div class="col-sm-5 col-md-6 label-group">
                                 {{ form_label(form.personExtra.birthCity) }}
                             </div>
-                            <div class="col-sm-6 form-group">
+                            <div class="col-sm-7 col-md-6 form-group">
                                 {{ form_widget(form.personExtra.birthCity) }}
                             </div>
                             <!--<img src="/img/typePerson.png">-->
@@ -266,7 +300,7 @@
                     <div class="col-sm-12 remember">
                         <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
-                    <div class="col-sm-10 col-xs-12 content-input blockUpData">
+                    <div class="col-sm-11 col-xs-12 content-input blockUpData">
 
                         <div class="col-sm-12">
                             <div class="col-sm-6 label-group">
@@ -338,7 +372,7 @@
                             <li><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
                         </ul>
                         <div class="tab-content">
-                            <div id="changeBehavior" class="hidden">{% if legalFlag is defined %}{% set changeBehaviorFlag = legalFlag %}{{ legalFlag }}{% else %}{% set changeBehaviorFlag = app.user.legalFlag %}{{ app.user.legalFlag }}{% endif %}</div>
+                            <div id="changeBehavior" class="hidden">{% if legalFlag != -1 %}{% set changeBehaviorFlag = legalFlag %}{{ legalFlag }}{% else %}{% set changeBehaviorFlag = app.user.legalFlag %}{{ app.user.legalFlag }}{% endif %}</div>
                             <div id="datePermitted" class="hidden">
                                 <div class="year">{{ permittedDate.y }}</div>
                                 <div class="month">{{ permittedDate.m }}</div>
@@ -346,8 +380,8 @@
                             </div>
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
-                                    <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 15px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
-                                    <p class="text-center typeQuestion" style="font-size: 16px;">Escoja el tipo de contrato que más se ajusta a este empleado <br/>de acuerdo a las condiciones laborales que le va a ofrecer</p>
+                                    <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
+                                    <p class="text-center typeQuestion" style="font-size: 16px;">Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales que le va a ofrecer</p>
                                 </div>
 
                                 <div class="row contractOptionsBox">
@@ -372,8 +406,8 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
-                                        <h2>Término fijo</h2>
-                                        <div class="contractFirstList">
+                                        <h2 class="margin-responsive">Término fijo</h2>
+                                        <div class="contractFirstList height-responsive">
                                             <h4 class="text-center">Características</h4>
                                             <ul class="">
                                                 <li>El periodo de prueba es la quinta parte de la duración del contrato no obstante no puede superar los dos meses.</li>
@@ -400,11 +434,16 @@
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
-                                        {{ form_label(form.employeeHasEmployers.startDate) }}<br/><br/>
-
+                                        <div style="height: auto; overflow:hidden; width: 80%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
+                                         
+                                        
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
-                                        <br />
-                                        <p class="text-muted" style="font-size:13px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que<br />conviene firmar el contrato cuando ya exista afiliación a Seguridad Social</p>
+                                        
+                                        </div>
+                                        
+                                        <p class="text-muted" style="font-size: 16px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que conviene firmar el contrato cuando ya exista afiliación a Seguridad Social
+                                        
+                                        </p>
                                     </div>
                                 </div>
                                 <br/>
