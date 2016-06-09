@@ -325,7 +325,7 @@ use EmployerMethodsTrait;
                     'name' => $this->fullName($employeePerson->getIdPerson()),
                     'docType' => $employeePerson->getDocumentType(),
                     'docNumber' => $employeePerson->getDocument(),
-                    'residencia' => $employeePerson->getNeighborhood(),
+                    'residencia' => $employeePerson->getMainAddress(),
                     'tel' => $employeePerson->getPhones()[0]
                 );
 
@@ -387,7 +387,7 @@ use EmployerMethodsTrait;
                     "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
                     "interno" => $interno,
                     "contractType" => $contractType,
-                    "workplace" => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    "workplace" => $contract->getWorkplaceWorkplace()->getMainAddress()." ".$contract->getWorkplaceWorkplace()->getCity()->getName(),
                     "numero" => $contract->getIdContract(),
                     "years" => $years,
                     "months" => $months,
