@@ -179,6 +179,7 @@ class PayrollController extends Controller
 //            }
 //        }
         dump($pods);
+        dump($owePurchaseOrders);
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
                     'dataNomina' => $pods,
                     //'novelties' => $novelties
@@ -487,9 +488,10 @@ class PayrollController extends Controller
                                 $newPayroll->setPeriod(4);
                             }
                             $newPayroll->setMonth($nowDate->format("m"));
-                            $newPayroll->setYear($nowDate->format("y"));
-                            $newPayroll->setContractContract($pod->getPayrollPayroll());
+                            $newPayroll->setYear($nowDate->format("Y"));
+                            $newPayroll->setContractContract($actualPayroll->getContractContract());
                             $actualPayroll->getContractContract()->setActivePayroll($newPayroll);
+                            $actualPayroll->setPaid(1);
                             $em->persist($newPayroll);
                             $em->persist($actualPayroll->getContractContract());
                             $em->flush();

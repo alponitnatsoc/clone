@@ -338,7 +338,7 @@
                             <li><a data-toggle="tab" data-target="#paymentMethod"></a>Método de pago</li>
                         </ul>
                         <div class="tab-content">
-                            <div id="changeBehavior" class="hidden">{{ app.user.legalFlag }}</div>
+                            <div id="changeBehavior" class="hidden">{% if legalFlag is defined %}{% set changeBehaviorFlag = legalFlag %}{{ legalFlag }}{% else %}{% set changeBehaviorFlag = app.user.legalFlag %}{{ app.user.legalFlag }}{% endif %}</div>
                             <div id="datePermitted" class="hidden">
                                 <div class="year">{{ permittedDate.y }}</div>
                                 <div class="month">{{ permittedDate.m }}</div>
@@ -416,7 +416,7 @@
                                         {{ form_widget(form.employeeHasEmployers.endDate) }}
                                     </div>
                                 </div>
-                                {% if app.user.legalFlag==1 %}
+                                {% if changeBehaviorFlag == 1 %}
                                     <div class="row">
                                         <div class="col-sm-12 text-center form-group">
                                             {{ form_label(form.employeeHasEmployers.holidayDebt) }} <br />

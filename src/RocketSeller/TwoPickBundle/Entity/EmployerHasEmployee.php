@@ -55,7 +55,8 @@ class EmployerHasEmployee
      * 0 - unActivated
      * 1 - active
      * 2 - Twilio Verification
-     * 3 - backoffice confirmed
+     * 3 - symplifica payed
+     * 4 - backoffice confirmed
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $state = 1;
@@ -70,6 +71,13 @@ class EmployerHasEmployee
      */
     private $isFree = 0;
 
+    /**
+     * Columna para saber si es existente o no igual a la legal flag, pero ahora por empleado
+     * 0 No ha iniciado labores
+     * 1 ya inicio labores
+     * @ORM\Column(type="integer", length=1, nullable=TRUE)
+     */
+    private $legalFF = -1;
     /**
      * Set idEmployerHasEmployee
      *
@@ -298,5 +306,29 @@ class EmployerHasEmployee
     public function getExistentSQL()
     {
         return $this->existentSQL;
+    }
+
+    /**
+     * Set legalFF
+     *
+     * @param integer $legalFF
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setLegalFF($legalFF)
+    {
+        $this->legalFF = $legalFF;
+
+        return $this;
+    }
+
+    /**
+     * Get legalFF
+     *
+     * @return integer
+     */
+    public function getLegalFF()
+    {
+        return $this->legalFF;
     }
 }

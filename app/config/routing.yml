@@ -470,8 +470,8 @@ back_employer_menu:
     defaults:  { _controller: RocketSellerTwoPickBundle:ExpressRegistration:menuEmployer }
 
 back_person_cvs_export:
-    path: /back-person-cvs-export/{idPerson}
-    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByPerson }
+    path: /back-person-cvs-export/{idAction}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Export:generateCsvByAction }
 
 express_registration_contract_employee:
     path: /express-registration/{id}/employee-contract/{idEmployee}

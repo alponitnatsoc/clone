@@ -412,6 +412,7 @@ class Employee
         if($actions->isEmpty()){
             $this->employeeHasUnfinishedActions = 0;
         }else{
+            $this->employeeHasUnfinishedActions = 0;
             foreach($actions as $action){
                 if ($action->getStatus() === "Nuevo"){
                     $this->setEmployeeHasUnfinishedActions(1);

@@ -212,7 +212,7 @@ class ExpressRegistrationController extends Controller
             return $this->redirectToRoute('back_employer_menu', array('id' => $employer[0]->getPersonPerson()->getIdPerson()));
         }
         return $this->render(
-                        'RocketSellerTwoPickBundle:BackOffice:startExpressRegister.html.twig', array('form' => $form->createView())
+            'RocketSellerTwoPickBundle:BackOffice:registerExpress.html.twig', array('form' => $form->createView())
         );
     }
 

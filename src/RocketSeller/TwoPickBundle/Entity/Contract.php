@@ -67,9 +67,7 @@ class Contract
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
-     * })
+     * @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
      */
     private $activePayroll;
 
@@ -754,16 +752,6 @@ class Contract
     {
         return $this->weekWorkableDays;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Set frequencyFrequency
@@ -885,4 +873,15 @@ class Contract
     {
         return $this->holidayDebt;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->payrolls = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->benefits = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->weekWorkableDays = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->liquidations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

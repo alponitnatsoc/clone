@@ -513,19 +513,34 @@ use EmployerMethodsTrait;
                 break;
             case "mandato":
                 //$id del empleador
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Person');
+                $repositoryE = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employer');
+                $repositoryU = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:User');
                 /** @var \RocketSeller\TwoPickBundle\Entity\Employer $employer */
-                $employer = $repository->find($id);
+                $employerPerson = $repository->find($id);
+                $employer = $repositoryE->findByPersonPerson($employerPerson);
+                $user = $repositoryU->findByPersonPerson($employerPerson);
+                $user = $user[0]->getId();
 
-                $employerPerson = $employer->getPersonPerson();
                 $employerInfo = array(
                     'name' => $this->fullName($employerPerson->getIdPerson()),
                     'docType' => $employerPerson->getDocumentType(),
                     'docNumber' => $employerPerson->getDocument(),
-                    'docExpPlace' => $employerPerson->getDocumentExpeditionPlace()
+                    'docExpPlace' => $employerPerson->getDocumentExpeditionPlace(),
+                    'arl' => $this->getEmployerArl($employer[0]->getIdEmployer()),
+                    'ccf' => $this->getEmployerCcf($employer[0]->getIdEmployer()),
+                    'tel' => $employerPerson->getPhones()->getValues()[0],
+                    'address' => $employerPerson->getMainAddress(),
+                    'city' => $employerPerson->getCity()->getName()
                 );
+
+                $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user), array('_format' => 'json'));
+                $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
+                
                 $data = array(
-                    'employer' => $employerInfo
+                    'employer' => $employerInfo,
+                    'accountInfo' => $responsePaymentsMethods,
+                    'rootDir' => $this->get('kernel')->getRootDir().'/..'
                 );
                 break;
             case "factura":
@@ -626,10 +641,11 @@ use EmployerMethodsTrait;
                     return new JsonResponse(array("name-path" => $docName));
                 }
 
+                //return new Response($html);
                 return new Response(
                         $this->get('knp_snappy.pdf')->getOutputFromHtml($html), 200, array(
                     'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"'
+                    'Content-Disposition' => 'attachment; filename="' . $ref . '.pdf"',
                         )
                 );
                 break;

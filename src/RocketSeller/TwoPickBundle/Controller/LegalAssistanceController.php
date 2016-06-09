@@ -138,9 +138,9 @@ class LegalAssistanceController extends Controller
             ))
             ->add('documentType', 'choice', array(
                 'choices' => array(
-                    'CC' => 'Cédula de ciudadanía',
+                    'CC' => 'Cédula de ciudadanía'/*,
                     'CE' => 'Cedula de extranjería',
-                    'TI' => 'Tarjeta de identidad'
+                    'TI' => 'Tarjeta de identidad'*/
                 ),
                 'multiple' => false,
                 'expanded' => false,
@@ -310,7 +310,7 @@ class LegalAssistanceController extends Controller
                 //return $this->payLegalAssistance($methodId);
             } else if ($methodType == "deb") {
 
-                // if ($this->addToHighTech($user)) 
+                // if ($this->addToHighTech($user))
                 // {
                 //    return true;
                 // }else{
@@ -318,7 +318,7 @@ class LegalAssistanceController extends Controller
                 //                 'form' => $form->createView(),
                 //                 'errno' => "Tenemos un errar en el sistema, intenta mas tarde"
                 //     ));
-                // } 
+                // }
                 $request->request->add(array(
                     "accountNumber" => $form->get("accountNumber")->getData(),
                     "bankId" => $form->get("bank")->getData()->getIdBank(),
@@ -424,6 +424,24 @@ class LegalAssistanceController extends Controller
 
         return $this->redirectToRoute($urlToSend);
     }
+    public function changeFlagEmployeeAction($employerHasEmployee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $eHERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
+        /** @var EmployerHasEmployee $ehe */
+        $ehe=$eHERepo->find($employerHasEmployee);
+        /** @var User $user */
+        $user = $this->getUser();
+        if($ehe->getEmployerEmployer()->getPersonPerson()->getIdPerson()==$user->getPersonPerson()->getIdPerson()){
+            $ehe->setLegalFF(-2);
+            $em->persist($ehe);
+            $em->flush();
+            return $this->redirectToRoute("welcome");
+
+        }
+        return $this->redirectToRoute("show_dashboard");
+
+    }
 
     public function successPaymentAction()
     {
@@ -451,4 +469,3 @@ class LegalAssistanceController extends Controller
 
 
 }
-

@@ -1,12 +1,12 @@
 {% extends "@RocketSellerTwoPick/BackOffice/backOfficeBase.html.twig" %}
 
-{% block title %}Validar Documentos Empleador{% endblock %}
+{% block title %}Ver Documentos{% endblock %}
 {% block fos_user_content %}
     <div id="main" class="col-sm-15">
         <div class="col-md-15">
             <div class="panel panel-title">
                 {% if action.actionTypeActionType.name == 'Validar Documentos' %}
-                    Validar Documentos de {{ person.fullName }}
+                    Documentos de  {{ person.fullName }}
                 {% else %}
                     {{ action.actionTypeActionType.name }} de {{ person.fullName }}
                 {% endif %}
@@ -38,12 +38,6 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="col-md-6" style="margin-top: 20px; text-align:center">
-                <td><button class="checked"></button></td>
-            </div>
-            <div class="col-md-6" style="margin-top: 20px; text-align:center">
-                <td><button class="checked"></button></td>
-            </div>
             <div class="panel panel-default"">
                 <div class="col-sm-6" style="margin-top: 30px; text-align:center">
                     {% if nameDoc=='' and nameRut==''%}
@@ -70,11 +64,12 @@
                     <br>
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-top: 20px; text-align:center">
-                <div style="margin-top: 30px">
-                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validar</a>
-                    <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
-                </div>
+            <div class="col-md-6" style="margin-top:20px;text-align:center;">
+                <a class="btn btn-orange notAjax" style="background-color: #CB6D6C; border-color: #CB6D6C" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Error'})}}">Cancelar</a>
+                <a class="btn btn-orange notAjax" style="background-color: #1b7e5a ; border-color: #1b7e5a" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completo'})}}">Aceptar</a>
+            </div>
+            <div class="col-md-6" style="margin-top:20px;text-align:center;">
+                <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
             </div>
             <div class="col-md-12" style="margin-top:30px;border-top:dotted 1px;">
                 <div class="col-md-12">
