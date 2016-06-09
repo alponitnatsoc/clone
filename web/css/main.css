@@ -151,7 +151,7 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 
 .form-group {
     height: auto;
-    overflow: hidden;   
+    overflow: hidden;
 }
 
 #registrationFormContainer .form-inline select{
@@ -194,6 +194,22 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     border-top: 1px solid #71C8C6;
 }
 
+.price-box {
+  margin-bottom: 15px;
+    width: 500px;
+}
+
+.left-box {
+  float: left;
+    width: 45%;
+    margin-right: 5px;
+}
+
+.right-box {
+  float: right;
+    width: 45%;
+    margin-right: 5px;
+}
 
 
 /* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
@@ -214,12 +230,12 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     .blockStep .txt-AD3{margin-top:15px; text-align: center; }
     #registrationFormContainer .form-inline select{ width: 29%; margin-right:2%;}
     #registrationFormContainer label, .blockUpData label{ font-size: 14px !important; }
-    
+
     .contractOptionsBox .contractFirstList{ height:600px; }
     .contractOptionsBox .contractSecondList{ height:220px; }
-    
+
     .text-muted{ padding: 0 50px; }
- 
+
 }
 
 @media (max-width: 768px){
@@ -231,10 +247,10 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     .modal-content .close span{font-size: 26px; }
     .modal-content .block-Intro-green{ padding: 20px 10px; }
     .block-Data{ text-align: center; }
-    
-    .label-group{ text-align: left !important; }  
+
+    .label-group{ text-align: left !important; }
     .title-center { text-align: center !important; }
-       
+
 }
 
 @media (max-width: 690px){
@@ -246,12 +262,12 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     .contractOptionsBox .contractFirstList{ height:910px; }
     .contractOptionsBox li{ font-size: 13px;}
     .contractOptionsBox .contractSecondList{ height:320px; }
-}   
+}
 
 @media (max-width: 480px){
     .btn-orange{ white-space: normal !important; }
     .contractOptionsBox .contractFirstList{ height:990px; }
-    .contractOptionsBox .contractSecondList{ height:360px; }   
+    .contractOptionsBox .contractSecondList{ height:360px; }
 }
 
 @media (max-width: 360px){
@@ -267,11 +283,8 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 EXTERNOS DE BOOTSTRAP QUE NO FUNCIONAN - 20160608 NATALIABH */
 
 @media (min-width: 768px){
-    
+
   .nav-tabs.nav-justified>li {
      display: inherit !important;
-     width: 1%; }  
+     width: 1%; }
 }
-
-
-
