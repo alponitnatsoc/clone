@@ -259,15 +259,16 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 
 @media (max-width: 550px){
 
-    .contractOptionsBox .contractFirstList{ height:910px; }
+    .contractOptionsBox .contractFirstList{ height:540px; }
     .contractOptionsBox li{ font-size: 13px;}
     .contractOptionsBox .contractSecondList{ height:320px; }
 }
 
 @media (max-width: 480px){
     .btn-orange{ white-space: normal !important; }
-    .contractOptionsBox .contractFirstList{ height:990px; }
-    .contractOptionsBox .contractSecondList{ height:360px; }
+    .contractOptionsBox .contractFirstList{ height:50%; }
+    .contractOptionsBox .contractSecondList{ height:230px; }
+    .col-xs-6 {width: 100%;}
 }
 
 @media (max-width: 360px){
