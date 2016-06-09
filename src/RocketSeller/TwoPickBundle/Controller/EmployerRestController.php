@@ -138,6 +138,8 @@ class EmployerRestController extends FOSRestController
                 $missingDocs = 'Cedula Empleador, ';
             if(!$employerPerson->getDocByType("Rut"))
                 $missingDocs = $missingDocs.'Rut Empleador, ';
+            if(!$employerPerson->getDocByType("Mandato"))
+                $missingDocs = $missingDocs.'Mandato Empleador, ';
             $numEmp = 0;
             /** @var EmployerHasEmployee $employerHasEmployee */
             foreach($employerPerson->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
@@ -147,6 +149,9 @@ class EmployerRestController extends FOSRestController
                 }
                 if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Carta autorización Symplifica")){
                     $missingDocs = $missingDocs.'Carta Autorizacion Empleado '.$numEmp.', ';
+                }
+                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
+                    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
                 }
             }
             if($missingDocs==''){
