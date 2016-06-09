@@ -64,6 +64,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
     var totalExpenses = 0;
     var totalExpenses2 = 0;
     var totalIncome = 0;
+    var totalDiscountsForEmployer = 0;
     var EPSEmployerCal = 0;
     var EPSEmployeeCal = 0;
     var PensEmployeeCal = 0;
@@ -112,6 +113,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             senaCal = sena * base;
             icbfCal = icbf * base;
             totalIncome = (salaryD * numberOfDays) - EPSEmployerCal - PensEmployerCal;
+            totalDiscountsForEmployer = EPSEmployerCal + PensEmployerCal;
             totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
         } else {
             var EPSEmployee2 = 0;
@@ -150,6 +152,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
             senaCal = sena * base;
             icbfCal = icbf * base;
             totalIncome = ((salaryD + transportAidDaily) * numberOfDays) - PensEmployeeCal;
+            totalDiscountsForEmployer = PensEmployeeCal;
             totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
         }
 
@@ -179,6 +182,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         senaCal = sena * base;
         icbfCal = icbf * base;
         totalIncome = (salaryM + transportCal - EPSEmployerCal - PensEmployerCal);
+        totalDiscountsForEmployer = EPSEmployerCal + PensEmployerCal;
         totalExpenses2 = base + EPSEmployerCal + EPSEmployeeCal + PensEmployerCal + PensEmployeeCal;
 
     }
@@ -204,6 +208,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         resposne['senaCal'] = 0;
         resposne['icbfCal'] = 0;
         resposne['totalIncome'] = 0;
+        resposne['totalDiscountsForEmployer'] = 0;
     } else {
         resposne['totalExpenses'] = totalExpenses;
         resposne['totalExpenses2'] = totalExpenses2;
@@ -223,6 +228,7 @@ function calculator(type, salaryM, salaryD, numberOfDays, sisben, transport) {
         resposne['senaCal'] = senaCal;
         resposne['icbfCal'] = icbfCal;
         resposne['totalIncome'] = totalIncome;
+        resposne['totalDiscountsForEmployer']= totalDiscountsForEmployer;
     }
     //console.log('calculator-responce:' + resposne['totalExpenses']);
     //console.log('calculator-responce:' + getPrice(resposne['totalExpenses']));

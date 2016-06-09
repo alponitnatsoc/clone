@@ -217,17 +217,22 @@
         <div id="salariosmed">
             <div class="infosalarios">
                 <div class="left">Salarios a pagar*</div>
-                <div class="right" id="">$ {{ "0" }}</div>
+                <div id="totalSal" class="right" ></div>
             </div>
             <div class="empleadosmed">
-                <div class="empleadomed">
-                    <div class="left lightpay">Jeferson gutierritos</div>
-                    <div class="right numberpay">$14.000</div>
-                </div>
-                <div class="empleadomed">
-                    <div class="left lightpay">Jeferson gutierritos</div>
-                    <div class="right numberpay">$14.000</div>
-                </div>
+              {% for employeeData in employees %}
+
+                  {% set employee = employeeData['employee'] %}
+                  {% set contrato = employeeData['contrato'] %}
+
+                  <div class="empleadomed">
+                      <div class="left lightpay">{{ employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastname1}}</div>
+                      <div class="right numberpay salaryIndVal"
+                      data-id="{{ employee.idEmployerHasEmployee }}"></div>
+                  </div>
+              {% endfor %}
+
+
             </div>
         </div>
         <div id="salariosmed">
@@ -237,7 +242,7 @@
             <div class="empleadosmed">
                 <div class="empleadomed">
                     <div class="left monto">Monto Total</div>
-                    <div class="right numberpay">$14.000</div>
+                    <div id="totalSeguridadSocial" class="right numberpay"></div>
                 </div>
             </div>
         </div>
@@ -271,19 +276,21 @@
                                           al mes
                                       </div>
                                   </div>
-                                  <div class="col-md-3 div-btn-change-state-contract">
-                                      <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
-                                           data-id="{{ employee.idEmployerHasEmployee }}"
-                                           data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
-                                  </div>
+
+                              </div>
+                              <!--<div class="col-md-3 div-btn-change-state-contract">
+                                  <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
+                                       data-id="{{ employee.idEmployerHasEmployee }}"
+                                       data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
+                              </div>-->
+                              <div class="right numberpay suscriptionInd"
+                                data-id="{{ employee.idEmployerHasEmployee }}">
                               </div>
                           </div>
 
                       {% endfor %}
                   </div>
-                  <div class="right numberpay">
-                    $29.000
-                  </div>
+
                 </div>
             </div>
         </div>

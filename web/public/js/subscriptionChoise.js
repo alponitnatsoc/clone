@@ -112,7 +112,7 @@ function startSubscriptionChoise() {
     }
 
     function calculatePrice(contenedor) {
-        var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0, total = 0, subtotal = 0, count_employee = 0;
+        var Tiempo_Completo = 0, Medio_tiempo = 0, Trabajo_por_días = 0, total = 0, subtotal = 0, count_employee = 0, total_income=0, total_seguridad_social=0;
         if (contenedor == '_calc') {
             Tiempo_Completo = tiempo_completoSlider ? parseInt(tiempo_completoSlider.noUiSlider.get()) : 0;
             Medio_tiempo = medio_tiempoSlider ? parseInt(medio_tiempoSlider.noUiSlider.get()) : 0;
@@ -159,14 +159,25 @@ function startSubscriptionChoise() {
 
                 total = total + resultado['totalExpenses2'];
 
+                $("div[data-id='"+ key +"']").each(function(){
+                  if($(this).hasClass("salaryIndVal"))
+                  {
+                    $(this).html(getPrice(resultado['totalIncome']));
+                    total_income += resultado['totalIncome'];
+                    total_seguridad_social += resultado['totalDiscountsForEmployer'];
+                  }
+                });
+
+
+                $("#totalSeguridadSocial").html(getPrice(total_seguridad_social));
                 $("#sueldos").html(getPrice(total));
                 $("#primerPago").html(getPrice(total));
                 $("#segundoPago").html(getPrice(total + subtotal));
                 $("#count_employee").html(count_employee + ' Empleados');
-
+                $("#totalSal").html(getPrice(total_income));
             }
         }
-        console.log(producto);
+
         $("#divSubtotal").html(getPrice(subtotal));
 
         if (subtotal == 0) {
@@ -175,13 +186,34 @@ function startSubscriptionChoise() {
             $("input[type=submit]").attr('disabled', false);
         }
 
+        $(".suscriptionInd").each(function( index ) {
+          if (employee[$(this).data("id")]['state'] > 0) {
+            var workableDays = contrato[$(this).data("id")]['workableDaysMonth'];
+            var endValue = 0;
+            if( workableDays >= 20){
+              endValue = producto['PS3'];
+            }
+            else if (workableDays >= 11){
+              endValue = producto['PS2'];
+            }
+            else {
+              endValue = producto['PS1'];
+            }
+            $(this).html(getPrice(endValue));
+          } else {
+            $(this).html(getPrice(0));
+          }
+        });
+
+
+
     }
 
     function getPrice(valor) {
         price = parseFloat(valor.toString().replace(/,/g, ""))
             .toFixed(0)
             .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         return "$ " + price;
     }
 
@@ -223,5 +255,6 @@ function startSubscriptionChoise() {
             });
         }
     });
-}
 
+
+}
