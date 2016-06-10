@@ -30,6 +30,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
                 "register_employee[employeeHasEmployers][payMethod]": "required",
+                "register_employee[verificationCode]": "required",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "required"/*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
@@ -63,6 +64,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                "register_employee[verificationCode]": "Por favor ingrese el código",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción"/*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -359,7 +361,12 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+
     $('#btn-verificaion').click(function (e) {
+        if (!validator.element($("#register_employee_verificationCode"))) {
+            return false;
+        }
+
         e.preventDefault();
         var form = $("form");
         var url= $(this).attr('href');
