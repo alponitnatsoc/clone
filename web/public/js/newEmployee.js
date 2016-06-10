@@ -812,10 +812,12 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
+    $("#labelCosto").html("Costo total diario </br> por el empleado");
     calculator();
 });
 
 $('#radio_mensual').click(function() {
+    $("#labelCosto").html("Costo total </br> por el empleado");
     calculator();
 });
 
@@ -1220,6 +1222,7 @@ var dotation;
 var transportAidDaily;
 var vacations30D;
 var dotationDaily;
+var firstLoad = true;
 function loadConstrains() {
     var constraints = null;
     $.ajax({
@@ -1450,6 +1453,7 @@ function calculator() {
     }
     // Calculate the days again.
     var i = 0;
+
     $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
             i++;
         });
@@ -1457,6 +1461,11 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       console.log("entre");
+      if( firstLoad == true){
+        $("#labelCosto").html("Costo total diario </br> por el empleado");
+        firstLoad = false;
+      }
+
       //$('#radio_diario').prop('checked', true);
       //$('#radio_mensual').prop('checked', false);
     }
