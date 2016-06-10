@@ -169,6 +169,28 @@
         .subtotalTitle {
             font-size: 16px;
         }
+        
+        .codigo_referido {
+            width: 300px;
+            margin: 0 auto;
+        }
+        
+        
+        
+        /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
+
+            @media (max-width: 768px){
+                .label-primer-pago { text-align: center; }            
+            }  
+         
+        
+            @media (max-width: 480px){
+                .codigo_referido { width: 100%;
+            }
+        
+            
+           
+
     </style>
     {#
     {% for flash_message in app.session.flashbag.get('error') %}
@@ -183,7 +205,7 @@
                 <img src="/img/block-inline.png" class="center-block">
             </div>
             <div id="" class="col-md-10 col-md-12 txt-AD1">
-                <div id="" class="text-left">
+                <div id="" class="text-left title-center">
                     <span class="step">Paso 3 de 3</span>
                     Medio de pago
                 </div>
@@ -395,8 +417,8 @@
                 descuento en la suscripción de ese mes.<br/>
             </div>
             <div class="col-md-12 margin-top-bottom-10">
-                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control" maxlength="10"
-                       placeholder="Ingresa un código de referido" style="width: 300px; display: inline-block;">
+                <input type="text" name="codigo_referido" id="codigo_referido" class="form-control codigo_referido" maxlength="10"
+                       placeholder="Ingresa un código de referido">
                 <button id="btnRedimir" class="btn btn-default" value="Redimir"
                         style="margin-top: 0px; font-size: 13px;">Redimir
                 </button>
@@ -408,32 +430,27 @@
     <br/>
     <div class="row padding-left-right-40">
         <div class="col-md-12 nopadding margin-top-bottom-10">
-            <h4 style="font-style: italic; color: #777;"<b>Total a pagar mensualmente</b></h4>
+            <h4 style="font-style: italic; color: #777;"><b>Total a pagar mensualmente</b></h4>
         </div>
-        <div class="col-md-12 " style="background-color: #F3F1F1;">
-            <div class="col-md-12 border-botton-darkGray2 padding-top-botton-10">
-                <div class="col-md-8 " style="padding-top: 5px;">
+        <div class="col-md-12" style="background-color: #F3F1F1; height: auto; overflow: hidden">
+            <div class="col-md-12 border-botton-darkGray2 padding-top-botton-10" style="height: auto; overflow: hidden">
+                <div class="col-xs-12 col-sm-7 label-primer-pago">
                     <div style="color:#314A5A; font-style: italic;">El primer mes de servicio</div>
                     <div style="color:#777;">(Symplifica te ha obsequiado un mes de servicio)</div>
                 </div>
-                <div class="col-md-4 " style="
-                     padding-top: 10px;
-                     text-align: right;
-                     padding-right: 100px;">
+                <div class="col-xs-12 col-sm-5" style="text-align: center; padding-top: 5px">
                     <div id="primerPago" style="font-size: x-large; font-weight: bold; color: lightgrey;">
                         $ {{ total_sin_descuentos|number_format(0,'.',',') }}</div>
                 </div>
             </div>
-            <div class="col-md-12 padding-top-botton-10">
-                <div class="col-md-8 " style="padding-top: 5px;">
+            <div class="col-md-12 padding-top-botton-10" style="height: auto; overflow: hidden">
+                <div class="col-xs-12 col-sm-7 label-primer-pago">
                     {% set day_pay = startDate|date("d") %}
                     {% set month_pay = startDate|date("F")|trans %}
                     {% set year_pay = startDate|date("Y") %}
                     <div style="color:#314A5A;">A partir del {{ day_pay }} de {{ month_pay }} de {{ year_pay }}</div>
                 </div>
-                <div class="col-md-4 " style="
-                     text-align: right;
-                     padding-right: 100px;">
+                <div class="col-xs-12 col-sm-5" style="text-align: center; padding-top: 5px">
                     <div id="segundoPago" style="font-size: x-large; font-weight: bold; color: darkgrey;">
                         $ {{ total_sin_descuentos|number_format(0,'.',',') }}</div>
                 </div>
