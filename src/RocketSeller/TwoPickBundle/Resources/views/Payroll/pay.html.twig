@@ -75,7 +75,7 @@
                         <div class="borderclass">
                             <div class="tittle-pay">
                                   <div class="light-italic left">
-                                    Pila de los empleados:
+                                    Aportes a seguridad:
                                     {%  set payrolls = pilaData.payrollsPila %}
                                   </div>
 
@@ -84,23 +84,24 @@
                                     <label style="font-weight:100"><input type="radio" class="alreadyPaid" name="{{ pilaData.idPurchaseOrdersDescription }}" value="ap-{{ pilaData.idPurchaseOrdersDescription }}"> Ya pagué </label>
                                 </div>
                             </div>
-                                    <div class="pila-empl title-span azulmediofont semi-italic">
+                                <div class="height">
+                                    <div class="pila-empl title-span left azulmediofont semi-italic">
                                         <ul>
                                             {% for payroll in payrolls %}
                                                 <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>
-                            <div></div>
-                            <div class="height">
-                                  <div class="center borderight">
-                                      <div class="center" style="padding: 10px 0 0 0">
-                                        <span class="semi-italic azulmediofont">Monto a pagar</span>
-                                        <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
-                                      </div>
-                                  </div>
+                                    <div class="right" style="border-left: 1px #CCC solid;">
+                                          <div class="center borderight">
+                                              <div class="center">
+                                                <span class="title-span semi-italic azulmediofont">Monto a pagar</span>
+                                                <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
+                                              </div>
+                                          </div>
 
-                            </div>
+                                    </div>
+                              </div>
                         </div>
 
                     {% endif %}
@@ -154,7 +155,7 @@
 
                                     <div class="tittle-pay">
                                       <div class="left light-italic">
-                                        Pila de los empleados mes {{ pilaData.payrollsPila.0.month }}:
+                                        Aportes a seguridad mes {{ pilaData.payrollsPila.0.month }}:
                                         {%  set payrolls = pilaData.payrollsPila %}
                                       </div>
                                       <div class="right">
@@ -163,25 +164,24 @@
                                       </div>
                                     </div>
 
+                                    <div class="height">
+                                        <div class="title-span pila-empl left azulmediofont semi-italic">
+                                              <ul>
+                                                  {% for payroll in payrolls %}
+                                                      <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
+                                                  {% endfor %}
+                                              </ul>
+                                        </div>
 
-                                    <div class="pila-empl title-span azulmediofont semi-italic">
-                                          <ul>
-                                              {% for payroll in payrolls %}
-                                                  <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
-                                              {% endfor %}
-                                          </ul>
-                                    </div>
-
-                                <div></div>
-                                <div class="height">
-                                    <div class="center borderight">
-                                      <div class="center" style="padding: 10px 0 0 0">
-                                        <span class="semi-italic azulmediofont">Monto a pagar</span>
-                                        <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
-                                      </div>
-                                    </div>
-
-                                </div>
+                                        <div class="right" style="border-left: 1px #CCC solid;">
+                                            <div class="center borderight">
+                                              <div class="center">
+                                                <span class="title-span semi-italic azulmediofont">Monto a pagar</span>
+                                                <span class="bold precio-pay">${{ pilaData.value|number_format(0, '.', ',')  }}</span>
+                                              </div>
+                                            </div>
+                                        </div>
+                                  </div>
                             </div>
 
                         {% endif %}
