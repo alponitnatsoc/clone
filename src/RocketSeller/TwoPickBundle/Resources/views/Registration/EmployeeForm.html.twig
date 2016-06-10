@@ -68,7 +68,7 @@
 
             .label-group > h3 {
                 text-align: center;
-                margin-bottom: 20px; 
+                margin-bottom: 20px;
             }
             .form-select{
                 color: yellow !important;
@@ -87,7 +87,7 @@
                 border-radius: 5px;
                 padding: 15px;
                 text-align: center;
-            } 
+            }
 
             /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
 
@@ -567,16 +567,18 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-xs-12 days">
+                                <!--<div class="col-sm-12 col-xs-12 days">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.salaryD) }}
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-sm-8 col-sm-offset-2 days price-box">
                                   <div class="priceContainer">
+                                      <p class="p">Salario contractual</p>
                                       <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                   </div>
                                     <div class="text-center form-group right-box">
+                                        <p class="p">¿Cuanto sera el salario diario?</p>
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
@@ -585,18 +587,18 @@
                                     <span>Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario minimo</span>
                                 </div>
                                 <br/>
-                                <div class="col-sm-12 col-xs-12 complete">
+                                <!--<div class="col-sm-12 col-xs-12 complete">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.salary) }}
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-sm-8 col-sm-offset-2 complete price-box">
                                     <div class="text-center form-group left-box">
-                                        <p>Salario mensual</p>
+                                        <p class="p">¿Cuanto sera el salario mensual?</p>
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
                                     </div>
                                     <div class="priceContainer">
-                                        <p>Recibe el empleado</p>
+                                        <p class="p">Esto recibira neto el empleado mensualmente</p>
                                         <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                     </div>
                                 </div>
@@ -605,7 +607,7 @@
                                 <div id="cont-resumenpagos">
                                     <div class="col-sm-12 col-xs-12 text-center resumenpagos">
                                         <br />
-                                        <p style="font-weight:100">Resumen <br />del pago mensual:</p>
+                                        <p style="font-weight:100">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
                                             <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
@@ -1514,7 +1516,7 @@
                             <div class="texto-seguridad-msj">
                             Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
                             </div>
-                        
+
                             <div class="col-sm-12 col-xs-12">
                                 <div class="col-sm-6 label-group">
                                     {{ form_label(form.verificationCode) }}
@@ -1524,7 +1526,7 @@
                                     {{ form_widget(form.verificationCode) }}
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="col-sm-12 col-xs-12 center">
                             <a id="btn-reenviar" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Pedir nuevo código</a>
