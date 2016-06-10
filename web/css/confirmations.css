@@ -36,6 +36,10 @@
   float: right;
 }
 
+.right-susc {
+  float: right;
+}
+
 .empleadosmed {
   clear: both;
 }
@@ -51,7 +55,7 @@
     padding: 10px 20px;
     font-weight: bold;
     color: #5D5D5D;
-    font-size: 17px;
+    font-size: 20px;
 }
 .empleadosmed {
   height: auto;
@@ -96,7 +100,7 @@
 
 .numberpay {
     font-weight: normal;
-    font-size: 20px;
+    font-size: 17px;
     color: #9E9E9E;
     font-style: italic;
   }
@@ -107,3 +111,39 @@
       color: #00858C;
       font-style: italic;
     }
+.contsuscripcionpago {
+  width:100%
+}
+
+.nombrecont {
+  width: 40%
+}
+
+.nombrefont {
+    font-weight: bold;
+    font-size: 20px;
+    color: #00858C;
+}
+
+.paddingbottom {
+  padding: 15px 15px 20px 15px;
+  border-bottom: 1px solid #CCC;
+}
+
+@media only screen and (max-width: 980px) {
+.right-susc {
+  float: none;
+}
+.nombrecont {
+    width: 100%;
+    text-align: center;}
+.paddingbottom {
+    text-align: center;
+  }
+
+}
+
+@media only screen and (max-width: 375px) {
+  .left, .right {float:none}
+  .empleadomed, .infosalarios {text-align: center;}
+}

@@ -54,7 +54,7 @@ trait PayrollMethodsTrait
                         $productPILA = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PP'));
                         $podPila->setProductProduct($productPILA);
                         $dateToday = new \DateTime();
-                        $podPila->setDescription("Pago de PILA mes " . $dateToday->format("m"));
+                        $podPila->setDescription("Pago de Aportes a Seguridad Social mes " . $dateToday->format("m"));
                         $entity = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
                         $pos = $entity->findOneBy(array('idNovoPay' => 'P1')); // Estado pendiente por pago
                         $podPila->setPurchaseOrdersStatus($pos);
@@ -124,7 +124,7 @@ trait PayrollMethodsTrait
                     $tempPOD->setPayrollPayroll($payroll);
                     $tempPOD->setProductProduct($productNomina);
                     $person = $employerHasEmployee->getEmployeeEmployee()->getPersonPerson();
-                    $tempPOD->setDescription("Pago Nómina " . $person->getLastName1() . " mes " . $payroll->getMonth() . " periodo " . $payroll->getPeriod());
+                    $tempPOD->setDescription("Pago Nómina " .ucfirst(mb_strtolower(explode(" ", $person->getNames())[0], 'UTF-8')) ." ". ucfirst($person->getLastName1()) . " mes " . $payroll->getMonth() . " periodo " . $payroll->getPeriod());
                     $tempPOD->setValue($totalLiquidation["total"]);
 
                     if ($payroll->getPeriod() == 4) {

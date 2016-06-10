@@ -263,7 +263,7 @@
             </div>
             <div class="empleadosmed">
                 <div class="empleadomed">
-                    <div class="left monto">Monto Total</div>
+                    <div class="left monto">Total</div>
                     <div id="totalSeguridadSocial" class="right numberpay"></div>
                 </div>
             </div>
@@ -273,26 +273,25 @@
                 <div class="center">Suscripción symplifica</div>
             </div>
             <div class="empleadosmed">
-              <div class="empleadomed">
-                  <div class="col-md-6" style="{% if employees|length < 2 %}{% endif %}">
+              <div class="suscripempleados">
+                  <div class="col-md-6 contsuscripcionpago" style="{% if employees|length < 2 %}{% endif %}">
                       {% for employeeData in employees %}
 
                           {% set employee = employeeData['employee'] %}
                           {% set contrato = employeeData['contrato'] %}
                           {% set producto = employeeData['product'] %}
 
-                          <div class="row clearfix">
-                              <div class="col-md-12 padding-all-10 employee text-left border-all-darkGray {{ employee.state>0 ?'activo':'inactivo' }}"
-                                   style="min-height:90px;margin-top:17px;">
+                          <div class="row clearfix paddingbottom">
+                              <div class="col-md-12 padding-all-10 employee text-left nombrecont {{ employee.state>0 ?'activo':'inactivo' }}">
                                   <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                       <div>
-                                          <b class="employee_name"
+                                          <b class="employee_name nombrecont"
                                              style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
                                           <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
                                       </div>
                                       {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
                                       <div style="font-style:italic; font-weight:100; font-size: small;"
-                                           class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? "medio_tiempo":"trabajo_por_dias" ) }}  "
+                                           class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
                                            data-employeeId="{{ employee.idEmployerHasEmployee }}">
                                           Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
                                           al mes
@@ -300,12 +299,12 @@
                                   </div>
 
                               </div>
-                              <!--<div class="col-md-3 div-btn-change-state-contract">
+                              <div class="col-md-3 padding-all-10">
                                   <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
                                        data-id="{{ employee.idEmployerHasEmployee }}"
                                        data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
-                              </div>-->
-                              <div class="right numberpay suscriptionInd"
+                              </div>
+                              <div class="right-susc numberpay suscriptionInd padding-all-10"
                                 data-id="{{ employee.idEmployerHasEmployee }}">
                               </div>
                           </div>
@@ -326,8 +325,8 @@
             </div>
             <div class="empleadosmed">
                 <div class="empleadomed">
-                    <div class="left monto">Monto Total</div>
-                    <div class="right numberpay">$14.000</div>
+                    <div class="left monto">Total</div>
+                    <div class="right numberpay">$7.000</div>
                 </div>
             </div>
         </div>
@@ -338,7 +337,7 @@
             </div>
         </div>
     </div>
-    <div class="row padding-left-right-40">
+    <!--<div class="row padding-left-right-40">
         <div class="col-md-12 nopadding text-left border-botton-darkGray">
             <div class="col-md-6 padding-top-botton-20">
                 <span class="x-large" style="padding: 10px 0px 10px 0px;"><em>Sueldos y Seguridad social</em></span>
@@ -456,7 +455,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <hr>
     <form action="{{ path('subscription_confirm') }}" method="POST">

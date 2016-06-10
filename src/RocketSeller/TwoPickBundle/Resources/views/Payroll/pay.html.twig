@@ -36,8 +36,9 @@
                             <div class="borderclass">
                                 <div class="tittle-pay">
                                     <div class="left light-italic">
-                                      {%  set employeeName = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names %}
-                                      {{ employeeName }}
+                                      {%  set employee = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
+                                      {%  set employeeName = employee.names ~' '~ employee.lastName1 %}
+                                      {{ employeeName|capitalize }}
                                     </div>
                                     <div class="right">
                                         <label style="font-weight: 100;"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
@@ -75,7 +76,7 @@
                         <div class="borderclass">
                             <div class="tittle-pay">
                                   <div class="light-italic left">
-                                    Aportes a seguridad:
+                                    Aportes a seguridad social:
                                     {%  set payrolls = pilaData.payrollsPila %}
                                   </div>
 
@@ -88,7 +89,8 @@
                                     <div class="pila-empl title-span left azulmediofont semi-italic">
                                         <ul>
                                             {% for payroll in payrolls %}
-                                                <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
+                                                {%  set employeePP = payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
+                                                <li>{{ employeePP.names|capitalize ~' '~ employeePP.lastName1|capitalize }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -117,8 +119,9 @@
                                 <div class="borderclass">
                                     <div class="tittle-pay">
                                         <div class="left light-italic">
-                                            {%  set employeeName = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names %}
-                                            Nómina de {{ employeeName }} mes {{ data.payrollPayroll.month }}
+                                            {%  set employee = data.payrollPayroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
+                                            {%  set employeeName = employee.names ~' '~ employee.lastName1 %}
+                                            Nómina de {{ employeeName|capitalize }} mes {{ data.payrollPayroll.month }}
                                         </div>
                                         <div class="right">
                                             <label style="font-weight:100"><input type="radio" class="toPayArray" name="{{ data.idPurchaseOrdersDescription }}" value="p-{{ data.idPurchaseOrdersDescription }}"> Pagar </label>
@@ -155,7 +158,7 @@
 
                                     <div class="tittle-pay">
                                       <div class="left light-italic">
-                                        Aportes a seguridad mes {{ pilaData.payrollsPila.0.month }}:
+                                        Aportes a seguridad social mes {{ pilaData.payrollsPila.0.month }}:
                                         {%  set payrolls = pilaData.payrollsPila %}
                                       </div>
                                       <div class="right">
@@ -168,7 +171,8 @@
                                         <div class="title-span pila-empl left azulmediofont semi-italic">
                                               <ul>
                                                   {% for payroll in payrolls %}
-                                                      <li>{{ payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson.names }}</li>
+                                                      {%  set employeePP = payroll.contractContract.employerHasEmployeeEmployerHasEmployee.employeeEmployee.personPerson %}
+                                                      <li>{{ employeePP.names|capitalize ~' '~ employeePP.lastName1|capitalize }}</li>
                                                   {% endfor %}
                                               </ul>
                                         </div>
