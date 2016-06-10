@@ -104,7 +104,7 @@ trait EmployeeMethodsTrait
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
 
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
                     $contratoType = $documentTypeRepo->findOneBy(array('name' => "Contrato"));
@@ -112,14 +112,14 @@ trait EmployeeMethodsTrait
                     $msj = "Generar contrato con Symplifica";
                     $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                     $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
-                    $msj = "Subir copia del contrato de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir copia del contrato de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $cartaType = $documentTypeRepo->findOneBy(array('name' => "Carta autorización Symplifica"));
                     $documentType = 'Carta autorización Symplifica';
                     $msj = "Generar Carta autorización Symplifica";
                     $url = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                     $this->createNotification($user->getPersonPerson(), $msj, $url, $cartaType, "Bajar");
-                    $msj = "Subir copia de la Carta autorización Symplifica de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir copia de la Carta autorización Symplifica de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
@@ -170,10 +170,10 @@ trait EmployeeMethodsTrait
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
 
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'RUT') {
-                    $msj = "Subir copia del RUT de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                    $msj = "Subir copia del RUT de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'RUT';
                 } elseif ($type == 'Mandato'){
                   $mandatoType = $documentTypeRepo->findOneBy(array('name' => "Mandato"));
@@ -181,7 +181,7 @@ trait EmployeeMethodsTrait
                   $msj = "Generar Mandato";
                   $url = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                   $this->createNotification($user->getPersonPerson(), $msj, $url, $mandatoType, "Bajar");
-                  $msj = "Subir mandato firmado de " .explode(" ",$person->getNames())[0]." ". $person->getLastName1();
+                  $msj = "Subir mandato firmado de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst(ucfirst($person->getLastName1()));
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));

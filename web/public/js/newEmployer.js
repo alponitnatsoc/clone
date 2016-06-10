@@ -300,7 +300,7 @@ function startEmployer() {
                 day: $(form).find("select[name='register_employer[person][birthDate][day]']").val(),
             }
         }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -359,7 +359,7 @@ function startEmployer() {
                 $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
 
             }
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -492,7 +492,7 @@ function startEmployer() {
                 workDepartment: departments
             }
         }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);

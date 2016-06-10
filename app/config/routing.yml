@@ -119,6 +119,10 @@ employees_documents:
     path:     /manage/employees/documents
     defaults: { _controller: RocketSellerTwoPickBundle:Employer:viewDocuments }
 
+employer_completion_documents:
+    path:     /document/completion
+    defaults: { _controller: RocketSellerTwoPickBundle:Employer:documentCompletion }
+
 show_documents:
     path:      /manage/employee/{id}/documents/{idNotification}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:employeeDocuments , idNotification: -1 }

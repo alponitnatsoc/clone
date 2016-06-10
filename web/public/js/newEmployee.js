@@ -812,10 +812,12 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
+    $("#labelCosto").html("Costo total diario </br> por el empleado");
     calculator();
 });
 
 $('#radio_mensual').click(function() {
+    $("#labelCosto").html("Costo total </br> por el empleado");
     calculator();
 });
 
@@ -837,6 +839,13 @@ function changeValues(data) {
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
+  console.log("Plain Sal: " + data.plainSalary);
+  console.log("Trans Cal: " + data.transportCal);
+  console.log("EPS Empl Cal: " + data.EPSEmployerCal);
+  console.log("Pens Empl Cal: " + data.PensEmployerCal);
+  console.log("Caja cal: " + data.cajaCal);
+  console.log("Arl cal: " + data.arlCal);
+
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
   var total_prestaciones = Math.floor(data.cesCal + data.taxCesCal + data.vacationsCal);
 
@@ -1213,6 +1222,7 @@ var dotation;
 var transportAidDaily;
 var vacations30D;
 var dotationDaily;
+var firstLoad = true;
 function loadConstrains() {
     var constraints = null;
     $.ajax({
@@ -1443,6 +1453,7 @@ function calculator() {
     }
     // Calculate the days again.
     var i = 0;
+
     $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
             i++;
         });
@@ -1450,8 +1461,13 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       console.log("entre");
-      $('#radio_diario').prop('checked', true);
-      $('#radio_mensual').prop('checked', false);
+      if( firstLoad == true){
+        $("#labelCosto").html("Costo total diario </br> por el empleado");
+        firstLoad = false;
+      }
+
+      //$('#radio_diario').prop('checked', true);
+      //$('#radio_mensual').prop('checked', false);
     }
     changeValues(resposne);
 
@@ -1460,6 +1476,13 @@ function calculator() {
     //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
+
+$("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("click", function () {
+  $('#radio_diario').prop('checked', true);
+  $('#radio_mensual').prop('checked', false);
+});
+
+
 function checkDate(date) {
     var $permittedDate= $("#datePermitted");
     var dateNow = new Date(

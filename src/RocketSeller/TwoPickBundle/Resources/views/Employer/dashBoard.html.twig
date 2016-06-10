@@ -475,12 +475,6 @@
             </div>
             <div class="col-sm-5 contain-notificaciones" style=" font-size: 12px;">
                 <div class="row">
-                    <div class="col-sm-5 dashboard_employer_contador_div contador-div-uno">
-                        <span class="txthelp"><p> <span class="dashboard_employer_contador_type_alert"></span> Alertas</p></span>
-                    </div>
-                    <div class="col-sm-7 dashboard_employer_contador_div contador-div-dos">
-                        <span class="txthelp"><p> <span class="dashboard_employer_contador_type_notification"></span> Notificaciones</p></span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -579,11 +573,6 @@
                         {% endif %}
                     {% endif %}
                 {% endfor %}
-            </div>
-        </div>
-        <div class="row" style="margin-top:20px">
-            <div class="text-center">
-                <a class="btn btn-gray" href="{{ path('manage_employees') }}">Reportar novedad</a>
             </div>
         </div>
         {% set reminders = [] %}
