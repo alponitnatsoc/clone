@@ -9,42 +9,59 @@
 		<h2 class="light azulclarofont" style="margin:0; padding: 0 0 0 15px">prueba integración continua</h2>
         <div class="search col-md-12" style="margin-top: 30px">
 	        <div class="col-md-10 input-field">
-						<form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
+						<div id="contact_form" enctype="multipart/form-data">
+							{{ form_errors(form) }}
+							{{ form_start(form) }}
 									<div class="row">
-											<label class="semi-italic grisclarofont" for="name">Nombre:</label><br />
-											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
+										{% for label, flashes in app.session.flashbag.all %}
+											{% for flash in flashes %}
+												<div class="alert alert-{{ label }} semi-italic" for="alert">
+													{{ flash }}
+												</div>
+											{% endfor %}
+										{% endfor %}
 									</div>
 									<div class="row">
-											<label class="semi-italic grisclarofont" for="name">Teléfono:</label><br />
-											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
-									</div>
-									<div class="row">
-											<label  class="semi-italic grisclarofont" for="email">Email:</label><br />
-											<input id="email" class="input" name="email" type="text" value="" size="30" /><br />
-									</div>
-									<div class="row">
-											<label  class="semi-italic grisclarofont" for="email">Tema de la pregunta</label><br />
-											<select class="input">
-											  <option value="Tema 1">Selecciona una categoría</option>
-											  <option value="Tema 2">Preguntas del Registro</option>
-											  <option value="Tema 3">Pago de la Nómina y Aportes</option>
-											  <option value="Tema 4">Calculadora Salarial</option>
-												<option value="Tema 5">Consulta Jurídica</option>
-												<option value="Tema 6">Planes y Precios</option>
-												<option value="Tema 7">Otros</option>
-											</select><br />
-									</div>
-									<div class="row">
-											<label class="semi-italic grisclarofont" for="message">Mensaje:</label><br />
-											<textarea placeholder="¿Tienes preguntas? escribela aquí y tendras respuestas lo antes posible" id="message" class="message" name="message" rows="7" cols="30"></textarea><br />
-									</div>
-									<input class="naranja bold" id="submit_button" type="submit" value="Enviar email" />
-							</form>
+											<div class="semi-italic grisclarofont" for="name">
+												{{ form_label(form.name) }}
+											</div>
+											<div id="name" class="input" name="name" type="text" value="" size="30">
+												{{ form_widget(form.name) }}
+												{{ form_errors(form.name) }}
+											</div><br />
 
-	            <input type="text" class="form-control" placeholder="Envíenme un email cuando esté listo" id="emailSus">
-	        </div>
-	        <div class="col-md-2 submit" style="clear:both">
-	            <button type="button" class="btn btn-default submit-button loading" onclick="javascript:suscribirme($(this))" data-loading-text="Cargando..." data-complete-text="Cerrar">Enviar ></button>
+									</div>
+									<div class="row">
+											<div  class="semi-italic grisclarofont" for="email">
+												{{ form_label(form.email) }}
+											</div>
+											<div id="email" class="input" name="email" type="text" value="" size="30">
+												{{ form_widget(form.email) }}
+												{{ form_errors(form.email) }}
+											</div><br />
+									</div>
+									<div class="row">
+											<div  class="semi-italic grisclarofont" for="email">
+												{{ form_label(form.subject) }}
+											</div>
+											<div class="input">
+											  	{{ form_widget(form.subject) }}
+											</div><br />
+									</div>
+									<div class="row">
+											<div class="semi-italic grisclarofont" for="message">
+												{{ form_label(form.message) }}
+											</div>
+											<div id="message" name="message" rows="7" cols="30">
+												{{ form_widget(form.message) }}
+												{{ form_errors(form.message) }}
+											</div><br />
+									</div>
+									<div>
+										{{ form_widget(form) }}
+									</div>
+							{{ form_end(form) }}
+							</div>
 	        </div>
         </div>
         <div class="container col-md-12">

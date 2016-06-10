@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -11,76 +12,65 @@ use Symfony\Component\Validator\Constraints\Collection;
 
 class ContactType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-        ->add('name', 'text', array(
-            'attr' => array(
-                'placeholder' => 'Quién eres? :)',
-                'pattern'     => '.{2,}', //minlength
-                'class' => ''
-            )
-        ))
-        ->add('email', 'email', array(
-            'attr' => array(
-                'placeholder' => 'Tú correo electronico.'
-            )
-        ))
-        ->add('topic', 'choice', array(
-            'choices' => array(
-                0 => 'Facturacion',
-                1 => 'Preguntas Laborales',
-                2 => 'Problemas técnicos con la plataforma',
-                3 => 'PQR'
-            ),
-            'multiple' => false,
-            'expanded' => false,
-            'mapped' => false,
-            'label'=>'Asunto',
-            'required' => true,
-            'empty_value' => 'Selecciona una opción'
-        ))
-        ->add('subject', 'hidden', array(
-        ))
-        ->add('message', 'textarea', array(
-            'attr' => array(
-                'cols' => 90,
-                'rows' => 10,
-                'placeholder' => 'Escribe Tu mensaje aquí ...'
-            )
-        ));
+    private $name;
+    private $email;
+
+    public function __construct($name,$email){
+        $this->name  = $name;
+        $this->email = $email;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $collectionConstraint = new Collection(array(
-            'name' => array(
-                new NotBlank(array('message' => 'El nombre no puede ir vacio.')),
-                new Length(array('min' => 10))
-            ),
-            'email' => array(
-                new NotBlank(array('message' => 'El email no puede ir vacio.')),
-                new Email(array('message' => 'Invalid email address.'))
-            ),
-            'topic' => array(
-                new NotBlank(array('message' => 'Debe seleccionar un tema de contacto.')),
-                new Length(array('min' => 3))
-            ),
-            'subject' => array(
-//                 new NotBlank(array('message' => 'El asunto no puede ir vacio.')),
-//                 new Length(array('min' => 3))
-            ),
-            'message' => array(
-                new NotBlank(array('message' => 'El mensaje no puede ir vacio.')),
-                new Length(array('min' => 5))
+
+        $builder
+            ->setMethod($options['method'])
+            ->add('name', 'text',array(
+                    'data'     =>$this->name,
+                    'label'    => 'Nombre:',
+                    'required' => true
+                )
             )
+
+            ->add('email', 'email',array(
+                    'data'    =>$this->email,
+                    'label'   => 'Email:',
+                    'required'=> true
+                )
+            )
+
+            ->add('subject', 'choice', array(
+                    'label'   =>'Con que necesitas ayuda?',
+                    'choices' => array(
+                        0 => 'Preguntas del Registro',
+                        1 => 'Preguntas de pago de nómina y aportes',
+                        2 => 'Preguntas sobre la calculadora salarial',
+                        3 => 'Consulta jurídica',
+                        4 => 'Consulta de planes y precios',
+                        5 => 'Otros'
+                    ),
+                    'multiple' => false,
+                    'expanded' => false,
+                    'mapped'   => false,
+                    'required' => true
+                )
+            )
+        ->add('message', 'textarea', array(
+            'attr' => array(
+                'placeholder' => 'Escribe Tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+            )
+        ))
+
+        ->add('enviar', 'submit', array(
+            'label' => 'Enviar el correo',
+            'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
         ));
 
+    }
 
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
-            'constraints' => $collectionConstraint,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token'
         ));
     }
 

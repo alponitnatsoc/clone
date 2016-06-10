@@ -193,7 +193,7 @@
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Configuración</a>
                             </div>
                             <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
+                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('contact') }}"{% endif %}>Ayuda</a>
                             </div>
                             {% endblock%}
                         </div>
@@ -515,7 +515,14 @@
                     });
 
                     return true;
+                } else if (url.lastIndexOf("/contact") !== -1) {
+                    $.getScript("{{ asset('public/js/contact.js') }}").done(function () {
+                        startContact();
+                    });
+
+                    return true;
                 }
+
                 return false;
             }
             return false;
