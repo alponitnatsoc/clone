@@ -93,6 +93,9 @@ class PersonController extends Controller
                 }
             }
         }
+        else {
+          $form->get('arlExists')->setData($enti->getState(0));
+        }
         $form->get('severances')->setData($actualSeverances);
 
         return $this->render(

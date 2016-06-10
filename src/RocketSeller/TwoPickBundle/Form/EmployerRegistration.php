@@ -96,13 +96,13 @@ class EmployerRegistration extends AbstractType
             ))
             ->add('arlExists', 'choice', array(
                 'choices' => array(
-                    0 => 'Ya tengo ARL  o realizaré el tramite por mi cuenta',
-                    1 => 'No, deseo que se realice la afiliación'
+                    0 => 'Si',
+                    1 => 'No, afílieme'
                 ),
                 'multiple' => false,
-                'expanded' => false,
+                'expanded' => true,
                 'mapped' => false,
-                'label'=>' ',
+                'label'=>'¿Está afiliado?*',
                 'required' => true
             ))
             ->add('save', 'submit', array(
