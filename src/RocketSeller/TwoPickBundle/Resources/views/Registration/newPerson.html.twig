@@ -94,20 +94,20 @@
     <div class="row-fluid" id='registrationFormContainer'>
         {{ form_start(form) }}
 
-        <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li class="active"><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
-            <li><a data-toggle="tab" data-target="#contactData"></a>Datos de contacto</li>
-            <li><a data-toggle="tab" data-target="#workplacesData"></a>Lugares de trabajo</li>
-            <li><a data-toggle="tab" data-target="#employerEntities"></a>Tus entidades</li>
+        <ul id="formNav" class="nav-justified nav-4-tabs">
+            <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
+            <li><a data-toggle="tab" data-target="#employerEntities">Tus entidades</a></li>
         </ul>
 
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in active">
                 {# render the task's only field: description #}
                 <div class="formulario col-xs-12">
-                    <div class="col-sm-11 col-xs-12 blockUpData content-input" style="border-bottom: none;">
+                    <div class="col-md-11 col-sm-12 col-xs-12 blockUpData content-input" style="border-bottom: none;">
                         <div class="col-sm-111 col-sm-offset-1 remember">
-                            <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                            <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                         </div>
 
                         <div class="col-sm-12 col-xs-12">

@@ -224,7 +224,7 @@ class ContractRegistration extends AbstractType
                 'expanded' => false,
                 'label'=>'Frecuencia de Págo',
                 'required'=> true,
-                'placeholder'=>'Selecione una opción'
+                'placeholder'=>'Seleccione una opción'
             ))
             ->add('workplace', new WorkPlaceRegistration(), array(
                 'mapped' => false));
