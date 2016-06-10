@@ -67,7 +67,8 @@
             }
 
             .label-group > h3 {
-                text-align: left;
+                text-align: center;
+                margin-bottom: 20px; 
             }
             .form-select{
                 color: yellow !important;
@@ -77,7 +78,16 @@
                 margin-right: 20px;
             }
 
-
+            .texto-seguridad-msj{
+                width: 70%;
+                margin: 0 auto 35px auto;
+                font-size: 16px;
+                color: #A5A5A5;font-weight: 500;
+                border: 1px solid #E4E4E4;
+                border-radius: 5px;
+                padding: 15px;
+                text-align: center;
+            } 
 
             /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
 
@@ -132,11 +142,11 @@
         {{ form_errors(form) }}
         {{ form_start(form) }}
 
-        <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de contacto</li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities"></a>Seguridad social</li>
+        <ul id="formNav" class="nav-4-tabs nav-justified">
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Seguridad social</a></li>
 
         </ul>
 
@@ -145,7 +155,7 @@
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
                 <div class="formulario col-xs-12" style="border-bottom: none;">
                     <div class="col-sm-12 remember">
-                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        <span ><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
 
                     <div class="col-sm-11 col-xs-12 blockUpData" style="border-bottom: none;">
@@ -1372,7 +1382,7 @@
 
 
             <div id="employeeEntities" class="formulario tab-pane fade in {%   if tab==4 %}active{% endif %}">
-                <ul id="finalStepNav" class="nav nav-tabs nav-justified">
+                <ul id="finalStepNav" class="nav-justified">
                     <li class="active" ><a data-toggle="tab" data-target="#employeeEntitiesTab"></a></li>
                     <li><a data-toggle="tab" data-target="#smsConfirmationTab"></a></li>
                 </ul>
@@ -1509,16 +1519,21 @@
                        }
                     </style>
                     <div id="smsConfirmationTab" class="tab-pane fade in">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 18px;margin-bottom: 35px;color: #A5A5A5;font-weight: 500;border: 1px solid #E4E4E4;border-radius: 5px;padding: 15px;text-align: center;">
-                          &nbsp; Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
-                        </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.verificationCode) }}
+                            <div class="texto-seguridad-msj">
+                            Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
                             </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.verificationCode) }}
+                        
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.verificationCode) }}
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.verificationCode) }}
+                                </div>
                             </div>
+                            
                         </div>
                         <div class="col-sm-12 col-xs-12 center">
                             <a id="btn-verificaion" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Verificar empleado</a>
