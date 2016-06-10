@@ -60,7 +60,7 @@
     <div class="row-fluid" id='registrationFormContainer'>
         {{ form_start(form) }}
 
-        <ul class="nav nav-tabs nav-justified">
+        <ul class="nav-justified nav-3-tabs">
             <li class="active"><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
             <li><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
             <li><a data-toggle="tab" data-target="#workplacesData">Lugares de trabajo</a></li>
@@ -69,8 +69,8 @@
         <div class="tab-content">
             <div id="basicData" class="tab-pane fade in active">
                 {# render the task's only field: description #}
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                <div class="col-sm-12 col-xs-12 remember">
+                    <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <div class="col-sm-10 col-xs-12 blockUpData content-input" style="border-bottom: none;">
                     <div class="col-sm-12 col-xs-12">
@@ -138,8 +138,8 @@
             </div>
 
             <div id="contactData" class="tab-pane fade in">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                <div class="col-sm-12 col-xs-12 remember">
+                    <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                 </div>
                 <br></br>
                 <div class="col-sm-10 col-xs-12 blockUpData">
@@ -197,9 +197,9 @@
             </div>
 
             <div id="workplacesData" class="tab-pane fade h3">
-                <div class="col-sm-12 col-xs-12 block-Intro">
-                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                    <span style="color:#ccc; font-weight:300"><i class="fa fa-info-circle"></i> Se deben incluir todos los sitios de trabajo en donde tu empleado ejercerá sus labores.</span>
+                <div class="col-sm-12 col-xs-12 remember">
+                    <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                    <span><i class="fa fa-info-circle"></i> Se deben incluir todos los sitios de trabajo en donde tu empleado ejercerá sus labores.</span>
                 </div>
 
 
