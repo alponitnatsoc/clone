@@ -88,7 +88,7 @@
                 padding: 15px;
                 text-align: center;
             }
-            
+
             .price-box {
                 margin: 15px 0;
                 width: 100%;
@@ -107,7 +107,7 @@
                 .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; }
                 .nav-tabs.nav-justified > li{ font-size: 11px; line-height: 15px; }
                 .padding-container{ padding: 0 50px; }
-                .priceTotal{ width: 75%; margin: 0 auto; }   
+                .priceTotal{ width: 75%; margin: 0 auto; }
 
             }
 
@@ -311,7 +311,7 @@
                 <div class="col-sm-12 col-xs-12 center">
                     <a id="btn-changeOld" href="{{ path('change_flag_employee', {'ehe': id }) }}" class="btn btn-grey notAjax" >Cambiar antiguedad del empleado</a>
                     <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Siguiente: Datos de contacto</a>
-                    
+
                 </div>
             </div>
 
@@ -643,7 +643,7 @@
                                         <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué debo saber el costo mensual del empleado?</h4>
                                         <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque la forma como determina la ley que deba pagarse a un empleado implica costos adicionales al sueldo que el empleador debe asumir como es el caso de seguridad social, vacaciones, cesantías, dotaciones, etc.lo cual debe ser tenido en cuenta como una provisión que debe ser reservada para el momento en que deban aplicarse.</span>
                                     </div>
-                                
+
 
                                 <!-- Modal -->
                                 <!--div id="calculatorResultsModal" class="modal fade" role="dialog">
@@ -1210,7 +1210,7 @@
                                                         <br />-->
                                                     </div>
                                                     <div class="paymentMethodsOptions" id="putFields_{{ index }}">
-                                                    
+
                                                     </div>
                                                 </div>
 
@@ -1230,12 +1230,12 @@
 
                                         </div>
                                     </div>
-                                    
+
                                         <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                             <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cómo influye el método de pago que se escoja?</h4>
                                             <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Cada uno de los tres métodos garantiza que el pago desde Symplifica le facilite la vida.<br>La diferencia entre cada método determina la forma como se calcula el valor del pago mes a mes y las respectivas notificaciones y recordatorios que usted recibirá. Así mismo determina el mecanismo que Symplifica usará para llevar a cabo los pagos.</span>
                                         </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -1510,7 +1510,7 @@
                                 <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a la cuál quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
 </span>
                             </div>
-                        
+
                     </div>
                     <style>
                       .formulario {
@@ -1527,7 +1527,7 @@
                                 <div class="col-sm-6 label-group">
                                     {{ form_label(form.verificationCode) }}
                                 </div>
-                                <div class="col-sm-6 form-group">
+                                
                                 <div class="col-sm-6 form-group">
                                     {{ form_widget(form.verificationCode) }}
                                 </div>
