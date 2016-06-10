@@ -837,6 +837,13 @@ function changeValues(data) {
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
+  console.log("Plain Sal: " + data.plainSalary);
+  console.log("Trans Cal: " + data.transportCal);
+  console.log("EPS Empl Cal: " + data.EPSEmployerCal);
+  console.log("Pens Empl Cal: " + data.PensEmployerCal);
+  console.log("Caja cal: " + data.cajaCal);
+  console.log("Arl cal: " + data.arlCal);
+
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
   var total_prestaciones = Math.floor(data.cesCal + data.taxCesCal + data.vacationsCal);
 
@@ -1450,8 +1457,8 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       console.log("entre");
-      $('#radio_diario').prop('checked', true);
-      $('#radio_mensual').prop('checked', false);
+      //$('#radio_diario').prop('checked', true);
+      //$('#radio_mensual').prop('checked', false);
     }
     changeValues(resposne);
 
@@ -1460,6 +1467,13 @@ function calculator() {
     //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
+
+$("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("click", function () {
+  $('#radio_diario').prop('checked', true);
+  $('#radio_mensual').prop('checked', false);
+});
+
+
 function checkDate(date) {
     var $permittedDate= $("#datePermitted");
     var dateNow = new Date(
