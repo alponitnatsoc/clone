@@ -24,6 +24,10 @@ class EmployerController extends Controller
     {
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
+    public function documentCompletionAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:Employer:documentsCompletion.html.twig');
+    }
 
     public function showDataAction()
     {
