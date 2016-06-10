@@ -169,27 +169,27 @@
         .subtotalTitle {
             font-size: 16px;
         }
-        
+
         .codigo_referido {
             width: 300px;
             margin: 0 auto;
         }
-        
-        
-        
+
+
+
         /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
 
             @media (max-width: 768px){
-                .label-primer-pago { text-align: center; }            
-            }  
-         
-        
-            @media (max-width: 480px){
-                .codigo_referido { width: 100%;
+                .label-primer-pago { text-align: center; }
             }
-        
-            
-           
+
+
+            @media (max-width: 480px){
+                .codigo_referido { width: 100%; }
+            }
+
+
+
 
     </style>
     {#
@@ -247,14 +247,14 @@
                   {% set employee = employeeData['employee'] %}
                   {% set contrato = employeeData['contrato'] %}
 
+                  {% if employee.state > 0 %}
                   <div class="empleadomed">
                       <div class="left lightpay">{{ employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastname1}}</div>
                       <div class="right numberpay salaryIndVal"
                       data-id="{{ employee.idEmployerHasEmployee }}"></div>
                   </div>
+                  {% endif %}
               {% endfor %}
-
-
             </div>
         </div>
         <div id="salariosmed">
@@ -333,7 +333,7 @@
         <div id="salariosmed">
             <div class="empleadofoot">
                     <div class="left">Total</div>
-                    <div class="right">$14.000</div>
+                    <div id="totalCostAll" class="right"></div>
             </div>
         </div>
     </div>
