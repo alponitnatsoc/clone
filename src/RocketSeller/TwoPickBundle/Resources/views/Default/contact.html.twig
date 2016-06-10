@@ -2,7 +2,7 @@
 
 {% block title %}Contacto{% endblock%}
 
-{% block body %}
+{% block fos_user_content %}
     <header>
         <h1>Contacto Symplifica</h1>
     </header>
@@ -17,7 +17,7 @@
         {% endfor %}
     {% endfor %}
 
-    <form action="{{ path('contact') }}" method="post" {{ form_enctype(form) }} class="blogger">
+    <form action="{{ path('contact') }}" method="post" {{ form_enctype(form) }} class="blogger form-black">
         {{ form_widget(form) }}
         <input type="submit" value="Enviar" />
     </form>

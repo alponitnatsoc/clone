@@ -205,7 +205,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'¿Cuál será su lugar de trabajo?',
+                'label'=>'¿Cuál será su lugar de trabajo?*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))

@@ -27,21 +27,17 @@ class ContactType extends AbstractType
             )
         ))
         ->add('topic', 'choice', array(
-            'attr' => array(
-                'onchange' => 'javascript:setSubject(this);'
+            'choices' => array(
+                0 => 'Facturacion',
+                1 => 'Preguntas Laborales',
+                2 => 'Problemas técnicos con la plataforma',
+                3 => 'PQR'
             ),
-            'choices'  => array(
-                'contactanos@symplifica.com' => 'Facturacion',
-                'info@symplifica.com' => 'Preguntas Laborales',
-                'it@symplifica.com' => 'Problemas técnicos con la plataforma',
-                'servicioalcliente@symplifica.com' => 'PQR'
-            ),
-            'choice_attr' => function($val, $key, $index) {
-                return array("label" => $key);
-            },
-            'label' => 'Tema de contacto',
             'multiple' => false,
             'expanded' => false,
+            'mapped' => false,
+            'label'=>'Asunto',
+            'required' => true,
             'empty_value' => 'Selecciona una opción'
         ))
         ->add('subject', 'hidden', array(
