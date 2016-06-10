@@ -30,6 +30,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
                 "register_employee[employeeHasEmployers][payMethod]": "required",
+                "register_employee[verificationCode]": "required",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "required"/*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
@@ -63,6 +64,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                "register_employee[verificationCode]": "Por favor ingrese el código",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción"/*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -359,7 +361,12 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+
     $('#btn-verificaion').click(function (e) {
+        if (!validator.element($("#register_employee_verificationCode"))) {
+            return false;
+        }
+
         e.preventDefault();
         var form = $("form");
         var url= $(this).attr('href');
@@ -404,6 +411,7 @@ function startEmployee() {
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+
         if (selectedVal == " Trabajador por días"&&sisben==" Si") {
           /*  $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
@@ -447,6 +455,7 @@ function startEmployee() {
             }
         });
 
+
         $(form).find("select[name*='[severances]']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -466,6 +475,27 @@ function startEmployee() {
             }
         });
 
+        $(form).find("input[name*='[severancesExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
+        $(form).find("input[name*='[wealthExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
+        $(form).find("input[name*='[pensionExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
         if (!flagValid) {
             return;
         }
@@ -474,6 +504,29 @@ function startEmployee() {
         }/*else{
             $("#register_employee_entities_ars").val("");
         }*/
+
+        var severancesExists;
+        $("#register_employee_entities_severancesExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            severancesExists = $(this).val();
+          }
+        });
+
+        var wealthExists;
+        $("#register_employee_entities_wealthExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            wealthExists = $(this).val();
+          }
+        });
+
+        var pensionExists;
+        $("#register_employee_entities_pensionExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            pensionExists = $(this).val();
+          }
+        });
+
+
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -481,11 +534,11 @@ function startEmployee() {
                 idContract: $("input[name='register_employee[idContract]']").val(),
                 beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
-                pensionExists: $("#register_employee_entities_pensionExists").val(),
+                pensionExists: pensionExists,
                 wealth:  $("#register_employee_entities_wealth").val(),
-                wealthExists: $("#register_employee_entities_wealthExists").val(),
+                wealthExists: wealthExists,
                 severances:  $("#register_employee_entities_severances").val(),
-                severancesExists:  $("#register_employee_entities_severancesExists").val(),
+                severancesExists:  severancesExists,
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -1633,12 +1686,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
 
             }
         });
@@ -1700,12 +1753,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {

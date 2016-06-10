@@ -35,13 +35,13 @@ class CajaPick extends AbstractType
             ))
             ->add('severancesExists', 'choice', array(
                 'choices' => array(
-                    0 => 'Ya tengo caja de compensación  o realizaré el tramite por mi cuenta',
-                    1 => 'No, deseo que se realice la afiliación'
+                    0 => 'Si',
+                    1 => 'No, afílieme'
                 ),
                 'multiple' => false,
-                'expanded' => false,
-                'label'=>' ',
+                'expanded' => true,
                 'property_path' => 'state',
+                'label'=>'¿Está afiliado?*',
                 'required' => true,
                 'attr'=>array("class"=>'existsS')
             ));

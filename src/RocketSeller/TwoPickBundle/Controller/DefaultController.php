@@ -40,7 +40,7 @@ class DefaultController extends Controller
                         )
                         ->setCc(
                                 array(
-                                    'plinio.romero@symplifica.com' => 'Plinio Romero',
+                                    'andres.ramirez@symplifica.com' => 'Andres Ramirez',
                                     $form->get('email')->getData() => $form->get('name')->getData()
                                 )
                         )
