@@ -117,7 +117,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
 
         $mandato = new DocumentType();
         $mandato->setName('Mandato');
-        $mandato->setRetPdf('mandato');
+        $mandato->setRefPdf('mandato');
         $manager->persist($mandato);
 
         $manager->flush();

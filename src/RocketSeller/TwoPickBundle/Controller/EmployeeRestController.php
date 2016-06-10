@@ -1554,7 +1554,7 @@ class EmployeeRestController extends FOSRestController {
             $exist = false;
             /** @var EmployerHasEntity $rEE */
             foreach ($realEmployerEnt as $rEE) {
-                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "AFP") {
+                if ($rEE->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "ARP") {
                     $rEE->setEntityEntity($realArl);
                     $rEE->setState($arlExists);
                     $exist = true;
