@@ -1,0 +1,115 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {margin: 0; padding: 0}
+a {text-decoration: none}
+
+.grisclarofont  {color: #87868A}
+.naranjafont  {color: #FD9224}
+.azuloscurofont {color: #3c4b5a}
+.azulmediofont {color: #00838c}
+.azulclarofont {color: #00cccb}
+
+.fondo-section {background: #f7f7f7; padding-bottom: 50px;}
+
+.naranja {background: #FD9224}
+.azuloscuro {background: #3c4b5a}
+.azulmedio {background: #00838c}
+.azulclaro {background: #00cccb}
+
+.light-italic {font-family: 'Open Sans', sans-serif;font-weight: 300;font-style:italic}
+.light {font-family: 'Open Sans', sans-serif;font-weight: 300}
+.semi-italic {font-family: 'Open Sans', sans-serif;font-weight: 600;font-style:italic}
+.bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
+.extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
+
+.h2 {
+	font-size: 20px;
+    width: 80%;
+    margin: 0 auto;}
+
+#cont-succesdocs {
+	width: 90%;
+  margin: 0 auto;
+  height: auto;
+  overflow: hidden;
+  padding: 80px 0 0 0;}
+
+#title-siccesdocs {
+	text-align: center;
+	margin: 0 0 50px 0}
+
+#cont-genssuccescont {
+	width: 80%;
+	border-radius: 5px;
+	background: #F7F7F8;
+	margin: 0 auto;
+	padding: 30px
+	}
+
+.pasos {
+	width: 80%;
+    height: auto;
+    overflow: hidden;
+    margin: 15px auto;}
+
+
+.img {
+	float: left;
+	margin-right: 20px}
+
+.pasos-text {
+	float: left;
+    width: 80%;}
+
+#recuerda {
+	clear: both;
+    text-align: center;
+    margin: 20px auto;
+    width: 80%;
+    height: auto;
+    overflow: hidden;}
+
+.centrar {
+	text-align:center;
+	font-size: 25px}
+
+	#posibilidades {
+		margin: 40px 0}
+
+.posibilidades-op {
+	border: 1px #F0F0F1 solid;
+	border-radius: 5px;
+	padding: 10px 0;
+	margin: 5px 0;
+	text-align: center}
+
+.fechasclave {
+	background: #F7F7F8;
+	border-radius:5px;
+	width:31%;
+	float:left;
+	margin: 5px 7px;
+	padding: 15px 0px;
+	height: 70px;}
+
+.border {
+	border: 1px solid #CCC;
+	border-radius:5px;
+	clear:both;
+	margin: 10px 0;
+	padding: 20px 20px}
+
+#fechas {
+	clear: both;
+    text-align: center;
+    margin: 50px auto;
+    width: 100%;
+    height: auto;
+    overflow: hidden;}
+
+  .infogra {
+    text-align: center;
+    border-top: 1px solid #CCC;
+    padding: 25px 0 0 0;
+  }

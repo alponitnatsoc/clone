@@ -1,8 +1,10 @@
 {% extends "::base.html.twig" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ asset('../css/pantallas.css') }}"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
 	<div id="cont-succesdocs">
 		<div id="title-siccesdocs">
-			<img src="perfecto.png"/>
+			<img src="{{ asset('../img/perfecto.png') }}" alt="">
 			<h1 class="azulclarofont light">Haz elegido hacer tu vida más sencilla</h1><br>
 			<h2 class="h2 light grisclarofont">¡Ya eres parte de Symplifica así que es hora de relajarte! Nos encontramos trabajando para ti, espera mientras:</h2>
 		</div>
@@ -10,21 +12,21 @@
 		<div id="texto-succesdocs">
 			<div id="cont-genssuccescont">
 				<div class="pasos">
-					<div class="img"><img src="prieba.png"/></div>
+					<div class="img"><img src="{{ asset('../img/paso1.png') }}" alt=""></div>
 					<div class="pasos-text">
 						<span class="bold azuloscurofont">Primero</span>
 						<p class="light grisclarofont">Verificamos tus datos y tu información.</p>
 					</div>
 				</div>
 				<div class="pasos">
-					<div class="img"><img src="prieba.png"/></div>
+					<div class="img"><img src="{{ asset('../img/paso2.png') }}" alt=""></div>
 					<div class="pasos-text">
 						<span class="bold azuloscurofont">Después</span>
 						<p class="light grisclarofont">Te afiliamos a ti y a tus empleados a entidades de seguridad social (si es necesario).</p>
 					</div>
 				</div>
 				<div class="pasos">
-					<div class="img"><img src="prieba.png"/></div>
+					<div class="img"><img src="{{ asset('../img/paso3.png') }}" alt=""></div>
 					<div class="pasos-text">
 						<span class="bold azuloscurofont">y luego</span>
 						<p class="light grisclarofont">Conocemos más de tu situación y como ayudarte.</p>
@@ -37,6 +39,9 @@
 
 					<br><br><span class="azulmediofont bold">¡Nos veremos pronto!</span></p>
 			</div>
+		</div>
+		<div class="infogra">
+				<button class="btn btn-orange">Conoce más sobre el proceso de contratación</button>
 		</div>
 	</div>
 {% endblock %}
