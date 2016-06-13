@@ -52,8 +52,30 @@ class DefaultController extends Controller
                 */
 
                 $mailer = $this->get('mailer');
+                $sub='';  
+                switch($form->get('subject')->getData()){
+                    case 0:
+                        $sub = 'Preguntas del Registro';
+                        break;
+                    case 1:
+                        $sub ='Preguntas de pago de nómina y aportes';
+                        break;
+                    case 2:
+                        $sub = 'Preguntas sobre la calculadora salarial';
+                        break;
+                    case 3:
+                        $sub = 'Consulta jurídica';
+                        break;
+                    case 4:
+                        $sub = 'Consulta de planes y precios';
+                        break;
+                    case 5:
+                        $sub = 'Otros';
+                        break;
+                }
+                
                 $message = $mailer->createMessage()
-                    ->setSubject($form->get('subject')->getData())
+                    ->setSubject($sub)
                     ->setFrom(
                         array($form->get('email')->getData() => $form->get('name')->getData())
                     )
@@ -72,7 +94,8 @@ class DefaultController extends Controller
                                 'ip' => $request->getClientIp(),
                                 'name' => $form->get('name')->getData(),
                                 'email' => $form->get('email')->getData(),
-                                'message' => $form->get('message')->getData()
+                                'message' => $form->get('message')->getData(),
+                                'subject' => $form->get('subject')->getData()
                             )
                         )
                     );
