@@ -183,15 +183,15 @@
 						{% if employerHasEmployee.state == 4 %}
 							<p> proceso de: {{ employerHasEmployee.employeeEmployee.personPerson.names}} terminado</p>
 						{% else %}
-							<a class="btn btn-orange noAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
+							<a class="btn btn-orange notAjax" href="{{ path('complete_employee',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure })}}"> Terminar proceso </a>
 						{% endif %}
 						{% if documentos == 2 %}
 							<a class="btn btn-bitbucket notAjax" href="{{path('export_all_documents',{'idAction':act.idAction})}}">Descargar Documentos</a>
 							{% if employerHasEmployee and (act.personPerson.employee) %}
 								{% if employerHasEmployee.existentSQL == 0 %}
-									<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee})}}">Agregar a SQL</a>
+									<a class="btn btn-orange notAjax" style="background-color: #8c8c8c; border-color: #8c8c8c" href="{{ path('back_add_sql',{'idEmployerHasEmployee':employerHasEmployee.idEmployerHasEmployee,'procedureId':procedure.idProcedure})}}">Agregar a SQL</a>
 								{% elseif employerHasEmployee.existentSQL == 1 %}
-									<p>ya esta inscrio a SQL </p>
+									<p>ya esta inscrio en SQL </p>
 								{% endif %}
 							{% endif %}
 						{% endif %}

@@ -173,8 +173,10 @@ function startEmployer() {
         }
 
         i = 0;
-        $(form).find(".existsS").each(function () {
-            severancesExist[i++] = $(this).val();
+        $(form).find(".existsS").find("input[type=radio]").each(function () {
+            if($(this).is(":checked")){
+              severancesExist[i++] = $(this).val();
+            }
         });
         //alert(flagValid);
         if (!flagValid) {
@@ -193,6 +195,13 @@ function startEmployer() {
           $("#errorARL").hide();
         }
 
+        var arlExists;
+        $("#register_employer_arlExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            arlExists = $(this).val();
+          }
+        });
+
         $('#createdModal').modal('toggle');
         $.ajax({
             url: $(this).attr('href'),
@@ -201,7 +210,7 @@ function startEmployer() {
                 severances: 			severances,
                 severancesExists: severancesExist,
                 arl: 					arl.val(),
-                arlExists: arlEx.val(),
+                arlExists: arlExists,
                 economicalActivity: 	$(form).find("input[name='register_social_security[economicalActivity]']").val(),
             }
         }).done(function (data) {
@@ -291,7 +300,7 @@ function startEmployer() {
                 day: $(form).find("select[name='register_employer[person][birthDate][day]']").val(),
             }
         }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -350,7 +359,7 @@ function startEmployer() {
                 $("#register_employer_workplaces_0_city").val($("#register_employer_person_city").val());
 
             }
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -483,16 +492,11 @@ function startEmployer() {
                 workDepartment: departments
             }
         }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
-        });
-
-        restrictARL(true);
-        $( "#register_employer_arlExists" ).change(function( event ) {
-            restrictARL(false);
         });
     });
 }
@@ -579,6 +583,10 @@ function addListeners() {
 
     }
     initEntitiesEmployerFields();
+    restrictARL(true);
+    $( "#register_employer_arlExists" ).change(function( event ) {
+        restrictARL(false);
+    });
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -602,7 +610,7 @@ function addSeveranceForm($collectionHolderB, $newLinkLi) {
     $(newForm).find("select").find("> option").each(function() {
         dataSev.push({'label':this.text,'value':this.value});
     });
-    var $actualInsertion=$newLinkLi.prev().find("input[name*='register_employer[severances]']").not("[type='hidden']");
+    var $actualInsertion=$newLinkLi.prev().find("input[name*='register_employer[severances]']").not("[type='hidden']").not("[name*='severancesExists']");
     console.log($actualInsertion);
     addAutoComplete($actualInsertion, dataSev);
     $actualInsertion.rules("add", {
@@ -704,7 +712,13 @@ function initEntitiesEmployerFields(){
 
 function restrictARL(firstTime){
   var selection = "";
-  var arlSelection = $('#register_employer_arlExists').find(":selected").val();
+  var arlSelection;
+  $("#register_employer_arlExists").find("input[type=radio]").each(function () {
+    if($(this).is(":checked") ){
+      arlSelection = $(this).val();
+    }
+  });
+
 
   if(arlSelection==0){
       $("#msgARL").hide();

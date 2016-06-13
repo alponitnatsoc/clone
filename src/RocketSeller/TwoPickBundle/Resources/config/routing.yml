@@ -103,7 +103,7 @@ report_error:
     path:     /backoffice/report/{idAction}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:reportError }
 back_add_sql:
-    path:     /backoffice/add/sql/{idEmployerHasEmployee}
+    path:     /backoffice/add/sql/{idEmployerHasEmployee}/{procedureId}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addToSQL }
 export_documents_person:
     path:     /backoffice/export/person/documents/{idPerson}

@@ -205,7 +205,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'¿Cuál será su lugar de trabajo?',
+                'label'=>'¿Cuál será su lugar de trabajo?*',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -224,7 +224,7 @@ class ContractRegistration extends AbstractType
                 'expanded' => false,
                 'label'=>'Frecuencia de Págo',
                 'required'=> true,
-                'placeholder'=>'Selecione una opción'
+                'placeholder'=>'Seleccione una opción'
             ))
             ->add('workplace', new WorkPlaceRegistration(), array(
                 'mapped' => false));

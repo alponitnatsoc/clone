@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
@@ -164,7 +165,6 @@ use EmployerMethodsTrait;
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             if (in_array($document->getMediaMedia()->getContentType(), $fileTypePermitted)) {
 
                 $medias = $document->getMediaMedia();
@@ -190,6 +190,25 @@ use EmployerMethodsTrait;
                             ->find($idNotification);
                     $notification->setStatus(0);
                     $em->flush();
+                    $request = $this->container->get('request');
+                    $request->setMethod("GET");
+                    $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
+                    $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
+                    if($responsePaymentsMethods["state"]==true){
+                        /** @var Person $person */
+                        $person=$this->getUser()->getPersonPerson();
+                        $notifications=$person->getNotifications();
+                        /** @var Notification $not */
+                        foreach ($notifications as $not ) {
+                            if($not->getAccion()=="Bajar"){
+                                $not->setStatus(0);
+                                $em->persist($not);
+                            }
+                        }
+                        $em->flush();
+
+                        return $this->redirectToRoute('employer_completion_documents');
+                    }
                     return $this->redirect($request->server->get('HTTP_REFERER'));
                 } else {
                     return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
@@ -325,7 +344,7 @@ use EmployerMethodsTrait;
                     'name' => $this->fullName($employeePerson->getIdPerson()),
                     'docType' => $employeePerson->getDocumentType(),
                     'docNumber' => $employeePerson->getDocument(),
-                    'residencia' => $employeePerson->getNeighborhood(),
+                    'residencia' => $employeePerson->getMainAddress(),
                     'tel' => $employeePerson->getPhones()[0]
                 );
 
@@ -387,7 +406,7 @@ use EmployerMethodsTrait;
                     "timeCommitment" => $contract->getTimeCommitmentTimeCommitment()->getName(),
                     "interno" => $interno,
                     "contractType" => $contractType,
-                    "workplace" => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    "workplace" => $contract->getWorkplaceWorkplace()->getMainAddress()." ".$contract->getWorkplaceWorkplace()->getCity()->getName(),
                     "numero" => $contract->getIdContract(),
                     "years" => $years,
                     "months" => $months,

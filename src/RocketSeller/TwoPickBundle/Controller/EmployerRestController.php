@@ -111,6 +111,65 @@ class EmployerRestController extends FOSRestController
     }
 
     /**
+     * Obtener el estado de los documentos de un empleador
+     * @ApiDoc(
+     *     description="Obtener el estado de los documentos del empleador.",
+     *     statusCodes={
+     *     200 = "Returned when succesful",
+     *     400 = "Returned status when Error"
+     *  }
+     * )
+     *
+     * @param integer $idUser - Id del User
+     *
+     * @return View
+     */
+    public function getEmployerDocumentsStateAction($idUser)
+    {
+        /** @var User $user */
+        $user = $this->loadClassById($idUser,"User");
+        $view = View::create();
+        $missingDocs='';
+
+        if($user){
+            /** @var Person $employerPerson */
+            $employerPerson=$user->getPersonPerson();
+            if(!$employerPerson->getDocByType("Cedula"))
+                $missingDocs = 'Cedula Empleador, ';
+            if(!$employerPerson->getDocByType("Rut"))
+                $missingDocs = $missingDocs.'Rut Empleador, ';
+            if(!$employerPerson->getDocByType("Mandato"))
+                $missingDocs = $missingDocs.'Mandato Empleador, ';
+            $numEmp = 0;
+            /** @var EmployerHasEmployee $employerHasEmployee */
+            foreach($employerPerson->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
+                $numEmp+=1;
+                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Cedula")){
+                    $missingDocs = $missingDocs.'Cedula Empleado '.$numEmp.', ';
+                }
+                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Carta autorización Symplifica")){
+                    $missingDocs = $missingDocs.'Carta Autorizacion Empleado '.$numEmp.', ';
+                }
+                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
+                    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
+                }
+            }
+            if($missingDocs==''){
+                $msg = array('state'=>true , 'message'=>"Documentos Completos" , 'missingDocs'=>$missingDocs);
+            }else{
+                $msg = array('state'=>false , 'message'=>"Faltan Documentos" , 'missingDocs'=>$missingDocs);
+            }
+            $view->setData($msg);
+            $view->setStatusCode(200);
+        }else{
+            $msg = array('state'=>false , 'message'=>"User doesn't exist" , 'missingDocs'=>$missingDocs);
+            $view->setData($msg);
+            $view->setStatusCode(404);
+        }
+        return $view;
+    }
+
+    /**
      * Get the validation errors
      *
      * @param ConstraintViolationList $errors Validator error list
@@ -240,6 +299,19 @@ class EmployerRestController extends FOSRestController
         $view->setData(array());
         $view->setStatusCode(200);
         return $view;
+    }
+
+    /**
+     * hace un query de la clase para instanciarla
+     * @param  [type] $parameter id que desea pasar
+     * @param  [type] $entity    entidad a la cual hace referencia
+     */
+    private function loadClassById($parameter, $entity)
+    {
+        $loadedClass = $this->getdoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:'.$entity)
+            ->find($parameter);
+        return $loadedClass;
     }
 
 

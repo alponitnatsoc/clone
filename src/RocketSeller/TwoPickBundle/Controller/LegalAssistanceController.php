@@ -411,17 +411,18 @@ class LegalAssistanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
-        $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-        /** @var EmployerHasEmployee $ehe */
-        foreach ($ehes as $ehe ) {
-            if($ehe->getLegalFF()==-2){
-                $ehe->setLegalFF($flag);
-                $em->persist($ehe);
-                $em->flush();
-                return $this->redirectToRoute("register_employee",array('id'=>$ehe->getEmployeeEmployee()->getIdEmployee()));
+        if($user->getPersonPerson()->getEmployer()!=null){
+            $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            /** @var EmployerHasEmployee $ehe */
+            foreach ($ehes as $ehe ) {
+                if($ehe->getLegalFF()==-2){
+                    $ehe->setLegalFF($flag);
+                    $em->persist($ehe);
+                    $em->flush();
+                    return $this->redirectToRoute("register_employee",array('id'=>$ehe->getEmployeeEmployee()->getIdEmployee()));
+                }
             }
         }
-
         if ($user->getLegalFlag() != -1) {
             $urlToSend = 'edit_profile';
         } else {

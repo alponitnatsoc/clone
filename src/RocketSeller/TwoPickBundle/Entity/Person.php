@@ -116,6 +116,12 @@ class Person
     private $docs;
 
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Notification
+     * @ORM\OneToMany(targetEntity="\RocketSeller\TwoPickBundle\Entity\Notification", mappedBy="personPerson", cascade={"persist"})
+     */
+    private $notifications;
+
+    /**
      * @ORM\OneToMany(targetEntity="SpecificData", mappedBy="personPerson", cascade={"persist"})
      */
     private $specificData;
@@ -168,18 +174,7 @@ class Person
      */
     private $billingAddress;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->billingAddress = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+    
     /**
      * Get idPerson
      *
@@ -897,4 +892,50 @@ class Person
         return $this->billingAddress;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->docs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->action = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->billingAddress = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Notification $notification
+     *
+     * @return Person
+     */
+    public function addNotification(\RocketSeller\TwoPickBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\RocketSeller\TwoPickBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
 }

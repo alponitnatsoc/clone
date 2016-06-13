@@ -2,7 +2,7 @@
 
 {% block title %}Contacto{% endblock%}
 
-{% block body %}
+{% block fos_user_content %}
     <header>
         <h1>Contacto Symplifica</h1>
     </header>
@@ -17,13 +17,24 @@
         {% endfor %}
     {% endfor %}
 
-    <form action="{{ path('contact') }}" method="post" {{ form_enctype(form) }} class="blogger">
-        {{ form_widget(form) }}
-        <input type="submit" value="Enviar" />
-    </form>
+    <div>
+        {{ form_errors(form) }}
+        {{ form_start(form) }}
+
+        <div class="col-sm-12 col-xs-12">
+            <div class="col-sm-5 col-md-6 label-group">
+                {{ form_label(form.subject) }}
+            </div>
+            <div class="col-sm-7 col-md-6 form-group">
+                {{ form_widget(form.subject) }}
+            </div>
+            <!--<img src="/img/typePerson.png">-->
+        </div>
+    </div>
+
     <script>
     function setSubject(element) {
-        $("form #contact_subject").val(element.selectedOptions[0].label);
+        $("form #contact").val(element.selectedOptions[0].label);
     }
     </script>
 {% endblock %}

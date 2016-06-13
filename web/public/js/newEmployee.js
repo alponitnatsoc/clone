@@ -30,6 +30,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
                 "register_employee[employeeHasEmployers][payMethod]": "required",
+                "register_employee[verificationCode]": "required",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "required"/*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
@@ -63,6 +64,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
+                "register_employee[verificationCode]": "Por favor ingrese el código",
                 "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción"/*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
@@ -359,7 +361,12 @@ function startEmployee() {
         e.preventDefault();
         inquiry();
     });
+
     $('#btn-verificaion').click(function (e) {
+        if (!validator.element($("#register_employee_verificationCode"))) {
+            return false;
+        }
+
         e.preventDefault();
         var form = $("form");
         var url= $(this).attr('href');
@@ -404,6 +411,7 @@ function startEmployee() {
         var flagValid = true;
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+
         if (selectedVal == " Trabajador por días"&&sisben==" Si") {
           /*  $(form).find("select[name*='[ars]']").each(function () {
                 if (!validator.element($(this))) {
@@ -447,6 +455,7 @@ function startEmployee() {
             }
         });
 
+
         $(form).find("select[name*='[severances]']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -466,6 +475,27 @@ function startEmployee() {
             }
         });
 
+        $(form).find("input[name*='[severancesExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
+        $(form).find("input[name*='[wealthExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
+        $(form).find("input[name*='[pensionExists]']:checked").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+                return;
+            }
+        });
+
         if (!flagValid) {
             return;
         }
@@ -474,6 +504,29 @@ function startEmployee() {
         }/*else{
             $("#register_employee_entities_ars").val("");
         }*/
+
+        var severancesExists;
+        $("#register_employee_entities_severancesExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            severancesExists = $(this).val();
+          }
+        });
+
+        var wealthExists;
+        $("#register_employee_entities_wealthExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            wealthExists = $(this).val();
+          }
+        });
+
+        var pensionExists;
+        $("#register_employee_entities_pensionExists").find("input[type=radio]").each(function () {
+          if($(this).is(":checked")){
+            pensionExists = $(this).val();
+          }
+        });
+
+
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -481,11 +534,11 @@ function startEmployee() {
                 idContract: $("input[name='register_employee[idContract]']").val(),
                 beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
-                pensionExists: $("#register_employee_entities_pensionExists").val(),
+                pensionExists: pensionExists,
                 wealth:  $("#register_employee_entities_wealth").val(),
-                wealthExists: $("#register_employee_entities_wealthExists").val(),
+                wealthExists: wealthExists,
                 severances:  $("#register_employee_entities_severances").val(),
-                severancesExists:  $("#register_employee_entities_severancesExists").val(),
+                severancesExists:  severancesExists,
                 idEmployee: $("#register_employee_idEmployee").val()
             }
         }).done(function (data) {
@@ -759,10 +812,12 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
+    $("#labelCosto").html("Costo total diario </br> por el empleado");
     calculator();
 });
 
 $('#radio_mensual').click(function() {
+    $("#labelCosto").html("Costo total </br> por el empleado");
     calculator();
 });
 
@@ -784,6 +839,13 @@ function changeValues(data) {
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
+  console.log("Plain Sal: " + data.plainSalary);
+  console.log("Trans Cal: " + data.transportCal);
+  console.log("EPS Empl Cal: " + data.EPSEmployerCal);
+  console.log("Pens Empl Cal: " + data.PensEmployerCal);
+  console.log("Caja cal: " + data.cajaCal);
+  console.log("Arl cal: " + data.arlCal);
+
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
   var total_prestaciones = Math.floor(data.cesCal + data.taxCesCal + data.vacationsCal);
 
@@ -1160,6 +1222,7 @@ var dotation;
 var transportAidDaily;
 var vacations30D;
 var dotationDaily;
+var firstLoad = true;
 function loadConstrains() {
     var constraints = null;
     $.ajax({
@@ -1390,6 +1453,7 @@ function calculator() {
     }
     // Calculate the days again.
     var i = 0;
+
     $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
             i++;
         });
@@ -1397,8 +1461,13 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       console.log("entre");
-      $('#radio_diario').prop('checked', true);
-      $('#radio_mensual').prop('checked', false);
+      if( firstLoad == true){
+        $("#labelCosto").html("Costo total diario </br> por el empleado");
+        firstLoad = false;
+      }
+
+      //$('#radio_diario').prop('checked', true);
+      //$('#radio_mensual').prop('checked', false);
     }
     changeValues(resposne);
 
@@ -1407,6 +1476,13 @@ function calculator() {
     //$("#totalExpensesVal").val(totalExpenses.toFixed(0));
 
 }
+
+$("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("click", function () {
+  $('#radio_diario').prop('checked', true);
+  $('#radio_mensual').prop('checked', false);
+});
+
+
 function checkDate(date) {
     var $permittedDate= $("#datePermitted");
     var dateNow = new Date(
@@ -1633,12 +1709,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_wealth").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
 
             }
         });
@@ -1700,12 +1776,12 @@ function initEntitiesFields(){
             select: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
             },
             focus: function(event, ui) {
                 event.preventDefault();
                 autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("register_employee_entities_severances").val(ui.item.value);
+                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
             }
         });
         $(this).on("focus",function () {

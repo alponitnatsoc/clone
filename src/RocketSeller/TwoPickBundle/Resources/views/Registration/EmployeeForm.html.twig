@@ -29,11 +29,11 @@
             .register_employee_employeeHasEmployers_payMethod label input {
 
             }
-            
+
             .blockStep .txt-AD0 img{
                 margin-top: 25px;
             }
-            
+
             .paymentImage {
                 float: left;
                 margin: 0px 5px 0 0px;
@@ -65,9 +65,10 @@
                 text-align: right !important;
                 padding-top: 10px;
             }
-            
+
             .label-group > h3 {
-                text-align: left;
+                text-align: center;
+                margin-bottom: 20px;
             }
             .form-select{
                 color: yellow !important;
@@ -76,34 +77,52 @@
             .form-inline .checkbox, .form-inline .radio {
                 margin-right: 20px;
             }
-            
-             
-            
+
+            .texto-seguridad-msj{
+                width: 70%;
+                margin: 0 auto 35px auto;
+                font-size: 16px;
+                color: #A5A5A5;font-weight: 500;
+                border: 1px solid #E4E4E4;
+                border-radius: 5px;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .price-box {
+                margin: 15px 0;
+                width: 100%;
+            }
+
+
             /* MEDIA QUERIES PARA RESPONSIVE - 20160608 NATALIABH */
 
             @media (max-width: 768px){
-                .label-group{ text-align: left !important; }  
- 
-            } 
-            
+                .label-group{ text-align: left !important; }
+                .padding-container{ padding: 0 100px; }
+
+            }
+
             @media (max-width: 480px){
-                .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; } 
+                .nav-tabs.nav-justified>li.active{ font-size: 10px; line-height: 15px; }
                 .nav-tabs.nav-justified > li{ font-size: 11px; line-height: 15px; }
- 
-            } 
+                .padding-container{ padding: 0 50px; }
+                .priceTotal{ width: 75%; margin: 0 auto; }
+
+            }
 
             @media (max-width: 375px){
                h2.margin-responsive{ padding: 24px 0 !important; }
             }
-            
+
             @media (max-width: 320px){
                h2.margin-responsive{ padding: 15px 0 !important; }
             }
-                
+
         </style>
     {% endblock %}
     <div class="row">
-        
+
         <div class="col-sm-12 col-xs-12 align-Resp">
             <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
                 <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
@@ -117,7 +136,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 <!--
@@ -132,11 +151,11 @@
         {{ form_errors(form) }}
         {{ form_start(form) }}
 
-        <ul id="formNav" class="nav nav-tabs nav-justified">
-            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData"></a>Datos básicos</li>
-            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData"></a>Datos de contacto</li>
-            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData"></a>Información del contrato</li>
-            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities"></a>Seguridad social</li>
+        <ul id="formNav" class="nav-4-tabs nav-justified">
+            <li {%   if tab==1 %} class="active" {% endif %}><a data-toggle="tab" data-target="#basicData">Datos básicos</a></li>
+            <li {%   if tab==2 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contactData">Datos de contacto</a></li>
+            <li {%   if tab==3 %} class="active" {% endif %}><a data-toggle="tab" data-target="#contractData">Información del contrato</a></li>
+            <li {%   if tab==4 %} class="active" {% endif %}><a data-toggle="tab" data-target="#employeeEntities">Seguridad social</a></li>
 
         </ul>
 
@@ -145,7 +164,7 @@
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
                 <div class="formulario col-xs-12" style="border-bottom: none;">
                     <div class="col-sm-12 remember">
-                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
 
                     <div class="col-sm-11 col-xs-12 blockUpData" style="border-bottom: none;">
@@ -292,14 +311,14 @@
                 <div class="col-sm-12 col-xs-12 center">
                     <a id="btn-changeOld" href="{{ path('change_flag_employee', {'ehe': id }) }}" class="btn btn-grey notAjax" >Cambiar antiguedad del empleado</a>
                     <a id="btn-1" href="{{ path('api_public_post_new_employee_submit_step1') }}" class="btn btn-orange">Siguiente: Datos de contacto</a>
-                    <br /><br />
+
                 </div>
             </div>
 
             <div id="contactData" class="tab-pane fade in {%   if tab==2 %} active {% endif %}">
                 <div class="formulario col-xs-12">
                     <div class="col-sm-12 remember">
-                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
                     </div>
                     <div class="col-sm-11 col-xs-12 content-input blockUpData">
 
@@ -436,14 +455,14 @@
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
                                         <div style="height: auto; overflow:hidden; width: 80%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
-                                         
-                                        
+
+
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
-                                        
+
                                         </div>
-                                        
+
                                         <p class="text-muted" style="font-size: 16px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que conviene firmar el contrato cuando ya exista afiliación a Seguridad Social
-                                        
+
                                         </p>
                                     </div>
                                 </div>
@@ -478,9 +497,6 @@
 
                             <div id="employeeContractTypeTab" class="tab-pane fade in">
                                 <div class="formulario col-xs-12">
-                                    <div class="col-sm-12 remember">
-                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                                    </div>
                                     <div class="col-sm-12 col-xs-12 blockUpData">
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.position) }}
@@ -538,11 +554,6 @@
 
 
                             <div id="contractSalaryTab" class="tab-pane fade in">
-                                <div class="formulario" style="border:0">
-                                    <div class="col-sm-12 remember">
-                                        <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                                    </div>
-                                </div>
                                 <div class="col-sm-12 col-xs-12 complete">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.transportAid) }}
@@ -565,34 +576,38 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-xs-12 days">
+                                <!--<div class="col-sm-12 col-xs-12 days">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.salaryD) }}
                                     </div>
-                                </div>
-                                <div class="col-sm-8 col-sm-offset-2 days" style="margin-bottom: 15px;">
-                                  <div class="priceContainer">
+                                </div>-->
+                                <div class="col-sm-12 days price-box">
+                                  <div class="padding-container col-xs-12 col-sm-6 priceContainer">
+                                      <p class="p">Salario contractual</p>
                                       <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                   </div>
-                                    <div class="text-center form-group">
+                                    <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
+                                        <p class="p">¿Cuanto sera el salario diario?</p>
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
 
                                 <div id ="arsNotAplicable" class="col-sm-12 col-xs-12">
-                                    <span>Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario minimo</span>
+                                    <span>Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario mínimo</span>
                                 </div>
                                 <br/>
-                                <div class="col-sm-12 col-xs-12 complete">
+                                <!--<div class="col-sm-12 col-xs-12 complete">
                                     <div class="text-center">
                                         {{ form_label(form.employeeHasEmployers.salary) }}
                                     </div>
-                                </div>
-                                <div class="col-sm-8 col-sm-offset-2 complete" style="margin-bottom: 15px;width:500px">
-                                    <div class="text-center form-group" style="float: left;width: 45%;margin-right: 5px;">
+                                </div>-->
+                                <div class="col-sm-12 complete">
+                                    <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
+                                        <p class="p">¿Cuánto será el salario mensual?</p>
                                         {{ form_widget(form.employeeHasEmployers.salary) }}
                                     </div>
-                                    <div class="priceContainer">
+                                    <div class="padding-container col-xs-12 col-sm-6 priceContainer">
+                                        <p class="p">Esto recibirá neto el empleado mensualmente</p>
                                         <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
                                     </div>
                                 </div>
@@ -601,7 +616,7 @@
                                 <div id="cont-resumenpagos">
                                     <div class="col-sm-12 col-xs-12 text-center resumenpagos">
                                         <br />
-                                        <p style="font-weight:100">Resumen <br />del pago mensual:</p>
+                                        <p id="labelCosto" style="font-weight:100">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
                                             <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
@@ -624,13 +639,11 @@
                                         <a id="btn-3" href="{{ path('api_public_post_new_employee_submit_step3') }}" class="btn btn-orange">Siguiente: Método de pago</a>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <br><br>
                                     <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                         <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué debo saber el costo mensual del empleado?</h4>
                                         <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque la forma como determina la ley que deba pagarse a un empleado implica costos adicionales al sueldo que el empleador debe asumir como es el caso de seguridad social, vacaciones, cesantías, dotaciones, etc.lo cual debe ser tenido en cuenta como una provisión que debe ser reservada para el momento en que deban aplicarse.</span>
                                     </div>
-                                </div>
+
 
                                 <!-- Modal -->
                                 <!--div id="calculatorResultsModal" class="modal fade" role="dialog">
@@ -731,11 +744,11 @@
 
 /*tooltip hover*/
 
-.tooltip {
+.tooltip1 {
     position: relative;
 }
 
-.tooltip .tooltiptext {
+.tooltip1 .tooltiptext {
     visibility: hidden;
     width: 120px;
     background-color: #7DB8BE;
@@ -752,7 +765,7 @@
     margin-left: -60px;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip1:hover .tooltiptext {
     visibility: visible;
 }
 
@@ -770,7 +783,7 @@
         	<h4 style="color:#5D5D5D" class="semi-italic">¿Cómo quieres ver los datos?</h4>
         	<form action="" class="light">
                   <input id="radio_diario" type="radio" name="frecuency" value="Diario"> Diario
-                  <input id="radio_mensual" checked="checked" class="left" type="radio" name="frecuency" value="Mensual"> Mensual
+                  <input style="margin: 0 0 0 30px;" id="radio_mensual" checked="checked" type="radio" name="frecuency" value="Mensual"> Mensual
             </form>
         </div>
 
@@ -778,10 +791,10 @@
         	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td>
-                    	<table id="contenedor-tabla" align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    	<table align="center" border="0" cellpadding="0" cellspacing="0">
                              <tr><!---------------------------------------------empieza Ingresos promedio del empleado (sin prestaciones)-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Ingresos promedio del empleado (sin prestaciones)
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
@@ -871,7 +884,7 @@
                              </tr><!------------------------------------termina Ingresos promedio del empleado (sin prestaciones)-->
                              <tr><!--------------------------------------Empieza Pagos recurrentes promedio diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Pagos recurrentes promedio diarios
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
@@ -900,7 +913,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="concepto" width="260" valign="top">
-                                                         Auxilio de trasnporte
+                                                         Auxilio de transporte
                                                         </td>
                                                         <td id="subsidio_transporte2" class="concepto" width="260" valign="top">
                                                          $68.140
@@ -989,14 +1002,14 @@
                              </tr><!----------------------------------------------------------------termina Pagos recurrentes promedio diarios-->
                              <tr><!----------------------------------------------------------------Empieza Prestaciones promedio por diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip">
+                                	<p class="centrar tooltip1">
                                     	&#10067; Prestaciones promedio por diario
                                     <span class="tooltiptext light">Aquí va el texto de ayuda</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                              <td class="franja-gris">
-                                              Cesantias (+)
+                                              Cesantías (+)
                                              </td>
                                          </tr>
                                           <tr><!--------------empieza doble columna cesantias------------------------->
@@ -1004,7 +1017,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="concepto" width="260" valign="top">
-                                                         Cesantias
+                                                         Cesantías
                                                         </td>
                                                         <td id="cesantias" class="concepto" width="260" valign="top">
                                                          $68.812
@@ -1018,7 +1031,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="concepto" width="260" valign="top">
-                                                         Intereses de cesantias
+                                                         Intereses de cesantías
                                                         </td>
                                                         <td id="int_cesantias" class="concepto" width="260" valign="top">
                                                          $68.140
@@ -1070,7 +1083,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="pagos" width="260" valign="top">
-                                                         Total pretaciones
+                                                         Total prestaciones
                                                         </td>
                                                         <td id="total_prestaciones" class="pagos" width="260" valign="top">
                                                          $68.812
@@ -1101,7 +1114,7 @@
                                 <div class="formulario" style="border-bottom:0px">
                                     <div class="formulario row">
                                         <div class="col-sm-12 col-xs-12 complete">
-                                            <div class="text-center">
+                                            <div class="text-center" style="padding: 0 0 30px 0;font-size: 19px;font-weight: 100;color: #00858C;">
                                                 ¿Cuál será el metodo de pago para tu empleado?
                                             </div>
                                         </div>
@@ -1196,7 +1209,9 @@
                                                         <a style="color:#00cdcc;text-decoration: none;" href="#"><i style="color:#00cdcc; font-size: 13px;" class="fa fa-info-circle"></i> Más Información</a>
                                                         <br />-->
                                                     </div>
-                                                    <div class="paymentMethodsOptions" id="putFields_{{ index }}"></div>
+                                                    <div class="paymentMethodsOptions" id="putFields_{{ index }}">
+
+                                                    </div>
                                                 </div>
 
                                             {% endfor %}
@@ -1215,13 +1230,12 @@
 
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <br><br>
+
                                         <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                             <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cómo influye el método de pago que se escoja?</h4>
                                             <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Cada uno de los tres métodos garantiza que el pago desde Symplifica le facilite la vida.<br>La diferencia entre cada método determina la forma como se calcula el valor del pago mes a mes y las respectivas notificaciones y recordatorios que usted recibirá. Así mismo determina el mecanismo que Symplifica usará para llevar a cabo los pagos.</span>
                                         </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -1372,7 +1386,7 @@
 
 
             <div id="employeeEntities" class="formulario tab-pane fade in {%   if tab==4 %}active{% endif %}">
-                <ul id="finalStepNav" class="nav nav-tabs nav-justified">
+                <ul id="finalStepNav" class="nav-justified">
                     <li class="active" ><a data-toggle="tab" data-target="#employeeEntitiesTab"></a></li>
                     <li><a data-toggle="tab" data-target="#smsConfirmationTab"></a></li>
                 </ul>
@@ -1405,9 +1419,6 @@
                             {% else %}
                                 {% set sname = "" %}
                             {% endif %}
-                            <div class="col-sm-12 col-xs-12 remember">
-                                <span style="color:#666; font-weight:300"><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-                            </div>
                             <div class="col-sm-10 col-xs-12 blockUpData">
                                 <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                                     <div class="hidden">
@@ -1494,14 +1505,12 @@
                             <br/>
                         </div>
 
-                        <div class="row">
-                            <br><br>
                             <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                 <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
                                 <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a la cuál quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
 </span>
                             </div>
-                        </div>
+
                     </div>
                     <style>
                       .formulario {
@@ -1509,20 +1518,25 @@
                        }
                     </style>
                     <div id="smsConfirmationTab" class="tab-pane fade in">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 18px;margin-bottom: 35px;color: #A5A5A5;font-weight: 500;border: 1px solid #E4E4E4;border-radius: 5px;padding: 15px;text-align: center;">
-                          &nbsp; Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
-                        </div>
                         <div class="col-sm-12 col-xs-12">
-                            <div class="col-sm-6 label-group">
-                                {{ form_label(form.verificationCode) }}
+                            <div class="texto-seguridad-msj">
+                            Por tu seguridad te enviamos un mensaje de texto a tu celular para que valides la inscripción de esta cuenta. Si en dos minutos no has recibido el mensaje puedes solicitarlo nuevamente.
                             </div>
-                            <div class="col-sm-6 form-group">
-                                {{ form_widget(form.verificationCode) }}
+
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="col-sm-6 label-group">
+                                    {{ form_label(form.verificationCode) }}
+                                </div>
+
+                                <div class="col-sm-6 form-group">
+                                    {{ form_widget(form.verificationCode) }}
+                                </div>
                             </div>
+
                         </div>
                         <div class="col-sm-12 col-xs-12 center">
-                            <a id="btn-verificaion" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Verificar empleado</a>
                             <a id="btn-reenviar" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Pedir nuevo código</a>
+                            <a id="btn-verificaion" href="{{ path('api_public_post_verify_verification_code') }}" class="btn btn-orange" >Continuar</a>
                             <br/>
                             <br/>
                         </div>
@@ -1709,7 +1723,8 @@
                     </div>
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-8 col-md-push-2">
-                            La fechas del contrato no pueden ser anteriores a el día sugerido por symplifica!
+                            ¡Las fechas del contrato no pueden ser anteriores al día sugerido por Symplifica!
+                          </br></br> Si tu empleado empezó labores previamente, regresa y marcalo de la forma correspondiente.
                         </div>
                     </div>
                 </div>

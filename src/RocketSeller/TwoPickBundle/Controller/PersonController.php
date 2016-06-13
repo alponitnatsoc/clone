@@ -90,6 +90,9 @@ class PersonController extends Controller
 										$form->get('arlExists')->setData($enti->getState());
                 }else {
                     $actualSeverances->add($enti);
+                    if($enti->getEntityEntity()==null){
+                      $form->get('arlExists')->setData(0);
+                    }
                 }
             }
         }

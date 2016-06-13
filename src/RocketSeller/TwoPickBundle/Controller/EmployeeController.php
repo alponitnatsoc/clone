@@ -394,6 +394,10 @@ class EmployeeController extends Controller
                     $employeeForm->get('severancesExists')->setData($enti->getState());
                 }
             }
+        } else {
+              $employeeForm->get('wealthExists')->setData(0);
+              $employeeForm->get('pensionExists')->setData(0);
+              $employeeForm->get('severancesExists')->setData(0);
         }
         $todayPlus = new DateTime();
         $request = $this->container->get('request');
