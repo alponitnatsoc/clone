@@ -46,6 +46,40 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
+    public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip, $path = null)
+    {
+        $msg = array(
+            'name' => $name,
+            'toEmail' => $toEmail,
+            'fromEmail' =>$fromEmail,
+            'subject' =>$subject,
+            'message' =>$message,
+            'ip'=> $ip
+        );
+        $context = $this->twig->mergeGlobals($msg);
+        $template = $this->twig->loadTemplate($templateName);
+        $subject = $template->renderBlock('subject', $context);
+        $textBody = $template->renderBlock('body_text', $context);
+        $htmlBody = $template->renderBlock('body_html', $context);
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom($fromEmail)
+            ->setTo($toEmail);
+        
+        if ($path) {
+            $message->attach(\Swift_Attachment::fromPath($path));
+        }
+
+        if (!empty($htmlBody)) {
+            $message->setBody($htmlBody, 'text/html')
+                ->addPart($textBody, 'text/plain');
+        } else {
+            $message->setBody($textBody);
+        }
+
+        return $this->mailer->send($message);
+    }
+
     public function sendResettingEmailMessage(UserInterface $user)
     {
         $template = $this->parameters['template']['resetting'];
@@ -84,7 +118,7 @@ class TwigSwiftMailer implements MailerInterface
 
         return $this->sendMessage($templateName, $context, $fromEmail, $toEmail, $path);
     }
-
+    
     /**
      * @param string $templateName
      * @param array  $context
@@ -99,6 +133,7 @@ class TwigSwiftMailer implements MailerInterface
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);
         $htmlBody = $template->renderBlock('body_html', $context);
+        
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
