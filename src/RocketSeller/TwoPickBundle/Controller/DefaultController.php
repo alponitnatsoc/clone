@@ -62,7 +62,7 @@ class DefaultController extends Controller
                         break;
                 }
                 $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'andres.ramirez@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp());
+                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'contactanos@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp());
 
                 /*
                 $mailer = $this->get('mailer');
