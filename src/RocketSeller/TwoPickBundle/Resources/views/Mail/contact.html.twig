@@ -1,171 +1,58 @@
-<!DOCTYPE html>
-<html>
-
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}{{ subject }}{% endautoescape %}{% endblock %}
+{% block body_text %}
+    {% autoescape false %}
+        &#161;Mensaje enviado desde {{ ip }}&#33;
+        {{ name }} Tiene una duda sobre {{ subject }}
+    {% endautoescape %}
+{% endblock %}
+{% block body_html %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>*|{{ subject }}|*</title>
-    <style type="text/css">
-        /* /\/\/\/\/\/\/\/\/ CLIENT-SPECIFIC STYLES /\/\/\/\/\/\/\/\/ */
-        #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" message */
-        .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
-        .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* Force Hotmail to display normal line spacing */
-        body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
-        table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;} /* Remove spacing between tables in Outlook 2007 and up */
-        img{-ms-interpolation-mode:bicubic;} /* Allow smoother rendering of resized image in Internet Explorer */
-        /* /\/\/\/\/\/\/\/\/ RESET STYLES /\/\/\/\/\/\/\/\/ */
-
-
-
-        html, body {
-            margin:0;
-            padding:0;
-            height:100%;
-            font-family: "open sans";
-        }
-        #general {
-
-            min-height:100%;
-            position:relative;
-        }
-
-        #header {
-            width: 100%;
-            height: 400px;
-            background-image: url('http://symplifica.com/public/img/foto_mail_inscripcion.jpg');
-            background-size: 100% 100%;
-        }
-
-        #header img{
-            width: 100%;
-        }
-
-        #logo {
-            background-color: #3C4B59;
-        }
-
-        #logo img {
-            margin-left: 62%;
-            width: 39%;
-            min-width: 270px;
-            max-width: 350px;
-        }
-
-        #main_texto {
-            width: 30%;
-            margin-left: 64.6%;
-            color: #828181;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            max-width: 350px;
-            font-size: 17px;
-        }
-
-        #main {
-
-            padding-bottom:60px;
-        }
-
-
-        #texto_azul {
-            color: #3Acdcb;
-            display: inline;
-        }
-        #texto_resaltado {
-            font-weight: bold;
-            display: inline;
-            font-style: italic;
-        }
-
-        #footer {
-            background-color: #3Acdcb;
-            position: absolute;
-            bottom: -8;
-            padding-bottom: 8px;
-            width: 100%;
-            height: 60px;
-        }
-
-
-        #texto_footer{
-            position: relative;
-            margin-left: 64.6%;
-            margin-top: 0px;
-            color: #DAF4F3;
-            font-size: 14px;
-        }
-
-
-
-        @media screen and (max-width: 740px) {
-            #main_texto {
-                margin-left: 20%;
-                width: 50%;
-            }
-            #logo img {
-                margin-left: 17%;
-            }
-            #texto_footer{
-                margin-left: 20%;
-            }
-        }
-
-        @media screen and (max-width: 450px) {
-            #main_texto {
-                margin-left: 5%;
-                width: 75%;
-            }
-            #logo img {
-                margin-left: 5%;
-            }
-            #texto_footer{
-                margin-left: 5%;
-            }
-        }
-
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Symplifica</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic' rel='stylesheet' type='text/css'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet" type="text/css">
+<title>Seccion de ayuda symplifica</title>
+<style type="text/css">
+  @media only screen and (max-width: 480px) {
+    table {width: 100% !important}
+  }
+</style>
 </head>
-<body>
-<div id = "general">
-
-    <div id = "header">
-
-    </div>
-
-    <div id = "main">
-        <div id = "main_texto">
-            <div>
-                <h4>Mensaje de  {{ name }}</h4>
-                <h5>Enviado desde la zona de contacto de symplifica</h5>
-                <h5>IP: {{ ip }}</h5>
-                <h5>Email: {{ email }}</h5>
-                <h5>Asunto: {{ subject }}</h5>
-                <br/>
-
-                {{ message|raw }}
-            </div>
-        </div>
-        <div style="clear: both;"></div>
-        <div id = "logo">
-            <img src="http://www.symplifica.com/public/img/symplifica_logo.png">
-        </div>
-        <div style="clear: both;"></div>
-
-    </div>
-
-    <div id = "footer">
-        <div id = "texto_footer">
-            <p>&copy; *|CURRENT_YEAR|* symplifica.<br>
-                Todos los derechos reservados.</p>
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-</div>
+<body style="margin: 0; padding: 0;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        <tr><!--------------------------------------------header----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
+        </tr><!--------------------------------------------fin header----------------------------------->
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 25px;color:#5D5D5D">
+                            {{ dump(name) }}
+                        </td>
+                    </tr>
+                    <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 20px;color:#858789">
+                            Dudas sobre {{ subject }}
+                        </td>
+                    </tr>
+                     <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
+                    <tr>
+                        <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 300; font-style:italic; font-size: 15px;color:#858789">
+                            {{ message }}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr><!--------------------------------------------footer----------------------------------->
+            {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
+        </tr><!--------------------------------------------fin footer----------------------------------->
+    </table>
 </body>
 </html>
-
-
+{% endblock %}
