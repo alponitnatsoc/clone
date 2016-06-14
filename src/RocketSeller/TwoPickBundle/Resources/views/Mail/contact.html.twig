@@ -2,7 +2,7 @@
 {% block subject %}{% autoescape false %}{{ subject }}{% endautoescape %}{% endblock %}
 {% block body_text %}
     {% autoescape false %}
-        &#161;Mensaje enviado desde {{ ip }}&#33;
+        &#161;Ayuda&#33;
         {{ name }} Tiene una duda sobre {{ subject }}
     {% endautoescape %}
 {% endblock %}
@@ -22,16 +22,17 @@
 </head>
 <body style="margin: 0; padding: 0;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
-        <tr><!--------------------------------------------header----------------------------------->
-            {% include "RocketSellerTwoPickBundle:EmailTemplates:header.txt.twig" %}
-        </tr><!--------------------------------------------fin header----------------------------------->
         <tr>
             <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
                     <tr>
                         <td align="center" style="font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 25px;color:#5D5D5D">
-                            {{ dump(name) }}
+                            Mensaje Enviado desde la zona de ayuda de Symplifica.<br>
+                            Nombre: {{ name }}<br>
+                            IP: {{ ip }}<br>
+                            Email: {{ email }}<br>
+
                         </td>
                     </tr>
                     <tr><td style="font-size: 0; line-height: 0;" height="30">&nbsp;</td></tr><!--espacios-->
@@ -49,9 +50,6 @@
                 </table>
             </td>
         </tr>
-        <tr><!--------------------------------------------footer----------------------------------->
-            {% include "RocketSellerTwoPickBundle:EmailTemplates:footer.txt.twig" %}
-        </tr><!--------------------------------------------fin footer----------------------------------->
     </table>
 </body>
 </html>
