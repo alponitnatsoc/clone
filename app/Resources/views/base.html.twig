@@ -60,7 +60,48 @@
                 '//www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');</script>
+
 <!-- End Google Tag Manager -->
+
+<!-- Start Intercom JS -->
+<script>
+  window.intercomSettings = { app_id: "fnfuyjdu" };
+</script>
+
+<script>(function(){
+  var w=window;var ic=w.Intercom;
+  if(typeof ic==="function"){
+    ic('reattach_activator');ic('update',intercomSettings);
+  }
+  else{
+    var d=document;
+    var i=function(){
+      i.c(arguments)
+    };
+    i.q=[];
+    i.c=function(args){
+      i.q.push(args)
+    };
+    w.Intercom=i;
+    function l(){
+      var s=d.createElement('script');
+      s.type='text/javascript';
+      s.async=true;
+      s.src='https://widget.intercom.io/widget/fnfuyjdu';
+      var x=d.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s,x);
+    }
+    if(w.attachEvent){
+      w.attachEvent('onload',l);
+    }
+    else{
+      w.addEventListener('load',l,false);
+    }
+  }
+})()</script>
+
+<!-- End Intercom JS -->
+
 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
     <nav class="navbar navbar-inverse navbar-fixed-top interna" role="navigation">
         <div class="row-fluid up-Help-Phone">
@@ -193,7 +234,7 @@
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Configuración</a>
                             </div>
                             <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_help') }}"{% endif %}>Ayuda</a>
+                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('contact') }}"{% endif %}>Ayuda</a>
                             </div>
                             {% endblock%}
                         </div>
@@ -515,7 +556,14 @@
                     });
 
                     return true;
+                } else if (url.lastIndexOf("/contact") !== -1) {
+                    $.getScript("{{ asset('public/js/contact.js') }}").done(function () {
+                        startContact();
+                    });
+
+                    return true;
                 }
+
                 return false;
             }
             return false;

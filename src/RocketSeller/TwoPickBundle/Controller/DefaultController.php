@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Form\Type\ContactType;
@@ -19,53 +20,97 @@ class DefaultController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
 
-    public function contactAction(Request $query)
+    public function contactAction(Request $request)
     {
-        $form = $this->createForm(new ContactType());
+        $helpCategories = $this->getDoctrine()
+            ->getRepository('RocketSellerTwoPickBundle:HelpCategory')
+            ->findAll();
 
-        if ($query->isMethod('POST')) {
-//             $form->handleRequest($query);
-            $form->bind($query);
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        /** @var User $user */
+        $user = $this->getUser();
+        $name = $user->getPersonPerson()->getFullName();
+        $email = $user->getEmail();
+
+        $form = $this->createForm(new ContactType($name,$email), array('method'=> 'POST'));
+        
+
+        $form->handleRequest($request);
+
+        if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
+                /*$smailer = $this->get('symplifica.mailer.twig_swift');
+                $send = $smailer->sendEmail($this->getUser(),
+                    'RocketSellerTwoPickBundle:Mail:contact.html.twig', array(
+                        'ip' => $request->getClientIp(),
+                        'name' => $form->get('name')->getData(),
+                        'email' => $form->get('email')->getData(),
+                        'message' => $form->get('message')->getData())
+                    ,$form->get('email'), 'andres.ramirez@symplifica.com');
+                */
+
                 $mailer = $this->get('mailer');
+                $sub='';  
+                switch($form->get('subject')->getData()){
+                    case 0:
+                        $sub = 'Preguntas del Registro';
+                        break;
+                    case 1:
+                        $sub ='Preguntas de pago de nómina y aportes';
+                        break;
+                    case 2:
+                        $sub = 'Preguntas sobre la calculadora salarial';
+                        break;
+                    case 3:
+                        $sub = 'Consulta jurídica';
+                        break;
+                    case 4:
+                        $sub = 'Consulta de planes y precios';
+                        break;
+                    case 5:
+                        $sub = 'Otros';
+                        break;
+                }
+                
                 $message = $mailer->createMessage()
-                        ->setSubject($form->get('subject')->getData())
-                        ->setFrom(
-                                array($form->get('email')->getData() => $form->get('name')->getData())
+                    ->setSubject($sub)
+                    ->setFrom(
+                        array($form->get('email')->getData() => $form->get('name')->getData())
+                    )
+                    ->setTo(
+                        array('andres.ramirez@symplifica.com')
+                    )
+                    ->setCc(
+                        array(
+                            'andres.ramirez@symplifica.com' => 'Andres Felipe Ramirez',
+                            $form->get('email')->getData() => $form->get('name')->getData()
                         )
-                        ->setTo(
-                                array(
-                                    $form->get('topic')->getData() => $form->get('subject')->getData()
-                                )
-                        )
-                        ->setCc(
-                                array(
-                                    'andres.ramirez@symplifica.com' => 'Andres Ramirez',
-                                    $form->get('email')->getData() => $form->get('name')->getData()
-                                )
-                        )
-                        ->setBody(
+                    )
+                    ->setBody(
                         $this->renderView(
-                                'RocketSellerTwoPickBundle:Mail:contact.html.twig', array(
-                            'ip' => $query->getClientIp(),
-                            'name' => $form->get('name')->getData(),
-                            'email' => $form->get('email')->getData(),
-                            'message' => $form->get('message')->getData(),
-                            'subject' => $form->get('subject')->getData()
-                                )
+                            'RocketSellerTwoPickBundle:Mail:contact.html.twig', array(
+                                'ip' => $request->getClientIp(),
+                                'name' => $form->get('name')->getData(),
+                                'email' => $form->get('email')->getData(),
+                                'message' => $form->get('message')->getData(),
+                                'subject' => $form->get('subject')->getData()
+                            )
                         )
-                );
+                    );
 
                 $mailer->send($message);
 
-                $query->getSession()->getFlashBag()->add('success', 'Tu email ha sido enviado. Gracias');
+                $request->getSession()->getFlashBag()->add('success', 'Tu email ha sido enviado. Gracias');
 
                 return $this->redirect($this->generateUrl('contact'));
             }
         }
 
-        return $this->render('RocketSellerTwoPickBundle:Default:contact.html.twig', array(
-                    'form' => $form->createView()
+        return $this->render('RocketSellerTwoPickBundle:General:help.html.twig', array(
+                    'form' => $form->createView(),
+                    'helpCategories'=>$helpCategories
         ));
     }
 

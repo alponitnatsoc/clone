@@ -360,15 +360,19 @@
                     <h4>Datos de seguridad social</h4>
                     <div class="col-sm-8 col-sm-offset-2 recuadro-ssocial">
                         <div class="col-sm-6 left">
+                          {% if entidades["EPS"].name is defined %}
                             <p class="title"><i><strong>Eps</strong></i></p>
+                          {% endif %}
                             <p class="title"><i><strong>Fondo de pensiones</strong></i></p>
-                            <p class="title"><i><strong>Arl</strong></i></p>
+                            <!--<p class="title"><i><strong>Arl</strong></i></p>-->
                             <p class="title"><i><strong>Caja de compensación</strong></i></p>
                         </div>
                         <div class="col-sm-6 right">
+                          {% if entidades["EPS"].name is defined %}
                             <p>{{entidades["EPS"].name}}</p>
+                          {% endif %}
                             <p>{{entidades["Pension"].name}}</p>
-                            <p>{{entidades["ARL"].name}}</p>
+                            <!--<p>{{entidades["ARL"].name}}</p>-->
                             <p>{{entidades["CC"].name}}</p>
                         </div>
                     </div>
@@ -471,7 +475,9 @@
                                 {{form_row(form.city)}}
                             </div>
                             <input id="register_beneficiary_mainAddress" name="idEmployee" required="required" class="form-control" type="hidden" hidden="true" value="{{employee.idEmployee}}">
-                            <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
+                            {% if entidades["EPS"].name is defined %}
+                              <input id="register_beneficiary_mainAddress" name="idEPS" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["EPS"].idEntity}}">
+                            {% endif %}
                             <input id="register_beneficiary_mainAddress" name="idCC" required="required" class="form-control" type="hidden" hidden="true" value="{{entidades["CC"].idEntity }}">
                             <input id="" name="idBeneficiary" required="required" class="form-control" type="hidden" hidden="true" value="">
                             <div class="col-sm-12 col-xs-12 center">

@@ -412,7 +412,7 @@ download_certificate_post:
 
 show_help:
     path:     /help
-    defaults: { _controller: RocketSellerTwoPickBundle:Home:help }
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact }
 
 help_detail:
     path:     /help/detail/{id}

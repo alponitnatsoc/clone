@@ -168,7 +168,6 @@ function startSubscriptionChoise() {
                   }
                 });
 
-
                 $("#totalSeguridadSocial").html(getPrice(total_seguridad_social));
                 $("#sueldos").html(getPrice(total));
                 $("#primerPago").html(getPrice(total));
@@ -368,7 +367,6 @@ function fillTable(){
             }
           });
 
-
           $("#totalSeguridadSocial").html(getPrice(total_seguridad_social));
 
           $("#sueldos").html(getPrice(total));
@@ -402,6 +400,10 @@ function fillTable(){
       }
       else {
         endValue = producto['PS1'];
+      }
+
+      if(count_employee >= 3){
+        endValue = endValue * 0.9;
       }
       $(this).html(getPrice(endValue));
     } else {
