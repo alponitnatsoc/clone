@@ -94,7 +94,7 @@ class DefaultController extends Controller
 
                 $mailer->send($message);*/
 
-                $request->getSession()->getFlashBag()->add('success', 'Tu email ha sido enviado. Gracias');
+                $this->addFlash('success', 'Tu email ha sido enviado. Gracias');
 
                 return $this->redirect($this->generateUrl('contact'));
             }
