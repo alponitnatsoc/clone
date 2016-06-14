@@ -94,7 +94,7 @@ class DefaultController extends Controller
 
                 $mailer->send($message);*/
 
-                $this->addFlash('success', 'Tu email ha sido enviado. Gracias');
+                $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
 
                 return $this->redirect($this->generateUrl('contact'));
             }
