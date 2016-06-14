@@ -42,11 +42,11 @@ class ContactType extends AbstractType
             ->add('subject', 'choice', array(
                     'label'   =>'Con que necesitas ayuda?',
                     'choices' => array(
-                        0 => 'Preguntas del Registro',
-                        1 => 'Preguntas de pago de nómina y aportes',
-                        2 => 'Preguntas sobre la calculadora salarial',
+                        0 => 'Registro',
+                        1 => 'Nómina y aportes',
+                        2 => 'Calculadora salarial',
                         3 => 'Consulta jurídica',
-                        4 => 'Consulta de planes y precios',
+                        4 => 'Planes y precios',
                         5 => 'Otros'
                     ),
                     'multiple' => false,
@@ -62,7 +62,7 @@ class ContactType extends AbstractType
         ))
 
         ->add('enviar', 'submit', array(
-            'label' => 'Enviar el correo',
+            'label' => 'Enviar',
             'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
         ));
 

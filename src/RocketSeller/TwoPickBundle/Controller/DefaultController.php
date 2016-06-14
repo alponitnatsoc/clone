@@ -62,7 +62,7 @@ class DefaultController extends Controller
                         break;
                 }
                 $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'andres.ramirez@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp());
+                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'contactanos@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp());
 
                 /*
                 $mailer = $this->get('mailer');
@@ -94,7 +94,7 @@ class DefaultController extends Controller
 
                 $mailer->send($message);*/
 
-                $request->getSession()->getFlashBag()->add('success', 'Tu email ha sido enviado. Gracias');
+                $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
 
                 return $this->redirect($this->generateUrl('contact'));
             }
