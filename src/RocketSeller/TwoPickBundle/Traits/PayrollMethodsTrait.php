@@ -83,6 +83,7 @@ trait PayrollMethodsTrait
         }else{
             $todayPeriod = $dateToday->format("d") >= 16 ? 4 : 2;
         }
+        dump("todayPeriod".$todayPeriod);
         if ($dateToday->format("Y") == $payroll->getYear() && $dateToday->format("m") == $payroll->getMonth() && $payroll->getPeriod() == $todayPeriod) {
             return true;
         }

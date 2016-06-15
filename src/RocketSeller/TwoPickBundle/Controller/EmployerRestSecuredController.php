@@ -12,7 +12,29 @@ use Symfony\Component\Validator\ConstraintViolationList;
 
 class EmployerRestSecuredController extends FOSRestController
 {
+    /**
+     * Edit a Beneficiary from the submitted data.<br/>
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Creates a new person from the submitted data.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the requested Ids don't exist"
+     *   }
+     * )
 
+     * @return View
+     */
+    public function getEmployerInformationAction($userName) {
+        $view= View::create();
+        $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle");
+        $realUser=$userRepo->findOneBy(array('usernameCanonical'=>$userName));
+        if($realUser==null){
+            return $view->setStatusCode(404);
+        }
+        return $view->setStatusCode(200)->setData(array());
+    }
 
 
 }
