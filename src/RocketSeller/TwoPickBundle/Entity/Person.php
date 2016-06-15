@@ -4,6 +4,8 @@ namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Person
@@ -106,34 +108,40 @@ class Person
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Employee
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Employee", mappedBy="personPerson", cascade={"persist", "remove"})
+     * @Exclude
      */
     private $employee;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Document
      * @ORM\OneToMany(targetEntity="\RocketSeller\TwoPickBundle\Entity\Document", mappedBy="personPerson", cascade={"persist"})
+     * @Exclude
      */
     private $docs;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Notification
      * @ORM\OneToMany(targetEntity="\RocketSeller\TwoPickBundle\Entity\Notification", mappedBy="personPerson", cascade={"persist"})
+     * @Exclude
      */
     private $notifications;
 
     /**
      * @ORM\OneToMany(targetEntity="SpecificData", mappedBy="personPerson", cascade={"persist"})
+     * @Exclude
      */
     private $specificData;
 
     /**
      * @ORM\OneToMany(targetEntity="Action", mappedBy="personPerson", cascade={"persist"})
+     * @Exclude
      */
     private $action;
 
     /**
      * @var \Application\Sonata\MediaBundle\Entity\Gallery
      * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", mappedBy="person", cascade={"persist"}, fetch="LAZY")
+     * @Exclude
      */
     protected $gallery;
 
@@ -171,6 +179,7 @@ class Person
 
     /**
      * @ORM\OneToMany(targetEntity="BillingAddress", mappedBy="personPerson", cascade={"persist", "remove"})
+     * @Exclude
      */
     private $billingAddress;
 

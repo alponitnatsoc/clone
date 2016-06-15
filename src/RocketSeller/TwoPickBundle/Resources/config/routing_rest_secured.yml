@@ -2,3 +2,7 @@ users :
     type: rest
     resource:     "RocketSellerTwoPickBundle:UserRest"
     name_prefix:  api_secured_
+employers :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:EmployerRestSecured"
+    name_prefix:  api_secured_

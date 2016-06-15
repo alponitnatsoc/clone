@@ -83,6 +83,7 @@ trait PayrollMethodsTrait
         }else{
             $todayPeriod = $dateToday->format("d") >= 16 ? 4 : 2;
         }
+        dump("todayPeriod".$todayPeriod);
         if ($dateToday->format("Y") == $payroll->getYear() && $dateToday->format("m") == $payroll->getMonth() && $payroll->getPeriod() == $todayPeriod) {
             return true;
         }
@@ -98,15 +99,17 @@ trait PayrollMethodsTrait
     private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, PurchaseOrdersDescription &$podPila)
     {
         if ($employerHasEmployee->getState() >= 4) {
+            dump($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames());
             $contracts = $employerHasEmployee->getContracts();
             /* @var $contract Contract */
             foreach ($contracts as $contract) {
                 if ($contract->getState() > 0) {
                     /* @var Payroll $payroll */
                     $payroll = $contract->getActivePayroll();
+                    dump("Active P?".$this->checkActivePayroll($payroll));
+                    dump($payroll->getYear()." ".$payroll->getMonth()." ".$payroll->getPeriod());
                     if (!$this->checkActivePayroll($payroll))
                         break;
-                    dump($payroll);
                     if(count($payroll->getPurchaseOrdersDescription())>0){
                         /** @var PurchaseOrdersDescription $tempPOD */
                         $tempPOD=$payroll->getPurchaseOrdersDescription()->get(0);

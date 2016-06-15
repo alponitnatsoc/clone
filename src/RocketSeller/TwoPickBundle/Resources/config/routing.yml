@@ -60,6 +60,9 @@ register_express:
 marketing:
     path:     /backoffice/marketing
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:showLanding}
+autenticate:
+    path:     /backoffice/autenticate/{user}/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:demoLogin}
 
 #tramites
 show_procedure:

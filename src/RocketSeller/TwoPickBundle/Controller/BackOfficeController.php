@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Entity\ActionError;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Traits\SubscriptionMethodsTrait;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 
 class BackOfficeController extends Controller
@@ -36,7 +37,33 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
 
+    public function demoLoginAction($user,$autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
 
+        $dm = $this->getDoctrine();
+        $repo = $dm->getRepository('RocketSellerTwoPickBundle:User');
+        /** @var User $user */
+        $user = $repo->find($user);
+
+        if (!$user) {
+            throw $this->createNotFoundException('No demouser found!');
+        }
+        if($autentication==$user->getSalt()){
+            $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
+
+            $context = $this->get('security.context');
+            $context->setToken($token);
+
+            $router = $this->get('router');
+            $url = $router->generate('show_dashboard');
+
+            return $this->redirect($url);
+        }else{
+          return $this->redirectToRoute("pages");
+        }
+
+    }
     /**
      * Funcion que valida la informacion del empleado
      * @param $idAction

@@ -522,3 +522,7 @@ faq:
 producto:
     path:     /producto
     defaults: { _controller: RocketSellerTwoPickBundle:Public:producto }
+
+categories:
+    path:     /categories/{redirectedBy}
+    defaults: { _controller: RocketSellerTwoPickBundle:Public:categories }

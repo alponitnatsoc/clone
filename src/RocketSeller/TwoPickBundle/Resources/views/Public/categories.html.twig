@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Preguntas frecuentes</title>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="css/preguntas.css"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/preguntas.css') }}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 </head>
 
@@ -25,7 +25,7 @@
             </div>
         </header>
 
-        <section>
+        <section id="acerca_symplifica">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat1.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Acerca de symplifica</h3>
@@ -86,7 +86,7 @@
 
         </section>
         <!----------------------------------preguntas de registro------------------------------------->
-        <section>
+        <section  id="registro">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat2.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Regístro</h3>
@@ -152,7 +152,7 @@
 
         <!--empieza preguntas de precio y facturacioin-->
 
-        <section>
+        <section  id="precio_factur">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat3.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Precio y facturación</h3>
@@ -198,7 +198,7 @@ Los pagos electrónicos de la nómina y de los aportes de tus empleados tienen u
 
         <!--empieza gestion del epmpleado-->
 
-        <section>
+        <section  id="gestion">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat4.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Gestión del empleado</h3>
@@ -302,7 +302,7 @@ Sí si empleado trabaja por días y se encuentra afiliado al régimen subsidiado
 
         <!--ampieza apoyo en tramites-->
 
-        <section>
+        <section  id="apoyo_tramites">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat5.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Apoyo en trámites</h3>
@@ -352,7 +352,7 @@ Debes tener en cuenta la facilidad de tu empleado doméstico, ya que en su mayor
 
         <!--empieza Reporte de novedades-->
 
-        <section>
+        <section  id="reporte_novedades">
             <div class="breadcrumb">
             	<img class="img-cat" src="{{ asset('public/img/home/cat6.png') }}" alt="symplifica"/>
                 <h3 class="light azulmediofont">Reporte de novedades</h3>
@@ -449,11 +449,38 @@ Trabajar horas extras, recargos nocturnos, préstamo, adelanto, incapacidades, a
             </div>
 
         </section>
+				<a style="text-decoration:none" href="/preguntas-frecuentes"><div class="callto naranja" style="text-align:center; margin-bottom: 40px">Regresar</div></a>
     </main>
 
 <script type="text/javascript">
 	$(document).ready(function(){
+		$("#acerca_symplifica").hide();
+		$("#registro").hide();
+		$("#precio_factur").hide();
+		$("#gestion").hide();
+		$("#apoyo_tramites").hide();
+		$("#reporte_novedades").hide();
 
+		var called = '{{ called_from }}';
+
+		if(called == 1){
+			$("#acerca_symplifica").show();
+		}
+		else if(called == 2){
+			$("#registro").show();
+		}
+		else if(called == 3){
+			$("#precio_factur").show();
+		}
+		else if(called == 4){
+			$("#gestion").show();
+		}
+		else if(called == 5){
+			$("#apoyo_tramites").show();
+		}
+		else if(called == 6){
+			$("#reporte_novedades").show();
+		}
 	});
 </script>
 
