@@ -87,10 +87,7 @@ class PublicController extends Controller
                 return $this->redirect($this->generateUrl('contactenos'));
             }
         }
-
         return $this->render('RocketSellerTwoPickBundle:Public:contactenos.html.twig', array(
-            "breadcrumbs" => array("Inicio" => "/", "Contáctenos" => "")
-        ));
             'form' => $form->createView()
         ));
     }
