@@ -38,30 +38,142 @@ h1 {margin: 0}
 	text-align: center}
 
 #banner-beneficios-cont p {color: #5b5b5f; width: 300px; text-align: center; margin: 0 auto}
-#breadcrumb {width: 300px; margin: 20px auto; text-align: center;}
+.breadcrumb {width: 300px; margin: 20px auto; text-align: center;background: none}
 .bread-style a {color: #87868a}
 
 /*---------------empieza seccion preguntas-------------------*/
 
 #texto-descript {margin: 60px 0 70px 0}
 #texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
-#cont-preguntas {width: 880px; margin: 0 auto; padding-bottom: 120px}
+.cont-preguntas {width: 880px; margin: 0 auto; padding: 20px 0 120px 0;}
 .preguntas {width: 100%}
-.pregunta {border-bottom: 1px #DDDDDD solid; padding: 20px 0; font-size: 25px}
+.pregunta {border: #b3b3b3 1px dashed;
+    padding: 10px 0;
+    font-size: 20px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 5px 0;
+	cursor: pointer}
 .respuesta p {display: none}
+.respuesta {width: 80%;
+    margin: 0 auto;}
+.font {font-size:22px}
+.img-cat {padding: 50px 0 30px 0;}
+
+/*-------------------------------------------------empieza seccion de la categoria de preguntas---------------------------------*/
+
+#categories {
+	width: 1100px;
+	margin: 0 auto}
+.pregunta p {margin: 0}
+.preguntas a {text-decoration: none}
+.contenido-cat {
+	background: #fbfbfb;
+    border-radius: 5px;
+    text-align: center;
+    padding: 50px 0;
+    border: dashed 1px #e6e6e6;}
+
+.contenido-cat h3 {
+	padding: 25px 0 0 0;	}
+
+.callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
+#callregistro {color: #6d6d71; margin: 50px 0 90px 0;text-align:center}
+a .contenido-cat:hover {
+	background: none !important}
+/*grid responsive*/
+
+.span_1_of_3 {
+	width: 32.26%;
+}
+
+
+/*  GO FULL WIDTH AT LESS THAN 480 PIXELS */
+
+@media only screen and (max-width: 480px) {
+	.span_3_of_3 {
+		width: 100%;
+	}
+	.span_2_of_3 {
+		width: 100%;
+	}
+	.span_1_of_3 {
+		width: 100%;
+	}
+}
+
+/*  SECTIONS  ============================================================================= */
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+/*  GROUPING  ============================================================================= */
+
+
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+/*  GRID COLUMN SETUP   ==================================================================== */
+
+.col {
+	display: block;
+	float:left;
+	margin: 0.5% 0.8%;
+}
+
+.col:first-child { margin-left: 0; } /* all browsers except IE6 and lower */
+
+
+/*  REMOVE MARGINS AS ALL GO FULL WIDTH AT 480 PIXELS */
+
+@media only screen and (max-width: 480px) {
+	.col {
+		margin: 1% 0 1% 0%;
+	}
+}
 
 /*responsive-------------------*/
+@media only screen and (max-width: 1100px) {
+	#categories {
+		width: 85%;}
+	}
 
 @media only screen and (max-width: 1024px) {
 
-		#cont-preguntas { width: 85%;}
+		.cont-preguntas { width: 85%;}
 		}
+
+@media only screen and (max-width: 850px) {
+	.span_1_of_3 {
+    width: 46%;}
+	.col {
+    margin: 1% 3%;}
+	}
 
 @media only screen and (max-width: 768px) {
 
 	#texto-descript h4 {width: 86%;}
 	}
 
+@media only screen and (max-width: 560px) {
+
+		.span_1_of_3 {
+    width: 100%;}
+		}
+
 
 @media only screen and (max-width: 414px) {
-	#contenido-pc p {width: 340px;}}
+	#contenido-pc p {width: 340px;}
+}

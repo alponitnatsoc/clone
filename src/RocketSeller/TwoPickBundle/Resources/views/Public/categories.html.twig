@@ -1,0 +1,505 @@
+{% extends "::new-design/public.html.twig" %}
+{% block body %}
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preguntas frecuentes</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/preguntas.css') }}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<main>
+    	<header>
+        	<!--aca va el nav que ya esta hecho-->
+        	<div id="banner-beneficios">
+            	<div id="banner-beneficios-cont">
+                  <h1 class="bold azuloscurofont">Tus preguntas son</h1>
+                  <h1 class="light azulmediofont">importantes para nosotros</h1>
+                </div>
+            </div>
+        </header>
+
+        <section id="acerca_symplifica">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat1.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Acerca de symplifica</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta1" onClick="preguntar(this)" data-pregunta = "respuesta1"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué es?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta1" class="light grisclarofont">
+                        Symplifica es la herramienta online más sencilla para administrar a empleados domésticos y de pequeñas empresas. Te apoyamos en todo el proceso de gestión de tu empleado desde la contratación hasta la correcta liquidación, permitiendote realizar los pagos y aportes con un solo clic, mientras manejamos todos los detalles del día a día de tus empleados según la ley y te garantizamos la mayor seguridad al guardar todos los documentos digitales de la relación laboral.</p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta2" onClick="preguntar(this)" data-pregunta = "respuesta2"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué beneficios obtengo?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta2" class="light grisclarofont">
+                        <span class="light azulclarofont font">Nuestros principales servicios son:</span><br><br>
+                        &#8226; Creamos un contrato laboral acorde a tus necesidades.<br>
+                        &#8226; Calculamos cuánto debes pagar y descontarle a tus empleados según la ley.<br>
+                        &#8226;Te hacemos la vida fácil permitiéndote pagar desde tu computador o celular la nómina y aportes de tus empleados y pagamos por ti las cesantías cada año.<br>
+                        &#8226;Te afiliamos a ti y a tus empleados a las administradoras de seguridad social.<br>
+                        &#8226;Generamos comprobantes de pago para controlar la relación laboral.<br>
+                        &#8226;Guardamos una carpeta digital con documentación de tu empleado y su historia laboral.<br>
+                        &#8226;Calculamos la liquidación y demás aportes que debes cancelar a tu empleado al terminar la relación laboral, y te damos los formatos que deben firmarse.<br>
+                        &#8226;Te permitimos pagar la liquidación electrónicamente.<br>
+                        &#8226;Te ofrecemos un servicio de consultoría jurídica opcional con costos exclusivos a través de nuestro  aliado Alvarez, Lievano, Laserna Abogados, expertos en ley laboral.<br><br></p>
+                    </div>
+                </div>
+
+                 <!-----------pregunta 3----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta3" onClick="preguntar(this)" data-pregunta = "respuesta3"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Es para personas o empresas?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta3" class="light grisclarofont">Nuestro servicio es para personas y empresas. Sin embargo, nuestra versión inicial sólo gestionará empleados domésticos de personas naturales. Si eres una empresa regístrate y pronto te contactaremos para darte a conocer  nuestro producto para empresas.</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </section>
+        <!----------------------------------preguntas de registro------------------------------------->
+        <section  id="registro">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat2.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Regístro</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta4" onClick="preguntar(this)" data-pregunta = "respuesta4"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué datos y documentos necesito para registrarme?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta4" class="light grisclarofont">
+                        <span class="light azulclarofont font">Para registrarte como empleador:</span><br><br>
+                        &#8226; Datos básicos (Nombre, Documento de Identidad, Lugar y Fecha de Expedición).<br>
+                        &#8226; Datos de contacto (dirección, teléfono).<br>
+                        &#8226; Entidades de seguridad social seleccionadas (ARL y caja de compensación).<br>
+                        &#8226; Datos de tu cuenta bancaria para pago de nómina y aportes (Banco, tipo de cuenta, número de cuenta).<br>
+                        &#8226; Copia del documento de identidad.<br>
+                        &#8226; Copia del RUT (del empleador).<br><br>
+                        <span class="light azulclarofont font">Para registrarte como empleado:</span><br><br>
+                        &#8226; Datos básicos (Nombre, Documento de Identidad, Lugar y Fecha de Expedición).<br>
+                        &#8226; Datos de contacto (dirección, teléfono).<br>
+                        &#8226; Entidades de seguridad social seleccionadas (ARL y caja de compensación). <br>
+                        &#8226; Datos de tu cuenta bancaria para pago de nómina y aportes (Banco, tipo de cuenta, número de cuenta).<br>
+                        &#8226; Copia del documento de identidad.<br>
+                        &#8226; Copia del RUT (del empleador).<br><br></p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta5" onClick="preguntar(this)" data-pregunta = "respuesta5"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cómo me registro?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta5" class="light grisclarofont">Dale clic al botón "obtén un mes gratis", regístrate con tu nombre, correo electrónico y una clave y sigue las instrucciones que te vamos dando.</p>
+                    </div>
+                </div>
+
+                 <!-----------pregunta 3----------------------->
+
+                 <div class="preguntas">
+
+                	<a id="pregunta6" onClick="preguntar(this)" data-pregunta = "respuesta6"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Puedo afiliar a mi empleado a seguridad social con Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta6" class="light grisclarofont">Sí. Si tu empleado no está afiliado a la seguridad social nosotros nos hacemos cargo de afiliarlo y de afiliarte a ti como su empleador sin necesidad de trámites complicados. No hacemos trámites de tralados de EPS ni Fondos de Pensión.</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </section>
+
+        <!--empieza preguntas de precio y facturacioin-->
+
+        <section  id="precio_factur">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat3.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Precio y facturación</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta7" onClick="preguntar(this)" data-pregunta = "respuesta7"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cuánto cuesta Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta7" class="light grisclarofont">
+                        <span class="light azulclarofont font">¡El primer mes es gratis! y empieza a contar luego de validar los datos y documnetación y haber afiliado correctamente a tu empleado y a ti como empleador de ser necesario.</span><br><br>
+
+Una vez se cumpla el mes de prueba se empezará a cobrar una tarifa mensual por empleado. Estas tarifas varían de acuerdo al número de días a la semana que tus empleados laboran.<br><br>
+<strong class="azulmediofont">1. Entre 1 y 2 días a la semana: $16.500, IVA incluido<br>
+2. Entre 3 y 4 días a la semana:  $22.500, IVA incluido.<br>
+3. Tiempo completo (5 días a la semana o más) $29.500, IVA incluido.<br><br></strong>
+Los pagos electrónicos de la nómina y de los aportes de tus empleados tienen un costo adicional de $7.000 pesos por transacción. Este cobro adicional es para cubrir el gasto de la transferencia electrónica que cobra el sistema financiero.  ¿Se puede enviar a la calculadora de precios?<br><br>
+<span class="light azulclarofont font">Proveemos dos alternativas de pago:</span><br><br>
+&#8226; Cargo recurrente a tu cuenta corriente o de ahorros con autorización de débito automático.<br>
+&#8226; Cargo recurrente a tu tarjeta de crédito (Muy pronto en funcionamiento).<br><br></p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta8" onClick="preguntar(this)" data-pregunta = "respuesta8"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Hay alguna cláusula de permanencia?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta8" class="light grisclarofont">No,  puedes estar durante el tiempo que lo desees y finalizar en cualquier momento.<br><br></p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!--empieza gestion del epmpleado-->
+
+        <section  id="gestion">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat4.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Gestión del empleado</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta9" onClick="preguntar(this)" data-pregunta = "respuesta9"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Si mi empleado ya está registrado a seguridad social cómo me ayudará Symplifica?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta9" class="light grisclarofont">Nos encargaremos de la gestión mensual, alertarte sobre las fechas clave para pagos y aportes, te permitiremos pagar con un sólo clic desde cualquier lugar, llevaremos un control de la relación laboral, te apoyaremos con documentos en información durante el proceso y realizaremos correctamente la liquidación de tu empleado cuando decidan dar por terminado el contrato.<br><br></p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta10" onClick="preguntar(this)" data-pregunta = "respuesta10"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿A que beneficios de ley tiene derecho mi empleado?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta10" class="light grisclarofont">
+                        <span class="light azulclarofont font">Si tu empleado trabaja por días:</span><br><br>
+Tiene derecho a ser afiliado a una ARL, recibir pensión, caja de compensación familiar, cesantías, intereses sobre las cesantías, días de vacaciones, auxilio de transporte y a afiliación a una EPS (a no ser que se encuentre afiliado al régimen subsidiado SISBEN).<br><br>
+
+<span class="light azulclarofont font">Si tu empleado trabaja tiempo completo:</span><br><br>
+Tiene derecho a ser afiliado a una ARL y una EPS, recibir pensión, caja de compensación familiar, cesantías, intereses sobre las cesantías, días de vacaciones y auxilio de transporte (si no es interna).
+<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 3----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta11" onClick="preguntar(this)" data-pregunta = "respuesta11"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Si he omitido algún tipo de aporte en el pasado Symplifica resuelve mi situación actual?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta11" class="light grisclarofont">
+                        Symplifica no da asesoría jurídica. Sin embargo, como usuario registrado de Symplifica tienes acceso a tarifas preferenciales para una consulta jurídica con nuestros aliados Alvarez, Lievano, Laserna Abogados. Ellos te darán guía sobre los pasos que debes seguir para solucionar tu situación actual. Es muy importante entender que no todos los casos son iguales y que las soluciones generalmente implican el pago de pasivos al empleador y a la seguridad social. Si necesitaras hacer una consulta legal este servicio tiene un precio preferencial de 150.000 pesos por una consulta de una hora.<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 4----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta12" onClick="preguntar(this)" data-pregunta = "respuesta12"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cuanto debo pagar en seguridad social por mi empleado?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta12" class="light grisclarofont">
+                        La cotización al Régimen Contributivo en salud del empleado dependiente es del 12.5% del salario mensual, del cual el 8.5% está a cargo del empleador y el 4% a cargo del empleado. En materia pensional es del 16% del salario mensual, de este porcentaje el 12% está a cargo del empleador y el 4% a cargo del empleado.
+Sí si empleado trabaja por días y se encuentra afiliado al régimen subsidiado (SISBEN) no es necesario que haga los aportes en salud (EPS).
+<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 5----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta13" onClick="preguntar(this)" data-pregunta = "respuesta13"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Debo entregarle dotación a mi empleada doméstica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta13" class="light grisclarofont">
+                        Si, debes entregarle dotación tres veces por año (uniforme y calzado).<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 6----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta14" onClick="preguntar(this)" data-pregunta = "respuesta14"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Debo pagar primas de servicio a mi empleada doméstica?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta14" class="light grisclarofont">
+                        No en este momento, debido a que las casas de familia por no ser empresas o personas jurídicas, no generan ni utilidades ni ganancias. Sin embargo, se encuentra en proceso un proyecto de ley para otorgar primas a empleadas domésticas, así que esto podría cambiar.<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 7----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta15" onClick="preguntar(this)" data-pregunta = "respuesta15"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué debo hacer si mi empleado sufre un accidente laboral?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta15" class="light grisclarofont">
+                        Si tu empleado sufre un accidente en el lugar de trabajo comunícate a la línea de atención de tu ARL y repórtalo antes de 48 horas.<br><br></p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!--ampieza apoyo en tramites-->
+
+        <section  id="apoyo_tramites">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat5.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Apoyo en trámites</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta16" onClick="preguntar(this)" data-pregunta = "respuesta16"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Debo firmar algún tipo de contrato con mi empleado?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta16" class="light grisclarofont">
+                        Sí. Es importante que mantengas un contrato laboral con todas las condiciones del trabajo a las que deben estar de acuerdo tanto tú como tu empleado para evitar futuros percances. Sí vas a iniciar con una relación nueva generaremos un contrato de acuerdo a tus necesidades y si es existente puedes mantener tu contrato actual o solicitar uno a Symplifica. </p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta17" onClick="preguntar(this)" data-pregunta = "respuesta17"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cómo recibe el pago mi empleado?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta17" class="light grisclarofont">Por medio de una cuenta de ahorros que tenga activa, mediante daviplata o pago en efectivo.
+Debes tener en cuenta la facilidad de tu empleado doméstico, ya que en su mayoría prefieren recibir los pagos en efectivo. Al pagar por nuestra plataforma incurres en un costo adicional de $7.000 pesos (este es el fee bancario que cobra la entidad por realizar la transacción electrónica)
+<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 3----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta18" onClick="preguntar(this)" data-pregunta = "respuesta18"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Quiero liquidar a mi empleado que debo hacer?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta18" class="light grisclarofont">Ingresa a la plataforma e indica que quieres realizar la liquidación de tu empleado, los pagos correspondientes los puedes hacer a través de un debito automático de tu tarjeta o por medio de una consignación a un número de cuenta. (Ser un poco más explícito..decir que nosotros le decimos cuándo pagarle, le generamos los formatos que debe hacer firmar el empleado le decimos cúanto tiene que pagarle, etc).<br><br></p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!--empieza Reporte de novedades-->
+
+        <section  id="reporte_novedades">
+            <div class="breadcrumb">
+            	<img class="img-cat" src="{{ asset('public/img/home/cat6.png') }}" alt="symplifica"/>
+                <h3 class="light azulmediofont">Reporte de novedades</h3>
+            </div>
+
+        	<div class="cont-preguntas">
+            	<!-----------pregunta 1---------------------->
+            	<div class="preguntas">
+
+                	<a id="pregunta19" onClick="preguntar(this)" data-pregunta = "respuesta19"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué son las novedades?</p>
+                    </div></a>
+
+                    <div class="respuesta">
+                    	<p id="respuesta19" class="light grisclarofont">Contemplamos como novedades todas aquellas circunstancias, permisos o incidentes ocurridos durante el periodo laboral, que afecten el normal flujo de las labores de sus empelado y que deben ser reportadas para tener constancia en la nómina, algunas de ellas son:
+Trabajar horas extras, recargos nocturnos, préstamo, adelanto, incapacidades, accidente de trabajo, licencia de maternidad, licencia de paternidad, ausentismos, vacaciones.<br><br></p>
+                    </div>
+                </div>
+
+                <!-----------pregunta 2----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta19" onClick="preguntar(this)" data-pregunta = "respuesta19"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cuándo debo reportar las novedades?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta19" class="light grisclarofont">
+                        <span class="light azulclarofont font">Puedes reportar las novedades en la plataforma y se harán las respectivas deduciones dependiendo de tu periodo de pago, si es quincenal deber ser antes del 12 para pagar el 15, si es mensual antes del 25 para pagar el 30.<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 3----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta20" onClick="preguntar(this)" data-pregunta = "respuesta20"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué debo hacer si mi empleado sufre un accidente laboral?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta20" class="light grisclarofont">
+                        Si tu empleado sufre un accidente en el lugar de trabajo comunícate a la línea de atención de tu ARL y repórtalo antes de 48 horas y reportarlo en Symplifica.<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 4----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta21" onClick="preguntar(this)" data-pregunta = "respuesta21"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Qué hago si mi empleado se incapacita?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta21" class="light grisclarofont">
+                        Debes reportar la correspondiente incapacidad en la plataforma correspondiente al periodo de nómina. Sí la incapacidad es menor a dos días debes asumir el pago de esta, si es mayor deben comunicarte con la EPS de tu empleado para hacer el recobro de los días siguientes.
+<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 5----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta22" onClick="preguntar(this)" data-pregunta = "respuesta22"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">¿Cómo reporto un prestamo o un adelanto?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta22" class="light grisclarofont">
+                        Debes imprimir un formato de autorización de descuentos, el cual puedes descargar desde la página, hacerlo firmar por tu empelado y subirlo de nuevo para reportar la novedad a la nómina según el periodo que aplique.<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 6----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta23" onClick="preguntar(this)" data-pregunta = "respuesta23"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">Mi empleado quiere tomar días de vacaciones ¿qué debo hacer?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta23" class="light grisclarofont">
+                        Debes imprimir un formato de solicitud de vacaciones el cual puedes descargar desde la página y hacerlo completar por tu empleado. Él podrá solicitar el número de días deseado de acuerdo a su acumulado histórico (máximo 30 días) luego debes subir el formato y reportarlo a Symplifica. En caso de que el trabajador quiera solicitar más días de los que tiene acumulados, puedes otorgarle una licencia no remunerada completando el formato que puede descargable en nuestra página.
+<br><br></p>
+                    </div>
+                </div>
+                <!-----------pregunta 7----------------------->
+                <div class="preguntas">
+
+                	<a id="pregunta24" onClick="preguntar(this)" data-pregunta = "respuesta24"><div class="pregunta">
+                    	<p class="light-italic azulclarofont">El hijo de mi empleada está enfermo ¿cuántos días de permiso debo darle?</p>
+                    </div></a>
+
+                    <div class="respuesta" >
+                    	<p id="respuesta24" class="light grisclarofont">
+                        En el caso de que el hijo de tu empleada se encuentre incapacitado o haya sufrido un accidente, debes otorgarle una licencia remunerada la cual debes reportar a Symplifica. Esta licencia puede ser de hasta 5 días, sin embargo, la ley permite según la magnitud de la situación, ampliar el periodo de ésta a tu criterio, siempre y cuando sigas pagando la licencia.<br><br></p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+				<a style="text-decoration:none" href="/preguntas-frecuentes"><div class="callto naranja" style="text-align:center; margin-bottom: 40px">Regresar</div></a>
+    </main>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#acerca_symplifica").hide();
+		$("#registro").hide();
+		$("#precio_factur").hide();
+		$("#gestion").hide();
+		$("#apoyo_tramites").hide();
+		$("#reporte_novedades").hide();
+
+		var called = '{{ called_from }}';
+
+		if(called == 1){
+			$("#acerca_symplifica").show();
+		}
+		else if(called == 2){
+			$("#registro").show();
+		}
+		else if(called == 3){
+			$("#precio_factur").show();
+		}
+		else if(called == 4){
+			$("#gestion").show();
+		}
+		else if(called == 5){
+			$("#apoyo_tramites").show();
+		}
+		else if(called == 6){
+			$("#reporte_novedades").show();
+		}
+	});
+</script>
+
+<script type="text/javascript">
+
+	function preguntar (buttom) {
+
+		var id = buttom.getAttribute("data-pregunta");
+		var answer = document.querySelector("#" + id);
+		console.log(answer);
+		$(answer).slideToggle();
+
+
+	}
+
+</script>
+
+
+</body>
+</html>
+
+{% endblock %}

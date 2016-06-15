@@ -93,5 +93,40 @@ class TokenRestController extends FOSRestController
 
         return $token;
     }
+    /**
+     * Get User Salt.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get user salt by its username",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when the user is not found"
+     *   }
+     * )
+     *
+     * @param $slug username
+     * @return View
+     * @internal param string $id the user username
+     *
+     */
+    public function getUserSaltAction($slug)
+    {
+
+        $entity = $this->getDoctrine()->getRepository('RocketSeller\TwoPickBundle\Entity\User')->findOneBy(
+            array('username' => $slug)
+        );
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Data not found.');
+        }
+
+        $salt = $entity->getSalt();
+
+        $view = View::create();
+        $view->setData(array('salt' => $salt))->setStatusCode(200);
+
+        return $view;
+    }
 
 }

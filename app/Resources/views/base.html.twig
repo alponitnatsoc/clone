@@ -60,7 +60,48 @@
                 '//www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');</script>
+
 <!-- End Google Tag Manager -->
+
+<!-- Start Intercom JS -->
+<script>
+  window.intercomSettings = { app_id: "fnfuyjdu" };
+</script>
+
+<script>(function(){
+  var w=window;var ic=w.Intercom;
+  if(typeof ic==="function"){
+    ic('reattach_activator');ic('update',intercomSettings);
+  }
+  else{
+    var d=document;
+    var i=function(){
+      i.c(arguments)
+    };
+    i.q=[];
+    i.c=function(args){
+      i.q.push(args)
+    };
+    w.Intercom=i;
+    function l(){
+      var s=d.createElement('script');
+      s.type='text/javascript';
+      s.async=true;
+      s.src='https://widget.intercom.io/widget/fnfuyjdu';
+      var x=d.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s,x);
+    }
+    if(w.attachEvent){
+      w.attachEvent('onload',l);
+    }
+    else{
+      w.addEventListener('load',l,false);
+    }
+  }
+})()</script>
+
+<!-- End Intercom JS -->
+
 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
     <nav class="navbar navbar-inverse navbar-fixed-top interna" role="navigation">
         <div class="row-fluid up-Help-Phone">
@@ -193,7 +234,7 @@
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Configuración</a>
                             </div>
                             <div class="{% if app.request.get('_route') == 'show_help' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('contact') }}"{% endif %}>Ayuda</a>
+                                <a href="{{ path('contact') }}">Ayuda</a>
                             </div>
                             {% endblock%}
                         </div>
@@ -209,6 +250,47 @@
                         <div class="span12">
                             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                                 <div class="col-sm-12 col-xs-12 profile-Data">
+                                    <div id="recordardatos">
+                                        <div class="btn btn-middleblue" id="mibotn">
+                                          Recordar datos requeridos
+                                        </div>
+
+                                          <!-- The Modal -->
+                                        <div id="mimoda" class="moda">
+
+                                          <!-- Modal content -->
+                                          <div class="modal-conten">
+                                            <div class="moda-header">
+                                              <span class="close">×</span>
+                                              <h2>Debes tener en cuenta los siguientes documentos</h2>
+                                            </div>
+                                            <div class="moda-body">
+                                              <ul>
+                                                  <li><span>Para el empleador</span></li>
+                                                  <li>&#8227; Copia del documento de identidad</li>
+                                                  <li>&#8227; Copia del RUT</li>
+                                                  <li>&#8227; Datos de contacto (nombre, teléfono, diracción, estado civil)</li>
+                                                  <li>&#8227; Entidades de seguridad social seleccionadas (ARL y caja de compensación)</li>
+                                                  <li>&#8227; Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta)</li>
+                                                  <li></li>
+                                                  <li><span>Para el empleado</span></li>
+                                                  <li>&#8227; Copia del documento de identidad</li>
+                                                  <li>&#8227; Datos de básicos (nombre, teléfono, diracción, estado civil)</li>
+                                                  <li>&#8227; Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora)</li>
+                                                  <li>&#8227; Entidades de seguridad social seleccionadas (EPS y fondo de pensiones)</li>
+                                              </ul>
+                                            </div>
+                                            <div class="moda-footer">
+                                              <!--<div</div> div label-->
+                                              <!--<div</div> div input-->
+                                              <!--<div</div> div submit-->
+
+                                            </div>
+                                          </div>
+
+                                        </div>
+
+                                    </div>
                                     <div class="col-sm-4 col-xs-11 person">
                                         <div class="col-sm-12 col-xs-12">
                                             <h4>{% block usrName %}{{ app.user.getPersonPerson().getNames() }}{% endblock %}</h4>
@@ -535,99 +617,9 @@
         }
     </script>
     <!-- End Ajax scripts -->
-    <!-- begin olark code -->
-    <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/
-        window.olark || (function (c) {
-            var f = window, d = document, l = f.location.protocol == "https:" ? "https:" : "http:", z = c.name, r = "load";
-            var nt = function () {
-                f[z] = function () {
-                    (a.s = a.s || []).push(arguments)
-                };
-                var a = f[z]._ = {}, q = c.methods.length;
-                while (q--) {
-                    (function (n) {
-                        f[z][n] = function () {
-                            f[z]("call", n, arguments)
-                        }
-                    })(c.methods[q])
-                }
-                a.l = c.loader;
-                a.i = nt;
-                a.p = {
-                    0: +new Date
-                };
-                a.P = function (u) {
-                    a.p[u] = new Date - a.p[0]
-                };
-                function s() {
-                    a.P(r);
-                    f[z](r)
-                }
-
-                f.addEventListener ? f.addEventListener(r, s, false) : f.attachEvent("on" + r, s);
-                var ld = function () {
-                    function p(hd) {
-                        hd = "head";
-                        return ["<", hd, "></", hd, "><", i, ' onl' + 'oad="var d=', g, ";d.getElementsByTagName('head')[0].", j, "(d.", h, "('script')).", k, "='", l, "//", a.l, "'", '"', "></", i, ">"].join("")
-                    }
-
-                    var i = "body", m = d[i];
-                    if (!m) {
-                        return setTimeout(ld, 100)
-                    }
-                    a.P(1);
-                    var j = "appendChild", h = "createElement", k = "src", n = d[h]("div"), v = n[j](d[h](z)), b = d[h]("iframe"), g = "document", e = "domain", o;
-                    n.style.display = "none";
-                    m.insertBefore(n, m.firstChild).id = z;
-                    b.frameBorder = "0";
-                    b.id = z + "-loader";
-                    if (/MSIE[ ]+6/.test(navigator.userAgent)) {
-                        b.src = "javascript:false"
-                    }
-                    b.allowTransparency = "true";
-                    v[j](b);
-                    try {
-                        b.contentWindow[g].open()
-                    } catch (w) {
-                        c[e] = d[e];
-                        o = "javascript:var d=" + g + ".open();d.domain='" + d.domain + "';";
-                        b[k] = o + "void(0);"
-                    }
-                    try {
-                        var t = b.contentWindow[g];
-                        t.write(p());
-                        t.close()
-                    } catch (x) {
-                        b[k] = o + 'd.write("' + p().replace(/"/g, String.fromCharCode(92) + '"') + '");d.close();'
-                    }
-                    a.P(2)
-                };
-                ld()
-            };
-            nt()
-        })({
-            loader: "static.olark.com/jsclient/loader0.js",
-            name: "olark",
-            methods: ["configure", "extend", "declare", "identify"]
-        });
-        /* custom configuration goes here (www.olark.com/documentation) */
-        olark.identify('2239-144-10-4926');
-        /*]]>*/</script>
-    <noscript><a href="https://www.olark.com/site/2239-144-10-4926/contact" title="Contáctanos" target="_blank">Questions?
-            Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live
-            chat software</a></noscript>
-    <script type="text/javascript">
-        olark.configure("locale.unavailable_title", "Contáctanos");
-    </script>
-    <script>
-        $(function () {
-            var options = {
-                trigger: 'hover'
-            };
-            $('[data-toggle="tooltip"]').tooltip(options);
-        })
-    </script>
-    <!-- end olark code -->
+    <!-- Start of symplificasupport Zendesk Widget script -->
+    <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("//assets.zendesk.com/embeddable_framework/main.js","symplificasupport.zendesk.com");/*]]>*/</script>
+    <!-- End of symplificasupport Zendesk Widget script -->
 {% endblock %}
 {% block UserLogin %}
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
@@ -712,6 +704,34 @@
         var x = document.getElementsByTagName('script')[0];
         x.parentNode.insertBefore(s, x);
     })();
+</script>
+<!--script modal datos que debe recordar-->
+<script>
+// Get the modal
+var modal = document.getElementById('mimoda');
+
+// Get the button that opens the modal
+var btn = document.getElementById("mibotn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 </script>
 </body>
 </html>
