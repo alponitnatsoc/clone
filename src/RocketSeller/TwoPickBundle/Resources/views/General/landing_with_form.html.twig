@@ -1,389 +1,465 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<!--meta para obligar a cargar el css-->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<!--meta para obligar a cargar el css-->
+    <!--meta para obligar a cargar el css-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <!--meta para obligar a cargar el css-->
 
-<!--meta de facebook-->
-  <meta property="og:title" content="Symplifica."/>
-	<meta property="og:site_name" content="Symplifica."/>
-	<meta property="og:url" content="https://symplifica.com">
-	<meta property="og:description" content="Somos el área de nómina de los pequeños empleadores."/>
-  <meta property="og:image" content="{{ asset('public/img/landing/link-face.png', absolute=true) }}"/>
-<!--meta de facebook-->
+    <!--meta de facebook-->
+    <meta property="og:title" content="Symplifica."/>
+    <meta property="og:site_name" content="Symplifica."/>
+    <meta property="og:url" content="https://symplifica.com">
+    <meta property="og:description" content="Somos el área de nómina de los pequeños empleadores."/>
+    <meta property="og:image" content="{{ asset('public/img/landing/link-face.png', absolute=true) }}"/>
+    <!--meta de facebook-->
+    <!--meta de web master tools-->
+    <meta name="google-site-verification" content="ZJy3QlLha_gQ5H0AafyZ6UVE4ijwxpbsq1atDQmuwnE"/>
+    <!--meta de web master tools-->
 
-<title>Symplifica</title>
-<link rel="stylesheet" type="text/css" href="{{ asset('public/css/style.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('public/css/font-awesome.min.css') }}">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet" type="text/css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script>
+    <title>Symplifica</title>
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/font-awesome.min.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,800" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
 
-</script>
-<!-- Facebook Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq)return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq)f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window,
+                document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-fbq('init', '732236950251416');
-fbq('track', "PageView");</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=732236950251416&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
+        fbq('init', '732236950251416');
+        fbq('track', "PageView");</script>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=732236950251416&ev=PageView&noscript=1"
+                /></noscript>
+    <!-- End Facebook Pixel Code -->
 
-<!-- Facebook events Code -->
-<script>
-// Lead
-// Track when a user expresses interest in your offering (ex. form submission, sign up for trial, landing on pricing page)
-fbq('track', 'Lead');
+    <!-- Facebook events Code -->
+    <script>
+        // Lead
+        // Track when a user expresses interest in your offering (ex. form submission, sign up for trial, landing on pricing page)
+        fbq('track', 'Lead');
 
 
-// CompleteRegistration
-// Track when a registration form is completed (ex. complete subscription, sign up for a service)
-fbq('track', 'CompleteRegistration');
-</script>
-<!-- Facebook end events Code -->
-<script src="{{ asset('public/js/jquery.scrollme.js') }}"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        // CompleteRegistration
+        // Track when a registration form is completed (ex. complete subscription, sign up for a service)
+        fbq('track', 'CompleteRegistration');
+    </script>
+    <!-- Facebook end events Code -->
+    <script src="{{ asset('public/js/jquery.scrollme.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <style type="text/css">
-html,body{
-  margin:0px;
-  height:100%;
-}
+    html, body {
+        margin: 0px;
+        height: 100%;
+    }
 </style>
 <body>
 
-      <!------------------------------------------- Google Tag Manager ------------------------------------------>
+<!------------------------------------------- Google Tag Manager ------------------------------------------>
 
-    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TR6JCJ');</script>
+<noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-TR6JCJ"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<script>(function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start': new Date().getTime(), event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+                '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');</script>
 
-    <!------------------------------------------ End Google Tag Manager ------------------------------------------>
-    <header>
-    	<div id="zona-logo">
+<!------------------------------------------ End Google Tag Manager ------------------------------------------>
+<header>
+    <div id="zona-logo">
         <div id="logo-zone">
             <div id="logo">
-              <img class="logo-size img-logo" src="{{ asset('public/img/landing/logo.png') }}" width="190" height="auto">
+                <img class="logo-size img-logo" src="{{ asset('public/img/landing/logo.png') }}" width="190"
+                     height="auto">
             </div>
-            <a href="#formulario"><div id="btn_intencion1" class="calltoactionh">Recibe 3 meses gratis</div></a>
+            <a href="#formulario">
+                <div id="btn_intencion1" class="calltoactionh">Recibe 3 meses gratis</div>
+            </a>
+
             <div id="redes">
                 <ul>
-                	<li>Síguenos</li>
-                  <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank"><li><img src="{{ asset('public/img/landing/face.png') }}"></i></li></a>
-                   <a href="https://twitter.com/symplifica_" target="_blank"><li><img src="{{ asset('public/img/landing/tweet.png') }}"></li></a>
-                   <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica" target="_blank"><li class="blue redes"><li><img src="{{ asset('public/img/landing/link.png') }}"></li></a>
+                    <li>Síguenos</li>
+                    <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank">
+                        <li><img src="{{ asset('public/img/landing/face.png') }}"></i></li>
+                    </a>
+                    <a href="https://twitter.com/symplifica_" target="_blank">
+                        <li><img src="{{ asset('public/img/landing/tweet.png') }}"></li>
+                    </a>
+                    <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"
+                       target="_blank">
+                        <li class="blue redes">
+                        <li><img src="{{ asset('public/img/landing/link.png') }}"></li>
+                    </a>
                 </ul>
-              </div>
-        </div>
-
-        </div>
-
-        <div id="prueba">
-          <div id="texto-banner">
-          	<h1>Somos el área de nómina de los pequeños empleadores</h1>
-              <h3>La herramienta online más sencilla para administrar empleados domésticos y de pequeñas empresas</h2>
-
-              <a href="#formulario"><div id="btn_intencion1" class="calltoaction">¡Inscríbete ahora y recibe 3 meses gratis!</div></a>
-          </div>
-        </div>
-
-        <div id="bull-cont">
-             <div id="bullets">
-                <div class="bull-text">
-                    FACILIDAD
-                    <p>Hacemos los procesos de nómina más fáciles</p>
-                </div>
-                <div class="bull-text">
-                    CONVENIENCIA
-                    <p>Gestiona todo desde cualquier lugar con pocos clics</p>
-                </div>
-                <div class="bull-text">
-                    TRANQUILIDAD
-                    <p>Pon en manos de expertos tus procesos de nómina</p>
-                </div>
             </div>
         </div>
 
-    </header>
+    </div>
+
+    <div id="prueba">
+        <div id="texto-banner">
+            <h1>Somos el área de nómina de los pequeños empleadores</h1>
+
+            <h3>La herramienta online más sencilla para administrar empleados domésticos y de pequeñas empresas</h2>
+
+                <a href="#formulario">
+                    <div id="btn_intencion1" class="calltoaction">¡Inscríbete ahora y recibe 3 meses gratis!</div>
+                </a>
+        </div>
+    </div>
+
+    <div id="bull-cont">
+        <div id="bullets">
+            <div class="bull-text">
+                FACILIDAD
+                <p>Hacemos los procesos de nómina más fáciles</p>
+            </div>
+            <div class="bull-text">
+                CONVENIENCIA
+                <p>Gestiona todo desde cualquier lugar con pocos clics</p>
+            </div>
+            <div class="bull-text">
+                TRANQUILIDAD
+                <p>Pon en manos de expertos tus procesos de nómina</p>
+            </div>
+        </div>
+    </div>
+
+</header>
 
 <!-----------------------------------------------------------------beneficios--------------------------------------------------------------------------->
 
 
-	<section>
+<section>
 
-        <div id="beneficios">
-        	<h2 class="espacio">Soluciona mes a mes todo en un sólo lugar</h2>
+    <div id="beneficios">
+        <h2 class="espacio">Soluciona mes a mes todo en un sólo lugar</h2>
 
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit1.png') }}">
-                <p>Te guiamos en la correcta contratación del empleado</p>
-            </div>
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit1.png') }}">
 
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit2.png') }}">
-                <p>Generamos un contrato laboral acorde a tus necesidades</p>
-            </div>
-
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit3.png') }}">
-                <p>Aﬁliamos a tus empleados y a ti a las administradoras de seguridad social</p>
-            </div>
-
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit4.png') }}">
-                <p>Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
-            </div>
-
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit6.png') }}">
-                <p>Administramos todos los detalles del día a día de tus empleados</p>
-            </div>
-
-            <div class="cuadros-beneficios">
-            	<img src="{{ asset('public/img/landing/benefit5.png') }}">
-                <p>Te garantizamos seguridad al guardar todos los documentos digitales de la relación laboral</p>
-            </div>
+            <p>Te guiamos en la correcta contratación del empleado</p>
         </div>
 
-        <div id="precio">
-            <h2 style="font-size: 25px; padding: 0 10px">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2><br>
-            <p class="cuadro-precio">Hasta <span>$29.500</span> /mes x empleado</p>
-            <a href="#formulario"><div id="btn_intencion2" class="calltoaction">¡Qué estas esperando pre-inscribete ya!</div></a>
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit2.png') }}">
+
+            <p>Generamos un contrato laboral acorde a tus necesidades</p>
         </div>
 
-        <div id="man">
-        	<div class="cont-gris">
-            	<h2>¿Planillas, afiliaciones, nómina, liquidación?<br>Olvídate de los proceso tediosos y complicados,</h2>
-                <h4>Nosotros nos encargamos de gestionar a tus empleados</h4>
-            </div>
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit3.png') }}">
 
-            <div id="foto-hombre">
-
-            	<div id="contenedor-info">
-                    <div class="seccion-hombre">
-                        <div class="info-hombre">
-                          Nunca olvidarás pagarle a tus empleados y tendrás la seguridad de hacerlo según la ley.
-                        </div>
-                        <div class="info-hombre">
-                          Realiza tus procesos de pago de nómina y aportes con un solo clic desde tu celular o computador.
-                        </div>
-
-                    </div>
-                    <div class="seccion-hombre desaparece">
-                        <img id="imghombre" src="{{ asset('public/img/landing/man-noback.png') }}">
-                        <a href="#formulario"><div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div></a>
-                    </div>
-                    <div class="seccion-hombre">
-                        <div class="info-hombre">
-                          Cuéntanos tu necesidad de contratación, nosotros nos encargamos del resto.
-                        </div>
-                        <div class="info-hombre">
-                          No te alarmes por conceptos que no conoces, desde la afiliación hasta la liquidación de tus empleados es cuestión  de Symplifica.
-                        </div>
-
-                    </div>
-                    <div class="boton-hombre aparece">
-                        <a href="#formulario"><div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div></a>
-                    </div>
-                 </div>
-            </div>
+            <p>Aﬁliamos a tus empleados y a ti a las administradoras de seguridad social</p>
         </div>
-    </section>
 
-    <section>
-    	<div id="asi-de-facil">
-        	<div class="cont-gris">
-            	<h2>Hacemos tu vida más sencilla en muy pocos pasos</h2>
-                <h4>Inscríbete y disfruta de la tranquilidad</h4>
-            </div>
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit4.png') }}">
 
-            <div id="info-facil" class="scrollme">
-            	<div class="cont-facil">
-                	<img class="pc-width" src="{{ asset('public/img/landing/pc.png') }}" width="90%" height="auto">
+            <p>Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
+        </div>
+
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit6.png') }}">
+
+            <p>Administramos todos los detalles del día a día de tus empleados</p>
+        </div>
+
+        <div class="cuadros-beneficios">
+            <img src="{{ asset('public/img/landing/benefit5.png') }}">
+
+            <p>Te garantizamos seguridad al guardar todos los documentos digitales de la relación laboral</p>
+        </div>
+    </div>
+
+    <div id="precio">
+        <h2 style="font-size: 25px; padding: 0 10px">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2><br>
+
+        <p class="cuadro-precio">Hasta <span>$29.500</span> /mes x empleado</p>
+        <a href="#formulario">
+            <div id="btn_intencion2" class="calltoaction">¡Qué estas esperando pre-inscribete ya!</div>
+        </a>
+    </div>
+
+    <div id="man">
+        <div class="cont-gris">
+            <h2>¿Planillas, afiliaciones, nómina, liquidación?<br>Olvídate de los proceso tediosos y complicados,</h2>
+            <h4>Nosotros nos encargamos de gestionar a tus empleados</h4>
+        </div>
+
+        <div id="foto-hombre">
+
+            <div id="contenedor-info">
+                <div class="seccion-hombre">
+                    <div class="info-hombre">
+                        Nunca olvidarás pagarle a tus empleados y tendrás la seguridad de hacerlo según la ley.
+                    </div>
+                    <div class="info-hombre">
+                        Realiza tus procesos de pago de nómina y aportes con un solo clic desde tu celular o computador.
+                    </div>
+
                 </div>
-                <div class="cont-facil animateme" data-when="enter" data-from="0.75" data-to="0" data-opacity="0" data-translatex="400">
-                	<h1 style="color:#5D5D5D">¡Así de fácil!</h1>
-                    <ul>
-                    	<img class="img" src="{{ asset('public/img/landing/1.png') }}"><li><span>Completa unas preguntas </span>- te aseguramos que son muy fáciles</li>
-                        <img class="img" src="{{ asset('public/img/landing/2.png') }}"><li><span>Carga algunos documentos </span>- consíguelos en unos minutos</li>
-                        <img class="img" src="{{ asset('public/img/landing/3.png') }}"><li><span>Autorízanos a realizar los procesos </span>- nosotros hacemos el trabajo duro</li>
-                        <img class="img" src="{{ asset('public/img/landing/4.png') }}"><li><span>Y relájate...</span> no tendrás que preocuparte más por los procesos de nómina</li>
-                    </ul>
+                <div class="seccion-hombre desaparece">
+                    <img id="imghombre" src="{{ asset('public/img/landing/man-noback.png') }}">
+                    <a href="#formulario">
+                        <div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div>
+                    </a>
+                </div>
+                <div class="seccion-hombre">
+                    <div class="info-hombre">
+                        Cuéntanos tu necesidad de contratación, nosotros nos encargamos del resto.
+                    </div>
+                    <div class="info-hombre">
+                        No te alarmes por conceptos que no conoces, desde la afiliación hasta la liquidación de tus
+                        empleados es cuestión de Symplifica.
+                    </div>
+
+                </div>
+                <div class="boton-hombre aparece">
+                    <a href="#formulario">
+                        <div id="btn_intencion3" class="callto">¡Quiero Symplifica!</div>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div id="formulario">
-        	<div class="titulo">
-                <h4>¿Listo para hacer tu vida más fácil?</h4>
-                <h2>Inscríbete ahora y recibe tres meses gratis</h2>
-            </div>
-
-
-            {# app/Resources/views/General/landing_with_form.html.twig #}
-
-            {{ form_start(form, {'attr': {'id': 'formulario_inscripcion'}}) }}
-                {{ form_row(form.name) }}
-                {{ form_row(form.entity_type, { 'id': 'entity' }) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.phone) }}
-                <button id="btn_registro" type="submit">Enviar</button>
-            {{ form_end(form) }}
+<section>
+    <div id="asi-de-facil">
+        <div class="cont-gris">
+            <h2>Hacemos tu vida más sencilla en muy pocos pasos</h2>
+            <h4>Inscríbete y disfruta de la tranquilidad</h4>
         </div>
-    </section>
-    <!--modal-------------------------->
 
-          <div id="gracias" class="modal">
-            <div id="done">
-            	<div id="done1">
-                	<div id="done1-check">
-                    <img src="{{ asset('public/img/landing/check.png') }}" width="100%" height="auto">
-                    </div>
-                    <div id="done1-text">
-                    	Tu inscripción<br>
-                        se realizó con éxito
-                    </div>
-                    <span style="cursor: pointer" id="close">x</span>
-                </div>
-                <div id="done2">
-                	Pronto estaremos listos para brindarte el mejor servicio y <span>symplificar tu día a día.</span>
-                </div>
+        <div id="info-facil" class="scrollme">
+            <div class="cont-facil">
+                <img class="pc-width" src="{{ asset('public/img/landing/pc.png') }}" width="90%" height="auto">
             </div>
-
-          </div>
-
-        <!--termina modal-------------------------->
-
-    <footer>
-        	<div id="footer-content">
-                	<div class="text" style="text-align:right; border-right: 1px solid #71CBC9">
-                     <img src="{{ asset('public/img/landing/logo-foot.png') }}"><br><br>
-                  </div>
-
-                  <div class="text">
-                    	<h4>¿Tienes preguntas?</h4>
-                      <h3>contactanos@symplifica.com</h3>
-                  </div>
-
-            </div>
-
-            <div id="redesfoot">
+            <div class="cont-facil animateme" data-when="enter" data-from="0.75" data-to="0" data-opacity="0"
+                 data-translatex="400">
+                <h1 style="color:#5D5D5D">¡Así de fácil!</h1>
                 <ul>
-                  <li>Síguenos</li>
-                  <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank"><li><img src="{{ asset('public/img/landing/face.png') }}"></i></li></a>
-                   <a href="https://twitter.com/symplifica_" target="_blank"><li><img src="{{ asset('public/img/landing/tweet.png') }}"></li></a>
-                   <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica" target="_blank"><li class="blue redes"><li><img src="{{ asset('public/img/landing/link.png') }}"></li></a>
+                    <img class="img" src="{{ asset('public/img/landing/1.png') }}">
+                    <li><span>Completa unas preguntas </span>- te aseguramos que son muy fáciles</li>
+                    <img class="img" src="{{ asset('public/img/landing/2.png') }}">
+                    <li><span>Carga algunos documentos </span>- consíguelos en unos minutos</li>
+                    <img class="img" src="{{ asset('public/img/landing/3.png') }}">
+                    <li><span>Autorízanos a realizar los procesos </span>- nosotros hacemos el trabajo duro</li>
+                    <img class="img" src="{{ asset('public/img/landing/4.png') }}">
+                    <li><span>Y relájate...</span> no tendrás que preocuparte más por los procesos de nómina</li>
                 </ul>
             </div>
+        </div>
+    </div>
 
-            <div id="derechos"> <!--añadi este div, es nuevo-->
-            	Copyright © 2016 symplifica.com | Aviso de Privacidad<br>
-                    Prohibida su reproducción total o parcial, así como su traducción a cualquier
-                    idioma sin autorización escrita de su titular.
+    <div id="formulario">
+        <div class="titulo">
+            <h4>¿Listo para hacer tu vida más fácil?</h4>
+
+            <h2>Inscríbete ahora y recibe tres meses gratis</h2>
+        </div>
+
+
+        {# app/Resources/views/General/landing_with_form.html.twig #}
+
+        {{ form_start(form, {'attr': {'id': 'formulario_inscripcion'}}) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.entity_type, { 'id': 'entity' }) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.phone) }}
+        <button id="btn_registro" type="submit">Enviar</button>
+        {{ form_end(form) }}
+    </div>
+</section>
+<!--modal-------------------------->
+
+<div id="gracias" class="modal">
+    <div id="done">
+        <div id="done1">
+            <div id="done1-check">
+                <img src="{{ asset('public/img/landing/check.png') }}" width="100%" height="auto">
             </div>
-        </footer>
+            <div id="done1-text">
+                Tu inscripción<br>
+                se realizó con éxito
+            </div>
+            <span style="cursor: pointer" id="close">x</span>
+        </div>
+        <div id="done2">
+            Pronto estaremos listos para brindarte el mejor servicio y <span>symplificar tu día a día.</span>
+        </div>
+    </div>
 
-    <script>
+</div>
 
-      //Este es para poner el modal cuando regrese.
-      $(document).ready(function(){
-        var url = window.location.href;
-        if(url.indexOf('#thanks') > -1) {
-          document.getElementById("gracias").style.display = "block";
-          document.getElementById("done").style.display = "block";
-        }
-      });
+<!--termina modal-------------------------->
 
-      $("#hambur").click(function(){
-          $("#redes-resp").slideToggle();
-      });
+<footer>
+    <div id="footer-content">
+        <div class="text" style="text-align:right; border-right: 1px solid #71CBC9">
+            <img src="{{ asset('public/img/landing/logo-foot.png') }}"><br><br>
+        </div>
 
-    	$(document).ready(function(){
+        <div class="text">
+            <h4>¿Tienes preguntas?</h4>
 
-    		$("#texto-banner").fadeIn(1500);
-        /*
-    		$("button").click(function(){
-    			$("#gracias").fadeIn("slow");
-    			$("#done").delay(300).slideDown("slow");
-    		});
-        */
-    		$("#close").click(function(){
-    			$("#done").slideUp("slow");
-    			$("#gracias").delay(200).fadeOut("slow");
-    		});
+            <h3>contactanos@symplifica.com</h3>
+        </div>
 
+    </div>
 
-    	$('a[href^="#"]').on('click',function (e) {
-    	    e.preventDefault();
+    <div id="redesfoot">
+        <ul>
+            <li>Síguenos</li>
+            <a href="https://www.facebook.com/Symplifica-1538503439800792/timeline" target="_blank">
+                <li><img src="{{ asset('public/img/landing/face.png') }}"></i></li>
+            </a>
+            <a href="https://twitter.com/symplifica_" target="_blank">
+                <li><img src="{{ asset('public/img/landing/tweet.png') }}"></li>
+            </a>
+            <a href="https://www.linkedin.com/company/10358058?trk=tyah&trkInfo=clickedVertical%3Acompany%2CclickedEntityId%3A10358058%2Cidx%3A1-1-1%2CtarId%3A1456525736089%2Ctas%3Asymplifica"
+               target="_blank">
+                <li class="blue redes">
+                <li><img src="{{ asset('public/img/landing/link.png') }}"></li>
+            </a>
+        </ul>
+    </div>
 
-    	    var target = this.hash;
-    	    var $target = $(target);
-
-    	    $('html, body').stop().animate({
-    	        'scrollTop': $target.offset().top
-    	    }, 1500, 'swing', function () {
-    	        window.location.hash = target;
-    	    });
-    	});
-    });
-
-    	</script>
-      <script>
-      // This and the next scripts are to enable validation in safari.
-      jQuery.swap = function( elem, options, callback, args ) {
-         var ret, name, old = {};
-         // Remember the old values, and insert the new ones
-         for ( name in options ) {
-                 old[ name ] = elem.style[ name ];
-                 elem.style[ name ] = options[ name ];
-         }
-
-         ret = callback.apply( elem, args || [] );
-
-         // Revert the old values
-         for ( name in options ) {
-                 elem.style[ name ] = old[ name ];
-         }
-         return ret;
-      };
-      </script>
-      <script src="{{ asset('public/js/js-webshim/minified/polyfiller.js')}}"></script>
+    <div id="derechos"> <!--añadi este div, es nuevo-->
+        Copyright © 2016 symplifica.com | Aviso de Privacidad<br>
+        Prohibida su reproducción total o parcial, así como su traducción a cualquier
+        idioma sin autorización escrita de su titular.
+    </div>
+</footer>
 
 <script>
-  webshim.setOptions('forms', {
-      //show custom styleable validation bubble
-      replaceValidationUI: true
-  });
-  webshim.activeLang('es');
-  //start polyfilling
-  webshim.polyfill('forms');
+
+    //Este es para poner el modal cuando regrese.
+    $(document).ready(function () {
+        var url = window.location.href;
+        if (url.indexOf('#thanks') > -1) {
+            document.getElementById("gracias").style.display = "block";
+            document.getElementById("done").style.display = "block";
+        }
+    });
+
+    $("#hambur").click(function () {
+        $("#redes-resp").slideToggle();
+    });
+
+    $(document).ready(function () {
+
+        $("#texto-banner").fadeIn(1500);
+        /*
+         $("button").click(function(){
+         $("#gracias").fadeIn("slow");
+         $("#done").delay(300).slideDown("slow");
+         });
+         */
+        $("#close").click(function () {
+            $("#done").slideUp("slow");
+            $("#gracias").delay(200).fadeOut("slow");
+        });
+
+
+        $('a[href^="#"]').on('click', function (e) {
+            e.preventDefault();
+
+            var target = this.hash;
+            var $target = $(target);
+
+            $('html, body').stop().animate({
+                'scrollTop': $target.offset().top
+            }, 1500, 'swing', function () {
+                window.location.hash = target;
+            });
+        });
+    });
+
 </script>
-        <!---codigo de analitics------------------------------------------------------------------->
-        <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<script>
+    // This and the next scripts are to enable validation in safari.
+    jQuery.swap = function (elem, options, callback, args) {
+        var ret, name, old = {};
+        // Remember the old values, and insert the new ones
+        for (name in options) {
+            old[name] = elem.style[name];
+            elem.style[name] = options[name];
+        }
 
-      ga('create', 'UA-70850811-3', 'auto');
-      ga('send', 'pageview');
+        ret = callback.apply(elem, args || []);
 
-    </script>
+        // Revert the old values
+        for (name in options) {
+            elem.style[name] = old[name];
+        }
+        return ret;
+    };
+</script>
+<script src="{{ asset('public/js/js-webshim/minified/polyfiller.js') }}"></script>
+
+<script>
+    webshim.setOptions('forms', {
+        //show custom styleable validation bubble
+        replaceValidationUI: true
+    });
+    webshim.activeLang('es');
+    //start polyfilling
+    webshim.polyfill('forms');
+</script>
+<!---codigo de analitics------------------------------------------------------------------->
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-70850811-3', 'auto');
+    ga('send', 'pageview');
+
+</script>
 
 </body>
 </html>
