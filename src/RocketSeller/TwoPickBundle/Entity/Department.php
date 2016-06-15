@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Department
@@ -39,6 +41,7 @@ class Department
     /**
      *
      * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\City", mappedBy="departmentDepartment")
+     * @Exclude
      */
     private $citys;
 
@@ -48,6 +51,7 @@ class Department
     private $departmentCode;
     /**
      * @ORM\ManyToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\Entity", mappedBy="departments")
+     * @Exclude
      */
     private $entities;
 

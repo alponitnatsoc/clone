@@ -3,6 +3,9 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
+
 
 /**
  * Employee
@@ -41,15 +44,18 @@ class Employee
 
     /**
      * @ORM\OneToMany(targetEntity="EmployeeHasEntity", mappedBy="employeeEmployee", cascade={"persist"})
+     * @Exclude
      */
     private $entities;
 
     /**
      * @ORM\OneToMany(targetEntity="EmployerHasEmployee", mappedBy="employeeEmployee", cascade={"persist"})
+     * @Exclude
      */
     private $employeeHasEmployers;
     /**
      * @ORM\OneToMany(targetEntity="EmployeeHasBeneficiary", mappedBy="employeeEmployee", cascade={"persist"})
+     * @Exclude
      */
     private $employeeHasBeneficiary;
     /**
