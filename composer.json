@@ -38,7 +38,7 @@
         "facebook/php-sdk-v4": "~5.0",
         "sonata-project/media-bundle": "^2.3",
         "sonata-project/easy-extends-bundle": "^2.1",
-        "sonata-project/intl-bundle": "2.2-dev",
+        "sonata-project/intl-bundle": " 2.x-dev",
         "jackalope/jackalope-doctrine-dbal": "^1.2",
         "twbs/bootstrap": "3.3.*@dev",
         "doctrine/doctrine-migrations-bundle": "^1.0",

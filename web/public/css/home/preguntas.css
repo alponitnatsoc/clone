@@ -38,7 +38,7 @@ h1 {margin: 0}
 	text-align: center}
 
 #banner-beneficios-cont p {color: #5b5b5f; width: 300px; text-align: center; margin: 0 auto}
-#breadcrumb {width: 300px; margin: 20px auto; text-align: center;}
+.breadcrumb {width: 300px; margin: 20px auto; text-align: center;background: none}
 .bread-style a {color: #87868a}
 
 /*---------------empieza seccion preguntas-------------------*/
@@ -65,7 +65,8 @@ h1 {margin: 0}
 #categories {
 	width: 1100px;
 	margin: 0 auto}
-
+.pregunta p {margin: 0}
+.preguntas a {text-decoration: none}
 .contenido-cat {
 	background: #fbfbfb;
     border-radius: 5px;
@@ -78,7 +79,7 @@ h1 {margin: 0}
 
 .callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
 #callregistro {color: #6d6d71; margin: 50px 0 90px 0;text-align:center}
-a div:hover {
+a .contenido-cat:hover {
 	background: none !important}
 /*grid responsive*/
 
