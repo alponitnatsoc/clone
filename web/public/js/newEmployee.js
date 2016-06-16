@@ -198,7 +198,7 @@ function startEmployee() {
             $('#TIModal').modal('toggle');
         }
     });
-    $('#btnToggleFijo').click(function () {
+    $('#fijo').click(function () {
         $("#register_employee_employeeHasEmployers_contractType").val("2")
         $(".definite").each(function () {
             $(this).show();
@@ -206,10 +206,10 @@ function startEmployee() {
         $('#contractIndefinido').hide();
         $('#contractFijo').show();
         $(this).addClass('active');
-        $('#btnToggleIndefinido').removeClass('active');
+        $('#indef').removeClass('active');
     });
 
-    $('#btnToggleIndefinido').click(function () {
+    $('#indef').click(function () {
         $("#register_employee_employeeHasEmployers_contractType").val("1")
         $(".definite").each(function () {
             $(this).hide();
@@ -217,17 +217,17 @@ function startEmployee() {
         $('#contractIndefinido').show();
         $('#contractFijo').hide();
         $(this).addClass('active');
-        $('#btnToggleFijo').removeClass('active');
+        $('#fijo').removeClass('active');
     });
     var contractType = $("#register_employee_employeeHasEmployers_contractType");
     selectedVal = $(contractType).find("option:selected").text();
     if (selectedVal == "Término fijo") {
-        $("#btnToggleFijo").trigger("click");
+        $("#fijo").trigger("click");
         $(".definite").each(function () {
             $(this).show();
         });
     } else {
-        $("#btnToggleIndefinido").trigger("click");
+        $("#indef").trigger("click");
         $(".definite").each(function () {
             $(this).hide();
         });

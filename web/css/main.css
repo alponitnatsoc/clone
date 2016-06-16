@@ -251,7 +251,7 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 }
 
 #registrationFormContainer .form-inline select{
-    width: 25%;
+    width: 29% !important;
     float: left;
     margin-right:4%;
 }

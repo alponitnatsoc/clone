@@ -489,7 +489,7 @@
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
-                                        <div style="height: auto; overflow:hidden; width: 80%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
+                                        <div style="height: auto; overflow:hidden; width: 55%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
 
 
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
@@ -507,7 +507,7 @@
                                     <div class="col-sm-12 text-center form-group">
                                         {{ form_label(form.employeeHasEmployers.endDate) }}<br /><br/>
 
-                                        {{ form_widget(form.employeeHasEmployers.endDate) }}
+                                        <div style="height: auto;overflow: hidden;width: 55%;margin: 0 auto;">{{ form_widget(form.employeeHasEmployers.endDate) }}</div>
                                     </div>
                                 </div>
                                 {% if changeBehaviorFlag == 1 %}
