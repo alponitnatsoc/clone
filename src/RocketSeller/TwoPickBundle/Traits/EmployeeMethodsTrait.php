@@ -53,6 +53,22 @@ trait EmployeeMethodsTrait
         return null;
     }
 
+    protected function getEmployeeFces($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Employee');
+        /** @var \RocketSeller\TwoPickBundle\Entity\Employee $employee */
+        $employee = $repository->find($id);
+        $entities = $employee->getEntities();
+        /** @var \RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity $entity */
+        foreach ($entities as $entity) {
+            if ($entity->getEntityEntity()->getEntityTypeEntityType()->getPayrollCode() == "FCES") {
+                return $entity->getEntityEntity();
+            }
+        }
+
+        return null;
+    }
+
     protected function validateDocuments(User $user)
     {
         /* @var $employerHasEmployee EmployerHasEmployee */

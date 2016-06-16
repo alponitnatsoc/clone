@@ -449,7 +449,8 @@ use EmployerMethodsTrait;
                     'docNumber' => $employeePerson->getDocument(),
                     'docExpPlace' => $employeePerson->getDocumentExpeditionPlace(),
                     'eps' => $this->getEmployeeEps($employee->getIdEmployee()),
-                    'afp' => $this->getEmployeeAfp($employee->getIdEmployee())
+                    'afp' => $this->getEmployeeAfp($employee->getIdEmployee()),
+                    'fces' => $this->getEmployeeFces($employee->getIdEmployee())
                 );
 
                 $employerPerson = $employer->getPersonPerson();
@@ -555,7 +556,7 @@ use EmployerMethodsTrait;
 
                 $clientListPaymentmethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user), array('_format' => 'json'));
                 $responsePaymentsMethods = json_decode($clientListPaymentmethods->getContent(), true);
-                
+
                 $data = array(
                     'employer' => $employerInfo,
                     'accountInfo' => $responsePaymentsMethods,
