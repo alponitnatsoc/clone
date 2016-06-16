@@ -42,12 +42,12 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
         $ninera->setObligations("1. Preparar las comidas de los niños y darles de comer; 2.  mantener las habiataciones limpias y arregladas; 3. Realizar activades fuera del hogar con el(los) niños; 4. vigilar y cuidar a los niños; 5. comprar los implementos que necesite el(los) niños.");
         $manager->persist($ninera);
 
-        $enfermera = new Position();
+        /*$enfermera = new Position();
         $enfermera->setName('Enfermero(a)');
         $enfermera->setPayrollCoverageCode('1'); // Code 0.522
         $enfermera->setIdentBy("e");
         $enfermera->setObligations("1. Mantener la higiene personal del paciente y los objetos de uso inherentes a cargo; 2. proporcionar los cuidados básicos y avanzados del paciente; 3. Realizar activadas fuera del hogar con el paciente; 4. vigilar y cuidar al paciente; 5. comprar los implementos que necesite el paciente.");
-        $manager->persist($enfermera);
+        $manager->persist($enfermera);*/
 
         $mayordomo = new Position();
         $mayordomo->setName('Mayordomo');
@@ -68,7 +68,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 //         $this->addReference('position-varios', $PositionVarios);
         $this->addReference('position-otros', $conductor);
         $this->addReference('position-ninera', $ninera);
-        $this->addReference('position-enfermera', $enfermera);
+        //$this->addReference('position-enfermera', $enfermera);
         $this->addReference('position-mayordomo', $mayordomo);
 //         $this->addReference('position-amaLlaves', $amaLlaves);
     }
