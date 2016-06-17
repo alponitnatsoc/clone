@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -62,6 +62,9 @@ class NoveltyRestController extends FOSRestController
             }else{
                 $dateToday= new DateTime();
                 $methodToCall="postAddNoveltyEmployee";
+                if($noveltyType->getName()=="Anticipo"){
+                  $novelty->setUnits("1");
+                }
                 $request->request->add(array(
                     "employee_id"=>$idEmployerHasEmployee,
                     "novelty_concept_id"=>$noveltyType->getPayrollCode(),
