@@ -251,7 +251,7 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
 }
 
 #registrationFormContainer .form-inline select{
-    width: 25%;
+    width: 29% !important;
     float: left;
     margin-right:4%;
 }
@@ -389,7 +389,57 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     margin-right: 5px;
 }
 
+/*ajuste para el tipo de contrato*/
+#contratotypes {
+  height: auto;
+  overflow: hidden;
+  width: 100%
+}
 
+#radio-contrato {
+    height: auto;
+    overflow: hidden;
+    width: 100%;
+}
+.contratotipo {
+  float: left;
+   text-align: center;
+   width: 49%;
+   background: #1fcecb;
+   padding: 10px 0;
+   margin: 0 0.5%;
+   color: #FFF;
+   font-size: 17px;
+   font-weight: 700;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+#tipocont2 {display: none}
+
+#contenedor-tipocontrato {
+  width: 99%;
+  margin: 0 auto;
+}
+
+.cont-tipocontrato {
+    border: 1px dashed #CCC;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 3px 0 0 0;
+    padding: 15px 35px;
+}
+
+.cont-tipocontrato p, li {
+  color: #5D5D5D
+}
+
+.cont-tipocontrato h4 {
+  color: #349da2;
+    font-weight: 100;
+}
+
+/*ajuste para el tipo de contrato*
 /* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
 
 @media (max-width: 1200px){

@@ -404,7 +404,42 @@
                                     <p class="text-center typeQuestion" style="font-size: 16px;">Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales que le va a ofrecer</p>
                                 </div>
 
-                                <div class="row contractOptionsBox">
+                                <!--cambio de eleccion de tipo de contrato-->
+                                <div id="contratotypes">
+                                    <div id="radio-contrato">
+                                        <form action="">
+                                            <div class="contratotipo"><input id="indef" type="radio" name="gender" value="male" checked> Termino indefinido</div>
+                                            <div class="contratotipo"><input id="fijo" type="radio" name="gender" value="female"> Termino fijo</div>
+                                        </form>
+                                    </div>
+                                    <div id="contenedor-tipocontrato">
+                                        <div id="tipocont1" class="cont-tipocontrato">
+                                            <h4>Características termino indefinido</h4>
+                                            <ul>
+                                                <li>No tiene fecha determinada de terminación.</li>
+                                                <li>El periodo de pruea máximo es de 2 meses.</li>
+                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un largo perdiodo de tiempo.</li>
+                                            </ul>
+                                            <h4>Tenga en cuenta que:</h4>
+                                            <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
+                                        </div>
+                                        <div id="tipocont2" class="cont-tipocontrato">
+                                          <h4>Características termino fijo</h4>
+                                          <ul>
+                                              <li>El periodo de prueba es la quinta parte de la duración del contrato no obstante no puede superar los dos meses.</li>
+                                              <li>Se renueva automáticamente si no se notifica su terminación 30 días antes de la fecha de terminación.</li>
+                                              <li>Recomendado para empleadores que quieran contratar a un empleado por un tiempo determinado menor o igual a un año.</li>
+                                              <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
+                                              <li>Si el término fijo es inferior a un (1) año, únicamente podrá prorrogarse sucesivamente el contrato hasta por tres (3) períodos iguales o inferiores, al cabo de los cuales el término de renovación no podrá ser inferior a un (1) año.</li>
+                                          </ul>
+                                          <h4>Tenga en cuenta que:</h4>
+                                          <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
+                                          <br /><br />
+                                          Además, este tipo de contrato debe cancelarse 30 días antes que finalice.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="row contractOptionsBox">
                                     <div class="col-xs-6">
                                         <h2>Término indefinido</h2>
                                         <div class="contractFirstList">
@@ -448,13 +483,13 @@
                                             <button type="button" id="btnToggleFijo" class="btn-contrato btn ">Seleccionar</button>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
 
                                 <br/><br/>
                                 <div class="row">
                                     <div class="col-sm-12 form-group text-center">
-                                        <div style="height: auto; overflow:hidden; width: 80%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
+                                        <div style="height: auto; overflow:hidden; width: 55%; margin: 0 auto 20px auto">{{ form_label(form.employeeHasEmployers.startDate) }}
 
 
                                         {{ form_widget(form.employeeHasEmployers.startDate) }}
@@ -472,7 +507,7 @@
                                     <div class="col-sm-12 text-center form-group">
                                         {{ form_label(form.employeeHasEmployers.endDate) }}<br /><br/>
 
-                                        {{ form_widget(form.employeeHasEmployers.endDate) }}
+                                        <div style="height: auto;overflow: hidden;width: 55%;margin: 0 auto;">{{ form_widget(form.employeeHasEmployers.endDate) }}</div>
                                     </div>
                                 </div>
                                 {% if changeBehaviorFlag == 1 %}
@@ -1789,3 +1824,23 @@
     </div>
 
 {% endblock fos_user_content %}
+
+{% block javascripts %}
+  {{parent()}}
+  <script>
+      $(document).ready(function(){
+          $("#fijo").click(function(){
+              $("#tipocont1").hide("slow");
+              $("#tipocont1").hide(3000);
+              $("#tipocont2").show("slow");
+              $("#tipocont2").show(3000);
+          });
+          $("#indef").click(function(){
+              $("#tipocont2").hide("slow");
+              $("#tipocont2").hide(3000);
+              $("#tipocont1").show("slow");
+              $("#tipocont1").show(3000);
+          });
+      });
+</script>
+{% endblock javascripts %}

@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,8 +34,12 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $name = $user->getPersonPerson()->getFullName();
         $email = $user->getEmail();
-
-        $form = $this->createForm(new ContactType($name,$email), array('method'=> 'POST'));
+        if(!$user->getPersonPerson()->getPhones()->isEmpty()){
+            $phone = $user->getPersonPerson()->getPhones()->first()->getPhoneNumber();
+        }else{
+            $phone = '';
+        }
+        $form = $this->createForm(new ContactType($name,$email,$phone), array('method'=> 'POST'));
         
 
         $form->handleRequest($request);
@@ -62,39 +67,13 @@ class DefaultController extends Controller
                         break;
                 }
                 $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'contactanos@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp());
+                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'contactanos@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp(),$form->get('phone')->getData());
 
-                /*
-                $mailer = $this->get('mailer');
-                $message = $mailer->createMessage()
-                    ->setSubject($sub)
-                    ->setFrom(
-                        array($form->get('email')->getData() => $form->get('name')->getData())
-                    )
-                    ->setTo(
-                        array('andres.ramirez@symplifica.com')
-                    )
-                    ->setCc(
-                        array(
-                            'andres.ramirez@symplifica.com' => 'Andres Felipe Ramirez',
-                            $form->get('email')->getData() => $form->get('name')->getData()
-                        )
-                    )
-                    ->setBody(
-                        $this->renderView(
-                            'RocketSellerTwoPickBundle:Mail:contact.html.twig', array(
-                                'ip' => $request->getClientIp(),
-                                'name' => $form->get('name')->getData(),
-                                'email' => $form->get('email')->getData(),
-                                'message' => $form->get('message')->getData(),
-                                'subject' => $form->get('subject')->getData()
-                            )
-                        )
-                    );
-
-                $mailer->send($message);*/
-
-                $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
+                if($send){
+                    $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
+                }else{
+                    $this->addFlash('fail','Ocurrio un error');
+                }
 
                 return $this->redirect($this->generateUrl('contact'));
             }

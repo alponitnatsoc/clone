@@ -1,78 +1,199 @@
 {% extends "::new-design/public.html.twig" %}
+{% block title %}Contactanos{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
 {% block body %}
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contáctanos</title>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="{{ asset('public/css/home/contacto.css') }}"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-</head>
+<link rel="stylesheet" href="{{ asset('public/css/help.css') }}">
+<link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
 
-<body>
+<header>
+	<!--aca va el nav que ya esta hecho-->
+	<div id="banner-beneficios">
+		<div id="banner-beneficios-cont">
+			<h1 class="bold azuloscurofont">Tu opinión es importante</h1>
+			<h1 class="light azulmediofont">para nosotros, contáctanos</h1>
+		</div>
+	</div>
+</header>
 
-<main>
-		<header>
-				<!--aca va el nav que ya esta hecho-->
-				<div id="banner-beneficios">
-						<div id="banner-beneficios-cont">
-								<h1 class="bold azuloscurofont">Tu opinión es importante</h1>
-								<h1 class="light azulmediofont">para nosotros, contáctanos</h1>
-							</div>
-					</div>
-			</header>
+<section>
+		<div id="breadcrumb">
+			<h2 class="light azulmediofont">Contáctanos</h2>
+			<!--<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Contáctanos</span></div>-->
+		</div>
 
-			<section>
-					<div id="breadcrumb">
-						<h2 class="light azulmediofont">Contáctanos</h2>
-						<!--<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Contáctanos</span></div>-->
-					</div>
+		<div id="texto-descript">
+			<h4 class="light grisclarofont">Tus inquietudes son importantes para nosotros</h4>
 
-					<div id="texto-descript">
-						<h4 class="light grisclarofont">Tus inquietudes son importantes para nosotros</h4>
+		</div>
+</section>
 
-					</div>
-			</section>
-
-			<section>
-				<div id="formulario">
-						<form id="contact_form" action="#" method="POST" enctype="multipart/form-data">
-									<div class="row">
-											<label class="semi-italic grisclarofont" for="name">Nombre:</label><br />
-											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
-									</div>
-									<div class="row">
-											<label class="semi-italic grisclarofont" for="name">Teléfono:</label><br />
-											<input id="name" class="input" name="name" type="text" value="" size="30" /><br />
-									</div>
-									<div class="row">
-										<select class="input">
-												<option value="volvo">Selecciona una categoría</option>
-												<option value="volvo">Preguntas del registro</option>
-												<option value="saab">Pago de la nómina y aportes</option>
-												<option value="opel">Calculadora salarial</option>
-												<option value="audi">Consulta juridica</option>
-												<option value="opel">PLanes y precios</option>
-												<option value="audi">Otros</option>
-												</select><br />
-									</div>
-									<div class="row">
-											<label  class="semi-italic grisclarofont" for="email">Email:</label><br />
-											<input id="email" class="input" name="email" type="text" value="" size="30" /><br />
-									</div>
-									<div class="row">
-											<label class="semi-italic grisclarofont" for="message">Mensaje:</label><br />
-											<textarea placeholder="¿Tienes preguntas? escribela aquí y tendras respuestas lo antes posible" id="message" class="message" name="message" rows="7" cols="30"></textarea><br />
-									</div>
-									<input class="naranja bold" id="submit_button" type="submit" value="Enviar email" />
-							</form>
+<section>
+	<div id="formulario">
+		<div id="contact_form" enctype="multipart/form-data">
+			{{ form_errors(form) }}
+			{{ form_start(form) }}
+			<div class="row">
+				{% for label, flashes in app.session.flashbag.all %}
+					{% for flash in flashes %}
+						<div class="alert alert-{{ label }} semi-italic" for="alert">
+							{{ flash }}
+						</div>
+					{% endfor %}
+				{% endfor %}
+			</div>
+			<div class="row">
+				<div class="semi-italic grisclarofont" for="name">
+					{{ form_label(form.name) }}
+				</div>
+				<div id="name" class="input" name="name" type="text" value="" size="30">
+					{{ form_widget(form.name) }}
+					<div id="error" class="error" name="name" type="error" size="30">
+						{{ form_errors(form.name) }}
 					</div>
 
+				</div><br />
 
-			</section>
- </main>
-</body>
-</html>
+			</div>
+			<div class="row">
+				<div class="semi-italic grisclarofont" for="phone">
+					{{ form_label(form.phone) }}
+				</div>
+				<div id="name" class="input" name="name" type="text" value="" size="30">
+					{{ form_widget(form.phone) }}
+					<div id="error" class="error" name="name" type="error" size="30">
+						{{ form_errors(form.phone) }}
+					</div>
 
+				</div><br />
+
+			</div>
+			<div class="row">
+				<div  class="semi-italic grisclarofont" for="email">
+					{{ form_label(form.email) }}
+				</div>
+				<div id="email" class="input" name="email" type="text" value="" size="30">
+					{{ form_widget(form.email) }}
+					{{ form_errors(form.email) }}
+				</div><br />
+			</div>
+			<div class="row">
+				<div  class="semi-italic grisclarofont" for="email">
+					{{ form_label(form.subject) }}
+				</div>
+				<div class="input">
+					{{ form_widget(form.subject) }}
+				</div><br />
+			</div>
+			<div class="row">
+				<div class="semi-italic grisclarofont" for="message">
+					{{ form_label(form.message) }}
+				</div>
+				<div id="message" name="message" rows="15" cols="30">
+					{{ form_widget(form.message) }}
+					{{ form_errors(form.message) }}
+				</div><br />
+			</div>
+			<div>
+				{{ form_widget(form) }}
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+</section>
+
+{% endblock %}
+{% block javascripts %}
+
+	<script>
+		var state = "/old";
+		jQuery(document).ready(function () {
+			if (!jsLoader(location.href)) {
+				$("#main").find("a").not(".notAjax").on("click", function (e) {
+					e.preventDefault();
+					var href = $(this).attr('href');
+					history.pushState({}, '', href);
+					sendAjax(href);
+				});
+			} else {
+				{#$(".body-container a:not(#main a)").not(".notAjax").on("click", function (e) {
+                    e.preventDefault();
+                    var href = $(this).attr('href');
+                    history.pushState({}, '', href);
+                    sendAjax(href);
+                });
+                #}
+			}
+//                  ajax que maneja los requests
+			$(window).on("popstate", function (e) {
+				sendAjax(location.href);
+			});
+			$(window).keydown(function(event){
+				if(event.keyCode == 13) {
+					event.preventDefault();
+					return false;
+				}
+			});
+			// Simple ajax url manager
+			var redirector = getParameterByName('redirector');
+			//console.log(redirector);
+			if (redirector) {
+				sendAjax(redirector);
+			}
+//                  addNoClick();
+		});
+
+		function sendAjax(url, form) {
+			if (url == "") {
+				return false;
+			}
+			$.ajax({
+				url: url,
+				type: $(form).attr('method'),
+				data: $(form).serializeArray(),
+				statusCode: {
+					500: function () {
+						$("#errorModal").modal("show");
+					}
+				}
+			}).done(function (data) {
+				window.scrollTo(0, 0);
+				if (data["url"] != null) {
+					console.log(data["url"]);
+					sendAjax(data["url"]);
+				} else {
+					$('#main').replaceWith(
+							// ... with the returned one from the AJAX response.
+							$(data).find('#main'));
+					addClick();
+					if (!jsLoader(url)) {
+						addSumbit();
+					}
+					// This thing is not working, we should check this later
+					//var currentPage = document.location;
+					//document.location = currentPage + "?redirector=" + url;
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR == errorHandleTry(jqXHR)) {
+					$("#errorModal").modal("show");
+				}
+			});
+		}
+
+		function jsLoader(url) {
+			if (typeof url !== 'undefined') {
+				if (url.lastIndexOf("/contactenos") !== -1) {
+					$.getScript("{{ asset('public/js/contact.js') }}").done(function () {
+						startContact();
+					});
+					return true;
+				}
+				return false;
+			}
+			return false;
+		}
+	</script>
 {% endblock %}

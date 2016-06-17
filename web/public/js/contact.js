@@ -9,13 +9,15 @@ function startContact() {
         validator = $("form[name='contact']").validate({
             rules: {
                 "contact[name]": "required",
-                "contact[email]":"required",
+                "contact[email]": {required:true, email:true, minlength:5 },
+                "contact[phone]": {required:true, number:true, minlength:7 },
                 "contact[subject]":"required",
                 "contact[message]":"required"
             },
             messages: {
                 "contact[name]": "Por favor digita tu nombre",
-                "contact[email]":"Por favor digita tu email",
+                "contact[email]": {minlength: "El E-mail es muy corto.", required: "Por favor digita tu email", email: "No es un E-mail valido" },
+                "contact[phone]": {minlength: "El numero digitado es muy corto, debe tener al menos 7 digitos.", required: "Por favor Digita un numero de contacto", number: "Este campo solo admite numeros" },
                 "contact[message]":"Por favor escribe el mensaje"
             }
         });
@@ -31,8 +33,12 @@ function startContact() {
 
             }
         });
-        
         $(form).find("select[name*='contact[email]']").not("[type='hidden']").each(function () {
+            if (!validator.element($(this))) {
+                flagValid = false;
+            }
+        });
+        $(form).find("select[name*='contact[phone]']").not("[type='hidden']").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
             }
@@ -54,6 +60,7 @@ function startContact() {
             data: {
                 name: $(form).find("input[name='contact[name]']:checked").val(),
                 email: $(form).find("input[name='contact[email]']:checked").val(),
+                phone: $(form).find("input[name='contact[phone]']:checked").val(),
                 subject: $(form).find("input[name='contact[subject]']:checked").val(),
                 message: $(form).find("input[name='contact[message]']:checked").val()
             }

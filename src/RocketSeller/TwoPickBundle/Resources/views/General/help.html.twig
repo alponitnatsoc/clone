@@ -32,6 +32,16 @@
 
 									</div>
 									<div class="row">
+										<div class="semi-italic grisclarofont" for="phone">
+											{{ form_label(form.phone) }}
+										</div>
+										<div id="name" class="input" name="name" type="text" value="" size="30">
+											{{ form_widget(form.phone) }}
+											{{ form_errors(form.phone) }}
+										</div><br />
+
+									</div>
+									<div class="row">
 											<div  class="semi-italic grisclarofont" for="email">
 												{{ form_label(form.email) }}
 											</div>

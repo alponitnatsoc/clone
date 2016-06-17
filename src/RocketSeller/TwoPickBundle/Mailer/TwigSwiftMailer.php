@@ -46,7 +46,7 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
-    public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip, $path = null)
+    public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip,$phone, $path = null)
     {
         $msg = array(
             'name' => $name,
@@ -54,8 +54,10 @@ class TwigSwiftMailer implements MailerInterface
             'fromEmail' =>$fromEmail,
             'subject' =>$subject,
             'message' =>$message,
-            'ip'=> $ip
+            'ip'=> $ip,
+            'phone'=>$phone
         );
+        
         $context = $this->twig->mergeGlobals($msg);
         $template = $this->twig->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);

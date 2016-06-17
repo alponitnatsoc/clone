@@ -14,31 +14,77 @@ class ContactType extends AbstractType
 {
     private $name;
     private $email;
+    private $phone;
 
-    public function __construct($name,$email){
+    public function __construct($name,$email,$phone){
         $this->name  = $name;
         $this->email = $email;
+        $this->phone = $phone;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $builder
-            ->setMethod($options['method'])
-            ->add('name', 'text',array(
-                    'data'     =>$this->name,
-                    'label'    => 'Nombre:',
-                    'required' => true
-                )
-            )
+            ->setMethod($options['method']);
 
-            ->add('email', 'email',array(
-                    'data'    =>$this->email,
-                    'label'   => 'Email:',
-                    'required'=> true
+        if($this->name!='' and $this->email!='' and $this->phone!=''){
+            $builder
+                ->add('name', 'text',array(
+                        'data'     =>$this->name,
+                        'label'    => 'Nombre:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Digita tu nombre'
+                        )
+                    )
                 )
-            )
-
+                ->add('email', 'email',array(
+                        'data'    =>$this->email,
+                        'label'   => 'Email:',
+                        'required'=> true,
+                        'attr' => array(
+                            'placeholder' => 'Digita un correo electronico de contacto'
+                        )
+                    )
+                )
+                ->add('phone', 'number',array(
+                        'data'  =>$this->phone,
+                        'label' => 'Telefono / Celular:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Digita tu nombre'
+                        )
+                    )
+                );
+        }else{
+            $builder
+                ->add('name', 'text',array(
+                        'label'    => 'Nombre:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Digita tu nombre'
+                        )
+                    )
+                )
+                ->add('email', 'email',array(
+                        'label'   => 'Email:',
+                        'required'=> true,
+                        'attr' => array(
+                            'placeholder' => 'Digita un correo electronico de contacto'
+                        )
+                    )
+                )
+                ->add('phone', 'number',array(
+                        'label' => 'Telefono / Celular:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Digita tu nombre'
+                        )
+                    )
+                );
+        }
+        $builder
             ->add('subject', 'choice', array(
                     'label'   =>'Con que necesitas ayuda?',
                     'choices' => array(
@@ -57,7 +103,7 @@ class ContactType extends AbstractType
             )
         ->add('message', 'textarea', array(
             'attr' => array(
-                'placeholder' => 'Escribe Tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+                'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
             )
         ))
 
