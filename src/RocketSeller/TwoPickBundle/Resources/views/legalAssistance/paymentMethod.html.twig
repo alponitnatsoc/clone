@@ -92,33 +92,30 @@
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
 
             <br/><br/>
-            <h3>
-                <i>No corras riesgos, nuestro consultorio jurídico está listo para orientarte</i>
+            <h3 class="borderh3">
+                <i class="i"><strong>No corras riesgos</strong><br>nuestro consultorio jurídico está listo para orientarte</i>
             </h3>
             <br/>
-            <h4 style="font-weight: lighter;">
+            <h4 style="font-weight: lighter;color: #989898;">
                 Expón tu caso y nuestros abogados podrán ofrecerte un diagnóstico que te permita saber cómo abordarlo*
             </h4>
             <br/>
         </div>
     </div>
     <div class="row">
-        <div class="priceContainer">
+        <div class="priceContainer pricelegalpay">
             <h2>Valor de la consulta</h2>
             <h1>$150.000</h1>
         </div>
     </div>
-    <div class="row">
-        <br/>
+    <div class="row condicioneslegalpay">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <h5>
                 <i>Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes </i><strong>24
                     horas hábiles</strong>
             </h5>
         </div>
-    </div>
-    <br/>
-    <div class="row">
+        <br>
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <small style="font-weight: lighter;"><i>
                     * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se
@@ -130,7 +127,7 @@
     <br/>
     <hr style="width: 75%;"/>
     <div class="col-sm-8 col-sm-offset-2" style="text-align:center;">
-        <h3>
+        <h3 style="font-weight: 700;color: #00858c">
 Pago de consulta jurídicia inicial</h3>
 <h4 style="font-weight: lighter;"><i>Valor de la consulta jurídica por una (1) hora</i></h4>
         <!--
@@ -144,7 +141,7 @@ Pago de consulta jurídicia inicial</h3>
             </div>
             <div style="" class="col-md-4 text-center">
                 <input type="radio" checked="true" value="debito" name="typeMethod" id="debito_radio" class="debitPayBtn">
-                <label style="font-weight: normal;" for="debito_radio">Cuenta bancaria</label>                
+                <label style="font-weight: normal;" for="debito_radio">Cuenta bancaria</label>
             </div>
         </div>
         <!--
@@ -168,7 +165,7 @@ Pago de consulta jurídicia inicial</h3>
             <div class="">
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
-                <div id='' class='creditCardForm col-md-12' style="display:none;">
+                <div id='' class='creditCardForm col-md-12' style="display:none;color:#7D7D7D">
                     <hr/>
                     <h4 class="text-center" style="color:#00c4c5">Información de tu tarjeta de crédito</h4>
                     <br/>
@@ -197,7 +194,7 @@ Pago de consulta jurídicia inicial</h3>
                         <button type="submit" class="btn register-AS1 btn-symplifica btn">Continuar</button>
                     </div>
                 </div>
-                <div class="debitCardForm col-md-12" style="display:block;">
+                <div class="debitCardForm col-md-12" style="display:block;color:#7D7D7D">
                     <hr/>
                     <h4 class="text-center" style="color:#00c4c5">Información de tu cuenta bancaria</h4>
                     <br/>
@@ -259,7 +256,7 @@ Pago de consulta jurídicia inicial</h3>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <!--<hr style="width: 75%;"/>-->
                     </div>
@@ -272,7 +269,7 @@ Pago de consulta jurídicia inicial</h3>
                         </div>
                     </div>
 
-                    
+
                 </div>
                 <input class="methodTypeInput" name="methodType" value="" hidden="true"></input>
                 {{ form_end(form) }}
