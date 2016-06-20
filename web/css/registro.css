@@ -73,6 +73,11 @@ font-weight: 100;
     border-radius: 5px;
     padding: 20px 0;
 }
+@media only screen and (max-width: 1200px) {
+  .responsivestyle {white-space: normal;}
+  .padd {padding: 6px 30px;margin-bottom: 5px}
+}
+
 @media only screen and (max-width: 1024px) {
   .condicioneslegalpay {width: 90%}
 }
