@@ -118,29 +118,26 @@ trait EmployeeMethodsTrait
             if (!$docs[$type]) {
                 $msj = "";
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
-
+                $dAction=null;
+                $dUrl=null;
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
-                    $contratoType = $documentTypeRepo->findOneBy(array('name' => "Contrato"));
                     $documentType = 'Contrato';
-                    $msj = "Generar contrato con Symplifica";
-                    $url = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
-                    $this->createNotification($user->getPersonPerson(), $msj, $url, $contratoType, "Bajar");
+                    $dAction="Bajar";
                     $msj = "Subir copia del contrato de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                 } elseif ($type == 'Carta autorización Symplifica') {
-                    $cartaType = $documentTypeRepo->findOneBy(array('name' => "Carta autorización Symplifica"));
                     $documentType = 'Carta autorización Symplifica';
-                    $msj = "Generar Carta autorización Symplifica";
-                    $url = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
-                    $this->createNotification($user->getPersonPerson(), $msj, $url, $cartaType, "Bajar");
                     $msj = "Subir copia de la Carta autorización Symplifica de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $dAction="Bajar";
+                    $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType);
+                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Subir",$dAction,$dUrl);
             }
         }
     }
@@ -184,7 +181,8 @@ trait EmployeeMethodsTrait
             if (!$docs[$type]) {
                 $msj = "";
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
-
+                $dAction=null;
+                $dUrl=null;
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'Cedula';
@@ -192,22 +190,20 @@ trait EmployeeMethodsTrait
                     $msj = "Subir copia del RUT de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
                     $documentType = 'RUT';
                 } elseif ($type == 'Mandato'){
-                  $mandatoType = $documentTypeRepo->findOneBy(array('name' => "Mandato"));
                   $documentType = 'Mandato';
-                  $msj = "Generar Mandato";
-                  $url = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
-                  $this->createNotification($user->getPersonPerson(), $msj, $url, $mandatoType, "Bajar");
                   $msj = "Subir mandato firmado de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst(ucfirst($person->getLastName1()));
+                  $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
+                  $dAction="Bajar";
                 }
-                $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
+                $documentType = $documentTypeRepo->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType);
+                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Subir",$dAction,$dUrl);
             }
         }
     }
 
-    protected function createNotification($person, $descripcion, $url, $documentType = null, $action = "Subir")
+    protected function createNotification($person, $descripcion, $url, $documentType = null, $action = "Subir",$dAction=null,$dUrl=null)
     {
         $notification = new Notification();
         $notification->setPersonPerson($person);
@@ -217,6 +213,8 @@ trait EmployeeMethodsTrait
         $notification->setDescription($descripcion);
         $notification->setRelatedLink($url);
         $notification->setAccion($action);
+        $notification->setDownloadAction($dAction);
+        $notification->setDownloadLink($dUrl);
         $em = $this->getDoctrine()->getManager();
         $em->persist($notification);
         $em->flush();

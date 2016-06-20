@@ -123,6 +123,8 @@ trait PayrollMethodsTrait
                     }
                     $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
                     $totalLiquidation = $this->totalLiquidation($detailNomina);
+                    if($totalLiquidation==0)
+                        break;
                     $productNomina = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PN'));
                     $tempPOD->setPayrollPayroll($payroll);
                     $tempPOD->setProductProduct($productNomina);
