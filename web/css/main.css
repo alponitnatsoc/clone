@@ -439,6 +439,26 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     font-weight: 100;
 }
 
+/*seccion certificados*/
+.symplificate {
+  text-align: center;
+margin: 75px 0 25px 0;
+}
+.symplificate span {
+  color: #7b7b7b;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0 145px;
+}
+@media (max-width: 990px){
+  .symplificate span {
+    padding: 0px 20px;
+  }
+}
+
+
+/*fin seccion certificados*/
+
 /*ajuste para el tipo de contrato*
 /* MEDIA QUERIES PARA RESPONSIVE - 20160604 NATALIABH */
 

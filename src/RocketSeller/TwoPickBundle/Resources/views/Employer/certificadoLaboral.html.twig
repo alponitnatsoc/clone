@@ -1,16 +1,14 @@
 {% block content %}
-    <h1 align="center">{{ employer.personPerson.names|upper}} {{ employer.personPerson.lastName1|upper}} {{ employer.personPerson.lastName2|upper}}</h1>
-    <p align="center">{{ employer.personPerson.documentType|trans|lower }} {{ employer.personPerson.document }}</p>
-    <br align="center"></br>
-    <h2 align="center">CERTIFICA QUE:</h1>
-    <p align="center"></p>	
-    La persona {{ employee.personPerson.names|upper }} {{employee.personPerson.lastName1|upper }} {{ employee.personPerson.lastName2|upper}}  
-    identificada con {{ (employee.personPerson.documentType~'_name')|trans|lower }} número {{ employee.personPerson.document }} de 
-    {{ employee.personPerson.documentExpeditionPlace|lower|capitalize }} desempeñó labores de servicio doméstico durante el periodo 
-    {{ contrato.startDate|date("d") }} de {{ contrato.startDate|date("F")|trans|lower }} de {{ contrato.startDate|date("Y") }} 
-    hasta {{ "now"|date("d") }} de {{ "now"|date("F")|trans|lower }} de {{ "now"|date("Y") }}, de acuerdo a la relación contractual que se 
-    encuentra establecida conmigo, con una asignación salarial de ${{ contrato.salary }} pesos colombianos diarios.
-    <br align="center">
-    <p align="center"></p>
-    La anterior certificación se expide a solicitud del interesado, a los {{ "now"|date("d") }} días del mes de {{ "now"|date("F") }} de {{ "now"|date("Y") }}.
+    <h1 align="center" style="font-weight: 800;">{{ employer.personPerson.names|upper}} {{ employer.personPerson.lastName1|upper}} {{ employer.personPerson.lastName2|upper}}</h1>
+    <p align="center" style="font-size: 20px;">{{ employer.personPerson.documentType|trans|lower }} {{ employer.personPerson.document }}</p>
+    <h2 align="center" style="font-weight: 100;">CERTIFICA QUE:</h1>
+    <p class="textocert">
+      {{ employee.personPerson.names|upper }} {{employee.personPerson.lastName1|upper }} {{ employee.personPerson.lastName2|upper}}
+      identificada con {{ (employee.personPerson.documentType~'_name')|trans|lower }} número {{ employee.personPerson.document }} de
+      {{ employee.personPerson.documentExpeditionPlace|lower|capitalize }} desempeñó labores de servicio doméstico durante el periodo
+      {{ contrato.startDate|date("d") }} de {{ contrato.startDate|date("F")|trans|lower }} de {{ contrato.startDate|date("Y") }}
+      hasta {{ "now"|date("d") }} de {{ "now"|date("F")|trans|lower }} de {{ "now"|date("Y") }}, de acuerdo a la relación contractual que se
+      encuentra establecida conmigo, con una asignación salarial de ${{ contrato.salary }} pesos colombianos diarios.<br><br>
+      <strong>La anterior certificación se expide a solicitud del interesado, a los {{ "now"|date("d") }} días del mes de {{ "now"|date("F") }} de {{ "now"|date("Y") }}.</strong>
+    </p>
 {% endblock %}
