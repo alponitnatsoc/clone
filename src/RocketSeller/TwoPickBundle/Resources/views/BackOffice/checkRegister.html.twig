@@ -14,14 +14,16 @@
             <div class="panel panel-default">
                 <h4 class="col-md-12 panel-heading">Información Registrada</h4>
 
-                    {% set document = person.docByType("Cedula") %}
-                    {% if person.docByType("Cedula")=='' %}
-                        <div class="col-md-6" style="margin-top:250px; text-align:center">
-                        <p>Llamar al cliente {{ person.fullName}} y recordarle que suba la cedula</p>
+                {% set document = person.docByType("Cedula") %}
+                {% if person.docByType("Cedula")=='' %}
+                <div class="col-md-6" style="margin-top:250px; text-align:center">
+                    <p>Llamar al cliente {{ person.fullName }} y recordarle que suba la cedula</p>
                     {% else %}
                         <div class="col-md-6">
-                            {{ dump(path) }}
-                        </embed>
+                            <embed width="400" height="500" src= {{ path_document }}  alt=”pdf”
+                                   pluginspage=”http://www.adobe.com/products/acrobat/readstep2.html”>
+                            </embed>
+                        </div>
                     {% endif %}
 
                 </div>
@@ -29,99 +31,116 @@
                     <table class="table">
                         <thead class="tab-header">
                         <tr>
-                            <th style="vertical-align: middle" >Campo</th>
-                            <th style="vertical-align: middle" >Valor</th>
-                            <th style="vertical-align: middle" >Error</th>
+                            <th style="vertical-align: middle">Campo</th>
+                            <th style="vertical-align: middle">Valor</th>
+                            <th style="vertical-align: middle">Error</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr >
-                                <td><strong>Nombre</strong></td>
-                                <td>{{ person.names}}</td>
-                                <td><button class="checked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Primer Apellido</strong></td>
-                                <td>{{ person.lastName1}}</td>
-                                <td><button class="checked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Segundo Apellido</strong></td>
-                                <td>{{ person.lastName2}}</td>
-                                <td><button class="cheked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Segundo Apellido</strong></td>
-                                <td>{{ person.lastName2}}</td>
-                                <td><button class="cheked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Dirección</strong></td>
-                                <td>{{ person.mainAddress}}</td>
-                                <td></td>
-                            </tr>
-                            {% for phone in person.phones %}
+                        <tr>
+                            <td><strong>Nombre</strong></td>
+                            <td>{{ person.names }}</td>
+                            <td>
+                                <button class="checked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Primer Apellido</strong></td>
+                            <td>{{ person.lastName1 }}</td>
+                            <td>
+                                <button class="checked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Segundo Apellido</strong></td>
+                            <td>{{ person.lastName2 }}</td>
+                            <td>
+                                <button class="cheked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Segundo Apellido</strong></td>
+                            <td>{{ person.lastName2 }}</td>
+                            <td>
+                                <button class="cheked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dirección</strong></td>
+                            <td>{{ person.mainAddress }}</td>
+                            <td></td>
+                        </tr>
+                        {% for phone in person.phones %}
                             <tr>
                                 <td><strong>celular</strong></td>
                                 <td>{{ phone.phoneNumber }}</td>
                                 <td style="color: #00a65a"> Validado</td>
                             </tr>
-                            {% endfor %}
-                            <tr>
-                                <td><strong>Ciudad/Municipio</strong></td>
-                                <td>{{ person.city }}</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Departamento</strong></td>
-                                <td>{{ person.department }}</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>
-                                        {% if person.documentType == 'CC'%}
-                                            Cédula de Ciudadanía
-                                        {% elseif person.documentType == 'CE'%}
-                                            Cédula de Estranjería
-                                        {% elseif person.documentType == 'TI'%}
-                                            Tarjeta de Identidad
-                                        {% endif %}
-                                    </strong>
-                                </td>
-                                <td>{{ person.document }}</td>
-                                <td><button class="cheked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Fecha de Expedición del documento</strong></td>
-                                <td>{{ person.documentExpeditionDate.format('d/m/Y') }}</td>
-                                <td><button class="cheked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Fecha de Nacimiento</strong></td>
-                                <td>{{ person.birthDate.format('d/m/Y') }}</td>
-                                <td><button class="cheked"></button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Correo Electrónico</strong></td>
-                                <td>{{ user.email }}</td>
-                                <td style="color: #00a65a"> Validado</td>
-                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><strong>Ciudad/Municipio</strong></td>
+                            <td>{{ person.city }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Departamento</strong></td>
+                            <td>{{ person.department }}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>
+                                    {% if person.documentType == 'CC' %}
+                                        Cédula de Ciudadanía
+                                    {% elseif person.documentType == 'CE' %}
+                                        Cédula de Estranjería
+                                    {% elseif person.documentType == 'TI' %}
+                                        Tarjeta de Identidad
+                                    {% endif %}
+                                </strong>
+                            </td>
+                            <td>{{ person.document }}</td>
+                            <td>
+                                <button class="cheked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha de Expedición del documento</strong></td>
+                            <td>{{ person.documentExpeditionDate.format('d/m/Y') }}</td>
+                            <td>
+                                <button class="cheked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha de Nacimiento</strong></td>
+                            <td>{{ person.birthDate.format('d/m/Y') }}</td>
+                            <td>
+                                <button class="cheked"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Correo Electrónico</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td style="color: #00a65a"> Validado</td>
+                        </tr>
 
                         </tbody>
                     </table>
 
                 </div>
                 <div class="col-md-6" style="margin-top:60px; text-align:center;">
-                    <a class="btn btn-bitbucket notAjax" href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure})}}">Volver al tramite</a>
-                    <a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Completo</a>
+                    <a class="btn btn-bitbucket notAjax"
+                       href="{{ path('show_procedure',{'procedureId':action.realProcedureRealProcedure.idProcedure}) }}">Volver
+                        al tramite</a>
+                    <a class="btn btn-orange notAjax"
+                       href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'}) }}">Completo</a>
                 </div>
                 <div class="col-md-6">
                     <table class="table">
                         <thead class="tab-header">
                         <tr>
-                            <th style="vertical-align: middle" >Entidad</th>
-                            <th style="vertical-align: middle" >Estado</th>
+                            <th style="vertical-align: middle">Entidad</th>
+                            <th style="vertical-align: middle">Estado</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -163,7 +182,7 @@
             </div>
             <div class="col-md-12" style="border-top:dotted 1px;">
                 <div class="col-md-12">
-                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction}))}}
+                    {{ render(controller('RocketSellerTwoPickBundle:BackOffice:reportError',{'idAction':action.idAction})) }}
                 </div>
             </div>
 
