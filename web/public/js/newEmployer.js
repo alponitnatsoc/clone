@@ -126,7 +126,7 @@ function startEmployer() {
     // index when inserting a new item (e.g. 2)
     //el cambio de tabs entre el formulario de registro
     $('.btnPrevious').click(function () {
-        $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+        $('.nav-justified > .active').prev('li').find('a').trigger('click');
     });
     var redirUri = "";
     $('#btn-save-entities').click(function (e) {
