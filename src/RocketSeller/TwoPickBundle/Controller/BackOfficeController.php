@@ -83,9 +83,10 @@ class BackOfficeController extends Controller
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
         dump('llamo');
+        /** @var Document $cedula */
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
         dump('salio');
-        
+        dump($cedula->getMediaMedia()->getProviderReference());
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 dump('es host');
@@ -93,6 +94,11 @@ class BackOfficeController extends Controller
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
                 dump('es dev o alpha');
+                
+                if($this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(),'reference')){
+                    dump($this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(),'reference'));
+                }
+
                 $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
