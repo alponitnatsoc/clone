@@ -46,3 +46,38 @@ font-size: 15px;
 font-weight: 400;
 font-style: italic;
 }
+
+.pricelegalpay {
+    width: 300px;
+    margin: 0 auto;
+    float:none !important;
+}
+
+.i {
+  color: #3c4b5a;
+font-style: normal;
+font-weight: 100;
+}
+
+.condicioneslegalpay {
+  background: #fbfbfb;
+    border-radius: 5px;
+    width: 600px;
+    margin: 25px auto 0 auto;
+    padding: 15px 0 25px 0;
+    color: #7b7b7b;
+}
+
+.borderh3 {
+  border: 1px #CCC solid;
+    border-radius: 5px;
+    padding: 20px 0;
+}
+@media only screen and (max-width: 1200px) {
+  .responsivestyle {white-space: normal;}
+  .padd {padding: 6px 30px;margin-bottom: 5px}
+}
+
+@media only screen and (max-width: 1024px) {
+  .condicioneslegalpay {width: 90%}
+}

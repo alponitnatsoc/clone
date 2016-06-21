@@ -1,0 +1,61 @@
+{% extends "::base.html.twig" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{{ asset('../css/pantallas.css') }}"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
+
+	<div id="cont-succesdocs">
+            <div id="title-siccesdocs">
+                <img src="perfecto.png"/>
+                <h1 class="azuloscurofont bold">¡Juan sebastian!</h1>
+                <h2 class="h2 light grisclarofont">No tienes tareas pendientes</h2>
+            </div>
+
+            <div id="texto-succesdocs">
+                <h1 class="azulclarofont light centrar">Pagos futuros</h1>
+                <div id="posibilidades">
+                	<div class="pagospendientesdash">
+                    	<p class="light"><strong>20 de Julio</strong> pago de nómina de <strong>Jose Pekerman</strong></p>
+                    </div>
+                </div>
+                <hr>
+                <div id="fechas">
+                    <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 10 de cada mes</p>
+                        <p class="grisclarofont light">Tiempo oportuno</p>
+                        <p class="light-italic grisclarofont">para reportar novedades</p>
+                    </div>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 12 de cada mes</p>
+                        <p class="grisclarofont light">Cierre de nómina</p>
+                        <p class="light-italic grisclarofont">(para modalidad quincenal)</p>
+                    </div>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 15 de cada mes</p>
+                        <p class="grisclarofont light">Pago de nómina</p>
+                    </div>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 23 de cada mes</p>
+                        <p class="grisclarofont light">Tiempo oportuno</p>
+                        <p class="light-italic grisclarofont">para reportar novedades</p>
+                    </div>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 25 de cada mes</p>
+                        <p class="grisclarofont light">Cierre de nómina</p>
+                    </div>
+                    <div class="fechasclave">
+                    	<p class="bold azulclarofont">Día 30 de cada mes</p>
+                        <p class="grisclarofont light">Pago de nómina</p>
+                        <p class="light-italic grisclarofont">pago de aportes a seguridad</p>
+                    </div>
+                </div>
+                <div class="border">
+                	<p class="semi-italic azulmediofont">Puedes reportar novedades en cualquier momento.<br>
+
+					Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento si no tienes novedades por reportar.</p>
+                </div>
+            </div>
+		</div>
+
+{% endblock %}

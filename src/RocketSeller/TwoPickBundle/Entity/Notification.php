@@ -76,9 +76,23 @@ class Notification {
     /**
      * @var string
      *
+     * @ORM\Column(name="downloadlink", type="string", length=100, nullable=TRUE)
+     */
+    private $downloadLink;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="accion", type="string", length=100, nullable=TRUE)
      */
     private $accion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="download_accion", type="string", length=100, nullable=TRUE)
+     */
+    private $downloadAction;
 
     /**
      * @var string
@@ -394,5 +408,53 @@ class Notification {
     public function getDocumentTypeDocumentType()
     {
         return $this->documentTypeDocumentType;
+    }
+
+    /**
+     * Set downloadLink
+     *
+     * @param string $downloadLink
+     *
+     * @return Notification
+     */
+    public function setDownloadLink($downloadLink)
+    {
+        $this->downloadLink = $downloadLink;
+
+        return $this;
+    }
+
+    /**
+     * Get downloadLink
+     *
+     * @return string
+     */
+    public function getDownloadLink()
+    {
+        return $this->downloadLink;
+    }
+
+    /**
+     * Set downloadAction
+     *
+     * @param string $downloadAction
+     *
+     * @return Notification
+     */
+    public function setDownloadAction($downloadAction)
+    {
+        $this->downloadAction = $downloadAction;
+
+        return $this;
+    }
+
+    /**
+     * Get downloadAction
+     *
+     * @return string
+     */
+    public function getDownloadAction()
+    {
+        return $this->downloadAction;
     }
 }

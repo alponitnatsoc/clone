@@ -44,7 +44,8 @@ class PayrollMethodRestController extends FOSRestController
 {
     use PayrollMethodsTrait;
 
-    public function getGeneralPayrollsAction($employeeId, $period = null, $month = null, $year = null){
+    public function getGeneralPayrollsAction($employeeId){
+       $period = null; $month = null; $year = null;
        $em=$this->getDoctrine()->getManager();
        $ehERepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
        /** @var EmployerHasEmployee $realEHE */

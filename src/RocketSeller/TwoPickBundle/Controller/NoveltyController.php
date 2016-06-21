@@ -34,6 +34,11 @@ class NoveltyController extends Controller {
         $noveltyTypes=$noveltyTypeRepo->findAll();
         $noveltyTypesGroups=array();
         $noveltyTypeToShow=new ArrayCollection();
+
+        $payRollRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Payroll");
+        $payRol = $payRollRepo->find($idPayroll);
+        $empId = $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getIdEmployee();
+
         /** @var NoveltyType $NT */
         foreach ($noveltyTypes as $NT) {
             if($NT->getGrupo()!="no_show"){
@@ -80,7 +85,8 @@ class NoveltyController extends Controller {
         $choices = $options['choice_list']->getChoices();
         return $this->render('RocketSellerTwoPickBundle:Novelty:selectNovelty.html.twig', array(
             'form' => $form->createView(),
-            'choices' => $choices));
+            'choices' => $choices,
+            'empId' => $empId));
     }
 
     /**
@@ -105,6 +111,14 @@ class NoveltyController extends Controller {
         if ($noveltyType == null) {
             return $this->redirectToRoute('novelty_select', array('idPayroll' => $idPayroll), 301);
         }
+
+      /*  if($noveltyType->getName() == "Terminar contrato" ){
+
+          $idToCall = $payRol->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getIdEmployee();
+          return $this->redirectToRoute('final_liquidation', array(
+                      'id' => $idToCall));
+        }*/
+
         $novelty->setNoveltyTypeNoveltyType($noveltyType);
         $requiredDocuments = $noveltyType->getRequiredDocuments();
         $hasDocuments = false;
@@ -160,6 +174,7 @@ class NoveltyController extends Controller {
             $em->persist($payRol);
             $em->flush();
             $request->setMethod("GET");
+
             $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getAddNoveltySql',array(
                 "idNovelty"=>$novelty->getIdNovelty()), array('_format' => 'json'));
             if($insertionAnswer->getStatusCode()!=201){
@@ -169,7 +184,7 @@ class NoveltyController extends Controller {
                 $em->flush();
                 return $this->render('RocketSellerTwoPickBundle:Novelty:addNovelty.html.twig', array(
                     'form' => $form->createView(),
-                    'errno'=> 'No Se puedo agregar la novedad intente mas tarde!'
+                    'errno'=> 'No Se pudo agregar la novedad intente mas tarde!'
                 ));
             }
             if ( !$this->checkNoveltyFulfilment($novelty, $form)) {

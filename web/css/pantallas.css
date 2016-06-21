@@ -113,3 +113,43 @@ a {text-decoration: none}
     border-top: 1px solid #CCC;
     padding: 25px 0 0 0;
   }
+
+	.pagospendientesdash {
+	background: #fd5c5c;
+	border-radius: 5px;
+	padding: 10px 0;
+	margin: 5px 0;
+	text-align: center;
+	color: #FFF;
+	font-size: 20px}
+
+#pagoadelantado {
+	background: #fbfbfb;;
+	border-radius: 5px
+	}
+#contenidopagoadelando {
+	width: 400px;
+    text-align: center;
+    margin: 0 auto;
+	padding: 70px 0;}
+
+#contenidopagoadelando p {
+	margin: 30px 0
+	}
+
+#contenidopagoadelando h1 {
+	margin: 30px 0
+	}
+
+.btn-azulnopagos {
+	width:250px;
+	border-radius: 5px;
+	padding: 10px 0;
+	border-bottom: #4f8084 3px solid;
+	background: #5db0b7;
+	color: #FFF;
+	margin: 0 auto}
+
+.btn-azulnopagos:hover {
+	border-bottom: #4f8084 3px solid;
+	background: #8ca4a7}
