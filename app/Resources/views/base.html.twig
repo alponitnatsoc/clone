@@ -226,9 +226,6 @@
                             <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                 <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                             </div>
-                            <div class="{% if app.request.get('_route') == 'setup' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href=""{% endif %}>Configuración</a>
-                            </div>
                             <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
                                 <a href="{{ path('contact') }}">Ayuda</a>
                             </div>
