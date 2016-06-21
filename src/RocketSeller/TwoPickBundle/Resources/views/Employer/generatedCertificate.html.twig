@@ -3,13 +3,27 @@
 {% block stylesheet %}
     {{ parent() }}
     <style type="text/css">
-        .divider {
-            height: 1px;
-            width:100%;
-            display:block; /* for use on default inline elements like span */
-            margin: 9px 0;
-            overflow: hidden;
-            background-color: #e5e5e5;
+        .certificatesucces {
+          padding: 30px 0;
+          clear: both;
+          color: #8a8a8a;
+          font-size: 20px;
+          font-weight: 100;
+        }
+        .certificatesucces .glyphicon {
+          color: #fd9224;
+        }
+        .textocert {
+          font-weight: 100;
+          color: #8e8e8e;
+          margin: 45px auto;
+          width: 90%;
+        }
+        .campofechascert {
+          border: #c3c3c3 dashed 1px;
+          border-radius: 5px;
+          padding: 13px 0;
+          color: #00858c;
         }
         .center{
             text-align: center;
@@ -26,25 +40,24 @@
         .certificate{
             margin: 10px;
             padding: 30px;
-            background-color: #efefef;
+            color: #5D5D5D;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="divider"></div>
-    <div class="center">
+    <div class="center certificatesucces">
         <div class="glyphicon glyphicon-ok-sign"></div>El certificado fue creado exitosamente.
 
     </div>
-    <div class="divider"></div>
-    <div class="center col-md-12 col-sm-12">
+
+    <div class="center col-md-12 col-sm-12 campofechascert">
         <div class="col-md-3 col-sm-3">
 
         </div>
         <div class="col-md-3 col-sm-3">
             <div class="glyphicon glyphicon-refresh"></div><b>Fecha de creación</b>
-                {{ "now"|date("d") ~' de ' ~ "now"|date("F")|trans|lower  ~ ' de ' ~ "now"|date("Y") }} 
+                {{ "now"|date("d") ~' de ' ~ "now"|date("F")|trans|lower  ~ ' de ' ~ "now"|date("Y") }}
         </div>
         <div class="col-md-3 col-sm-3">
             <div class="glyphicon glyphicon-list-alt"></div><b>Tipo de certifido</b>
@@ -54,16 +67,14 @@
 
         </div>
     </div>
-    <div class="divider"></div>
-
     <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{ path('download_certificate_post') }}">
         <div class="certificate">
             {{ content|raw }}
-        </div>	
+        </div>
         <div class="divSubmit center col-md-12">
             <input type="hidden" name="idEmployee" value="{{ employee.idEmployee }}"/>
             <input type="hidden" name="idCertificate" value="{{ certificate['id'] }}"/>
-            <button class="btn btn-symplifica" type="submit">Imprimir</button>	
-        </div>		
+            <button class="btn btn-symplifica" type="submit">Imprimir</button>
+        </div>
     </form>
 {% endblock %}

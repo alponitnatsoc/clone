@@ -123,6 +123,8 @@ trait PayrollMethodsTrait
                     }
                     $detailNomina = $this->getInfoNominaSQL($employerHasEmployee);
                     $totalLiquidation = $this->totalLiquidation($detailNomina);
+                    if($totalLiquidation==0)
+                        break;
                     $productNomina = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PN'));
                     $tempPOD->setPayrollPayroll($payroll);
                     $tempPOD->setProductProduct($productNomina);
@@ -132,6 +134,8 @@ trait PayrollMethodsTrait
 
                     if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
+                        dump("Pila: ".$pila);
+                        dump("PODPila: ".$podPila);
                         //this is for the first case
                         if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
                             $podPila=$pila;

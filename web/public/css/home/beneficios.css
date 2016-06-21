@@ -58,12 +58,12 @@ border-bottom: 3px solid #794815}
 #beneficios-title {margin: 80px 0 90px 0}
 .centrar {text-align: center}
 .icon {width: 70%; height: auto}
-.right {text-align: right}
-.left {text-align: left}
+.right {text-align: right;padding: 40px 0 0 0;}
+.left {text-align: left;padding: 40px 0 0 0;}
 .rightp {margin: 0 0 0 350px}
 #cont-beneficios-list h4 {font-size: 30px; color: #5D5D5D; margin-top: 30px}
 #cont-beneficios-list p {width: 470px; font-size: 15px; color: #87868a; margin-bottom: 30px}
-.linea-punteada {border-top: #d8d9dd dashed 2px;}
+.linea-punteada {border-top: #d8d9dd dashed 2px;padding: 40px 0 0 0;}
 #callregistro {color: #6d6d71; margin: 50px 0 90px 0}
 .bread-style a {color: #87868a}
 

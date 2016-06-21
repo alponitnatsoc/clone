@@ -515,7 +515,14 @@
                                                 <span href="{{ notification.relatedlink }}/{{ notification.id }}"
                                                       class="download-link">{{ notification.accion }}</span>
                                             </div>
-                                        {% else %}
+                                            {% if (notification.downloadLink|lower|trim) != NULL %}
+                                                <div class="panel_btn">
+                                                    <a href="{{ notification.downloadLink }}" target="_blank"
+                                                       class="action-link notAjax">{{ notification.downloadAction }}</a>
+                                                </div>
+                                            {% endif %}
+
+                                            {% else %}
                                             <div class="panel_btn">
                                                 <a href="{{ notification.relatedlink }}" target="_blank"
                                                    class="action-link notAjax">{{ notification.accion }}</a>
@@ -560,6 +567,11 @@
                                         {% if (notification.accion|lower|trim) == "subir" %}
                                             <span href="{{ notification.relatedlink }}/{{ notification.id }}"
                                                   class="download-link"> {{ notification.accion }}</span>
+
+                                            {% if (notification.downloadLink|lower|trim) != NULL %}
+                                                <a href="{{ notification.downloadLink }}" target="_blank"
+                                                   class="action-link notAjax">{{ notification.downloadAction }}</a>
+                                            {% endif %}
                                         {% else %}
                                             <a href="{{ notification.relatedlink }}" target="_blank"
                                                class="action-link notAjax">{{ notification.accion }}</a>
