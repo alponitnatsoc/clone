@@ -1,12 +1,12 @@
 {% extends "::base.html.twig" %}
 {% block content %}
-    <div class="col-sm-12 col-xs-12 block-Data">
+    <div class="col-sm-12 col-xs-12 block-Data symplificate">
         <h1>SYMPLIFÍCATE</h1>
         <span>Genera los certificados que quieres para ti y tus empleados registrados.</span>
     </div>
     <br></br>
     {#<form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates',{'id': employee.idEmployee})}}">#}
-    <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates')}}">	
+    <form class="form col-md-12" method="POST" enctype="multipart/form-data" action="{{path('show_certificates')}}">
         <div class="col-md-2"></div>
         <div class="form-group col-md-4">
             <label for="sel1">Nombre del solicitante</label>
@@ -14,7 +14,7 @@
                 {% for employerHasEmployee in employerHasEmployees %}
                     <option value="{{ employerHasEmployee.employeeEmployee.idEmployee }}">{{ employerHasEmployee.employeeEmployee.personPerson.names ~ ' ' ~ employerHasEmployee.employeeEmployee.personPerson.lastname1}}</option>
                 {% endfor %}
-            </select>		  	
+            </select>
         </div>
         <div class="form-group col-md-4">
             <label for="sel1">Tipo de certificado</label>
@@ -22,12 +22,12 @@
                 <option value="1">Certificado laboral</option>
                 <option value="2">Certificado de aportes</option>
                 <option value="3">Certificado de ingresos y retenciones</option>
-            </select>		  	
+            </select>
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-12 text-center">
             <br />
-            <button class="btn btn-symplifica" type="submit">Generar certificado</button>	
-        </div>		
+            <button class="btn btn-symplifica" type="submit">Generar certificado</button>
+        </div>
     </form>
 {% endblock %}
