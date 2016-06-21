@@ -20,7 +20,7 @@
                         <p>Llamar al cliente {{ person.fullName}} y recordarle que suba la cedula</p>
                     {% else %}
                         <div class="col-md-6">
-                        <embed width="400" height="500" src='{{ path }}'  alt=”pdf” pluginspage=”http://www.adobe.com/products/acrobat/readstep2.html”>
+                            {{ dump(path) }}
                         </embed>
                     {% endif %}
 

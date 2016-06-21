@@ -71,5 +71,4 @@ services:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
                   resetting: '%fos_user.resetting.email.from_email%'
     capitalize:
-        path:     /capitalize/{stringToCapitalize}
-        defaults: { _controller: RocketSellerTwoPickBundle:Public:capitalizes }
+        class: RocketSeller\TwoPickBundle\Controller\UtilsController
