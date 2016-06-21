@@ -415,10 +415,10 @@ function startEmployer() {
      addListeners();
      }
      });*/
-    $("form").on("submit", function (e) {
+    $("[name='register_employer']").on("submit", function (e) {
         e.preventDefault();
 
-        var form = $("form");
+        var form = $("[name='register_employer']");
         var names = [], addresses = [], citys = [], departments = [], ids = [];
         var i = 0;
         $(form).find("ul.workplaces input[name*='id']").each(function () {

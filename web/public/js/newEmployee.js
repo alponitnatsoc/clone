@@ -280,9 +280,9 @@ function startEmployee() {
         });
     });
 
-    $("form").on("submit", function (e) {
+    $("[name='register_employee']").on("submit", function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var idsBenef = [], idsWorkpl = [];
         var i = 0;
         $(form).find("ul.benefits select[name*='benefits']").each(function () {
