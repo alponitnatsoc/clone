@@ -117,7 +117,7 @@ class BackOfficeController extends Controller
         }else{
             $employerHasEmployee = null;
         }
-        dump('edula path: '.$pathCedula);
+        dump('cedula path: '.$pathCedula);
         if($employerHasEmployee == null){
             return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path'=>$pathCedula,'nameDoc'=>$nameCedula));
         }else{
