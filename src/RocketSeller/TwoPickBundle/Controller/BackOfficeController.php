@@ -82,17 +82,22 @@ class BackOfficeController extends Controller
         $employee = $person->getEmployee();
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
-
+        dump('llamo');
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
+        dump('salio');
+        
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
+                dump('es host');
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
+                dump('es dev o alpha');
                 $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
+            dump('no encontro cedula');
             $pathCedula='';
             $nameCedula='';
         }
