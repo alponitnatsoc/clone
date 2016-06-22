@@ -86,7 +86,6 @@ class BackOfficeController extends Controller
         /** @var Document $cedula */
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
         dump('salio');
-        dump($cedula->getMediaMedia()->getProviderReference());
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
                 dump('es host');
