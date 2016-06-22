@@ -82,6 +82,15 @@
         $('#app_user_registration_form_plainPassword').attr('oninvalid', 'setCustomValidity("Tu contraseña no cumple con nuestros parametros de seguridad")');
         $('#app_user_registration_form_plainPassword').attr('oninput', "setCustomValidity('')");
 
+        $('#app_user_registration_form_name').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+        $('#app_user_registration_form_name').attr('oninput', "setCustomValidity('')");
+
+        $('#app_user_registration_form_lastName').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+        $('#app_user_registration_form_lastName').attr('oninput', "setCustomValidity('')");
+
+        $('#app_user_registration_form_email').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
+        $('#app_user_registration_form_email').attr('oninput', "setCustomValidity('')");
+
         // This function checks for all the requirements of the password.
         function checkReq() {
           // First show everything.
@@ -141,6 +150,7 @@
             // We check each of the conditions.
             checkReq();
         });
+
 
     </script>
 {% endblock %}
