@@ -143,8 +143,11 @@ trait PayrollMethodsTrait
                         dump($podPila);
                         //this is for the first case
                         if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
+                            dump("Entré POD");
                             $podPila=$pila;
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                            dump($podPila);
+
                         }else{
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podPila->getValue());
                             if($podPila->getIdPurchaseOrdersDescription()==null)
