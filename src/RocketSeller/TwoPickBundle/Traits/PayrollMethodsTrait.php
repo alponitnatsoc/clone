@@ -137,8 +137,10 @@ trait PayrollMethodsTrait
 
                     if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
-                        dump("Pila: ".$pila);
-                        dump("PODPila: ".$podPila);
+                        dump("Pila: ");
+                        dump($pila);
+                        dump("PODPila: ");
+                        dump($podPila);
                         //this is for the first case
                         if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
                             $podPila=$pila;
