@@ -26,7 +26,7 @@ function startAfiliation() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor escribe en el campo, hasta encontrar la entidad"
+                    required: "Por favor escribe en el campo, hasta encontrar la entidad o a la cual te gustaría ser afiliado"
                 }
             });
         });

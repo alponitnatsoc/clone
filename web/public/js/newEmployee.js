@@ -98,7 +98,7 @@ function startEmployee() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor escribe en el campo, hasta encontrar tu entidad"
+                    required: "Por favor escribe en el campo, hasta encontrar tu entidad o a la cual te gustaría ser afiliado"
                 }
             });
         });

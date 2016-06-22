@@ -4,9 +4,12 @@
  */
 function startEmployer() {
     var validator;
+
     $("#errorSeverance").hide();
     $("#errorARL").hide();
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+
         validator = $("form[name='register_employer']").validate({
             rules: {
                 "register_employer[person][documentType]": "required",
@@ -31,26 +34,31 @@ function startEmployer() {
                 "register_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
             }
         });
-        $("ul.phones input[name*='phoneNumber']").each(function () {
-            $(this).rules("add", {
-                minlength: 7,
-                required: true,
-                number: true,
-                messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
-                }
-            });
-        });
+
         $("ul.workplaces input[name*='mainAddress']").each(function () {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor ingresa una dirección"
+                    required: "Por favor ingresa una dirección",
                 }
             });
         });
+
+        $("ul.phones input[name*='phoneNumber']").each(function () {
+            $(this).rules("add", {
+                maxlength: 10,
+                required: true,
+                number: true,
+                pattern: /3[\d]{9}/,
+                messages: {
+                    required: "Por favor ingresa un número de telefono celular",
+                    number: "Por favor ingresa solo digitos",
+                    pattern: "El número no tiene la estructura de un celular colombiano",
+                    maxlength: "No es un número de celular válido"
+                }
+            });
+        });
+
         $("ul.workplaces select").each(function () {
             $(this).rules("add", {
                 required: true,
@@ -63,10 +71,11 @@ function startEmployer() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor escribe en el campo, hasta encontrar tu entidad"
+                    required: "Por favor escribe en el campo, hasta encontrar la entidad o a la cual te gustaría ser afiliado"
                 }
             });
         });
+      });
     });
     var $collectionHolderPhones;
     var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar nuevo lugar de trabajo</span></a>');
@@ -334,6 +343,12 @@ function startEmployer() {
             }
             phones[i++] = $(this).val();
         });
+
+        if(!validator.element($("#register_employer_person_mainAddress"))) {
+          flagValid = false;
+          return;
+        }
+
         if (!flagValid) {
             return;
         }

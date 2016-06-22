@@ -4,7 +4,13 @@
  */
 function startEmployerEdit() {
     var validator;
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+    $.when(
+      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"),
+      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js"),
+      $.Deferred(function( deferred ){
+        $( deferred.resolve );
+      })
+    ).then(function () {
         validator = $("form[name='edit_employer']").validate({
             rules: {
                 "edit_employer[person][documentType]": "required",
@@ -27,15 +33,16 @@ function startEmployerEdit() {
                 "edit_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
             }
         });
+
         $("ul.phones input[name*='phoneNumber']").each(function () {
             $(this).rules("add", {
-                minlength: 7,
                 required: true,
                 number: true,
+                pattern: /3[\d]{9}/,
                 messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
+                    required: "Por favor ingresa un número de telefono celular",
+                    number: "Por favor ingresa solo digitos",
+                    pattern: "El número no tiene la estructura de un celular colombiano"
                 }
             });
         });
