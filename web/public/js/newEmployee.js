@@ -98,7 +98,7 @@ function startEmployee() {
             $(this).rules("add", {
                 required: true,
                 messages: {
-                    required: "Por favor escribe en el campo, hasta encontrar tu entidad"
+                    required: "Por favor escribe en el campo, hasta encontrar tu entidad o a la cual te gustaría ser afiliado"
                 }
             });
         });
@@ -122,9 +122,19 @@ function startEmployee() {
     });
     $("#existentDataToShow").hide();
     var timeCommitment = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']");
+    if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
+      $('#radio_diario').prop('checked', true);
+      $('#radio_mensual').prop('checked', false);
+    }
+    else{
+      $('#radio_diario').prop('checked', false);
+      $('#radio_mensual').prop('checked', true);
+    }
     timeCommitment.change(function () {
         var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
         if (selectedVal == " Trabajador por días") {
+            $('#radio_diario').prop('checked', true);
+            $('#radio_mensual').prop('checked', false);
             $(".days").each(function () {
                 $(this).show();
             });
@@ -133,6 +143,8 @@ function startEmployee() {
             });
             checkSisben();
         } else {
+            $('#radio_diario').prop('checked', false);
+            $('#radio_mensual').prop('checked', true);
             $(".days").each(function () {
                 $(this).hide();
             });
@@ -268,9 +280,9 @@ function startEmployee() {
         });
     });
 
-    $("form").on("submit", function (e) {
+    $("[name='register_employee']").on("submit", function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var idsBenef = [], idsWorkpl = [];
         var i = 0;
         $(form).find("ul.benefits select[name*='benefits']").each(function () {
@@ -741,7 +753,7 @@ function startEmployee() {
                 timeCommitment: timeCommitment.val(),
                 position: position.val(),
                 salary: accounting.unformat(salary.val()),
-                salaryD: accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()),
+                salaryD: accounting.unformat($("#totalExpensesValD").val()),
                 idsBenefits: idsBenef,
                 benefType: benefType,
                 amountBenefits: amountBenef,
@@ -813,11 +825,13 @@ function jsonToHTML(data) {
 
 $('#radio_diario').click(function() {
     $("#labelCosto").html("Costo total diario </br> por el empleado");
+    $("#ingresoNeto").html("Esto recibirá neto el empleado diariamente");
     calculator();
 });
 
 $('#radio_mensual').click(function() {
     $("#labelCosto").html("Costo total </br> por el empleado");
+    $("#ingresoNeto").html("Esto recibirá neto el empleado mensualmente");
     calculator();
 });
 
@@ -833,19 +847,10 @@ function changeValues(data) {
     }else {
       division = 1;
     }
-
-    console.log("days:  "+data.numberOfDays);
   // Plain salary is what the employee should recieve.
   var salario_bruto = Math.floor((data.plainSalary - data.transportCal)/0.92);
 
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
-  console.log("Plain Sal: " + data.plainSalary);
-  console.log("Trans Cal: " + data.transportCal);
-  console.log("EPS Empl Cal: " + data.EPSEmployerCal);
-  console.log("Pens Empl Cal: " + data.PensEmployerCal);
-  console.log("Caja cal: " + data.cajaCal);
-  console.log("Arl cal: " + data.arlCal);
-
   var pagos_netos = (Math.floor(data.plainSalary) + Math.floor(data.transportCal)) - (Math.floor(data.EPSEmployeeCal) + Math.floor(data.PensEmployeeCal));
   var total_prestaciones = Math.floor(data.cesCal + data.taxCesCal + data.vacationsCal);
 
@@ -1139,7 +1144,7 @@ function addListeners() {
     });
     $("#register_employee_employeeHasEmployers_salaryD").on("input", function () {
         calculator();
-        formatMoney($("#totalExpensesVal"));
+        formatMoney($("#totalExpensesValD"));
         formatMoney($(this));
     });
     $("#register_employee_employeeHasEmployers_salary").on("input", function () {
@@ -1272,7 +1277,7 @@ function calculator() {
     var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
     if (type.parent().text() == " Trabajador por días") {
         type = "days";
-        numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4;
+        numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
     } else {
         type = "complete";
     }
@@ -1314,14 +1319,16 @@ function calculator() {
             salaryD = (salaryD - transportAidDaily)/(1-(PensEmployee));
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
                 PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
-                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             PensEmployerCal = PensEmployer * base;
             PensEmployeeCal = PensEmployee * base;
             arlCal = arl * base;
-            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
-            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             cajaCal = caja * base;
             vacationsCal = vacations30D * numberOfDays * salaryD;
             dotationCal = dotationDaily * numberOfDays;
@@ -1360,12 +1367,14 @@ function calculator() {
             //then calculate arl ces and the rest
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployee2 + arl
                 + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
-                * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
+                * numberOfDays) + transportAidDaily*numberOfDays)) + PensEmployeeCal + cajaCal + PensEmployerCal;
             EPSEmployerCal = EPSEmployer2 * base;
             EPSEmployeeCal = EPSEmployer2 * base;
             arlCal = arl * base;
-            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
-            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             vacationsCal = vacations30D * numberOfDays * salaryD;
             dotationCal = dotationDaily * numberOfDays;
             senaCal = sena * base;
@@ -1460,7 +1469,6 @@ function calculator() {
     $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
-      console.log("entre");
       if( firstLoad == true){
         $("#labelCosto").html("Costo total diario </br> por el empleado");
         firstLoad = false;
@@ -1478,10 +1486,17 @@ function calculator() {
 }
 
 $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("click", function () {
-  $('#radio_diario').prop('checked', true);
-  $('#radio_mensual').prop('checked', false);
+  if( $(this).val() == 1 ){
+    $('#radio_diario').prop('checked', false);
+    $('#radio_mensual').prop('checked', true);
+    $("#labelCosto").html("Costo total </br> por el empleado");
+  }
+  else {
+    $('#radio_diario').prop('checked', true);
+    $('#radio_mensual').prop('checked', false);
+    $("#labelCosto").html("Costo total diario </br> por el empleado");
+  }
 });
-
 
 function checkDate(date) {
     var $permittedDate= $("#datePermitted");

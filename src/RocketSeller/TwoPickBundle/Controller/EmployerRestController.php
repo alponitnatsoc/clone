@@ -313,6 +313,44 @@ class EmployerRestController extends FOSRestController
             ->find($parameter);
         return $loadedClass;
     }
+    /**
+     * crear notificaciones iniciales  para empleador
+     *
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Enviar email requerido",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the mail no send"
+     *   }
+     * )
+     *
+     * @param ParamFetcher $paramFetcher
+     *
+     * @RequestParam(name="email", nullable=false, strict=true, description="email al que se envía la infomación")
+     *
+     * @return View
+     */
+    public function postRemainderAction(ParamFetcher $paramFetcher)
+    {
+        $email = $paramFetcher->get("email");
+        $view=View::create();
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $view->setStatusCode(403);
+        }
+
+        $smailer = $this->get('symplifica.mailer.twig_swift');
+        dump("beSend: ".$email);
+        $send = $smailer->remainderEmail('@RocketSellerTwoPick/SendEmail/recuerdatos.html.twig', 'registro@symplifica.com', $email, 'Recordatorio datos para registro');
+        dump("send: ".$send);
+        if ($send) {
+            return $view->setStatusCode(200)->setData(array());
+        } else {
+            return $view->setStatusCode(500);
+        }
+
+    }
 
 
 }

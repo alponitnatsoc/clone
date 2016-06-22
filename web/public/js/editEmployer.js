@@ -5,6 +5,7 @@
 function startEmployerEdit() {
     var validator;
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
         validator = $("form[name='edit_employer']").validate({
             rules: {
                 "edit_employer[person][documentType]": "required",
@@ -27,15 +28,18 @@ function startEmployerEdit() {
                 "edit_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
             }
         });
+
         $("ul.phones input[name*='phoneNumber']").each(function () {
             $(this).rules("add", {
-                minlength: 7,
+                maxlength: 10,
                 required: true,
                 number: true,
+                pattern: /3[\d]{9}/,
                 messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
+                    required: "Por favor ingresa un número de telefono celular",
+                    number: "Por favor ingresa solo digitos",
+                    pattern: "El número no tiene la estructura de un celular colombiano",
+                    maxlength: "No es un número de celular válido"
                 }
             });
         });
@@ -118,6 +122,7 @@ function startEmployerEdit() {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
             }
         });
+      });
     });
     $('#btn-2').click(function (e) {
         e.preventDefault();

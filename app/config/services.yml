@@ -17,7 +17,7 @@ services:
         class: RocketSeller\TwoPickBundle\Listener\RegistrationConfirmListener
         arguments: [@router]
         tags:
-            - { name: kernel.event_subscriber } 
+            - { name: kernel.event_subscriber }
     app.form.registration:
         class: RocketSeller\TwoPickBundle\Form\RegistrationType
         tags:
@@ -37,7 +37,7 @@ services:
 
     send_sms:
         class: RocketSeller\TwoPickBundle\Controller\SmsController
-        
+
     validate.user.onload:
         class: RocketSeller\TwoPickBundle\Listener\ValidateUserOnloadListener
         arguments: [@router, @doctrine.orm.entity_manager]
@@ -70,3 +70,5 @@ services:
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'
                   resetting: '%fos_user.resetting.email.from_email%'
+    app.symplifica_utils:
+        class: RocketSeller\TwoPickBundle\Controller\UtilsController
