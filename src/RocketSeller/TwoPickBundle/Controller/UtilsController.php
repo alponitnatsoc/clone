@@ -2,8 +2,6 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-
 class UtilsController
 {
     public function mb_capitalize($stringToCapitalize)
@@ -21,7 +19,7 @@ class UtilsController
         }
 
         $stringToReturn = implode(" ", $lclArr);
-        
+
         return $stringToReturn;
     }
 }
