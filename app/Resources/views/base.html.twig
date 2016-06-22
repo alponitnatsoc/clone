@@ -36,7 +36,7 @@
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/noUiSlider.8.2.1/nouislider.min.css') }}">
         <link rel="stylesheet" href="{{ asset('public/css/subscriptionChoise.css') }}">
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
     {% endblock %}
     {% block scriptImport %}
     {% endblock %}
@@ -65,40 +65,43 @@
 
 <!-- Start Intercom JS -->
 <script>
-  window.intercomSettings = { app_id: "fnfuyjdu" };
+    window.intercomSettings = {app_id: "fnfuyjdu"};
 </script>
 
-<script>(function(){
-  var w=window;var ic=w.Intercom;
-  if(typeof ic==="function"){
-    ic('reattach_activator');ic('update',intercomSettings);
-  }
-  else{
-    var d=document;
-    var i=function(){
-      i.c(arguments)
-    };
-    i.q=[];
-    i.c=function(args){
-      i.q.push(args)
-    };
-    w.Intercom=i;
-    function l(){
-      var s=d.createElement('script');
-      s.type='text/javascript';
-      s.async=true;
-      s.src='https://widget.intercom.io/widget/fnfuyjdu';
-      var x=d.getElementsByTagName('script')[0];
-      x.parentNode.insertBefore(s,x);
-    }
-    if(w.attachEvent){
-      w.attachEvent('onload',l);
-    }
-    else{
-      w.addEventListener('load',l,false);
-    }
-  }
-})()</script>
+<script>(function () {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === "function") {
+            ic('reattach_activator');
+            ic('update', intercomSettings);
+        }
+        else {
+            var d = document;
+            var i = function () {
+                i.c(arguments)
+            };
+            i.q = [];
+            i.c = function (args) {
+                i.q.push(args)
+            };
+            w.Intercom = i;
+            function l() {
+                var s = d.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'https://widget.intercom.io/widget/fnfuyjdu';
+                var x = d.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            }
+
+            if (w.attachEvent) {
+                w.attachEvent('onload', l);
+            }
+            else {
+                w.addEventListener('load', l, false);
+            }
+        }
+    })()</script>
 
 <!-- End Intercom JS -->
 
@@ -112,7 +115,8 @@
                     {% set status = 0 %}
                 {% endif %}
                 <div class="txthelp">
-                    <span><em><strong><a href="{{ path('contact') }}">¿Necesitas ayuda?</a></strong></em><i class="fa fa-mobile"></i>Bogotá: 350 833 0000</span>
+                    <span><em><strong><a href="{{ path('contact') }}">¿Necesitas ayuda?</a></strong></em><i
+                                class="fa fa-mobile"></i>Bogotá: 350 833 0000</span>
                 </div>
             </div>
         </div>
@@ -128,7 +132,8 @@
             <div class="row-fluid up-Help-Phone">
                 <div class="container">
                     <div class="txthelp">
-                        <span><em><strong><a href="{{ path('contact') }}">¿Necesita ayuda?</a></strong></em> <!--<i class="fa fa-mobile"></i>Bogotá: 350 833 0000--></span>
+                        <span><em><strong><a href="{{ path('contact') }}">¿Necesita ayuda?</a></strong></em>
+                            <!--<i class="fa fa-mobile"></i>Bogotá: 350 833 0000--></span>
                     </div>
                 </div>
             </div>
@@ -182,8 +187,9 @@
 
                         <div id="navbarSidebar" class="section about navbar-collapse collapse">
                             <div class="well well-lg leftColumnLogo">
-                                <a href="{% block clickLogo %}{% endblock %}"><img class="img-responsive" alt="Symplifica"
-                                                src="/img/logo-oscuro.png"></a>
+                                <a href="{% block clickLogo %}{% endblock %}"><img class="img-responsive"
+                                                                                   alt="Symplifica"
+                                                                                   src="/img/logo-oscuro.png"></a>
                             </div>
                             {% if app.user.legalFlag is defined %}
                                 {% set legalFlag = app.user.legalFlag %}
@@ -205,10 +211,10 @@
                                 </div>
                             {% elseif  status == 1 %}
                                 {% block menuInicio %}
-                                <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador"
-                                     style="margin-top: 40px;">
+                                    <div class="{% if app.request.get('_route') == 'show_dashboard' %}activeMenu{% endif %} well well-lg separador"
+                                         style="margin-top: 40px;">
                                         <a href="{{ path('show_dashboard') }}">Inicio</a>
-                                </div>
+                                    </div>
                                 {% endblock %}
                             {% endif %}
 
@@ -243,47 +249,83 @@
                         <div class="span12">
                             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                                 <div class="col-sm-12 col-xs-12 profile-Data">
+                                    {% set flag = 0 %}
+                                    {% set path = app.request.pathInfo|split('/') %}
+                                    {% if path[1] =='register' %}
+                                        {% set flag = 1 %}
+                                    {% else %}
+                                        {% set flag = 0 %}
+                                    {% endif %}
                                     <div id="recordardatos">
-                                        <div class="btn btn-middleblue" id="mibotn">
-                                          Recordar datos requeridos
+
+                                        <div class="btn btn-middleblue" id="mibotn" {% if flag == 0 %} style="display: none" {% endif %} >
+                                            Recordar datos requeridos
                                         </div>
 
-                                          <!-- The Modal -->
+                                        <!-- The Modal -->
                                         <div id="mimoda" class="moda">
 
-                                          <!-- Modal content -->
-                                          <div class="modal-conten">
-                                            <div class="moda-header">
-                                              <span class="close">×</span>
-                                              <h2>Debes tener en cuenta los siguientes documentos</h2>
+                                            <!-- Modal content -->
+                                            <div class="modal-conten">
+                                                <div class="moda-header">
+                                                    <span class="close">×</span>
+                                                    <h2>Debes tener en cuenta los siguientes documentos</h2>
+                                                </div>
+                                                <div class="moda-body">
+                                                    <ul>
+                                                        <li><span>Para el empleador</span></li>
+                                                        <li>&#8227; Copia del documento de identidad</li>
+                                                        <li>&#8227; Copia del RUT</li>
+                                                        <li>&#8227; Datos de contacto (nombre, teléfono, diracción,
+                                                            estado civil)
+                                                        </li>
+                                                        <li>&#8227; Entidades de seguridad social seleccionadas (ARL y
+                                                            caja de compensación)
+                                                        </li>
+                                                        <li>&#8227; Datos de cuenta bancaria para pago de nómina y
+                                                            aportes (banco, tipo de cuenta, número de cuenta)
+                                                        </li>
+                                                        <li></li>
+                                                        <li><span>Para el empleado</span></li>
+                                                        <li>&#8227; Copia del documento de identidad</li>
+                                                        <li>&#8227; Datos de básicos (nombre, teléfono, diracción,
+                                                            estado civil)
+                                                        </li>
+                                                        <li>&#8227; Datos del contrato (sueldo, fecha de ingreso, tipo
+                                                            de empleado, días que labora)
+                                                        </li>
+                                                        <li>&#8227; Entidades de seguridad social seleccionadas (EPS y
+                                                            fondo de pensiones)
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                    <div class="moda-footer">
+                                                        <li>
+                                                            <form id="reminderMail">
+                                                                <div class="row">
+                                                                </div>
+                                                                <span>Correo:</span>
+                                                                <div style="margin-left: 20px; margin-top: 10px;">
+                                                                    <input style="color: #4B4B4B; width: 280px; margin-right: 10px;"
+                                                                           type="text" id="emailToSendHelp"
+                                                                           name="emailToSendHelp"
+                                                                           placeholder="ejemplo@tucorreo.cual"/>
+                                                                </div>
+                                                                <div>
+                                                                    <a style=" margin-left: 20px; margin-top: 10px;"
+                                                                       class="btn btn-middleblue notAjax"
+                                                                       id="emailToSendHelpButton"
+                                                                       href="{{ path('api_public_post_remainder') }}">
+                                                                        Enviar </a>
+                                                                </div>
+                                                            </form>
+                                                        </li>
+                                                    </div>
                                             </div>
-                                            <div class="moda-body">
-                                              <ul>
-                                                  <li><span>Para el empleador</span></li>
-                                                  <li>&#8227; Copia del documento de identidad</li>
-                                                  <li>&#8227; Copia del RUT</li>
-                                                  <li>&#8227; Datos de contacto (nombre, teléfono, diracción, estado civil)</li>
-                                                  <li>&#8227; Entidades de seguridad social seleccionadas (ARL y caja de compensación)</li>
-                                                  <li>&#8227; Datos de cuenta bancaria para pago de nómina y aportes (banco, tipo de cuenta, número de cuenta)</li>
-                                                  <li></li>
-                                                  <li><span>Para el empleado</span></li>
-                                                  <li>&#8227; Copia del documento de identidad</li>
-                                                  <li>&#8227; Datos de básicos (nombre, teléfono, diracción, estado civil)</li>
-                                                  <li>&#8227; Datos del contrato (sueldo, fecha de ingreso, tipo de empleado, días que labora)</li>
-                                                  <li>&#8227; Entidades de seguridad social seleccionadas (EPS y fondo de pensiones)</li>
-                                              </ul>
-                                            </div>
-                                            <div class="moda-footer">
-                                              <!--<div</div> div label-->
-                                              <!--<div</div> div input-->
-                                              <!--<div</div> div submit-->
-
-                                            </div>
-                                          </div>
-
                                         </div>
 
                                     </div>
+
                                     <div class="col-sm-4 col-xs-11 person">
                                         <div class="col-sm-12 col-xs-12">
                                             <h4>{% block usrName %}{{ app.user.getPersonPerson().getNames() }}{% endblock %}</h4>
@@ -291,10 +333,11 @@
                                             <div class="pull-right">
                                                 {% block logout %}
                                                     <span id="profile"
-                                                      style="display: inline"> <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi
+                                                          style="display: inline"> <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi
                                                         cuenta</a></span> | <span id="logout" style="display: inline"
                                                                                   id="logout"><a class="notAjax"
-                                                                                                 href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></span>{% endblock %}
+                                                                                                 href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                    </span>{% endblock %}
                                             </div>
                                         </div>
                                     </div>
@@ -430,8 +473,8 @@
             $(window).on("popstate", function (e) {
                 sendAjax(location.href);
             });
-            $(window).keydown(function(event){
-                if(event.keyCode == 13) {
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
                     event.preventDefault();
                     return false;
                 }
@@ -442,6 +485,9 @@
             if (redirector) {
                 sendAjax(redirector);
             }
+            $.getScript("{{ asset('public/js/remaind.js') }}").done(function () {
+                startReminder();
+            });
 //                  addNoClick();
 
         });
@@ -497,6 +543,7 @@
                 history.pushState({}, '', href);
                 sendAjax(href);
             });
+            startReminder();
         }
         //                 function addNoClick() {
         //                         $(".noClick").each(function () {
@@ -611,81 +658,100 @@
     </script>
     <!-- End Ajax scripts -->
     <!-- Start of symplificasupport Zendesk Widget script -->
-    <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("//assets.zendesk.com/embeddable_framework/main.js","symplificasupport.zendesk.com");/*]]>*/</script>
+    <script>/*<![CDATA[*/
+        window.zEmbed || function (e, t) {
+            var n, o, d, i, s, a = [], r = document.createElement("iframe");
+            window.zEmbed = function () {
+                a.push(arguments)
+            }, window.zE = window.zE || window.zEmbed, r.src = "javascript:false", r.title = "", r.role = "presentation", (r.frameElement || r).style.cssText = "display: none", d = document.getElementsByTagName("script"), d = d[d.length - 1], d.parentNode.insertBefore(r, d), i = r.contentWindow, s = i.document;
+            try {
+                o = s
+            } catch (c) {
+                n = document.domain, r.src = 'javascript:var d=document.open();d.domain="' + n + '";void(0);', o = s
+            }
+            o.open()._l = function () {
+                var o = this.createElement("script");
+                n && (this.domain = n), o.id = "js-iframe-async", o.src = e, this.t = +new Date, this.zendeskHost = t, this.zEQueue = a, this.body.appendChild(o)
+            }, o.write('<body onload="document._l();">'), o.close()
+        }("//assets.zendesk.com/embeddable_framework/main.js", "symplificasupport.zendesk.com");
+        /*]]>*/</script>
     <!-- End of symplificasupport Zendesk Widget script -->
 {% endblock %}
 {% block UserLogin %}
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog modal-md vertical-align-center" role="document">
-            <div class="modal-content">
-                <div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style=""><span
-                                aria-hidden="true">&times;</span></button>
-                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <img src="/img/logo-claro.png"/></div>
-                    </div>
-                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-xs-12">
-                            {% include "RocketSellerTwoPickBundle:General:login.html.twig" %}
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="loginModal">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog modal-md vertical-align-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style=""><span
+                                    aria-hidden="true">&times;</span></button>
+                        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                            <div class="col-sm-12 col-xs-12 up-Intro">Bienvenido a <img src="/img/logo-claro.png"/>
+                            </div>
+                        </div>
+                        <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                            <div class="col-xs-12">
+                                {% include "RocketSellerTwoPickBundle:General:login.html.twig" %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="forgotModal">
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog modal-md vertical-align-center" role="document">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="forgotModal">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog modal-md vertical-align-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¿Olvidaste tu contraseña?
+                            </div>
+                        </div>
+                        <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                            <div class="col-md-8 col-md-push-2">
+                                <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te
+                                    permita
+                                    restablecer la contraseña</p>
+                                {% include "RocketSellerTwoPickBundle:Resetting:request_content.html.twig" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-body" style="padding: 0">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                             style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
                                 aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¿Olvidaste tu contraseña?
-                        </div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Error</div>
                     </div>
-                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-8 col-md-push-2">
-                            <p>Ingresa el email que usaste al momento del registro y enviaremos un correo que te permita
-                                restablecer la contraseña</p>
-                            {% include "RocketSellerTwoPickBundle:Resetting:request_content.html.twig" %}
+                    <div class="row-fluid clearfix" style="padding: 30px 15px;">
+                        <div class="row">
+                            <div class="col-md-8 col-md-push-2">
+                                Perdón, algo salió mal. Un equipo de monos altamente capacitados ha sido enviado para
+                                hacer
+                                frente a esta situación
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-body" style="padding: 0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
-                            aria-hidden="true">&times;</span></button>
-                <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                    <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Error</div>
-                </div>
-                <div class="row-fluid clearfix" style="padding: 30px 15px;">
-                    <div class="row">
-                        <div class="col-md-8 col-md-push-2">
-                            Perdón, algo salió mal. Un equipo de monos altamente capacitados ha sido enviado para hacer
-                            frente a esta situación
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 30px;">
-                        <div class="col-xs-12 text-center">
-                            <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-xs-12 text-center">
+                                <button type="button" class="btn btnPrevious" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 <script type="text/javascript">
     (function () {
@@ -699,32 +765,6 @@
     })();
 </script>
 <!--script modal datos que debe recordar-->
-<script>
-// Get the modal
-var modal = document.getElementById('mimoda');
 
-// Get the button that opens the modal
-var btn = document.getElementById("mibotn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-</script>
 </body>
 </html>

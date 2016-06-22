@@ -26,7 +26,7 @@ class CorporatePagesController extends Controller
 
     public function politicaPrivacidadAction()
     {
-        return $this->render('RocketSellerTwoPickBundle:CorporatePages:politica-privacidad.html.twig', array(
+        return $this->render('RocketSellerTwoPickBundle:CorporatePages:politicas-de-privacidad.html.twig', array(
                 // ...
             ));    }
 

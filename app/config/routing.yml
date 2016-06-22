@@ -197,7 +197,6 @@ send_email_test_send:
 contact:
     path: /contact
     defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
-
 payroll:
     path: /payroll
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
@@ -526,3 +525,7 @@ producto:
 categories:
     path:     /categories/{redirectedBy}
     defaults: { _controller: RocketSellerTwoPickBundle:Public:categories }
+
+politicas_privacidad:
+    path:     /politicas-de-privacidad
+    defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad}
