@@ -73,6 +73,58 @@ font-weight: 100;
     border-radius: 5px;
     padding: 20px 0;
 }
+
+/*pantalla inicial situacion legal*/
+#cont-opciones-casos {
+  margin: 25px 0 10px 0;
+    padding: 0 0 30px 0;
+    border-bottom: 1px solid #CCC;
+}
+.casohead {
+  background: #F7F7F8;
+  border-radius: 5px;
+  padding: 15px 30px;
+  color: #5D5D5D;
+  text-align: center;
+}
+.casohead strong {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;}
+
+.casotittlehead span {
+    color: #00858c;
+    text-align: center;
+    width: 300px;
+    margin: 25px auto;
+    font-weight: 400;
+}
+
+.casos p {
+  font-style: italic;
+    color: #888;
+    font-size: 15px;
+    font-weight: 100;
+    margin: 0 auto;
+    width: 90%;
+    text-align: center;
+}
+.optionsul {
+  border-radius: 5px;
+    border: 1px #CCC dashed;
+    padding: 25px;
+    margin: 35px 0;
+}
+.casoabogado p {
+  text-align: left;
+  padding: 20px 0
+}
+
+.botones-options {
+  text-align: center;
+  margin: 20px 0
+}
+/*fin pantalla inicial situacion legal*/
 @media only screen and (max-width: 1200px) {
   .responsivestyle {white-space: normal;}
   .padd {padding: 6px 30px;margin-bottom: 5px}

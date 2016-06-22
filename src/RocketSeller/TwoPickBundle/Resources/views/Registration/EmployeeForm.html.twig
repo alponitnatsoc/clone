@@ -401,15 +401,15 @@
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
-                                    <p class="text-center typeQuestion" style="font-size: 16px;">Escoja el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales que le va a ofrecer</p>
+                                    <p class="text-center typeQuestion" style="font-size: 16px;">Elige el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales.</p>
                                 </div>
 
                                 <!--cambio de eleccion de tipo de contrato-->
                                 <div id="contratotypes">
                                     <div id="radio-contrato">
                                         <form action="">
-                                            <div class="contratotipo"><input id="indef" type="radio" name="gender" value="male" checked> Termino indefinido</div>
-                                            <div class="contratotipo"><input id="fijo" type="radio" name="gender" value="female"> Termino fijo</div>
+                                            <div class="contratotipo" id="indef"><input type="radio" name="gender" value="male" checked> Termino indefinido</div>
+                                            <div class="contratotipo" id="fijo"><input type="radio" name="gender" value="female"> Termino fijo</div>
                                         </form>
                                     </div>
                                     <div id="contenedor-tipocontrato">
@@ -420,7 +420,7 @@
                                                 <li>El periodo de pruea máximo es de 2 meses.</li>
                                                 <li>Recomendado para empleadores que quieran contratar a un empleado por un largo perdiodo de tiempo.</li>
                                             </ul>
-                                            <h4>Tenga en cuenta que:</h4>
+                                            <h4>Ten en cuenta que:</h4>
                                             <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
                                         </div>
                                         <div id="tipocont2" class="cont-tipocontrato">
@@ -432,7 +432,7 @@
                                               <li>Si el contrato es por menos de un año sólo se puede renovar por periodos más cortos o iguales al inicialmente pactado.</li>
                                               <li>Si el término fijo es inferior a un (1) año, únicamente podrá prorrogarse sucesivamente el contrato hasta por tres (3) períodos iguales o inferiores, al cabo de los cuales el término de renovación no podrá ser inferior a un (1) año.</li>
                                           </ul>
-                                          <h4>Tenga en cuenta que:</h4>
+                                          <h4>Ten en cuenta que:</h4>
                                           <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, se debe indemnizar al empleado por el valor remanente del contrato.
                                           <br /><br />
                                           Además, este tipo de contrato debe cancelarse 30 días antes que finalice.</p>
@@ -496,7 +496,7 @@
 
                                         </div>
 
-                                        <p class="text-muted" style="font-size: 16px;">Tenga en cuenta que la fecha sugerida es tres días después a la fecha actual ya que conviene firmar el contrato cuando ya exista afiliación a Seguridad Social
+                                        <p class="text-muted" style="font-size: 16px;">Ten en cuenta que la fecha de inicio sugerida es tres días después a la fecha actual ya que conviene firmar el contrato cuando ya exista afiliación a Seguridad Social.
 
                                         </p>
                                     </div>
@@ -1834,12 +1834,18 @@
               $("#tipocont1").hide(3000);
               $("#tipocont2").show("slow");
               $("#tipocont2").show(3000);
+              $("#fijo").find("input[type=radio]").each(function () {
+                $(this).prop("checked", true);
+              });
           });
           $("#indef").click(function(){
               $("#tipocont2").hide("slow");
               $("#tipocont2").hide(3000);
               $("#tipocont1").show("slow");
               $("#tipocont1").show(3000);
+              $("#indef").find("input[type=radio]").each(function () {
+                $(this).prop("checked", true);
+              });
           });
       });
 </script>
