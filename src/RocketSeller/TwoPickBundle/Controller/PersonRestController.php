@@ -69,8 +69,11 @@ class PersonRestController extends FOSRestController
             $people->setNames($paramFetcher->get('names'));
             $people->setLastName1($paramFetcher->get('lastName1'));
             $people->setLastName2($paramFetcher->get('lastName2'));
-            $people->setDocument($paramFetcher->get('document'));
-            $people->setDocumentType($paramFetcher->get('documentType'));
+            if($user->getStatus() == 1){
+              $people->setDocument($paramFetcher->get('document'));
+              $people->setDocumentType($paramFetcher->get('documentType'));
+            }
+
             if ($paramFetcher->get('youAre') != null) {
                 $employer->setEmployerType($paramFetcher->get('youAre'));
             }
@@ -394,7 +397,10 @@ class PersonRestController extends FOSRestController
                 $em->flush();
                 if ($employer->getEmployerHasEmployees()->count() == 0) {
                     $view->setData(array('url' => $this->generateUrl('register_employee', array('id' => -1, 'tab' => 1))))->setStatusCode(200);
-                } else {
+                } elseif ($user->getStatus() == 2 ) {
+                    $view->setData(array('url' => $this->generateUrl('show_employer')))->setStatusCode(200);
+                }
+                else {
                     $view->setStatusCode(200);
                 }
                 return $view;

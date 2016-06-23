@@ -77,9 +77,6 @@ trait PayrollMethodsTrait
      */
     private function checkActivePayroll(Payroll $payroll)
     {
-        //DELETE URGENT
-        return true;
-
         $dateToday = new \DateTime();
         if($payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="M"){
             $todayPeriod=4;
