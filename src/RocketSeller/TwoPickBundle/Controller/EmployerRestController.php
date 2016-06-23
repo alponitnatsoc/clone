@@ -341,9 +341,9 @@ class EmployerRestController extends FOSRestController
         }
 
         $smailer = $this->get('symplifica.mailer.twig_swift');
-        dump("beSend: ".$email);
-        $send = $smailer->remainderEmail('@RocketSellerTwoPick/SendEmail/recuerdatos.html.twig', 'registro@symplifica.com', $email, 'Recordatorio datos para registro');
-        dump("send: ".$send);
+        
+        $send = $smailer->remainderEmail('@RocketSellerTwoPick/SendEmail/recuerdatos.html.twig', 'registro@symplifica.com', $email,'Recordatorio datos para registro');
+        
         if ($send) {
             return $view->setStatusCode(200)->setData(array());
         } else {

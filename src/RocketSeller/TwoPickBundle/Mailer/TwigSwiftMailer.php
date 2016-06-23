@@ -54,6 +54,10 @@ class TwigSwiftMailer implements MailerInterface
             'subject' =>$subject
         );
 
+        dump($subject);
+        dump($fromEmail);
+        dump($toEmail);
+        
         $context = $this->twig->mergeGlobals($msg);
         $template = $this->twig->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);
@@ -61,6 +65,7 @@ class TwigSwiftMailer implements MailerInterface
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail);
+        dump($message->getSubject());
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));
         }
