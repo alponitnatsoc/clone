@@ -525,3 +525,7 @@ producto:
 categories:
     path:     /categories/{redirectedBy}
     defaults: { _controller: RocketSellerTwoPickBundle:Public:categories }
+
+politicas_privacidad:
+    path:     /politicas-de-privacidad
+    defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad}

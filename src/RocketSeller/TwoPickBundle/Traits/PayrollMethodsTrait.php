@@ -77,6 +77,9 @@ trait PayrollMethodsTrait
      */
     private function checkActivePayroll(Payroll $payroll)
     {
+        //DELETE URGENT
+        return true;
+
         $dateToday = new \DateTime();
         if($payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="M"){
             $todayPeriod=4;
@@ -134,12 +137,17 @@ trait PayrollMethodsTrait
 
                     if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
-                        dump("Pila: ".$pila);
-                        dump("PODPila: ".$podPila);
+                        dump("Pila: ");
+                        dump($pila);
+                        dump("PODPila: ");
+                        dump($podPila);
                         //this is for the first case
                         if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
+                            dump("Entré POD");
                             $podPila=$pila;
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total']);
+                            dump($podPila);
+
                         }else{
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podPila->getValue());
                             if($podPila->getIdPurchaseOrdersDescription()==null)

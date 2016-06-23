@@ -48,7 +48,7 @@
                     {% for phone in phones %}
                         <p class="col-md-12">{{ phone.phoneNumber}} </p>
                     {% endfor %}
-                    <p class="col-md-12 label-title">Codigo para compartir:</p>
+                    <p class="col-md-12 label-title">Código para compartir:</p>
                     <p class="col-md-12">{{ user.code }} <a btn class="btn btn-default" href="{{ path('invitation') }}" class="nav-link">Referir</a></p>
                 </div>
             </div>
@@ -64,4 +64,3 @@
     </div>
 
 </div>
-

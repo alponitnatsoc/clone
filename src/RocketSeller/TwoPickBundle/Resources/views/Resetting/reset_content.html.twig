@@ -1,4 +1,12 @@
 {% trans_default_domain 'FOSUserBundle' %}
+<style type="text/css">
+    #req_pass {
+      background: #5D5D5D;
+      color: #FFF;
+      padding: 0 0 0 0;
+      font-weight: 100;
+    }
+</style>
 <head>
   <link rel="stylesheet" href="{{ asset('public/css/home/reset-pass.css') }}">
 </head>
@@ -14,8 +22,21 @@
 
     <div id="reset-pass">
       <p class="azulclarofont bold">Ingresa tu nueva contraseña</p>
-      <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+      <form id= "resetPasswordForm" action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+          {{ form_row(form.plainPassword.first) }}
+          <div id="req_pass">
+            <p id="carac8t" style="background: #272525; margin: 0 0 15px 0; padding: 9px 0; font-weight: bold;">Tu contraseña debe tener:</p>
+            <p id="carac8">&#8594; Mínimo 8 caracteres</p>
+            <p id="mayus">&#8594; Una mayúscula</p>
+            <p id="minu">&#8594; Una minúscula</p>
+            <p id="num">&#8594; Un número</p>
+          </div>
+          {{ form_row(form.plainPassword.second) }}
+          <div id="req_pass">
+            <p id="notSame">&#8594; Las contraseñas no coinciden</p>
+          </div>
           {{ form_widget(form) }}
+
           <div>
               <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
           </div>
