@@ -4,6 +4,9 @@
  */
 function startEmployerEdit() {
     var validator;
+    //$("#edit_employer_person_document").attr("disabled","true");
+    //$("#edit_employer_person_documentType").attr("disabled","true");
+
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
       $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
         validator = $("form[name='edit_employer']").validate({
@@ -83,14 +86,14 @@ function startEmployerEdit() {
     // index when inserting a new item (e.g. 2)
     //el cambio de tabs entre el formulario de registro
     $('.btnPrevious').click(function () {
-        $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+        $('.nav-justified > .active').prev('li').find('a').trigger('click');
     });
 
     $('#btn-1').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='edit_employer']");
         var documentType = $(form).find("select[name='edit_employer[person][documentType]']");
-        var document = $(form).find("input[name='edit_employer[person][document]']");
+        var documentUser = $(form).find("input[name='edit_employer[person][document]']");
         var names = $(form).find("input[name='edit_employer[person][names]']");
         var lastName1 = $(form).find("input[name='edit_employer[person][lastName1]']");
         var lastName2 = $(form).find("input[name='edit_employer[person][lastName2]']");
@@ -107,16 +110,19 @@ function startEmployerEdit() {
             type: 'POST',
             data: {
                 documentType: documentType.val(),
-                document: document.val(),
+                documentUser: documentUser.val(),
                 names: names.val(),
                 lastName1: lastName1.val(),
                 lastName2: lastName2.val(),
                 year: $(form).find("select[name='edit_employer[person][birthDate][year]']").val(),
                 month: $(form).find("select[name='edit_employer[person][birthDate][month]']").val(),
                 day: $(form).find("select[name='edit_employer[person][birthDate][day]']").val(),
+                documentExpeditionDateYear: $(form).find("select[name='edit_employer[documentExpeditionDate][year]']").val(),
+                documentExpeditionDateMonth: $(form).find("select[name='edit_employer[documentExpeditionDate][month]']").val(),
+                documentExpeditionDateDay: $(form).find("select[name='edit_employer[documentExpeditionDate][day]']").val()
             }
         }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -126,7 +132,7 @@ function startEmployerEdit() {
     });
     $('#btn-2').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='edit_employer']");
         var idsPhones = [], phones = [];
         var mainAddress = $(form).find("input[name='edit_employer[person][mainAddress]']");
         var department = $(form).find("select[name='edit_employer[person][department]']");
@@ -178,7 +184,7 @@ function startEmployerEdit() {
                 $("#edit_employer_workplaces_0_city").val($("#edit_employer_person_city").val());
 
             }*/
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            $('.nav-justified > .active').next('li').find('a').trigger('click');
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -189,10 +195,10 @@ function startEmployerEdit() {
     addListeners();
 
     //colocar el select en el valor del tamaño del arreglo
-    var dropDownWork = $collectionHolder.data('index');
-    if (dropDownWork == 1 && $("input[name='edit_employer[sameWorkHouse]']:checked").val() != '0') {
+    //var dropDownWork = $collectionHolder.data('index');
+    //if (dropDownWork == 1 && $("input[name='edit_employer[sameWorkHouse]']:checked").val() != '0') {
         //$('ul.workplaces').hide();
-    }
+    //}
     /* $('#edit_employer_numberOfWorkplaces').val($dropDownWork);
      //listener para el que agrega workplaces
      $('#edit_employer_numberOfWorkplaces').change(function() {
@@ -235,10 +241,10 @@ function startEmployerEdit() {
      }
      });*/
     var redirUri = "";
-    $("form").on("submit", function (e) {
+    $("[name='edit_employer']").on("submit", function (e) {
         e.preventDefault();
 
-        var form = $("form");
+        var form = $("[name='edit_employer']");
         var names = [], addresses = [], citys = [], departments = [], ids = [];
         var i = 0;
         $(form).find("ul.workplaces input[name*='id']").each(function () {
@@ -310,24 +316,20 @@ function startEmployerEdit() {
                 workMainAddress: addresses,
                 workCity: citys,
                 workDepartment: departments
-            },
-            statusCode: {
-                200: function (data) {
-                    console.log(data);
-                    if (data["url"] != null) {
-                        console.log(data["url"]);
-                        redirUri = "/dashboard/employer";
-                    } else {
-                        $('#main').replaceWith(
-                                // ... with the returned one from the AJAX response.
-                                $(data).find('#main'));
-                        addClick();
-                        if (!jsLoader(url)) {
-                            addSumbit();
-                        }
-                    }
+            }
+        }).done(function (data) {
+            console.log(data);
+            if (data["url"] != null) {
+                console.log(data["url"]);
+                redirUri = data["url"];
+            } else {
+                $('#main').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(data).find('#main'));
+                addClick();
+                if (!jsLoader(url)) {
+                    addSumbit();
                 }
-
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if(jqXHR==errorHandleTry(jqXHR)){
