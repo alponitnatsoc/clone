@@ -82,23 +82,18 @@ class BackOfficeController extends Controller
         $employee = $person->getEmployee();
         /** @var Employer $employer */
         $employer = $user->getPersonPerson()->getEmployer();
-        dump('llamo');
         /** @var Document $cedula */
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
-        dump('salio');
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                dump('es host');
+                echo $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(),'reference)');
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                dump('es dev o alpha');
-
                 $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
-            dump('no encontro cedula');
             $pathCedula='';
             $nameCedula='';
         }
@@ -113,7 +108,6 @@ class BackOfficeController extends Controller
             $employerHasEmployee = null;
         }
         if($employerHasEmployee == null){
-            dump('cedula path: '.$pathCedula);
             return $this->render('RocketSellerTwoPickBundle:BackOffice:checkRegister.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula));
         }else{
             return $this->render('RocketSellerTwoPickBundle:BackOffice:checkEmployee.html.twig',array('user'=>$user , 'person'=>$person,'action'=>$action,'employerHasEmployee'=>$employerHasEmployee,'cedula'=>$cedula,'path_document'=>$pathCedula,'nameDoc'=>$nameCedula));

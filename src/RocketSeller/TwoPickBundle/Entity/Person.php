@@ -616,13 +616,11 @@ class Person
         /** @var Document */
         $documents=$this->docs;
         foreach ($documents as $document){
-            dump('hola:');
             if($document->getDocumentTypeDocumentType()==$docType){
                 dump($document);
                 return $document;
             }
         }
-        dump('fin');
         return 0;
     }
 
