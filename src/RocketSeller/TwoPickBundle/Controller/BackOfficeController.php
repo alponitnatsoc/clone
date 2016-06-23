@@ -86,7 +86,6 @@ class BackOfficeController extends Controller
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                echo $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(),'reference)');
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
