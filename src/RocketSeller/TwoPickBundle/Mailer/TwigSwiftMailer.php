@@ -46,16 +46,7 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['confirmation'], $user->getEmail());
     }
 
-    public function remainderEmail($templateName, $fromEmail, $toEmail,$subject,$path = null)
-    {
-        $context = array(
-            'toEmail' => $toEmail,
-            'fromEmail' =>$fromEmail,
-            'subject' =>$subject
-        );
-
-        return $this->sendMessage($templateName, $context, $fromEmail,$toEmail);
-    }
+    
 
     public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip,$phone, $path = null)
     {
@@ -93,9 +84,19 @@ class TwigSwiftMailer implements MailerInterface
         return $this->mailer->send($message);
     }
 
+    public function sendRemainderEmailMessage($toEmail)
+    {
+        $template = $this ->parameters['template']['reminder'];
+        $context = array(
+            'toEmail' => $toEmail
+        );
+
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['reminder'] ,$toEmail);
+    }
+
     public function sendResettingEmailMessage(UserInterface $user)
     {
-        $template = $this->parameters['template']['resetting'];
+        $template = 'RocketSellerTwoPickBundle:Registration:reminder.text.twig';
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $context = array(
