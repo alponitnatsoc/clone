@@ -14,7 +14,7 @@
 
         {% set modal_id = 'success_email_modal' %}
         {% set style_header %}
-            style="background-color: #1b7e5a; padding: 0px 0px"
+            style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
         {% set modal_header %}
             <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px">Envio Exitoso</h1>
@@ -31,7 +31,7 @@
 
         {% set modal_id = 'fail_email_modal' %}
         {% set style_header %}
-            style="background-color: #9C2F2F;; padding: 0px 0px"
+            style="background-color: #fd5c5c; padding: 0px 0px"
         {% endset %}
         {% set modal_header %}
             <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Envio Fallido</h1>
@@ -51,8 +51,61 @@
         {% set modal_content %}
             <p style="color: #5D5D5D; padding: 20px; font-size: 120%">No se</p>
         {% endset %}
+
+    {% elseif  template_parameter == 4 %}
+
+        {% set modal_id = 'succes_payment_modal' %}
+        {% set style_header %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+        {% set modal_header %}
+           <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Confirmación de pago</h1>
+        {% endset %}
+        {% set modal_content %}
+           <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago fue realizado de manera exitosa!</p>
+        {% endset %}
+        {% set modal_style_button %}
+           style="width: 30%; font-size:20px"
+        {% endset %}
+        {% set modal_button = 'cerrar' %}
+
+    {% elseif  template_parameter == 5 %}
+
+        {% set modal_id = 'fail_payment_modal' %}
+        {% set style_header %}
+           style="background-color: #fd5c5c; padding: 0px 0px"
+        {% endset %}
+       {% set modal_header %}
+           <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Confirmación de pago</h1>
+       {% endset %}
+       {% set modal_content %}
+           <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago no pudo ser efectuado!<br>
+           Por favor intente nuevamente más tarde, si el problema persiste pongase en contacto con nosotros <strong>350 833 0000</strong</p>
+       {% endset %}
+       {% set modal_style_button %}
+           style="width: 30%; font-size:20px"
+       {% endset %}
+       {% set modal_button = 'cerrar' %}
+
+  {% elseif  template_parameter == 6 %}
+
+       {% set modal_id = 'end_documents_modal' %}
+       {% set style_header %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+       {% endset %}
+       {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Carga de documentos</h1>
+       {% endset %}
+       {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido tus documentos correctamente!<br>
+            En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
+            de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
+       {% endset %}
+       {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+       {% endset %}
+       {% set modal_button = 'cerrar' %}
+
     {% endif %}
     {{ include('@RocketSellerTwoPick/modal_templates/modal.twig') }}
 {% endmacro %}
-
-
