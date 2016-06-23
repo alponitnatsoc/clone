@@ -3,3 +3,114 @@
 {% block body %}
 {% include "FOSUserBundle:Resetting:reset_content.html.twig" %}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+      // Verifying the password.
+      // We hide the requirements, until the user hits the password.
+      $("#req_pass").hide();
+      $("#notSame").hide();
+      $('#fos_user_resetting_form_plainPassword_first').attr('oninvalid', 'setCustomValidity("Tu contraseña no cumple con nuestros parametros de seguridad")');
+      $('#fos_user_resetting_form_plainPassword_first').attr('oninput', "setCustomValidity('')");
+
+      $('#fos_user_resetting_form_plainPassword_second').attr('oninvalid', 'setCustomValidity("Las contraseñas no coinciden")');
+      $('#fos_user_resetting_form_plainPassword_second').attr('oninput', "setCustomValidity('')");
+      // This function checks for all the requirements of the password.
+      function checkReq() {
+
+        // First show everything.
+        $("#carac8").show();
+        $("#mayus").show();
+        $("#minu").show();
+        $("#num").show();
+        $("#req_pass").show();
+
+        var completo = 0;
+        var pass = $("#fos_user_resetting_form_plainPassword_first").val();
+
+        // Check for size.
+        if(pass.length >= 8) {
+          $("#carac8").hide();
+          completo++;
+        }
+
+        // Check for a capital letter.
+        for(var i = 0; i < pass.length; i++){
+          character = pass.charAt(i);
+          if (character != character.toLowerCase()) {
+            // The character is uppercase.
+            $("#mayus").hide();
+            completo++;
+            break;
+          }
+        }
+        // Check for a lowercase letter.
+        for(var i = 0; i < pass.length; i++){
+          character = pass.charAt(i);
+          if (character == character.toLowerCase()) {
+            // The character is lowercase.
+            $("#minu").hide();
+            completo++;
+            break;
+          }
+        }
+        // Check for numbers.
+        var matches = pass.match(/\d+/g);
+        if (matches != null) {
+            $("#num").hide();
+            completo++;
+        }
+        if(completo == 4) {
+          $("#req_pass").hide();
+          return true;
+        }
+
+        return false;
+      }
+
+      function checkPass() {
+
+        var pass = $("#fos_user_resetting_form_plainPassword_first").val();
+        var passC = $("#fos_user_resetting_form_plainPassword_second").val();
+
+        if(pass == passC) {
+          $("#notSame").hide();
+          return true;
+        }
+        $("#notSame").show();
+        return false;
+
+      }
+
+      // We show it on focus.
+      $("#fos_user_resetting_form_plainPassword_first").focus(function(){
+          checkReq();
+      });
+
+      $("#fos_user_resetting_form_plainPassword_first").keyup(function(event) {
+          // We check each of the conditions.
+          checkReq();
+      });
+
+      $("#fos_user_resetting_form_plainPassword_second").focus(function(){
+          checkPass();
+      });
+
+      $("#fos_user_resetting_form_plainPassword_second").keyup(function(event) {
+          // We check each of the conditions.
+          checkPass();
+      });
+
+      $("#resetPasswordForm").on("submit", function (e) {
+        var r1 = checkReq();
+        var r2 = checkPass();
+        return r1 && r2;
+      });
+
+
+
+  </script>
+
+{% endblock %}

@@ -48,24 +48,13 @@ class TwigSwiftMailer implements MailerInterface
 
     public function remainderEmail($templateName, $fromEmail, $toEmail,$subject,$path = null)
     {
-        $msg = array(
+        $context = array(
             'toEmail' => $toEmail,
             'fromEmail' =>$fromEmail,
             'subject' =>$subject
         );
 
-        $context = $this->twig->mergeGlobals($msg);
-        $template = $this->twig->loadTemplate($templateName);
-        $subject = $template->renderBlock('subject', $context);
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom($fromEmail)
-            ->setTo($toEmail);
-        if ($path) {
-            $message->attach(\Swift_Attachment::fromPath($path));
-        }
-
-        return $this->mailer->send($message);
+        return $this->sendMessage($templateName, $context, $fromEmail,$toEmail);
     }
 
     public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip,$phone, $path = null)

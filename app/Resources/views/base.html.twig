@@ -59,7 +59,9 @@
         j.src =
                 '//www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');</script>
+    })(window, document, 'script', 'dataLayer', 'GTM-TR6JCJ');
+</script>
+
 
 <!-- End Google Tag Manager -->
 
@@ -167,6 +169,13 @@
             -->
 {% endblock %}
 <div class="content">
+    {%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+    <div>
+        {% block modales %}
+            {{ modal(1) }}
+            {{ modal(2) }}
+        {% endblock %}
+    </div>
     {% block body %}
         <div class="container body-container navbar">
             <div class="row mainContentRow">
@@ -219,26 +228,28 @@
                             {% endif %}
 
                             {% block menu %}
-                            <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
-                            </div>
-                            <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
-                            </div>
-                            <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago
-                                    a empleados</a>
-                            </div>
-                            <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
-                                <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
-                            </div>
-                            <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
-                                <a href="{{ path('contact') }}">Ayuda</a>
-                            </div>
-                            {% endblock%}
+                                <div class="{% if app.request.get('_route') == 'show_employer' %}activeMenu{% endif %} well well-lg">
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_employer') }}" {% endif %}>Empleador</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'manage_employees' %}activeMenu{% endif %} well well-lg">
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('manage_employees') }}"{% endif %}>Empleados</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'payroll' %}activeMenu{% endif %} well well-lg separador">
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('payroll') }}" class="notAjax"{% endif %}>Pago
+                                        a empleados</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
+                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
+                                    <a href="{{ path('contact') }}">Ayuda</a>
+                                </div>
+                            {% endblock %}
                         </div>
                     {% endblock %}
                 </div>
+
+
                 <div id="main" class="col-sm-9 clearfix">
                     {% block main %}
                         {% if app.user.status is defined %}
@@ -248,21 +259,24 @@
                         {% endif %}
                         <div class="span12">
                             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                                {% if template_parameter is defined %}
+                                    {{ include('@RocketSellerTwoPick/modal_templates/modal_picker.twig',{'template_parameter':template_parameter}) }}
+                                {% endif %}
                                 <div class="col-sm-12 col-xs-12 profile-Data">
                                     {% set flag = 0 %}
-                                    {% set path = app.request.pathInfo|split('/') %}
-                                    {% if path[1] =='register' %}
+                                    {% set path_modal = app.request.pathInfo|split('/') %}
+                                    {% if path_modal[1] =='register' %}
                                         {% set flag = 1 %}
                                     {% else %}
                                         {% set flag = 0 %}
                                     {% endif %}
                                     <div id="recordardatos">
 
-                                        <div class="btn btn-middleblue" id="mibotn" {% if flag == 0 %} style="display: none" {% endif %} >
+                                        <div class="btn btn-middleblue"
+                                             id="mibotn" {% if flag == 0 %} style="display: none" {% endif %} >
                                             Recordar datos requeridos
                                         </div>
 
-                                        <!-- The Modal -->
                                         <div id="mimoda" class="moda">
 
                                             <!-- Modal content -->
@@ -299,45 +313,53 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                    <div class="moda-footer">
-                                                        <li>
-                                                            <form id="reminderMail">
-                                                                <div class="row">
-                                                                </div>
-                                                                <span>Correo:</span>
-                                                                <div style="margin-left: 20px; margin-top: 10px;">
-                                                                    <input style="color: #4B4B4B; width: 280px; margin-right: 10px;"
-                                                                           type="text" id="emailToSendHelp"
-                                                                           name="emailToSendHelp"
-                                                                           placeholder="ejemplo@tucorreo.cual"/>
-                                                                </div>
-                                                                <div>
-                                                                    <a style=" margin-left: 20px; margin-top: 10px;"
-                                                                       class="btn btn-middleblue notAjax"
-                                                                       id="emailToSendHelpButton"
-                                                                       href="{{ path('api_public_post_remainder') }}">
-                                                                        Enviar </a>
-                                                                </div>
-                                                            </form>
-                                                        </li>
-                                                    </div>
+                                                <div class="moda-footer">
+
+                                                    <form id="reminderMail">
+                                                        <div class="row">
+                                                        </div>
+                                                        <span style="color: #5D5D5D">Correo:</span>
+                                                        <div style="margin-left: 20px; margin-top: 10px;">
+                                                            <input style="color: #4B4B4B; width: 280px; margin-right: 10px;"
+                                                                   type="text" id="emailToSendHelp"
+                                                                   name="emailToSendHelp"
+                                                                   placeholder="ejemplo@tucorreo.cual"/>
+                                                        </div>
+
+                                                        <div>
+                                                            <a style=" margin-left: 20px; margin-top: 10px;"
+                                                               class="btn btn-middleblue notAjax"
+                                                               id="emailToSendHelpButton"
+                                                               href="{{ path('api_public_post_remainder') }}">
+                                                                Enviar </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="col-sm-4 col-xs-11 person">
                                         <div class="col-sm-12 col-xs-12">
-                                            <h4>{% block usrName %}{{ app.user.getPersonPerson().getNames() }}{% endblock %}</h4>
+                                            <h4>
+                                                {% block usrName %}
+                                                    {{ app.user.getPersonPerson().getNames() }}
+                                                {% endblock %}
+                                            </h4>
 
                                             <div class="pull-right">
                                                 {% block logout %}
-                                                    <span id="profile"
-                                                          style="display: inline"> <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} class="notAjax" href=" {{ path('show_user') }}" {% endif %}>Mi
-                                                        cuenta</a></span> | <span id="logout" style="display: inline"
-                                                                                  id="logout"><a class="notAjax"
-                                                                                                 href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-                                                    </span>{% endblock %}
+                                                    <span id="profile" style="display: inline">
+                                                        <a
+                                                            {% if status < 2 %}
+                                                                class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad"
+                                                            {% else %}
+                                                                class="notAjax" href=" {{ path('show_user') }}"
+                                                            {% endif %}
+                                                        >Mi cuenta</a>
+                                                    </span> | <span id="logout" style="display: inline"><a class="notAjax" href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                                    </span>
+                                                {% endblock %}
                                             </div>
                                         </div>
                                     </div>
@@ -752,7 +774,9 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
+
 <script type="text/javascript">
     (function () {
         var s = document.createElement("script");

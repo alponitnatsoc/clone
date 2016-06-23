@@ -1,0 +1,58 @@
+{% macro modal(template_parameter,modal_id) %}
+    {% if template_parameter is not defined %}
+        {% set style_header %}
+            style="background-color: #9C2F2F;; padding: 0px 0px"
+        {% endset %}
+        {% set modal_header %}
+            <h1>Error de modal</h1>
+        {% endset %}
+        {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡No se definio un modal_parameter!</p>
+        {% endset %}
+
+    {% elseif  template_parameter == 1 %}
+
+        {% set modal_id = 'success_email_modal' %}
+        {% set style_header %}
+            style="background-color: #1b7e5a; padding: 0px 0px"
+        {% endset %}
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px">Envio Exitoso</h1>
+        {% endset %}
+        {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Tu correo se envio de manera exitosa!</p>
+        {% endset %}
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+        {% set modal_button = 'cerrar' %}
+
+    {% elseif  template_parameter == 2 %}
+
+        {% set modal_id = 'fail_email_modal' %}
+        {% set style_header %}
+            style="background-color: #9C2F2F;; padding: 0px 0px"
+        {% endset %}
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Envio Fallido</h1>
+        {% endset %}
+        {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Ocurrio un error enviando el correo!</p>
+        {% endset %}
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+        {% set modal_button = 'cerrar' %}
+
+    {% elseif template_parameter == 3 %}
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px">Recuerda que: </h1>
+        {% endset %}
+        {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 120%">No se</p>
+        {% endset %}
+    {% endif %}
+    {{ include('@RocketSellerTwoPick/modal_templates/modal.twig') }}
+{% endmacro %}
+
+

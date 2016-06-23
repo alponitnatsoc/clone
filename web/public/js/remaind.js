@@ -40,6 +40,14 @@ function startReminder() {
         });
     });
 
+    $(function () {
+        $('.modal').modal({
+            show: false,
+            keyboard: false,
+            backdrop: 'static'
+        });
+    });
+
     $("#emailToSendHelpButton").on("click", function (e) {
 
         e.preventDefault();
@@ -55,8 +63,11 @@ function startReminder() {
                 email: $("#emailToSendHelp").val()
             }
         }).done(function (data) {
+            modal.style.display = "none";
+            $("#success_email_modal").modal("show");
             console.log("yay")
         }).fail(function (jqXHR, textStatus, errorThrown) {
+            $("#fail_email_modal").modal("show");
             console.log("nei")
         });
     });
