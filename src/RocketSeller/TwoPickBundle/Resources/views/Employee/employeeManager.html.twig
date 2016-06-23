@@ -23,9 +23,9 @@
     <div id="agregarNovedad"></div>
     <div class="col-xs-12" id="employees">
         <div class="row employeesCount">
-            <div class="col-md-4 col-xs-3"><p><b>{{ employees|length }}</b><br>Empleados <br>activos</p></div>
-            <div class="col-md-4 col-xs-3 division-line"><p><b> 0</b><br>Empleados <br>inactivos</p></div>
-            <div class="col-md-4 col-xs-6"><p><b> 0</b><br>Empleados en proceso <br>de registro</p></div>
+            <div class="col-md-4 col-xs-3"><p><b> {{ activeEmp }}</b><br>Empleados <br>activos</p></div>
+            <div class="col-md-4 col-xs-3 division-line"><p><b> {{ inactiveEmp }} </b><br>Empleados <br>inactivos</p></div>
+            <div class="col-md-4 col-xs-6"><p><b> {{ registerEmp }} </b><br>Empleados en proceso <br>de registro</p></div>
         </div>
         <br />
         <div class="row">

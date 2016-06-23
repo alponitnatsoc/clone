@@ -236,6 +236,11 @@ class EmployeeController extends Controller
                 $employeesData = array();
                 $ehEs = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 /** @var EmployerHasEmployee $ehE */
+
+                $eHStateActive = 0;
+                $eHStateInactive = 0;
+                $eHStateRegister = 0;
+
                 foreach ($ehEs as $ehE) {
                     if ($ehE->getState() == -1) {
                         continue;
@@ -264,6 +269,16 @@ class EmployeeController extends Controller
                         );
                         break;
                     }
+
+                    if($ehE->getState() == 0){
+                      $eHStateInactive = $eHStateInactive + 1;
+                    }
+                    elseif ($ehE->getState() == 1 || $ehE->getState() == 2 ) {
+                      $eHStateRegister = $eHStateRegister + 1;
+                    }
+                    elseif ($ehE->getState() >= 3) {
+                      $eHStateActive = $eHStateActive + 1;
+                    }
                 }
 
                 $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
@@ -271,7 +286,10 @@ class EmployeeController extends Controller
                                 'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
                             'employees' => $employeesData,
                             'user' => $user,
-                            'registerState' => $registerState
+                            'registerState' => $registerState,
+                            'inactiveEmp' => $eHStateInactive,
+                            'registerEmp' => $eHStateRegister,
+                            'activeEmp' => $eHStateActive
                 ));
             } else {
                 return $this->redirectToRoute('ajax');
