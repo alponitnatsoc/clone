@@ -46,7 +46,7 @@ interface MailerInterface
     public function sendWelcomeEmailMessage(UserInterface $user);
 
     /**
-     * Send an welcome email
+     * Send an reminder email
      *
      * @param String $toEmail
      *

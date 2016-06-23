@@ -13,7 +13,6 @@ namespace RocketSeller\TwoPickBundle\Mailer;
 
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use RocketSeller\TwoPickBundle\Mailer\MailerInterface;
 
 /**
  * @author Christophe Coevoet <stof@notk.org>
@@ -62,9 +61,6 @@ class TwigSwiftMailer implements MailerInterface
         
         $context = $this->twig->mergeGlobals($msg);
         $template = $this->twig->loadTemplate($templateName);
-        $subject = $template->renderBlock('subject', $context);
-        $textBody = $template->renderBlock('body_text', $context);
-        $htmlBody = $template->renderBlock('body_html', $context);
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom($fromEmail)
@@ -74,29 +70,13 @@ class TwigSwiftMailer implements MailerInterface
             $message->attach(\Swift_Attachment::fromPath($path));
         }
 
-        if (!empty($htmlBody)) {
-            $message->setBody($htmlBody, 'text/html')
-                ->addPart($textBody, 'text/plain');
-        } else {
-            $message->setBody($textBody);
-        }
-
         return $this->mailer->send($message);
     }
-
-    public function sendRemainderEmailMessage($toEmail)
-    {
-        $template = $this ->parameters['template']['reminder'];
-        $context = array(
-            'toEmail' => $toEmail
-        );
-
-        return $this->sendMessage($template, $context, $this->parameters['from_email']['reminder'] ,$toEmail);
-    }
+    
 
     public function sendResettingEmailMessage(UserInterface $user)
     {
-        $template = 'RocketSellerTwoPickBundle:Registration:reminder.text.twig';
+        $template = $this->parameters['template']['resetting'];
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $context = array(
@@ -166,5 +146,15 @@ class TwigSwiftMailer implements MailerInterface
         }
 
         return $this->mailer->send($message);
+    }
+    
+    public function sendReminderEmailMessage($toEmail)
+    {
+        $template = 'RocketSellerTwoPickBundle:Registration:recuerdatos.txt.twig';
+        $context = array(
+            'toEmail' => $toEmail
+        );
+
+        return $this->sendMessage($template, $context, $this->parameters['from_email']['reminder'] ,$toEmail);
     }
 }
