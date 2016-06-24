@@ -837,7 +837,6 @@ function startEmployee() {
             }
         });
 
-        alert(holidayDebtTrueValue);
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -881,8 +880,22 @@ function startEmployee() {
             }
         });
     });
-    $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
 
+    if($("#register_employee_employeeHasEmployers_holidayDebt").val() == 0){
+      $("#alDiaDias").find("input[type=radio]").each(function () {
+          $(this).prop("checked", true);
+      });
+    }else if ($("#register_employee_employeeHasEmployers_holidayDebt").val() > 0) {
+      $("#leDeboDias").find("input[type=radio]").each(function () {
+          $(this).prop("checked", true);
+      });
+    }else {
+      $("#meDebeDias").find("input[type=radio]").each(function () {
+          $(this).prop("checked", true);
+      });
+    }
+
+    $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
     loadConstrains();
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -923,18 +936,21 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
-    $("#labelCosto").html("Costo total diario </br> por el empleado");
-    $("#ingresoNeto").html("Esto recibirá neto el empleado diariamente");
+    //$("#labelCosto").html("Costo total diario </br> por el empleado");
+    //$("#ingresoNeto").html("Esto recibirá neto el empleado diariamente");
+    radioChange = true;
     calculator();
 });
 
 $('#radio_mensual').click(function() {
-    $("#labelCosto").html("Costo total </br> por el empleado");
-    $("#ingresoNeto").html("Esto recibirá neto el empleado mensualmente");
+    //$("#labelCosto").html("Costo total </br> por el empleado");
+    //$("#ingresoNeto").html("Esto recibirá neto el empleado mensualmente");
+    radioChange = true;
     calculator();
 });
 
 var sueldo_plano = 0;
+var radioChange = false;
 
 function changeValues(data) {
   // We call calculator to have everything fresh.
@@ -975,11 +991,13 @@ function changeValues(data) {
 
   sueldo_plano = data.plainSalary/data.numberOfDays;
 
+  if( radioChange == false ){
     $("#totalExpensesVal").val(getPrice(Math.floor(pagos_netos/division)));
-
-    $("#totalExpensesValD").val(getPrice(Math.floor(data.plainSalary)/division));
-
     $("#totalExpensesVal2").val(getPrice(Math.floor(total_modal)/division));
+    $("#totalExpensesValD").val(getPrice(Math.floor(data.plainSalary)/division));
+  } else {
+    radioChange = false;
+  }
 
 
   if($("#totalExpensesVal2").val() == 'NaN')
