@@ -63,6 +63,9 @@ marketing:
 autenticate:
     path:     /backoffice/autenticate/{user}/{autentication}
     defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:demoLogin}
+add_to_sql_back:
+    path:     /backoffice/autenticate/{user}/{autentication}
+    defaults: { _controller: RocketSellerTwoPickBundle:BackOffice:addtoSQLBack}
 
 #tramites
 show_procedure:

@@ -37,6 +37,24 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
 
+    public function addtoSQLBackAction($user,$autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $dm = $this->getDoctrine();
+        $repo = $dm->getRepository('RocketSellerTwoPickBundle:User');
+        /** @var User $user */
+        $user = $repo->find($user);
+        if (!$user) {
+            throw $this->createNotFoundException('No demouser found!');
+        }
+        if($autentication==$user->getSalt()) {
+            $this->addToSQL($user);
+            dump("Se agregó a sql");
+        }
+        return $this->redirectToRoute("pages");
+
+    }
     public function demoLoginAction($user,$autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
