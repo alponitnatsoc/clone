@@ -417,7 +417,7 @@
                                             <h4>Características termino indefinido</h4>
                                             <ul>
                                                 <li>No tiene fecha determinada de terminación.</li>
-                                                <li>El periodo de pruea máximo es de 2 meses.</li>
+                                                <li>El periodo de prueba máximo es de 2 meses.</li>
                                                 <li>Recomendado para empleadores que quieran contratar a un empleado por un largo perdiodo de tiempo.</li>
                                             </ul>
                                             <h4>Ten en cuenta que:</h4>
@@ -511,12 +511,21 @@
                                     </div>
                                 </div>
                                 {% if changeBehaviorFlag == 1 %}
+
                                     <div class="row">
-                                        <div class="col-sm-12 text-center form-group">
-                                            {{ form_label(form.employeeHasEmployers.holidayDebt) }} <br />
-                                            {{ form_widget(form.employeeHasEmployers.holidayDebt) }}
+                                        <div class="col-sm-12 text-center form-group" style="border: #e0e0e0 1px dashed;border-radius: 5px;padding: 25px 0;">
+                                          {{ form_label(form.employeeHasEmployers.holidayDebt) }}<br />
+                                          <div id="radio-vacaciones" style="padding: 0 0 25px 0;">
+                                              <form action="">
+                                                  <div  id="meDebeDias"><input type="radio" name="holidayState" value="ND" checked> El empleado me debe días</div>
+                                                  <div style="padding: 15px 0;"  id="alDiaDias"><input type="radio" name="holidayState" value="OD" > No hay vacaciones pendientes</div>
+                                                  <div  id="leDeboDias"><input type="radio" name="holidayState" value="PD"> Le debo días a mi empleado</div>
+                                              </form>
+                                          </div>
+                                          <div style="width:265px;margin:0 auto">{{ form_widget(form.employeeHasEmployers.holidayDebt) }}</div>
                                         </div>
                                     </div>
+
                                 {% endif %}
                                 <br/>
                                 <br />
@@ -619,7 +628,7 @@
                                 <div class="col-sm-12 days price-box">
                                   <div class="padding-container col-xs-12 col-sm-6 priceContainer">
                                       <p class="p">Salario contractual</p>
-                                      <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                      <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                   </div>
                                     <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
                                         <p class="p">¿Cuanto será el salario diario?</p>
@@ -643,7 +652,7 @@
                                     </div>
                                     <div class="padding-container col-xs-12 col-sm-6 priceContainer">
                                         <p id="ingresoNeto" class="p">Esto recibirá neto el empleado mensualmente</p>
-                                        <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                        <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                     </div>
                                 </div>
 
@@ -654,7 +663,7 @@
                                         <p id="labelCosto" style="font-weight:100">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
-                                            <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                            <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                         </div>
                                         <!--<a id="link_calculator" style="margin-top:10px;display:block;color: #666;font-size: 14px;font-weight: 100;text-decoration: underline;" class="notAjax">Ver detalle del costo</a>-->
 
@@ -1758,8 +1767,25 @@
                     </div>
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-8 col-md-push-2">
-                            ¡Las fechas del contrato no pueden ser anteriores al día sugerido por Symplifica!
+                            ¡La fecha de inicio del contrato no puede ser anterior al día sugerido por Symplifica!
                           </br></br> Si tu empleado empezó labores previamente, regresa y marcalo de la forma correspondiente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dateContract2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content"><div class="modal-body" style="padding: 0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Fecha Invalida</div>
+                    </div>
+                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
+                        <div class="col-md-8 col-md-push-2">
+                            ¡La fecha de finalización del contrato no puede ser previa al día de inicio del mismo!
                         </div>
                     </div>
                 </div>
@@ -1824,29 +1850,3 @@
     </div>
 
 {% endblock fos_user_content %}
-
-{% block javascripts %}
-  {{parent()}}
-  <script>
-      $(document).ready(function(){
-          $("#fijo").click(function(){
-              $("#tipocont1").hide("slow");
-              $("#tipocont1").hide(3000);
-              $("#tipocont2").show("slow");
-              $("#tipocont2").show(3000);
-              $("#fijo").find("input[type=radio]").each(function () {
-                $(this).prop("checked", true);
-              });
-          });
-          $("#indef").click(function(){
-              $("#tipocont2").hide("slow");
-              $("#tipocont2").hide(3000);
-              $("#tipocont1").show("slow");
-              $("#tipocont1").show(3000);
-              $("#indef").find("input[type=radio]").each(function () {
-                $(this).prop("checked", true);
-              });
-          });
-      });
-</script>
-{% endblock javascripts %}
