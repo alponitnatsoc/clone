@@ -150,11 +150,10 @@ class TwigSwiftMailer implements MailerInterface
     
     public function sendReminderEmailMessage($toEmail)
     {
-        $template = 'RocketSellerTwoPickBundle:Registration:recuerdatos.txt.twig';
         $context = array(
             'toEmail' => $toEmail
         );
 
-        return $this->sendMessage($template, $context, $this->parameters['from_email']['reminder'] ,$toEmail);
+        return $this->sendMessage($this->parameters['template']['reminder'], $context, 'registro@symplifica.com' ,$toEmail);
     }
 }
