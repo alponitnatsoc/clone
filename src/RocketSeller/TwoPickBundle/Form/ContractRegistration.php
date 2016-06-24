@@ -154,15 +154,15 @@ class ContractRegistration extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'label' => '¿Cual es la fecha de inicio del contrato?*:',
+                'label' => '¿Cúal es la fecha de inicio del contrato?*:',
                 'years' => range(1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'label' => '¿Cual es la fecha en que finaliza el contrato?*:',
-                'data' => $this->todayOneYear,
+                'label' => '¿Cúal es la fecha en que finaliza el contrato?*:',
+                //'data' => $this->todayOneYear,
                 'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+3),
             ))
             ->add('weekWorkableDays', 'choice', array(

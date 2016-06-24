@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -425,10 +426,12 @@ class EmployeeController extends Controller
             return false;
         }
         $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
-
+        $interval = new DateInterval('P364D');
+        $localEndDate =new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+        $localEndDate->add($interval);
         $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
         $form->get('employeeHasEmployers')->get("startDate")->setData($permittedDate);
-        $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
+        $form->get('employeeHasEmployers')->get("endDate")->setData($localEndDate);
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
             if ($contracts->count() != 0) {

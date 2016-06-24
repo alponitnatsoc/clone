@@ -4,6 +4,15 @@
 
 function startEmployee() {
     var validator;
+
+    var loadedStartDateDay = $("#register_employee_employeeHasEmployers_startDate_day").val();
+    var loadedStartDateMonth = $("#register_employee_employeeHasEmployers_startDate_month").val();
+    var loadedStartDateYear = $("#register_employee_employeeHasEmployers_startDate_year").val();
+
+    var loadedEndDateDay = $("#register_employee_employeeHasEmployers_endDate_day").val();
+    var loadedEndDateMonth = $("#register_employee_employeeHasEmployers_endDate_month").val();
+    var loadedEndDateYear = $("#register_employee_employeeHasEmployers_endDate_year").val();
+
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
@@ -110,7 +119,57 @@ function startEmployee() {
         $('#contractNav > .active').prev('li').find('a').trigger('click');
     });
     $('.btnNext-contract').click(function () {
-        $('#contractNav > .active').next('li').find('a').trigger('click');
+          var dateOk = true;
+          var mustCheck = false;
+
+          if($("#changeBehavior").text() !="1"){
+            if( loadedStartDateDay != $("#register_employee_employeeHasEmployers_startDate_day").val()
+                  || loadedStartDateMonth != $("#register_employee_employeeHasEmployers_startDate_month").val()
+                    || loadedStartDateYear != $("#register_employee_employeeHasEmployers_startDate_year").val()){
+                      mustCheck = true;
+                      if (!checkDate(new Date(
+                              $("#register_employee_employeeHasEmployers_startDate_year").val(),
+                              parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+                              $("#register_employee_employeeHasEmployers_startDate_day").val()
+                          ))) {
+                          var $permittedDate= $("#datePermitted");
+                          $("#register_employee_employeeHasEmployers_startDate_year").val(parseInt($permittedDate.find(".year").text()));
+                          $("#register_employee_employeeHasEmployers_startDate_month").val(parseInt($permittedDate.find(".month").text()));
+                          $("#register_employee_employeeHasEmployers_startDate_day").val(parseInt($permittedDate.find(".day").text()));
+                          dateOk = false;
+                      }
+                    }
+          }
+
+          if( $("#fijo").find("input[type=radio]").prop("checked") == true  && dateOk == true){
+
+              if( loadedEndDateDay != $("#register_employee_employeeHasEmployers_endDate_day").val()
+                    || loadedEndDateMonth != $("#register_employee_employeeHasEmployers_endDate_month").val()
+                      || loadedEndDateYear != $("#register_employee_employeeHasEmployers_endDate_year").val()
+                        || mustCheck == true){
+
+                      if (!checkDateVsStart(new Date(
+                              $("#register_employee_employeeHasEmployers_endDate_year").val(),
+                              parseInt($("#register_employee_employeeHasEmployers_endDate_month").val()),
+                              $("#register_employee_employeeHasEmployers_endDate_day").val()
+                          ))) {
+
+                        var setEndDate = oneYearFromNow(new Date(
+                                $("#register_employee_employeeHasEmployers_startDate_year").val(),
+                                parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+                                $("#register_employee_employeeHasEmployers_startDate_day").val()));
+
+                        $("#register_employee_employeeHasEmployers_endDate_year").val($("#register_employee_employeeHasEmployers_startDate_year").val());
+                        $("#register_employee_employeeHasEmployers_endDate_month").val(parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()));
+                        $("#register_employee_employeeHasEmployers_endDate_day").val($("#register_employee_employeeHasEmployers_startDate_day").val());
+                        dateOk = false;
+                      }
+          }
+        }
+
+          if(dateOk == true){
+            $('#contractNav > .active').next('li').find('a').trigger('click');
+          }
     });
     //dinamic loading contract type and commitment
     //first hide all
@@ -154,7 +213,7 @@ function startEmployee() {
         }
         calculator();
     });
-    $("#register_employee_employeeHasEmployers_startDate").on("change", function () {
+    /*$("#register_employee_employeeHasEmployers_startDate").on("change", function () {
         if($("#changeBehavior").text()=="1"){
             return;
         }
@@ -185,7 +244,7 @@ function startEmployee() {
             $(this).find("#register_employee_employeeHasEmployers_endDate_month").val(month + 1);
             $(this).find("#register_employee_employeeHasEmployers_endDate_day").val(day);
         }
-    });
+    });*/
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
     if (selectedVal == " Trabajador por días") {
         $(".days").each(function () {
@@ -1502,7 +1561,7 @@ function checkDate(date) {
     var $permittedDate= $("#datePermitted");
     var dateNow = new Date(
         $permittedDate.find(".year").text(),
-        parseInt($permittedDate.find(".month").text())-1,
+        parseInt($permittedDate.find(".month").text()),
         $permittedDate.find(".day").text()
     );
     if (date < dateNow) {
@@ -1511,6 +1570,22 @@ function checkDate(date) {
     }
     return true;
 }
+
+function checkDateVsStart(date) {
+    var $permittedDate= $("#datePermitted");
+    var dateNow = new Date(
+            $("#register_employee_employeeHasEmployers_startDate_year").val(),
+            parseInt($("#register_employee_employeeHasEmployers_startDate_month").val()),
+            $("#register_employee_employeeHasEmployers_startDate_day").val()
+        );
+
+    if (date < dateNow) {
+        $("#dateContract2").modal("show");
+        return false;
+    }
+    return true;
+}
+
 function getPrice(valor) {
     price = parseFloat(valor.toString().replace(/,/g, ""))
         .toFixed(0)
@@ -1804,4 +1879,9 @@ function initEntitiesFields(){
         });
     });
 
+}
+
+function oneYearFromNow(date){
+  date.setDate( date.getDate() + 364 );
+  return date;
 }
