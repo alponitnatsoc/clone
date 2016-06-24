@@ -149,12 +149,12 @@ class TwigSwiftMailer implements MailerInterface
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));
         }
-
+        dump($htmlBody);
         if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html')
                 ->addPart($textBody, 'text/plain');
         } else {
-            $message->setBody($textBody);
+            $message->setBody($textBody, 'text/plain');
         }
 
         return $this->mailer->send($message);
