@@ -40,7 +40,9 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][transportAid]": "required",
                 "register_employee[employeeHasEmployers][payMethod]": "required",
                 "register_employee[verificationCode]": "required",
-                "register_employee[employeeHasEmployers][frequencyFrequency]": "required"/*,
+                "register_employee[employeeHasEmployers][frequencyFrequency]": "required",
+                "register_employee[employeeHasEmployers][holidayDebt]": "required"
+                /*,
                  "register_employee[credit_card]": "required",
                  "register_employee[cvv]": "required",
                  "register_employee[expiry_date]": "required",
@@ -74,7 +76,9 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][payMethod]": "Por favor selecciona una opción",
                 "register_employee[verificationCode]": "Por favor ingrese el código",
-                "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción"/*,
+                "register_employee[employeeHasEmployers][frequencyFrequency]": "Por favor selecciona una opción",
+                "register_employee[employeeHasEmployers][holidayDebt]" : "Por favor ingrese un número de días o cambie de opción"
+                /*,
                  "register_employee[credit_card]": "Por favor ingresa el número de la tarjeta",
                  "register_employee[cvv]": "Por favor ingresa el código de seguridad de la tarjeta",
                  "register_employee[expiry_date]": "Por favor ingresa la fecha de expiración de la tarjeta",
@@ -167,7 +171,21 @@ function startEmployee() {
           }
         }
 
-          if(dateOk == true){
+        var valid = true;
+        var shouldBeEmpty = false;
+        $("#alDiaDias").find("input[type=radio]").each(function () {
+            if( $(this).prop("checked") == true){
+              shouldBeEmpty = true;
+              $("#register_employee_employeeHasEmployers_holidayDebt").val(0);
+            }
+        });
+
+        if(!shouldBeEmpty){
+            if (!validator.element($("#register_employee_employeeHasEmployers_holidayDebt"))) {
+                valid = false;
+            }
+        }
+          if(dateOk == true && valid == true){
             $('#contractNav > .active').next('li').find('a').trigger('click');
           }
     });
@@ -800,6 +818,26 @@ function startEmployee() {
         if (!validateSalary()) {
             return false;
         }
+
+        var holidayDebtTrueValue = 0;
+        var numericValueHolidayDebt = Math.abs($(form).find("#register_employee_employeeHasEmployers_holidayDebt").val());
+        $("#meDebeDias").find("input[type=radio]").each(function () {
+            if( $(this).prop("checked") == true){
+              holidayDebtTrueValue = numericValueHolidayDebt * -1;
+            }
+        });
+        $("#alDiaDias").find("input[type=radio]").each(function () {
+            if( $(this).prop("checked") == true){
+              holidayDebtTrueValue = 0;
+            }
+        });
+        $("#leDeboDias").find("input[type=radio]").each(function () {
+            if( $(this).prop("checked") == true){
+              holidayDebtTrueValue = numericValueHolidayDebt;
+            }
+        });
+
+        alert(holidayDebtTrueValue);
         $.ajax({
             url: $(this).attr('href'),
             type: 'POST',
@@ -832,7 +870,7 @@ function startEmployee() {
                 //    'minute': $(form).find("select[name='register_employee[employeeHasEmployers][workTimeEnd][minute]']").val()},
                 weekWorkableDays: $(form).find("#register_employee_employeeHasEmployers_weekWorkableDays").val(),
                 contractId: $(form).find("input[name='register_employee[idContract]']").val(),
-                holidayDebt: $(form).find("#register_employee_employeeHasEmployers_holidayDebt").val()
+                holidayDebt: holidayDebtTrueValue
             }
         }).done(function (data) {
             $('#contractNav > .active').next('li').find('a').trigger('click');
@@ -843,6 +881,8 @@ function startEmployee() {
             }
         });
     });
+    $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
+
     loadConstrains();
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -1266,6 +1306,31 @@ function addListeners() {
                 jsonToHTML(data)
             );
         });
+    });
+
+    $("#meDebeDias").click(function(){
+      $("#register_employee_employeeHasEmployers_holidayDebt").show();
+      $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
+      $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
+      $(this).find("input[type=radio]").each(function () {
+        $(this).prop("checked", true);
+      });
+    });
+    $("#alDiaDias").click(function(){
+      //$("#register_employee_employeeHasEmployers_holidayDebt").val(0);
+      $("#register_employee_employeeHasEmployers_holidayDebt-error").hide();
+      $("#register_employee_employeeHasEmployers_holidayDebt").hide();
+      $(this).find("input[type=radio]").each(function () {
+        $(this).prop("checked", true);
+      });
+    });
+    $("#leDeboDias").click(function(){
+      $("#register_employee_employeeHasEmployers_holidayDebt").show();
+      $("#register_employee_employeeHasEmployers_holidayDebt").removeClass("error");
+      $("#register_employee_employeeHasEmployers_holidayDebt").addClass("valid");
+      $(this).find("input[type=radio]").each(function () {
+        $(this).prop("checked", true);
+      });
     });
 }
 //Extract Constraints

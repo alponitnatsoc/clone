@@ -511,12 +511,21 @@
                                     </div>
                                 </div>
                                 {% if changeBehaviorFlag == 1 %}
+
                                     <div class="row">
                                         <div class="col-sm-12 text-center form-group">
-                                            {{ form_label(form.employeeHasEmployers.holidayDebt) }} <br />
-                                            {{ form_widget(form.employeeHasEmployers.holidayDebt) }}
+                                          {{ form_label(form.employeeHasEmployers.holidayDebt) }} <br />
+                                          <div id="radio-vacaciones">
+                                              <form action="">
+                                                  <div  id="meDebeDias"><input type="radio" name="holidayState" value="ND" checked> El empleado me debe días</div>
+                                                  <div  id="alDiaDias"><input type="radio" name="holidayState" value="OD" > No hay vacaciones pendientes</div>
+                                                  <div  id="leDeboDias"><input type="radio" name="holidayState" value="PD"> Le debo días a mi empleado</div>
+                                              </form>
+                                          </div>
+                                          {{ form_widget(form.employeeHasEmployers.holidayDebt) }}
                                         </div>
                                     </div>
+
                                 {% endif %}
                                 <br/>
                                 <br />
@@ -1864,6 +1873,8 @@
                 $(this).prop("checked", true);
               });
           });
+
+
       });
 </script>
 {% endblock javascripts %}
