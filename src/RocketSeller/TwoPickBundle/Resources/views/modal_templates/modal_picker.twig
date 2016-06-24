@@ -106,6 +106,47 @@
        {% endset %}
        {% set modal_button = 'cerrar' %}
 
+  {% elseif  template_parameter == 7 %}
+
+        <!--modal de abogado-->
+        {% set style_header %}
+                 style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+        {% set modal_header %}
+                 <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Consulta legal</h1>
+        {% endset %}
+        {% set modal_content %}
+                 <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Por una tarifa preferencial de $150.000, tendrás acceso
+                   a una sesión de una hora con nuestros aliados ALVAREZ LIEVANO LASERNA ABOGADOS, una de las firmas de abogados
+                   laboralistas más reconocidas.
+                   <br>Ellos evaluarán tu caso y recibirás asesoría personalizada sobre cómo lograr la mejor
+                    solución. Una vez normalizada tu situación, te ayudaremos a subir el registro de tu empleado en Symplifica para empezar
+                     hacer las cosas de la mejor manera, sin necesidad de preocuparte nunca más.</p>
+        {% endset %}
+        {% set modal_style_button %}
+                 style="width: 30%; font-size:20px"
+        {% endset %}
+        {% set modal_button = 'cerrar' %}
+
+  {% elseif  template_parameter == 8 %}
+
+              <!--modal salir consulte legal-->
+              {% set style_header %}
+                       style="background-color: #3c4b5a; padding: 0px 0px"
+              {% endset %}
+              {% set modal_header %}
+                       <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Consulta legal</h1>
+              {% endset %}
+              {% set modal_content %}
+                       <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Has decidido no continuar con el registro de tu empleado.
+                         <br>Nos estaremos contactando contigo para entender cómo podemos ayudarte. Recuerda que puedes volver a ingresar en
+                         cualquier momento y continuar con el registro usando tu usuario y contraseña.</p>
+              {% endset %}
+              {% set modal_style_button %}
+                       style="width: 30%; font-size:20px"
+              {% endset %}
+              {% set modal_button = 'cerrar' %}
+
     {% endif %}
     {{ include('@RocketSellerTwoPick/modal_templates/modal.twig') }}
 {% endmacro %}
