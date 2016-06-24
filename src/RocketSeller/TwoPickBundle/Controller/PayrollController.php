@@ -183,7 +183,8 @@ class PayrollController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
                     'dataNomina' => $pods,
                     //'novelties' => $novelties
-                    'debt'=>$owePurchaseOrders
+                    'debt'=>$owePurchaseOrders,
+                    'name'=>$user->getPersonPerson()->getNames()
         ));
     }
 
