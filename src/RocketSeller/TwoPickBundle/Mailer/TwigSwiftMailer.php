@@ -87,10 +87,12 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
     }
 
-    public function sendReminderEmailMessage($toEmail)
+    public function sendReminderEmailMessage(UserInterface $user, $toEmail)
     {
         $template = $this->parameters['template']['reminder'];
         $context = array(
+            'user' => $user,
+            'subject' => 'Documentos necesarios para el registro',
             'toEmail' => $toEmail
         );
 

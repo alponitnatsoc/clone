@@ -52,7 +52,7 @@ interface MailerInterface
      *
      * @return void
      */
-    public function sendReminderEmailMessage($toEmail);
+    public function sendReminderEmailMessage(UserInterface $user,$toEmail);
 
     /**
      * Sen email
