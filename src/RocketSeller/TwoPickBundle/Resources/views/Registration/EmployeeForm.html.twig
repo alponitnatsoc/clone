@@ -513,16 +513,16 @@
                                 {% if changeBehaviorFlag == 1 %}
 
                                     <div class="row">
-                                        <div class="col-sm-12 text-center form-group">
-                                          {{ form_label(form.employeeHasEmployers.holidayDebt) }} <br />
-                                          <div id="radio-vacaciones">
+                                        <div class="col-sm-12 text-center form-group" style="border: #e0e0e0 1px dashed;border-radius: 5px;padding: 25px 0;">
+                                          {{ form_label(form.employeeHasEmployers.holidayDebt) }}<br />
+                                          <div id="radio-vacaciones" style="padding: 0 0 25px 0;">
                                               <form action="">
                                                   <div  id="meDebeDias"><input type="radio" name="holidayState" value="ND" checked> El empleado me debe días</div>
-                                                  <div  id="alDiaDias"><input type="radio" name="holidayState" value="OD" > No hay vacaciones pendientes</div>
+                                                  <div style="padding: 15px 0;"  id="alDiaDias"><input type="radio" name="holidayState" value="OD" > No hay vacaciones pendientes</div>
                                                   <div  id="leDeboDias"><input type="radio" name="holidayState" value="PD"> Le debo días a mi empleado</div>
                                               </form>
                                           </div>
-                                          {{ form_widget(form.employeeHasEmployers.holidayDebt) }}
+                                          <div style="width:265px;margin:0 auto">{{ form_widget(form.employeeHasEmployers.holidayDebt) }}</div>
                                         </div>
                                     </div>
 
