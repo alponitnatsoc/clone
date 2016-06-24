@@ -124,7 +124,11 @@
                      hacer las cosas de la mejor manera, sin necesidad de preocuparte nunca más.</p>
         {% endset %}
         {% set modal_style_button %}
-                 style="width: 30%; font-size:20px"
+                 style="width: 30%; font-size:20px" id="continuarAbogado"
+        {% endset %}
+        {% set modal_button = 'Continuar' %}
+        {% set modal_style_button %}
+                 style="width: 30%; font-size:20px" id="cerrarAbogado"
         {% endset %}
         {% set modal_button = 'cerrar' %}
 
@@ -143,9 +147,13 @@
                          cualquier momento y continuar con el registro usando tu usuario y contraseña.</p>
               {% endset %}
               {% set modal_style_button %}
-                       style="width: 30%; font-size:20px"
+                       style="width: 30%; font-size:20px" id="atrasConsultoria"
               {% endset %}
-              {% set modal_button = 'cerrar' %}
+              {% set modal_button = 'Atras' %}
+              {% set modal_style_button2 %}
+                       style="width: 30%; font-size:20px" id="salirConsultoria"
+              {% endset %}
+              {% set modal_button2 = 'Salir' %}
 
     {% endif %}
     {{ include('@RocketSellerTwoPick/modal_templates/modal.twig') }}
