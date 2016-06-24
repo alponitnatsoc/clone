@@ -896,6 +896,7 @@ function startEmployee() {
     }
 
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
+    $("#totalExpensesVal").attr("disabled", true);
     loadConstrains();
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -1349,6 +1350,25 @@ function addListeners() {
       $(this).find("input[type=radio]").each(function () {
         $(this).prop("checked", true);
       });
+    });
+
+    $("#fijo").click(function(){
+        $("#tipocont1").hide("slow");
+        $("#tipocont1").hide(3000);
+        $("#tipocont2").show("slow");
+        $("#tipocont2").show(3000);
+        $("#fijo").find("input[type=radio]").each(function () {
+          $(this).prop("checked", true);
+        });
+    });
+    $("#indef").click(function(){
+        $("#tipocont2").hide("slow");
+        $("#tipocont2").hide(3000);
+        $("#tipocont1").show("slow");
+        $("#tipocont1").show(3000);
+        $("#indef").find("input[type=radio]").each(function () {
+          $(this).prop("checked", true);
+        });
     });
 }
 //Extract Constraints

@@ -628,7 +628,7 @@
                                 <div class="col-sm-12 days price-box">
                                   <div class="padding-container col-xs-12 col-sm-6 priceContainer">
                                       <p class="p">Salario contractual</p>
-                                      <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                      <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                   </div>
                                     <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
                                         <p class="p">¿Cuanto será el salario diario?</p>
@@ -652,7 +652,7 @@
                                     </div>
                                     <div class="padding-container col-xs-12 col-sm-6 priceContainer">
                                         <p id="ingresoNeto" class="p">Esto recibirá neto el empleado mensualmente</p>
-                                        <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                        <h1>$<input type="text" id="totalExpensesVal" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                     </div>
                                 </div>
 
@@ -663,7 +663,7 @@
                                         <p id="labelCosto" style="font-weight:100">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
-                                            <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;"></h1>
+                                            <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                         </div>
                                         <!--<a id="link_calculator" style="margin-top:10px;display:block;color: #666;font-size: 14px;font-weight: 100;text-decoration: underline;" class="notAjax">Ver detalle del costo</a>-->
 
@@ -1850,31 +1850,3 @@
     </div>
 
 {% endblock fos_user_content %}
-
-{% block javascripts %}
-  {{parent()}}
-  <script>
-      $(document).ready(function(){
-          $("#fijo").click(function(){
-              $("#tipocont1").hide("slow");
-              $("#tipocont1").hide(3000);
-              $("#tipocont2").show("slow");
-              $("#tipocont2").show(3000);
-              $("#fijo").find("input[type=radio]").each(function () {
-                $(this).prop("checked", true);
-              });
-          });
-          $("#indef").click(function(){
-              $("#tipocont2").hide("slow");
-              $("#tipocont2").hide(3000);
-              $("#tipocont1").show("slow");
-              $("#tipocont1").show(3000);
-              $("#indef").find("input[type=radio]").each(function () {
-                $(this).prop("checked", true);
-              });
-          });
-
-
-      });
-</script>
-{% endblock javascripts %}
