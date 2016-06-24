@@ -173,21 +173,24 @@ function startEmployee() {
 
         var valid = true;
         var shouldBeEmpty = false;
-        $("#alDiaDias").find("input[type=radio]").each(function () {
-            if( $(this).prop("checked") == true){
-              shouldBeEmpty = true;
-              $("#register_employee_employeeHasEmployers_holidayDebt").val(0);
-            }
-        });
+        if ( $("#changeBehavior").text() == "1" ){
+            $("#alDiaDias").find("input[type=radio]").each(function () {
+                if( $(this).prop("checked") == true){
+                  shouldBeEmpty = true;
+                  $("#register_employee_employeeHasEmployers_holidayDebt").val(0);
+                }
+            });
 
-        if(!shouldBeEmpty){
-            if (!validator.element($("#register_employee_employeeHasEmployers_holidayDebt"))) {
-                valid = false;
+            if(!shouldBeEmpty){
+                if (!validator.element($("#register_employee_employeeHasEmployers_holidayDebt"))) {
+                    valid = false;
+                }
             }
         }
-          if(dateOk == true && valid == true){
-            $('#contractNav > .active').next('li').find('a').trigger('click');
-          }
+
+        if(dateOk == true && valid == true){
+          $('#contractNav > .active').next('li').find('a').trigger('click');
+        }
     });
     //dinamic loading contract type and commitment
     //first hide all
@@ -1987,4 +1990,8 @@ function initEntitiesFields(){
 function oneYearFromNow(date){
   date.setDate( date.getDate() + 364 );
   return date;
+}
+
+function test(){
+  console.log(smmlv);
 }
