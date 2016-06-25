@@ -154,13 +154,12 @@ class PayrollMethodRestController extends FOSRestController
         }
 
         $payrolls = $payrollEntity->findBy($params);
-        dump($payrolls);
-        die();
+
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
         foreach($payrolls as $payroll) {
-            if($payroll->getPaid()!=0){
+            if($payroll->getPaid()!=0||$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getState()==-1){
                 continue;
             }
             $employer=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
@@ -262,10 +261,11 @@ class PayrollMethodRestController extends FOSRestController
                                 $contract->setActivePayroll($newActivePayroll);
                                 $em->persist($contract);
                                 $em->flush();
-
-                                if($activePayrrol->getPila()==null){
+                                if ($payroll->getPeriod() == 4) {
                                     $totalPilaToPay+= $pila["total"];//TODO verificar el resultado de pila se removio $aportes["total"] +
-                                    $podPila->addPayrollsPila($activePayrrol);
+                                    if($activePayrrol->getPila()==null){
+                                        $podPila->addPayrollsPila($activePayrrol);
+                                    }
                                 }
 
                             }
