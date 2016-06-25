@@ -155,6 +155,7 @@ class PayrollMethodRestController extends FOSRestController
 
         $payrolls = $payrollEntity->findBy($params);
         dump($payrolls);
+        die();
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
