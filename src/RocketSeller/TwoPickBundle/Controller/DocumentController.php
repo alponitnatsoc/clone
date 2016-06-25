@@ -619,6 +619,64 @@ use EmployerMethodsTrait;
                     'purchaseOrder' => $purchaseInfo,
                     'items' => $items
                 );
+                break;
+            case "comprobante":
+                //id de la orden de compra
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrders');
+                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders */
+                $purchaseOrders = $repository->find($id);
+
+
+
+                $client = $purchaseOrders->getIdUser()->getPersonPerson();
+                $clientInfo = array(
+                    'name' => $this->fullName($client->getIdPerson()),
+                    'docType' => $client->getDocumentType(),
+                    'docNumber' => $client->getDocument(),
+                    'address' => $client->getMainAddress(),
+                    'phone' => $client->getPhones()->getValues(),
+                    'city' => $client->getCity()->getName()
+                );
+
+                $descriptions = $purchaseOrders->getPurchaseOrderDescriptions();
+                $items=array();
+                $ivaTotal=0;
+                $productsPrice = 0;
+                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
+                foreach ($descriptions as $desc) {
+                    if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
+                        $items[] = array(
+                            'desc' => $desc->getDescription(),
+                            'product' => $desc->getProductProduct(),
+                            'pays' => $desc->getPayPay(),
+                            'status' => $desc->getPurchaseOrdersStatus(),
+                            'totalValue' => $desc->getValue(),
+                            'unitValue' => $desc->getProductProduct()->getPrice()
+                        );
+                        $productsPrice += $desc->getProductProduct()->getPrice();
+                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+                    }
+
+                }
+
+                $purchaseInfo = array(
+                    'number' => $purchaseOrders->getIdPurchaseOrders(),
+                    'city' => 'bogotá',
+                    'endDate' => null,
+                    'center' => null,
+                    'total' => $ivaTotal+$productsPrice
+                );
+
+                $purchaseInfo['iva'] = $ivaTotal;
+                $purchaseInfo['subTotal'] = $productsPrice;
+
+                $data = array(
+                    'invoiceNumber' => $purchaseOrders->getInvoiceNumber(),
+                    'client' => $clientInfo,
+                    'purchaseOrder' => $purchaseInfo,
+                    'items' => $items
+                );
+                break;
             default:
                 break;
         };

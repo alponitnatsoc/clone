@@ -7,14 +7,12 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
-use RocketSeller\TwoPickBundle\Entity\Pay;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Contract;
-use RocketSeller\TwoPickBundle\Entity\Liquidation;
 use RocketSeller\TwoPickBundle\Traits\GetTransactionDetailTrait;
 
 class EmployerRestController extends FOSRestController
@@ -339,14 +337,13 @@ class EmployerRestController extends FOSRestController
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $view->setStatusCode(403);
         }
-
-        $smailer = $this->get('symplifica.mailer.twig_swift');
+        $smailer = $this->get('symplifica.mailer.twig_swift')->sendReminderEmailMessage($this->getUser(),$email);
         
-        $send = $smailer->remainderEmail('@RocketSellerTwoPick/SendEmail/recuerdatos.html.twig', 'registro@symplifica.com', $email,'Recordatorio datos para registro');
-        
-        if ($send) {
+        if ($smailer) {
+            dump('yay');
             return $view->setStatusCode(200)->setData(array());
         } else {
+            dump('nay');
             return $view->setStatusCode(500);
         }
 

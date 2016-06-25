@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Documento sin título</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
+
+    <style type="text/css">
+        * {margin: 0 auto;padding: 0}
+        ​,
+        #contenedor-comp {
+            width: 612px;
+            height: auto;
+        }
+        ​,
+        #tittle-comp {
+            color: #5D5D5D;
+            text-align: center;
+            margin-top: 45px;
+        }
+        span,th {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 18px
+        }
+        #tittle-comp h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            text-transform: uppercase;
+            line-height: 30px
+        }
+        ​,
+        #data-empleado {
+            border-top: 1px #CCC solid;
+            margin: 20px 0 0 0;
+            padding: 20px 0 0 0;
+            color: #5D5D5D;
+        }
+        ​,
+        .celdas-copm {
+            border: 1px #CCC solid;
+            height: auto;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .info-celdas {
+            width: 45%;
+            float: left;
+            padding: 10px 15px;
+        }
+        ​,
+        p {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+        ​,
+        th {
+            color: #5D5D5D
+        }
+        ​,
+        #descript-comp {
+            margin: 35px 0 0 0;
+            clear: both
+        }
+        ​,
+        .border-comp td {
+            border: 1px solid #e6e6e6;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            padding: 5px 15px;
+            color: #828282;
+        }
+        ​,
+        .bold {
+            font-weight: 700 !important;
+            color: #5D5D5D;
+        }
+        ​,
+        .sub {
+            background: #e4e4e4;
+        }
+        ​,
+        .total {
+            background: #c1c1c1;
+        }
+        ​,
+        .border-comp th {
+            background: #e4e4e4;;
+            padding: 5px 0;
+        }
+        ​,
+        #firma-empleado {
+            width: 300px;
+            margin: 150px 0 0 0;
+            border-top: 1px #CCC solid;
+            padding: 15px 0 0 0;
+            color: #5D5D5D
+        }
+    </style>
+
+</head>
+<body>
+<div id="contenedor-comp">
+    <div id="tittle-comp">
+        <h2>Comprobante de pago</h2>
+        <span>Periodo x y</span>
+    </div>
+    <div id="data-empleado">
+        <p>
+            <span>Empleador</span><br>
+            Carlos Eduardo Cartagena Carrasco
+        </p>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Empleado</span><br>
+                    Sandra María Bisval Mora
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Cédula</span><br>
+                    123456790
+                </p>
+            </div>
+        </div>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Cargo</span><br>
+                    Empleada doméstica
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Ciudad</span><br>
+                    Bogotá
+                </p>
+            </div>
+        </div>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Medio de pago</span><br>
+                    Efectivo
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Salario</span><br>
+                    $689.455
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="descript-comp">
+        <table class="border-comp" width="612px" border="0" cellspacing="0">
+            <tr align="center" valign="middle">
+                <th>Item</th>
+                <th>Descripción</th>
+                <th>Devengado</th>
+                <th>Deducido</th>
+            </tr>
+            <tr align="center" valign="middle">
+                <td>1</td>
+                <td>Salario ordinario</td>
+                <td>$300.000</td>
+                <td>$0</td>
+            </tr>
+            <tr align="center" valign="middle">
+                <td>2</td>
+                <td>Aporte a salud</td>
+                <td>$0</td>
+                <td>$300.000</td>
+            </tr>
+            <tr align="center" valign="middle">
+                <td>3</td>
+                <td>Aporte a pensión</td>
+                <td>$0</td>
+                <td>$300.000</td>
+            </tr>
+            <tr valign="middle" class="sub">
+                <td class="bold" colspan="2" align="left">Total</td>
+                <td class="bold" align="center">$300.000</td>
+                <td class="bold" align="center">$0</td>
+            </tr>
+            <tr valign="middle" class="total">
+                <td class="bold" colspan="3" align="left">Neto a pagar</td>
+                <td class="bold" align="center">$300.000</td>
+            </tr>
+        </table>
+    </div>
+    <div id="firma-empleado">
+        <p>
+            <span>Firma empleado</span><br>
+            Sandra Liliana Mahecha Gonzales<br>
+            1234567890
+        </p>
+    </div>
+</div>
+</body>
+</html>

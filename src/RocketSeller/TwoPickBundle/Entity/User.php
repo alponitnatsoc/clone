@@ -69,6 +69,7 @@ class User extends BaseUser
         //@todo GABRIEL agregar id unico del usuario al momento de registrar.
         $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
         $this->purchaseOrders = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->promotionCodes = new \Doctrine\Common\Collections\ArrayCollection();
         // your own logic
     }
 
@@ -236,6 +237,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Referred", mappedBy="userId", cascade={"persist"})
      */
     private $referrals;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RocketSeller\TwoPickBundle\Entity\PromotionCode", mappedBy="userUser", cascade={"persist"})
+     */
+    private $promotionCodes;
 
     /**
      * Set personPerson
@@ -912,5 +918,39 @@ class User extends BaseUser
     public function getPurchaseOrders()
     {
         return $this->purchaseOrders;
+    }
+
+    /**
+     * Add promotionCode
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PromotionCode $promotionCode
+     *
+     * @return User
+     */
+    public function addPromotionCode(\RocketSeller\TwoPickBundle\Entity\PromotionCode $promotionCode)
+    {
+        $this->promotionCodes[] = $promotionCode;
+
+        return $this;
+    }
+
+    /**
+     * Remove promotionCode
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\PromotionCode $promotionCode
+     */
+    public function removePromotionCode(\RocketSeller\TwoPickBundle\Entity\PromotionCode $promotionCode)
+    {
+        $this->promotionCodes->removeElement($promotionCode);
+    }
+
+    /**
+     * Get promotionCodes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPromotionCodes()
+    {
+        return $this->promotionCodes;
     }
 }

@@ -12,79 +12,88 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $product = new Product();
-        $product->setName('Pago Symplifica 0 a 10');
-        $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 0 a 10 días');
-        $product->setPrice(floatval('14224')); //16500/1,16=14224.13
-        $product->setSimpleName('PS1');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productS1 = new Product();
+        $productS1->setName('Pago Symplifica 0 a 10');
+        $productS1->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 0 a 10 días');
+        $productS1->setPrice(floatval('14224')); //16500/1,16=14224.13
+        $productS1->setSimpleName('PS1');
+        $productS1->setTaxTax($this->getReference('tax-iva'));
+        $productS1->setValidity(null);
+        $manager->persist($productS1);
 
-        $product = new Product();
-        $product->setName('Pago Symplifica 11 a 19');
-        $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 11 a 19 días');
-        $product->setPrice(floatval('19397')); //21000/1,16=18103.44
-        $product->setSimpleName('PS2');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productS2 = new Product();
+        $productS2->setName('Pago Symplifica 11 a 19');
+        $productS2->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 11 a 19 días');
+        $productS2->setPrice(floatval('19397')); //21000/1,16=18103.44
+        $productS2->setSimpleName('PS2');
+        $productS2->setTaxTax($this->getReference('tax-iva'));
+        $productS2->setValidity(null);
+        $manager->persist($productS2);
 
-        $product = new Product();
-        $product->setName('Pago Symplifica 20 o +');
-        $product->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 20 o más días');
-        $product->setPrice(floatval('25431')); //27500/1,16=23706.89
-        $product->setSimpleName('PS3');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productS3 = new Product();
+        $productS3->setName('Pago Symplifica 20 o +');
+        $productS3->setDescription('El pago de symplifica que hace el usuario par adquirir los servicios básicos de 20 o más días');
+        $productS3->setPrice(floatval('25431')); //27500/1,16=23706.89
+        $productS3->setSimpleName('PS3');
+        $productS3->setTaxTax($this->getReference('tax-iva'));
+        $productS3->setValidity(null);
+        $manager->persist($productS3);
 
-        $product = new Product();
-        $product->setName('Pago Registro express symplifica');
-        $product->setDescription('El pago de symplifica que hace el usuario para adquirir los servicios de registro express');
-        $product->setPrice(floatval('129310.35'));
-        $product->setSimpleName('PRE');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productRE = new Product();
+        $productRE->setName('Pago Registro express symplifica');
+        $productRE->setDescription('El pago de symplifica que hace el usuario para adquirir los servicios de registro express');
+        $productRE->setPrice(floatval('129310.35'));
+        $productRE->setSimpleName('PRE');
+        $productRE->setTaxTax($this->getReference('tax-iva'));
+        $productRE->setValidity(null);
+        $manager->persist($productRE);
 
-        $product = new Product();
-        $product->setName('Pago asistencia legal');
-        $product->setDescription('El pago que hace un usuario para una consulta legal');
-        $product->setPrice(floatval('129310.35'));
-        $product->setSimpleName('PAL');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productAL = new Product();
+        $productAL->setName('Pago asistencia legal');
+        $productAL->setDescription('El pago que hace un usuario para una consulta legal');
+        $productAL->setPrice(floatval('129310.35'));
+        $productAL->setSimpleName('PAL');
+        $productAL->setTaxTax($this->getReference('tax-iva'));
+        $productAL->setValidity(null);
+        $manager->persist($productAL);
 
-        $product = new Product();
-        $product->setName('Pago Nomina');
-        $product->setDescription('Pago Nomina');
-        $product->setPrice(null);
-        $product->setSimpleName('PN');
-        $product->setTaxTax(null);
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productPN = new Product();
+        $productPN->setName('Pago Nomina');
+        $productPN->setDescription('Pago Nomina');
+        $productPN->setPrice(null);
+        $productPN->setSimpleName('PN');
+        $productPN->setTaxTax(null);
+        $productPN->setValidity(null);
+        $manager->persist($productPN);
 
-        $product = new Product();
-        $product->setName('Pago PILA');
-        $product->setDescription('Pago PILA');
-        $product->setPrice(null);
-        $product->setSimpleName('PP');
-        $product->setTaxTax(null);
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productPP = new Product();
+        $productPP->setName('Pago PILA');
+        $productPP->setDescription('Pago PILA');
+        $productPP->setPrice(null);
+        $productPP->setSimpleName('PP');
+        $productPP->setTaxTax(null);
+        $productPP->setValidity(null);
+        $manager->persist($productPP);
 
-        $product = new Product();
-        $product->setName('Costo transaccion');
-        $product->setDescription('Costo transaccion');
-        $product->setPrice("6034.48");
-        $product->setSimpleName('CT');
-        $product->setTaxTax($this->getReference('tax-iva'));
-        $product->setValidity(null);
-        $manager->persist($product);
+        $productCT = new Product();
+        $productCT->setName('Costo transaccion');
+        $productCT->setDescription('Costo transaccion');
+        $productCT->setPrice("6034.48");
+        $productCT->setSimpleName('CT');
+        $productCT->setTaxTax($this->getReference('tax-iva'));
+        $productCT->setValidity(null);
+        $manager->persist($productCT);
 
         $manager->flush();
+
+        $this->addReference('product-type-ps1', $productS1);
+        $this->addReference('product-type-ps2', $productS2);
+        $this->addReference('product-type-ps3', $productS3);
+        $this->addReference('product-type-al', $productAL);
+        $this->addReference('product-type-ct', $productCT);
+        $this->addReference('product-type-pp', $productPP);
+        $this->addReference('product-type-pn', $productPN);
+        $this->addReference('product-type-re', $productRE);
     }
 
     public function getOrder()

@@ -301,11 +301,26 @@
             </form>
         </div>
     {% else %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('/../css/pantallas.css') }}"/>
         <div style="clear: both;height: 60px;"></div>
-        <div class="nopagospen">
-            <img src="{{ asset('img/noerror.png') }}"/>
-            <h1>No hay pagos de nómina pendientes</h1>
-        </div>
+        <div id="cont-succesdocs">
+            <div id="title-siccesdocs">
+                <img src="/../img/perfecto.png"/>
+                <h1 class="azuloscurofont bold">¡{{name}}!</h1>
+                <h2 class="h2 light grisclarofont">No tienes pagos pendientes</h2>
+            </div>
+
+            <div id="texto-succesdocs">
+            	<div id="pagoadelantado">
+                	<div id="contenidopagoadelando">
+                        <img src="{{ asset('/public/img/home/icon3.png') }}" width="100px" height="auto">
+                        <h1 class="azulclarofont bold centrar">¿Puedo pagar por adelantado?</h1>
+                        <p class="light grisclarofont">Solo debes dar clic en botón de abajo o dirigirte al menú seccion de empleados y reportar la novedad de <strong>“adelanto de nómina”</strong></p>
+                        <a href="/manage/employees"><div class="light btn-azulnopagos">Reportar novedad</div></a>
+                    </div>
+                </div>
+            </div>
+		</div>
     {% endif %}
 
 

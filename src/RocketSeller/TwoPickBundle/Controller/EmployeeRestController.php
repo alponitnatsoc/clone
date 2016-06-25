@@ -305,18 +305,34 @@ class EmployeeRestController extends FOSRestController {
             $em->persist($payMethod);
             $em->flush();
             if ($hasIt==-1) {
-                $notification = new Notification();
-                $notification->setPersonPerson($user->getPersonPerson());
-                $notification->setStatus(1);
-                $notification->setType('alert');
-                $notification->setDescription("Crear Cuenta DaviPlata para ".$employee->getPersonPerson()->getNames());
-                $notification->setAccion("Crear Daviplata");
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($notification);
-                $em->flush();
-                $notification->setRelatedLink($this->generateUrl("daviplata_guide", array("idNotification" => $notification->getId(), "payMethodId" => $contract->getPayMethodPayMethod()->getIdPayMethod())));
-                $em->persist($notification);
-                $em->flush();
+                $notifs=$user->getPersonPerson()->getNotifications();
+                $flagDavi=true;
+                /** @var Notification $nots */
+                foreach ($notifs as $nots) {
+                    if($nots->getAccion()=="Crear Daviplata"){
+                        $explode=explode("/",$nots->getRelatedLink());
+                        if($explode[2]==$contract->getPayMethodPayMethod()->getIdPayMethod()){
+                            $flagDavi=false;
+                            break;
+                        }
+                    }
+                }
+                if($flagDavi){
+                    /** @var UtilsController $utils */
+                    $utils = $this->get('app.symplifica_utils');
+                    $notification = new Notification();
+                    $notification->setPersonPerson($user->getPersonPerson());
+                    $notification->setStatus(1);
+                    $notification->setType('alert');
+                    $notification->setDescription("Crear Cuenta DaviPlata para ".$utils->mb_capitalize($employee->getPersonPerson()->getFullName()));
+                    $notification->setAccion("Crear Daviplata");
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($notification);
+                    $em->flush();
+                    $notification->setRelatedLink($this->generateUrl("daviplata_guide", array("idNotification" => $notification->getId(), "payMethodId" => $contract->getPayMethodPayMethod()->getIdPayMethod())));
+                    $em->persist($notification);
+                    $em->flush();
+                }
             }
             //$idContract id del contrato que se esta creando o editando, true para eliminar payroll existentes y dejar solo el nuevo
             $data = $this->forward('RocketSellerTwoPickBundle:Payroll:createPayrollToContract', array(

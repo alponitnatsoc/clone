@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use DateTime;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Beneficiary;
 use RocketSeller\TwoPickBundle\Entity\Contract;
@@ -236,6 +237,11 @@ class EmployeeController extends Controller
                 $employeesData = array();
                 $ehEs = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                 /** @var EmployerHasEmployee $ehE */
+
+                $eHStateActive = 0;
+                $eHStateInactive = 0;
+                $eHStateRegister = 0;
+
                 foreach ($ehEs as $ehE) {
                     if ($ehE->getState() == -1) {
                         continue;
@@ -264,6 +270,16 @@ class EmployeeController extends Controller
                         );
                         break;
                     }
+
+                    if($ehE->getState() == 0){
+                      $eHStateInactive = $eHStateInactive + 1;
+                    }
+                    elseif ($ehE->getState() == 1 || $ehE->getState() == 2 ) {
+                      $eHStateRegister = $eHStateRegister + 1;
+                    }
+                    elseif ($ehE->getState() >= 3) {
+                      $eHStateActive = $eHStateActive + 1;
+                    }
                 }
 
                 $registerState = $user->getPersonPerson()->getEmployer()->getRegisterState();
@@ -271,7 +287,10 @@ class EmployeeController extends Controller
                                 'RocketSellerTwoPickBundle:Employee:employeeManager.html.twig', array(
                             'employees' => $employeesData,
                             'user' => $user,
-                            'registerState' => $registerState
+                            'registerState' => $registerState,
+                            'inactiveEmp' => $eHStateInactive,
+                            'registerEmp' => $eHStateRegister,
+                            'activeEmp' => $eHStateActive
                 ));
             } else {
                 return $this->redirectToRoute('ajax');
@@ -407,10 +426,12 @@ class EmployeeController extends Controller
             return false;
         }
         $permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
-
+        $interval = new DateInterval('P364D');
+        $localEndDate =new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+        $localEndDate->add($interval);
         $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
         $form->get('employeeHasEmployers')->get("startDate")->setData($permittedDate);
-        $form->get('employeeHasEmployers')->get("endDate")->setData($todayPlus);
+        $form->get('employeeHasEmployers')->get("endDate")->setData($localEndDate);
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
             if ($contracts->count() != 0) {
@@ -1080,8 +1101,8 @@ filename = "certificadoLaboral.pdf"'
         $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var EmployerHasEmployee $realEhe */
         $realEhe = $eheRepo->find($idEhe);
-        if ($realEhe == null || $realEhe->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer() || $realEhe->getState() == 1) {
-            return;
+        if ($realEhe == null || $realEhe->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer() ) {
+            return $this->redirectToRoute("manage_employees");
         }
         $realEhe->setState(-1);
         $em->persist($realEhe);

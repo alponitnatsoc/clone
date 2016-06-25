@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -106,6 +107,7 @@ trait EmployeeMethodsTrait
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 3
         ));
+        $utils = $this->get('app.symplifica_utils');
         $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
@@ -121,16 +123,16 @@ trait EmployeeMethodsTrait
                 $dAction=null;
                 $dUrl=null;
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
                     $documentType = 'Contrato';
                     $dAction="Bajar";
-                    $msj = "Subir copia del contrato de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $documentType = 'Carta autorización Symplifica';
-                    $msj = "Subir copia de la Carta autorización Symplifica de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $msj = "Subir copia de la Carta autorización Symplifica de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $dAction="Bajar";
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                 }
@@ -169,7 +171,8 @@ trait EmployeeMethodsTrait
         $person = $realEmployer->getPersonPerson();
         $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
         $documents = $documentsRepo->findByPersonPerson($person);
-
+        /** @var UtilsController $utils */
+        $utils = $this->get('app.symplifica_utils');
         $docs = array('Cedula' => false, 'RUT' => false, 'Mandato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
@@ -184,14 +187,14 @@ trait EmployeeMethodsTrait
                 $dAction=null;
                 $dUrl=null;
                 if ($type == 'Cedula') {
-                    $msj = "Subir copia del documento de identidad de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'RUT') {
-                    $msj = "Subir copia del RUT de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst($person->getLastName1());
+                    $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $documentType = 'RUT';
                 } elseif ($type == 'Mandato'){
                   $documentType = 'Mandato';
-                  $msj = "Subir mandato firmado de " .explode(" ",ucfirst($person->getNames()))[0]." ". ucfirst(ucfirst($person->getLastName1()));
+                  $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                   $dUrl = $this->generateUrl("download_documents", array('id' => $person->getIdPerson(), 'ref' => "mandato", 'type' => 'pdf'));
                   $dAction="Bajar";
                 }
