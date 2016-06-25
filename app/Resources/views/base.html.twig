@@ -174,9 +174,11 @@
         {% block modales %}
             {{ modal(1) }}
             {{ modal(2) }}
-            {{ modal(7, "modalAbogado") }}
-            {{ modal(8, "modalSalirAbogado") }}
-            {{ modal(9, "modalHuboCambios") }}
+            {{ modal(3) }}
+            {{ modal(7) }}
+            {{ modal(8) }}
+            {{ modal(9) }}
+
         {% endblock %}
     </div>
     {% block body %}
@@ -243,6 +245,9 @@
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                     <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
+                                </div>
+                                <div class="{% if app.request.get('_route') == 'legal_payment' %}activeMenu{% endif %} well well-lg">
+                                    <a href="{{ path('legal_payment') }}">Asistencia Legal</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
                                     <a href="{{ path('contact') }}">Ayuda</a>
@@ -504,7 +509,6 @@
                     return false;
                 }
             });
-
             // Simple ajax url manager
             var redirector = getParameterByName('redirector');
             //console.log(redirector);
@@ -584,6 +588,31 @@
                 sendAjax($(this).attr('action'), $(this));
             });
         }
+
+        function showModal(idModal){
+            if(idModal==0){
+                $("#default_modal").modal("show");
+            }else if(idModal==1) {
+                $("#success_email_modal").modal("show");
+            }else if(idModal==2){
+                $("#fail_email_modal").modal("show");
+            }else if(idModal==3){
+                $("#default_modal_3").modal("show");
+            }else if(idModal==4){
+                $("#succes_payment_modal").modal("show");
+            }else if(idModal==5){
+                $("#fail_payment_modal").modal("show");
+            }else if(idModal==6){
+                $("#end_documents_modal").modal("show");
+            }else if(idModal==7){
+                $("#modal_abogado").modal("show");
+            }else if(idModal==8){
+                $("#exit_legal_modal").modal("show");
+            }else if(idModal==9){
+                $("#default_modal_9").modal("show");
+            }
+        }
+
         function jsLoader(url) {
             if (typeof url !== 'undefined') {
                 if (url.indexOf("{{ path('edit_profile') }}") !== -1) {

@@ -7,7 +7,7 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(1) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
@@ -18,7 +18,7 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(1) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
@@ -31,7 +31,7 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(2) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
@@ -42,7 +42,7 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(2) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
@@ -55,11 +55,11 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(3) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
-      $("#modalAbogado").modal("show");
+      showModal(7);
   });
 
   $("#continuarAbogado").click(function () {
@@ -70,11 +70,11 @@ function prepareLegal() {
     var notGo = false;
     if( !validateBeforeNext(3) ){
         notGo = true;
-        $("#modalHuboCambios").modal("show");
+        showModal(9);
     }
 
     if(!notGo)
-      $("#modalSalirAbogado").modal("show");
+      showModal(8);
   });
 
   $("#salirConsultoria").click(function () {

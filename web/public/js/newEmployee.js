@@ -1141,6 +1141,9 @@ function addListeners() {
     $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
+        if($("#register_employee_employeeHasEmployers_salaryD").val()== 0){
+            $("#register_employee_employeeHasEmployers_salaryD").val(2591);
+        }
         calculator("d");
         formatMoney($("#totalExpensesVal"));
         formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
@@ -1704,11 +1707,25 @@ function validateSalary() {
     if (selectedVal == " Trabajador por días") {
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
-            salarioMinimoDiario = 22982;
+            salarioMinimoDiario = 24653;
+            salarioMinimoContractual=22982;
         }
         salarioDias = sueldo_plano;
-        if (salarioDias < salarioMinimoDiario) {
-            $("#salarioMinimo").find('.modal-body').html('El salario minimo diario legal es de $ ' + getPrice(salarioMinimoDiario));
+        
+        if(!salarioDias){
+            if($("#register_employee_employeeHasEmployers_salaryD").val()!=0) {
+                $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $' + getPrice(salarioMinimoDiario) + ' pesos para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salarioMinimoContractual) + ').');
+                $("#salarioMinimo").modal('show');
+                $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
+                calculator();
+            }else{
+                $("#ErrorSalarioMinimoModal").modal("show");
+            }
+            return false;
+        }
+
+        if (salarioDias < salarioMinimoContractual) {
+            $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $'+ getPrice(salarioMinimoDiario)+ ' pesos para que el salario contractual sea del mínimo legal vigente ($'+getPrice(salarioMinimoContractual)+').');
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
             calculator();
@@ -1721,10 +1738,11 @@ function validateSalary() {
         salarioMinimo = $("#salarioMinimo").val();
         if (!salarioMinimo) {
             salarioMinimo = 689455;
+            salarioContractualMinimo =689455;
         }
         salarioMes = sueldo_plano;
         if (salarioMes < (salarioMinimo/30)) {
-            $("#salarioMinimo").find('.modal-body').html('El salario minimo legal es de $ ' + getPrice(salarioMinimo));
+            $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioContractualMinimo));
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
             formatMoney($("#register_employee_employeeHasEmployers_salary"));
