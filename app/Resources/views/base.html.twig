@@ -174,6 +174,8 @@
         {% block modales %}
             {{ modal(1) }}
             {{ modal(2) }}
+            {{ modal(3) }}
+
         {% endblock %}
     </div>
     {% block body %}
@@ -495,6 +497,7 @@
             $(window).on("popstate", function (e) {
                 sendAjax(location.href);
             });
+//            $("#ErrorSalarioMinimoModal").modal("show");
             $(window).keydown(function (event) {
                 if (event.keyCode == 13) {
                     event.preventDefault();
@@ -580,6 +583,31 @@
                 sendAjax($(this).attr('action'), $(this));
             });
         }
+
+        function showModal(idModal){
+            if(idModal==0){
+                $("#default_modal").modal("show");
+            }else if(idModal==1) {
+                $("#success_email_modal").modal("show");
+            }else if(idModal==2){
+                $("#fail_email_modal").modal("show");
+            }else if(idModal==3){
+                $("#default_modal_3").modal("show");
+            }else if(idModal==4){
+                $("#succes_payment_modal").modal("show");
+            }else if(idModal==5){
+                $("#fail_payment_modal").modal("show");
+            }else if(idModal==6){
+                $("#end_documents_modal").modal("show");
+            }else if(idModal==7){
+                $("#modal_abogado").modal("show");
+            }else if(idModal==8){
+                $("#exit_legal_modal").modal("show");
+            }else if(idModal==9){
+                $("#default_modal_9").modal("show");
+            }
+        }
+
         function jsLoader(url) {
             if (typeof url !== 'undefined') {
                 if (url.indexOf("{{ path('edit_profile') }}") !== -1) {
