@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
@@ -9,6 +10,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -121,7 +123,28 @@ class RegistrationController extends BaseController
             $person->setLastName1($form->get("lastName")->getData());
             $user->setPersonPerson($person);
             $user->setUsername($user->getEmail());
-            $userManager->updateUser($user);
+            $invitationCode=$form->get("creationCode")->getData();
+            $promoCodeRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
+            /** @var PromotionCode $realCode */
+            $realCode=$promoCodeRepo->findOneBy(array("code"=>$invitationCode));
+            if($realCode==null){
+                return $this->redirect("https://symplifica.com/");
+            }
+            if($realCode->getUserUser()==null){
+                if($realCode->getPromotionCodeTypePromotionCodeType()->getShortName()!="AC"){
+                    $realCode->setUserUser($user);
+                    /** @var User $user */
+                    $user->setIsFree($realCode->getPromotionCodeTypePromotionCodeType()->getDuration());
+                    $realCode->setStartDate(new \DateTime());
+                    $endDate= new DateTime(date("Y-m-d", strtotime("+".$user->getIsFree()." month", strtotime($realCode->getStartDate()->format("Y-m-d")))));
+                    $realCode->setEndDate($endDate);
+                }
+                $userManager->updateUser($user);
+            }else{
+                return $this->redirect("https://symplifica.com/");
+            }
+
+
 
             if (null === $response = $event->getResponse()) {
                 $url = $this->generateUrl('fos_user_registration_confirmed');

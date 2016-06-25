@@ -91,6 +91,9 @@
         $('#app_user_registration_form_email').attr('oninvalid', 'setCustomValidity("El correo escrito no es valido")');
         $('#app_user_registration_form_email').attr('oninput', "setCustomValidity('')");
 
+        $('#app_user_registration_form_creationCode').attr('oninvalid', 'setCustomValidity("El campo no puede estar vacio")');
+        $('#app_user_registration_form_creationCode').attr('oninput', "setCustomValidity('')");
+
         // This function checks for all the requirements of the password.
         function checkReq() {
           // First show everything.
