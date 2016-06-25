@@ -901,6 +901,11 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
     $("#totalExpensesVal").attr("disabled", true);
     loadConstrains();
+    if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
+      $(document).ajaxStop(function () {
+          reverseCalculator();
+      });
+    }
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
@@ -1711,7 +1716,7 @@ function validateSalary() {
             salarioMinimoContractual=22982;
         }
         salarioDias = sueldo_plano;
-        
+
         if(!salarioDias){
             if($("#register_employee_employeeHasEmployers_salaryD").val()!=0) {
                 $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $' + getPrice(salarioMinimoDiario) + ' pesos para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salarioMinimoContractual) + ').');
@@ -2010,6 +2015,48 @@ function oneYearFromNow(date){
   return date;
 }
 
-function test(){
-  console.log(smmlv);
+function reverseCalculator(){
+
+  var plainSalary = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+  if(plainSalary == ""){
+    $("#register_employee_employeeHasEmployers_salaryD").val(0);
+    calculator();
+    return;
+  }
+  var salaryD = 0;
+
+  var aid = 0;
+  var aidD = 0;
+  var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
+  var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
+  var numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+
+  var PensEmployeeCal = 0;
+  var base = 0;
+
+  if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
+    salaryD = plainSalary;
+  }
+  else {
+    base = smmlv;
+    salaryD = plainSalary;
+
+    if (numberOfDays <= 7) {
+        PensEmployeeCal = PensEmployee * base / 4;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else if (numberOfDays <= 14) {
+        PensEmployeeCal = PensEmployee * base / 2;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else if (numberOfDays <= 21) {
+        PensEmployeeCal = PensEmployee * base * 3 / 4;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else {
+        PensEmployeeCal = PensEmployee * base;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    }
+  }
+
+  $("#register_employee_employeeHasEmployers_salaryD").val(Math.floor(salaryD));
+  calculator();
+
 }
