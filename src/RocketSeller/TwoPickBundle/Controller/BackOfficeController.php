@@ -55,7 +55,7 @@ class BackOfficeController extends Controller
         $em->flush();
         /** @var PromotionCode $promC */
         foreach ($creating as $promC) {
-            $promC->setCode(substr(md5($promC->getIdPromotionCode()),1,8));
+            $promC->setCode(substr(md5($promC->getIdPromotionCode()),1,12));
             $em->persist($clientBetaReal);
 
         }
