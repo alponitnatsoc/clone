@@ -278,23 +278,43 @@
 
   {% elseif  template_parameter == 9 %}
 
-        <!--modal salir consulte legal-->
-        {% set style_header %}
-                 style="background-color: #3c4b5a; padding: 0px 0px"
+        {% set primary_modal_header %}
         {% endset %}
+
+        {% set primary_modal_footer %}
+
+        {% endset %}
+
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+
         {% set modal_header %}
-                 <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Notificación de Cambio</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Notificación de Cambio</h1>
         {% endset %}
+
+        {% set modal_content_style %}
+        {% endset %}
+
         {% set modal_content %}
-                 <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Cambiaste la situación actual desde la última vez que evaluamos tu caso,
-                 esta opción ya no es valida para ti, vuelve a evaluar tu situación para observar tus nuevas opciones.</p>
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Cambiaste la situación actual desde la última vez que evaluamos tu caso,
+            esta opción ya no es valida para ti, vuelve a evaluar tu situación para observar tus nuevas opciones.</p>
         {% endset %}
+
         {% set modal_style_button %}
-                 style="width: 30%; font-size:20px" id="cerrarAviso"
+            style="width: 30%; font-size:20px" id="cerrarAviso"
         {% endset %}
-        {% set modal_button = 'Entendido' %}
+
+        {% set modal_button %}
+            Entendido
+        {% endset %}
+
         {% set modal_style_button2 %}
-        style="display:none"
+            style="display: none"
+        {% endset %}
+
+        {% set modal_button2 %}
+            cerrar2
         {% endset %}
 
   {% else %}
