@@ -64,33 +64,33 @@
                     {# 			    </div></li>#}
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>El empleador es una persona natural.</label>
+                            <label><input id="op1" name="legal-status" type="checkbox" value=""/>El empleador es una persona natural.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>El empleado está afiliado a las entidades de seguridad social.</label>
+                            <label><input id="op2" name="legal-status" type="checkbox" value=""/>El empleado está afiliado a las entidades de seguridad social.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Mi empleado trabaja por días y lo tenemos afiliado a seguridad
+                            <label><input id="op3" name="legal-status" type="checkbox" value=""/>Mi empleado trabaja por días y lo tenemos afiliado a seguridad
                               social con el salario mínimo entre varios empleadores.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Yo estoy registrado como su empleador en las entidades de seguridad social.</label>
+                            <label><input id="op4" name="legal-status" type="checkbox" value=""/>Yo estoy registrado como su empleador en las entidades de seguridad social.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Estoy al día en el pago de la seguridad social de mi empleado.</label>
+                            <label><input id="op5" name="legal-status" type="checkbox" value=""/>Estoy al día en el pago de la seguridad social de mi empleado.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Tengo un contrato firmado con mi empleado.</label>
+                            <label><input id="op6" name="legal-status" type="checkbox" value=""/>Tengo un contrato firmado con mi empleado.</label>
                         </div>
                     </li>
 
@@ -106,11 +106,11 @@
                 </ul>
             </form>
             <div class="botones-options">
-              <div class="btn btn-orange">Evaluar</div>
+              <div class="btn btn-orange" onclick="evaluateOptions()">Evaluar</div>
             </div>
             <div id="cont-opciones-casos">
               <!--caso 1 -->
-                <div class="casos">
+                <div id="caso1" class="casos">
                     <div class="casohead">
                         <strong>Te recomendamos continuar con la relación laboral que tienes vigente</strong>
                         <p>Symplifica asume que has cumplido con todas tus responsabilidades en el pasado y no tienes pendientes con tu empleado
@@ -143,12 +143,12 @@
                         No estoy seguro de entender mi situación actual y las implicaciones y quisiera consultar un abogado con una tarifa preferencial.</i>
                          <br><br>
                     <div class="botones-options">
-                      <div class="btn btn-orange">Aceptar y continuar</div>
-                      <div class="btn btn-orange">Consulta legal</div>
+                      <div id="continuarContratoNext" class="btn btn-orange">Aceptar y continuar</div>
+                      <div id="continuarContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
                     </div>
                 </div>
                 <!--caso 2 -->
-                  <div class="casos">
+                  <div id="caso2" class="casos">
                       <div class="casohead">
                           <strong>De acuerdo con tu situación</strong>
                           <p>Te recomendamos formalizar tu relación laboral y firmar un nuevo contrato con tu empleado.<br><br>
@@ -179,12 +179,12 @@
                        No estoy seguro de entender mi situación actual y las implicaciones y quisiera consultar un abogado con una tarifa preferencial.</i>
                        <br><br>
                       <div class="botones-options">
-                          <div class="btn btn-orange">Aceptar y continuar</div>
-                          <div class="btn btn-orange">Consulta legal</div>
+                          <div id="nuevoContratoNext" class="btn btn-orange">Aceptar y continuar</div>
+                          <div id="nuevoContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
                       </div>
                   </div>
                   <!--caso 3 -->
-                    <div class="casos">
+                    <div id="caso3" class="casos">
                         <div class="casohead">
                             <strong>De acuerdo con tu situación</strong>
                             <p>Symplifica te recomienda tomar una sesión de consultoría legal con un abogado experto.</p>
@@ -196,20 +196,20 @@
                             ayudaremos a empezar a usar Symplifica.</p>
                         </div>
                         <div class="botones-options">
-                            <div class="btn btn-orange">Aceptar y continuar</div>
-                            <div class="btn btn-orange">Salir</div>
+                            <div id="abogadoModal" class="btn btn-orange">Aceptar y continuar</div>
+                            <div id="salirAbogadoModal" class="btn btn-orange">Salir</div>
                         </div>
                     </div>
             </div>
             <br/>
-            <div class="col-sm-12">
+            <!--<div class="col-sm-12">
                 <div class="col-sm-6" style="text-align: right;">
                     <a class="btn btn-grey  notAjax" href="/welcome">Volver atrás</a>
                 </div>
                 <div class="col-sm-6">
                     <span class="btn btn-orange notAjax" href="" onclick="done()">Validar situación actual</span>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="col-sm-12">
@@ -222,32 +222,13 @@
             <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si una, varias, o todas las responsabilidades que tiene con su empleado son evadidas requiere un manejo legal para subsanarlo.</span>
         </div>
     </div>
-{% endblock %}
+{% endblock fos_user_content %}
+
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var flag = true;
-        function validate() {
-            var legal = document.forms[0];
-            var i;
-            for (i = 0; i < legal.length; i++) {
-                if (!legal[i].checked) {
-                    flag = false;
-                }
-            }
-        }
-        function done() {
-            validate();
-            if (flag) {
-                document.location.href = '{{ path('legal_acceptance',{state:'correct'}) }}';
-                clearForm();
-            } else {
-                document.location.href = '{{ path('legal_acceptance',{state:'incorrect'}) }}';
-            }
-        }
-        function clearForm() {
-            var legal = document.forms[0];
-            legal.reset();
-        }
-    </script>
+	{{ parent() }}
+	<script>
+  	$.getScript("{{ asset('/public/js/legal_status.js') }}").done(function () {
+  			prepareLegal();
+  	});
+	</script>
 {% endblock %}

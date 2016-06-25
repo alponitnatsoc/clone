@@ -1101,8 +1101,8 @@ filename = "certificadoLaboral.pdf"'
         $eheRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EmployerHasEmployee");
         /** @var EmployerHasEmployee $realEhe */
         $realEhe = $eheRepo->find($idEhe);
-        if ($realEhe == null || $realEhe->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer() || $realEhe->getState() == 1) {
-            return;
+        if ($realEhe == null || $realEhe->getEmployerEmployer()->getIdEmployer() != $employer->getIdEmployer() ) {
+            return $this->redirectToRoute("manage_employees");
         }
         $realEhe->setState(-1);
         $em->persist($realEhe);
