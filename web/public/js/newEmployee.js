@@ -744,9 +744,6 @@ function startEmployee() {
             }
         }).done(function (data) {
             $('#formNav > .active').next('li').find('a').trigger('click');
-            if($("#register_employee_employeeHasEmployers_contractType").val()=="2"){
-                $("#contractIndefiniteModal").modal("toggle");
-            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             if (jqXHR == errorHandleTry(jqXHR)) {
                 alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
@@ -1880,7 +1877,7 @@ function initEntitiesFields(){
             source: function(request, response) {
               var results;
               if(request.term.length != 0){
-                var results = $.ui.autocomplete.filter(dataPen, request.term);
+                results = $.ui.autocomplete.filter(dataPen, request.term);
               }
               else {
                 results = $.ui.autocomplete.filter("", request.term);
@@ -1913,7 +1910,7 @@ function initEntitiesFields(){
             source: function(request, response) {
               var results;
               if(request.term.length != 0){
-                var results = $.ui.autocomplete.filter(dataWe, request.term);
+                results = $.ui.autocomplete.filter(dataWe, request.term);
               }
               else {
                 results = $.ui.autocomplete.filter("", request.term);
@@ -1947,7 +1944,7 @@ function initEntitiesFields(){
             source: function(request, response) {
               var results;
               if(request.term.length != 0){
-                var results = $.ui.autocomplete.filter(dataArs, request.term);
+                results = $.ui.autocomplete.filter(dataArs, request.term);
               }
               else {
                 results = $.ui.autocomplete.filter("", request.term);
