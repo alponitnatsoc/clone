@@ -34,30 +34,7 @@
                 margin-top: 25px;
             }
 
-            .paymentImage {
-                float: left;
-                margin: 0px 5px 0 0px;
-            }
-
             .paymentImage img {
-
-            }
-
-            label label.error {
-                position: absolute;
-                top: -25px;
-            }
-
-            .paymentTitle {
-                float: left;
-                margin: 0px 0 0 10px;
-                width: 600px;
-
-            }
-
-            .paymentDescription {
-                float: left;
-                margin: 0 0 20px 80px
 
             }
 
@@ -69,13 +46,6 @@
             .label-group > h3 {
                 text-align: center;
                 margin-bottom: 20px;
-            }
-            .form-select{
-                color: yellow !important;
-            }
-
-            .form-inline .checkbox, .form-inline .radio {
-                margin-right: 20px;
             }
 
             .texto-seguridad-msj{
@@ -111,13 +81,6 @@
 
             }
 
-            @media (max-width: 375px){
-               h2.margin-responsive{ padding: 24px 0 !important; }
-            }
-
-            @media (max-width: 320px){
-               h2.margin-responsive{ padding: 15px 0 !important; }
-            }
 
         </style>
     {% endblock %}
@@ -126,7 +89,7 @@
         <div class="col-sm-12 col-xs-12 align-Resp">
             <div id="" class="col-sm-12 col-xs-12 blockStep inline  nav-link">
                 <div id="" class="col-md-2 col-xs-12 txt-AD0" style="text-align: left;">
-                    <img src="/img/block-inline.png" class="center-block">
+                    <img src="{{ asset('img/block-inline.png') }}" class="center-block">
                 </div>
                 <div id="" class="col-md-10 col-xs-12 txt-AD1">
                     <div id="" class="text-left title-center">
@@ -581,7 +544,7 @@
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
-                                            <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar lugar de trabajo</span></a>
+                                            <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar lugar de trabajo</span></a>
                                         </div>
 
                                     </div>
@@ -735,13 +698,6 @@
 	margin: 0 auto;
 	text-align: center}
 
-.left {
-	margin-left: 100px;}
-
-#contenedor-tabla {
-	width: 600px
-	}
-
 .border {
 	border-radius: 5px;
 	border: 1px solid #CCC
@@ -815,7 +771,6 @@
 
 @media only screen and (max-width: 600px) {
 	.concepto {width: 50%}
-	#contenedor-tabla {width: 85%;}
 	}
 </style>
 
@@ -1227,7 +1182,7 @@
                                         <div class="col-sm-10">
                                             <div class="col-sm-6 label-group">
 
-                                                <label class="control-label required" for="register_employee_employeeHasEmployers_position" aria-required="true">Frecuencia de pago *</label>
+                                                <label class="control-label required" for="register_employee_employeeHasEmployers_position">Frecuencia de pago *</label>
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 {{ form_widget(form.employeeHasEmployers.frequencyFrequency) }}
@@ -1804,23 +1759,6 @@
                     <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
                         <div class="col-md-8 col-md-push-2">
                             El documento ingresado ya existe los datos serán llenados automaticamente
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal no -->
-    <div class="modal fade" id="contractIndefiniteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content"><div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
-                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">El periodo de prueba</div>
-                    </div>
-                    <div class="row-fluid clearfix" style="padding-top: 30px; padding-bottom: 30px;">
-                        <div class="col-md-11 col-md-push-1">
-                            El periodo de prueba consiste en 2 meses en los que el empleador tiene la posiblididad de despedir a su empleado sin indemnización.
                         </div>
                     </div>
                 </div>
