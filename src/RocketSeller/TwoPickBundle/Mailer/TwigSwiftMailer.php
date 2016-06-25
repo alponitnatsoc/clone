@@ -87,6 +87,18 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($template, $context, $this->parameters['from_email']['resetting'], $user->getEmail());
     }
 
+    public function sendReminderEmailMessage(UserInterface $user, $toEmail)
+    {
+        $template = $this->parameters['template']['reminder'];
+        $context = array(
+            'user' => $user,
+            'subject' => 'Documentos necesarios para el registro',
+            'toEmail' => $toEmail
+        );
+
+        return $this->sendMessage($template, $context, 'registro@symplifica.com' ,$toEmail);
+    }
+    
     public function sendWelcomeEmailMessage(UserInterface $user)
     {
         $template = $this->parameters['template']['welcome'];
@@ -137,23 +149,15 @@ class TwigSwiftMailer implements MailerInterface
         if ($path) {
             $message->attach(\Swift_Attachment::fromPath($path));
         }
-
+        dump($htmlBody);
         if (!empty($htmlBody)) {
             $message->setBody($htmlBody, 'text/html')
                 ->addPart($textBody, 'text/plain');
         } else {
-            $message->setBody($textBody);
+            $message->setBody($textBody, 'text/plain');
         }
 
         return $this->mailer->send($message);
     }
     
-    public function sendReminderEmailMessage($toEmail)
-    {
-        $context = array(
-            'toEmail' => $toEmail
-        );
-
-        return $this->sendMessage($this->parameters['template']['reminder'], $context, 'registro@symplifica.com' ,$toEmail);
-    }
 }
