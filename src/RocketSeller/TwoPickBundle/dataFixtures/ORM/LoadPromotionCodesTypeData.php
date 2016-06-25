@@ -10,7 +10,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\PromotionCodeType;
 
-class LoadAccountDataData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPromotionCodesTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
