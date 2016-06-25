@@ -318,11 +318,13 @@ class EmployeeRestController extends FOSRestController {
                     }
                 }
                 if($flagDavi){
+                    /** @var UtilsController $utils */
+                    $utils = $this->get('app.symplifica_utils');
                     $notification = new Notification();
                     $notification->setPersonPerson($user->getPersonPerson());
                     $notification->setStatus(1);
                     $notification->setType('alert');
-                    $notification->setDescription("Crear Cuenta DaviPlata para ".$employee->getPersonPerson()->getNames());
+                    $notification->setDescription("Crear Cuenta DaviPlata para ".$utils->mb_capitalize($employee->getPersonPerson()->getFullName()));
                     $notification->setAccion("Crear Daviplata");
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($notification);
