@@ -977,14 +977,14 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
-    //$("#labelCosto").html("Costo total diario </br> por el empleado");
+    //$("#labelCosto").html("Costo diario </br> del empleado (no incluye prestaciones)");
     //$("#ingresoNeto").html("Esto recibirá neto el empleado diariamente");
     radioChange = true;
     calculator();
 });
 
 $('#radio_mensual').click(function() {
-    //$("#labelCosto").html("Costo total </br> por el empleado");
+    //$("#labelCosto").html("Costo </br> del empleado (no incluye prestaciones)");
     //$("#ingresoNeto").html("Esto recibirá neto el empleado mensualmente");
     radioChange = true;
     calculator();
@@ -1675,7 +1675,7 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       if( firstLoad == true){
-        $("#labelCosto").html("Costo total diario </br> por el empleado");
+        $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
         firstLoad = false;
       }
 
@@ -1694,12 +1694,12 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
   if( $(this).val() == 1 ){
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
-    $("#labelCosto").html("Costo total </br> por el empleado");
+    $("#labelCosto").html("Costo </br> del empleado (sin prestaciones)");
   }
   else {
     $('#radio_diario').prop('checked', true);
     $('#radio_mensual').prop('checked', false);
-    $("#labelCosto").html("Costo total diario </br> por el empleado");
+    $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
   }
 });
 
