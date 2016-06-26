@@ -1,4 +1,13 @@
 {% extends "::base.html.twig" %}
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(1) }}
+    {{ modal(2) }}
+    {{ modal(3) }}
+    {{ modal(10) }}
+    {{ modal(11) }}
+{% endblock %}
+
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>

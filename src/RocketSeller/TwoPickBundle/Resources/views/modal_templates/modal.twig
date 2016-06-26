@@ -1,11 +1,11 @@
 {% block modalMessage %}
     <div class="modal fade" id="{{ modal_id| default("modal_template") }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
+            <div class="modal-content" {{  modal_style | default('') }}>
                 {% if primary_modal_header is defined and primary_modal_header !="" %}
                     {{ primary_modal_header }}
                 {% endif %}
-                <div class="modal-body" style="padding: 0">
+                <div class="modal-body" style="padding: 0;line-height: 1;"}} >
                     {% if primary_modal_body is defined %}
                         {{ primary_modal_body }}
                     {% else %}
@@ -13,7 +13,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" {{ modal_header_style | default('style="margin-top: 0;padding: 0px 0px"') }} >
-                            <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px">
+                            <div class="col-sm-12 col-xs-12 up-Intro">
                                 {{ modal_header | default("El header esta vacio") }}
                             </div>
                         </div>

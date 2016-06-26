@@ -11,6 +11,7 @@
 
         {% endset %}
 
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
         {% set modal_header_style %}
             style="background-color: #9C2F2F;border-color:#9C2F2F; padding: 0px 0px"
         {% endset %}
@@ -54,9 +55,12 @@
 
         {% set primary_modal_footer %}
         {% endset %}
-
+        {% set modal_style %}style="width: 70%;"{% endset %}
         {% set modal_header_style %}
-             style="background-color: #1a5a17; padding: 5px 0px"
+             style="background-color:#1a5a17;
+                    padding: 0px 0px;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;"
         {% endset %}
 
         {% set modal_header %}
@@ -71,15 +75,15 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Tu correo se envió de manera exitosa!</p>
+            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">¡Tu correo se envió de manera exitosa!</p>
         {% endset %}
 
         {% set modal_style_button %}
-            style="width: 30%; font-size:20px"
+            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
         {% endset %}
 
         {% set modal_button %}
-            cerrar
+            aceptar
         {% endset %}
 
         {% set modal_style_button2 %}
@@ -101,12 +105,17 @@
         {% set primary_modal_footer %}
         {% endset %}
 
+        {% set modal_style %}style="width: 70%;"{% endset %}
         {% set modal_header_style %}
-            style="background-color: #9C2F2F;border-color:#9C2F2F; padding: 0px 0px"
+            style="background-color: #9C2F2F;
+            border-color:#9C2F2F;
+            padding: 0px 0px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;"
         {% endset %}
 
         {% set modal_header %}
-            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Envío Fallido</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px;  ">Falló el envio</h1>
         {% endset %}
 
         {% set modal_content_class %}
@@ -117,15 +126,15 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Ocurrió un error enviando el correo!</p>
+            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">¡Ocurrió un error enviando el correo!</p>
         {% endset %}
 
         {% set modal_style_button %}
-            style="width: 30%; font-size:20px"
+            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
         {% endset %}
 
         {% set modal_button %}
-            cerrar
+            aceptar
         {% endset %}
 
         {% set modal_style_button2 %}
@@ -138,7 +147,7 @@
 
     {% elseif template_parameter == 3 %}
 
-        {% set modal_id = 'default_modal_3' %}
+        {% set modal_id = 'error_salario' %}
 
         {% set primary_modal_header %}
         {% endset %}
@@ -152,8 +161,10 @@
             </div>
         {% endset %}
 
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
         {% set primary_modal_body %}
-            <p style="padding: 15px 10px 5px 15px;">El salario mínimo no puede ser 0</p>
+            <p style="padding: 15px 10px 5px 15px;">El salario no puede estar vacio.</p>
         {% endset %}
 
         {% set primary_modal_footer %}
@@ -171,6 +182,8 @@
         {% endset %}
 
         {% set modal_id = 'succes_payment_modal' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set modal_header_style %}
              style="background-color: #3c4b5a; padding: 0px 0px"
@@ -209,6 +222,8 @@
 
         {% set modal_id = 'fail_payment_modal' %}
 
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
         {% set modal_header_style %}
            style="background-color: #fd5c5c; padding: 0px 0px"
         {% endset %}
@@ -226,7 +241,7 @@
 
         {% set modal_content %}
             <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago no pudo ser efectuado!<br>
-            Por favor intente nuevamente más tarde, si el problema persiste pongase en contacto con nosotros <strong>350 833 0000</strong</p>
+            Por favor intente nuevamente más tarde, si el problema persiste pongase en contacto con nosotros <strong>350 833 0000</strong></p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -246,6 +261,8 @@
         {% endset %}
 
         {% set modal_id = 'end_documents_modal' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set modal_header_style %}
             style="background-color: #3c4b5a; padding: 0px 0px"
@@ -277,6 +294,8 @@
 
         <!--modal de abogado-->
         {% set modal_id = 'modal_abogado' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set primary_modal_header %}
         {% endset %}
@@ -328,6 +347,8 @@
         <!--modal salir consulte legal-->
         {% set modal_id = 'exit_legal_modal' %}
 
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
         {% set primary_modal_header %}
         {% endset %}
 
@@ -357,6 +378,8 @@
   {% elseif  template_parameter == 9 %}
 
         {% set modal_id = 'default_modal_9' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set primary_modal_header %}
         {% endset %}
@@ -393,8 +416,66 @@
             style="display: none"
         {% endset %}
 
+    {% elseif template_parameter == 10 %}
+
+        {% set modal_id = 'error_dias_laborales' %}
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Advertencia días laborales</h4>
+            </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+            <p style="padding: 15px 10px 5px 15px;">No has seleccionado los días de trabajo de tu empleado.</p>
+        {% endset %}
+
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
+        {% endset %}
+
+    {% elseif template_parameter == 11 %}
+
+        {% set modal_id = 'error_modal_transporte' %}
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Advertencia sobre lugar de residencia</h4>
+            </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+            <p style="padding: 15px 10px 5px 15px;">Por favor selecciona una opción sobre donde residira el trabajador.</p>
+        {% endset %}
+
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
+        {% endset %}
 
   {% else %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
         {% set primary_modal_header %}
         {% endset %}
 

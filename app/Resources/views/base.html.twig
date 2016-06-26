@@ -172,13 +172,9 @@
     {%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
     <div>
         {% block modales %}
-            {{ modal(1) }}
-            {{ modal(2) }}
-            {{ modal(3) }}
             {{ modal(7) }}
             {{ modal(8) }}
             {{ modal(9) }}
-
         {% endblock %}
     </div>
     {% block body %}
@@ -324,23 +320,25 @@
                                                 <div class="moda-footer">
 
                                                     <form id="reminderMail">
-                                                        <div class="row">
-                                                        </div>
-                                                        <span style="color: #5D5D5D">Correo:</span>
-                                                        <div style="margin-left: 20px; margin-top: 10px;">
-                                                            <input style="color: #4B4B4B; width: 280px; margin-right: 10px;"
-                                                                   type="text" id="emailToSendHelp"
-                                                                   name="emailToSendHelp"
-                                                                   placeholder="ejemplo@tucorreo.cual"/>
+                                                        <div class="row" style="margin-left: 20px">
+                                                            <span style="display: block;overflow: hidden;font-size: 20px;color: #5D5D5D;font-weight: bold;box-sizing: border-box;">Correo:</span>
+                                                            <div style="margin-top: 10px;">
+                                                                <input style="color: #4B4B4B; width: 60%;"
+                                                                       type="text" id="emailToSendHelp"
+                                                                       name="emailToSendHelp"
+                                                                       placeholder="tucorreo@ejemplo.com"/>
+                                                            </div>
+
+                                                            <div>
+                                                                <a style="margin-top: 10px;"
+                                                                   class="btn btn-middleblue notAjax"
+                                                                   id="emailToSendHelpButton"
+                                                                   href="{{ path('api_public_post_remainder') }}">
+                                                                    Enviar </a>
+                                                            </div>
                                                         </div>
 
-                                                        <div>
-                                                            <a style=" margin-left: 20px; margin-top: 10px;"
-                                                               class="btn btn-middleblue notAjax"
-                                                               id="emailToSendHelpButton"
-                                                               href="{{ path('api_public_post_remainder') }}">
-                                                                Enviar </a>
-                                                        </div>
+
                                                     </form>
                                                 </div>
                                             </div>
@@ -597,7 +595,7 @@
             }else if(idModal==2){
                 $("#fail_email_modal").modal("show");
             }else if(idModal==3){
-                $("#default_modal_3").modal("show");
+                $("#error_salario").modal("show");
             }else if(idModal==4){
                 $("#succes_payment_modal").modal("show");
             }else if(idModal==5){
@@ -610,6 +608,10 @@
                 $("#exit_legal_modal").modal("show");
             }else if(idModal==9){
                 $("#default_modal_9").modal("show");
+            }else if(idModal==10){
+                $("#error_dias_laborales").modal("show");
+            }else if(idModal==11){
+                $("#error_modal_transporte").modal("show");
             }
         }
 
