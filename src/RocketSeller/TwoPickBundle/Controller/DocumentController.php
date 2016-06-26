@@ -588,16 +588,28 @@ use EmployerMethodsTrait;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
                     if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
+
+                        $unitValue = 0;
+                        if( $desc->getProductProduct()->getSimpleName()=="CT" ){
+                          $ivaTotal+= round($desc->getValue()-($desc->getValue() / 1.16),0);
+                          $unitValue = round(($desc->getValue() / 1.16),0);
+                          $productsPrice += round(($desc->getValue() / 1.16));
+                        }
+                        else {
+                          $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+                          $unitValue = $desc->getProductProduct()->getPrice();
+                          $productsPrice += $desc->getProductProduct()->getPrice();
+                        }
+
                         $items[] = array(
                             'desc' => $desc->getDescription(),
                             'product' => $desc->getProductProduct(),
                             'pays' => $desc->getPayPay(),
                             'status' => $desc->getPurchaseOrdersStatus(),
                             'totalValue' => $desc->getValue(),
-                            'unitValue' => $desc->getProductProduct()->getPrice()
+                            'unitValue' => $unitValue
                         );
-                        $productsPrice += $desc->getProductProduct()->getPrice();
-                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+
                     }
 
                 }
