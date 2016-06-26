@@ -553,7 +553,7 @@
 
                                 <div class="col-sm-12 col-xs-12 center">
                                     <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
-                                    <a class="btn btn-orange btnNext-contract" >Siguiente: Información de pago</a>
+                                    <a class="btn btn-orange btnNext-infoPago" >Siguiente: Información de pago</a>
 
                                 </div>
 
@@ -590,11 +590,11 @@
                                 </div>-->
                                 <div class="col-sm-12 days price-box">
                                   <div class="padding-container col-xs-12 col-sm-6 priceContainer">
-                                      <p class="p">Salario contractual</p>
+                                      <p class="p">Este debe ser el salario diario de tu empleado para que reciba lo que tu quieres  </p>
                                       <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                   </div>
                                     <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
-                                        <p class="p">¿Cuanto será el salario diario?</p>
+                                        <p class="p">¿Cuanto quieres que reciba neto tu empleado cada día?</p>
                                         {{ form_widget(form.employeeHasEmployers.salaryD) }}
                                     </div>
                                 </div>
@@ -682,7 +682,7 @@
                                         -->
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                                             <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                                                <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-usd" style="font-size:17px"></i>&nbsp; Estimación del costo de tu empleado</div>
+                                                <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px;">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-usd" style="font-size:17px"></i>&nbsp;          Estimación del costo de tu empleado</div>
                                             </div>
                                             <div class="modal-body">
 
@@ -794,13 +794,13 @@
                              <tr><!---------------------------------------------empieza Ingresos promedio del empleado (sin prestaciones)-->
                                 <td class="padding">
                                 	<p class="centrar tooltip1">
-                                    	&#10067; Ingresos promedio del empleado (sin prestaciones)
-                                    <span class="tooltiptext light">Aquí va el texto de ayuda</span>
+                                    	&#10067; Ingreso estimado del empleado (sin prestaciones)
+                                    <span class="tooltiptext light">Este es el valor neto que recibirá el empleado. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Las prestaciones se pueden ver más abajo</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                              <td class="franja-gris">
-                                              Ingresos brutos (+)
+                                              Salario y Auxilios  (+)
                                              </td>
                                          </tr>
                                           <tr><!--empieza doble columna-->
@@ -869,7 +869,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="pagos" width="260" valign="top">
-                                                         Pagos por días netos
+                                                         Esto recibe el empleado
                                                         </td>
                                                         <td id="pagos_netos" class="pagos" width="260" valign="top">
                                                          $69.120
@@ -884,13 +884,13 @@
                              <tr><!--------------------------------------Empieza Pagos recurrentes promedio diarios-->
                                 <td class="padding">
                                 	<p class="centrar tooltip1">
-                                    	&#10067; Pagos recurrentes promedio diarios
-                                    <span class="tooltiptext light">Aquí va el texto de ayuda</span>
+                                    	&#10067; Costo del empleado (sin prestaciones)
+                                    <span class="tooltiptext light">Este es el resumen del costo recurrente que va a tener el empleador. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Más abajo se detalla el costo de las prestaciones</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                              <td class="franja-gris">
-                                              Ingresos brutos del empleado (+)
+                                              Salario y Auxilios (+)
                                              </td>
                                          </tr>
                                           <tr><!--empieza doble columna-->
@@ -987,7 +987,7 @@
                                               	<table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td class="pagos" width="260" valign="top">
-                                                         Costo total
+                                                         Costo sin prestaciones
                                                         </td>
                                                         <td id="costo_total" class="pagos" width="260" valign="top">
                                                          $200.140
@@ -1002,8 +1002,8 @@
                              <tr><!----------------------------------------------------------------Empieza Prestaciones promedio por diarios-->
                                 <td class="padding">
                                 	<p class="centrar tooltip1">
-                                    	&#10067; Prestaciones promedio por diario
-                                    <span class="tooltiptext light">Aquí va el texto de ayuda</span>
+                                    	&#10067; Prestaciones promedio
+                                    <span class="tooltiptext light">Estas son las provisiones. Es decir, lo que deberías ahorrar promedio en el periodo para pagar las prestaciones cuando se ejecutan. Estos valores en realidad se pagan una vez al año o cuando se termina el contrato</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
