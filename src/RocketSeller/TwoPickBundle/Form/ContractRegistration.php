@@ -179,7 +179,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:'
+                'label'=>'¿Qué días de la semana trabajará?'
             ))
             ->add('weekDays', 'choice', array(
                 'choices' => array(
@@ -194,7 +194,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:',
+                'label'=>'¿Qué días de la semana trabajará?',
                 'attr'   =>  array(
                 'class'   => 'testing')
             ))

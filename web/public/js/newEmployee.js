@@ -35,6 +35,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
+                "register_employee[employeeHasEmployers][sisben]": "required",
                 "register_employee[employeeHasEmployers][position]": "required",
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
@@ -71,6 +72,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
+                "register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
@@ -192,6 +194,34 @@ function startEmployee() {
           $('#contractNav > .active').next('li').find('a').trigger('click');
         }
     });
+
+    $('.btnNext-infoPago').click(function () {
+
+      var valid = true;
+      if (!validator.element($("#register_employee_employeeHasEmployers_position"))) {
+          valid = false;
+      }
+
+      if (!validator.element($("[name='register_employee[employeeHasEmployers][timeCommitment]']"))) {
+          valid = false;
+      }
+
+      if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
+        if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
+            valid = false;
+        }
+      }
+
+      if (!validator.element($("#register_employee_employeeHasEmployers_workplaces"))) {
+          valid = false;
+      }
+
+      if(valid == true){
+          $('#contractNav > .active').next('li').find('a').trigger('click');
+      }
+    });
+
+
     //dinamic loading contract type and commitment
     //first hide all
     $(".days").each(function () {
@@ -902,6 +932,16 @@ function startEmployee() {
     $("#register_employee_employeeHasEmployers_holidayDebt").val(Math.abs($("#register_employee_employeeHasEmployers_holidayDebt").val()));
     $("#totalExpensesVal").attr("disabled", true);
     loadConstrains();
+    if($("#register_employee_employeeHasEmployers_timeCommitment_2").is("[checked]")){
+      $(document).ajaxStop(function () {
+          reverseCalculator();
+      });
+    }
+
+    if( $("#register_employee_employeeHasEmployers_transportAid_0").prop("checked") == false
+          && $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked") == false ){
+          $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked",true);
+        }
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
@@ -941,14 +981,14 @@ function jsonToHTML(data) {
 }
 
 $('#radio_diario').click(function() {
-    //$("#labelCosto").html("Costo total diario </br> por el empleado");
+    //$("#labelCosto").html("Costo diario </br> del empleado (no incluye prestaciones)");
     //$("#ingresoNeto").html("Esto recibirá neto el empleado diariamente");
     radioChange = true;
     calculator();
 });
 
 $('#radio_mensual').click(function() {
-    //$("#labelCosto").html("Costo total </br> por el empleado");
+    //$("#labelCosto").html("Costo </br> del empleado (no incluye prestaciones)");
     //$("#ingresoNeto").html("Esto recibirá neto el empleado mensualmente");
     radioChange = true;
     calculator();
@@ -1637,7 +1677,7 @@ function calculator() {
     var htmlRes = jsonCalcToHTML(resposne);
     if ($("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text() == " Trabajador por días") {
       if( firstLoad == true){
-        $("#labelCosto").html("Costo total diario </br> por el empleado");
+        $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
         firstLoad = false;
       }
 
@@ -1656,12 +1696,12 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
   if( $(this).val() == 1 ){
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
-    $("#labelCosto").html("Costo total </br> por el empleado");
+    $("#labelCosto").html("Costo </br> del empleado (sin prestaciones)");
   }
   else {
     $('#radio_diario').prop('checked', true);
     $('#radio_mensual').prop('checked', false);
-    $("#labelCosto").html("Costo total diario </br> por el empleado");
+    $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
   }
 });
 
@@ -1719,7 +1759,7 @@ function validateSalary() {
             salarioMinimoContractual=22982;
         }
         salarioDias = sueldo_plano;
-        
+
         if(!salarioDias){
             if($("#register_employee_employeeHasEmployers_salaryD").val()!=0) {
                 $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $' + getPrice(salarioMinimoDiario) + ' pesos para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salarioMinimoContractual) + ').');
@@ -2036,6 +2076,48 @@ function oneYearFromNow(date){
   return date;
 }
 
-function test(){
-  console.log(smmlv);
+function reverseCalculator(){
+
+  var plainSalary = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
+  if(plainSalary == ""){
+    $("#register_employee_employeeHasEmployers_salaryD").val(0);
+    calculator();
+    return;
+  }
+  var salaryD = 0;
+
+  var aid = 0;
+  var aidD = 0;
+  var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
+  var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
+  var numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+
+  var PensEmployeeCal = 0;
+  var base = 0;
+
+  if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
+    salaryD = plainSalary;
+  }
+  else {
+    base = smmlv;
+    salaryD = plainSalary;
+
+    if (numberOfDays <= 7) {
+        PensEmployeeCal = PensEmployee * base / 4;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else if (numberOfDays <= 14) {
+        PensEmployeeCal = PensEmployee * base / 2;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else if (numberOfDays <= 21) {
+        PensEmployeeCal = PensEmployee * base * 3 / 4;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    } else {
+        PensEmployeeCal = PensEmployee * base;
+        salaryD = (salaryD + transportAidDaily) - (PensEmployeeCal/numberOfDays);
+    }
+  }
+
+  $("#register_employee_employeeHasEmployers_salaryD").val(Math.floor(salaryD));
+  calculator();
+
 }

@@ -213,7 +213,7 @@
         {% endset %}
 
     {% elseif  template_parameter == 5 %}
-
+      <!--pago fallido-->
         {% set primary_modal_header %}
         {% endset %}
 
@@ -416,7 +416,43 @@
             style="display: none"
         {% endset %}
 
-    {% elseif template_parameter == 10 %}
+    {% elseif  template_parameter == 10 %}
+        <!--modal de exito de pago de consultoria juroidica-->
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set modal_id = 'end_documents_modal' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Consultoría Juridica</h1>
+        {% endset %}
+
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
+
+        {% set modal_content %}
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago fue exitoso!<br>
+                En las siguientes 24 horas uno de nuestros representantes se estará comunicando contigo para agendar tu cita</p>
+        {% endset %}
+
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
+    {% elseif template_parameter == 11 %}
 
         {% set modal_id = 'error_dias_laborales' %}
 
@@ -444,7 +480,7 @@
             </div>
         {% endset %}
 
-    {% elseif template_parameter == 11 %}
+    {% elseif template_parameter == 12 %}
 
         {% set modal_id = 'error_modal_transporte' %}
 

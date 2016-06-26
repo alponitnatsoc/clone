@@ -68,6 +68,14 @@ font-weight: 100;
     color: #7b7b7b;
 }
 
+.incluye {
+  width: 85%;
+  margin: 30px auto 0 auto;
+  clear: both;
+}
+
+#sectionContent2, #sectionContent3, #sectionContent4 {display:none;}
+
 .borderh3 {
   border: 1px #CCC solid;
     border-radius: 5px;
