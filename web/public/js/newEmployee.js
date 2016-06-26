@@ -35,6 +35,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "required",
                 "register_employee[employeeHasEmployers][contractType]": "required",
                 "register_employee[employeeHasEmployers][timeCommitment]": "required",
+                "register_employee[employeeHasEmployers][sisben]": "required",
                 "register_employee[employeeHasEmployers][position]": "required",
                 "register_employee[employeeHasEmployers][workplaces]": "required",
                 "register_employee[employeeHasEmployers][transportAid]": "required",
@@ -71,6 +72,7 @@ function startEmployee() {
                 "register_employee[employeeHasEmployers][employeeType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][contractType]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][timeCommitment]": "Por favor selecciona una opción",
+                "register_employee[employeeHasEmployers][sisben]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][position]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][workplaces]": "Por favor selecciona una opción",
                 "register_employee[employeeHasEmployers][transportAid]": "Por favor selecciona una opción",
@@ -192,6 +194,34 @@ function startEmployee() {
           $('#contractNav > .active').next('li').find('a').trigger('click');
         }
     });
+
+    $('.btnNext-infoPago').click(function () {
+
+      var valid = true;
+      if (!validator.element($("#register_employee_employeeHasEmployers_position"))) {
+          valid = false;
+      }
+
+      if (!validator.element($("[name='register_employee[employeeHasEmployers][timeCommitment]']"))) {
+          valid = false;
+      }
+
+      if($("#register_employee_employeeHasEmployers_timeCommitment_2").prop("checked") == true){
+        if (!validator.element($("[name='register_employee[employeeHasEmployers][sisben]']"))) {
+            valid = false;
+        }
+      }
+
+      if (!validator.element($("#register_employee_employeeHasEmployers_workplaces"))) {
+          valid = false;
+      }
+
+      if(valid == true){
+          $('#contractNav > .active').next('li').find('a').trigger('click');
+      }
+    });
+
+
     //dinamic loading contract type and commitment
     //first hide all
     $(".days").each(function () {
@@ -903,6 +933,11 @@ function startEmployee() {
           reverseCalculator();
       });
     }
+
+    if( $("#register_employee_employeeHasEmployers_transportAid_0").prop("checked") == false
+          && $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked") == false ){
+          $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked",true);
+        }
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');
