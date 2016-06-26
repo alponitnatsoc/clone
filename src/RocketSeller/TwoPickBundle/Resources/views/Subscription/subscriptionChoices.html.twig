@@ -312,12 +312,26 @@
         </div>
         <div id="salariosmed">
             <div class="infosalarios">
-                <div class="center">Costo de transacciones*</div>
+                <div class="center">
+                  <p id="modalCost" style="cursor:pointer;" onclick="modalCosto()"><u>Costo transaccional*</u></p>
+                </div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total 4x1000:</div>
+                <div id="cuatroXmil" class="right numberpay salaryIndVal"></div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total costo transacciones de nómina:</div>
+                <div id="totalCostoTransaccionSalarial" class="right numberpay salaryIndVal"></div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total costo transacciones de aportes a seguridad social:</div>
+                <div id="totalCostoTransaccionPila" class="right numberpay salaryIndVal"></div>
             </div>
             <div class="empleadosmed">
                 <div class="empleadomed">
                     <div class="left monto">Total</div>
-                    <div class="right numberpay">$7.000</div>
+                    <div id="totalTransaccional" class="right numberpay salaryIndVal"></div>
                 </div>
             </div>
         </div>
@@ -555,6 +569,8 @@
         contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
         contrato[{{ employee.idEmployerHasEmployee }}]['transportAid'] ={{ contrato.transportAid?contrato.transportAid:0 }} ;
         contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['wayToPay'] = {{ contrato.payMethodPayMethod.payTypePayType.idPayType }} ;
+        contrato[{{ employee.idEmployerHasEmployee }}]['frecuencia'] = {{ contrato.frequencyFrequency.idFrequency }} ;
         producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
         producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
         producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};

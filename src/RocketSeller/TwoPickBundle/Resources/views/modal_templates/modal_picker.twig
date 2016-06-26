@@ -428,6 +428,47 @@
                   style="display:none"
        {% endset %}
 
+  {% elseif  template_parameter == 11 %}
+
+       {% set primary_modal_header %}
+       {% endset %}
+
+       {% set primary_modal_footer %}
+       {% endset %}
+
+       {% set modal_id = 'detalle_costo_trans_modal' %}
+
+       {% set modal_header_style %}
+           style="background-color: #3c4b5a; padding: 0px 0px"
+       {% endset %}
+
+       {% set modal_header %}
+           <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Costo Transaccional</h1>
+       {% endset %}
+
+       {% set modal_content_style %}
+           style="padding: 10px 20px"
+       {% endset %}
+
+       {% set modal_content %}
+           <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Se cobra el 4 por mil del total de la transacción</br>
+            +</br>
+            7500 por la transacción por empleado si la transacciòn involucra el pago de nómina de 1 empleado</br>
+            o</br>
+            5500 por la transacción por la transacción por empleado si la transacciòn involucra el pago de nómina de 2 a 5 empleados</br>
+            o</br>
+            3500 por la transacción por la transacción por empleado si la transacciòn involucra el pago de nómina de más de 5 empleados</br>
+            o</br>
+            3500 si es sólo un pago de la PILA y el pago no involucra el pago de nómina de ningún empleado</p>
+       {% endset %}
+
+       {% set modal_style_button %}
+           style="width: 30%; font-size:20px"
+       {% endset %}
+
+       {% set modal_style_button2 %}
+           style="display:none"
+       {% endset %}
 
   {% else %}
         {% set primary_modal_header %}
