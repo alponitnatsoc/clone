@@ -157,7 +157,7 @@
 
         {% set primary_modal_header %}
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Advertencia salario minimo</h4>
+                <h4 class="modal-title" id="myModalLabel">Advertencia salario</h4>
             </div>
         {% endset %}
 
@@ -175,22 +175,24 @@
 
     {% elseif  template_parameter == 4 %}
 
+        {% set modal_id = 'succes_payment_modal' %}
+
         {% set primary_modal_header %}
         {% endset %}
 
         {% set primary_modal_footer %}
         {% endset %}
 
-        {% set modal_id = 'succes_payment_modal' %}
-
-        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+        {% set modal_style %}
+            style="padding: 0;line-height: 1;"
+        {% endset %}
 
         {% set modal_header_style %}
-             style="background-color: #3c4b5a; padding: 0px 0px"
+            style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
 
         {% set modal_header %}
-           <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Confirmación de pago</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Confirmación de pago</h1>
         {% endset %}
 
         {% set modal_content_class %}
@@ -201,11 +203,15 @@
         {% endset %}
 
         {% set modal_content %}
-           <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago fue realizado de manera exitosa!</p>
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago fue realizado de manera exitosa!</p>
         {% endset %}
 
         {% set modal_style_button %}
-           style="width: 30%; font-size:20px"
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_button %}
+            cerrar
         {% endset %}
 
         {% set modal_style_button2 %}
@@ -229,7 +235,7 @@
         {% endset %}
 
         {% set modal_header %}
-        <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Confirmación de pago</h1>
+        <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Error confirmación de pago</h1>
         {% endset %}
 
         {% set modal_content_class %}

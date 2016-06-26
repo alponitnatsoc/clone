@@ -172,9 +172,18 @@
     {%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
     <div>
         {% block modales %}
+            {{ modal(1) }}
+            {{ modal(2) }}
+            {{ modal(3) }}
+            {{ modal(4) }}
+            {{ modal(5) }}
+            {{ modal(6) }}
             {{ modal(7) }}
             {{ modal(8) }}
             {{ modal(9) }}
+            {{ modal(10) }}
+            {{ modal(11) }}
+            {{ modal(12) }}
         {% endblock %}
     </div>
     {% block body %}
@@ -609,8 +618,10 @@
             }else if(idModal==9){
                 $("#default_modal_9").modal("show");
             }else if(idModal==10){
+                $("#end_documents_modal").modal("show");
+            } else if(idModal==11){
                 $("#error_dias_laborales").modal("show");
-            }else if(idModal==11){
+            }else if(idModal==12){
                 $("#error_modal_transporte").modal("show");
             }
         }
