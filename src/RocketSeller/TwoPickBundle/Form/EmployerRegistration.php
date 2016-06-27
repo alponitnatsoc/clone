@@ -106,7 +106,7 @@ class EmployerRegistration extends AbstractType
                 'required' => true
             ))
             ->add('save', 'submit', array(
-                'label' => 'Siguiente: Seguridad social como empleador',
+                'label' => 'Guardar y continuar',
                 'attr'   =>  array(
                 'class'   => 'btn btn-orange')
             ));
