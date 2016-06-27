@@ -846,7 +846,7 @@ function startEmployee() {
             return;
         }
         if(!$("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val()){
-            showModal(11);
+            showModal(13);
             return false;
         }
         if (!validateSalary()) {
@@ -1750,7 +1750,7 @@ function validateSalary() {
             i++;
         });
         if(i==0){
-            showModal(10);
+            showModal(12);
             return false;
         }
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
