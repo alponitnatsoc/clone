@@ -2,13 +2,17 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use RocketSeller\TwoPickBundle\Controller\NotificationController;
 
 class DashBoardEmployerController extends Controller {
 
+    use EmployeeMethodsTrait;
     /**
      * Maneja el registro de una nueva persona con los datos básicos, 
      * TODO agregar todos los campos de los wireframes
@@ -30,10 +34,26 @@ class DashBoardEmployerController extends Controller {
         try {
             $orderBy = ($request->query->get('orderBy')) ? $request->query->get('orderBy') : 'deadline';
             $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
+            /** @var User $user */
+            $user = $this->getUser();
+            $employerHasEmployees=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+            $index= 0;
+            /** @var EmployerHasEmployee $employerHasEmployee */
+            foreach ($employerHasEmployees as $employerHasEmployee){
+                if($this->allDocumentsReady($user,$employerHasEmployee)){
+                    $ready[$index]=$employerHasEmployee->getIdEmployerHasEmployee();
+                }else{
+                    $ready[$index]=-1;
+                }
+                $index++;
+            }
+            
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => $notifications,
                         'user' => $user->getPersonPerson(),
-                        'contractType' => $contractType
+                        'contractType' => $contractType,
+                        'ready'=> $ready
+                        
             ));
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(

@@ -10,7 +10,7 @@ function startReminder() {
     var btn = document.getElementById("mibotn");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var span = document.getElementById("span_close_modal");
 
     // When the user clicks the button, open the modal
     btn.onclick = function () {
