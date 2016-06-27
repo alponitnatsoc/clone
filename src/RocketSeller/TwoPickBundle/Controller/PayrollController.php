@@ -204,23 +204,31 @@ class PayrollController extends Controller
                 //por seguridad se verifica que exista por lo menos un item a pagar
                 return $this->redirectToRoute("payroll");
             }
-            $total = 0;
-            $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-            $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
-            $paidPO = new PurchaseOrders();
-            $realtoPay = new PurchaseOrders();
-            $paidValue = 0;
-            foreach ($payrollToPay as $key => $value) {
+            $total=0;
+            $poS=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+            $paidStatus=$poS->findOneBy(array('idNovoPay'=>'00'));
+            $paidPO=new PurchaseOrders();
+            $realtoPay=new PurchaseOrders();
+
+            $paidValue=0;
+
+            $valueToGet4xMilFrom = 0;
+            $numberOfPNTrans = 0;
+            $willPayPN = false;
+
+            foreach ($payrollToPay as $key=>$value ) {
+
                 /** @var PurchaseOrdersDescription $tempPOD */
-                $tempPOD = $podRepo->find($key);
-                if ($tempPOD == null) {
+                $tempPOD=$podRepo->find($key);
+
+                if($tempPOD==null){
                     //por seguridad en caso de que no exista el POD
                     return $this->redirectToRoute("payroll");
                 }
-                if ($tempPOD->getPayrollPayroll() == null) {
-                    $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                } else {
-                    $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                if($tempPOD->getPayrollPayroll()==null){
+                    $person=$tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                }else{
+                    $person=$tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 }
                 if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
@@ -230,7 +238,16 @@ class PayrollController extends Controller
                 if ($exploded[0] == 'p') {
                     $total += $tempPOD->getValue();
                     $realtoPay->addPurchaseOrderDescription($tempPOD);
-                } else {
+
+                    if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                      $willPayPN = true;
+                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                      $numberOfPNTrans = $numberOfPNTrans + 1;
+                    }
+                    else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                    }
+                }else{
                     $tempPOD->setPurchaseOrdersStatus($paidStatus);
                     $paidPO->addPurchaseOrderDescription($tempPOD);
                     $paidValue += $tempPOD->getValue();
@@ -249,14 +266,32 @@ class PayrollController extends Controller
                 $em->persist($paidPO);
                 $em->flush();
             }
-            if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
+            if($realtoPay->getPurchaseOrderDescriptions()->count()>0){
                 //add transaction cost
-                $transactionPOD = new PurchaseOrdersDescription();
-                $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
-                /** @var Product $productTransaction */
-                $productTransaction = $productRepo->findOneBy(array("simpleName" => "CT"));
+                $transactionCost = 0;
+
+                // Se agrega el cobro único por pila si no hay pagos de nomina
+                if($willPayPN == false){
+                  $transactionCost = $transactionCost + 3500;
+                }
+
+                // Se agrega el cobro del 4x1000
+                $transactionCost = $transactionCost + ( ($valueToGet4xMilFrom / 1000) * 4);
+                // Se agrega el cobro por transaccional
+
+                if($numberOfPNTrans == 1){
+                  $transactionCost = $transactionCost + 7500;
+                }
+                elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
+                  $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
+                }
+                elseif ($numberOfPNTrans > 5) {
+                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                }
+
+                $transactionPOD=new PurchaseOrdersDescription();
                 $transactionPOD->setDescription("Costo transaccional");
-                $transactionPOD->setValue(round($productTransaction->getPrice() * (1 + $productTransaction->getTaxTax()->getValue()), 0));
+                $transactionPOD->setValue(round($transactionCost,0));
                 $realtoPay->addPurchaseOrderDescription($transactionPOD);
                 $total += $transactionPOD->getValue();
                 $dateToday = new DateTime();
@@ -361,13 +396,18 @@ class PayrollController extends Controller
                 //por seguridad se verifica que exista por lo menos un item a pagar
                 return $this->redirectToRoute("payroll");
             }
-            $total = 0;
-            $poS = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
-            $paidStatus = $poS->findOneBy(array('idNovoPay' => '00'));
-            $paidPO = new PurchaseOrders();
-            $realtoPay = new PurchaseOrders();
-            $paidValue = 0;
-            $paymethodid = $payrollToPay["paymentMethod"];
+            $total=0;
+            $poS=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus");
+            $paidStatus=$poS->findOneBy(array('idNovoPay'=>'00'));
+            $paidPO=new PurchaseOrders();
+            $realtoPay=new PurchaseOrders();
+            $paidValue=0;
+
+            $valueToGet4xMilFrom = 0;
+            $numberOfPNTrans = 0;
+            $willPayPN = false;
+
+            $paymethodid=$payrollToPay["paymentMethod"];
             unset($payrollToPay["paymentMethod"]);
             foreach ($payrollToPay as $key => $value) {
                 /** @var PurchaseOrdersDescription $tempPOD */
@@ -385,19 +425,50 @@ class PayrollController extends Controller
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
                     return $this->redirectToRoute("payroll");
                 }
-                $total += $tempPOD->getValue();
+
+                if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                  $willPayPN = true;
+                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                  $numberOfPNTrans = $numberOfPNTrans + 1;
+                }
+                else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                }
+
+                $total+=$tempPOD->getValue();
                 $realtoPay->addPurchaseOrderDescription($tempPOD);
             }
             $em = $this->getDoctrine()->getManager();
 
             if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
                 //add transaction cost
-                $transactionPOD = new PurchaseOrdersDescription();
-                $productRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
+                $transactionCost = 0;
+
+                // Se agrega el cobro único por pila si no hay pagos de nomina
+                if($willPayPN == false){
+                  $transactionCost = $transactionCost + 3500;
+                }
+
+                // Se agrega el cobro del 4x1000
+                $transactionCost = $transactionCost + ( ($valueToGet4xMilFrom / 1000) * 4);
+                // Se agrega el cobro por transaccional
+
+                if($numberOfPNTrans == 1){
+                  $transactionCost = $transactionCost + 7500;
+                }
+                elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
+                  $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
+                }
+                elseif ($numberOfPNTrans > 5) {
+                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                }
+
+                $transactionPOD=new PurchaseOrdersDescription();
+                $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 /** @var Product $productTransaction */
                 $productTransaction = $productRepo->findOneBy(array("simpleName" => "CT"));
                 $transactionPOD->setDescription("Costo transaccional");
-                $transactionPOD->setValue(round($productTransaction->getPrice() * (1 + $productTransaction->getTaxTax()->getValue()), 0));
+                $transactionPOD->setValue(round($transactionCost,0));
                 $transactionPOD->setProductProduct($productTransaction);
                 $realtoPay->addPurchaseOrderDescription($transactionPOD);
                 $total += $transactionPOD->getValue();

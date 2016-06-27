@@ -2,6 +2,11 @@
 
 {% block title %}RocketSellerTwoPickBundle:Beneficiary:addBeneficiary{% endblock %}
 
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+	{{ modal(1) }}
+	{{ modal(2) }}
+{% endblock %}
 {% block content %}
 <h1>Entidades</h1>
 <p>Seleccione de una de las entidades a las que se encuentra afiliado el empleado</p>

@@ -84,6 +84,22 @@ class EmployerHasEmployee
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $legalFF = -1;
+
+    /**
+     * Columna para los mensajes que se muestran al usuario en dashboard
+     * -1 - pending docs
+     * 0 - employer doc uploaded
+     * 1 - all backoffice docs uploaded
+     * 2 - employer docs backoffice validated
+     * 3 - employee docs backoffice validated
+     * 4 - all documents validated
+     * 5 - employer documents error
+     * 6 - employee documents error
+     * 7 - employer and employee documents error
+     * @ORM\Column(type="integer", length=1, nullable=TRUE)
+     */
+    private $documentStatus = -1;
+    
     /**
      * Set idEmployerHasEmployee
      *
@@ -336,5 +352,29 @@ class EmployerHasEmployee
     public function getLegalFF()
     {
         return $this->legalFF;
+    }
+
+    /**
+     * Set documentStatus
+     *
+     * @param integer $documentStatus
+     *
+     * @return EmployerHasEmployee
+     */
+    public function setDocumentStatus($documentStatus)
+    {
+        $this->documentStatus = $documentStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get documentStatus
+     *
+     * @return integer
+     */
+    public function getDocumentStatus()
+    {
+        return $this->documentStatus;
     }
 }

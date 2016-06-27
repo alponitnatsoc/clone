@@ -53,7 +53,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu nombre'
+                            'placeholder' => 'Digita tu telefono o numero celular'
                         )
                     )
                 );

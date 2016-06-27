@@ -70,6 +70,88 @@ trait EmployeeMethodsTrait
         return null;
     }
 
+    protected function allEmployerDocumentsReady(User $user){
+
+        $em = $this->getDoctrine()->getManager();
+        $person = $user->getPersonPerson();
+        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
+        $documents = $documentsRepo->findByPersonPerson($person);
+        /** @var UtilsController $utils */
+        $utils = $this->get('app.symplifica_utils');
+        $docs = array('Cedula' => false, 'Rut' => false, 'Mandato' => false);
+        $pendingDoc = 0;
+        foreach ($docs as $type => $status) {
+
+            foreach ($documents as $key => $document) {
+                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
+
+                    $docs[$type] = true;
+                    break;
+                }
+            }
+            if (!$docs[$type]) {
+                $pendingDoc++;
+            }
+        }
+        return $pendingDoc;
+    }
+
+    protected function allEmployeeDocumentsReady(User $user, Employee $realEmployee)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employer = $user->getPersonPerson()->getEmployer();
+        $person = $realEmployee->getPersonPerson();
+
+        $documentsRepo = $em->getRepository('RocketSellerTwoPickBundle:Document');
+        $documents = $documentsRepo->findByPersonPerson($person);
+        /** @var EmployerHasEmployee $employerHasEmployee */
+        $employerHasEmployee = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->findOneBy(array(
+            'employerEmployer' => $employer,
+            'employeeEmployee' => $realEmployee,
+            'state' => 3
+        ));
+        /** @var Contract $contract */
+        $utils = $this->get('app.symplifica_utils');
+        $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
+        $pendindDocs=0;
+        foreach ($docs as $type => $status) {
+            foreach ($documents as $key => $document) {
+                if ($type == $document->getDocumentTypeDocumentType()->getName()) {
+                    $docs[$type] = true;
+                    break;
+                }
+            }
+            if (!$docs[$type]) {
+                if($type!='Contrato'){
+                    $pendindDocs++;
+                }
+            }
+        }
+        return $pendindDocs;
+    }
+
+    protected function allDocumentsReady(User $user, EmployerHasEmployee $employerHasEmployee){
+
+        if($employerHasEmployee->getDocumentStatus()>0){
+            return false;
+        }
+        if($this->allEmployerDocumentsReady($user)==0){
+            $employerHasEmployee->setDocumentStatus(0);
+            if($this->allEmployeeDocumentsReady($user, $employerHasEmployee->getEmployeeEmployee())==0){
+                $employerHasEmployee->setDocumentStatus(1);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($employerHasEmployee);
+                $em->flush();
+                return true;
+            }
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($employerHasEmployee);
+        $em->flush();
+        return false;
+    }
+
+
     protected function validateDocuments(User $user)
     {
         /* @var $employerHasEmployee EmployerHasEmployee */
@@ -184,7 +266,7 @@ trait EmployeeMethodsTrait
         $documents = $documentsRepo->findByPersonPerson($person);
         /** @var UtilsController $utils */
         $utils = $this->get('app.symplifica_utils');
-        $docs = array('Cedula' => false, 'RUT' => false, 'Mandato' => false);
+        $docs = array('Cedula' => false, 'Rut' => false, 'Mandato' => false);
         foreach ($docs as $type => $status) {
             foreach ($documents as $key => $document) {
                 if ($type == $document->getDocumentTypeDocumentType()->getName()) {
@@ -200,9 +282,9 @@ trait EmployeeMethodsTrait
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $documentType = 'Cedula';
-                } elseif ($type == 'RUT') {
+                } elseif ($type == 'Rut') {
                     $msj = "Subir copia del RUT de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $documentType = 'RUT';
+                    $documentType = 'Rut';
                 } elseif ($type == 'Mandato'){
                   $documentType = 'Mandato';
                   $msj = "Subir mandato firmado de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());

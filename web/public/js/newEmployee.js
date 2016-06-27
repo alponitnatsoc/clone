@@ -845,6 +845,10 @@ function startEmployee() {
             //alert("Llenaste algunos campos incorrectamente");
             return;
         }
+        if(!$("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val()){
+            showModal(11);
+            return false;
+        }
         if (!validateSalary()) {
             return false;
         }
@@ -1178,11 +1182,8 @@ function addListeners() {
     $("#ex6").bootstrapSlider();
     $("#ex6").on("slide", function (slideEvt) {
         $("#register_employee_employeeHasEmployers_salaryD").val(slideEvt.value);
-        if($("#register_employee_employeeHasEmployers_salaryD").val()== 0){
-            $("#register_employee_employeeHasEmployers_salaryD").val(2591);
-        }
         calculator("d");
-        formatMoney($("#totalExpensesVal"));
+        formatMoney($("#totalExpensesValD"));
         formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
     });
     $("#ex7").bootstrapSlider();
@@ -1278,7 +1279,7 @@ function addListeners() {
         });
         $("#register_employee_employeeHasEmployers_weekWorkableDays").val(i);
         calculator();
-        formatMoney($("#totalExpensesVal"));
+        formatMoney($("#totalExpensesValD"));
     });
     $("#register_employee_employeeHasEmployers_existent").on("click", function () {
         $('#existentQuestion').hide();
@@ -1315,6 +1316,7 @@ function addListeners() {
 
     calculator();
     formatMoney($("#totalExpensesVal"));
+    formatMoney($("#totalExpensesValD"));
     formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
     formatMoney($("#register_employee_employeeHasEmployers_salary"));
 
@@ -1740,8 +1742,17 @@ function getPrice(valor) {
     return price;
 }
 function validateSalary() {
+
     var selectedVal = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").parent().text();
     if (selectedVal == " Trabajador por días") {
+        var i = 0;
+        $("[name='register_employee[employeeHasEmployers][weekDays][]']:checked").each(function () {
+            i++;
+        });
+        if(i==0){
+            showModal(10);
+            return false;
+        }
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
         if (!salarioMinimoDiario) {
             salarioMinimoDiario = 24653;
@@ -1754,9 +1765,11 @@ function validateSalary() {
                 $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $' + getPrice(salarioMinimoDiario) + ' pesos para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salarioMinimoContractual) + ').');
                 $("#salarioMinimo").modal('show');
                 $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
-                calculator();
+                calculator("d");
+                formatMoney($("#totalExpensesValD"));
+                formatMoney($(this));
             }else{
-                $("#ErrorSalarioMinimoModal").modal("show");
+                showModal(3);
             }
             return false;
         }
@@ -1766,7 +1779,7 @@ function validateSalary() {
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
             calculator();
-            formatMoney($("#totalExpensesVal"));
+            formatMoney($("#totalExpensesValD"));
             formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
             $("#ex6").bootstrapSlider("setValue", salarioMinimoDiario);
             return false;
@@ -1775,14 +1788,30 @@ function validateSalary() {
         salarioMinimo = $("#salarioMinimo").val();
         if (!salarioMinimo) {
             salarioMinimo = 689455;
-            salarioContractualMinimo =689455;
         }
         salarioMes = sueldo_plano;
+        if(!salarioMes){
+            if(salarioMes!= 0){
+                $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
+                $("#salarioMinimo").modal('show');
+                $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
+                calculator();
+                formatMoney($("#totalExpensesVal"));
+                formatMoney($("#register_employee_employeeHasEmployers_salary"));
+                formatMoney($(this));
+            }else{
+                showModal(3);
+            }
+            return false;
+        }
         if (salarioMes < (salarioMinimo/30)) {
-            $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioContractualMinimo));
+            $("#salarioMinimo").find('.modal-body').html('El salario mínimo legal es de $ ' + getPrice(salarioMinimo)+' pesos.');
             $("#salarioMinimo").modal('show');
             $("#register_employee_employeeHasEmployers_salary").val((salarioMinimo));
+            calculator();
+            formatMoney($("#totalExpensesVal"));
             formatMoney($("#register_employee_employeeHasEmployers_salary"));
+            formatMoney($(this));
             return false;
         }
     }
