@@ -124,22 +124,16 @@ class ContactType extends AbstractType
                     'required' => true
                 )
             )
-        ->add('message', 'textarea', array(
-            'label' => 'Mensaje',
-            'attr' => array(
-                'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
-            )
-        ))
-          ->add('message', 'textarea', array(
-              'attr' => array(
-                  'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
-              )
-          ))
-          
-          ->add('enviar', 'submit', array(
-              'label' => 'Enviar',
-              'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
-          ));
+            ->add('message', 'textarea', array(
+                    'label' => 'Mensaje',
+                'attr' => array(
+                    'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+                )
+            ))
+            ->add('enviar', 'submit', array(
+                  'label' => 'Enviar',
+                  'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
+              ));
 
     }
 
