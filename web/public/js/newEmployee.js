@@ -14,6 +14,7 @@ function startEmployee() {
     var loadedEndDateYear = $("#register_employee_employeeHasEmployers_endDate_year").val();
 
     $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
             rules: {
@@ -87,18 +88,22 @@ function startEmployee() {
                  "register_employee[name_on_card]": "Por favor ingresa el nombre del titular de la tarjeta"*/
             }
         });
+
         $("ul.phones input[name*='phoneNumber']").each(function () {
             $(this).rules("add", {
-                minlength: 7,
+                maxlength: 10,
                 required: true,
                 number: true,
+                pattern: /3[\d]{9}/,
                 messages: {
-                    minlength: "Por favor ingresa un número valido",
-                    required: "Por favor ingresa un número de telefono",
-                    number: "Por favor ingresa solo digitos"
+                    required: "Por favor ingresa un número de telefono celular",
+                    number: "Por favor ingresa solo digitos",
+                    pattern: "El número no tiene la estructura de un celular colombiano",
+                    maxlength: "No es un número de celular válido"
                 }
             });
         });
+        
         $("ul.benefits input[name*='amount']").each(function () {
             $(this).rules("add", {
                 required: true,
@@ -117,6 +122,7 @@ function startEmployee() {
                 }
             });
         });
+      });
     });
     $('.btnPrevious-form').click(function () {
         $('#formNav > .active').prev('li').find('a').trigger('click');
@@ -846,7 +852,7 @@ function startEmployee() {
             return;
         }
         if(!$("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val()){
-            showModal(11);
+            showModal(13);
             return false;
         }
         if (!validateSalary()) {
@@ -1750,7 +1756,7 @@ function validateSalary() {
             i++;
         });
         if(i==0){
-            showModal(10);
+            showModal(12);
             return false;
         }
         salarioMinimoDiario = $("#salarioMinimoDiario").val();
