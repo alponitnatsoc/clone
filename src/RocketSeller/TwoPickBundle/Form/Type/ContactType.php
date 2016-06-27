@@ -46,7 +46,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -73,7 +73,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -108,12 +108,34 @@ class ContactType extends AbstractType
         }
 
         $builder
+            ->add('subject', 'choice', array(
+                    'label'   =>'Con que necesitas ayuda?',
+                    'choices' => array(
+                        0 => 'Registro',
+                        1 => 'Nómina y aportes',
+                        2 => 'Calculadora salarial',
+                        3 => 'Consulta jurídica',
+                        4 => 'Planes y precios',
+                        5 => 'Otros'
+                    ),
+                    'multiple' => false,
+                    'expanded' => false,
+                    'mapped'   => false,
+                    'required' => true
+                )
+            )
+        ->add('message', 'textarea', array(
+            'label' => 'Mensaje',
+            'attr' => array(
+                'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+            )
+        ))
           ->add('message', 'textarea', array(
               'attr' => array(
                   'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
               )
           ))
-
+          
           ->add('enviar', 'submit', array(
               'label' => 'Enviar',
               'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
