@@ -23,7 +23,7 @@ class WsseProvider implements AuthenticationProviderInterface {
     public function authenticate(TokenInterface $token)
     {
         $user = $this->userProvider->loadUserByUsername($token->getUsername());
-        
+
         if(!$user){
             throw new AuthenticationException("Bad credentials... Did you forgot your username ?");
         }
@@ -58,7 +58,7 @@ class WsseProvider implements AuthenticationProviderInterface {
 
         // Validate that the nonce is *not* used in the last 5 minutes
         // if it has, this could be a replay attack
-        if (file_exists($this->cacheDir.'/'.$nonce) && file_get_contents($this->cacheDir.'/'.$nonce) + 300 > time()) {
+        if (file_exists($this->cacheDir.'/'.$nonce) && file_get_contents($this->cacheDir.'/'.$nonce) + 300 < time()) {
             throw new NonceExpiredException('Previously used nonce detected');
         }
         // If cache directory does not exist we create it
@@ -69,7 +69,7 @@ class WsseProvider implements AuthenticationProviderInterface {
 
         // Validate Secret
         $expected = base64_encode(sha1(base64_decode($nonce).$created.$secret, true));
-        
+
         if($digest !== $expected){
             throw new AuthenticationException("Bad credentials ! Digest is not as expected.");
         }
