@@ -137,7 +137,7 @@
             <div id="basicData" class="tab-pane fade in  {%   if tab==1 %} active {% endif %}">
                 <div class="formulario col-xs-12" style="border-bottom: none;">
                     <div class="col-sm-12 remember">
-                        <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        <span><i class="fa fa-info-circle"></i> Los datos del empleado serán guardados automaticamente</span>
                     </div>
 
                     <div class="col-sm-11 col-xs-12 blockUpData" style="border-bottom: none;">
@@ -291,13 +291,13 @@
             <div id="contactData" class="tab-pane fade in {%   if tab==2 %} active {% endif %}">
                 <div class="formulario col-xs-12">
                     <div class="col-sm-12 remember">
-                        <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
+                        <span><i class="fa fa-info-circle"></i> Los datos del empleado serán guardados automaticamente</span>
                     </div>
                     <div class="col-sm-11 col-xs-12 content-input blockUpData">
 
                         <div class="col-sm-12">
                             <div class="col-sm-6 label-group">
-                                <label>Dirección donde vive el empleado*</label>
+                                <label>Dirección donde vive el empleado</label>
                             </div>
                             <div class="col-sm-6 form-group input">
                                 {{ form_widget(form.person.mainAddress) }}
@@ -336,7 +336,13 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="col-sm-6 label-group">
-                                {{ form_label(form.personExtra.email)}}
+                                {{ form_label(form.personExtra.email, null,{
+                                    'label' : 'Email (Opcional)',
+                                    'label_attr': {
+                                        'style': "color:#5D5D5D",
+                                        'class': 'prueba',
+                                    },
+                                })}}
                             </div>
                             <div class="col-sm-6 form-group">
                                 {{ form_widget(form.personExtra.email) }}
@@ -1198,7 +1204,7 @@
                                         <div class="col-sm-10">
                                             <div class="col-sm-6 label-group">
 
-                                                <label class="control-label required" for="register_employee_employeeHasEmployers_position">Frecuencia de pago *</label>
+                                                <label class="control-label required" for="register_employee_employeeHasEmployers_position">Frecuencia de pago</label>
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 {{ form_widget(form.employeeHasEmployers.frequencyFrequency) }}

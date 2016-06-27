@@ -36,7 +36,7 @@ class EmployerRegistration extends AbstractType
                     $disabled = $key=="empresa";
                     return $disabled ? ['disabled' => 'disabled'] : [];
                 },
-                'label' => 'Soy*',
+                'label' => 'Soy',
                 'property_path' => 'employerType'))
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
@@ -46,7 +46,7 @@ class EmployerRegistration extends AbstractType
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
                 'years' => range(2015,1900),
-                'label' => 'Fecha de expedición de documento de identidad*',
+                'label' => 'Fecha de expedición de documento de identidad',
                 'required' => true,
                 'mapped' => false,
             ))
@@ -57,7 +57,7 @@ class EmployerRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'label' => '¿Tu dirección de contacto es la misma donde trabajarán tus empleados? *',
+                'label' => '¿Tu dirección de contacto es la misma donde trabajarán tus empleados?',
                 'data' => true,
                 'property_path' => 'sameWorkHouse',
                 'required' => true,
@@ -77,7 +77,7 @@ class EmployerRegistration extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'property_path' => 'entities',
-                'label'=>'Caja de compensación Familiar*',
+                'label'=>'Caja de compensación Familiar',
             ))
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',
@@ -85,7 +85,7 @@ class EmployerRegistration extends AbstractType
                 'choice_label' =>'name',
                 'placeholder'=>"",
                 'mapped' => false,
-                'label'=>'Administradora de Riesgos Labolares*',
+                'label'=>'Administradora de Riesgos Labolares',
                 'required' => true
             ))
             ->add('arlAC', 'text', array(
@@ -102,7 +102,7 @@ class EmployerRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?*',
+                'label'=>'¿Está afiliado?',
                 'required' => true
             ))
             ->add('save', 'submit', array(

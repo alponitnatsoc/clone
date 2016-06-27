@@ -32,7 +32,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('wealthAC', 'text', array(
                 'mapped' => false,
-                'label'=>'Entidad Promotora de Salud (EPS) *',
+                'label'=>'Entidad Promotora de Salud (EPS)',
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomW',
@@ -47,7 +47,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?*',
+                'label'=>'¿Está afiliado?',
                 'required' => true
             ))
 
@@ -56,11 +56,11 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->pensionEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Pension*'
+                'label'=>'Pension'
             ))
             ->add('pensionAC', 'text', array(
                 'mapped' => false,
-                'label'=>'Administradora de Fondo de Pensiones (AFP) *',
+                'label'=>'Administradora de Fondo de Pensiones (AFP)',
                 'required' => true,
                 'attr'=>array(
                     "class"=>'autocomP',
@@ -75,7 +75,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?*',
+                'label'=>'¿Está afiliado?',
                 'required' => true
             ))
 
@@ -87,7 +87,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Registrará beneficiarios?*',
+                'label'=>'¿Registrará beneficiarios?',
                 'required' => true
             ))
 
@@ -96,7 +96,7 @@ class EntitiesPick extends AbstractType
                 'choices' => $this->severancesEntities,
                 'choice_label' =>'name',
                 'mapped' => false,
-                'label'=>'Cesantias*'
+                'label'=>'Cesantias'
             ))
             ->add('severancesAC', 'text', array(
                 'mapped' => false,
@@ -115,7 +115,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?*',
+                'label'=>'¿Está afiliado?',
                 'required' => true
             ))
 

@@ -29,7 +29,7 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'civilStatus',
-                'label' => 'Estado civil*',
+                'label' => 'Estado civil',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -41,7 +41,7 @@ class PersonExtraData extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'gender',
-                'label' => 'Género*',
+                'label' => 'Género',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -50,15 +50,15 @@ class PersonExtraData extends AbstractType
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
                 'years' => range(2015,1900),
-                'label' => 'Fecha de expedición de documento de identidad*',
+                'label' => 'Fecha de expedición de documento de identidad',
                 'required' => true
             ))
             ->add('documentExpeditionPlace', 'text', array(
-                'label' => 'Lugar de expedición de documento de identidad*',
+                'label' => 'Lugar de expedición de documento de identidad',
                 'required' => true
             ))
             ->add('birthCountry', 'entity', array(
-                'label' => 'País de Nacimiento*',
+                'label' => 'País de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Country',
                 'property' => 'name',
@@ -69,7 +69,7 @@ class PersonExtraData extends AbstractType
                 'required' => true
             ))
             ->add('birthDepartment', 'entity', array(
-                'label' => 'Departamento de Nacimiento*',
+                'label' => 'Departamento de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:Department',
                 'property' => 'name',
@@ -80,7 +80,7 @@ class PersonExtraData extends AbstractType
                 'required' => true
             ))
             ->add('birthCity', 'entity', array(
-                'label' => 'Ciudad de Nacimiento*',
+                'label' => 'Ciudad de Nacimiento',
                 'translation_domain' => 'messages',
                 'class' => 'RocketSellerTwoPickBundle:City',
                 'property' => 'name',

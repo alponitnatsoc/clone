@@ -24,7 +24,7 @@ class CajaPick extends AbstractType
                 'choice_label' =>'name',
                 'placeholder'=>"",
                 'property_path' => 'entityEntity',
-                'label'=>'Caja de Compensación Familiar*',
+                'label'=>'Caja de Compensación Familiar',
                 'required' => true
             ))
             ->add('severancesAC', 'text', array(
@@ -41,7 +41,7 @@ class CajaPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'state',
-                'label'=>'¿Está afiliado?*',
+                'label'=>'¿Está afiliado?',
                 'required' => true,
                 'attr'=>array("class"=>'existsS')
             ));

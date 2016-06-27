@@ -22,7 +22,7 @@ class WorkPlaceRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank()
                 ),
-                "label"=>"Nombre asignado a este lugar de trabajo*",
+                "label"=>"Nombre asignado a este lugar de trabajo",
                 "attr" => array(
                     "placeholder"=>"(Casa, Finca, Apartamento)",
                 ),
@@ -32,7 +32,7 @@ class WorkPlaceRegistration extends AbstractType
                 'constraints' => array(
                     new NotBlank()
                 ),
-                "label"=>"Dirección*",
+                "label"=>"Dirección",
                 'required' => true
             ))
             ->add('id', 'hidden', array(
@@ -44,7 +44,7 @@ class WorkPlaceRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
-                "label" => "Departamento*",
+                "label" => "Departamento",
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -54,7 +54,7 @@ class WorkPlaceRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'city',
-                "label" => "Ciudad*",
+                "label" => "Ciudad",
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ));

@@ -21,7 +21,7 @@ class PhoneRegistration extends AbstractType
             ->add('phoneNumber', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Celular*',
+                ),'label' => 'Celular',
                 "attr" => array(
                     "data-toggle" => "tooltip",
                     "data-placement" => "right",

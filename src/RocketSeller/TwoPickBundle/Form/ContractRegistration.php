@@ -74,7 +74,7 @@ class ContractRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'label'=>'¿El empleado pertenece al SISBÉN?*',
+                'label'=>'¿El empleado pertenece al SISBÉN?',
                 'required' => true,
             ))
             ->add('transportAid', 'choice', array(
@@ -102,7 +102,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'¿Cuál será la modalidad de trabajo?*',
+                'label'=>'¿Cuál será la modalidad de trabajo?',
                 'required' => true
             ))
             ->add('position', 'entity', array(
@@ -111,7 +111,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'positionPosition',
-                'label'=>'Defina el cargo que asignará a su empleado:*',
+                'label'=>'Defina el cargo que asignará a su empleado:',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -154,7 +154,7 @@ class ContractRegistration extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'label' => '¿Cúal es la fecha de inicio del contrato?*:',
+                'label' => '¿Cúal es la fecha de inicio del contrato?:',
                 'years' => range(1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
@@ -205,7 +205,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'workplaceWorkplace',
-                'label'=>'¿Cuál será su lugar de trabajo?*',
+                'label'=>'¿Cuál será su lugar de trabajo?',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
