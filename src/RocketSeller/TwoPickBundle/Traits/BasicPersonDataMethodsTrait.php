@@ -1,6 +1,8 @@
 <?php
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use RocketSeller\TwoPickBundle\Controller\UtilsController;
+
 trait BasicPersonDataMethodsTrait
 {
     protected function fullName($id)
@@ -18,7 +20,10 @@ trait BasicPersonDataMethodsTrait
         if($lastName2 != ""){
           $fullName = $fullName . " " . $lastName2;
         }
+        /** @var UtilsController $utils */
+        $utils = $this->get('app.symplifica_utils');
 
-        return $fullName;
+
+        return $utils->mb_capitalize($fullName);
     }
 }

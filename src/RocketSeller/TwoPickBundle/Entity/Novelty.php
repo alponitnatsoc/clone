@@ -39,6 +39,14 @@ class Novelty
      */
     private $payrollPayroll;
     /**
+     * @var \RocketSeller\TwoPickBundle\Entity\Payroll
+     * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", inversedBy="sqlNovelties")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sql_payroll_id_sql_payroll", referencedColumnName="id_payroll")
+     * })
+     */
+    private $sqlPayrollPayroll;
+    /**
      * @var \RocketSeller\TwoPickBundle\Entity\NoveltyType
      * @ORM\ManyToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\NoveltyType")
      * @ORM\JoinColumns({
@@ -80,6 +88,11 @@ class Novelty
      * @ORM\Column(type="string", nullable=TRUE, name="amount", length=100)
      */
     private $amount;
+
+    /**
+     * @ORM\Column(type="float", nullable=TRUE, name="sql_value")
+     */
+    private $sqlValue;
 
     /**
      * @ORM\Column(type="string", nullable=TRUE, name="description", length=200)
@@ -353,5 +366,53 @@ class Novelty
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set sqlValue
+     *
+     * @param float $sqlValue
+     *
+     * @return Novelty
+     */
+    public function setSqlValue($sqlValue)
+    {
+        $this->sqlValue = $sqlValue;
+
+        return $this;
+    }
+
+    /**
+     * Get sqlValue
+     *
+     * @return float
+     */
+    public function getSqlValue()
+    {
+        return $this->sqlValue;
+    }
+
+    /**
+     * Set sqlPayrollPayroll
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Payroll $sqlPayrollPayroll
+     *
+     * @return Novelty
+     */
+    public function setSqlPayrollPayroll(\RocketSeller\TwoPickBundle\Entity\Payroll $sqlPayrollPayroll = null)
+    {
+        $this->sqlPayrollPayroll = $sqlPayrollPayroll;
+
+        return $this;
+    }
+
+    /**
+     * Get sqlPayrollPayroll
+     *
+     * @return \RocketSeller\TwoPickBundle\Entity\Payroll
+     */
+    public function getSqlPayrollPayroll()
+    {
+        return $this->sqlPayrollPayroll;
     }
 }

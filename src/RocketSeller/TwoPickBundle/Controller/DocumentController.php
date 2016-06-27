@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -621,60 +622,72 @@ use EmployerMethodsTrait;
                 );
                 break;
             case "comprobante":
-                //id de la orden de compra
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrders');
-                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders */
-                $purchaseOrders = $repository->find($id);
+                //id de la nomina
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+                /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
+                $payroll = $repository->find($id);
 
-
-
-                $client = $purchaseOrders->getIdUser()->getPersonPerson();
-                $clientInfo = array(
-                    'name' => $this->fullName($client->getIdPerson()),
-                    'docType' => $client->getDocumentType(),
-                    'docNumber' => $client->getDocument(),
-                    'address' => $client->getMainAddress(),
-                    'phone' => $client->getPhones()->getValues(),
-                    'city' => $client->getCity()->getName()
-                );
-
-                $descriptions = $purchaseOrders->getPurchaseOrderDescriptions();
-                $items=array();
-                $ivaTotal=0;
-                $productsPrice = 0;
-                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
-                foreach ($descriptions as $desc) {
-                    if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
-                        $items[] = array(
-                            'desc' => $desc->getDescription(),
-                            'product' => $desc->getProductProduct(),
-                            'pays' => $desc->getPayPay(),
-                            'status' => $desc->getPurchaseOrdersStatus(),
-                            'totalValue' => $desc->getValue(),
-                            'unitValue' => $desc->getProductProduct()->getPrice()
-                        );
-                        $productsPrice += $desc->getProductProduct()->getPrice();
-                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
-                    }
-
+                if($payroll->getPaid()==0){
+                    return $this->redirectToRoute("show_dashboard");
                 }
 
-                $purchaseInfo = array(
-                    'number' => $purchaseOrders->getIdPurchaseOrders(),
-                    'city' => 'bogotá',
-                    'endDate' => null,
-                    'center' => null,
-                    'total' => $ivaTotal+$productsPrice
+                $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                $contract=$payroll->getContractContract();
+                $pods=$payroll->getPurchaseOrdersDescription();
+                $sqlNovelties=$payroll->getSqlNovelties();
+                if($pods->count()>0){
+                    /** @var PurchaseOrdersDescription $pod */
+                    $pod=$pods->get(0);
+                    $purchaseOrder=$pod->getPurchaseOrders();
+                    if($purchaseOrder->getPayMethodId()==null)
+                        $payMM="Efectivo";
+                    else
+                        $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+                }
+                else
+                    $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+
+                $clientInfo = array(
+                    'name' => $this->fullName($employer->getIdPerson()),
+                );
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument(),
+                    'position' => $contract->getPositionPosition()->getName(),
+                    'payMethod' => $payMM,
+                    'salary' => $contract->getSalary(),
+                    'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'period'=>$payroll->getPeriod(),
+                    'month'=>$payroll->getMonth()
+                );
+                $devengado= array();
+                $deducido= array();
+                $totalDevengado=$totalDeducido=$total=0;
+                /** @var Novelty $sqlNovelty */
+                foreach ($sqlNovelties as $sqlNovelty) {
+                    if($sqlNovelty->getNoveltyTypeNoveltyType()->getNaturaleza()=="DEV"){
+                        $devengado[]=$sqlNovelty;
+                        $totalDevengado+=$sqlNovelty->getSqlValue();
+                    }else{
+                        $deducido[]=$sqlNovelty;
+                        $totalDeducido+=$sqlNovelty->getSqlValue();
+
+                    }
+                }
+                $discriminatedInfo= array(
+                    'devengado'=>$devengado,
+                    'deducido'=>$deducido,
+                    'totalDevengado'=>$totalDevengado,
+                    'totalDeducido'=>$totalDeducido,
+                    'total'=>$totalDevengado-$totalDeducido
                 );
 
-                $purchaseInfo['iva'] = $ivaTotal;
-                $purchaseInfo['subTotal'] = $productsPrice;
-
                 $data = array(
-                    'invoiceNumber' => $purchaseOrders->getInvoiceNumber(),
+                    'employeeInfo' => $employeeInfo,
                     'client' => $clientInfo,
-                    'purchaseOrder' => $purchaseInfo,
-                    'items' => $items
+                    'discriminatedInfo' => $discriminatedInfo,
                 );
                 break;
             default:

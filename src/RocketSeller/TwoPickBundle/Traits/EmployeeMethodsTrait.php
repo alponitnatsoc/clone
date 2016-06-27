@@ -121,15 +121,23 @@ trait EmployeeMethodsTrait
                 $msj = "";
                 $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
                 $dAction=null;
+                $nAction="Subir";
                 $dUrl=null;
                 if ($type == 'Cedula') {
                     $msj = "Subir copia del documento de identidad de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $documentType = 'Cedula';
                 } elseif ($type == 'Contrato') {
                     $documentType = 'Contrato';
-                    $dAction="Bajar";
-                    $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
-                    $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                    if($employerHasEmployee->getLegalFF()==1){
+                        $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    }else{
+                        $msj = "Contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                        $nAction="Ver";
+                    }
+//                    $documentType = 'Contrato';
+//                    $dAction="Bajar";
+//                    $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $documentType = 'Carta autorización Symplifica';
                     $msj = "Subir copia de la Carta autorización Symplifica de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
@@ -138,8 +146,11 @@ trait EmployeeMethodsTrait
                 }
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                if($nAction=="Ver"){
+                    $url = $this->generateUrl("view_document_contract_state");
+                }
                 //$url = $this->generateUrl("api_public_post_doc_from");
-                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,"Subir",$dAction,$dUrl);
+                $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,$nAction,$dAction,$dUrl);
             }
         }
     }

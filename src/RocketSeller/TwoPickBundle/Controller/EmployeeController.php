@@ -1117,5 +1117,9 @@ filename = "certificadoLaboral.pdf"'
 
 
     }
+    public function contractConditionAction()
+    {
+        return $this->render('RocketSellerTwoPickBundle:Employee:contractCondition.html.twig');
+    }
 
 }
