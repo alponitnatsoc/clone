@@ -103,7 +103,7 @@ function startEmployee() {
                 }
             });
         });
-        
+
         $("ul.benefits input[name*='amount']").each(function () {
             $(this).rules("add", {
                 required: true,
@@ -660,7 +660,7 @@ function startEmployee() {
             type: 'POST',
             data: {
                 idContract: $("input[name='register_employee[idContract]']").val(),
-                beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
+                //beneficiaries: $("input[name='register_employee[entities][beneficiaries]']:checked").val(),
                 pension: $("#register_employee_entities_pension").val(),
                 pensionExists: pensionExists,
                 wealth:  $("#register_employee_entities_wealth").val(),

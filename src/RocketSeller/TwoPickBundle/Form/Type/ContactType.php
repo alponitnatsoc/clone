@@ -44,7 +44,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -71,7 +71,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -79,7 +79,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu nombre'
+                            'placeholder' => 'Digita tu celular'
                         )
                     )
                 );
@@ -102,6 +102,7 @@ class ContactType extends AbstractType
                 )
             )
         ->add('message', 'textarea', array(
+            'label' => 'Mensaje',
             'attr' => array(
                 'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
             )
