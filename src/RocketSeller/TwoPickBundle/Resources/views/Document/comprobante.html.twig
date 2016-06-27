@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Documento sin título</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,800,600italic,700" rel="stylesheet" type="text/css">
+
+    <style type="text/css">
+        * {margin: 0 auto;padding: 0}
+        ​,
+        #contenedor-comp {
+            width: 612px;
+            height: auto;
+        }
+        ​,
+        #tittle-comp {
+            color: #5D5D5D;
+            text-align: center;
+            margin-top: 45px;
+        }
+        span,th {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 18px
+        }
+        #tittle-comp h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            text-transform: uppercase;
+            line-height: 30px
+        }
+        ​,
+        #data-empleado {
+            border-top: 1px #CCC solid;
+            margin: 20px 0 0 0;
+            padding: 20px 0 0 0;
+            color: #5D5D5D;
+        }
+        ​,
+        .celdas-copm {
+            border: 1px #CCC solid;
+            height: auto;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .info-celdas {
+            width: 45%;
+            float: left;
+            padding: 10px 15px;
+        }
+        ​,
+        p {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+        ​,
+        th {
+            color: #5D5D5D
+        }
+        ​,
+        #descript-comp {
+            margin: 35px 0 0 0;
+            clear: both
+        }
+        ​,
+        .border-comp td {
+            border: 1px solid #e6e6e6;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            padding: 5px 15px;
+            color: #828282;
+        }
+        ​,
+        .bold {
+            font-weight: 700 !important;
+            color: #5D5D5D;
+        }
+        ​,
+        .sub {
+            background: #e4e4e4;
+        }
+        ​,
+        .total {
+            background: #c1c1c1;
+        }
+        ​,
+        .border-comp th {
+            background: #e4e4e4;;
+            padding: 5px 0;
+        }
+        ​,
+        #firma-empleado {
+            width: 300px;
+            margin: 150px 0 0 0;
+            border-top: 1px #CCC solid;
+            padding: 15px 0 0 0;
+            color: #5D5D5D
+        }
+    </style>
+
+</head>
+<body>
+<div id="contenedor-comp">
+    <div id="tittle-comp">
+        <h2>Comprobante de pago</h2>
+        <span>Periodo {{ data.employeeInfo.month }} {{ data.employeeInfo.period }}</span>
+    </div>
+    <div id="data-empleado">
+        <p>
+            <span>Empleador</span><br>
+            {{ data.client.name }}
+        </p>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Empleado</span><br>
+                    {{ data.employeeInfo.name }}
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Cédula</span><br>
+                    {{ data.employeeInfo.docNumber }}
+                </p>
+            </div>
+        </div>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Cargo</span><br>
+                    {{ data.employeeInfo.position }}
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Ciudad</span><br>
+                    {{ data.employeeInfo.workCity }}
+                </p>
+            </div>
+        </div>
+        <div class="celdas-copm">
+            <div class="info-celdas">
+                <p>
+                    <span>Medio de pago</span><br>
+                    {{ data.employeeInfo.payMethod }}
+                </p>
+            </div>
+            <div class="info-celdas">
+                <p>
+                    <span>Salario</span><br>
+                    {{ data.employeeInfo.salary }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="descript-comp">
+        <table class="border-comp" width="612px" border="0" cellspacing="0">
+            <tr align="center" valign="middle">
+                <th>Item</th>
+                <th>Descripción</th>
+                <th>Devengado</th>
+                <th>Deducido</th>
+            </tr>
+
+            {% set counter=0 %}
+            {% for desc in data.discriminatedInfo.devengado %}
+                <tr align="center" valign="middle">
+                    <td>{{ counter }}</td>
+                    <td>{{ desc.name }}</td>
+                    <td>${{ desc.sqlValue }}</td>
+                    <td>$0</td>
+                </tr>
+                {% set counter=counter+1 %}
+            {% endfor %}
+            {% for desc in data.discriminatedInfo.deducido %}
+                <tr align="center" valign="middle">
+                    <td>{{ counter }}</td>
+                    <td>{{ desc.name }}</td>
+                    <td>$0</td>
+                    <td>${{ desc.sqlValue }}</td>
+                </tr>
+                {% set counter=counter+1 %}
+            {% endfor %}
+
+            <tr valign="middle" class="sub">
+                <td class="bold" colspan="2" align="left">Total</td>
+                <td class="bold" align="center">${{ data.discriminatedInfo.totalDevengado }}</td>
+                <td class="bold" align="center">${{ data.discriminatedInfo.totalDeducido }}</td>
+            </tr>
+            <tr valign="middle" class="total">
+                <td class="bold" colspan="3" align="left">Neto a pagar</td>
+                <td class="bold" align="center">{{ data.discriminatedInfo.total }}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="firma-empleado">
+        <p>
+            <span>Firma empleado</span><br>
+            {{ data.employeeInfo.name }}<br>
+            {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -168,6 +168,7 @@
                                 <a class="button btn btn-symplifica" href="{{ path("subscription_choices") }}">Activar suscripción</a>
                             </div>
                         {% else %}
+                          {% if eHEToSend.partialTime + eHEToSend.fullTime > 0 %}
                             <div class="row panel panel-default table-responsive">
                                 <!-- Default panel contents -->
                                 <div class="panel-heading center">Fecha de próxima facturación</div>
@@ -181,14 +182,26 @@
                                             </td>
                                             <td style="width: 40%;">
                                                 <ul style="list-style:none; margin: 10px; text-align: justify;">
-                                                    <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
-                                                    <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
+                                                  {% if eHEToSend.partialTime > 0 %}
+                                                    {% if eHEToSend.partialTime == 1 %}
+                                                      <li>{{ eHEToSend.partialTime }} Empleado de tiempo parcial</li>
+                                                    {% else %}
+                                                      <li>{{ eHEToSend.partialTime }} Empleados de tiempo parcial</li>
+                                                    {% endif %}
+                                                  {% else %}
+                                                    {% if eHEToSend.fullTime == 1 %}
+                                                      <li>{{ eHEToSend.fullTime }} Empleado de tiempo completo</li>
+                                                    {% else %}
+                                                      <li>{{ eHEToSend.fullTime }} Empleados de tiempo completo</li>
+                                                    {% endif %}
+                                                  {% endif %}
                                                 </ul>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                          {% endif %}
                         {% endif %}
                     </div>
                 </div>

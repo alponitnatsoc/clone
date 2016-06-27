@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -588,16 +589,28 @@ use EmployerMethodsTrait;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
                     if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
+
+                        $unitValue = 0;
+                        if( $desc->getProductProduct()->getSimpleName()=="CT" ){
+                          $ivaTotal+= round($desc->getValue()-($desc->getValue() / 1.16),0);
+                          $unitValue = round(($desc->getValue() / 1.16),0);
+                          $productsPrice += round(($desc->getValue() / 1.16));
+                        }
+                        else {
+                          $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+                          $unitValue = $desc->getProductProduct()->getPrice();
+                          $productsPrice += $desc->getProductProduct()->getPrice();
+                        }
+
                         $items[] = array(
                             'desc' => $desc->getDescription(),
                             'product' => $desc->getProductProduct(),
                             'pays' => $desc->getPayPay(),
                             'status' => $desc->getPurchaseOrdersStatus(),
                             'totalValue' => $desc->getValue(),
-                            'unitValue' => $desc->getProductProduct()->getPrice()
+                            'unitValue' => $unitValue
                         );
-                        $productsPrice += $desc->getProductProduct()->getPrice();
-                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+
                     }
 
                 }
@@ -619,6 +632,76 @@ use EmployerMethodsTrait;
                     'purchaseOrder' => $purchaseInfo,
                     'items' => $items
                 );
+                break;
+            case "comprobante":
+                //id de la nomina
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+                /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
+                $payroll = $repository->find($id);
+
+                if($payroll->getPaid()==0){
+                    return $this->redirectToRoute("show_dashboard");
+                }
+
+                $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                $contract=$payroll->getContractContract();
+                $pods=$payroll->getPurchaseOrdersDescription();
+                $sqlNovelties=$payroll->getSqlNovelties();
+                if($pods->count()>0){
+                    /** @var PurchaseOrdersDescription $pod */
+                    $pod=$pods->get(0);
+                    $purchaseOrder=$pod->getPurchaseOrders();
+                    if($purchaseOrder->getPayMethodId()==null)
+                        $payMM="Efectivo";
+                    else
+                        $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+                }
+                else
+                    $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+
+                $clientInfo = array(
+                    'name' => $this->fullName($employer->getIdPerson()),
+                );
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument(),
+                    'position' => $contract->getPositionPosition()->getName(),
+                    'payMethod' => $payMM,
+                    'salary' => $contract->getSalary(),
+                    'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'period'=>$payroll->getPeriod(),
+                    'month'=>$payroll->getMonth()
+                );
+                $devengado= array();
+                $deducido= array();
+                $totalDevengado=$totalDeducido=$total=0;
+                /** @var Novelty $sqlNovelty */
+                foreach ($sqlNovelties as $sqlNovelty) {
+                    if($sqlNovelty->getNoveltyTypeNoveltyType()->getNaturaleza()=="DEV"){
+                        $devengado[]=$sqlNovelty;
+                        $totalDevengado+=$sqlNovelty->getSqlValue();
+                    }else{
+                        $deducido[]=$sqlNovelty;
+                        $totalDeducido+=$sqlNovelty->getSqlValue();
+
+                    }
+                }
+                $discriminatedInfo= array(
+                    'devengado'=>$devengado,
+                    'deducido'=>$deducido,
+                    'totalDevengado'=>$totalDevengado,
+                    'totalDeducido'=>$totalDeducido,
+                    'total'=>$totalDevengado-$totalDeducido
+                );
+
+                $data = array(
+                    'employeeInfo' => $employeeInfo,
+                    'client' => $clientInfo,
+                    'discriminatedInfo' => $discriminatedInfo,
+                );
+                break;
             default:
                 break;
         };

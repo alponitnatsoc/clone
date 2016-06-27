@@ -32,12 +32,11 @@
             {# 			<h4 style="font-weight: lighter;">#}
             {# 				Para brindarte la mejor asesoría en el manejo de tus empleados necesitamos hacerte unas preguntas#}
             {# 			</h4>#}
-            <h4 style="font-size: 22px;">
-                <i>Cuéntanos, cómo es la situación actual con tu empleado</i>
-            </h4>
+            <h4 style="font-size: 22px;font-size: 22px;font-weight: 800;color: #1fcecb;">Antes de empezar</h4>
+            <p style="    color: #8a8a8a;font-size: 17px;font-weight: 100;">Para asesorarte mejor, queremos conocer la situación actual con tu empleado</p>
         </div>
     </div>
-    <br/><br/>
+    <br/>
     <div class="col-sm-12">
         <div class="col-sm-10 col-sm-offset-1 employeeResponsabilities">
             <form action="">
@@ -65,39 +64,36 @@
                     {# 			    </div></li>#}
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Tienen un contrato firmado.</label>
+                            <label><input id="op1" name="legal-status" type="checkbox" value=""/>El empleador es una persona natural.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Está afiliado por ti a Seguridad Social (Salud, pensión, Riesgos laborales, caja de compensación).</label>
+                            <label><input id="op2" name="legal-status" type="checkbox" value=""/>El empleado está afiliado a las entidades de seguridad social.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Se encuentra afiliado desde el inicio de la relación laboral.</label>
+                            <label><input id="op3" name="legal-status" type="checkbox" value=""/>Mi empleado trabaja por días y lo tenemos afiliado a seguridad
+                              social con el salario mínimo entre varios empleadores.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Recibe por lo menos el Salario mínimo legal vigente (Diario: $ 22.981,23 / Mensual: $689.455).</label>
+                            <label><input id="op4" name="legal-status" type="checkbox" value=""/>Yo estoy registrado como su empleador en las entidades de seguridad social.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Recibe días de vacaciones pagos.</label>
+                            <label><input id="op5" name="legal-status" type="checkbox" value=""/>Estoy al día en el pago de la seguridad social de mi empleado.</label>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Realiza aportes a un fondo de cesantías.</label>
+                            <label><input id="op6" name="legal-status" type="checkbox" value=""/>Tengo un contrato firmado con mi empleado.</label>
                         </div>
                     </li>
-                    <li class="list-group-item">
-                        <div class="checkbox">
-                            <label><input name="legal-status" type="checkbox" value=""/>Le pagas los intereses de cesantías anualmente.</label>
-                        </div>
-                    </li>
+
                     <!--
 
                 <li class="list-group-item"><div class="checkbox">
@@ -109,15 +105,111 @@
                 </div>-->
                 </ul>
             </form>
+            <div class="botones-options">
+              <div class="btn btn-orange" onclick="evaluateOptions()">Evaluar</div>
+            </div>
+            <div id="cont-opciones-casos">
+              <!--caso 1 -->
+                <div id="caso1" class="casos">
+                    <div class="casohead">
+                        <strong>Te recomendamos continuar con la relación laboral que tienes vigente</strong>
+                        <p>Symplifica asume que has cumplido con todas tus responsabilidades en el pasado y no tienes pendientes con tu empleado
+                        (pago de cesantías, vacaciones, dotación, etc.)</p>
+                    </div>
+
+                    <div class="casotittlehead">
+                        <span>De hoy en adelante te ayudaremos a cumplir con las obligaciones de ley con tu empleado</span>
+                        <p>Para empezar a administrar a tu empleado necesitamos que tengas listos los siguientes datos:</p>
+                    </div>
+                    <div class="optionsul">
+                        <p>Fecha de inicio del contrato (verbal o escrito) vigente:</p><br>
+                        <ul>
+                            <li>Symplifica tomará esta fecha como la fecha de inicio de la relación laboral.</li>
+                            <li>Usaremos esta fecha para hacer cálculos de indemnizaciones en caso de una terminación del contrato.</li>
+                            <li>Esta fecha no debería ser anterior a la fecha en la que se afilió al empleado en la seguridad social.</li>
+                        </ul>
+                        <p>Días de vacaciones pendientes: </p><br>
+                        <ul>
+                            <li>Esto es cuántos días de vacaciones le debes a la fecha a tu empleado o cuántos días de vacaciones te
+                              debe él a tí por haberse tomado más días de los debidos.</li>
+                            <li>Al dato que nos proveas le empezaremos a sumar los días que acumule de ahora en adelante.</li>
+                        </ul>
+                    </div>
+                    <p>En el pasado pudiste haber omitido responsabilidades importantes con tu empleado, las cuáles te recomendamos resolver.
+                      Al ser usuario de Symplifica tendrás acceso a unas tarifas preferenciales con nuestros aliados ALVAREZ LIEVANO LASERNA
+                      para recibir consejo jurídico y evaluar la forma de solucionar contingencias laborales.</p><br><br>
+                       <i>*Al dar continuar entiendo que Symplifica no es responsable por las obligaciones que pudiera haber omitido con mi
+                         empleado en el pasado y que estoy continuando bajo mi responsabilidad.<br><br>
+                        No estoy seguro de entender mi situación actual y las implicaciones y quisiera consultar un abogado con una tarifa preferencial.</i>
+                         <br><br>
+                    <div class="botones-options">
+                      <div id="continuarContratoNext" class="btn btn-orange">Aceptar y continuar</div>
+                      <div id="continuarContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
+                    </div>
+                </div>
+                <!--caso 2 -->
+                  <div id="caso2" class="casos">
+                      <div class="casohead">
+                          <strong>De acuerdo con tu situación</strong>
+                          <p>Te recomendamos formalizar tu relación laboral y firmar un nuevo contrato con tu empleado.<br><br>
+                            Symplifica te ayuda a generar este contrato una vez te hayas registrado y hayamos validado tu información para afiliarte<br>
+  Symplifica te afiliará a ti y a tu empleado ante las entidades de seguridad social</p>
+                      </div>
+
+                      <div class="casotittlehead">
+                          <span>Es importante que tengas presente la siguiente información:</span>
+                      </div>
+                      <div class="optionsul">
+                          <ul>
+                              <li>Firmar un contrato nuevo no te exime de las responsabilidades adquiridas como empleadoren el pasado, es sólo una forma
+                                de marcar un nuevo inicio en la relación laboral.</li>
+                              <li>Tu empleado debe estar de acuerdo con el nuevo contrato y firmarlo.</li>
+                              <li>Symplifica asume que este empleado es nuevo y que no existen obligaciones pasadas como empleador.</li>
+                              <li>En caso de requerir calcular indeminizaciones por terminación del contrato sin justa causa, Symplifica usará la fecha
+                                de inicio del contrato reportada para calcular la antigüedad.</li>
+                              <li>Las obligaciones y responsabilidades omitidas en el pasado (e.g. pago de cesantías, vacaciones, dotación, aportes a
+                                seguridad social) deben ser cerradas para no dejar pendientes con tu empleado. Al ser usuario de Symplifica tendrás acceso
+                                a unas tarifas preferenciales con nuestros aliados ALVAREZ LIEVANO LASERNA para recibir consejo jurídico y evaluar la
+                                forma de solucionar contingencias laborales.</li>
+                          </ul>
+                      </div>
+
+                      <i>*Al dar continuar entiendo que Symplifica no es responsable por las obligaciones que pudiera haber omitido con mi empleado en
+                        el pasado y que estoy continuando bajo mi responsabilidad entendiendo las implicaciones.<br><br>
+                       No estoy seguro de entender mi situación actual y las implicaciones y quisiera consultar un abogado con una tarifa preferencial.</i>
+                       <br><br>
+                      <div class="botones-options">
+                          <div id="nuevoContratoNext" class="btn btn-orange">Aceptar y continuar</div>
+                          <div id="nuevoContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
+                      </div>
+                  </div>
+                  <!--caso 3 -->
+                    <div id="caso3" class="casos">
+                        <div class="casohead">
+                            <strong>De acuerdo con tu situación</strong>
+                            <p>Symplifica te recomienda tomar una sesión de consultoría legal con un abogado experto.</p>
+                        </div>
+
+                        <div class="casoabogado">
+                          <p>Tu caso es especial y te recomendamos que <strong>antes de empezar a usar Symplifica tomes una sesión de
+                            consultoría legal con un abogado experto para entender mejor tu situación.</strong> Una vez lo soluciones te
+                            ayudaremos a empezar a usar Symplifica.</p>
+                        </div>
+                        <div class="botones-options">
+                            <div id="abogadoModal" class="btn btn-orange">Aceptar y continuar</div>
+                            <div id="salirAbogadoModal" class="btn btn-orange">Salir</div>
+                        </div>
+                    </div>
+            </div>
             <br/>
-            <div class="col-sm-12">
+            <!--<div class="col-sm-12">
                 <div class="col-sm-6" style="text-align: right;">
                     <a class="btn btn-grey  notAjax" href="/welcome">Volver atrás</a>
                 </div>
                 <div class="col-sm-6">
                     <span class="btn btn-orange notAjax" href="" onclick="done()">Validar situación actual</span>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="col-sm-12">
@@ -130,32 +222,13 @@
             <span style="color:#666; font-weight:300; display:none; font-size: 14px;" id="textPorque">Si una, varias, o todas las responsabilidades que tiene con su empleado son evadidas requiere un manejo legal para subsanarlo.</span>
         </div>
     </div>
-{% endblock %}
+{% endblock fos_user_content %}
+
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        var flag = true;
-        function validate() {
-            var legal = document.forms[0];
-            var i;
-            for (i = 0; i < legal.length; i++) {
-                if (!legal[i].checked) {
-                    flag = false;
-                }
-            }
-        }
-        function done() {
-            validate();
-            if (flag) {
-                document.location.href = '{{ path('legal_acceptance',{state:'correct'}) }}';
-                clearForm();
-            } else {
-                document.location.href = '{{ path('legal_acceptance',{state:'incorrect'}) }}';
-            }
-        }
-        function clearForm() {
-            var legal = document.forms[0];
-            legal.reset();
-        }
-    </script>
+	{{ parent() }}
+	<script>
+  	$.getScript("{{ asset('/public/js/legal_status.js') }}").done(function () {
+  			prepareLegal();
+  	});
+	</script>
 {% endblock %}

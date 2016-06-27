@@ -29,11 +29,8 @@ a {text-decoration: none}
     margin: 0 auto;}
 
 #cont-succesdocs {
-	width: 90%;
-  margin: 0 auto;
-  height: auto;
-  overflow: hidden;
-  padding: 80px 0 0 0;}
+	width: 800px;
+	margin: 0 auto}
 
 #title-siccesdocs {
 	text-align: center;
@@ -108,13 +105,7 @@ a {text-decoration: none}
     height: auto;
     overflow: hidden;}
 
-  .infogra {
-    text-align: center;
-    border-top: 1px solid #CCC;
-    padding: 25px 0 0 0;
-  }
-
-	.pagospendientesdash {
+.pagospendientesdash {
 	background: #fd5c5c;
 	border-radius: 5px;
 	padding: 10px 0;

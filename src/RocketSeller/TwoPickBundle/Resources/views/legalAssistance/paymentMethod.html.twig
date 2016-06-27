@@ -92,14 +92,13 @@
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
 
             <br/><br/>
-            <h3 class="borderh3">
-                <i class="i"><strong>No corras riesgos</strong><br>nuestro consultorio jurídico está listo para orientarte</i>
+            <h3>
+                <i class="i"><strong>¡Bienvenido a nuestro consultorio juridico!</strong></i>
             </h3>
             <br/>
             <h4 style="font-weight: lighter;color: #989898;">
-                Expón tu caso y nuestros abogados podrán ofrecerte un diagnóstico que te permita saber cómo abordarlo*
+              Consulta tu caso con nuestros aliados <strong>ALVAREZ LIEVANO LASERNA ABOGADOS</strong> y recibe un concepto sobre cómo solucionar tu caso por una tarifa preferencial de
             </h4>
-            <br/>
         </div>
     </div>
     <div class="row">
@@ -111,22 +110,66 @@
     <div class="row condicioneslegalpay">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
             <h5>
-                <i>Una vez recibido el pago, el consultorio se pondrá en contacto contigo en las siguientes </i><strong>24
-                    horas hábiles</strong>
+                <strong>Este servicio incluye</strong>
             </h5>
         </div>
         <br>
-        <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
-            <small style="font-weight: lighter;"><i>
-                    * De acuerdo a tu caso el abogado estimará el valor de sus honorarios si tu decides que él se
-                    haga cargo lo cual también incluye completar tu registro en Symplifica</i>
-            </small>
+        <div class="col-sm-offset-2 incluye">
+            <ul>
+                <li>Una sesión de una hora con un representante de ALVAREZ LIEVANO LASERNA para exponerle tu caso.
+                  Esta consulta puede ser telefónica o presencial (sólo en Bogotá).</li>
+                <li>Unos días después recibirás un concepto con una recomendación sobre los pasos que debes seguir para solucionar tu casos.</li>
+                <li>Dependiendo de la complejidad del caso ALVARES LIEVANO LASERNA te presentará una propuesta para acompañarte en la solución
+                   del caso después de la sesión de consulta.</li>
+                <li>El registro asistido a Symplifica con la ayuda de uno de nuestros asesores de servicio, una vez tu caso haya sido resuelto</li>
+            </ul>
             <br/>
+        </div>
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+            <h5>
+                <strong>Este servicio no incluye</strong>
+            </h5>
+        </div>
+        <br>
+        <div class="col-sm-offset-2 incluye">
+            <ul>
+                <li>La resolución total del caso durante la sesión ya que cada caso es diferente y su solución depende de la complejidad del mismo.</li>
+                <li>Acompañamiento a juzgados, negociaciones o atención de consultas posteriores a esta consulta inicial.</li>
+            </ul>
+            <br/>
+        </div>
+        <div class="botones-options">
+            <div id="section2" class="btn btn-orange">Continuar</div>
+            <a href="#"><div class="btn btn-grey">Salir</div></a>
+        </div>
+    </div>
+    <div class="row condicioneslegalpay" id="sectionContent2">
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12 text-center">
+            <h5 style="margin-bottom: 20px;"><strong>Para hacer más eficiente la consulta te pediremos al final del proceso que nos envíes unos documentos (si los tienes) y
+              que nos cuentes en el siguiente espacio más detalle sobre tu caso, incluye por favor:</strong></h5>
+        </div>
+        <div class="col-sm-offset-2 incluye">
+            <ul>
+                <li>Fecha en que tu empleado empezó a trabajar contigo.</li>
+                <li>Si tu empleado está afiliado a seguridad social y si lo hiciste desde el inicio de la relación laboral.</li>
+                <li>Si has consignado a un fondo las cesantías cada año.</li>
+                <li>Si has entregado a tu empleado los intereses sobre las cesantías cada año.</li>
+                <li>Si estas al día en el pago de aportes a seguridad social.</li>
+                <li>Tu preocupación o consulta principal.</li>
+            </ul>
+            <br/>
+        </div>
+        <div>
+            <!--aqui va el formulario de los datos que se requieren y el campo paa que el man conteste los requerimientos-->
+        </div>
+        <div class="botones-options">
+            <div id="section3" class="btn btn-orange">Continuar</div>
+            <div id="section3up" class="btn btn-grey">Atrás</div>
         </div>
     </div>
     <br/>
     <hr style="width: 75%;"/>
-    <div class="col-sm-8 col-sm-offset-2" style="text-align:center;">
+    <div class="col-sm-8 col-sm-offset-2" style="text-align:center;" id="sectionContent3">
         <h3 style="font-weight: 700;color: #00858c">
 Pago de consulta jurídicia inicial</h3>
 <h4 style="font-weight: lighter;"><i>Valor de la consulta jurídica por una (1) hora</i></h4>
@@ -159,7 +202,7 @@ Pago de consulta jurídicia inicial</h3>
 
 
     </div>
-    <div id="" class="containerForm row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
+    <div id="sectionContent4" class="containerForm row-fluid clearfix col-sm-8 col-sm-offset-2" style="padding-bottom: 30px;">
 
         <div class="">
             <div class="">
@@ -262,7 +305,7 @@ Pago de consulta jurídicia inicial</h3>
                     </div>
                     <div class="row">
                         <div class="col-sm-4 col-sm-offset-2 col-xs-12 multipleOptions">
-                            <a class="btn btn-grey notAjax" href="{{ path('legal_acceptance') }}">Volver atrás</a>
+                            <a class="btn btn-grey notAjax" href="{{ path('legal') }}">Volver atrás</a>
                         </div>
                         <div class="col-sm-4 col-xs-12 multipleOptions multipleRight" style="">
                             <button type="submit" class="submit-debit btn btn-symplifica btn" disabled="true">Pagar consulta</button>
@@ -514,6 +557,20 @@ Pago de consulta jurídicia inicial</h3>
             });
 
 
+        });
+        $(document).ready(function(){
+            $("#section2").click(function(){
+                $("#sectionContent2").slideDown("slow");
+            });
+
+            $("#section3").click(function(){
+                $("#sectionContent3,#sectionContent4").slideDown("slow");
+            });
+
+
+            $("#section3up").click(function(){
+                $("#sectionContent3,#sectionContent4,#sectionContent2").slideUp("slow");
+            });
         });
     </script>
 {% endblock %}

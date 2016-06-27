@@ -465,6 +465,9 @@ choose_registration:
 welcome_post_register:
     path: /welcome/register
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:welcomePostRegister }
+view_document_contract_state:
+    path: /contract/condition
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:contractCondition }
 
 
 back_employer_menu:

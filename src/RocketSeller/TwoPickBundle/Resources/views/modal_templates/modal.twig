@@ -1,31 +1,46 @@
 {% block modalMessage %}
     <div class="modal fade" id="{{ modal_id| default("modal_template") }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 6px;z-index: 100; color: #fff;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" {{ style_header | default('style="margin-top: 0;padding: 0px 0px"') }}>
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px">
+            <div class="modal-content" {{  modal_style | default('') }}>
+                {% if primary_modal_header is defined and primary_modal_header !="" %}
+                    {{ primary_modal_header }}
+                {% endif %}
+                <div class="modal-body" style="padding: 0;line-height: 1;"}} >
+                    {% if primary_modal_body is defined %}
+                        {{ primary_modal_body }}
+                    {% else %}
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 6px;z-index: 100; color: #fff;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" {{ modal_header_style | default('style="margin-top: 0;padding: 0px 0px"') }} >
+                            <div class="col-sm-12 col-xs-12 up-Intro">
                                 {{ modal_header | default("El header esta vacio") }}
-                        </div>
-                    </div>
-                    <div class="row-fluid clearfix">
-                        <div class="row">
-                            <div class="text-center">
-                                {{ modal_content | default("no has definido el contenido del modal") }}
                             </div>
                         </div>
-                        <div class="row" style="margin: 10px 0;">
-                            <div class="text-center">
-                                <button type="button" class="btn btn-orange" data-dismiss="modal"  {{ modal_style_button | default('') }}>{{ modal_button | default("cerrar") }}</button>
+                        <div class="row-fluid clearfix" >
+                            <div class="row">
+                                <div {{ modal_content_class | default('class="text-center"') }} {{ modal_content_style | default('style="padding: 10px 20px"') }}>
+                                    {{ modal_content | default("No has definido el contenido del modal") }}
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 10px 0;">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-orange" data-dismiss="modal" {{ modal_style_button | default("") }}>{{ modal_button | default("cerrar") }}</button>
+                                    <button type="button" class="btn btn-orange" data-dismiss="modal" {{ modal_style_button2 | default('style="display: none"')  }}>{{ modal_button2 | default("cerrar2") }}</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+
                 </div>
+                {% if primary_modal_footer is defined and primary_modal_footer !='' %}
+                    {{ primary_modal_footer }}
+                {% endif %}
+
             </div>
         </div>
     </div>
-
 {% endblock %}
+
+
+

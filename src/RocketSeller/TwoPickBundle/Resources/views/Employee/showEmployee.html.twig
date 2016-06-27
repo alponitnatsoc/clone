@@ -213,7 +213,7 @@
                                         <p><strong>{{ contract.positionPosition.name }}</strong></p>
                                     </li>
                                     <li>
-                                        <p class="title"><i>Fecha inicion de contrato</i></p>
+                                        <p class="title"><i>Fecha inicio de contrato</i></p>
                                         <p><strong>{{ contract.startDate|date('F')|trans }} {{ contract.startDate|date('d')}} de {{  contract.startDate|date('Y')}}</strong></p>
                                     </li>
                                     <li>
@@ -230,12 +230,14 @@
                                 <ul class="col-sm-12">
                                     <li>
                                         <p class="title"><i>Cargo</i></p>
-                                        <p><strong>{{contract.contractTypeContractType.name}}</strong></p>
+                                        <p><strong>{{contract.positionPosition.name}}</strong></p>
                                     </li>
-                                    <li>
-                                        <p class="title"><i>Fecha fin de contrato</i></p>
-                                        <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
-                                    </li>
+                                    {% if contract.contractTypeContractType.name == "Término fijo" %}
+                                      <li>
+                                          <p class="title"><i>Fecha fin de contrato</i></p>
+                                          <p><strong>{{ contract.endDate|date('F')|trans }} {{ contract.endDate|date('d')}} de {{  contract.endDate|date('Y')}}</strong></p>
+                                      </li>
+                                    {% endif %}
                                     <li>
                                         <p class="title"><i>Lugar de trabajo</i></p>
                                         <p><strong>{{contract.workplaceWorkplace.mainAddress}}</strong></p>
@@ -253,7 +255,7 @@
                                         <p><strong>{{contract.timeCommitmentTimeCommitment.name}}</strong></p>
                                     </li>
                                     <li>
-                                        <p class="title"><i>Dias laborales al mes</i></p>
+                                        <p class="title"><i>Días laborales al mes</i></p>
                                         <p><strong>{{contract.workableDaysMonth}}</strong></p>
                                     </li>
                                 </ul>
@@ -589,10 +591,10 @@
                         <div class="col-sm-12">
                             <h3><strong>Pagos efectuados al día de hoy</strong></h3>
                             <div class="col-sm-6">
-                                <p>Total pagado: $60000000</p>
+                                <!--<p>Total pagado: $60000000</p>-->
                             </div>
                             <div class="col-sm-6">
-                                <p>Total pagos: {{ payrolls|length}}</p>
+                                <!--<p>Total pagos: {{ payrolls|length}}</p>-->
                             </div>
                         </div>
                         <div class="col-sm-12 table-title">
@@ -607,17 +609,19 @@
                             </div>
                         </div>
                         {% for payroll in payrolls %}
-                            <div class="col-sm-12 row-payment">
-                                <div class="element col-sm-4">
-                                    <p>{{payroll.month}}/{{payroll.year}}</p>
+                            {% if payroll.paid!=0 %}
+                                <div class="col-sm-12 row-payment">
+                                    <div class="element col-sm-4">
+                                        <p>{{payroll.month}}/{{payroll.year}}</p>
+                                    </div>
+                                    <div class="element col-sm-4">
+                                        <p>${{ contract.salary }}</p>
+                                    </div>
+                                    <div class="detail-element col-sm-4">
+                                        <p>Ver detalles</p>
+                                    </div>
                                 </div>
-                                <div class="element col-sm-4">
-                                    <p>${{ contract.salary }}</p>
-                                </div>
-                                <div class="detail-element col-sm-4">
-                                    <p>Ver detalles</p>
-                                </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

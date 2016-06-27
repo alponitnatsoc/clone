@@ -1,4 +1,8 @@
 {% extends "::base.html.twig" %}
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(6) }}
+{% endblock %}
 {% block fos_user_content %}
     {% block stylesheets %}
         <style>
@@ -428,6 +432,7 @@
         </style>
     {% endblock %}
     <title>{% block title %}Tu tablero de control - Symplifica{% endblock %}</title>
+
     {# dump(user) #}
     {% if notifications %}
         <div class="row">
@@ -435,6 +440,17 @@
                 <img src="{{ asset('/img/hola.png') }}">
                 <h3 class="blueHeadline">¡ Bienvenido {{ app.user.getPersonPerson().getNames() }} !</h3>
                 <h5>Este es tu resumen de tareas</h5>
+                {% for employerHasEmployee in user.employer.employerHasEmployees %}
+                    {%  for id in ready %}
+                        {% if employerHasEmployee.IdEmployerHasEmployee == id %}
+                            <div id ="docsCompletos" style="display: none">
+                                <h1>hola</h1>
+                            </div>
+                            {% else %}
+
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </div>
         </div>
         {# dump(notifications) #}
@@ -628,6 +644,9 @@
             }, function () {
                 $(this).css('cursor', 'auto');
             });
+            if($("#docsCompletos").data()){
+                showModal(6);
+            }
 
             $(".dashboard_employer_order_by_select").on('change', function () {
                 window.location.replace($(this).val());

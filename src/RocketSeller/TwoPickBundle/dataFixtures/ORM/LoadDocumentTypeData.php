@@ -14,6 +14,10 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $documentTypeCedula->setName('Cedula');
         $manager->persist($documentTypeCedula);
 
+        $documentTypeComprobante = new DocumentType();
+        $documentTypeComprobante->setName('Comprobante');
+        $manager->persist($documentTypeComprobante);
+
         $documentTypeRut = new DocumentType();
         $documentTypeRut->setName('Rut');
         $manager->persist($documentTypeRut);
@@ -123,6 +127,7 @@ class LoadDocumentTypeData extends AbstractFixture implements OrderedFixtureInte
         $manager->flush();
 
         $this->addReference('document-type-cedula', $documentTypeCedula);
+        $this->addReference('document-type-comprobante', $documentTypeComprobante);
         $this->addReference('document-type-rut', $documentTypeRut);
         $this->addReference('document-type-contrato', $documentTypeContrato);
         $this->addReference('document-carta-aut', $documentTypeCartaAut);

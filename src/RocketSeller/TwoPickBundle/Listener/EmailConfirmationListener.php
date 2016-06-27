@@ -41,7 +41,8 @@ class EmailConfirmationListener implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
-            FOSUserEvents::REGISTRATION_CONFIRMED => 'authenticate2'
+            FOSUserEvents::REGISTRATION_CONFIRMED => 'authenticate2',
+            FOSUserEvents::RESETTING_RESET_SUCCESS => 'onChangePasswordComplete'
         );
     }
 
@@ -71,5 +72,11 @@ class EmailConfirmationListener implements EventSubscriberInterface
         }
 
         $this->mailer->sendWelcomeEmailMessage($user);
+    }
+
+    public function onChangePasswordComplete(FormEvent $event)
+    {
+        $url = $this->router->generate('show_dashboard');
+        $event->setResponse(new RedirectResponse($url));
     }
 }

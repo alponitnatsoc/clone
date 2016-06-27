@@ -617,7 +617,6 @@ class Person
         $documents=$this->docs;
         foreach ($documents as $document){
             if($document->getDocumentTypeDocumentType()==$docType){
-                dump($document);
                 return $document;
             }
         }

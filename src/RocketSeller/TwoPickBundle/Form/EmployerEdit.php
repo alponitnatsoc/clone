@@ -20,8 +20,19 @@ class EmployerEdit extends AbstractType
         $builder
             ->setAction($options['action'])
             ->setMethod($options['method'])
+
             ->add('person', new BasicPersonRegistration(), array(
                 'property_path' => 'personPerson'))
+
+            ->add('documentExpeditionDate', 'date', array(
+                'placeholder' => array(
+                    'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
+                ),
+                'years' => range(2015,1900),
+                'label' => 'Fecha de expedición de documento de identidad*',
+                'required' => false,
+                'mapped' => false,
+            ))
             ->add('workplaces', 'collection', array(
                 'type' => new WorkPlaceRegistration(),
                 'allow_add'    => true,

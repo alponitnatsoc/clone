@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Config;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrders;
@@ -60,7 +61,7 @@ class PayrollController extends Controller
                 if ($frequencyPay == 'J') {
                     $period = '4';
                 } elseif ($frequencyPay == 'Q') {
-                    if ((int) $day <= 15) {
+                    if ((int)$day <= 15) {
                         $period = '2';
                     } else {
                         $period = '4';
@@ -155,12 +156,12 @@ class PayrollController extends Controller
         $pods = $this->getInfoPayroll($this->getUser()->getPersonPerson()->getEmployer());
         //obtener los meses de mora
         /** @var User $user */
-        $user=$this->getUser();
-        $purchaseOrders=$user->getPurchaseOrders();
-        $owePurchaseOrders=new ArrayCollection();
+        $user = $this->getUser();
+        $purchaseOrders = $user->getPurchaseOrders();
+        $owePurchaseOrders = new ArrayCollection();
         /** @var PurchaseOrders $po */
         foreach ($purchaseOrders as $po) {
-            if($po->getPurchaseOrdersStatus()->getIdNovoPay()=='P1'&&$po->getPurchaseOrderDescriptions()->count()>0){
+            if ($po->getPurchaseOrdersStatus()->getIdNovoPay() == 'P1' && $po->getPurchaseOrderDescriptions()->count() > 0) {
                 $owePurchaseOrders->add($po);
             }
         }
@@ -181,9 +182,10 @@ class PayrollController extends Controller
         dump($pods);
         dump($owePurchaseOrders);
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
-                    'dataNomina' => $pods,
-                    //'novelties' => $novelties
-                    'debt'=>$owePurchaseOrders
+            'dataNomina' => $pods,
+            //'novelties' => $novelties
+            'debt' => $owePurchaseOrders,
+            'name' => $user->getPersonPerson()->getNames()
         ));
     }
 
@@ -195,10 +197,10 @@ class PayrollController extends Controller
         if ($request->isMethod('POST')) {
             /* @var $user User */
             $user = $this->getUser();
-            $userPerson=$user->getPersonPerson();
+            $userPerson = $user->getPersonPerson();
             $payrollToPay = $request->request->all();
-            $podRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
-            if(count($payrollToPay)==0){
+            $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+            if (count($payrollToPay) == 0) {
                 //por seguridad se verifica que exista por lo menos un item a pagar
                 return $this->redirectToRoute("payroll");
             }
@@ -207,10 +209,18 @@ class PayrollController extends Controller
             $paidStatus=$poS->findOneBy(array('idNovoPay'=>'00'));
             $paidPO=new PurchaseOrders();
             $realtoPay=new PurchaseOrders();
+
             $paidValue=0;
+
+            $valueToGet4xMilFrom = 0;
+            $numberOfPNTrans = 0;
+            $willPayPN = false;
+
             foreach ($payrollToPay as $key=>$value ) {
+
                 /** @var PurchaseOrdersDescription $tempPOD */
                 $tempPOD=$podRepo->find($key);
+
                 if($tempPOD==null){
                     //por seguridad en caso de que no exista el POD
                     return $this->redirectToRoute("payroll");
@@ -220,25 +230,34 @@ class PayrollController extends Controller
                 }else{
                     $person=$tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 }
-                if($person->getIdPerson()!=$userPerson->getIdPerson()){
+                if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
                     return $this->redirectToRoute("payroll");
                 }
-                $exploded=explode("-",$value);
-                if($exploded[0]=='p'){
-                    $total+=$tempPOD->getValue();
+                $exploded = explode("-", $value);
+                if ($exploded[0] == 'p') {
+                    $total += $tempPOD->getValue();
                     $realtoPay->addPurchaseOrderDescription($tempPOD);
+
+                    if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                      $willPayPN = true;
+                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                      $numberOfPNTrans = $numberOfPNTrans + 1;
+                    }
+                    else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                    }
                 }else{
                     $tempPOD->setPurchaseOrdersStatus($paidStatus);
                     $paidPO->addPurchaseOrderDescription($tempPOD);
-                    $paidValue+=$tempPOD->getValue();
+                    $paidValue += $tempPOD->getValue();
                 }
 
             }
             //setting the data of the already paid selected items
-            $em=$this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-            if($paidPO->getPurchaseOrderDescriptions()->count()>0){
+            if ($paidPO->getPurchaseOrderDescriptions()->count() > 0) {
                 $paidPO->setValue($paidValue);
                 $paidPO->setPurchaseOrdersStatus($paidStatus);
                 $paidPO->setDatePaid(new \DateTime());
@@ -249,68 +268,88 @@ class PayrollController extends Controller
             }
             if($realtoPay->getPurchaseOrderDescriptions()->count()>0){
                 //add transaction cost
-                $transactionPOD=new PurchaseOrdersDescription();
-                $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
-                /** @var Product $productTransaction */
-                $productTransaction=$productRepo->findOneBy(array("simpleName"=>"CT"));
-                $transactionPOD->setDescription("Costo transaccional");
-                $transactionPOD->setValue(round($productTransaction->getPrice()*(1+$productTransaction->getTaxTax()->getValue()),0));
-                $realtoPay->addPurchaseOrderDescription($transactionPOD);
-                $total+=$transactionPOD->getValue();
-                $dateToday=new DateTime();
-                $effectiveDate=$user->getLastPayDate();
-                $isFreeMonths=$user->getIsFree();
-                if($isFreeMonths>0){
-                    $isFreeMonths-=1;
-                }
-                $isFreeMonths+=1;
-                $effectiveDate =  new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-")."1"))));
-                $effectiveDate->setDate($effectiveDate->format("Y"),$effectiveDate->format("m"),25);
+                $transactionCost = 0;
 
-                if($dateToday->format("d")>=16&&$dateToday->format("m")==$effectiveDate->format("m")&&$dateToday->format("Y")==$effectiveDate->format("Y")){
+                // Se agrega el cobro único por pila si no hay pagos de nomina
+                if($willPayPN == false){
+                  $transactionCost = $transactionCost + 3500;
+                }
+
+                // Se agrega el cobro del 4x1000
+                $transactionCost = $transactionCost + ( ($valueToGet4xMilFrom / 1000) * 4);
+                // Se agrega el cobro por transaccional
+
+                if($numberOfPNTrans == 1){
+                  $transactionCost = $transactionCost + 7500;
+                }
+                elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
+                  $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
+                }
+                elseif ($numberOfPNTrans > 5) {
+                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                }
+
+                $transactionPOD=new PurchaseOrdersDescription();
+                $transactionPOD->setDescription("Costo transaccional");
+                $transactionPOD->setValue(round($transactionCost,0));
+                $realtoPay->addPurchaseOrderDescription($transactionPOD);
+                $total += $transactionPOD->getValue();
+                $dateToday = new DateTime();
+                $effectiveDate = $user->getLastPayDate();
+                $isFreeMonths = $user->getIsFree();
+                if ($isFreeMonths > 0) {
+                    $isFreeMonths -= 1;
+                }
+                $isFreeMonths += 1;
+                $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "1"))));
+                $effectiveDate->setDate($effectiveDate->format("Y"), $effectiveDate->format("m"), 25);
+
+                if ($dateToday->format("d") >= 16 && $dateToday->format("m") == $effectiveDate->format("m") && $dateToday->format("Y") == $effectiveDate->format("Y")) {
                     //this means that the user has to pay the symplifica fee this month
-                    $symplificaPOD=new PurchaseOrdersDescription();
+                    $symplificaPOD = new PurchaseOrdersDescription();
                     $symplificaPOD->setDescription("Subscripción Symplifica");
-                    $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                    $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     /** @var Product $PS1 */
-                    $PS1=$productRepo->findOneBy(array("simpleName"=>"PS1"));
+                    $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
                     /** @var Product $PS2 */
-                    $PS2=$productRepo->findOneBy(array("simpleName"=>"PS2"));
+                    $PS2 = $productRepo->findOneBy(array("simpleName" => "PS2"));
                     /** @var Product $PS3 */
-                    $PS3=$productRepo->findOneBy(array("simpleName"=>"PS3"));
-                    $ps1Count=0;$ps2Count=0;$ps3Count=0;
+                    $PS3 = $productRepo->findOneBy(array("simpleName" => "PS3"));
+                    $ps1Count = 0;
+                    $ps2Count = 0;
+                    $ps3Count = 0;
                     /** @var EmployerHasEmployee $ehe */
                     foreach ($ehes as $ehe) {
-                        if($ehe->getState()<3){
+                        if ($ehe->getState() < 3) {
                             continue;
                         }
-                        $contracts=$ehe->getContracts();
-                        $actualContract=null;
+                        $contracts = $ehe->getContracts();
+                        $actualContract = null;
                         /** @var Contract $contract */
                         foreach ($contracts as $contract) {
-                            if($contract->getState()==1){
-                                $actualContract=$contract;
+                            if ($contract->getState() == 1) {
+                                $actualContract = $contract;
                                 break;
                             }
                         }
-                        if($actualContract==null){
+                        if ($actualContract == null) {
                             continue;
                         }
-                        $actualDays=$actualContract->getWorkableDaysMonth();
-                        if($actualDays<10){
+                        $actualDays = $actualContract->getWorkableDaysMonth();
+                        if ($actualDays < 10) {
                             $ps1Count++;
-                        }elseif($actualDays<=19){
+                        } elseif ($actualDays <= 19) {
                             $ps2Count++;
-                        }else{
+                        } else {
                             $ps3Count++;
                         }
 
                     }
-                    $symplificaPOD->setValue(round(($PS1->getPrice()*(1+$PS1->getTaxTax()->getValue())*$ps1Count)+
-                        ($PS2->getPrice()*(1+$PS2->getTaxTax()->getValue())*$ps2Count)+
-                        ($PS3->getPrice()*(1+$PS3->getTaxTax()->getValue())*$ps3Count),0));
+                    $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
+                        ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
+                        ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
                     $realtoPay->addPurchaseOrderDescription($symplificaPOD);
-                    $total+=$symplificaPOD->getValue();
+                    $total += $symplificaPOD->getValue();
 
                 }
             }
@@ -350,10 +389,10 @@ class PayrollController extends Controller
         if ($request->isMethod('POST')) {
             /* @var $user User */
             $user = $this->getUser();
-            $userPerson=$user->getPersonPerson();
+            $userPerson = $user->getPersonPerson();
             $payrollToPay = $request->request->all();
-            $podRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
-            if(count($payrollToPay)==0){
+            $podRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersDescription");
+            if (count($payrollToPay) == 0) {
                 //por seguridad se verifica que exista por lo menos un item a pagar
                 return $this->redirectToRoute("payroll");
             }
@@ -363,97 +402,135 @@ class PayrollController extends Controller
             $paidPO=new PurchaseOrders();
             $realtoPay=new PurchaseOrders();
             $paidValue=0;
+
+            $valueToGet4xMilFrom = 0;
+            $numberOfPNTrans = 0;
+            $willPayPN = false;
+
             $paymethodid=$payrollToPay["paymentMethod"];
             unset($payrollToPay["paymentMethod"]);
-            foreach ($payrollToPay as $key=>$value ) {
+            foreach ($payrollToPay as $key => $value) {
                 /** @var PurchaseOrdersDescription $tempPOD */
-                $tempPOD=$podRepo->find($key);
-                if($tempPOD==null){
+                $tempPOD = $podRepo->find($key);
+                if ($tempPOD == null) {
                     //por seguridad en caso de que no exista el POD
                     return $this->redirectToRoute("payroll");
                 }
-                if($tempPOD->getPayrollPayroll()==null){
-                    $person=$tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
-                }else{
-                    $person=$tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                if ($tempPOD->getPayrollPayroll() == null) {
+                    $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                } else {
+                    $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
                 }
-                if($person->getIdPerson()!=$userPerson->getIdPerson()){
+                if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
                     return $this->redirectToRoute("payroll");
                 }
+
+                if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                  $willPayPN = true;
+                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                  $numberOfPNTrans = $numberOfPNTrans + 1;
+                }
+                else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                }
+
                 $total+=$tempPOD->getValue();
                 $realtoPay->addPurchaseOrderDescription($tempPOD);
             }
-            $em=$this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-            if($realtoPay->getPurchaseOrderDescriptions()->count()>0){
+            if ($realtoPay->getPurchaseOrderDescriptions()->count() > 0) {
                 //add transaction cost
+                $transactionCost = 0;
+
+                // Se agrega el cobro único por pila si no hay pagos de nomina
+                if($willPayPN == false){
+                  $transactionCost = $transactionCost + 3500;
+                }
+
+                // Se agrega el cobro del 4x1000
+                $transactionCost = $transactionCost + ( ($valueToGet4xMilFrom / 1000) * 4);
+                // Se agrega el cobro por transaccional
+
+                if($numberOfPNTrans == 1){
+                  $transactionCost = $transactionCost + 7500;
+                }
+                elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
+                  $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
+                }
+                elseif ($numberOfPNTrans > 5) {
+                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                }
+
                 $transactionPOD=new PurchaseOrdersDescription();
                 $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 /** @var Product $productTransaction */
-                $productTransaction=$productRepo->findOneBy(array("simpleName"=>"CT"));
+                $productTransaction = $productRepo->findOneBy(array("simpleName" => "CT"));
                 $transactionPOD->setDescription("Costo transaccional");
-                $transactionPOD->setValue(round($productTransaction->getPrice()*(1+$productTransaction->getTaxTax()->getValue()),0));
+                $transactionPOD->setValue(round($transactionCost,0));
                 $transactionPOD->setProductProduct($productTransaction);
                 $realtoPay->addPurchaseOrderDescription($transactionPOD);
-                $total+=$transactionPOD->getValue();
-                $dateToday=new DateTime();
-                $effectiveDate=$user->getLastPayDate();
-                $isFreeMonths=$user->getIsFree();
-                if($isFreeMonths>0){
-                    $isFreeMonths-=1;
+                $total += $transactionPOD->getValue();
+                $dateToday = new DateTime();
+                $effectiveDate = $user->getLastPayDate();
+                $isFreeMonths = $user->getIsFree();
+                if ($isFreeMonths > 0) {
+                    $isFreeMonths -= 1;
                     $user->setIsFree($isFreeMonths);
                     $em->persist($user);
                 }
-                $isFreeMonths+=1;
-                $effectiveDate =  new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-")."1"))));
-                $effectiveDate->setDate($effectiveDate->format("Y"),$effectiveDate->format("m"),25);
+                $isFreeMonths += 1;
+                $effectiveDate = new DateTime(date('Y-m-d', strtotime("+$isFreeMonths months", strtotime($effectiveDate->format("Y-m-") . "1"))));
+                $effectiveDate->setDate($effectiveDate->format("Y"), $effectiveDate->format("m"), 25);
 
-                if($dateToday->format("d")>=16&&$dateToday->format("m")==$effectiveDate->format("m")&&$dateToday->format("Y")==$effectiveDate->format("Y")){
+                if ($dateToday->format("d") >= 16 && $dateToday->format("m") == $effectiveDate->format("m") && $dateToday->format("Y") == $effectiveDate->format("Y")) {
                     //this means that the user has to pay the symplifica fee this month
-                    $symplificaPOD=new PurchaseOrdersDescription();
+                    $symplificaPOD = new PurchaseOrdersDescription();
                     $symplificaPOD->setDescription("Subscripción Symplifica");
-                    $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                    $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
                     /** @var Product $PS1 */
-                    $PS1=$productRepo->findOneBy(array("simpleName"=>"PS1"));
+                    $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
                     /** @var Product $PS2 */
-                    $PS2=$productRepo->findOneBy(array("simpleName"=>"PS2"));
+                    $PS2 = $productRepo->findOneBy(array("simpleName" => "PS2"));
                     /** @var Product $PS3 */
-                    $PS3=$productRepo->findOneBy(array("simpleName"=>"PS3"));
-                    $ps1Count=0;$ps2Count=0;$ps3Count=0;
+                    $PS3 = $productRepo->findOneBy(array("simpleName" => "PS3"));
+                    $ps1Count = 0;
+                    $ps2Count = 0;
+                    $ps3Count = 0;
                     /** @var EmployerHasEmployee $ehe */
                     foreach ($ehes as $ehe) {
-                        if($ehe->getState()<3){
+                        if ($ehe->getState() < 3) {
                             continue;
                         }
-                        $contracts=$ehe->getContracts();
-                        $actualContract=null;
+                        $contracts = $ehe->getContracts();
+                        $actualContract = null;
                         /** @var Contract $contract */
                         foreach ($contracts as $contract) {
-                            if($contract->getState()==1){
-                                $actualContract=$contract;
+                            if ($contract->getState() == 1) {
+                                $actualContract = $contract;
                                 break;
                             }
                         }
-                        if($actualContract==null){
+                        if ($actualContract == null) {
                             continue;
                         }
-                        $actualDays=$actualContract->getWorkableDaysMonth();
-                        if($actualDays<10){
+                        $actualDays = $actualContract->getWorkableDaysMonth();
+                        if ($actualDays < 10) {
                             $ps1Count++;
-                        }elseif($actualDays<=19){
+                        } elseif ($actualDays <= 19) {
                             $ps2Count++;
-                        }else{
+                        } else {
                             $ps3Count++;
                         }
 
                     }
-                    $symplificaPOD->setValue(round(($PS1->getPrice()*(1+$PS1->getTaxTax()->getValue())*$ps1Count)+
-                        ($PS2->getPrice()*(1+$PS2->getTaxTax()->getValue())*$ps2Count)+
-                        ($PS3->getPrice()*(1+$PS3->getTaxTax()->getValue())*$ps3Count),0));
+                    $symplificaPOD->setValue(round(($PS1->getPrice() * (1 + $PS1->getTaxTax()->getValue()) * $ps1Count) +
+                        ($PS2->getPrice() * (1 + $PS2->getTaxTax()->getValue()) * $ps2Count) +
+                        ($PS3->getPrice() * (1 + $PS3->getTaxTax()->getValue()) * $ps3Count), 0));
                     $symplificaPOD->setProductProduct($PS1);
                     $realtoPay->addPurchaseOrderDescription($symplificaPOD);
-                    $total+=$symplificaPOD->getValue();
+                    $total += $symplificaPOD->getValue();
 
                 }
             }
@@ -467,24 +544,51 @@ class PayrollController extends Controller
                 "idPurchaseOrder" => $realtoPay->getIdPurchaseOrders()), array('_format' => 'json'));
             if ($response->getStatusCode() == 200) {
                 //set all to paid
-                $procesingStatus=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'S2'));
+                $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'S2'));
                 $realtoPay->setPurchaseOrdersStatus($procesingStatus);
-                $pods=$realtoPay->getPurchaseOrderDescriptions();
+                $pods = $realtoPay->getPurchaseOrderDescriptions();
+                /** @var UtilsController $utils */
+                $utils = $this->get('app.symplifica_utils');
+                $documentTypeRepo = $em->getRepository('RocketSellerTwoPickBundle:DocumentType');
                 /** @var PurchaseOrdersDescription $pod */
                 foreach ($pods as $pod) {
                     $pod->setPurchaseOrdersStatus($procesingStatus);
-                    if($pod->getPayrollPayroll()!=null){
-                        $actualPayroll=$pod->getPayrollPayroll();
-                        if($actualPayroll->getIdPayroll()==$actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()){
+                    if ($pod->getPayrollPayroll() != null) {
+                        $actualPayroll = $pod->getPayrollPayroll();
+                        if ($actualPayroll->getIdPayroll() == $actualPayroll->getContractContract()->getActivePayroll()->getIdPayroll()) {
                             //create next payroll
-                            $newPayroll=new Payroll();
-                            $nowDate= new DateTime();
-                            $nowDate =  new DateTime(date('Y-m-d', strtotime("+1 months", strtotime($nowDate->format("Y-m-")."1"))));
+                            $newPayroll = new Payroll();
+                            $nowDate = new DateTime();
+                            $nowDate = new DateTime(date('Y-m-d', strtotime("+1 months", strtotime($nowDate->format("Y-m-") . "1"))));
+                            //here i create the comprobante
 
-                            $nowPeriod=$actualPayroll->getPeriod();
-                            if($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="Q"&&$nowPeriod==4){
+                            $documentType = 'Comprobante';
+                            $msj = "Subir comprobante de " . $utils->mb_capitalize(explode(" ", $person->getNames())[0] . " " . $person->getLastName1());
+                            $dUrl = $this->generateUrl("download_documents", array('id' => $actualPayroll->getIdPayroll(), 'ref' => "comprobante", 'type' => 'pdf'));
+                            $dAction = "Bajar";
+                            $action = "Subir";
+
+                            $documentType = $documentTypeRepo->findByName($documentType)[0];
+                            $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+                            //$url = $this->generateUrl("api_public_post_doc_from");
+
+                            $notification = new Notification();
+                            $notification->setPersonPerson($person);
+                            $notification->setStatus(1);
+                            $notification->setDocumentTypeDocumentType($documentType);
+                            $notification->setType('alert');
+                            $notification->setDescription($msj);
+                            $notification->setRelatedLink($url);
+                            $notification->setAccion($action);
+                            $notification->setDownloadAction($dAction);
+                            $notification->setDownloadLink($dUrl);
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($notification);
+
+                            $nowPeriod = $actualPayroll->getPeriod();
+                            if ($actualPayroll->getContractContract()->getFrequencyFrequency()->getPayrollCode() == "Q" && $nowPeriod == 4) {
                                 $newPayroll->setPeriod(2);
-                            }else{
+                            } else {
                                 $newPayroll->setPeriod(4);
                             }
                             $newPayroll->setMonth($nowDate->format("m"));
@@ -498,25 +602,26 @@ class PayrollController extends Controller
                         }
                     }
                 }
+                $em->flush();
                 /** @var Config $ucfg */
-                $ucfg=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name'=>'ufg'));
-                $invoiceNumber=intval($ucfg->getValue())+1;
+                $ucfg = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Config")->findOneBy(array('name' => 'ufg'));
+                $invoiceNumber = intval($ucfg->getValue()) + 1;
                 $ucfg->setValue($invoiceNumber);
                 $realtoPay->setInvoiceNumber($invoiceNumber);
                 $em->persist($ucfg);
                 $em->persist($realtoPay);
                 $em->flush();
 
-                return $this->redirectToRoute("payroll_result", array('result'=>"s",'idPO'=>$realtoPay->getIdPurchaseOrders()));
+                return $this->redirectToRoute("payroll_result", array('result' => "s", 'idPO' => $realtoPay->getIdPurchaseOrders()));
 
-            }else{
+            } else {
                 //reverse the Purchase Order
-                $procesingStatus=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
+                $procesingStatus = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay' => 'P1'));
                 $realtoPay->setPurchaseOrdersStatus($procesingStatus);
-                $pods=$realtoPay->getPurchaseOrderDescriptions();
+                $pods = $realtoPay->getPurchaseOrderDescriptions();
                 /** @var PurchaseOrdersDescription $pod */
                 foreach ($pods as $pod) {
-                    if(!($pod->getProductProduct()->getSimpleName()=="PP"||$pod->getProductProduct()->getSimpleName()=="PN")){
+                    if (!($pod->getProductProduct()->getSimpleName() == "PP" || $pod->getProductProduct()->getSimpleName() == "PN")) {
                         $em->remove($pod);
                         $em->flush();
                     }
@@ -524,7 +629,7 @@ class PayrollController extends Controller
                 }
                 $em->persist($realtoPay);
                 $em->flush();
-                return $this->redirectToRoute("payroll_result", array('result'=>"e"));
+                return $this->redirectToRoute("payroll_result", array('result' => "e"));
 
             }
 
@@ -544,8 +649,8 @@ class PayrollController extends Controller
     public function payrollSuccessAction(Request $request)
     {
         return $this->render('RocketSellerTwoPickBundle:Payroll:confirm.html.twig', array(
-                    'dataNomina' => $data,
-                    'total' => $total
+            'dataNomina' => $data,
+            'total' => $total
         ));
     }
 
@@ -687,7 +792,7 @@ class PayrollController extends Controller
     public function voucherAction($idPayroll, Request $request)
     {
         $payrollRepo = $this->getDoctrine()
-                ->getRepository('RocketSellerTwoPickBundle:Payroll');
+            ->getRepository('RocketSellerTwoPickBundle:Payroll');
         $payroll = $payrollRepo->findBy(array('idPayroll' => $idPayroll))[0];
 
         $contract = $payroll->getContractContract();
@@ -701,17 +806,17 @@ class PayrollController extends Controller
             'period' => null,
             'month' => null,
             'year' => null
-                ), array('_format' => 'json')
+        ), array('_format' => 'json')
         );
         $generalPayroll = json_decode($generalPayroll->getContent(), true);
 
         return $this->render('RocketSellerTwoPickBundle:Payroll:comprobante.html.twig', array(
-                    'employeer' => $employeer,
-                    'employee' => $employee,
-                    'contract' => $contract,
-                    'generalPayroll' => $generalPayroll,
-                    'payroll' => $payroll,
-                    'periodo' => 'Octubre 1 al 15  de 2015'
+            'employeer' => $employeer,
+            'employee' => $employee,
+            'contract' => $contract,
+            'generalPayroll' => $generalPayroll,
+            'payroll' => $payroll,
+            'periodo' => 'Octubre 1 al 15  de 2015'
         ));
     }
 
@@ -720,10 +825,10 @@ class PayrollController extends Controller
         $pageUrl = $this->generateUrl('payroll_voucher', array('idPayroll' => $idPayroll), true); // use absolute path!
 
         return new Response(
-                $this->get('knp_snappy.pdf')->getOutput($pageUrl), 200, array(
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="file.pdf"'
-                )
+            $this->get('knp_snappy.pdf')->getOutput($pageUrl), 200, array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="file.pdf"'
+            )
         );
 
         $this->get('knp_snappy.pdf')->getOutput($pageUrl, 'file.pdf');
@@ -737,15 +842,15 @@ class PayrollController extends Controller
         @readfile($file);
     }
 
-    public function payrollErrorAction($result,$idPO)
+    public function payrollErrorAction($result, $idPO)
     {
-        $url="";
-        if($idPO!=-1){
-            $url=$this->generateUrl("download_documents",array('ref'=>'factura','id'=>$idPO,'type'=>'pdf'));
+        $url = "";
+        if ($idPO != -1) {
+            $url = $this->generateUrl("download_documents", array('ref' => 'factura', 'id' => $idPO, 'type' => 'pdf'));
         }
         return $this->render('RocketSellerTwoPickBundle:Payroll:error.html.twig', array(
-            'result' =>$result,
-            'url'=>$url
+            'result' => $result,
+            'url' => $url
         ));
     }
 

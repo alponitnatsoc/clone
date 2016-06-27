@@ -66,6 +66,7 @@ class EmployerController extends Controller
             'method' => 'POST',
         ));
 
+        $form->get("documentExpeditionDate")->setData($people->getDocumentExpeditionDate());
 
         return $this->render(
                         'RocketSellerTwoPickBundle:Employer:editPerson.html.twig', array('form' => $form->createView())

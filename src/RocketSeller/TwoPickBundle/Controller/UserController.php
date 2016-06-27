@@ -91,10 +91,6 @@ class UserController extends Controller
         ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////
 
-
-
-
-
         $invoicesEmited=new ArrayCollection();
         $purchaseOrders=$user->getPurchaseOrders();
         /** @var PurchaseOrders $purchaseOrder */

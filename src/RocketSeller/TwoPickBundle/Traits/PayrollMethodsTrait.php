@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Traits;
 use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
 use RocketSeller\TwoPickBundle\Entity\Payroll;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Employer;
@@ -77,9 +78,6 @@ trait PayrollMethodsTrait
      */
     private function checkActivePayroll(Payroll $payroll)
     {
-        //DELETE URGENT
-        return true;
-
         $dateToday = new \DateTime();
         if($payroll->getContractContract()->getFrequencyFrequency()->getPayrollCode()=="M"){
             $todayPeriod=4;
@@ -128,6 +126,33 @@ trait PayrollMethodsTrait
                     $totalLiquidation = $this->totalLiquidation($detailNomina);
                     if($totalLiquidation==0)
                         break;
+
+                    //checking if any new stuff was added to this payroll
+                    /** @var ArrayCollection $novelties */
+                    $novelties=$totalLiquidation["novelties"];
+                    $sqlNovelties=$payroll->getSqlNovelties();
+                    /** @var Novelty $nowNovelty */
+                    for($z=0;$z<$novelties->count();$z++){
+                        if($sqlNovelties->count()<=$z){
+                            //add and end
+                            $sqlNovelties->add($novelties->get($z));
+                        }else{
+                            /** @var Novelty $actNovel */
+                            $actNovel=$sqlNovelties->get($z);
+                            $actNovel->setSqlValue($novelties->get($z)->getSqlValue());
+                            $actNovel->setNoveltyTypeNoveltyType($novelties->get($z)->getNoveltyTypeNoveltyType());
+                            $actNovel->setName($actNovel->getNoveltyTypeNoveltyType()->getName());
+                        }
+                    }
+                    $em=$this->getDoctrine()->getManager();
+                    /** @var Novelty $sqlNovelty */
+                    foreach ($sqlNovelties as $sqlNovelty) {
+                        $sqlNovelty->setSqlPayrollPayroll($payroll);
+                        $em->persist($sqlNovelty);
+                    }
+                    $em->flush();
+
+
                     $productNomina = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product")->findOneBy(array('simpleName' => 'PN'));
                     $tempPOD->setPayrollPayroll($payroll);
                     $tempPOD->setProductProduct($productNomina);

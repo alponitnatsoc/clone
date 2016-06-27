@@ -154,15 +154,15 @@ class ContractRegistration extends AbstractType
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'label' => '¿Cual es la fecha de inicio del contrato?*:',
+                'label' => '¿Cúal es la fecha de inicio del contrato?*:',
                 'years' => range(1990,intval($this->today->format("Y"))+1),
             ))
             ->add('endDate', 'date', array(
                 'placeholder' => array(
                     'year' => 'Año', 'month' => 'Mes', 'day' => 'Dia'
                 ),
-                'label' => '¿Cual es la fecha en que finaliza el contrato?*:',
-                'data' => $this->todayOneYear,
+                'label' => '¿Cúal es la fecha en que finaliza el contrato?*:',
+                //'data' => $this->todayOneYear,
                 'years' => range($this->today->format("Y"),intval($this->today->format("Y"))+3),
             ))
             ->add('weekWorkableDays', 'choice', array(
@@ -179,7 +179,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:'
+                'label'=>'¿Qué días de la semana trabajará?'
             ))
             ->add('weekDays', 'choice', array(
                 'choices' => array(
@@ -194,7 +194,7 @@ class ContractRegistration extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:',
+                'label'=>'¿Qué días de la semana trabajará?',
                 'attr'   =>  array(
                 'class'   => 'testing')
             ))
@@ -231,7 +231,7 @@ class ContractRegistration extends AbstractType
         if($this->legalFlag=='1'){
             $builder
                 ->add('holidayDebt', 'integer', array(
-                    'label'=>'¿Cuantos días de vacaciones tiene pendientes?',
+                    'label'=>'¿Como está respecto a vacaciones?*',
                     'required'=>true,
                 ));
         }

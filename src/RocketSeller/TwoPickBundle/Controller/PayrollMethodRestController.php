@@ -154,11 +154,12 @@ class PayrollMethodRestController extends FOSRestController
         }
 
         $payrolls = $payrollEntity->findBy($params);
+
 //         $result = count($payrolls);
 
         /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
         foreach($payrolls as $payroll) {
-            if($payroll->getPaid()!=0){
+            if($payroll->getPaid()!=0||$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getState()==-1){
                 continue;
             }
             $employer=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer();
@@ -260,10 +261,13 @@ class PayrollMethodRestController extends FOSRestController
                                 $contract->setActivePayroll($newActivePayroll);
                                 $em->persist($contract);
                                 $em->flush();
-
-                                if($activePayrrol->getPila()==null){
+                                if ($activePayrrol->getPeriod() == 4) {
                                     $totalPilaToPay+= $pila["total"];//TODO verificar el resultado de pila se removio $aportes["total"] +
-                                    $podPila->addPayrollsPila($activePayrrol);
+                                    if($activePayrrol->getPila()==null){
+                                        $podPila->addPayrollsPila($activePayrrol);
+                                    }else{
+                                        $podPila=$activePayrrol->getPila();
+                                    }
                                 }
 
                             }
@@ -276,13 +280,15 @@ class PayrollMethodRestController extends FOSRestController
             }
             if(count($podPila->getPayrollsPila())!=0){
                 $podPila->setDescription("Pago de PILA mes " . $month);
-                $podPila->setPayrollPayroll($payroll);
                 $prodRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                 $product = $prodRepo->findOneBy(array("simpleName" => "PP"));
                 $podPila->setProductProduct($product);
                 $podPila->setValue($totalPilaToPay);
                 $podPila->setPurchaseOrdersStatus($pos);
                 $purchaseOrder->addPurchaseOrderDescription($podPila);
+            }
+            if($purchaseOrder->getPurchaseOrderDescriptions()->count()==0){
+              continue;
             }
             $not = new Notification();
             $not->setPersonPerson($employer->getPersonPerson());

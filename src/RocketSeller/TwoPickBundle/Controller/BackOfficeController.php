@@ -2,10 +2,12 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Employee;
 use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PromotionCode;
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +39,56 @@ class BackOfficeController extends Controller
         return $this->render('RocketSellerTwoPickBundle:BackOffice:index.html.twig');
     }
 
+    public function generateCodesAction($amount)
+    {
+
+        $codesTypeRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType");
+        $em=$this->getDoctrine()->getManager();
+        $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
+        $creating= new ArrayCollection();
+        for($i=0;$i<$amount;$i++){
+            $tempCode=new PromotionCode();
+            $tempCode->setPromotionCodeTypePromotionCodeType($clientBetaReal);
+            $em->persist($tempCode);
+            $creating->add($tempCode);
+        }
+        $em->flush();
+        /** @var PromotionCode $promC */
+        foreach ($creating as $promC) {
+            $promC->setCode(substr(md5($promC->getIdPromotionCode()),1,12));
+            $em->persist($clientBetaReal);
+
+        }
+        $em->flush();
+        return $this->redirectToRoute("show_un_active_codes");
+    }
+    public function showUnActiveCodesAction()
+    {
+        $codesRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCode");
+        $codesTypeRepo= $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PromotionCodeType");
+        $clientBetaReal=$codesTypeRepo->findOneBy(array("shortName"=>"CB"));
+        $codes= $codesRepo->findBy(array("userUser"=>null,'promotionCodeTypePromotionCodeType'=>$clientBetaReal));
+        return $this->render('RocketSellerTwoPickBundle:BackOffice:promotionCodes.html.twig',array('codes'=>$codes));
+
+    }
+    public function addtoSQLBackAction($user,$autentication)
+    {
+        $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
+
+        $dm = $this->getDoctrine();
+        $repo = $dm->getRepository('RocketSellerTwoPickBundle:User');
+        /** @var User $user */
+        $user = $repo->find($user);
+        if (!$user) {
+            throw $this->createNotFoundException('No demouser found!');
+        }
+        if($autentication==$user->getSalt()) {
+            $this->addToSQL($user);
+            dump("Se agregó a sql");
+        }
+        return $this->redirectToRoute("pages");
+
+    }
     public function demoLoginAction($user,$autentication)
     {
         $this->denyAccessUnlessGranted('ROLE_BACK_OFFICE', null, 'Unable to access this page!');
@@ -86,7 +138,6 @@ class BackOfficeController extends Controller
         $cedula = $action->getPersonPerson()->getDocByType("Cedula");
         if ($cedula) {
             if($_SERVER['HTTP_HOST'] =='127.0.0.1:8000'){
-                echo $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(),'reference)');
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{

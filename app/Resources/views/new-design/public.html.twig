@@ -80,7 +80,7 @@
                                   </ul>
                               </div>
                               <div id="hamburguesa"><img src="{{ asset('public/img/home/hamburg.png') }}" alt=""></div>
-                              <a href="{{ path('fos_user_registration_register') }}"><div class="registro naranja callto3 bold">Obtén 1 mes gratis</div></a>
+                              <a href="{{ path('fos_user_registration_register') }}"><div class="registro naranja callto3 bold">Regístrate ahora</div></a>
                           </div>
 
                           <div id="menu-resp">
@@ -153,7 +153,10 @@
             </div>
             <p class="semi-italic azuloscurisimo">Copyright © 2016 sympliﬁca.com | Aviso de Privacidad<br>
             Prohibida su reproducción total o parcial, así como su traducción a cualquier<br>
-            idioma sin autorización escrita de su titular.</p>
+            idioma sin autorización escrita de su titular.<br>
+            <a style="color:#101c2d;" href="{{ path('terminos_condiciones') }}" target="_blank">Términos y Condiciones</a>
+            y <a style="color:#101c2d;" href="{{ path('politicas_privacidad') }}" target="_blank">políticas de privacidad</a>
+          </p>
         </div>
     </footer>
 
@@ -246,6 +249,25 @@
         </div>
         {% block javascripts %}
         {% endblock %}
+        <!-- Start of symplificasupport Zendesk Widget script -->
+        <script>/*<![CDATA[*/
+            window.zEmbed || function (e, t) {
+                var n, o, d, i, s, a = [], r = document.createElement("iframe");
+                window.zEmbed = function () {
+                    a.push(arguments)
+                }, window.zE = window.zE || window.zEmbed, r.src = "javascript:false", r.title = "", r.role = "presentation", (r.frameElement || r).style.cssText = "display: none", d = document.getElementsByTagName("script"), d = d[d.length - 1], d.parentNode.insertBefore(r, d), i = r.contentWindow, s = i.document;
+                try {
+                    o = s
+                } catch (c) {
+                    n = document.domain, r.src = 'javascript:var d=document.open();d.domain="' + n + '";void(0);', o = s
+                }
+                o.open()._l = function () {
+                    var o = this.createElement("script");
+                    n && (this.domain = n), o.id = "js-iframe-async", o.src = e, this.t = +new Date, this.zendeskHost = t, this.zEQueue = a, this.body.appendChild(o)
+                }, o.write('<body onload="document._l();">'), o.close()
+            }("//assets.zendesk.com/embeddable_framework/main.js", "symplificasupport.zendesk.com");
+            /*]]>*/</script>
+        <!-- End of symplificasupport Zendesk Widget script -->
         <script type="text/javascript">
 
           	$(document).ready(function(){
