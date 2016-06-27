@@ -213,7 +213,7 @@ trait EmployeeMethodsTrait
                     if($employerHasEmployee->getLegalFF()==1){
                         $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     }else{
-                        $msj = "Contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                        $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                         $nAction="Ver";
                     }
 //                    $documentType = 'Contrato';
