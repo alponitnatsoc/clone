@@ -588,7 +588,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-xs-12 days" style="margin-bottom: 15px;">
-                                    <div class="form-inline form-group text-center">
+                                    <div class="form-inline form-group text-center" style="border: 1px solid #e6e7e8;border-radius: 5px;padding: 10px 0 5px 0;">
                                         {{ form_widget(form.employeeHasEmployers.weekDays) }}
                                     </div>
                                 </div>
@@ -760,19 +760,18 @@
 
 .tooltip1 .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width: 100%;
     background-color: #7DB8BE;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 10px;
 
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
     bottom: 100%;
-    left: 50%;
-    margin-left: -60px;
+    margin: 0 auto;
 }
 
 .tooltip1:hover .tooltiptext {
