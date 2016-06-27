@@ -22,7 +22,7 @@ class DefaultController extends Controller
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
 
-    public function contactAction(Request $request)
+    public function contactAction(Request $request,$subject)
     {
         $helpCategories = $this->getDoctrine()
             ->getRepository('RocketSellerTwoPickBundle:HelpCategory')
@@ -40,8 +40,11 @@ class DefaultController extends Controller
         } else {
             $phone = '';
         }
-        $form = $this->createForm(new ContactType($name, $email, $phone), array('method' => 'POST'));
-
+        if($subject=='default'){
+            $form = $this->createForm(new ContactType($name, $email, $phone), array('method' => 'POST'));
+        }else{
+            echo 'hola';die;
+        }
 
         $form->handleRequest($request);
 
@@ -68,7 +71,7 @@ class DefaultController extends Controller
                         break;
                 }
                 $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(), 'RocketSellerTwoPickBundle:Mail:contact.html.twig', $form->get('email')->getData(), 'contactanos@symplifica.com', $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
+                $send = $smailer->helpEmail($form->get('name')->getData(), 'RocketSellerTwoPickBundle:Mail:contact.html.twig', $form->get('email')->getData(), 'andres.ramirez@symplifica.com', $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
                 if ($send) {
                     $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');

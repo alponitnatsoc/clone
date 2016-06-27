@@ -15,11 +15,13 @@ class ContactType extends AbstractType
     private $name;
     private $email;
     private $phone;
+    private $subject;
 
-    public function __construct($name,$email,$phone){
+    public function __construct($name,$email,$phone,$subject = "default"){
         $this->name  = $name;
         $this->email = $email;
         $this->phone = $phone;
+        $this->subject = $subject;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -79,11 +81,32 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu celular'
+                            'placeholder' => 'Digita tu telefono o numero celular'
                         )
                     )
                 );
         }
+
+        if($this->subject == "default"){
+          $builder
+              ->add('subject', 'choice', array(
+                      'label'   =>'Con que necesitas ayuda?',
+                      'choices' => array(
+                          0 => 'Registro',
+                          1 => 'Nómina y aportes',
+                          2 => 'Calculadora salarial',
+                          3 => 'Consulta jurídica',
+                          4 => 'Planes y precios',
+                          5 => 'Otros'
+                      ),
+                      'multiple' => false,
+                      'expanded' => false,
+                      'mapped'   => false,
+                      'required' => true
+                  )
+              );
+        }
+
         $builder
             ->add('subject', 'choice', array(
                     'label'   =>'Con que necesitas ayuda?',
@@ -107,11 +130,16 @@ class ContactType extends AbstractType
                 'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
             )
         ))
-
-        ->add('enviar', 'submit', array(
-            'label' => 'Enviar',
-            'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
-        ));
+          ->add('message', 'textarea', array(
+              'attr' => array(
+                  'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+              )
+          ))
+          
+          ->add('enviar', 'submit', array(
+              'label' => 'Enviar',
+              'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
+          ));
 
     }
 

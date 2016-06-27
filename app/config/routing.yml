@@ -195,8 +195,8 @@ send_email_test_send:
     path: /send-email/send
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:sendEmail}
 contact:
-    path: /contact
-    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
+    path: /contact/{subject}
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact, subject: "default"}
 payroll:
     path: /payroll
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
