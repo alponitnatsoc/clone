@@ -2,6 +2,9 @@
 
 namespace RocketSeller\TwoPickBundle\Traits;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use RocketSeller\TwoPickBundle\Entity\Novelty;
+
 trait LiquidationMethodsTrait
 {
 
@@ -16,12 +19,17 @@ trait LiquidationMethodsTrait
     protected function totalLiquidation($data)
     {
         $total = $totalDed = $totalDev = 0;
-
+        $novelties=new ArrayCollection();
         foreach ($data as $key => $info) {
             $payroll_code = isset($info["CON_CODIGO"]) ? $info["CON_CODIGO"] : false;
             /** @var \RocketSeller\TwoPickBundle\Entity\NoveltyType $noveltyType */
             $noveltyType = $this->noveltyTypeByPayrollCode($payroll_code);
             if ($noveltyType) {
+                $novelty=new Novelty();
+                $novelty->setNoveltyTypeNoveltyType($noveltyType);
+                $novelty->setName($noveltyType->getName());
+                $novelty->setSqlValue($info["NOMI_VALOR_LOCAL"]);
+                $novelties->add($novelty);
                 //                 var_dump($info["NOMI_VALOR"] . " - " . $noveltyType->getNaturaleza());
                 switch ($noveltyType->getNaturaleza()):
                     case "DED":
@@ -40,7 +48,8 @@ trait LiquidationMethodsTrait
         return array(
             "total" => ceil($total),
             "totalDed" => ceil($totalDed),
-            "totalDev" => ceil($totalDev)
+            "totalDev" => ceil($totalDev),
+            'novelties'=> $novelties
         );
     }
 

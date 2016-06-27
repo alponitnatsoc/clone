@@ -141,6 +141,8 @@ class EmployerRestController extends FOSRestController
             $numEmp = 0;
             /** @var EmployerHasEmployee $employerHasEmployee */
             foreach($employerPerson->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
+                if($employerHasEmployee->getState()<1)
+                    continue;
                 $numEmp+=1;
                 if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Cedula")){
                     $missingDocs = $missingDocs.'Cedula Empleado '.$numEmp.', ';
@@ -148,9 +150,9 @@ class EmployerRestController extends FOSRestController
                 if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Carta autorización Symplifica")){
                     $missingDocs = $missingDocs.'Carta Autorizacion Empleado '.$numEmp.', ';
                 }
-                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
-                    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
-                }
+                //if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
+                //    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
+                //}
             }
             if($missingDocs==''){
                 $msg = array('state'=>true , 'message'=>"Documentos Completos" , 'missingDocs'=>$missingDocs);

@@ -588,7 +588,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-xs-12 days" style="margin-bottom: 15px;">
-                                    <div class="form-inline form-group text-center">
+                                    <div class="form-inline form-group text-center" style="border: 1px solid #e6e7e8;border-radius: 5px;padding: 10px 0 5px 0;">
                                         {{ form_widget(form.employeeHasEmployers.weekDays) }}
                                     </div>
                                 </div>
@@ -636,7 +636,7 @@
                                         <p id="labelCosto" style="font-weight:100">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
-                                            <h1>$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
+                                            <h1 style="margin:0">$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                         </div>
                                         <!--<a id="link_calculator" style="margin-top:10px;display:block;color: #666;font-size: 14px;font-weight: 100;text-decoration: underline;" class="notAjax">Ver detalle del costo</a>-->
 
@@ -657,8 +657,15 @@
                                     </div>
                                 </div>
                                     <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
-                                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué debo saber el costo mensual del empleado?</h4>
-                                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Porque la forma como determina la ley que deba pagarse a un empleado implica costos adicionales al sueldo que el empleador debe asumir como es el caso de seguridad social, vacaciones, cesantías, dotaciones, etc.lo cual debe ser tenido en cuenta como una provisión que debe ser reservada para el momento en que deban aplicarse.</span>
+                                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Pregunta por hacer?</h4>
+                                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">En resumen, por tu empleado pagaras $26.468 por mes. EL contará con salud y pensión, estará protegido a riesgos
+                                        profesionales, tendrá caja de compensación con sus beneficios y contará  on ausxilio de transporte. Cada año tendrás que pagar un valor de alrededor de $41.124 por concepto de cesantías, es decir que
+                                      debes ahorrar $3.427 pesos por mes trabajado para pagar a final de año este monto. En junio y diciembre deberás pagar la prima por un valor aproximado de $18.361.
+                                      Por último, cada mes que tu empleado trabaje debes ahorrar $1.707 para pagar las vacaciones cuando se acabe el contrato, o simplemente otorgar los días de vacaciones para
+                                    descontar este concepto.
+                                    <div class="modal-resumen-pagos">
+                                      <a id="link_calculator" style="; cursor: pointer; margin-top:10px;display:block;color: #666;font-size: 14px;" class="notAjax">&#155; Ver detalle</a>
+                                    </div></span>
                                     </div>
 
 
@@ -760,19 +767,18 @@
 
 .tooltip1 .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width: 100%;
     background-color: #7DB8BE;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 10px;
 
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
     bottom: 100%;
-    left: 50%;
-    margin-left: -60px;
+    margin: 0 auto;
 }
 
 .tooltip1:hover .tooltiptext {
