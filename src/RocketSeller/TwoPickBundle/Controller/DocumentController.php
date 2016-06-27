@@ -143,8 +143,8 @@ use EmployerMethodsTrait;
     public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
     {
         $fileTypePermitted = array(
-            'image/jpeg',
             'image/png',
+            'image/jpeg',
             'application/pdf',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
@@ -152,6 +152,7 @@ use EmployerMethodsTrait;
         $person = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Person')
                 ->find($id);
+        $name = $person->getNames();
         $documentType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:DocumentType')
                 ->find($idDocumentType);
@@ -222,7 +223,7 @@ use EmployerMethodsTrait;
             //return $this->redirect('/pages?redirector=/matrix/choose');
         }
         return $this->render(
-                        'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'idNotification' => $idNotification));
+                        'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'documentName'=>$documentType->getName(),'personName'=>$name, 'idNotification' => $idNotification));
     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)

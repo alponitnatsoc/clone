@@ -291,7 +291,6 @@ class RegistrationController extends BaseController
         $form->handleRequest($request);
         $errno = null;
         if ($form->isValid()) {
-            //dump($form->get("phone")->getData()->getPhoneNumber());
             if ($person->getDocumentType() == null) {
                 $person->setDocumentType($form->get("documentType")->getData());
                 $person->setDocument($form->get("document")->getData());

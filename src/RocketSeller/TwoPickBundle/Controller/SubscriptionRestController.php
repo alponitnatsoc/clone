@@ -121,8 +121,6 @@ class SubscriptionRestController extends FOSRestController
         /* @var $user User */
         $user = $this->getUserById($idUser);
         $documents = $this->validateDocuments($user);
-
-
         $view = View::create();
         $view->setData(array('documents' => $documents));
         $view->setStatusCode(200);

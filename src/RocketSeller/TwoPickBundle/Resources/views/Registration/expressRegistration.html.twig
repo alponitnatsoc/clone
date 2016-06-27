@@ -5,7 +5,7 @@
     {{ parent() }}
     <style type="text/css">
         #app_user_express_registration_credit_card_credit_card {
-            background-image: url(/public/img/creditCard.png), url(/public/img/creditCard.png);
+            background-image: url({{ asset('public/img/creditCard.png') }}), url({{ asset('public/img/creditCard.png') }});
             background-position: 2px -117px, 233px -55px;
             background-size: 120px 361px, 120px 361px;
             background-repeat: no-repeat;
@@ -73,6 +73,7 @@
 
             <div class="smallOrangeBoxContent">
                 {% if errno is defined %}
+                    {% if errno == "null" %}{% endif %}
                     <span class="alert alert-danger">   
                         <span class="glyphicon glyphicon-exclamation-sign"></span> {{ errno }}
                     </span>
