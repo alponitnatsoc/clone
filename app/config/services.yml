@@ -68,6 +68,7 @@ services:
                     resetting: '%fos_user.resetting.email.template%'
                     welcome: 'FOSUserBundle:Registration:email-welcome.txt.twig'
                     reminder: 'FOSUserBundle:Registration:recuerdatos.txt.twig'
+                    help:     'FOSUserBundle:Registration:email-contact.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

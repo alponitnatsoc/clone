@@ -196,13 +196,13 @@ use EmployerMethodsTrait;
                     $request->setMethod("GET");
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
                     $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
-                    if($responsePaymentsMethods["state"]==true){
+                    if($responsePaymentsMethods["state"]==true) {
                         /** @var Person $person */
-                        $person=$this->getUser()->getPersonPerson();
-                        $notifications=$person->getNotifications();
+                        $person = $this->getUser()->getPersonPerson();
+                        $notifications = $person->getNotifications();
                         /** @var Notification $not */
-                        foreach ($notifications as $not ) {
-                            if($not->getAccion()=="Bajar"){
+                        foreach ($notifications as $not) {
+                            if ($not->getAccion() == "Bajar") {
                                 $not->setStatus(0);
                                 $em->persist($not);
                             }
@@ -211,7 +211,9 @@ use EmployerMethodsTrait;
 
                         return $this->redirectToRoute('employer_completion_documents');
                     }
-                    return $this->redirect($request->server->get('HTTP_REFERER'));
+
+                    return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
+
                 } else {
                     return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
                 }

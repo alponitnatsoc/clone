@@ -189,6 +189,7 @@ trait EmployeeMethodsTrait
             'employerHasEmployeeEmployerHasEmployee' => $employerHasEmployee,
             'state' => 3
         ));
+        /** @var UtilsController $utils */
         $utils = $this->get('app.symplifica_utils');
         $docs = array('Cedula' => false, 'Contrato' => false,'Carta autorización Symplifica'=>false);
         foreach ($docs as $type => $status) {
@@ -216,9 +217,6 @@ trait EmployeeMethodsTrait
                         $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                         $nAction="Ver";
                     }
-//                    $documentType = 'Contrato';
-//                    $dAction="Bajar";
-//                    $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
 
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $documentType = 'Carta autorización Symplifica';
@@ -229,7 +227,7 @@ trait EmployeeMethodsTrait
                 $documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
                 $url = $this->generateUrl("documentos_employee", array('id' => $person->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
                 if($nAction=="Ver"){
-                    $url = $this->generateUrl("view_document_contract_state");
+                    $url = $this->generateUrl("view_document_contract_state", array("idEHE"=>$employerHasEmployee->getIdEmployerHasEmployee()));
                 }
                 //$url = $this->generateUrl("api_public_post_doc_from");
                 $this->createNotification($user->getPersonPerson(), $msj, $url, $documentType,$nAction,$dAction,$dUrl);

@@ -466,7 +466,7 @@ welcome_post_register:
     path: /welcome/register
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:welcomePostRegister }
 view_document_contract_state:
-    path: /contract/condition
+    path: /contract/condition/{idEHE}
     defaults:  { _controller: RocketSellerTwoPickBundle:Employee:contractCondition }
 
 
