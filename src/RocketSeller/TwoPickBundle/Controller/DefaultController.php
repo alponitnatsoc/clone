@@ -24,9 +24,9 @@ class DefaultController extends Controller
 
     public function contactAction(Request $request,$subject)
     {
-        $helpCategories = $this->getDoctrine()
-            ->getRepository('RocketSellerTwoPickBundle:HelpCategory')
-            ->findAll();
+//        $helpCategories = $this->getDoctrine()
+//            ->getRepository('RocketSellerTwoPickBundle:HelpCategory')
+//            ->findAll();
 
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
@@ -43,7 +43,7 @@ class DefaultController extends Controller
         if($subject=='default'){
             $form = $this->createForm(new ContactType($name, $email, $phone), array('method' => 'POST'));
         }else{
-            echo 'hola';die;
+            $form = $this->createForm(new ContactType($name, $email, $phone,$subject), array('method' => 'POST'));
         }
 
         $form->handleRequest($request);
@@ -70,8 +70,7 @@ class DefaultController extends Controller
                         $sub = 'Otros';
                         break;
                 }
-                $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(), 'RocketSellerTwoPickBundle:Mail:contact.html.twig', $form->get('email')->getData(), 'andres.ramirez@symplifica.com', $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
+                $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(), $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
                 if ($send) {
                     $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
@@ -85,7 +84,7 @@ class DefaultController extends Controller
 
         return $this->render('RocketSellerTwoPickBundle:General:help.html.twig', array(
             'form' => $form->createView(),
-            'helpCategories' => $helpCategories
+//          'helpCategories' => $helpCategories
         ));
     }
     
@@ -101,12 +100,12 @@ class DefaultController extends Controller
 
     public function getAllRoutesAction()
     {
-        /** @var Router $router */
-        $router = $this->get('router');
-        $routes = $router->getRouteCollection();
-
-        return $this->render("RocketSellerTwoPickBundle:Default:routes.html.twig", array(
-            'routes' => $routes
-        ));
+//        /** @var Router $router */
+//        $router = $this->get('router');
+//        $routes = $router->getRouteCollection();
+//
+//        return $this->render("RocketSellerTwoPickBundle:Default:routes.html.twig", array(
+//            'routes' => $routes
+//        ));
     }
 }
