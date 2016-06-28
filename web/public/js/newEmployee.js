@@ -529,7 +529,7 @@ function startEmployee() {
                 history.pushState("", "", data["url"]);
                 sendAjax(data["url"]);
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Se ha enviado un nuevo codigo a tu celular");
+            showModal(14);
         });
     });
     $('#btn-entities').click(function (e) {

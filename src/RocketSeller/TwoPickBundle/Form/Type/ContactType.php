@@ -88,7 +88,7 @@ class ContactType extends AbstractType
         }
 
         if($this->subject == "default"){
-          $builder
+            $builder
               ->add('subject', 'choice', array(
                       'label'   =>'Con que necesitas ayuda?',
                       'choices' => array(
@@ -103,27 +103,21 @@ class ContactType extends AbstractType
                       'expanded' => false,
                       'mapped'   => false,
                       'required' => true
-                  )
-              );
+                    )
+                );
+        }else{
+            $builder
+                ->add('subject', 'text',array(
+                        'data'     =>$this->subject,
+                        'required' => true,
+                        'attr' => array(
+                            'style="display: none;"',
+                        )
+                    )
+                );
         }
 
         $builder
-            ->add('subject', 'choice', array(
-                    'label'   =>'Con que necesitas ayuda?',
-                    'choices' => array(
-                        0 => 'Registro',
-                        1 => 'Nómina y aportes',
-                        2 => 'Calculadora salarial',
-                        3 => 'Consulta jurídica',
-                        4 => 'Planes y precios',
-                        5 => 'Otros'
-                    ),
-                    'multiple' => false,
-                    'expanded' => false,
-                    'mapped'   => false,
-                    'required' => true
-                )
-            )
             ->add('message', 'textarea', array(
                     'label' => 'Mensaje',
                 'attr' => array(

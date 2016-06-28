@@ -556,6 +556,34 @@
             </div>
         {% endset %}
 
+    {% elseif template_parameter == 14 %}
+
+        {% set modal_id = 'confirmation_token_modal' %}
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Aviso código de Confirmación</h4>
+            </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+            <p style="padding: 15px 10px 5px 15px;">Hemos enviado un nuevo codigo a tu celular.</p>
+        {% endset %}
+
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
+        {% endset %}
+
   {% else %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}

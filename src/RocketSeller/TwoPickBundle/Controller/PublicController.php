@@ -76,8 +76,7 @@ class PublicController extends Controller
                         $sub = 'Otros';
                         break;
                 }
-                $smailer = $this->get('symplifica.mailer.twig_swift');
-                $send = $smailer->helpEmail($form->get('name')->getData(),'RocketSellerTwoPickBundle:Mail:contact.html.twig',$form->get('email')->getData(),'contactanos@symplifica.com',$sub,$form->get('message')->getData(),$request->getClientIp(),$form->get('phone')->getData());
+                $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(),$sub,$form->get('message')->getData(),$request->getClientIp(),$form->get('phone')->getData());
                 if($send){
                     $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
                 }else{

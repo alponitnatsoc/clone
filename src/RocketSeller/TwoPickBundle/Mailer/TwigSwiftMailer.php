@@ -12,6 +12,7 @@
 namespace RocketSeller\TwoPickBundle\Mailer;
 
 use FOS\UserBundle\Model\UserInterface;
+use RocketSeller\TwoPickBundle\Entity\Phone;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -47,11 +48,11 @@ class TwigSwiftMailer implements MailerInterface
 
     
 
-    public function helpEmail($name, $templateName, $fromEmail, $toEmail,$subject,$message,$ip,$phone, $path = null)
+    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone)
     {
-        $msg = array(
+        $template = $this->parameters['template']['help'];
+        $context = array(
             'name' => $name,
-            'toEmail' => $toEmail,
             'fromEmail' =>$fromEmail,
             'subject' =>$subject,
             'message' =>$message,
@@ -59,18 +60,7 @@ class TwigSwiftMailer implements MailerInterface
             'phone'=>$phone
         );
         
-        $context = $this->twig->mergeGlobals($msg);
-        $template = $this->twig->loadTemplate($templateName);
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom($fromEmail)
-            ->setTo($toEmail);
-        
-        if ($path) {
-            $message->attach(\Swift_Attachment::fromPath($path));
-        }
-
-        return $this->mailer->send($message);
+        return $this->sendMessage($template, $context, $fromEmail ,'contactanos@symplifica.com');
     }
     
 
