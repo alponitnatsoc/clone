@@ -105,16 +105,26 @@ class ContactType extends AbstractType
                       'required' => true
                     )
                 );
-        }else{
-            $builder
-                ->add('subject', 'text',array(
-                        'data'     =>$this->subject,
-                        'required' => true,
-                        'attr' => array(
-                            'style="display: none;"',
+        }else {
+            if ($this->subject == 'asistencia'){
+                $builder
+                    ->add('subject', 'text', array(
+                            'label' => 'Asunto:',
+                            'data' =>'Consulta jurídica',
+                            'required' => true,
+                            'disabled' => true,
                         )
-                    )
-                );
+                    );
+            }else{
+                $builder
+                    ->add('subject', 'text', array(
+                            'label' => 'Asunto:',
+                            'data' =>$this->subject,
+                            'required' => true,
+                            'disabled' => true,
+                        )
+                    );
+            }
         }
 
         $builder
