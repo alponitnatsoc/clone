@@ -50,26 +50,26 @@ class DefaultController extends Controller
 
         if ($request->getMethod() == 'POST') {
             if ($form->isValid()) {
-                switch ($form->get('subject')->getData()) {
-                    case 0:
-                        $sub = 'Registro';
+                $sub = $form->get('subject')->getData();
+                switch ($sub.'') {
+                    case '0':
+                        $sub='Consulta Jurídica';
                         break;
-                    case 1:
+                    case '1':
                         $sub = 'Pago de nómina y aportes';
                         break;
-                    case 2:
+                    case '2':
                         $sub = 'Calculadora salarial';
                         break;
-                    case 3:
+                    case '3':
                         $sub = 'Consulta jurídica';
                         break;
-                    case 4:
+                    case '4':
                         $sub = 'Planes y precios';
                         break;
-                    case 5:
+                    case '5':
                         $sub = 'Otros';
                         break;
-                    $sub = $form->get('subject')->getData();
                 }
                 $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(), $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
