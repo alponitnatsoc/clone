@@ -397,7 +397,7 @@
                                             <ul>
                                                 <li>No tiene fecha determinada de terminación.</li>
                                                 <li>El periodo de prueba máximo es de 2 meses.</li>
-                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un largo perdiodo de tiempo.</li>
+                                                <li>Recomendado para empleadores que quieran contratar a un empleado por un largo periodo de tiempo.</li>
                                             </ul>
                                             <h4>Ten en cuenta que:</h4>
                                             <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
@@ -606,7 +606,7 @@
                                 </div>-->
                                 <div class="col-sm-12 days price-box">
                                   <div class="padding-container col-xs-12 col-sm-6 priceContainer">
-                                      <p class="p">Este debe ser el salario diario de tu empleado para que reciba lo que tu quieres  </p>
+                                      <p class="p">Este debe ser el salario diario que aparecerá en el contrato</p>
                                       <h1>$<input type="text" id="totalExpensesValD" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
                                   </div>
                                     <div class="col-xs-12 col-sm-6 padding-container text-center form-group">
@@ -616,7 +616,7 @@
                                 </div>
 
                                 <div id ="arsNotAplicable" class="col-sm-12 col-xs-12">
-                                    <span>Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario mínimo</span>
+                                    <span class="noCumple">Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario mínimo</span>
                                 </div>
                                 <br/>
                                 <!--<div class="col-sm-12 col-xs-12 complete">
@@ -639,7 +639,7 @@
                                 <div id="cont-resumenpagos">
                                     <div class="col-sm-12 col-xs-12 text-center resumenpagos">
                                         <br />
-                                        <p id="labelCosto" style="font-weight:100">Costo total<br />del empleado</p>
+                                        <p id="labelCosto" class="p">Costo total<br />del empleado</p>
                                         <div class="priceTotal">
 
                                             <h1 style="margin:0">$<input type="text" id="totalExpensesVal2" class="" style="background-color: transparent;border: 0 none;color: #fff;text-align: center;width: 200px;" readonly></h1>
@@ -663,12 +663,22 @@
                                     </div>
                                 </div>
                                     <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
-                                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Pregunta por hacer?</h4>
-                                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">En resumen, por tu empleado pagaras $26.468 por mes. EL contará con salud y pensión, estará protegido a riesgos
-                                        profesionales, tendrá caja de compensación con sus beneficios y contará  on ausxilio de transporte. Cada año tendrás que pagar un valor de alrededor de $41.124 por concepto de cesantías, es decir que
-                                      debes ahorrar $3.427 pesos por mes trabajado para pagar a final de año este monto. En junio y diciembre deberás pagar la prima por un valor aproximado de $18.361.
-                                      Por último, cada mes que tu empleado trabaje debes ahorrar $1.707 para pagar las vacaciones cuando se acabe el contrato, o simplemente otorgar los días de vacaciones para
-                                    descontar este concepto.
+                                        <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i>¿Qué incluye el pago con seguridad social?</h4>
+                                        <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px; text-align:left;margin: 25px auto 0 auto;width:80%">
+                                          El aporte mensual de seguridad social para tu empleado será de acuerdo con el salario de
+                                          devengue mensual. Para SALUD se deberá aportar el 12.5%; dividido de la siguiente forma:<br><br>
+                                          -Trabajador 4%<br>
+                                          -Empleador 8,5%<br><br>
+                                          Para PENSION el total de aportes será de 16%, dividido de la siguiente forma:<br>
+                                          Trabajador 4%<br>
+                                          Empleador 12%<br><br>
+                                          Para la ARL será de acuerdo con el grado de riesgo laboral; 0,522, 1,044, 2,436, 4,35, 6,96 %<br>
+                                          Para la CAJA es el 4% aportado por el empleador<br>
+                                          Debes tener en cuenta que cada año tendrás que pagar un valor adicional el cual ahorraras mensualmente para las siguientes prestaciones:<br><br>
+                                          -Cesantías: 8,33%<br>
+                                          -Intereses de cesantías: 12%<br>
+                                          -Prima: 8,33%<br>
+                                          -Vacaciones: 4,17%
                                     <div class="modal-resumen-pagos">
                                       <a id="link_calculator" style="; cursor: pointer; margin-top:10px;display:block;color: #666;font-size: 14px;" class="notAjax">&#155; Ver detalle</a>
                                     </div></span>
@@ -767,35 +777,35 @@
 
 /*tooltip hover*/
 
-.tooltip1 {
-    position: relative;
-}
-
-.tooltip1 .tooltiptext {
-    visibility: hidden;
-    width: 100%;
-    background-color: #7DB8BE;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 10px;
-
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    margin: 0 auto;
-}
-
-.tooltip1:hover .tooltiptext {
-    visibility: visible;
+.toolstyle {
+  background: #efefef;
+  color: #888888;
+  padding: 13px 15px;
+  border-radius: 5px;
+  display: none;
+  border: dashed 1px #CCC;
+  margin: 10px 0 0 0;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 600px) {
 	.concepto {width: 50%}
 	}
 </style>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#tool1tr").click(function(){
+        $("#tool1").toggle();
+    });
+    $("#tool2tr").click(function(){
+        $("#tool2").toggle();
+    });
+    $("#tool3tr").click(function(){
+        $("#tool3").toggle();
+    });
+  });
+</script>
 
 
 
@@ -815,9 +825,9 @@
                     	<table align="center" border="0" cellpadding="0" cellspacing="0">
                              <tr><!---------------------------------------------empieza Ingresos promedio del empleado (sin prestaciones)-->
                                 <td class="padding">
-                                	<p class="centrar tooltip1">
-                                    	&#10067; Ingreso estimado del empleado (sin prestaciones)
-                                    <span class="tooltiptext light">Este es el valor neto que recibirá el empleado. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Las prestaciones se pueden ver más abajo</span>
+                                	<p class="centrar">
+                                    Ingreso estimado del empleado (sin prestaciones) <span id="tool1tr" class="glyphicon glyphicon-question-sign"></span>
+                                    <span id="tool1" class="toolstyle light">Este es el valor neto que recibirá el empleado. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Las prestaciones se pueden ver más abajo</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
@@ -905,9 +915,9 @@
                              </tr><!------------------------------------termina Ingresos promedio del empleado (sin prestaciones)-->
                              <tr><!--------------------------------------Empieza Pagos recurrentes promedio diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip1">
-                                    	&#10067; Costo del empleado (sin prestaciones)
-                                    <span class="tooltiptext light">Este es el resumen del costo recurrente que va a tener el empleador. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Más abajo se detalla el costo de las prestaciones</span>
+                                	<p class="centrar">
+                                    Costo del empleado (sin prestaciones) <i id="tool2tr" class="glyphicon glyphicon-question-sign"></i>
+                                    <span id="tool2" class="toolstyle light">Este es el resumen del costo recurrente que va a tener el empleador. No incluye prestaciones y puede variar según los días trabajados y novedades reportadas. Más abajo se detalla el costo de las prestaciones</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
@@ -1023,9 +1033,9 @@
                              </tr><!----------------------------------------------------------------termina Pagos recurrentes promedio diarios-->
                              <tr><!----------------------------------------------------------------Empieza Prestaciones promedio por diarios-->
                                 <td class="padding">
-                                	<p class="centrar tooltip1">
-                                    	&#10067; Prestaciones promedio
-                                    <span class="tooltiptext light">Estas son las provisiones. Es decir, lo que deberías ahorrar promedio en el periodo para pagar las prestaciones cuando se ejecutan. Estos valores en realidad se pagan una vez al año o cuando se termina el contrato</span>
+                                	<p class="centrar">
+                                    Prestaciones promedio <i id="tool3tr" class="glyphicon glyphicon-question-sign"></i>
+                                    <span id="tool3" class="toolstyle light">Estas son las provisiones. Es decir, lo que deberías ahorrar promedio en el periodo para pagar las prestaciones cuando se ejecutan. Estos valores en realidad se pagan una vez al año o cuando se termina el contrato</span>
                                     </p>
                                  	<table class="border" border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
@@ -1134,7 +1144,7 @@
                             <div id="paymentMethod" class="tab-pane fade in">
                                 <div class="formulario" style="border-bottom:0px">
                                     <div class="formulario row">
-                                        <div class="col-sm-12 col-xs-12 complete">
+                                        <div class="col-sm-12 col-xs-12">
                                             <div class="text-center" style="padding: 0 0 30px 0;font-size: 19px;font-weight: 100;color: #00858C;">
                                                 ¿Cuál será el metodo de pago para tu empleado?
                                             </div>
@@ -1252,10 +1262,10 @@
                                         </div>
                                     </div>
 
-                                        <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
+                                        <!--<div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                             <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Cómo influye el método de pago que se escoja?</h4>
                                             <span id="textPorque" style="color:#666; font-weight:300; display:none;font-size:14px">Cada uno de los tres métodos garantiza que el pago desde Symplifica le facilite la vida.<br>La diferencia entre cada método determina la forma como se calcula el valor del pago mes a mes y las respectivas notificaciones y recordatorios que usted recibirá. Así mismo determina el mecanismo que Symplifica usará para llevar a cabo los pagos.</span>
-                                        </div>
+                                        </div>-->
 
                                 </div>
                             </div>
