@@ -60,6 +60,28 @@ function prepareLegal() {
   });
   //END ABOGADO --------
 
+  //VALIDATION CHECKBOX
+  $("#continuarContratoNext").attr("disabled","true");
+
+  $("#checkboxContinueContinuar").click(function () {
+    if(!$(this).is(':checked')){
+           $("#continuarContratoNext").attr("disabled","true");
+      } else {
+           $("#continuarContratoNext").removeAttr("disabled");
+      }
+  });
+
+  $("#nuevoContratoNext").attr("disabled","true");
+
+  $("#checkboxContinueNuevo").click(function () {
+    if(!$(this).is(':checked')){
+           $("#nuevoContratoNext").attr("disabled","true");
+      } else {
+           $("#nuevoContratoNext").removeAttr("disabled");
+      }
+  });
+
+
 }
 
 function hideOptionsAndLoadOldSettings() {
