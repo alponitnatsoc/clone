@@ -20,18 +20,6 @@
 </header>
 
 <section>
-		<div id="breadcrumb">
-			<h2 class="light azulmediofont">Contáctanos</h2>
-			<!--<div class="bread-style"><a href="#" class="light">› incio</a> <span class="bold naranjafont">› Contáctanos</span></div>-->
-		</div>
-
-		<div id="texto-descript">
-			<h4 class="light grisclarofont">Tus inquietudes son importantes para nosotros</h4>
-
-		</div>
-</section>
-
-<section>
 	<div id="formulario">
 		<div id="contact_form" enctype="multipart/form-data">
 			{{ form_errors(form) }}
@@ -104,6 +92,17 @@
 		</div>
 	</div>
 </section>
+<section>
+	<div id="telefono">
+						<div id="datos-cont">
+								<div class="datos-contacto"><img src="{{asset('public/img/home/telefono-c.png')}}"></div>
+									<div class="datos-contacto" style="padding: 10px 10px;">
+										<p class="extrabold">Llámanos</p>
+											<p class="light">350 856 7864</p>
+									</div>
+							</div>
+</section>
+
 
 {% endblock %}
 {% block javascripts %}

@@ -5,9 +5,10 @@
     {{ parent() }}
     <style type="text/css">
         .media {
-            padding: 10px;
-            background-color: #DDD;
-            display: -webkit-box;
+          padding: 10px;
+          border: #ececec 1px solid;
+          border-radius: 5px;
+        }
         }
 
         .media-left {
@@ -15,12 +16,27 @@
             color: orange;
         }
 
-        .media-heading {
-            font-weight: bold;
+        .mediaContent {
+              padding-top: 9px;
+              text-align: center;
+        }
+
+        .errorContent li {
+          list-style-type: none;
+          display: inline;
+        }
+
+        .li-heading {
+          font-size: 25px;
+          font-weight: 600;
         }
 
         .padding {
-            padding: 50px 0px 50px 0px;
+            padding: 45px 0px 25px;
+        }
+        .errorContent {
+          margin: 0 auto;
+          width: 93%;
         }
     </style>
 {% endblock stylesheet %}
@@ -39,23 +55,23 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
+        <div class="errorContent">
             <div class="media">
-                <div class="media-left">
-                    <span class="glyphicon glyphicon-remove-circle fa-2x"></span>
-                </div>
-                <div class="media-body vertical-align-center" style="padding-top: 9px;">
-                    <h4 class="media-heading">Error de validación</h4>
+                <div class="mediaContent">
+                  <ul>
+                      <li class="glyphicon glyphicon-remove-circle fa-2x"></li>
+                      <li class="li-heading">Error de validación</li>
+                  </ul>
                 </div>
             </div>
-            <div class="text-center">
+            <div class="text-center" style="width:80%;margin:0 auto">
                 <div class="padding">
-                    <h4><b>No hemos podido validar tu identidad</b></h4>
+                    <h4 style="color: #1fcecb;"><b>No hemos podido validar tu identidad</b></h4>
                 </div>
-                <div class="padding">
-                  Recuerda que solo cuentas con dos intentos, si te equivocas de nuevo contáctate con nosotros para validar tu registro.
-                  Puedes revisar que tu información esté correcta dando clic en el botón inicio y revisando los datos suministrados.
-
+                <div class="padding" style="color: #907676;">
+                  Recuerda que solo cuantas con dos intentos para validad tu identidad, si te equivocas de nuevo <strong>contáctate
+                  con nosotros al 350 833 0000</strong> para poder confirmar tu registro. Puedes revisar que tu información sea correcta 
+                  dando clic en el botón de “inicio” en la parte izquierda de esta pantalla.
                 </div>
                 <div class="padding">
                     <input type="button" class="btn btn-orange" value="Intentar de nuevo"

@@ -4,14 +4,7 @@ function prepareLegal() {
 
   //CONTINUAR CONTRATO ---------
   $("#continuarContratoConsultaLegal").click(function () {
-    var notGo = false;
-    if( !validateBeforeNext(1) ){
-        notGo = true;
-        showModal(9);
-    }
-
-    if(!notGo)
-      window.location.href = "/legal-payment";
+    showModal(7);
   });
 
   $("#continuarContratoNext").click( function () {
@@ -28,14 +21,7 @@ function prepareLegal() {
 
   //NUEVO CONTRATO ---------
   $("#nuevoContratoConsultaLegal").click(function () {
-    var notGo = false;
-    if( !validateBeforeNext(2) ){
-        notGo = true;
-        showModal(9);
-    }
-
-    if(!notGo)
-      window.location.href = "/legal-payment";
+    showModal(7);
   });
 
   $("#nuevoContratoNext").click( function () {
@@ -52,18 +38,7 @@ function prepareLegal() {
 
   //CONSULTAR ABOGADO  ----------
   $("#abogadoModal").click(function () {
-    var notGo = false;
-    if( !validateBeforeNext(3) ){
-        notGo = true;
-        showModal(9);
-    }
-
-    if(!notGo)
-      showModal(7);
-  });
-
-  $("#continuarAbogado").click(function () {
-    window.location.href = "/legal-payment";
+    window.location.href = "/contact/asistencia";
   });
 
   $("#salirAbogadoModal").click(function () {
@@ -80,7 +55,32 @@ function prepareLegal() {
   $("#salirConsultoria").click(function () {
     window.location.href = "/dashboard";
   });
+  $("#continuarAbogado").click(function () {
+    window.location.href = "/contact/asistencia";
+  });
   //END ABOGADO --------
+
+  //VALIDATION CHECKBOX
+  $("#continuarContratoNext").attr("disabled","true");
+
+  $("#checkboxContinueContinuar").click(function () {
+    if(!$(this).is(':checked')){
+           $("#continuarContratoNext").attr("disabled","true");
+      } else {
+           $("#continuarContratoNext").removeAttr("disabled");
+      }
+  });
+
+  $("#nuevoContratoNext").attr("disabled","true");
+
+  $("#checkboxContinueNuevo").click(function () {
+    if(!$(this).is(':checked')){
+           $("#nuevoContratoNext").attr("disabled","true");
+      } else {
+           $("#nuevoContratoNext").removeAttr("disabled");
+      }
+  });
+
 
 }
 
@@ -90,7 +90,31 @@ function hideOptionsAndLoadOldSettings() {
   $("#caso2").hide();
   $("#caso3").hide();
 
-  //TODO Load Stored Settings
+  /*var hop1 = $("#hOp1").val();
+  var hop2 = $("#hOp2").val();
+  var hop3 = $("#hOp3").val();
+  var hop4 = $("#hOp4").val();
+  var hop5 = $("#hOp5").val();
+  var hop6 = $("#hOp6").val();
+
+  if( hop1 == 1 ){
+    $("#op1").attr('checked', 'checked');
+  }
+  if( hop2 == 1 ){
+    $("#op2").attr('checked', 'checked');
+  }
+  if( hop3 == 1 ){
+    $("#op3").attr('checked', 'checked');
+  }
+  if( hop4 == 1 ){
+    $("#op4").attr('checked', 'checked');
+  }
+  if( hop5 == 1 ){
+    $("#op5").attr('checked', 'checked');
+  }
+  if( hop6 == 1 ){
+    $("#op6").attr('checked', 'checked');
+  }*/
 
 }
 function evaluateOptions() {
