@@ -69,6 +69,7 @@ class DefaultController extends Controller
                     case 5:
                         $sub = 'Otros';
                         break;
+                    $sub = $form->get('subject')->getData();
                 }
                 $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(), $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
