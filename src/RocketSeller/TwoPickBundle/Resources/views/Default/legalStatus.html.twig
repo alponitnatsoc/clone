@@ -62,6 +62,16 @@
                     {# 			    <li class="list-group-item"><div class="checkbox">#}
                     {# 			      <label><input name="legal-status" type="checkbox" value="">Le he entregado los intereses sobre las cesantías todos los años</label>#}
                     {# 			    </div></li>#}
+
+                    <!--
+                    <input id="hOp1" hidden="true" value="{{legalStatusArr['1']}}" />
+                    <input id="hOp2" hidden="true" value="{{legalStatusArr['2']}}" />
+                    <input id="hOp3" hidden="true" value="{{legalStatusArr['3']}}" />
+                    <input id="hOp4" hidden="true" value="{{legalStatusArr['4']}}" />
+                    <input id="hOp5" hidden="true" value="{{legalStatusArr['5']}}" />
+                    <input id="hOp6" hidden="true" value="{{legalStatusArr['6']}}" />
+                    -->
+
                     <li class="list-group-item">
                         <div class="checkbox">
                             <label><input id="op1" name="legal-status" type="checkbox" value=""/>El empleador es una persona natural.</label>
@@ -142,7 +152,7 @@
                          <br><br>
                     <div class="botones-options">
                       <div id="continuarContratoNext" class="btn btn-orange">Aceptar y continuar</div>
-                      <div id="continuarContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
+                      <div id="continuarContratoConsultaLegal" class="btn btn-orange">Quiero ser contactado</div>
                     </div>
                 </div>
                 <!--caso 2 -->
@@ -179,23 +189,26 @@
                        <br><br>
                       <div class="botones-options">
                           <div id="nuevoContratoNext" class="btn btn-orange">Aceptar y continuar</div>
-                          <div id="nuevoContratoConsultaLegal" class="btn btn-orange">Consulta legal</div>
+                          <div id="nuevoContratoConsultaLegal" class="btn btn-orange">Quiero ser contactado</div>
                       </div>
                   </div>
                   <!--caso 3 -->
                     <div id="caso3" class="casos">
                         <div class="casohead">
                             <strong>De acuerdo con tu situación</strong>
-                            <p>Symplifica te recomienda tomar una sesión de consultoría legal con un abogado experto.</p>
+                            <p>Symplifica te recomienda asesorarte con nosotros antes de seguir tu proceso de registro.</p>
                         </div>
 
                         <div class="casoabogado">
-                          <p>Tu caso es especial y te recomendamos que <strong>antes de empezar a usar Symplifica tomes una sesión de
-                            consultoría legal con un abogado experto para entender mejor tu situación.</strong> Una vez lo soluciones te
-                            ayudaremos a empezar a usar Symplifica.</p>
+                          <p style="color: #969696; padding: 20px 45px 0 45px; font-size: 17px;font-weight: 100;text-align: center;">Para darte la mejor solución a tu situación actual nos gustaría
+                            conocer más detalles de tu relación laboral.<br>
+
+                              Déjanos tus datos de contacto y realizaremos una pre-evaluación para que inicies a usar Symplifica lo antes posible.
+                          </p>
                         </div>
+
                         <div class="botones-options">
-                            <div id="abogadoModal" class="btn btn-orange">Aceptar y continuar</div>
+                            <div id="abogadoModal" class="btn btn-orange">Quiero ser contactado</div>
                             <div id="salirAbogadoModal" class="btn btn-orange">Salir</div>
                         </div>
                     </div>
