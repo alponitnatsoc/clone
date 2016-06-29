@@ -268,6 +268,10 @@ function startEmployee() {
         }
         calculator();
     });
+
+    $("[name='register_employee[employeeHasEmployers][sisben]']").on("change", function () {
+      calculator();
+    });
     /*$("#register_employee_employeeHasEmployers_startDate").on("change", function () {
         if($("#changeBehavior").text()=="1"){
             return;
