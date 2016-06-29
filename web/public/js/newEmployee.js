@@ -1706,7 +1706,7 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
   if( $(this).val() == 1 ){
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
-    $("#labelCosto").html("Costo </br> del empleado (sin prestaciones)");
+    $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
   }
   else {
     $('#radio_diario').prop('checked', true);
