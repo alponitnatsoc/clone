@@ -686,7 +686,7 @@ function startEmployee() {
     });
     $('#btn-1').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var documentType = $(form).find("select[name='register_employee[person][documentType]']");
         var document = $(form).find("input[name='register_employee[person][document]']");
         var names = $(form).find("input[name='register_employee[person][names]']");
@@ -738,7 +738,7 @@ function startEmployee() {
     });
     $('#btn-2').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var idsPhones = [], phones = [];
         var mainAddress = $(form).find("input[name='register_employee[person][mainAddress]']");
 
@@ -790,7 +790,7 @@ function startEmployee() {
     });
     $('#btn-3').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
 
         //var employeeType = $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']");
         var contractType = $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']");
