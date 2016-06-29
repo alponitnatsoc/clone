@@ -14,8 +14,10 @@ function prepareLegal() {
         showModal(9);
     }
 
-    if(!notGo)
-      window.location.href = "/change-flag/1";
+    if(!notGo){
+      var send = prepareUrlString();
+      window.location.href = "/store_config/" + send +"/change-flag/1";
+    }
   });
   // END CONTINUAR
 
@@ -31,14 +33,18 @@ function prepareLegal() {
         showModal(9);
     }
 
-    if(!notGo)
-      window.location.href = "/change-flag/0";
+    if(!notGo){
+      var send = prepareUrlString();
+      window.location.href = "/store_config/" + send +"/change-flag/0";
+    }
+
   });
   // END NUEVO
 
   //CONSULTAR ABOGADO  ----------
   $("#abogadoModal").click(function () {
-    window.location.href = "/contact/asistencia";
+    var send = prepareUrlString();
+    window.location.href = "/store_config/" + send +"/contact/90";
   });
 
   $("#salirAbogadoModal").click(function () {
@@ -53,10 +59,12 @@ function prepareLegal() {
   });
 
   $("#salirConsultoria").click(function () {
-    window.location.href = "/dashboard";
+    var send = prepareUrlString();
+    window.location.href = "/store_config/" + send +"/show_dashboard";
   });
   $("#continuarAbogado").click(function () {
-    window.location.href = "/contact/asistencia";
+    var send = prepareUrlString();
+    window.location.href = "/store_config/" + send +"/contact/90";
   });
   //END ABOGADO --------
 
@@ -90,7 +98,7 @@ function hideOptionsAndLoadOldSettings() {
   $("#caso2").hide();
   $("#caso3").hide();
 
-  /*var hop1 = $("#hOp1").val();
+  var hop1 = $("#hOp1").val();
   var hop2 = $("#hOp2").val();
   var hop3 = $("#hOp3").val();
   var hop4 = $("#hOp4").val();
@@ -114,7 +122,7 @@ function hideOptionsAndLoadOldSettings() {
   }
   if( hop6 == 1 ){
     $("#op6").attr('checked', 'checked');
-  }*/
+  }
 
 }
 function evaluateOptions() {
@@ -167,4 +175,55 @@ function validateBeforeNext( prevOption ) {
   }
 
   return prevOption == actualOption;
+}
+
+function prepareUrlString (){
+
+  var optString = "";
+
+  var isB1On = $("#op1").is(':checked');
+  var isB2On = $("#op2").is(':checked');
+  var isB3On = $("#op3").is(':checked');
+  var isB4On = $("#op4").is(':checked');
+  var isB5On = $("#op5").is(':checked');
+  var isB6On = $("#op6").is(':checked');
+
+  if(isB1On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB2On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB3On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB4On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB5On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+  if(isB6On){
+    optString += "1";
+  }
+  else {
+    optString += "0";
+  }
+
+  return optString;
 }

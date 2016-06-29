@@ -357,10 +357,7 @@ class LegalAssistanceController extends Controller
             //$paymentMethods = array("0-101", "1-101");
             $paymentMethods = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getClientListPaymentMethods', array('idUser' => $user->getId()), $format);
             $paymentMethodsContent = json_decode($paymentMethods->getContent(), true);
-            dump($paymentMethodsContent);
-            //die();
-            //if varios
-            dump(count($paymentMethodsContent['payment-methods']));
+            
             if (count($paymentMethodsContent['payment-methods']) > 1) {
                 return $this->render('RocketSellerTwoPickBundle:legalAssistance:listPaymentMethod.html.twig', array(
                     'paymentMethods' => $paymentMethodsContent['payment-methods']

@@ -515,6 +515,14 @@ class EmployeeRestController extends FOSRestController {
                     $employerEmployee->setLegalFF($user->getLegalFlag());
                 }
                 $user->setLegalFlag(-1);
+
+                $configToDeleteArr = $user->getPersonPerson()->getConfigurations();
+                foreach($configToDeleteArr as $cr){
+                  $employee->getPersonPerson()->removeConfiguration($cr);
+                  $employee->getPersonPerson()->addConfiguration($cr);
+                  $user->getPersonPerson()->removeConfiguration($cr);
+                }
+
                 $em->persist($user);
                 $em->persist($employerEmployee);
                 $em->persist($employee);
