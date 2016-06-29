@@ -338,7 +338,14 @@ function fillTable(){
   }
 
   var total_seguridad_social = 0;
-  var total_cost_all = 7000 + subtotal;
+  var cuatro_x_mil = 0;
+  var total_cost_all = 0;
+  var num_empleados_pago_nomina = 0;
+  var num_empleados_pago_nomina_quincenal = 0;
+  var totalCTransaccion = 0;
+  var totalCPila = 0;
+  var totalTransaccionalL = 0;
+
   for (key in contrato) {
 
       if (employee[key]['state'] > 0) {
@@ -350,7 +357,6 @@ function fillTable(){
           sisben = contrato[key]['sisben'];
           transport = contrato[key]['transportAid'];
           //resultado = calculator(type, salaryM, salaryD, numberOfDays, sisben, transport);
-          console.log(key);
           resultado = calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport);
           total = total + resultado['totalExpenses2'];
 
@@ -358,11 +364,22 @@ function fillTable(){
 
           salaryKey = resultado['plainSalary'] + resultado['transportCal'] - resultado['EPSEmployeeCal'] - resultado['PensEmployeeCal'];
           localSecurityDiscount = resultado['EPSEmployeeCal'] + resultado ['PensEmployeeCal'] + resultado ['senaCal'] + resultado ['icbfCal'] + resultado ['EPSEmployerCal'] + resultado ['PensEmployerCal'] + resultado ['cajaCal'] + resultado ['arlCal'];
+
           $("div[data-id='"+ key +"']").each(function(){
             if($(this).hasClass("salaryIndVal"))
             {
-              $(this).html(getPrice(salaryKey));
-              total_income += salaryKey;
+              if(contrato[key]['wayToPay'] != 3){
+                $(this).html(getPrice(salaryKey));
+                total_income += salaryKey;
+                num_empleados_pago_nomina++;
+                if(contrato[key]['frecuencia'] == 2){
+                  num_empleados_pago_nomina_quincenal++;
+                }
+              }
+              else {
+                $(this).html('EFECTIVO');
+              }
+
               total_seguridad_social += localSecurityDiscount;
             }
           });
@@ -375,7 +392,36 @@ function fillTable(){
           $("#count_employee").html(count_employee + ' Empleados');
           $("#totalSal").html(getPrice(total_income));
 
-          total_cost_all = 7000 + subtotal + total_seguridad_social + total_income;
+          cuatro_x_mil = ((total_seguridad_social + total_income) / 1000) * 4;
+          $("#cuatroXmil").html(getPrice(cuatro_x_mil));
+
+          if(num_empleados_pago_nomina == 0){
+            totalCPila = 3500;
+          }
+          else if (num_empleados_pago_nomina == 1) {
+            totalCTransaccion = (7500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+          }
+          else if (num_empleados_pago_nomina >= 2 && num_empleados_pago_nomina <= 5) {
+            totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+          }
+          else {
+            totalCTransaccion = (3500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+          }
+
+          $("#totalCostoTransaccionSalarial").html(getPrice(totalCTransaccion));
+          $("#totalCostoTransaccionPila").html(getPrice(totalCPila));
+
+          totalTransaccionalL = totalCTransaccion + totalCPila + cuatro_x_mil;
+          $("#totalTransaccional").html(getPrice(totalTransaccionalL));
+
+          if(count_employee >= 3){
+            subtotal = subtotal * 0.9;
+          }
+
+          if( freeMonths > 0){
+            subtotal = 0;
+          }
+          total_cost_all = subtotal + total_seguridad_social + total_income + totalTransaccionalL;
           $("#totalCostAll").html(getPrice(total_cost_all));
       }
   }
@@ -389,25 +435,37 @@ function fillTable(){
   }
 
   $(".suscriptionInd").each(function( index ) {
-    if (employee[$(this).data("id")]['state'] > 0) {
-      var workableDays = contrato[$(this).data("id")]['workableDaysMonth'];
-      var endValue = 0;
-      if( workableDays >= 20){
-        endValue = producto['PS3'];
+
+    if(freeMonths > 0){
+      if(freeMonths == 1){
+        $(this).html("GRATIS</br>Por el próximo mes");
       }
-      else if (workableDays >= 11){
-        endValue = producto['PS2'];
-      }
-      else {
-        endValue = producto['PS1'];
+      else{
+        $(this).html("GRATIS</br>Por los próximos " + freeMonths + " meses");
       }
 
-      if(count_employee >= 3){
-        endValue = endValue * 0.9;
+    }
+    else {
+      if (employee[$(this).data("id")]['state'] > 0) {
+        var workableDays = contrato[$(this).data("id")]['workableDaysMonth'];
+        var endValue = 0;
+        if( workableDays >= 20){
+          endValue = producto['PS3'];
+        }
+        else if (workableDays >= 11){
+          endValue = producto['PS2'];
+        }
+        else {
+          endValue = producto['PS1'];
+        }
+
+        if(count_employee >= 3){
+          endValue = endValue * 0.9;
+        }
+        $(this).html(getPrice(endValue));
+      } else {
+        $(this).html(getPrice(0));
       }
-      $(this).html(getPrice(endValue));
-    } else {
-      $(this).html(getPrice(0));
     }
   });
 
@@ -548,8 +606,6 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport) {
         console.log("PensEmployerCal " + PensEmployerCal);*/
 
         totalIncome = (salaryM + transportCal - EPSEmployerCal - PensEmployerCal);
-        console.log("TI " + totalIncome);
-        console.log("SM " + salaryM);
         plainSalary = salaryM;
     }
     var resposne = [];
@@ -598,4 +654,8 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport) {
     }
 
     return resposne;
+}
+
+function modalCosto(){
+  showModal(11);
 }

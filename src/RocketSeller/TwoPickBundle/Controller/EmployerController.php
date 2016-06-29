@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\Phone;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -194,12 +195,18 @@ class EmployerController extends Controller
                         'employer' => $employer,
                         'content' => $content));
         } else {
+            /** @var Person $person */
             $person = $this->getUser()->getPersonPerson();
-            $employer = $this->loadClassByArray(array("personPerson" => $person), "Employer");
-            $em = $this->getDoctrine()->getManager();
-            $employerHasEmployees = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')
-                    ->findByEmployerEmployer($employer);
-            return $this->render('RocketSellerTwoPickBundle:Employer:certificates.html.twig', array('employerHasEmployees' => $employerHasEmployees));
+            $employer = $person->getEmployer();
+            $ehes=$employer->getEmployerHasEmployees();
+            $arraytoSend=new ArrayCollection();
+            /** @var EmployerHasEmployee $ehe */
+            foreach ($ehes as $ehe) {
+                if($ehe->getState()>=4){
+                    $arraytoSend->add($ehe);
+                }
+            }
+            return $this->render('RocketSellerTwoPickBundle:Employer:certificates.html.twig', array('employerHasEmployees' => $arraytoSend));
         }
     }
 

@@ -1,93 +1,103 @@
 {% extends "::base.html.twig" %}
 {% block stylesheet %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('public/css/help.css') }}">
-	<link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('public/css/help.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
 {% endblock %}
 {% block content %}
-		<h2 class="bold azulmediofont" style="margin-top:0px; clear:both; padding: 40px 0 0 15px">¡Estamos para servirte!</h2>
-		<h2 class="light azulclarofont" style="margin:0; padding: 0 0 0 15px">Escribenos tus dudas</h2>
-        <div class="search col-md-12" style="margin-top: 30px">
-	        <div class="col-md-10 input-field">
-						<div id="contact_form" enctype="multipart/form-data">
-							{{ form_errors(form) }}
-							{{ form_start(form) }}
-									<div class="row">
-										{% for label, flashes in app.session.flashbag.all %}
-											{% for flash in flashes %}
-												<div class="alert alert-{{ label }} semi-italic" for="alert">
-													{{ flash }}
-												</div>
-											{% endfor %}
-										{% endfor %}
-									</div>
-									<div class="row">
-											<div class="semi-italic grisclarofont" for="name">
-												{{ form_label(form.name) }}
-											</div>
-											<div id="name" class="input" name="name" type="text" value="" size="30">
-												{{ form_widget(form.name) }}
-												{{ form_errors(form.name) }}
-											</div><br />
+<h2 class="bold azulmediofont" style="margin-top:0px; clear:both; padding: 40px 0 0 15px">¡Estamos para servirte!</h2>
+<div class="search col-md-12" style="margin-top: 30px">
+    <div class="col-md-10 input-field">
+        <div id="contact_form" enctype="multipart/form-data">
+            {{ form_errors(form) }}
+            {{ form_start(form) }}
+            <div class="row">
+                {% for label, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                        {% if label == 'success' and flash == 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas' %}
+                            <div class="alert alert-{{ label }} semi-italic" for="alert">
+                                {{ flash }}
+                            </div>
+                        {% elseif label == 'fail' and flash == 'Ocurrio un error' %}
+                            <div class="alert alert-{{ label }} semi-italic" for="alert">
+                                {{ flash }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="semi-italic grisclarofont" for="name">
+                    {{ form_label(form.name) }}
+                </div>
+                <div id="name" class="input" name="name" type="text" value="" size="30">
+                    {{ form_widget(form.name) }}
+                    {{ form_errors(form.name) }}
+                </div>
+                <br/>
 
-									</div>
-									<div class="row">
-										<div class="semi-italic grisclarofont" for="phone">
-											{{ form_label(form.phone) }}
-										</div>
-										<div id="name" class="input" name="name" type="text" value="" size="30">
-											{{ form_widget(form.phone) }}
-											{{ form_errors(form.phone) }}
-										</div><br />
+            </div>
+            <div class="row">
+                <div class="semi-italic grisclarofont" for="phone">
+                    {{ form_label(form.phone) }}
+                </div>
+                <div id="name" class="input" name="name" type="text" value="" size="30">
+                    {{ form_widget(form.phone) }}
+                    {{ form_errors(form.phone) }}
+                </div>
+                <br/>
 
-									</div>
-									<div class="row">
-											<div  class="semi-italic grisclarofont" for="email">
-												{{ form_label(form.email) }}
-											</div>
-											<div id="email" class="input" name="email" type="text" value="" size="30">
-												{{ form_widget(form.email) }}
-												{{ form_errors(form.email) }}
-											</div><br />
-									</div>
-									<div class="row">
-											<div  class="semi-italic grisclarofont" for="email">
-												{{ form_label(form.subject) }}
-											</div>
-											<div class="input">
-											  	{{ form_widget(form.subject) }}
-											</div><br />
-									</div>
-									<div class="row">
-											<div class="semi-italic grisclarofont" for="message">
-												{{ form_label(form.message) }}
-											</div>
-											<div id="message" name="message" rows="7" cols="30">
-												{{ form_widget(form.message) }}
-												{{ form_errors(form.message) }}
-											</div><br />
-									</div>
-									<div>
-										{{ form_widget(form) }}
-									</div>
-							{{ form_end(form) }}
-							</div>
-	        </div>
+            </div>
+            <div class="row">
+                <div class="semi-italic grisclarofont" for="email">
+                    {{ form_label(form.email) }}
+                </div>
+                <div id="email" class="input" name="email" type="text" value="" size="30">
+                    {{ form_widget(form.email) }}
+                    {{ form_errors(form.email) }}
+                </div>
+                <br/>
+            </div>
+            <div class="row">
+                <div class="semi-italic grisclarofont" for="email">
+                    {{ form_label(form.subject) }}
+                </div>
+                <div class="input">
+                    {{ form_widget(form.subject) }}
+                </div>
+                <br/>
+            </div>
+            <div class="row">
+                <div class="semi-italic grisclarofont" for="message">
+                    {{ form_label(form.message) }}
+                </div>
+                <div id="message" name="message" rows="7" cols="30">
+                    {{ form_widget(form.message) }}
+                    {{ form_errors(form.message) }}
+                </div>
+                <br/>
+            </div>
+            <div>
+                {{ form_widget(form) }}
+            </div>
+            {{ form_end(form) }}
         </div>
-        <div class="container col-md-12">
-			{% for helpCategory in helpCategories %}
-				<div class="col-md-4 help_container">
-						<img class="help_icon" src="{{ asset('public/img/' ~ helpCategory.icon) }}"/>
-				 		<p>{{ helpCategory.name }}</p>
-				</div>
-				<div id='' class='col-xs-2'>
-						<a id='' class='nav-link' href="{{ path('help_detail' ,
-												{'id': helpCategory.idHelpCategory}) }}">
-							<div id='' class='text-right' >
-								view Articles
-							</div>
-						</a>
-					</div>
-			{% endfor %}
-        </div>
+    </div>
+</div>
+{#<div class="container col-md-12">#}
+			{#{% for helpCategory in helpCategories %}#}
+				{#<div class="col-md-4 help_container">#}
+						{#<img class="help_icon" src="{{ asset('public/img/' ~ helpCategory.icon) }}"/>#}
+				 		{#<p>{{ helpCategory.name }}</p>#}
+				{#</div>#}
+				{#<div id='' class='col-xs-2'>#}
+						{#<a id='' class='nav-link' href="{{ path('help_detail' ,#}
+												{#{'id': helpCategory.idHelpCategory}) }}">#}
+							{#<div id='' class='text-right' >#}
+								{#view Articles#}
+							{#</div>#}
+						{#</a>#}
+					{#</div>#}
+			{#{% endfor %}#}
+        {#</div>#}
 {% endblock %}

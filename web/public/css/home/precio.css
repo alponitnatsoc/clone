@@ -50,9 +50,9 @@ border-bottom: 3px solid #794815}
 /*---------------empieza precios-------------------*/
 #texto-descript {margin: 60px 0 70px 0}
 #texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
-#cont-3precios {width: 1100px; margin: 0 auto}
+#cont-3precios {width: 1100px; margin: 0 auto; padding: 60px 0 0 0;}
 .centrar {text-align: center;padding: 0 60px;box-sizing: border-box;}
-.caja-precio {background: #edeef0; width: 190px; height:90px; margin: 0 auto; border-radius: 5px; color: #5D5D5D; padding: 15px 0; margin-top: 20px}
+.caja-precio {background: #edeef0; width: 190px; height:auto; margin: 0 auto; border-radius: 5px; color: #5D5D5D; padding: 15px 0 1px 0; margin-top: 0px}
 .span {font-size: 25px}
 
 /*empieza la seccion de calculadora*/

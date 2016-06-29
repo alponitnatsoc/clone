@@ -240,7 +240,7 @@
 
                   {% if employee.state > 0 %}
                   <div class="empleadomed">
-                      <div class="left lightpay">{{ employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastname1}}</div>
+                      <div class="left lightpay">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names ~" "~ employee.employeeEmployee.personPerson.lastname1)}}</div>
                       <div class="right numberpay salaryIndVal"
                       data-id="{{ employee.idEmployerHasEmployee }}"></div>
                   </div>
@@ -272,33 +272,36 @@
                           {% set contrato = employeeData['contrato'] %}
                           {% set producto = employeeData['product'] %}
 
-                          <div class="row clearfix paddingbottom">
-                              <div class="col-md-12 padding-all-10 employee text-left nombrecont {{ employee.state>0 ?'activo':'inactivo' }}">
-                                  <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
-                                      <div>
-                                          <b class="employee_name nombrecont"
-                                             style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
-                                          <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
-                                      </div>
-                                      {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
-                                      <div style="font-style:italic; font-weight:100; font-size: small;"
-                                           class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
-                                           data-employeeId="{{ employee.idEmployerHasEmployee }}">
-                                          Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
-                                          al mes
-                                      </div>
-                                  </div>
+                          {% if contrato.employerHasEmployeeEmployerHasEmployee.state >= 0 %}
 
-                              </div>
-                              <div class="col-md-3 padding-all-10">
-                                  <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
-                                       data-id="{{ employee.idEmployerHasEmployee }}"
-                                       data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
-                              </div>
-                              <div class="right-susc numberpay suscriptionInd padding-all-10"
-                                data-id="{{ employee.idEmployerHasEmployee }}">
-                              </div>
-                          </div>
+                            <div class="row clearfix paddingbottom">
+                                <div class="col-md-12 padding-all-10 employee text-left nombrecont {{ employee.state>0 ?'activo':'inactivo' }}">
+                                    <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
+                                        <div>
+                                            <b class="employee_name nombrecont"
+                                               style="font-size:large;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names)}}</b><br/>
+                                            <span style="font-weight:80;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.lastname1 ~" "~ employee.employeeEmployee.personPerson.lastname2)}}</span>
+                                        </div>
+                                        {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
+                                        <div style="font-style:italic; font-weight:100; font-size: small;"
+                                             class="{{ ((contrato.workableDaysMonth) >= 20)? 'tiempo_completo':(((contrato.workableDaysMonth) >= 11)? 'medio_tiempo':'trabajo_por_dias' ) }}  "
+                                             data-employeeId="{{ employee.idEmployerHasEmployee }}">
+                                            Trabaja {{ (contrato.workableDaysMonth)|number_format(0, '.', ',') }} días
+                                            al mes
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3 padding-all-10">
+                                    <div class="btn btn-change-state-contract {{ employee.state>0 ?'on btn-grey':'off btn-orange ' }}"
+                                         data-id="{{ employee.idEmployerHasEmployee }}"
+                                         data-href="{{ path('change_state_employer_employee', {'id': employee.idEmployerHasEmployee }) }}">{{ employee.state >0?'Inactivar':'Activar' }}</div>
+                                </div>
+                                <div class="right-susc numberpay suscriptionInd padding-all-10"
+                                  data-id="{{ employee.idEmployerHasEmployee }}">
+                                </div>
+                            </div>
+                          {% endif %}
 
                       {% endfor %}
                   </div>
@@ -312,12 +315,26 @@
         </div>
         <div id="salariosmed">
             <div class="infosalarios">
-                <div class="center">Costo de transacciones*</div>
+                <div class="center">
+                  <p id="modalCost" style="cursor:pointer;" onclick="modalCosto()"><u>Costo transaccional*</u></p>
+                </div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total 4x1000:</div>
+                <div id="cuatroXmil" class="right numberpay salaryIndVal"></div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total costo transacciones de nómina:</div>
+                <div id="totalCostoTransaccionSalarial" class="right numberpay salaryIndVal"></div>
+            </div>
+            <div class="empleadomed">
+                <div class="left lightpay">Total costo transacciones de aportes a seguridad social:</div>
+                <div id="totalCostoTransaccionPila" class="right numberpay salaryIndVal"></div>
             </div>
             <div class="empleadosmed">
                 <div class="empleadomed">
                     <div class="left monto">Total</div>
-                    <div class="right numberpay">$7.000</div>
+                    <div id="totalTransaccional" class="right numberpay salaryIndVal"></div>
                 </div>
             </div>
         </div>
@@ -452,16 +469,16 @@
     <form action="{{ path('subscription_confirm') }}" method="POST">
         <div class="row padding-left-right-40">
             <div class="col-md-12 margin-top-bottom-10 text-center">
-                <input type="submit" class="btn btn-orange" value="Asignar método de pago"/>
+                <input type="submit" class="btn btn-orange" value="Continuar"/>
             </div>
         </div>
     </form>
 
     <div class="row">
         <br/>
-        <div class="col-sm-12 remember text-center" style="opacity: 0.7;">
-            <h4 style="font-size: 14px;">* El valor puede variar según las novedades ingresadas mes a mes por cada
-                empleado así como también <br/>la cantidad de empleados que registre en el sistema</h4>
+        <div class="col-sm-12 remember text-center" style="opacity: 0.7;width:">
+            <h4 style="font-size: 14px;">* Estos valores son estimado, pueden variar según las novedades registradas
+              cada mes,<br> el número de empleados y el número de pagos que haga a través de la plataforma cada mes.</h4>
         </div>
     </div>
 
@@ -538,27 +555,34 @@
         {% set contrato = employeeData['contrato'] %}
         {% set producto = employeeData['product'] %}
 
-        if (typeof (employee[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
-            employee[{{ employee.idEmployerHasEmployee }}] = new Array();
-        }
-        if (typeof (contrato[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
-            contrato[{{ employee.idEmployerHasEmployee }}] = new Array();
-        }
-        if (typeof (producto[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
-            producto[{{ employee.idEmployerHasEmployee }}] = new Array();
-        }
-        employee[{{ employee.idEmployerHasEmployee }}]['id'] ={{ employee.idEmployerHasEmployee }} ;
-        employee[{{ employee.idEmployerHasEmployee }}]['state'] ={{ employee.state }} ;
-        contrato[{{ employee.idEmployerHasEmployee }}]['state'] ={{ contrato.state }} ;
-        contrato[{{ employee.idEmployerHasEmployee }}]['salary'] ={{ contrato.salary }} ;
-        contrato[{{ employee.idEmployerHasEmployee }}]['timeCommitment'] = "{{ contrato.timeCommitmentTimeCommitment.code?contrato.timeCommitmentTimeCommitment.code:0 }}";
-        contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
-        contrato[{{ employee.idEmployerHasEmployee }}]['transportAid'] ={{ contrato.transportAid?contrato.transportAid:0 }} ;
-        contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
-        producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
-        producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
-        producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};
+        {% if contrato.employerHasEmployeeEmployerHasEmployee.state >= 0 %}
+            if (typeof (employee[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+                employee[{{ employee.idEmployerHasEmployee }}] = new Array();
+            }
+            if (typeof (contrato[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+                contrato[{{ employee.idEmployerHasEmployee }}] = new Array();
+            }
+            if (typeof (producto[{{ employee.idEmployerHasEmployee }}]) === 'undefined') {
+                producto[{{ employee.idEmployerHasEmployee }}] = new Array();
+            }
+            employee[{{ employee.idEmployerHasEmployee }}]['id'] ={{ employee.idEmployerHasEmployee }} ;
+            employee[{{ employee.idEmployerHasEmployee }}]['state'] ={{ employee.state }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['state'] ={{ contrato.state }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['salary'] ={{ contrato.salary }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['timeCommitment'] = "{{ contrato.timeCommitmentTimeCommitment.code?contrato.timeCommitmentTimeCommitment.code:0 }}";
+            contrato[{{ employee.idEmployerHasEmployee }}]['workableDaysMonth'] ={{ contrato.workableDaysMonth?contrato.workableDaysMonth:0 }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['transportAid'] ={{ contrato.transportAid?contrato.transportAid:0 }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['wayToPay'] = {{ contrato.payMethodPayMethod.payTypePayType.idPayType }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['frecuencia'] = {{ contrato.frequencyFrequency.idFrequency }} ;
+            producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
+            producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
+            producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};
+
+        {% endif %}
+
         {% endfor %}
+        var freeMonths = {{ user.isFree }} ;
 
     </script>
 {% endblock %}

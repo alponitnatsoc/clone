@@ -26,7 +26,7 @@
                         <p class="light-italic">La herramienta más sencilla para administrar empleados domésticos</p>
                     </div>
                     <div id="tbanner2">
-                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Prueba un mes gratis</div></a>
+                    	<a href="/register"><div id="btn-prueba" class="semi-italic">Regístrate ahora</div></a>
                         <!--<a href="#openModal"><div class="btn-video semi-italic">Ver video</div></a>-->
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 	<img src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
                 	<h3 class="light">Contratación guiada</h3>
 
-                	<p class="light-italic">Te guiamos en la correcta contratación del todos tus empleados</p>
+                	<p class="light-italic">Te guiamos en la correcta contratación de todos tus empleados</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
@@ -64,14 +64,14 @@
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
+                	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
                 	<h3 class="light">Pago electrónico</h3>
 
                 	<p class="light-italic">Te ahorramos tiempo gestionando tus pagos y aportes con un solo clic</p>
                 </div>
 
                 <div class="col span_1_of_4 beneficios">
-                	<img src="{{ asset('public/img/landing/benefit3.png') }}" alt="">
+                	<img src="{{ asset('public/img/landing/benefit4.png') }}" alt="">
                 	<h3 class="light">Fácil administración</h3>
 
                 	<p class="light-italic">Administramos todos los detalles del día a día de tus empleados</p>
@@ -183,7 +183,7 @@ de empleados que quieras administrar</h4>
            </div>
         </section>
 
-        <section class="fondo-section">
+        <!--<section class="fondo-section">
         	<div id="opiniones">
             	<h2 class="light grisclarofont">Lo que opinan nuestros usuarios</h2>
                 <div id="personas">
@@ -210,8 +210,8 @@ de empleados que quieras administrar</h4>
 
                 </div>
             </div>
-            <a href="/register"><div class="callto2 naranja bold">Prueba un mes gratis</div></a>
-        </section>
+            <a href="/register"><div class="callto2 naranja bold">Regístrate ahora</div></a>
+        </section>-->
 
         <div id="intro-pc">
         	<span class="azuloscurofont light">Hacemos tu vida más sencilla en muy pocos pasos</span><br>
@@ -254,7 +254,17 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
     });
-     slider1.on("slide", function(slideEvt) {
+			slider1.on("change", function() {
+				conta1 = $('#ex1Slider').val();
+				$("#emp1").text(conta1);
+				funcion();
+				if(conta1 != 1)
+					 $("#palabra-empleados1").text("empleados");
+				else
+							 $("#palabra-empleados1").text("empleado");
+		 });
+
+     /*slider1.on("slide", function(slideEvt) {
          //console.log($('#ex1Slider').val());
          //console.log(conta1);
          conta1 = $('#ex1Slider').val();
@@ -264,13 +274,24 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados1").text("empleados");
          else
                 $("#palabra-empleados1").text("empleado");
-     });
+     });*/
      var slider2 = $("#ex2Slider" ).slider({
       value: 0,
       min: 0,
       max: 5,
     });
-     slider2.on("slide", function(slideEvt) {
+
+		slider2.on("change", function() {
+				conta2 = $('#ex2Slider').val();
+				$("#emp2").text(conta2);
+				funcion();
+				if(conta2 != 1)
+					 $("#palabra-empleados2").text("empleados");
+				else
+					 $("#palabra-empleados2").text("empleado");
+		});
+
+    /* slider2.on("slide", function(slideEvt) {
          conta2 = $('#ex2Slider').val();
          $("#emp2").text(conta2);
          funcion();
@@ -278,14 +299,25 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados2").text("empleados");
          else
             $("#palabra-empleados2").text("empleado");
-     });
+     });*/
      //var slider3 = new Slider("#ex3Slider");
     var slider3 = $("#ex3Slider" ).slider({
           value: 0,
           min: 0,
           max: 5,
         });
-     slider3.on("slide", function(slideEvt) {
+
+			slider3.on("change", function() {
+	        conta3 = $('#ex3Slider').val();
+	        $("#emp3").text(conta3);
+	        funcion();
+	        if(conta3 != 1)
+	           $("#palabra-empleados3").text("empleados");
+	        else
+	           $("#palabra-empleados3").text("empleado");
+	    });
+
+     /*slider3.on("slide", function(slideEvt) {
          conta3 = $('#ex3Slider').val();
          $("#emp3").text(conta3);
          funcion();
@@ -293,7 +325,7 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados3").text("empleados");
          else
             $("#palabra-empleados3").text("empleado");
-     });
+     });*/
     function funcion(){
         var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
 				if((conta1 + conta2 + conta3) >= 3 )

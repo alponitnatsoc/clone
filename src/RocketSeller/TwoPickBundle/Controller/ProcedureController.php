@@ -2,9 +2,13 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use DateTime;
+use RocketSeller\TwoPickBundle\Entity\Contract;
+use RocketSeller\TwoPickBundle\Entity\DocumentType;
 use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -421,8 +425,88 @@ class ProcedureController extends Controller
     }
     public function changeVueltaStateAction($procedureId,$actionId,$status)
     {	
-    	$em = $this->getDoctrine()->getManager();	
-    	$action = $this->loadClassById($actionId,"Action");
+    	$em = $this->getDoctrine()->getManager();
+		/** @var Action $action */
+		$action = $this->loadClassById($actionId,"Action");
+		//adding verification to check if the actions is validate documents employee
+		if($action->getActionTypeActionType()->getCode()=="VDC"){
+			$employee=$action->getPersonPerson()->getEmployee();
+			if($employee!=null){
+				/** @var User $user */
+				$user=$action->getRealProcedureRealProcedure()->getUserUser();
+				$ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+				$realEhe=null;
+				/** @var EmployerHasEmployee $eHE */
+				foreach ($ehes as $eHE) {
+					if($eHE->getEmployeeEmployee()->getIdEmployee()==$employee->getIdEmployee()){
+						$realEhe=$eHE;
+					}
+				}
+				if($realEhe!=null){
+					$realContract=null;
+					$contracts=$realEhe->getContracts();
+					/** @var Contract $contract */
+					foreach ($contracts as $contract) {
+						if($contract->getState()==1){
+							$realContract=$contract;
+							break;
+						}
+					}
+					if($contract!=null){
+						//first create the notification
+						$utils = $this->get('app.symplifica_utils');
+						$documentType = 'Contrato';
+						$dAction="Bajar";
+						$dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+						$msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$realEhe->getEmployeeEmployee()->getPersonPerson()->getNames())[0]." ". $realEhe->getEmployeeEmployee()->getPersonPerson()->getLastName1());
+						$nAction="Subir";
+						/** @var DocumentType $documentType */
+						$documentType = $em->getRepository('RocketSellerTwoPickBundle:DocumentType')->findByName($documentType)[0];
+						$url = $this->generateUrl("documentos_employee", array('id' => $realEhe->getEmployeeEmployee()->getPersonPerson()->getIdPerson(), 'idDocumentType' => $documentType->getIdDocumentType()));
+						$notifications=$realEhe->getEmployerEmployer()->getPersonPerson()->getNotifications();
+						$urlToFind=$this->generateUrl("view_document_contract_state", array("idEHE"=>$realEhe->getIdEmployerHasEmployee()));
+						//searching the notification of the state of the contract to replace its content
+						$notification=null;
+						/** @var Notification $not */
+						foreach ($notifications as $not ) {
+							if($not->getRelatedLink()==$urlToFind){
+								$notification=$not;
+							}
+						}
+						if($notification==null)
+							$notification = new Notification();
+
+						$notification->setPersonPerson($user->getPersonPerson());
+						$notification->setStatus(1);
+						$notification->setDocumentTypeDocumentType($documentType);
+						$notification->setType('alert');
+						$notification->setDescription($msj);
+						$notification->setRelatedLink($url);
+						$notification->setAccion($nAction);
+						$notification->setDownloadAction($dAction);
+						$notification->setDownloadLink($dUrl);
+						$em->persist($notification);
+						//then check if changing the start date is necessary
+						if($realEhe->getLegalFF()==0){
+							$todayPlus = new DateTime();
+							$request = $this->container->get('request');
+							$request->setMethod("GET");
+							$insertionAnswer = $this->forward('RocketSellerTwoPickBundle:NoveltyRest:getWorkableDaysToDate',array('dateStart'=>$todayPlus->format("Y-m-d"),'days'=>3), array('_format' => 'json'));
+							if ($insertionAnswer->getStatusCode() != 200) {
+								return false;
+							}
+							$permittedDate=new DateTime(json_decode($insertionAnswer->getContent(),true)['date']);
+							if($contract->getStartDate()<$permittedDate){
+								$contract->setStartDate($permittedDate);
+								$em->persist($contract);
+							}
+						}
+						$em->flush();
+					}
+				}
+
+			}
+		}
     	$action->setStatus($status);
     	$em->persist($action);
     	$em->flush();

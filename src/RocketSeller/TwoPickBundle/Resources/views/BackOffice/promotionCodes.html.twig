@@ -11,10 +11,14 @@
             <br>
             <table>
                 <tr>
+                    <th>Número</th>
                     <th>Código</th>
                 </tr>
                 {% for code in codes %}
                     <tr>
+                        <td>
+                            {{ loop.index }}
+                        </td>
                         <td>
                             <input class="code" value="{{ code.code }}" onClick="this.select();document.execCommand('copy');">
                         </td>

@@ -47,7 +47,6 @@ use RocketSeller\TwoPickBundle\Entity\Notification;
 use DateTime;
 
 class EmployeeRestController extends FOSRestController {
-
     /**
      * Create a Person from the submitted data.<br/>
      *

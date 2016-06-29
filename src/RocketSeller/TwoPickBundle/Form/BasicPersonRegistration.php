@@ -32,7 +32,7 @@ class BasicPersonRegistration extends AbstractType
 			    'multiple' => false,
 			    'expanded' => false,
 			    'property_path' => 'documentType',
-                'label' => 'Tipo de documento*',
+                'label' => 'Tipo de documento',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
 		    ))
@@ -41,7 +41,7 @@ class BasicPersonRegistration extends AbstractType
                     new NotBlank()
                 ),
                 'property_path' => 'document',
-                'label' => 'Número de documento*',
+                'label' => 'Número de documento',
                 "attr" => array(
                     "data-toggle" => "tooltip",
                     "data-placement" => "right",
@@ -51,16 +51,16 @@ class BasicPersonRegistration extends AbstractType
             ->add('names', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Nombres*'))
+                ),'label' => 'Nombres'))
             ->add('lastName1', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Primer Apellido*'))
+                ),'label' => 'Primer Apellido'))
             ->add('lastName2', 'text', array(
                 'constraints' => array(
                     new NotBlank()
                 ),
-                'label' => 'Segundo Apellido',
+                'label' => 'Segundo Apellido (Opcional)',
                 'required' => false
             ))
             ->add('birthDate', 'date', array(
@@ -70,12 +70,12 @@ class BasicPersonRegistration extends AbstractType
                 'years' => range(intval($this->dateToday->format("Y"))-18,1900),
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Fecha de Nacimiento*'))
+                ),'label' => 'Fecha de Nacimiento'))
             //Tab 2
             ->add('mainAddress', 'text', array(
                 'constraints' => array(
                     new NotBlank()
-                ),'label' => 'Dirección*'))
+                ),'label' => 'Dirección'))
             ->add('phones', 'collection', array(
                 'type' => new PhoneRegistration(),
                 'allow_add'    => true,
@@ -88,7 +88,7 @@ class BasicPersonRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'department',
-                'label' => 'Departamento*',
+                'label' => 'Departamento',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ))
@@ -98,7 +98,7 @@ class BasicPersonRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'property_path' => 'city',
-                'label' => 'Ciudad*',
+                'label' => 'Ciudad',
                 'placeholder' => 'Seleccionar una opción',
                 'required' => true
             ));

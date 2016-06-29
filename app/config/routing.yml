@@ -195,8 +195,8 @@ send_email_test_send:
     path: /send-email/send
     defaults: { _controller: RocketSellerTwoPickBundle:SendEmail:sendEmail}
 contact:
-    path: /contact
-    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact}
+    path: /contact/{subject}
+    defaults: { _controller: RocketSellerTwoPickBundle:Default:contact, subject: "default"}
 payroll:
     path: /payroll
     defaults: { _controller: RocketSellerTwoPickBundle:Payroll:pay}
@@ -465,6 +465,9 @@ choose_registration:
 welcome_post_register:
     path: /welcome/register
     defaults:  { _controller: RocketSellerTwoPickBundle:Registration:welcomePostRegister }
+view_document_contract_state:
+    path: /contract/condition/{idEHE}
+    defaults:  { _controller: RocketSellerTwoPickBundle:Employee:contractCondition }
 
 
 back_employer_menu:

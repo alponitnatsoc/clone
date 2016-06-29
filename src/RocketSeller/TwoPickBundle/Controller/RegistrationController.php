@@ -225,7 +225,11 @@ class RegistrationController extends BaseController
         /** @var User $user */
         $user = $this->getUser();
         if ($user->getPersonPerson()->getEmployer() == null) {
-            return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
+            if($user->getLegalFlag()==-2){
+                return $this->render('RocketSellerTwoPickBundle:Registration:chooseRegistration.html.twig');
+            }else{
+                return $this->redirectToRoute('welcome');
+            }
         } else {
             return $this->redirectToRoute('ajax');
         }
@@ -287,7 +291,6 @@ class RegistrationController extends BaseController
         $form->handleRequest($request);
         $errno = null;
         if ($form->isValid()) {
-            //dump($form->get("phone")->getData()->getPhoneNumber());
             if ($person->getDocumentType() == null) {
                 $person->setDocumentType($form->get("documentType")->getData());
                 $person->setDocument($form->get("document")->getData());

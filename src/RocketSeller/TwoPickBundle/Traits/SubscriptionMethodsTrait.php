@@ -21,7 +21,7 @@ use Doctrine\ORM\EntityManager;
 trait SubscriptionMethodsTrait
 {
 
-    use EmployeeMethodsTrait;
+       use EmployeeMethodsTrait;
 
     protected function findProductByNumDays($productos, $days)
     {

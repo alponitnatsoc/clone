@@ -109,7 +109,175 @@ class EmployerRestController extends FOSRestController
     }
 
     /**
+     * Obtener el estado de validacion de los documentos del empleador
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener el estado de validacion de documentos del empleado.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $idUser - Id del usuario del que se desea consultar el estado de validacion de documentos como empleado por backoffice
+     *
+     *  @return View
+     */
+    public function getEmployerDocumentValidationStateAction($idUser)
+    {
+        /** @var User $user */
+        $user=$this->loadClassById($idUser,"User");
+        $view = View::create();
+        if($user){
+            $valid = $this->employerDocumentsValidated($user);
+            if($valid==1){
+                $data = 'Validado';
+            }elseif($valid==0){
+                $data = 'Por Validar';
+            }elseif($valid==-1){
+                $data = 'Error en documentos';
+            }elseif ($valid==2){
+                $data = 'Estado desconocido';
+            }
+        }else{
+            $data = 'Usuario no encontrado';
+            $view->setData($data)->setStatusCode(404);
+            return $view;
+        }
+
+        $view->setData($data)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Obtener el estado de validacion de los documentos del empleado
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener el estado de validacion de documentos del empleado.",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $idUser - Id del usuario del que se desea consultar el estado de validacion de documentos como empleado por backoffice
+     * @param integer $idEHE - id del employer has employee que se esta consultando
+     *  @return View
+     */
+    public function getEmployeeDocumentValidationStateAction($idUser,$idEHE)
+    {
+        /** @var User $user */
+        $user=$this->loadClassById($idUser,"User");
+        $eHE= $this->loadClassById($idEHE,"EmployerHasEmployee");
+        $view = View::create();
+        if($user){
+            if($eHE){
+                $valid = $this->employeeDocumentsValidated($user,$eHE);
+                if($valid==1){
+                    $data = 'Validado';
+                }elseif($valid==0){
+                    $data = 'Por Validar';
+                }elseif($valid==-1){
+                    $data = 'Error en documentos';
+                }elseif ($valid==2){
+                    $data = 'Estado desconocido';
+                }
+            }else{
+                $data = 'EmployerHasEmployee no encontrado';
+                $view->setData($data)->setStatusCode(404);
+                return $view;
+            }
+        }else{
+            $data = 'Usuario no encontrado';
+            $view->setData($data)->setStatusCode(404);
+            return $view;
+        }
+        $view->setData($data)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
+     * Obtener el estado de documentos de todos los empleados de un usuario;
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Obtener el estado de documentos de todos los empleados del usuario",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param integer $idUser - Id del usuario del que se desea consultar
+     *  @return View
+     */
+    public function getAllEmloyeeDocumentsStatusAction($idUser)
+    {
+        /** @var User $user */
+        $user=$this->loadClassById($idUser,"User");
+        $view = View::create();
+        if($user){
+            $data = $this->allDocumentsReady($user);
+            $response = array();
+            foreach ($data as $dat){
+                if($dat['docStatus']==-1){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all docs are pending');
+                }elseif($dat['docStatus']==0){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee docs are pending');
+                }elseif($dat['docStatus']==1){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employer docs are pending');
+                }elseif($dat['docStatus']==2){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'message docs ready');
+                }elseif($dat['docStatus']==3){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all documents are in validation');
+                }elseif($dat['docStatus']==4){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee documents are in validation');
+                }elseif($dat['docStatus']==5){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employer documents are in validation');
+                }elseif($dat['docStatus']==6){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee docs validated employer docs error');
+                }elseif($dat['docStatus']==7){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employer docs validated employee docs error');
+                }elseif($dat['docStatus']==8){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employer documents error');
+                }elseif($dat['docStatus']==9){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employer documents error');
+                }elseif($dat['docStatus']==10){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all documents error');
+                }elseif($dat['docStatus']==11){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all docs validated message');
+                }elseif($dat['docStatus']==12){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all docs error message');
+                }elseif($dat['docStatus']==13){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'backoffice message');
+                }elseif($dat['docStatus']==14){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee contract upload is pending');
+                }elseif($dat['docStatus']==15){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'message contract uploaded');
+                }elseif($dat['docStatus']==16){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee contract in validation');
+                }elseif($dat['docStatus']==17){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee contract error');
+                }elseif($dat['docStatus']==18){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee contract validated message');
+                }elseif($dat['docStatus']==19){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'backoffice finished');
+                }
+            }
+        }else{
+            $data = 'Usuario no encontrado';
+            $view->setData($data)->setStatusCode(404);
+            return $view;
+        }
+        $view->setData($response)->setStatusCode(200);
+        return $view;
+    }
+
+    /**
      * Obtener el estado de los documentos de un empleador
+     *
      * @ApiDoc(
      *     description="Obtener el estado de los documentos del empleador.",
      *     statusCodes={
@@ -141,6 +309,8 @@ class EmployerRestController extends FOSRestController
             $numEmp = 0;
             /** @var EmployerHasEmployee $employerHasEmployee */
             foreach($employerPerson->getEmployer()->getEmployerHasEmployees() as $employerHasEmployee){
+                if($employerHasEmployee->getState()<1)
+                    continue;
                 $numEmp+=1;
                 if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Cedula")){
                     $missingDocs = $missingDocs.'Cedula Empleado '.$numEmp.', ';
@@ -148,9 +318,9 @@ class EmployerRestController extends FOSRestController
                 if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Carta autorización Symplifica")){
                     $missingDocs = $missingDocs.'Carta Autorizacion Empleado '.$numEmp.', ';
                 }
-                if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
-                    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
-                }
+                //if(!$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getDocByType("Contrato")){
+                //    $missingDocs = $missingDocs.'Contrato Empleado '.$numEmp.', ';
+                //}
             }
             if($missingDocs==''){
                 $msg = array('state'=>true , 'message'=>"Documentos Completos" , 'missingDocs'=>$missingDocs);

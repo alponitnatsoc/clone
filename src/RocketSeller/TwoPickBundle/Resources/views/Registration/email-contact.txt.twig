@@ -2,8 +2,6 @@
 {% block subject %}{% autoescape false %}{{ subject }}{% endautoescape %}{% endblock %}
 {% block body_text %}
     {% autoescape false %}
-        Ayuda
-        {{ name }} Tiene una duda sobre {{ subject }}
     {% endautoescape %}
 {% endblock %}
 {% block body_html %}
@@ -35,7 +33,7 @@
                     <tr>
                         <td style="font-family: 'Open Sans', sans-serif; font-weight: 500; font-size: 15px;color:#5D5D5D">
                             {{ message }}<br><br>
-                            Mensaje Enviado desde la zona de ayuda de Symplifica.<br>
+                            Mensaje Enviado desde la zona de contacto de Symplifica.<br>
                             Nombre: {{ name }}<br>
                             IP: {{ ip }}<br>
                             Email: {{ fromEmail }}<br>

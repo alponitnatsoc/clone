@@ -81,7 +81,7 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'timeCommitmentTimeCommitment',
-                'label'=>'¿Cuál será la modalidad de trabajo?*',
+                'label'=>'¿Cuál será la modalidad de trabajo?',
                 'required' => true
             ))
             ->add('position', 'entity', array(
@@ -153,7 +153,7 @@ class expressContractRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => false,
                 'mapped' =>false,
-                'label'=>'¿Que días de la semana trabajará?*:'
+                'label'=>'¿Que días de la semana trabajará?:'
             ))
             ->add('workplaces', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Workplace',

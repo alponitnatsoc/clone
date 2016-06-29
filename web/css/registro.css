@@ -68,6 +68,14 @@ font-weight: 100;
     color: #7b7b7b;
 }
 
+.incluye {
+  width: 85%;
+  margin: 30px auto 0 auto;
+  clear: both;
+}
+
+#sectionContent2, #sectionContent3, #sectionContent4 {display:none;}
+
 .borderh3 {
   border: 1px #CCC solid;
     border-radius: 5px;
@@ -101,10 +109,9 @@ font-weight: 100;
 }
 
 .casos p {
-  font-style: italic;
-    color: #888;
+    color: #7b7b7b;
     font-size: 15px;
-    font-weight: 100;
+    font-weight: 400;
     margin: 0 auto;
     width: 90%;
     text-align: center;

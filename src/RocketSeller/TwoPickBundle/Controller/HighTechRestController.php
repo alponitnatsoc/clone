@@ -113,12 +113,12 @@ class HighTechRestController extends FOSRestController
     if($state == 0) {
       // I will update it to id 5.
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'00'));
-               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
       $retorno = $this->forward('RocketSellerTwoPickBundle:PaymentMethodRest:getDispersePurchaseOrder', ['idPurchaseOrder' => $dis->getIdPurchaseOrders()]);
     } else {
       $pos=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'P1'));
-               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $dis->setPurchaseOrdersStatus($pos);
       $date = new DateTime('01-01-0001 00:00:00');
       $dis->setDatePaid($date);
@@ -183,11 +183,11 @@ class HighTechRestController extends FOSRestController
     $retorno = null;
     if($state == 0) {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-1'));
-               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $pay->setPurchaseOrdersStatus($pos);
     } else {
       $pos = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:PurchaseOrdersStatus")->findOneBy(array('idNovoPay'=>'-2'));
-               $realtoPay->setPurchaseOrdersStatus($procesingStatus);
+               //$realtoPay->setPurchaseOrdersStatus($procesingStatus);
       $pay->setPurchaseOrdersStatus($pos);
       $view = View::create();
 
@@ -195,7 +195,7 @@ class HighTechRestController extends FOSRestController
       // Indicando que la transaccion no fue exitosa y se debe revisar la informacion del empleado.
       // Esto tambien debe disparar una accion que cuente un tiempo y retorne la plata automaticamente si no hay cambios.
     }
-    $em->persist($dis);
+    $em->persist($pay);
     $em->flush();
 
     // Succesfull operation.

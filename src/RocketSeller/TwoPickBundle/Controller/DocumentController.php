@@ -5,6 +5,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 use RocketSeller\TwoPickBundle\Entity\Document;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
+use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Form\DocumentRegistration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -142,8 +143,8 @@ use EmployerMethodsTrait;
     public function addDocAction($id, $idDocumentType, $idNotification, Request $request)
     {
         $fileTypePermitted = array(
-            'image/jpeg',
             'image/png',
+            'image/jpeg',
             'application/pdf',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
@@ -151,6 +152,7 @@ use EmployerMethodsTrait;
         $person = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Person')
                 ->find($id);
+        $name = $person->getNames();
         $documentType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:DocumentType')
                 ->find($idDocumentType);
@@ -194,13 +196,13 @@ use EmployerMethodsTrait;
                     $request->setMethod("GET");
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
                     $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
-                    if($responsePaymentsMethods["state"]==true){
+                    if($responsePaymentsMethods["state"]==true) {
                         /** @var Person $person */
-                        $person=$this->getUser()->getPersonPerson();
-                        $notifications=$person->getNotifications();
+                        $person = $this->getUser()->getPersonPerson();
+                        $notifications = $person->getNotifications();
                         /** @var Notification $not */
-                        foreach ($notifications as $not ) {
-                            if($not->getAccion()=="Bajar"){
+                        foreach ($notifications as $not) {
+                            if ($not->getAccion() == "Bajar") {
                                 $not->setStatus(0);
                                 $em->persist($not);
                             }
@@ -209,7 +211,9 @@ use EmployerMethodsTrait;
 
                         return $this->redirectToRoute('employer_completion_documents');
                     }
-                    return $this->redirect($request->server->get('HTTP_REFERER'));
+
+                    return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
+
                 } else {
                     return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
                 }
@@ -221,7 +225,7 @@ use EmployerMethodsTrait;
             //return $this->redirect('/pages?redirector=/matrix/choose');
         }
         return $this->render(
-                        'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'idNotification' => $idNotification));
+                        'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'documentName'=>$documentType->getName(),'personName'=>$name, 'idNotification' => $idNotification));
     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)
@@ -588,16 +592,28 @@ use EmployerMethodsTrait;
                 /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
                 foreach ($descriptions as $desc) {
                     if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
+
+                        $unitValue = 0;
+                        if( $desc->getProductProduct()->getSimpleName()=="CT" ){
+                          $ivaTotal+= round($desc->getValue()-($desc->getValue() / 1.16),0);
+                          $unitValue = round(($desc->getValue() / 1.16),0);
+                          $productsPrice += round(($desc->getValue() / 1.16));
+                        }
+                        else {
+                          $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+                          $unitValue = $desc->getProductProduct()->getPrice();
+                          $productsPrice += $desc->getProductProduct()->getPrice();
+                        }
+
                         $items[] = array(
                             'desc' => $desc->getDescription(),
                             'product' => $desc->getProductProduct(),
                             'pays' => $desc->getPayPay(),
                             'status' => $desc->getPurchaseOrdersStatus(),
                             'totalValue' => $desc->getValue(),
-                            'unitValue' => $desc->getProductProduct()->getPrice()
+                            'unitValue' => $unitValue
                         );
-                        $productsPrice += $desc->getProductProduct()->getPrice();
-                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
+
                     }
 
                 }
@@ -621,60 +637,72 @@ use EmployerMethodsTrait;
                 );
                 break;
             case "comprobante":
-                //id de la orden de compra
-                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:PurchaseOrders');
-                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrders $purchaseOrders */
-                $purchaseOrders = $repository->find($id);
+                //id de la nomina
+                $repository = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:Payroll');
+                /** @var \RocketSeller\TwoPickBundle\Entity\Payroll $payroll */
+                $payroll = $repository->find($id);
 
-
-
-                $client = $purchaseOrders->getIdUser()->getPersonPerson();
-                $clientInfo = array(
-                    'name' => $this->fullName($client->getIdPerson()),
-                    'docType' => $client->getDocumentType(),
-                    'docNumber' => $client->getDocument(),
-                    'address' => $client->getMainAddress(),
-                    'phone' => $client->getPhones()->getValues(),
-                    'city' => $client->getCity()->getName()
-                );
-
-                $descriptions = $purchaseOrders->getPurchaseOrderDescriptions();
-                $items=array();
-                $ivaTotal=0;
-                $productsPrice = 0;
-                /** @var \RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription $desc */
-                foreach ($descriptions as $desc) {
-                    if(!($desc->getProductProduct()->getSimpleName()=="PN"||$desc->getProductProduct()->getSimpleName()=="PP")){
-                        $items[] = array(
-                            'desc' => $desc->getDescription(),
-                            'product' => $desc->getProductProduct(),
-                            'pays' => $desc->getPayPay(),
-                            'status' => $desc->getPurchaseOrdersStatus(),
-                            'totalValue' => $desc->getValue(),
-                            'unitValue' => $desc->getProductProduct()->getPrice()
-                        );
-                        $productsPrice += $desc->getProductProduct()->getPrice();
-                        $ivaTotal+=$desc->getValue()-$desc->getProductProduct()->getPrice();
-                    }
-
+                if($payroll->getPaid()==0){
+                    return $this->redirectToRoute("show_dashboard");
                 }
 
-                $purchaseInfo = array(
-                    'number' => $purchaseOrders->getIdPurchaseOrders(),
-                    'city' => 'bogotá',
-                    'endDate' => null,
-                    'center' => null,
-                    'total' => $ivaTotal+$productsPrice
+                $employer = $payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                $employeePerson=$payroll->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployeeEmployee()->getPersonPerson();
+                $contract=$payroll->getContractContract();
+                $pods=$payroll->getPurchaseOrdersDescription();
+                $sqlNovelties=$payroll->getSqlNovelties();
+                if($pods->count()>0){
+                    /** @var PurchaseOrdersDescription $pod */
+                    $pod=$pods->get(0);
+                    $purchaseOrder=$pod->getPurchaseOrders();
+                    if($purchaseOrder->getPayMethodId()==null)
+                        $payMM="Efectivo";
+                    else
+                        $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+                }
+                else
+                    $payMM=$contract->getPayMethodPayMethod()->getPayTypePayType()->getName();
+
+                $clientInfo = array(
+                    'name' => $this->fullName($employer->getIdPerson()),
+                );
+                $employeeInfo = array(
+                    'name' => $this->fullName($employeePerson->getIdPerson()),
+                    'docType' => $employeePerson->getDocumentType(),
+                    'docNumber' => $employeePerson->getDocument(),
+                    'position' => $contract->getPositionPosition()->getName(),
+                    'payMethod' => $payMM,
+                    'salary' => $contract->getSalary(),
+                    'workCity' => $contract->getWorkplaceWorkplace()->getCity()->getName(),
+                    'period'=>$payroll->getPeriod(),
+                    'month'=>$payroll->getMonth()
+                );
+                $devengado= array();
+                $deducido= array();
+                $totalDevengado=$totalDeducido=$total=0;
+                /** @var Novelty $sqlNovelty */
+                foreach ($sqlNovelties as $sqlNovelty) {
+                    if($sqlNovelty->getNoveltyTypeNoveltyType()->getNaturaleza()=="DEV"){
+                        $devengado[]=$sqlNovelty;
+                        $totalDevengado+=$sqlNovelty->getSqlValue();
+                    }else{
+                        $deducido[]=$sqlNovelty;
+                        $totalDeducido+=$sqlNovelty->getSqlValue();
+
+                    }
+                }
+                $discriminatedInfo= array(
+                    'devengado'=>$devengado,
+                    'deducido'=>$deducido,
+                    'totalDevengado'=>$totalDevengado,
+                    'totalDeducido'=>$totalDeducido,
+                    'total'=>$totalDevengado-$totalDeducido
                 );
 
-                $purchaseInfo['iva'] = $ivaTotal;
-                $purchaseInfo['subTotal'] = $productsPrice;
-
                 $data = array(
-                    'invoiceNumber' => $purchaseOrders->getInvoiceNumber(),
+                    'employeeInfo' => $employeeInfo,
                     'client' => $clientInfo,
-                    'purchaseOrder' => $purchaseInfo,
-                    'items' => $items
+                    'discriminatedInfo' => $discriminatedInfo,
                 );
                 break;
             default:

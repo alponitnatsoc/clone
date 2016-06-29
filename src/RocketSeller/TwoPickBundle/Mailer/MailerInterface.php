@@ -55,11 +55,14 @@ interface MailerInterface
     public function sendReminderEmailMessage(UserInterface $user,$toEmail);
 
     /**
-     * Sen email
-     *
-     * @param UserInterface $user
+     * Send help message
+     * @param String $name
+     * @param String $fromEmail
+     * @param String $subject
+     * @param String $ip
+     * @param number $phone
      *
      * @return void
      */
-    public function sendEmail(UserInterface $user, $templateName, $fromEmail, $toEmail);
+    public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone);
 }

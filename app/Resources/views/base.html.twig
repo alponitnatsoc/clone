@@ -178,7 +178,7 @@
             {{ modal(7) }}
             {{ modal(8) }}
             {{ modal(9) }}
-
+            {{ modal(11)}}
         {% endblock %}
     </div>
     {% block body %}
@@ -247,7 +247,7 @@
                                     <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'legal_payment' %}activeMenu{% endif %} well well-lg">
-                                    <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('legal_payment') }}"{% endif %}>Asistencia Legal</a>
+                                    <a href="{{ path('legal_payment') }}">Asistencia Legal</a>
                                 </div>
                                 <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
                                     <a href="{{ path('contact') }}">Ayuda</a>
@@ -290,7 +290,7 @@
                                             <!-- Modal content -->
                                             <div class="modal-conten">
                                                 <div class="moda-header">
-                                                    <span class="close">×</span>
+                                                    <span class="close" id="span_close_modal">×</span>
                                                     <h2>Debes tener en cuenta los siguientes documentos</h2>
                                                 </div>
                                                 <div class="moda-body">
@@ -324,23 +324,25 @@
                                                 <div class="moda-footer">
 
                                                     <form id="reminderMail">
-                                                        <div class="row">
-                                                        </div>
-                                                        <span style="color: #5D5D5D">Correo:</span>
-                                                        <div style="margin-left: 20px; margin-top: 10px;">
-                                                            <input style="color: #4B4B4B; width: 280px; margin-right: 10px;"
-                                                                   type="text" id="emailToSendHelp"
-                                                                   name="emailToSendHelp"
-                                                                   placeholder="ejemplo@tucorreo.cual"/>
+                                                        <div class="row" style="margin-left: 20px">
+                                                            <span style="display: block;overflow: hidden;font-size: 20px;color: #5D5D5D;font-weight: bold;box-sizing: border-box;">Correo:</span>
+                                                            <div style="margin-top: 10px;">
+                                                                <input style="color: #4B4B4B; width: 60%;"
+                                                                       type="text" id="emailToSendHelp"
+                                                                       name="emailToSendHelp"
+                                                                       placeholder="tucorreo@ejemplo.com"/>
+                                                            </div>
+
+                                                            <div>
+                                                                <a style="margin-top: 10px;"
+                                                                   class="btn btn-middleblue notAjax"
+                                                                   id="emailToSendHelpButton"
+                                                                   href="{{ path('api_public_post_remainder') }}">
+                                                                    Enviar </a>
+                                                            </div>
                                                         </div>
 
-                                                        <div>
-                                                            <a style=" margin-left: 20px; margin-top: 10px;"
-                                                               class="btn btn-middleblue notAjax"
-                                                               id="emailToSendHelpButton"
-                                                               href="{{ path('api_public_post_remainder') }}">
-                                                                Enviar </a>
-                                                        </div>
+
                                                     </form>
                                                 </div>
                                             </div>
@@ -597,7 +599,7 @@
             }else if(idModal==2){
                 $("#fail_email_modal").modal("show");
             }else if(idModal==3){
-                $("#default_modal_3").modal("show");
+                $("#error_salario").modal("show");
             }else if(idModal==4){
                 $("#succes_payment_modal").modal("show");
             }else if(idModal==5){
@@ -610,6 +612,16 @@
                 $("#exit_legal_modal").modal("show");
             }else if(idModal==9){
                 $("#default_modal_9").modal("show");
+            }else if(idModal==10){
+                $("#end_documents_modal").modal("show");
+            }else if(idModal==11){
+                $("#detalle_costo_trans_modal").modal("show");
+            }else if(idModal==12){
+                $("#error_dias_laborales").modal("show");
+            }else if(idModal==13){
+                $("#error_modal_transporte").modal("show");
+            }else if(idModal==14){
+                $("#confirmation_token_modal").modal("show");
             }
         }
 

@@ -15,11 +15,13 @@ class ContactType extends AbstractType
     private $name;
     private $email;
     private $phone;
+    private $subject;
 
-    public function __construct($name,$email,$phone){
+    public function __construct($name,$email,$phone,$subject = "default"){
         $this->name  = $name;
         $this->email = $email;
         $this->phone = $phone;
+        $this->subject = $subject;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -44,7 +46,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -53,7 +55,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu nombre'
+                            'placeholder' => 'Digita tu telefono o numero celular'
                         )
                     )
                 );
@@ -71,7 +73,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electronico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 )
@@ -79,38 +81,63 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu nombre'
+                            'placeholder' => 'Digita tu telefono o numero celular'
                         )
                     )
                 );
         }
-        $builder
-            ->add('subject', 'choice', array(
-                    'label'   =>'Con que necesitas ayuda?',
-                    'choices' => array(
-                        0 => 'Registro',
-                        1 => 'Nómina y aportes',
-                        2 => 'Calculadora salarial',
-                        3 => 'Consulta jurídica',
-                        4 => 'Planes y precios',
-                        5 => 'Otros'
-                    ),
-                    'multiple' => false,
-                    'expanded' => false,
-                    'mapped'   => false,
-                    'required' => true
-                )
-            )
-        ->add('message', 'textarea', array(
-            'attr' => array(
-                'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
-            )
-        ))
 
-        ->add('enviar', 'submit', array(
-            'label' => 'Enviar',
-            'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
-        ));
+        if($this->subject == "default"){
+            $builder
+              ->add('subject', 'choice', array(
+                      'label'   =>'¿Con que necesitas ayuda?',
+                      'choices' => array(
+                          0 => 'Registro',
+                          1 => 'Nómina y aportes',
+                          2 => 'Calculadora salarial',
+                          3 => 'Consulta jurídica',
+                          4 => 'Planes y precios',
+                          5 => 'Otros'
+                      ),
+                      'multiple' => false,
+                      'expanded' => false,
+                      'mapped'   => false,
+                      'required' => true
+                    )
+                );
+        }else {
+            if ($this->subject == 'asistencia'){
+                $builder
+                    ->add('subject', 'text', array(
+                            'label' => 'Asunto:',
+                            'data' =>'Consulta jurídica',
+                            'required' => true,
+                            'disabled' => true,
+                        )
+                    );
+            }else{
+                $builder
+                    ->add('subject', 'text', array(
+                            'label' => 'Asunto:',
+                            'data' =>$this->subject,
+                            'required' => true,
+                            'disabled' => true,
+                        )
+                    );
+            }
+        }
+
+        $builder
+            ->add('message', 'textarea', array(
+                    'label' => 'Escribir mensaje',
+                'attr' => array(
+                    'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+                )
+            ))
+            ->add('enviar', 'submit', array(
+                  'label' => 'Enviar',
+                  'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
+              ));
 
     }
 

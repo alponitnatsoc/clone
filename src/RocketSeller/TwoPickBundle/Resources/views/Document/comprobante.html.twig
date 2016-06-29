@@ -103,24 +103,24 @@
 <div id="contenedor-comp">
     <div id="tittle-comp">
         <h2>Comprobante de pago</h2>
-        <span>Periodo x y</span>
+        <span>Periodo {{ data.employeeInfo.month }} {{ data.employeeInfo.period }}</span>
     </div>
     <div id="data-empleado">
         <p>
             <span>Empleador</span><br>
-            Carlos Eduardo Cartagena Carrasco
+            {{ data.client.name }}
         </p>
         <div class="celdas-copm">
             <div class="info-celdas">
                 <p>
                     <span>Empleado</span><br>
-                    Sandra María Bisval Mora
+                    {{ data.employeeInfo.name }}
                 </p>
             </div>
             <div class="info-celdas">
                 <p>
                     <span>Cédula</span><br>
-                    123456790
+                    {{ data.employeeInfo.docNumber }}
                 </p>
             </div>
         </div>
@@ -128,13 +128,13 @@
             <div class="info-celdas">
                 <p>
                     <span>Cargo</span><br>
-                    Empleada doméstica
+                    {{ data.employeeInfo.position }}
                 </p>
             </div>
             <div class="info-celdas">
                 <p>
                     <span>Ciudad</span><br>
-                    Bogotá
+                    {{ data.employeeInfo.workCity }}
                 </p>
             </div>
         </div>
@@ -142,13 +142,13 @@
             <div class="info-celdas">
                 <p>
                     <span>Medio de pago</span><br>
-                    Efectivo
+                    {{ data.employeeInfo.payMethod }}
                 </p>
             </div>
             <div class="info-celdas">
                 <p>
                     <span>Salario</span><br>
-                    $689.455
+                    {{ data.employeeInfo.salary }}
                 </p>
             </div>
         </div>
@@ -161,40 +161,44 @@
                 <th>Devengado</th>
                 <th>Deducido</th>
             </tr>
-            <tr align="center" valign="middle">
-                <td>1</td>
-                <td>Salario ordinario</td>
-                <td>$300.000</td>
-                <td>$0</td>
-            </tr>
-            <tr align="center" valign="middle">
-                <td>2</td>
-                <td>Aporte a salud</td>
-                <td>$0</td>
-                <td>$300.000</td>
-            </tr>
-            <tr align="center" valign="middle">
-                <td>3</td>
-                <td>Aporte a pensión</td>
-                <td>$0</td>
-                <td>$300.000</td>
-            </tr>
+
+            {% set counter=0 %}
+            {% for desc in data.discriminatedInfo.devengado %}
+                <tr align="center" valign="middle">
+                    <td>{{ counter }}</td>
+                    <td>{{ desc.name }}</td>
+                    <td>${{ desc.sqlValue }}</td>
+                    <td>$0</td>
+                </tr>
+                {% set counter=counter+1 %}
+            {% endfor %}
+            {% for desc in data.discriminatedInfo.deducido %}
+                <tr align="center" valign="middle">
+                    <td>{{ counter }}</td>
+                    <td>{{ desc.name }}</td>
+                    <td>$0</td>
+                    <td>${{ desc.sqlValue }}</td>
+                </tr>
+                {% set counter=counter+1 %}
+            {% endfor %}
+
             <tr valign="middle" class="sub">
                 <td class="bold" colspan="2" align="left">Total</td>
-                <td class="bold" align="center">$300.000</td>
-                <td class="bold" align="center">$0</td>
+                <td class="bold" align="center">${{ data.discriminatedInfo.totalDevengado }}</td>
+                <td class="bold" align="center">${{ data.discriminatedInfo.totalDeducido }}</td>
             </tr>
             <tr valign="middle" class="total">
                 <td class="bold" colspan="3" align="left">Neto a pagar</td>
-                <td class="bold" align="center">$300.000</td>
+                <td class="bold" align="center">{{ data.discriminatedInfo.total }}</td>
             </tr>
         </table>
     </div>
     <div id="firma-empleado">
         <p>
             <span>Firma empleado</span><br>
-            Sandra Liliana Mahecha Gonzales<br>
-            1234567890
+            {{ data.employeeInfo.name }}<br>
+            {{ data.employeeInfo.docType }}{{ data.employeeInfo.docNumber }}
+
         </p>
     </div>
 </div>
