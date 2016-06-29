@@ -87,15 +87,27 @@ class EmployerHasEmployee
 
     /**
      * Columna para los mensajes que se muestran al usuario en dashboard
-     * -1 - pending docs
-     * 0 - employer doc uploaded
-     * 1 - all backoffice docs uploaded
-     * 2 - employer docs backoffice validated
-     * 3 - employee docs backoffice validated
-     * 4 - all documents validated
-     * 5 - employer documents error
-     * 6 - employee documents error
-     * 7 - employer and employee documents error
+     * -1 - all docs are pending
+     * 0 - employee docs are pending
+     * 1 - employer docs are pending
+     * 2 - message docs ready
+     * 3 - all documents are in validation
+     * 4 - employee documents are in validation
+     * 5 - employer documents are in validation
+     * 6 - employee docs validated employer docs error
+     * 7 - employer docs validated employee docs error
+     * 8 - employer documents error
+     * 9 - employer documents error
+     * 10 - all documents error
+     * 11 - all docs validated message
+     * 12 - all docs error message
+     * 13 - backoffice message
+     * 14 - employee contract upload is pending
+     * 15 - message contract uploaded 
+     * 16 - employee contract in validation
+     * 17 - employee contract error
+     * 18 - employee contract validated message
+     * 19 - backoffice finished
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
     private $documentStatus = -1;

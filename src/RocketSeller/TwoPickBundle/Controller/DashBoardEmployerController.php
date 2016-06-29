@@ -36,30 +36,21 @@ class DashBoardEmployerController extends Controller {
             $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
             /** @var User $user */
             $user = $this->getUser();
-            $employerHasEmployees=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
-            $index= 0;
-            /** @var EmployerHasEmployee $employerHasEmployee */
-            foreach ($employerHasEmployees as $employerHasEmployee){
-                if($this->allDocumentsReady($user,$employerHasEmployee)){
-                    $ready[$index]=$employerHasEmployee->getIdEmployerHasEmployee();
-                }else{
-                    $ready[$index]=-1;
-                }
-                $index++;
+            foreach ($this->allDocumentsReady($user) as $docStat ){
+                $ready[$docStat['idEHE']]=$docStat['docStatus'];
             }
-            
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => $notifications,
                         'user' => $user->getPersonPerson(),
                         'contractType' => $contractType,
-                        'ready'=> $ready
-                        
+                        'ready'=>$ready,
             ));
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,
                         'user' => $user->getPersonPerson(),
-                        'contractType' => $contractType
+                        'contractType' => $contractType,
+
             ));
         }
     }
