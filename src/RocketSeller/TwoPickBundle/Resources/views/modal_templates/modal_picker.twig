@@ -635,8 +635,8 @@
 
 {% elseif template_parameter == 21 %}
 
-        {% set modal_id = 'confirmation_token_modal' %}
-
+        <!--modal para sisben-->
+        {% set modal_id = 'modalSiben' %}
         {% set primary_modal_header %}
         {% endset %}
 
@@ -662,6 +662,127 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
             </div>
         {% endset %}
+{% elseif template_parameter == 22 %}
+
+        <!--modal transacciones-->
+        {% set modal_id = 'modalTransaccionesInfo' %}
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+              <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel">Información costo de transacciones</h4>
+              </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+              <p style="padding: 15px 10px 5px 15px;">
+                1 empleado: $7.500 + 4x1.000 de la transacción<br>
+                2-5 empleados: $5.500 por empleado + 4x1.000 de la transacción<br>
+                +5 empleados: $3.500 por empleado + 4x1.000 de la transacción<br>
+                Sólo pago de Pila: $3.500</p>
+        {% endset %}
+
+                {% set primary_modal_footer %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                    </div>
+        {% endset %}
+ {% elseif template_parameter == 23 %}
+
+              <!--modal éxito validacion usuario sin contrato-->
+              {% set modal_id = 'modalContractPending' %}
+              {% set primary_modal_header %}
+              {% endset %}
+
+              {% set primary_modal_footer %}
+              {% endset %}
+
+              {% set primary_modal_header %}
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">¡Proceso de validación esitoso!</h4>
+                    </div>
+              {% endset %}
+
+              {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+              {% set primary_modal_body %}
+                    <p style="padding: 15px 10px 5px 15px;">
+                      El proceso de validación fue éxitoso, realizaremos la afiliación a
+                      las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
+                      nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera. Ya puedes descargar el contrato y subirlo.</p>
+              {% endset %}
+
+                      {% set primary_modal_footer %}
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                          </div>
+              {% endset %}
+
+              {% elseif template_parameter == 24 %}
+
+                           <!--modal éxito validacion usuario con contrato-->
+                           {% set modal_id = 'modalContractUpdate' %}
+                           {% set primary_modal_header %}
+                           {% endset %}
+
+                           {% set primary_modal_footer %}
+                           {% endset %}
+
+                           {% set primary_modal_header %}
+                                 <div class="modal-header">
+                                     <h4 class="modal-title" id="myModalLabel">¡Proceso de validación esitoso!</h4>
+                                 </div>
+                           {% endset %}
+
+                           {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+                           {% set primary_modal_body %}
+                                 <p style="padding: 15px 10px 5px 15px;">
+                                   El proceso de validación fue éxitoso, realizaremos la afiliación a
+                                   las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
+                                   nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera.</p>
+                           {% endset %}
+
+                                   {% set primary_modal_footer %}
+                                       <div class="modal-footer">
+                                           <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                                       </div>
+                           {% endset %}
+
+  {% elseif template_parameter == 25 %}
+
+              <!--modal validacion contrato-->
+
+             {% set primary_modal_header %}
+             {% endset %}
+
+             {% set primary_modal_footer %}
+             {% endset %}
+
+             {% set primary_modal_header %}
+                    <div class="modal-header">
+                         <h4 class="modal-title" id="myModalLabel">¡Tu contrato fue validado con exito!</h4>
+                   </div>
+             {% endset %}
+
+             {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+             {% set primary_modal_body %}
+                   <p style="padding: 15px 10px 5px 15px;">
+                        El contrato se ha validado con exito</p>
+             {% endset %}
+
+             {% set primary_modal_footer %}
+                 <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+                 </div>
+             {% endset %}
   {% else %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}

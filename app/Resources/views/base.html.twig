@@ -179,6 +179,10 @@
             {{ modal(8) }}
             {{ modal(9) }}
             {{ modal(11)}}
+            {{ modal(21) }}
+            {{ modal(22) }}
+            {{ modal(23) }}
+            {{ modal(24) }}
         {% endblock %}
     </div>
     {% block body %}
@@ -624,7 +628,16 @@
                 $("#confirmation_token_modal").modal("show");
             }else if(idModal==15){
                 $("#forbidden_format_modal").modal("show");
+            }else if(idModal==21){
+                $("#modalSiben").modal("show");
+            }else if(idModal==22){
+                $("#modalTransaccionesInfo").modal("show");
+            }else if(idModal==23){
+                $("#modalContractPending").modal("show");
+            }else if(idModal==24){
+                $("#modalContractUpdate").modal("show");
             }
+
         }
 
         function jsLoader(url) {
