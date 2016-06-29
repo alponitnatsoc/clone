@@ -578,9 +578,11 @@
             producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
             producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
             producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};
+
         {% endif %}
 
         {% endfor %}
+        var freeMonths = {{ user.isFree }} ;
 
     </script>
 {% endblock %}

@@ -254,7 +254,17 @@ de empleados que quieras administrar</h4>
           min: 0,
           max: 5,
     });
-     slider1.on("slide", function(slideEvt) {
+			slider1.on("change", function() {
+				conta1 = $('#ex1Slider').val();
+				$("#emp1").text(conta1);
+				funcion();
+				if(conta1 != 1)
+					 $("#palabra-empleados1").text("empleados");
+				else
+							 $("#palabra-empleados1").text("empleado");
+		 });
+
+     /*slider1.on("slide", function(slideEvt) {
          //console.log($('#ex1Slider').val());
          //console.log(conta1);
          conta1 = $('#ex1Slider').val();
@@ -264,13 +274,24 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados1").text("empleados");
          else
                 $("#palabra-empleados1").text("empleado");
-     });
+     });*/
      var slider2 = $("#ex2Slider" ).slider({
       value: 0,
       min: 0,
       max: 5,
     });
-     slider2.on("slide", function(slideEvt) {
+
+		slider2.on("change", function() {
+				conta2 = $('#ex2Slider').val();
+				$("#emp2").text(conta2);
+				funcion();
+				if(conta2 != 1)
+					 $("#palabra-empleados2").text("empleados");
+				else
+					 $("#palabra-empleados2").text("empleado");
+		});
+
+    /* slider2.on("slide", function(slideEvt) {
          conta2 = $('#ex2Slider').val();
          $("#emp2").text(conta2);
          funcion();
@@ -278,14 +299,25 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados2").text("empleados");
          else
             $("#palabra-empleados2").text("empleado");
-     });
+     });*/
      //var slider3 = new Slider("#ex3Slider");
     var slider3 = $("#ex3Slider" ).slider({
           value: 0,
           min: 0,
           max: 5,
         });
-     slider3.on("slide", function(slideEvt) {
+
+			slider3.on("change", function() {
+	        conta3 = $('#ex3Slider').val();
+	        $("#emp3").text(conta3);
+	        funcion();
+	        if(conta3 != 1)
+	           $("#palabra-empleados3").text("empleados");
+	        else
+	           $("#palabra-empleados3").text("empleado");
+	    });
+
+     /*slider3.on("slide", function(slideEvt) {
          conta3 = $('#ex3Slider').val();
          $("#emp3").text(conta3);
          funcion();
@@ -293,7 +325,7 @@ de empleados que quieras administrar</h4>
             $("#palabra-empleados3").text("empleados");
          else
             $("#palabra-empleados3").text("empleado");
-     });
+     });*/
     function funcion(){
         var valor = (conta1 * 29500) + (conta2 * 22500) + (conta3 * 16500);
 				if((conta1 + conta2 + conta3) >= 3 )

@@ -91,15 +91,13 @@ function startEmployee() {
 
         $("ul.phones input[name*='phoneNumber']").each(function () {
             $(this).rules("add", {
-                maxlength: 10,
+                minlength: 7,
                 required: true,
                 number: true,
-                pattern: /3[\d]{9}/,
                 messages: {
-                    required: "Por favor ingresa un número de telefono celular",
-                    number: "Por favor ingresa solo digitos",
-                    pattern: "El número no tiene la estructura de un celular colombiano",
-                    maxlength: "No es un número de celular válido"
+                    minlength: "Por favor ingresa un número valido",
+                    required: "Por favor ingresa un número de telefono",
+                    number: "Por favor ingresa solo digitos"
                 }
             });
         });
@@ -269,6 +267,10 @@ function startEmployee() {
             });
         }
         calculator();
+    });
+
+    $("[name='register_employee[employeeHasEmployers][sisben]']").on("change", function () {
+      calculator();
     });
     /*$("#register_employee_employeeHasEmployers_startDate").on("change", function () {
         if($("#changeBehavior").text()=="1"){
@@ -948,6 +950,8 @@ function startEmployee() {
           && $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked") == false ){
           $("#register_employee_employeeHasEmployers_transportAid_1").prop("checked",true);
         }
+
+    $( "label[for='register_employee_person_phones_0_phoneNumber']").text("Número de teléfono");
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
     var prototype = $collectionHolderB.data('prototype');

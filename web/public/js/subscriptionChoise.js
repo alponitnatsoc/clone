@@ -418,6 +418,9 @@ function fillTable(){
             subtotal = subtotal * 0.9;
           }
 
+          if( freeMonths > 0){
+            subtotal = 0;
+          }
           total_cost_all = subtotal + total_seguridad_social + total_income + totalTransaccionalL;
           $("#totalCostAll").html(getPrice(total_cost_all));
       }
@@ -432,25 +435,37 @@ function fillTable(){
   }
 
   $(".suscriptionInd").each(function( index ) {
-    if (employee[$(this).data("id")]['state'] > 0) {
-      var workableDays = contrato[$(this).data("id")]['workableDaysMonth'];
-      var endValue = 0;
-      if( workableDays >= 20){
-        endValue = producto['PS3'];
+
+    if(freeMonths > 0){
+      if(freeMonths == 1){
+        $(this).html("GRATIS</br>Por el próximo mes");
       }
-      else if (workableDays >= 11){
-        endValue = producto['PS2'];
-      }
-      else {
-        endValue = producto['PS1'];
+      else{
+        $(this).html("GRATIS</br>Por los próximos " + freeMonths + " meses");
       }
 
-      if(count_employee >= 3){
-        endValue = endValue * 0.9;
+    }
+    else {
+      if (employee[$(this).data("id")]['state'] > 0) {
+        var workableDays = contrato[$(this).data("id")]['workableDaysMonth'];
+        var endValue = 0;
+        if( workableDays >= 20){
+          endValue = producto['PS3'];
+        }
+        else if (workableDays >= 11){
+          endValue = producto['PS2'];
+        }
+        else {
+          endValue = producto['PS1'];
+        }
+
+        if(count_employee >= 3){
+          endValue = endValue * 0.9;
+        }
+        $(this).html(getPrice(endValue));
+      } else {
+        $(this).html(getPrice(0));
       }
-      $(this).html(getPrice(endValue));
-    } else {
-      $(this).html(getPrice(0));
     }
   });
 
