@@ -136,7 +136,7 @@ class ContactType extends AbstractType
             ))
             ->add('enviar', 'submit', array(
                   'label' => 'Enviar',
-                  'attr'=> array('class'=>"naranja bold btn-symplifica btn", 'id'=>"submit_button", 'type'=>"submit")
+                  'attr'=> array('class'=>"naranja bold btn-symplifica btn notAjax", 'id'=>"submit_button", 'type'=>"submit")
               ));
 
     }

@@ -54,23 +54,23 @@ function startContact() {
             return;
         }
         
-        $.ajax({
-            url: form.attr('action'),
-            type: $(form).attr('method'),
-            data: {
-                name: $(form).find("input[name='contact[name]']:checked").val(),
-                email: $(form).find("input[name='contact[email]']:checked").val(),
-                phone: $(form).find("input[name='contact[phone]']:checked").val(),
-                subject: $(form).find("input[name='contact[subject]']:checked").val(),
-                message: $(form).find("input[name='contact[message]']:checked").val()
-            }
-        }).done(function (data) {
-            $('.nav-tabs > .active').next('li').find('a').trigger('click');
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            if(jqXHR==errorHandleTry(jqXHR)){
-                alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
-            }
-        });
+        // $.ajax({
+        //     url: form.attr('action'),
+        //     type: $(form).attr('method'),
+        //     data: {
+        //         name: $(form).find("input[name='contact[name]']:checked").val(),
+        //         email: $(form).find("input[name='contact[email]']:checked").val(),
+        //         phone: $(form).find("input[name='contact[phone]']:checked").val(),
+        //         subject: $(form).find("input[name='contact[subject]']:checked").val(),
+        //         message: $(form).find("input[name='contact[message]']:checked").val()
+        //     }
+        // }).done(function (data) {
+        //     $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        // }).fail(function (jqXHR, textStatus, errorThrown) {
+        //     if(jqXHR==errorHandleTry(jqXHR)){
+        //         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
+        //     }
+        // });
 
         
     });
