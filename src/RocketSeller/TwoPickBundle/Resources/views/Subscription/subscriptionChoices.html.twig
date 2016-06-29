@@ -240,7 +240,7 @@
 
                   {% if employee.state > 0 %}
                   <div class="empleadomed">
-                      <div class="left lightpay">{{ employee.employeeEmployee.personPerson.names}} {{employee.employeeEmployee.personPerson.lastname1}}</div>
+                      <div class="left lightpay">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names ~" "~ employee.employeeEmployee.personPerson.lastname1)}}</div>
                       <div class="right numberpay salaryIndVal"
                       data-id="{{ employee.idEmployerHasEmployee }}"></div>
                   </div>
@@ -279,8 +279,8 @@
                                     <div class="col-md-8 nopadding {{ employee.employeeEmployee.personPerson.gender!='MAS'?'female':'male' }} ">
                                         <div>
                                             <b class="employee_name nombrecont"
-                                               style="font-size:large;">{{ employee.employeeEmployee.personPerson.names|upper }}</b><br/>
-                                            <span style="font-weight:80;">{{ (employee.employeeEmployee.personPerson.lastname1|lower|capitalize) ~ ' ' ~(employee.employeeEmployee.personPerson.lastname2 |lower|capitalize) }}</span>
+                                               style="font-size:large;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.names)}}</b><br/>
+                                            <span style="font-weight:80;">{{ utils.mb_capitalize(employee.employeeEmployee.personPerson.lastname1 ~" "~ employee.employeeEmployee.personPerson.lastname2)}}</span>
                                         </div>
                                         {% set tipo_tiempo_contrato = contrato.workableDaysMonth %}
                                         <div style="font-style:italic; font-weight:100; font-size: small;"
