@@ -532,3 +532,7 @@ categories:
 politicas_privacidad:
     path:     /politicas-de-privacidad
     defaults: { _controller: RocketSellerTwoPickBundle:CorporatePages:politicaPrivacidad}
+
+store_config:
+    path: /store_config/{legalOptions}/{redirectTo}/{changeFlag}
+    defaults: { _controller: RocketSellerTwoPickBundle:Configuration:storeConfig, changeFlag: 99}

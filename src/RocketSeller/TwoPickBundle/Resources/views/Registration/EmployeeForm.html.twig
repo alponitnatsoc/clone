@@ -385,6 +385,12 @@
                                 <div class="CCninero">{{ coverageCodes.2.payrollCoverageCode }}</div>
                                 <div class="CCmayordomo">{{ coverageCodes.3.payrollCoverageCode }}</div>
                             </div>
+                            <div id="hOp1C" class="hidden" >{% set hOp1 = legalOptions.1 %}{{legalOptions.1}}</div>
+                            <div id="hOp2C" class="hidden" >{% set hOp2 = legalOptions.2 %}{{legalOptions.2}}</div>
+                            <div id="hOp3C" class="hidden" >{% set hOp3 = legalOptions.3 %}{{legalOptions.3}}</div>
+                            <div id="hOp4C" class="hidden" >{% set hOp4 = legalOptions.4 %}{{legalOptions.4}}</div>
+                            <div id="hOp5C" class="hidden" >{% set hOp5 = legalOptions.5 %}{{legalOptions.5}}</div>
+                            <div id="hOp6C" class="hidden" >{% set hOp6 = legalOptions.6 %}{{legalOptions.6}}</div>
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
@@ -396,7 +402,11 @@
                                     <div id="radio-contrato">
                                         <form action="">
                                             <div class="contratotipo" id="indef"><input type="radio" name="gender" value="male" checked> Termino indefinido</div>
-                                            <div class="contratotipo" id="fijo"><input type="radio" name="gender" value="female"> Termino fijo</div>
+                                            {% if changeBehaviorFlag == 1 and hOp6 == 0 %}
+
+                                            {% else %}
+                                              <div class="contratotipo" id="fijo"><input type="radio" name="gender" value="female"> Termino fijo</div>
+                                            {% endif %}
                                         </form>
                                     </div>
                                     <div id="contenedor-tipocontrato">
@@ -410,6 +420,7 @@
                                             <h4>Ten en cuenta que:</h4>
                                             <p>Si el contrato se termina unilateralmente por el empleador después del periodo de prueba y sin justa causa, la indeminzación es de 30 días por el primer año y 20 por cada año subsiguiente usando como base el salario actual.</p>
                                         </div>
+
                                         <div id="tipocont2" class="cont-tipocontrato">
                                           <h4>Características termino fijo</h4>
                                           <ul>
@@ -424,6 +435,7 @@
                                           <br /><br />
                                           Además, este tipo de contrato debe cancelarse 30 días antes que finalice.</p>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!--<div class="row contractOptionsBox">
@@ -626,7 +638,10 @@
                                 </div>
 
                                 <div id ="arsNotAplicable" class="col-sm-12 col-xs-12">
-                                    <span class="noCumple">Su empleado no cumple los requisitos para pertenecer al regimen subsidiado, porque sus ganancias mensuales son mayores a un salario mínimo</span>
+                                    <span class="noCumple">El salario mensual excedería el salario mínimo mensual legal vigente. Según la ley, cuando esto sucede para trabajadores de tiempo parcial, la seguridad social se paga sobre 30 días y no por semanas lo cuál incrementa significativamente el costo</span>
+                                </div>
+                                <div id ="dontHaveSisben" class="col-sm-12 col-xs-12">
+                                    <span class="noCumple">El empleado está en el régimen contributivo (no pertenece al sisben). Según la ley, cuando esto sucede para trabajadores de tiempo parcial, la seguridad social se paga sobre 30 días y no por semanas lo cuál incrementa significativamente el costo</span>
                                 </div>
                                 <br/>
                                 <!--<div class="col-sm-12 col-xs-12 complete">
@@ -1143,6 +1158,8 @@ $(document).ready(function(){
         </section>
     </div>
                                             </div>
+                                            <p id="diasTrabajadosMod" class="centrar"><i>
+                                            </i></p>
                                             <div class="modal-footer" style="text-align: center;">
                                                 <button id="employerDismiss" type="button" class="btn btn-orange" data-dismiss="modal">Cerrar</button>
 

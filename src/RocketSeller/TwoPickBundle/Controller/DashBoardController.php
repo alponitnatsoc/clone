@@ -6,6 +6,7 @@ use RocketSeller\TwoPickBundle\Entity\Employer;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
+use RocketSeller\TwoPickBundle\Entity\Configuration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,40 @@ class DashBoardController extends Controller
 
     public function legalAction(Request $request)
     {
-        return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig');
+        $person = $this->getUser()->getPersonPerson();
+        $configurationArr = $person->getConfigurations();
+
+        $legalStatusArr = array(
+          "1" => 0,
+          "2" => 0,
+          "3" => 0,
+          "4" => 0,
+          "5" => 0,
+          "6" => 0
+        );
+
+        foreach($configurationArr as $cr){
+          if( $cr->getValue() == "PreLegal-NaturalPerson") {
+            $legalStatusArr["1"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SocialSecurity") {
+            $legalStatusArr["2"] = 1;
+          }
+          elseif( $cr->getValue() == "PreLegal-DaysMinimalWage") {
+            $legalStatusArr["3"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SocialSecurityEmployer") {
+            $legalStatusArr["4"] = 1;
+          }
+          elseif( $cr->getValue() == "PreLegal-SocialSecurityPayment") {
+            $legalStatusArr["5"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SignedContract") {
+            $legalStatusArr["6"] = 1;
+          }
+        }
+
+        return $this->render('RocketSellerTwoPickBundle:Default:legalStatus.html.twig', array('legalStatusArr' => $legalStatusArr));
     }
     /**
      * Maneja el registro de una nueva persona con los datos básicos,

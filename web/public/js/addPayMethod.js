@@ -131,7 +131,7 @@ function setupValidation(){
 var minYear = new Date().getFullYear();
 var form = $("#add_pay_method_form");
 var validator;
-  $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+  $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
     validator = form.validate({
         rules: {
             "name_on_card": "required" ,
