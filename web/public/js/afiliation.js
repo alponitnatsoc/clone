@@ -3,7 +3,7 @@
  */
 function startAfiliation() {
     var validator;
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='register_social_security']").validate({
             rules: {
                 "register_social_security[severances]": "required",

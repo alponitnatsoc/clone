@@ -74,9 +74,9 @@ class DefaultController extends Controller
                 $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(), $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
                 if ($send) {
-                    $this->addFlash('success', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
+                    $this->addFlash('success_send_email', 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas');
                 } else {
-                    $this->addFlash('fail', 'Ocurrio un error');
+                    $this->addFlash('fail_send_email', 'Ocurrio un error');
                 }
 
                 return $this->redirect($this->generateUrl('contact'));

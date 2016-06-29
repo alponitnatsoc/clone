@@ -74,7 +74,7 @@ class ContractRegistration extends AbstractType
                 ),
                 'multiple' => false,
                 'expanded' => true,
-                'label'=>'¿El empleado pertenece al SISBÉN?',
+                'label'=>'¿El empleado pertenece al SISBÉN? (regímen subsidiado)',
                 'required' => true,
             ))
             ->add('transportAid', 'choice', array(
