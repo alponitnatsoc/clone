@@ -183,7 +183,15 @@ class Person
      */
     private $billingAddress;
 
-    
+    /**
+     * @ORM\ManyToMany(targetEntity="Configuration", cascade={"persist"})
+     * @ORM\JoinTable(name="persons_has_configurations",
+     *      joinColumns={ @ORM\JoinColumn(name="person_id_person", referencedColumnName="id_person")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="configuration_id_configuration", referencedColumnName="id_configuration")}
+     *      )
+     */
+    private $configurations;
+
     /**
      * Get idPerson
      *
@@ -911,6 +919,7 @@ class Person
         $this->specificData = new \Doctrine\Common\Collections\ArrayCollection();
         $this->action = new \Doctrine\Common\Collections\ArrayCollection();
         $this->billingAddress = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->configurations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -945,5 +954,53 @@ class Person
     public function getNotifications()
     {
         return $this->notifications;
+    }
+
+    /**
+     * Add configuration
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Configuration $configuration
+     *
+     * @return Person
+     */
+    public function addConfiguration(\RocketSeller\TwoPickBundle\Entity\Configuration $configuration)
+    {
+        $this->configurations[] = $configuration;
+
+        return $this;
+    }
+
+    /**
+     * Set configuration
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Configuration $configuration
+     *
+     * @return Person
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->configurations = $configuration;
+
+        return $this;
+    }
+
+    /**
+     * Remove configuration
+     *
+     * @param \RocketSeller\TwoPickBundle\Entity\Configuration $configuration
+     */
+    public function removeConfiguration(\RocketSeller\TwoPickBundle\Entity\Configuration $configuration)
+    {
+        $this->configurations->removeElement($configuration);
+    }
+
+    /**
+     * Get configurations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConfigurations()
+    {
+        return $this->configurations;
     }
 }

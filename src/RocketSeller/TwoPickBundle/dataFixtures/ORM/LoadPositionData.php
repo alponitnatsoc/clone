@@ -30,7 +30,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $conductor = new Position();
         $conductor->setName('Conductor(a)');
-        $conductor->setPayrollCoverageCode('4'); // Code 4.35
+        $conductor->setPayrollCoverageCode('3'); // Code 2.436
         $conductor->setIdentBy("c");
         $conductor->setObligations("1. preparar y alistar el vehiculo asignado; 2.  mantener vigentes todos los documentos necesarios para realizar la actividad dentro lo cuales se encuentran (pase, soat, tecnomecanica); 3.utilizar el vehiculo solo para realizar las actividades para las cual fue contratado exclucivamente; 4. cumplir con la normatividad que regula la conduccion en colombia y respetar las señales de transito.");
         $manager->persist($conductor);
@@ -51,7 +51,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
 
         $mayordomo = new Position();
         $mayordomo->setName('Mayordomo');
-        $mayordomo->setPayrollCoverageCode('3'); // Code 2.436
+        $mayordomo->setPayrollCoverageCode('2'); // Code 1.044
         $mayordomo->setObligations("1. Cuidado y mantenimiento general del bien e inmueble tanto de forma interna como externa ; 2. pago de servicios y demas facturas; 3. Atender a los visitantes del empleador ; 4. Notificar inmendiatamente al empleador, de cualquier eventualidad que se presente en el inmueble.");
         $mayordomo->setIdentBy("m");
         $manager->persist($mayordomo);

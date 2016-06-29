@@ -25,12 +25,13 @@
                     <div class="row modal-responsive" style="border-bottom: none;">
                         <div class="col-sm-12 col-xs-12">
                             <div class="col-sm-12 col-xs-12 subir-archivo">
-                                {{ form_label(form.mediaMedia.binaryContent) }}
+                                {{ form_label(form.mediaMedia.binaryContent,'Subir archivo') }}
+                                <br/>
+                                <h8 style="font-stretch: expanded">Los formatos aceptados son .pdf .jpg .png .jpeg</h8>
                             </div>
                             <div class="col-sm-9 text-left">
-                                {{ form_widget(form.mediaMedia.binaryContent,{'attr': {'accept':"application/pdf,image/jpg,image/png,image/tif"}}) }}
+                                {{ form_widget(form.mediaMedia.binaryContent,{'attr':{'accept':"application/pdf,image/jpeg,image/tiff,image/png",'style':"margin-top:30px"}}) }}
                             </div>
-                            <!--<img src="/img/typePerson.png">-->
                         </div>
                     </div>
                     <div class="row " style="border-bottom: none; padding-top: 20px;">
@@ -44,3 +45,4 @@
         </div>
     </div>
 {% endblock fos_user_content %}
+

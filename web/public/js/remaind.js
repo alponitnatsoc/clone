@@ -28,7 +28,7 @@ function startReminder() {
             modal.style.display = "none";
         }
     }
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("#reminderMail").validate({
             rules:{
                 "emailToSendHelp" : { required: true, email: true, minlength:5}},
