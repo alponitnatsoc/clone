@@ -357,6 +357,7 @@ class EmployeeController extends Controller
         if ($tempPerson->getPhones()->count() == 0) {
             $tempPerson->addPhone(new Phone());
         }
+
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
         $entityTypes = $entityTypeRepo->findAll();
         $configData = $this->getConfigData();
@@ -365,6 +366,8 @@ class EmployeeController extends Controller
         $ars = null;
         $severances = null;
 
+        $positionRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Position");
+        $positions = $positionRepo->findAll();
 
         /** @var EntityType $entityType */
         foreach ($entityTypes as $entityType) {
@@ -473,7 +476,8 @@ class EmployeeController extends Controller
                     'permittedDate'=>array(
                         'y'=>$permittedDate->format("Y"),
                         'm'=>$permittedDate->format("m"),
-                        'd'=>$permittedDate->format("d"))
+                        'd'=>$permittedDate->format("d")),
+                    'coverageCodes' => $positions,
         ));
     }
 
