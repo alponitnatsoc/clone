@@ -418,6 +418,9 @@ function fillTable(){
             subtotal = subtotal * 0.9;
           }
 
+          if( freeMonths > 0){
+            subtotal = 0;
+          }
           total_cost_all = subtotal + total_seguridad_social + total_income + totalTransaccionalL;
           $("#totalCostAll").html(getPrice(total_cost_all));
       }
