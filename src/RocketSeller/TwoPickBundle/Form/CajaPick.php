@@ -41,7 +41,7 @@ class CajaPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'property_path' => 'state',
-                'label'=>'¿Está afiliado?',
+                'label'=>'¿Estás afiliado?',
                 'required' => true,
                 'attr'=>array("class"=>'existsS')
             ));

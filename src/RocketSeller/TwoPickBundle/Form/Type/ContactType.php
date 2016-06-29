@@ -90,7 +90,7 @@ class ContactType extends AbstractType
         if($this->subject == "default"){
             $builder
               ->add('subject', 'choice', array(
-                      'label'   =>'Con que necesitas ayuda?',
+                      'label'   =>'¿Con que necesitas ayuda?',
                       'choices' => array(
                           0 => 'Registro',
                           1 => 'Nómina y aportes',
@@ -129,7 +129,7 @@ class ContactType extends AbstractType
 
         $builder
             ->add('message', 'textarea', array(
-                    'label' => 'Mensaje',
+                    'label' => 'Escribir mensaje',
                 'attr' => array(
                     'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
                 )

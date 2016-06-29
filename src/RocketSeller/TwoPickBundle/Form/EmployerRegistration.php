@@ -102,7 +102,7 @@ class EmployerRegistration extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?',
+                'label'=>'¿Estás afiliado?',
                 'required' => true
             ))
             ->add('save', 'submit', array(
