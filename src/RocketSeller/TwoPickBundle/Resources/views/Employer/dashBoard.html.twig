@@ -25,7 +25,7 @@
             .dashboard_employer_pending_tasks_list {
 
                 border-radius: 7px;
-                padding-top: 15px;
+                padding: 15px 0;
                 display: inline-block;
                 width: 100%;
                 background: #F8F8F8;
@@ -67,7 +67,7 @@
             .download-link, .download-link:hover {
                 width: 100px;
                 display: block;
-                margin: 0 auto;
+                margin: 5px auto;
                 padding: 5px;
                 cursor: pointer;
                 background-color: #FD9224;
@@ -134,16 +134,18 @@
                 font-size: 16px;
                 display: inline-block;
                 vertical-align: -webkit-baseline-middle;
-                width: 80%;
+                width: 60%;
                 float: left;
             }
 
             .deadline {
                 font-family: 'Arial Regular', 'Arial';
-                font-weight: 400;
+                font-weight: 800;
                 font-style: normal;
                 font-size: 13px;
-                color: #666666;
+                color: #fd9224;
+                border-right: solid 1px;
+                border-left: solid 1px;
             }
 
             .deadline_alert {
@@ -313,6 +315,14 @@
                 display: block;
                 height: auto;
                 overflow: hidden;
+                float: left;
+                width: 15%;
+                text-align: center;
+            }
+
+            .dashBtons {
+              float: right;
+              width: 150px;
             }
 
             .reminder_title {
@@ -369,7 +379,7 @@
 
                 .description_list {
                     font-size: 14px;
-                    width: 70%;
+                    width: 55%;
                 }
 
             }
@@ -456,7 +466,7 @@
 
                 .description_list {
                     font-size: 13px;
-                    width: 60%;
+                    width: 50%;
                 }
 
                 .btn_list {
@@ -502,6 +512,15 @@
 
                     .label-group {
                         min-height: 30px;
+                    }
+
+                    .description_list, .deadline_list, .dashBtons, .btn_list, .action-link, .download-link {
+                      float: none;
+                      width: 100%;
+                      text-align: center;
+                    }
+                    .download-link, .download-link:hover, .action-link, .action-link:hover, action-link:visited {
+                      width: 100%
                     }
 
                 }
@@ -634,7 +653,7 @@
                                     <div class="label-as-badge label_list label-success">!</div>
                                 {% endif %}
                                 <div class="description_list col-md-8">
-                                    {{ notification.description }}
+                                    {{ notification.description }}rty
                                 </div>
                                 <div class="deadline_list col-md-2">
                                     {% if notification.deadline %}
@@ -651,27 +670,30 @@
                                         {% else %}
                                             {% set str_deadline =  str_deadline ~(  difference.days ~ ' días') %}
                                         {% endif %}
-                                        <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span>
+                                        <span class="deadline{{ deadline_type }}">{{ str_deadline }}</span><!--deadline-->
                                     {% endif %}
                                 </div>
-                                <div class="btn_list col-md-2">
-                                    {% if notification.accion %}
-                                        {% if (notification.accion|lower|trim) == "subir" %}
-                                            <span href="{{ notification.relatedlink }}/{{ notification.id }}"
-                                                  class="download-link"> {{ notification.accion }}</span>
+                                  <div class="dashBtons">
 
-                                            {% if (notification.downloadLink|lower|trim) != NULL %}
-                                                <a href="{{ notification.downloadLink }}" target="_blank"
-                                                   class="action-link notAjax">{{ notification.downloadAction }}</a>
-                                            {% endif %}
-                                        {% else %}
-                                            <a href="{{ notification.relatedlink }}" target="_blank"
-                                               class="action-link notAjax">{{ notification.accion }}</a>
-                                        {% endif %}
-                                    {% else %}
-                                        <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
-                                    {% endif %}
-                                </div>
+                                      <div class="btn_list col-md-2">
+                                          {% if notification.accion %}
+                                              {% if (notification.accion|lower|trim) == "subir" %}
+                                                  <span href="{{ notification.relatedlink }}/{{ notification.id }}"
+                                                        class="download-link"> {{ notification.accion }}</span><!--subir-->
+
+                                                  {% if (notification.downloadLink|lower|trim) != NULL %}
+                                                      <a href="{{ notification.downloadLink }}" target="_blank"
+                                                         class="action-link notAjax">{{ notification.downloadAction }}</a><!--bajar-->
+                                                  {% endif %}
+                                              {% else %}
+                                                  <a href="{{ notification.relatedlink }}" target="_blank"
+                                                     class="action-link notAjax">{{ notification.accion }}</a><!--ver-->
+                                              {% endif %}
+                                          {% else %}
+                                              <a href="{{ notification.relatedlink }}" class="btn btn-default">View</a>
+                                          {% endif %}
+                                      </div>
+                                  </div>
                             </div>
 
                         {% endif %}
