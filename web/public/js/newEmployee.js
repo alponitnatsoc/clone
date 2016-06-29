@@ -13,8 +13,8 @@ function startEmployee() {
     var loadedEndDateMonth = $("#register_employee_employeeHasEmployers_endDate_month").val();
     var loadedEndDateYear = $("#register_employee_employeeHasEmployers_endDate_year").val();
 
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
         validator = $("form[name='register_employee']").validate({
             //onfocusout: true,
             rules: {
@@ -691,7 +691,7 @@ function startEmployee() {
     });
     $('#btn-1').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var documentType = $(form).find("select[name='register_employee[person][documentType]']");
         var document = $(form).find("input[name='register_employee[person][document]']");
         var names = $(form).find("input[name='register_employee[person][names]']");
@@ -743,7 +743,7 @@ function startEmployee() {
     });
     $('#btn-2').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
         var idsPhones = [], phones = [];
         var mainAddress = $(form).find("input[name='register_employee[person][mainAddress]']");
 
@@ -795,7 +795,7 @@ function startEmployee() {
     });
     $('#btn-3').click(function (e) {
         e.preventDefault();
-        var form = $("form");
+        var form = $("[name='register_employee']");
 
         //var employeeType = $(form).find("select[name='register_employee[employeeHasEmployers][employeeType]']");
         var contractType = $(form).find("select[name='register_employee[employeeHasEmployers][contractType]']");
@@ -1757,7 +1757,7 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
   if( $(this).val() == 1 ){
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
-    $("#labelCosto").html("Costo </br> del empleado (sin prestaciones)");
+    $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
   }
   else {
     $('#radio_diario').prop('checked', true);

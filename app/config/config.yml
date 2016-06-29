@@ -45,6 +45,7 @@ twig:
         fos_csrf_provider: "@form.csrf_provider"
         symplifica_info: "%symplifica_info%"
         ambiente: "%ambiente%"
+        utils: "@app.symplifica_utils"
     date:
         timezone: "America/Bogota"
     number_format:

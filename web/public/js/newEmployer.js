@@ -7,8 +7,8 @@ function startEmployer() {
 
     $("#errorSeverance").hide();
     $("#errorARL").hide();
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
 
         validator = $("form[name='register_employer']").validate({
             rules: {
@@ -51,10 +51,10 @@ function startEmployer() {
                 number: true,
                 pattern: /3[\d]{9}/,
                 messages: {
-                    required: "Por favor ingresa un número de telefono celular",
+                    required: "Por favor ingresa un número de teléfono de celular en el siguiente formato, ejemplo 3508330000",
                     number: "Por favor ingresa solo digitos",
                     pattern: "El número no tiene la estructura de un celular colombiano",
-                    maxlength: "No es un número de celular válido"
+                    maxlength: "No es un número de celular válido; ejemplo 3508330000"
                 }
             });
         });
@@ -78,7 +78,7 @@ function startEmployer() {
       });
     });
     var $collectionHolderPhones;
-    var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar nuevo lugar de trabajo</span></a>');
+    var $addPhoneLink = $('<a href="#" class="add_phone_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar otro lugar de trabajo</span></a>');
     var $addSeveranceLink = $('<a href="#" class="add_severance_link" style="padding-top:2px !important;padding:10px;color:#00cdcc;text-decoration: none;margin-top:10px;display:block;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;">Agregar otra caja de compensación</span></a>');
     var $newLinkLi = $('<li class="col-md-12 text-center" id="addWorkplace"></li>').append($addPhoneLink);
     var $newLinkSeveranceLi = $('<li class="col-md-12 text-center" id="addSeverance"></li>').append($addSeveranceLink);

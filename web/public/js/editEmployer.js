@@ -7,8 +7,8 @@ function startEmployerEdit() {
     //$("#edit_employer_person_document").attr("disabled","true");
     //$("#edit_employer_person_documentType").attr("disabled","true");
 
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
-      $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+      $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
         validator = $("form[name='edit_employer']").validate({
             rules: {
                 "edit_employer[person][documentType]": "required",

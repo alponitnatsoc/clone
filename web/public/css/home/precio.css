@@ -60,9 +60,29 @@ border-bottom: 3px solid #794815}
 #calculadora {width: 1100px; margin: 0 auto;}
 #calculadora h2 {text-align: center; margin: 25px 0; font-size: 25px}
 #calculadora h4 {margin: 30px 0; text-align: center}
-.middle-cont {height: 98px; border: #d8d9dd solid 1px; padding: 45px 0 0 0; text-align: center;box-sizing: border-box; border-radius:5px}
-.no-colorcont {height: 98px; box-sizing: border-box; padding: 25px 0 0 0; font-size: 18px; color: #87868a;}
-.endcont {height: 98px; background: #edeef0; padding: 25px 0 0 0; text-align: center;box-sizing: border-box; font-size: 20px; border-radius: 5px}
+.middle-cont {
+	height: 70px;
+    border: #d8d9dd solid 1px;
+    padding: 35px 0 0 0;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+.no-colorcont {
+		height: 70px;
+    box-sizing: border-box;
+    padding: 13px 0 0 0;
+    font-size: 18px;
+    color: #87868a;}
+.endcont {
+	height: 70px;
+    background: #edeef0;
+    padding: 5px 0 0 0;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 20px;
+    border-radius: 5px;
+}
 #texto-finalcalculadora {text-align: center; width: 400px; margin: 20px auto; color: #6d6d71}
 #resultado-calculadora {width: 390px;border-radius: 3px;font-size: 28px;color: #FFF;}
 #callregistro {color: #6d6d71; margin: 70px auto; width: 255px; text-align: center}

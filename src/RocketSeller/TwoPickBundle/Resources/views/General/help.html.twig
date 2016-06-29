@@ -6,25 +6,21 @@
 {% endblock %}
 {% block content %}
 <h2 class="bold azulmediofont" style="margin-top:0px; clear:both; padding: 40px 0 0 15px">¡Estamos para servirte!</h2>
-<h2 class="light azulclarofont" style="margin:0; padding: 0 0 0 15px">Escribenos tus dudas</h2>
 <div class="search col-md-12" style="margin-top: 30px">
     <div class="col-md-10 input-field">
         <div id="contact_form" enctype="multipart/form-data">
             {{ form_errors(form) }}
             {{ form_start(form) }}
             <div class="row">
-                {% for label, flashes in app.session.flashbag.all %}
-                    {% for flash in flashes %}
-                        {% if label == 'success' and flash == 'Tu email ha sido enviado. Nos pondremos en contacto en menos de 24 horas' %}
-                            <div class="alert alert-{{ label }} semi-italic" for="alert">
-                                {{ flash }}
-                            </div>
-                        {% elseif label == 'fail' and flash == 'Ocurrio un error' %}
-                            <div class="alert alert-{{ label }} semi-italic" for="alert">
-                                {{ flash }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                {% for success_message in app.session.flashBag.get('success_send_email')%}
+                    <div class="alert alert-success semi-italic" for="alert">
+                        {{ success_message }}
+                    </div>
+                {% endfor %}
+                {% for fail_message in app.session.flashBag.get('fail_send_email')%}
+                    <div class="alert alert-fail semi-italic" for="alert">
+                        {{ fail_message }}
+                    </div>
                 {% endfor %}
             </div>
             <div class="row">

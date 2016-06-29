@@ -160,10 +160,10 @@ class SubscriptionController extends Controller
                     )
                 ))
                 ->add('documentType', 'text', array(
-                    'label' => 'Tipo de Documento',
+                    'label' => 'Tipo de documento',
                     'required' => true,
                     'attr' => array(
-                        'placeholder' => 'Tipo de Documento',
+                        'placeholder' => 'Tipo de documento',
                         'readonly' => true,
                         'value' => $person->getDocumentType()
                     )

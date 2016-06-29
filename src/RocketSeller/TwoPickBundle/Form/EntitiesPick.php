@@ -47,7 +47,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?',
+                'label'=>'¿El empleado está afiliado?',
                 'required' => true
             ))
 
@@ -75,7 +75,7 @@ class EntitiesPick extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'mapped' => false,
-                'label'=>'¿Está afiliado?',
+                'label'=>'¿El empleado está afiliado?',
                 'required' => true
             ))
 
@@ -100,7 +100,7 @@ class EntitiesPick extends AbstractType
             ))
             ->add('severancesAC', 'text', array(
                 'mapped' => false,
-                'label'=>'Cesantias*',
+                'label'=>'Fondo de Cesantías',
                 'required' => false,
                 'attr'=>array(
                     "class"=>'autocomCes',

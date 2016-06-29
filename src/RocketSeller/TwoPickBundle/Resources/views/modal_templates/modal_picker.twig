@@ -583,7 +583,85 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
             </div>
         {% endset %}
+    {% elseif template_parameter == 15 %}
+        {% set modal_id = 'forbidden_format_modal' %}
 
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set modal_style %}style="width: 70%;"{% endset %}
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px;  ">Error en el formato del documento</h1>
+        {% endset %}
+
+        {% set modal_content_class %}
+        {% endset %}
+
+        {% set modal_content_style %}
+        {% endset %}
+
+        {% set modal_content %}
+            <div>
+                <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">El archivo que intentaste subir no tiene un formato permitido. Los formatos permitidos son:</p>
+                <ul>.jpg</ul>
+                <ul>.png</ul>
+                <ul>.jpeg</ul>
+                <ul>.pdf</ul>
+            </div>
+        {% endset %}
+
+        {% set modal_style_button %}
+            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
+        {% endset %}
+
+        {% set modal_button %}
+            cerrar
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display: none"
+        {% endset %}
+
+        {% set modal_button2 %}
+            cerrar2
+        {% endset %}
+
+{% elseif template_parameter == 21 %}
+
+        {% set modal_id = 'confirmation_token_modal' %}
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Recuerde qué</h4>
+            </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+            <p style="padding: 15px 10px 5px 15px;">Recuerde que un empleado por días que no está en el
+              régimen subsidiado debe aportar a seguridad social sobre 30 días y cotizar a salud" si tiene
+              dudas escríbanos al chat o llámenos 350 833 0000.</p>
+        {% endset %}
+
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
+        {% endset %}
   {% else %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}

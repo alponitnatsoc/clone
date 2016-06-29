@@ -1,6 +1,6 @@
 function validateLiqForm() {
     var validator;
-    $.getScript("http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
+    $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='rocketseller_twopickbundle_liquidation']").validate({
             rules: {
                 "rocketseller_twopickbundle_liquidation[liquidationReason]": "required"
