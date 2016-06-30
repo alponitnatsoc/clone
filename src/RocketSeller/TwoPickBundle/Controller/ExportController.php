@@ -2,6 +2,7 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use RocketSeller\TwoPickBundle\Entity\Action;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\Document;
@@ -37,41 +38,26 @@ class ExportController extends Controller
 			->find($idPerson);
 
 			$personDocuments=$person->getDocs();
-			$files = array();
-			$files[0] = array();
+            $count = 1;
 			/** @var Document $document */
 			foreach ($personDocuments as $document) {
-				/**
-				if($count>0){
-					echo $person->getFullName()."<br>".$personDocuments->count();die;
-				}**/
-				$files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+				/** @var Media $media */
+                $media = $document->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                }
+                $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                $count++;
 			}
-			$valid_files = array();
-			$valid_files[0] = array();
-			$valid_files[1] = array();
-			//if files were passed in..
-			if(is_array($files[0])) {
-						//cycle through each file
-				for($i=0;$i<count($files[0]);$i++){
-					if(file_exists(getcwd().$files[0][$i])) {
-						$valid_files[0][] = getcwd() . $files[0][$i];
-					}
-				}
-				foreach($personDocuments as $document){
-					$valid_files[1][] = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.pdf';
-				}
-			}
-
 			# create new zip opbject
 			$zip = new ZipArchive();
-
+            $count--;
 			# create a temp file & open it
 			$tmp_file =$person->getNames()."_Documents.zip";
 			if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
 				# loop through each file
-				for($i=0;$i<count($valid_files[0]);$i++){
-					$zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
+				for($i=0;$i<$count;$i++){
+					$zip->addFile($docUrl[$i],$docName[$i]);
 				}
 				# close zip
 
@@ -98,6 +84,7 @@ class ExportController extends Controller
 		}
     }
 
+
     /**
      * Funcion para exporar todos los documentos relacionados a la acción
      * @param $idAction
@@ -108,61 +95,38 @@ class ExportController extends Controller
             $action = $this->getdoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Action')
                 ->find($idAction);
-
             //Employee Documents
             /** @var Person $person */
             $person = $action->getPersonPerson();
             $personDocuments=$person->getDocs();
-            $files = array();
-            $files[0] = array();
-            /** @var Document $document */
-            foreach ($personDocuments as $document) {
-                $files[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-            }
-            $valid_files = array();
-            $valid_files[0] = array();
-            $valid_files[1] = array();
-            //if files were passed in..
-            if(is_array($files[0])) {
-                for($i=0;$i<count($files[0]);$i++){
-                    //If file exist create path
-                    if(file_exists(getcwd().$files[0][$i])) {
-                        $valid_files[0][] = getcwd() . $files[0][$i];
-                    }
-                }
-                foreach($personDocuments as $document){
-                    //asign document name for the zip file
-                    $valid_files[1][] = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.pdf';
-                }
-            }
+            $count = 1;
             if($person->getIdPerson()!= $action->getUserUser()->getPersonPerson()->getIdPerson()){
                 //Employer Documents
                 /** @var Person $user */
                 $user = $action->getUserUser()->getPersonPerson();
                 $userDocuments = $user->getDocs();
-                $files1 = array();
-                $files1[0] = array();
                 /** @var Document $document */
                 foreach ($userDocuments as $document) {
-                    $files1[0][]= $this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
-                }
-                $valid_files1 = array();
-                $valid_files1[0] = array();
-                $valid_files1[1] = array();
-                //if files were passed in..
-                if(is_array($files1[0])) {
-                    for($i=0;$i<count($files1[0]);$i++){
-                        //If file exist create path
-                        if(file_exists(getcwd().$files1[0][$i])) {
-                            $valid_files1[0][] = getcwd() . $files1[0][$i];
-                        }
+                    /** @var Media $media */
+                    $media = $document->getMediaMedia();
+                    if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                        $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
                     }
-                    foreach($userDocuments as $document){
-                        //asign document name for the zip file
-                        $valid_files1[1][] = $document->getDocumentTypeDocumentType()->getName().' '.$user->getFullName().'.pdf';
-                    }
+                    $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$user->getFullName().'.'.$media->getExtension();
+                    $count++;
                 }
             }
+            /** @var Document $document */
+            foreach ($personDocuments as $document) {
+                /** @var Media $media */
+                $media = $document->getMediaMedia();
+                if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                    $docUrl[] = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+                }
+                $docName[] = $count.'. '.$document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+                $count++;
+            }
+            $count--;
 
             /** @var Person $person */
             $person= $action->getUserUser()->getPersonPerson();
@@ -288,19 +252,12 @@ class ExportController extends Controller
 
             # create new zip opbject
             $zip = new ZipArchive();
-
             # create a temp file & open it
             $tmp_file =$action->getUserUser()->getPersonPerson()->getNames()."_Documents.zip";
             if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
                 # loop through each file
-                for($i=0;$i<count($valid_files[0]);$i++){
-                    $zip->addFile($valid_files[0][$i],$i.". ".$valid_files[1][$i]);
-                }
-                # close zip
-                if($user){
-                    for($i=0;$i<count($valid_files1[0]);$i++){
-                        $zip->addFile($valid_files1[0][$i],$i.". ".$valid_files1[1][$i]);
-                    }
+                for($i=0;$i<$count;$i++){
+                    $zip->addFile($docUrl[$i],$docName[$i]);
                 }
                 $zip->addFile($csv,$user->getFullName().'.csv');
                 if($zip->close()!==TRUE)
