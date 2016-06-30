@@ -521,43 +521,7 @@ class EmployerRestController extends FOSRestController
 
     }
 
-    /**
-     * Obtener las notificaciones activas del usuario
-     *
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Enviar email requerido",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     404 = "Returned when no user found"
-     *   }
-     * )
-     *
-     * @param $userId
-     * @return View
 
-     */
-    public function getNotificationByUserAction($userId)
-    {
-
-        $view=View::create();
-        $userRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:User");
-        /** @var User $user */
-        $user=$userRepo->find($userId);
-        if($user==null){
-            return $view->setStatusCode(404);
-        }
-        $notifications=$user->getPersonPerson()->getNotifications();
-        $activeNotifications = new ArrayCollection();
-        /** @var Notification $notif */
-        foreach ( $notifications as $notif ) {
-            if( $notif->getStatus() == 1 )
-                $activeNotifications->add($notif);
-        }
-        return $view->setData(array('notifications'=>$activeNotifications))->setStatusCode(200);
-
-    }
 
 
 }
