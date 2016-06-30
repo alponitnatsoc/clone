@@ -242,7 +242,7 @@ function startEmployer() {
             }
         });
         $("#employerDismiss").on('click', function () {
-            sendAjax(redirUri);
+            window.location.href = redirUri;
         });
     });
     $('#btn-inquiry').click(function (e) {
