@@ -17,6 +17,11 @@ function startDaviplata(){
         $("#step2").show();
         $("#step1").hide();
     });
+    $("#btn-video").on("click", function (e) {
+        e.preventDefault();
+        $("#step2").show();
+        $("#step1").hide();
+    });
     $("#form_save").on("click", function (e) {
         e.preventDefault();
         var form =$("#formFields").parent();
