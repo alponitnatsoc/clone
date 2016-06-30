@@ -172,6 +172,9 @@ trait EmployeeMethodsTrait
      */
     protected function employeeDocumentsValidated(User $user, EmployerHasEmployee $eHE)
     {
+        if($eHE->getState()<3){
+            return 2;
+        }
         $employer = $user->getPersonPerson()->getEmployer();
         $employee = $eHE->getEmployeeEmployee();
         $person = $employee->getPersonPerson();
@@ -249,6 +252,9 @@ trait EmployeeMethodsTrait
                 case 3:
                     $docValid = $this->employerDocumentsValidated($user);
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($docValid == 2 or $eDocsValid == 2 ){
+                        break;
+                    }
                     if($docValid == 0 and $eDocsValid == 0){
                         $eHE->setDocumentStatus(3);
                     }elseif($docValid == 1 and $eDocsValid == 0){
@@ -271,6 +277,9 @@ trait EmployeeMethodsTrait
                     break;
                 case 4:
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($eDocsValid == 2 ){
+                        break;
+                    }
                     if($eDocsValid == 0){
                         $eHE->setDocumentStatus(4);
                     }elseif($eDocsValid == 1){
@@ -281,6 +290,9 @@ trait EmployeeMethodsTrait
                     break;
                 case 5:
                     $docValid = $this->employerDocumentsValidated($user);
+                    if($docValid == 2 ){
+                        break;
+                    }
                     if($docValid == 0 ){
                         $eHE->setDocumentStatus(5);
                     }elseif($docValid == 1 ){
@@ -291,6 +303,9 @@ trait EmployeeMethodsTrait
                     break;
                 case 6:
                     $docValid = $this->employerDocumentsValidated($user);
+                    if($docValid == 2 ){
+                        break;
+                    }
                     if($docValid == 1 ){
                         $eHE->setDocumentStatus(11);
                     }elseif($docValid == -1 ){
@@ -299,6 +314,9 @@ trait EmployeeMethodsTrait
                     break;
                 case 7:
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($eDocsValid == 2 ){
+                        break;
+                    }
                     if($eDocsValid == 1){
                         $eHE->setDocumentStatus(11);
                     }elseif($eDocsValid == -1){
@@ -308,6 +326,9 @@ trait EmployeeMethodsTrait
                 case 8:
                     $docValid = $this->employerDocumentsValidated($user);
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($docValid == 2 or $eDocsValid == 2 ){
+                        break;
+                    }
                     if($docValid == 1 and $eDocsValid == 0){
                         $eHE->setDocumentStatus(4);
                     }elseif($docValid == -1 and $eDocsValid == 1){
@@ -325,6 +346,9 @@ trait EmployeeMethodsTrait
                 case 9:
                     $docValid = $this->employerDocumentsValidated($user);
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($docValid == 2 or $eDocsValid == 2 ){
+                        break;
+                    }
                     if($docValid == 0 and $eDocsValid == 1){
                         $eHE->setDocumentStatus(5);
                     }elseif($docValid == -1 and $eDocsValid == 1){
@@ -342,6 +366,9 @@ trait EmployeeMethodsTrait
                 case 10:
                     $docValid = $this->employerDocumentsValidated($user);
                     $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                    if($docValid == 2 or $eDocsValid == 2 ){
+                        break;
+                    }
                     if($docValid == -1 and $eDocsValid == 1){
                         $eHE->setDocumentStatus(6);
                     }elseif($docValid == 1 and $eDocsValid == -1){
