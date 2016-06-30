@@ -507,7 +507,6 @@ class EmployeeController extends Controller
                 $form->get('idContract')->setData($currentContract->getIdContract());
             }
         }
-        $legalOp =
 
         $options = $form->get('employeeHasEmployers')->get('payMethod')->getConfig()->getOptions();
         $choices = $options['choice_list']->getChoices();
