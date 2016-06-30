@@ -217,7 +217,7 @@ trait EmployeeMethodsTrait
         /** @var EmployerHasEmployee $eHE */
         foreach($eHEs as $eHE){
             if($eHE->getDocumentStatus()!= null and $eHE->getState()>=3){
-                if($eHE->setDocumentStatus() == -2){
+                if($eHE->getDocumentStatus() == -2){
                     $eHE->setDocumentStatus(-1);
                 }
                 switch ($eHE->getDocumentStatus()){
