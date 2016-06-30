@@ -179,11 +179,11 @@ function startSubscriptionChoise() {
 
         $("#divSubtotal").html(getPrice(subtotal));
 
-        if (subtotal == 0) {
+        /*if (subtotal == 0) {
             $("input[type=submit]").attr('disabled', true);
         } else {
             $("input[type=submit]").attr('disabled', false);
-        }
+        }*/
 
         $(".suscriptionInd").each(function( index ) {
           if (employee[$(this).data("id")]['state'] > 0) {
@@ -428,11 +428,11 @@ function fillTable(){
 
   $("#divSubtotal").html(getPrice(subtotal));
 
-  if (subtotal == 0) {
+  /*if (subtotal == 0) {
       $("input[type=submit]").attr('disabled', true);
   } else {
       $("input[type=submit]").attr('disabled', false);
-  }
+  }*/
 
   $(".suscriptionInd").each(function( index ) {
 
