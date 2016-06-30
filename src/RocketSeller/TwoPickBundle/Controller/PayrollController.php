@@ -227,8 +227,13 @@ class PayrollController extends Controller
                 }
                 if($tempPOD->getPayrollPayroll()==null){
                     $person=$tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency=false;
                 }else{
                     $person=$tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    if($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode()=="EFE")
+                        $flagFrequency=true;
+                    else
+                        $flagFrequency=false;
                 }
                 if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
@@ -236,17 +241,19 @@ class PayrollController extends Controller
                 }
                 $exploded = explode("-", $value);
                 if ($exploded[0] == 'p') {
-                    $total += $tempPOD->getValue();
+                    if(!$flagFrequency){
+                        $total += $tempPOD->getValue();
+                        if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                            $willPayPN = true;
+                            $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                            $numberOfPNTrans = $numberOfPNTrans + 1;
+                        }
+                    }
+                    if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                        $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                    }
                     $realtoPay->addPurchaseOrderDescription($tempPOD);
 
-                    if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
-                      $willPayPN = true;
-                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                      $numberOfPNTrans = $numberOfPNTrans + 1;
-                    }
-                    else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
-                      $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                    }
                 }else{
                     $tempPOD->setPurchaseOrdersStatus($paidStatus);
                     $paidPO->addPurchaseOrderDescription($tempPOD);
@@ -272,7 +279,7 @@ class PayrollController extends Controller
 
                 // Se agrega el cobro único por pila si no hay pagos de nomina
                 if($willPayPN == false){
-                  $transactionCost = $transactionCost + 3500;
+                  $transactionCost = $transactionCost + 5500;
                 }
 
                 // Se agrega el cobro del 4x1000
@@ -280,13 +287,13 @@ class PayrollController extends Controller
                 // Se agrega el cobro por transaccional
 
                 if($numberOfPNTrans == 1){
-                  $transactionCost = $transactionCost + 7500;
+                  $transactionCost = $transactionCost + 5500;
                 }
                 elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
                   $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
                 }
                 elseif ($numberOfPNTrans > 5) {
-                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                  $transactionCost = $numberOfPNTrans + (5500 * $numberOfPNTrans);
                 }
 
                 $transactionPOD=new PurchaseOrdersDescription();
@@ -309,6 +316,7 @@ class PayrollController extends Controller
                     $symplificaPOD = new PurchaseOrdersDescription();
                     $symplificaPOD->setDescription("Subscripción Symplifica");
                     $ehes = $user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+                    $productRepo=$this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:Product");
                     /** @var Product $PS1 */
                     $PS1 = $productRepo->findOneBy(array("simpleName" => "PS1"));
                     /** @var Product $PS2 */
@@ -418,24 +426,29 @@ class PayrollController extends Controller
                 }
                 if ($tempPOD->getPayrollPayroll() == null) {
                     $person = $tempPOD->getPayrollsPila()->get(0)->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    $flagFrequency=false;
                 } else {
                     $person = $tempPOD->getPayrollPayroll()->getContractContract()->getEmployerHasEmployeeEmployerHasEmployee()->getEmployerEmployer()->getPersonPerson();
+                    if($tempPOD->getPayrollPayroll()->getContractContract()->getPayMethodPayMethod()->getPayTypePayType()->getPayrollCode()=="EFE")
+                        $flagFrequency=true;
+                    else
+                        $flagFrequency=false;
                 }
                 if ($person->getIdPerson() != $userPerson->getIdPerson()) {
                     //Por seguridad se verifica que los PODS pertenezcan al usuario loggeado
                     return $this->redirectToRoute("payroll");
                 }
-
-                if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
-                  $willPayPN = true;
-                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
-                  $numberOfPNTrans = $numberOfPNTrans + 1;
+                if(!$flagFrequency){
+                    $total += $tempPOD->getValue();
+                    if($tempPOD->getProductProduct()->getSimpleName() == "PN"){
+                        $willPayPN = true;
+                        $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                        $numberOfPNTrans = $numberOfPNTrans + 1;
+                    }
                 }
-                else if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
-                  $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
+                if($tempPOD->getProductProduct()->getSimpleName() == "PP"){
+                    $valueToGet4xMilFrom = $valueToGet4xMilFrom + $tempPOD->getValue();
                 }
-
-                $total+=$tempPOD->getValue();
                 $realtoPay->addPurchaseOrderDescription($tempPOD);
             }
             $em = $this->getDoctrine()->getManager();
@@ -446,7 +459,7 @@ class PayrollController extends Controller
 
                 // Se agrega el cobro único por pila si no hay pagos de nomina
                 if($willPayPN == false){
-                  $transactionCost = $transactionCost + 3500;
+                  $transactionCost = $transactionCost + 5500;
                 }
 
                 // Se agrega el cobro del 4x1000
@@ -454,13 +467,13 @@ class PayrollController extends Controller
                 // Se agrega el cobro por transaccional
 
                 if($numberOfPNTrans == 1){
-                  $transactionCost = $transactionCost + 7500;
+                  $transactionCost = $transactionCost + 5500;
                 }
                 elseif ($numberOfPNTrans >= 2 && $numberOfPNTrans <= 5) {
                   $transactionCost = $transactionCost + (5500 * $numberOfPNTrans);
                 }
                 elseif ($numberOfPNTrans > 5) {
-                  $transactionCost = $numberOfPNTrans + (3500 * $numberOfPNTrans);
+                  $transactionCost = $numberOfPNTrans + (5500 * $numberOfPNTrans);
                 }
 
                 $transactionPOD=new PurchaseOrdersDescription();
