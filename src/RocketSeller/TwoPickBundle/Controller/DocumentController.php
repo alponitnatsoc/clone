@@ -146,7 +146,7 @@ use EmployerMethodsTrait;
             'image/png',
             'image/jpeg',
             'application/pdf',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            //'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         );
         $em = $this->getDoctrine()->getManager();
         $person = $this->getDoctrine()
@@ -156,14 +156,17 @@ use EmployerMethodsTrait;
         $documentType = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:DocumentType')
                 ->find($idDocumentType);
+        $bdDoc=$person->getDocByType($documentType->getName());
         $document = new Document();
         $document->setPersonPerson($person);
         $document->setStatus(1);
         $document->setName('Diferente');
         $document->setDocumentTypeDocumentType($documentType);
-
-        $form = $this->createForm(new DocumentRegistration(), $document);
-
+        if($bdDoc){
+            $form = $this->createForm(new DocumentRegistration(), $bdDoc);
+        }else{
+            $form = $this->createForm(new DocumentRegistration(), $document);
+        }
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -172,7 +175,6 @@ use EmployerMethodsTrait;
                 $medias = $document->getMediaMedia();
                 /** @var Media $media */
                 foreach ($medias as $media) {
-
                     $media->setBinaryContent($media);
                     $media->setName($document->getName());
                     $media->setProviderStatus(Media::STATUS_OK);
@@ -183,8 +185,6 @@ use EmployerMethodsTrait;
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($document);
                 $em->flush();
-                //$view = View::createView();
-                //return new Response('guwegwei');
                 if ($idNotification != 0) {
                     $em = $this->getDoctrine()->getManager();
                     $notification = $this->getDoctrine()
@@ -212,20 +212,18 @@ use EmployerMethodsTrait;
                         return $this->redirectToRoute('employer_completion_documents');
                     }
 
-                    return $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard');
+                    return $this->redirectToRoute('show_dashboard');
 
                 } else {
                     return $this->redirectToRoute('matrix_choose', array('tab' => 3), 301);
                 }
             } else {
-                throw new \Exception('Formato no valido.');
+                $this->addFlash('fail_format', 'NVF');
+                return $this->redirectToRoute('show_dashboard');
             }
-
-            //return $this->redirectToRoute('matrix_choose', array('tab'=>3), 301);
-            //return $this->redirect('/pages?redirector=/matrix/choose');
         }
         return $this->render(
-                        'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'documentName'=>$documentType->getName(),'personName'=>$name, 'idNotification' => $idNotification));
+            'RocketSellerTwoPickBundle:Document:addDocumentForm.html.twig', array('form' => $form->createView(), 'id' => $id, 'idDocumentType' => $idDocumentType, 'documentName'=>$documentType->getName(),'personName'=>$name, 'idNotification' => $idNotification));
     }
 
     public function addDocModalAction($id, $idDocumentType, Request $request)

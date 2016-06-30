@@ -224,7 +224,9 @@ class EmployerRestController extends FOSRestController
             $data = $this->allDocumentsReady($user);
             $response = array();
             foreach ($data as $dat){
-                if($dat['docStatus']==-1){
+                if ($dat['docStatus']==-2){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee is not payed');
+                }elseif($dat['docStatus']==-1){
                     $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all docs are pending');
                 }elseif($dat['docStatus']==0){
                     $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee docs are pending');
