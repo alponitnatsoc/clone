@@ -396,9 +396,12 @@
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
-                                    <p class="text-center typeQuestion" style="font-size: 16px;">Elige el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales.</p>
+                                    {% if changeBehaviorFlag == 1 and hOp6 == 0 %}
+                                      <p class="text-center typeQuestion" style="font-size: 16px;">Debido a que ya cuentas con un contrato verbal con tu empleado y este equivale a un contrato a término indefinido, debes seleccionar esta opción.</p>
+                                    {% else %}
+                                      <p class="text-center typeQuestion" style="font-size: 16px;">Elige el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales.</p>
+                                    {% endif %}
                                 </div>
-
                                 <!--cambio de eleccion de tipo de contrato-->
                                 <div id="contratotypes">
                                     <div id="radio-contrato">
