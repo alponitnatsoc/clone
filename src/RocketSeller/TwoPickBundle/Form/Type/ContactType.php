@@ -30,7 +30,7 @@ class ContactType extends AbstractType
         $builder
             ->setMethod($options['method']);
 
-        if($this->name!='' and $this->email!='' and $this->phone!=''){
+        if($this->name!=''){
             $builder
                 ->add('name', 'text',array(
                         'data'     =>$this->name,
@@ -38,24 +38,6 @@ class ContactType extends AbstractType
                         'required' => true,
                         'attr' => array(
                             'placeholder' => 'Digita tu nombre'
-                        )
-                    )
-                )
-                ->add('email', 'email',array(
-                        'data'    =>$this->email,
-                        'label'   => 'Email:',
-                        'required'=> true,
-                        'attr' => array(
-                            'placeholder' => 'Digita un correo electrónico de contacto'
-                        )
-                    )
-                )
-                ->add('phone', 'number',array(
-                        'data'  =>$this->phone,
-                        'label' => 'Telefono / Celular:',
-                        'required' => true,
-                        'attr' => array(
-                            'placeholder' => 'Digita tu telefono o numero celular'
                         )
                     )
                 );
@@ -68,7 +50,21 @@ class ContactType extends AbstractType
                             'placeholder' => 'Digita tu nombre'
                         )
                     )
-                )
+                );
+        }
+        if($this->email!=''){
+            $builder
+                ->add('email', 'email',array(
+                        'data'    =>$this->email,
+                        'label'   => 'Email:',
+                        'required'=> true,
+                        'attr' => array(
+                            'placeholder' => 'Digita un correo electrónico de contacto'
+                        )
+                    )
+                );
+        }else{
+            $builder
                 ->add('email', 'email',array(
                         'label'   => 'Email:',
                         'required'=> true,
@@ -76,7 +72,21 @@ class ContactType extends AbstractType
                             'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
-                )
+                );
+        }
+        if($this->phone!=''  ){
+            $builder
+                ->add('phone', 'number',array(
+                        'data'  =>$this->phone,
+                        'label' => 'Telefono / Celular:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'Digita tu telefono o numero celular'
+                        )
+                    )
+                );
+        }else{
+            $builder
                 ->add('phone', 'number',array(
                         'label' => 'Telefono / Celular:',
                         'required' => true,
@@ -97,7 +107,8 @@ class ContactType extends AbstractType
                           2 => 'Calculadora salarial',
                           3 => 'Consulta jurídica',
                           4 => 'Planes y precios',
-                          5 => 'Otros'
+                          5 => 'Alternativas de registro',
+                          6 => 'Otro'
                       ),
                       'multiple' => false,
                       'expanded' => false,
@@ -110,7 +121,7 @@ class ContactType extends AbstractType
                 $builder
                     ->add('subject', 'text', array(
                             'label' => 'Asunto:',
-                            'data' =>'Consulta jurídica',
+                            'data' =>'Alternativas de registro',
                             'required' => true,
                             'disabled' => true,
                         )

@@ -2,197 +2,201 @@
 {% block title %}Contactanos{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
 
 {% endblock %}
 
 {% block body %}
-<link rel="stylesheet" href="{{ asset('public/css/help.css') }}">
-<link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
 
-<header>
-	<!--aca va el nav que ya esta hecho-->
-	<div id="banner-beneficios">
-		<div id="banner-beneficios-cont">
-			<h1 class="bold azuloscurofont">Tu opinión es importante</h1>
-			<h1 class="light azulmediofont">para nosotros, contáctanos</h1>
-		</div>
-	</div>
-</header>
 
-<section>
-	<div id="formulario">
-		<div id="contact_form" enctype="multipart/form-data">
-			{{ form_errors(form) }}
-			{{ form_start(form) }}
-			<div class="row">
-				{% for label, flashes in app.session.flashbag.all %}
-					{% for flash in flashes %}
-						<div class="alert alert-{{ label }} semi-italic" for="alert">
-							{{ flash }}
-						</div>
-					{% endfor %}
-				{% endfor %}
-			</div>
-			<div class="row">
-				<div class="semi-italic grisclarofont" for="name">
-					{{ form_label(form.name) }}
-				</div>
-				<div id="name" class="input" name="name" type="text" value="" size="30">
-					{{ form_widget(form.name) }}
-					<div id="error" class="error" name="name" type="error" size="30">
-						{{ form_errors(form.name) }}
-					</div>
+    <header>
+        <!--aca va el nav que ya esta hecho-->
+        <div id="banner-beneficios">
+            <div id="banner-beneficios-cont">
+                <h1 class="bold azuloscurofont">Tu opinión es importante</h1>
+                <h1 class="light azulmediofont">para nosotros, contáctanos</h1>
+            </div>
+        </div>
+    </header>
 
-				</div><br />
+    <section>
+        <div id="formulario">
+            <div id="contact_form" enctype="multipart/form-data">
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                <div class="row">
+                    {% for label, flashes in app.session.flashbag.all %}
+                        {% for flash in flashes %}
+                            <div class="alert alert-{{ label }} semi-italic" for="alert">
+                                {{ flash }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="semi-italic grisclarofont" for="name">
+                        {{ form_label(form.name) }}
+                    </div>
+                    <div id="name" class="input" name="name" type="text" value="" size="30">
+                        {{ form_widget(form.name) }}
+                        {{ form_errors(form.name) }}
 
-			</div>
-			<div class="row">
-				<div class="semi-italic grisclarofont" for="phone">
-					{{ form_label(form.phone) }}
-				</div>
-				<div id="name" class="input" name="name" type="text" value="" size="30">
-					{{ form_widget(form.phone) }}
-					<div id="error" class="error" name="name" type="error" size="30">
-						{{ form_errors(form.phone) }}
-					</div>
+                    </div>
+                    <br/>
 
-				</div><br />
+                </div>
+                <div class="row">
+                    <div class="semi-italic grisclarofont" for="phone">
+                        {{ form_label(form.phone) }}
+                    </div>
+                    <div id="name" class="input" name="name" type="text" value="" size="30">
+                        {{ form_widget(form.phone) }}
+                        {{ form_errors(form.phone) }}
 
-			</div>
-			<div class="row">
-				<div  class="semi-italic grisclarofont" for="email">
-					{{ form_label(form.email) }}
-				</div>
-				<div id="email" class="input" name="email" type="text" value="" size="30">
-					{{ form_widget(form.email) }}
-					{{ form_errors(form.email) }}
-				</div><br />
-			</div>
-			<div class="row">
-				<div  class="semi-italic grisclarofont" for="email">
-					{{ form_label(form.subject) }}
-				</div>
-				<div class="input">
-					{{ form_widget(form.subject) }}
-				</div><br />
-			</div>
-			<div class="row">
-				<div class="semi-italic grisclarofont" for="message">
-					{{ form_label(form.message) }}
-				</div>
-				<div id="message" name="message" rows="15" cols="30">
-					{{ form_widget(form.message) }}
-					{{ form_errors(form.message) }}
-				</div><br />
-			</div>
-			<div>
-				{{ form_widget(form) }}
-			</div>
-			{{ form_end(form) }}
-		</div>
-	</div>
-</section>
-<section>
-	<div id="telefono">
-						<div id="datos-cont">
-								<div class="datos-contacto"><img src="{{asset('public/img/home/telefono-c.png')}}"></div>
-									<div class="datos-contacto" style="padding: 10px 10px;">
-										<p class="extrabold">Llámanos</p>
-											<p class="light">350 856 7864</p>
-									</div>
-							</div>
-</section>
+                    </div>
+                    <br/>
+
+                </div>
+                <div class="row">
+                    <div class="semi-italic grisclarofont" for="email">
+                        {{ form_label(form.email) }}
+                    </div>
+                    <div id="email" class="input" name="email" type="text" value="" size="30">
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <br/>
+                </div>
+                <div class="row">
+                    <div class="semi-italic grisclarofont" for="email">
+                        {{ form_label(form.subject) }}
+                    </div>
+                    <div class="input">
+                        {{ form_widget(form.subject) }}
+                        {{ form_errors(form.subject) }}
+                    </div>
+                    <br/>
+                </div>
+                <div class="row">
+                    <div class="semi-italic grisclarofont" for="message">
+                        {{ form_label(form.message) }}
+                    </div>
+                    <div id="message" name="message" rows="15" cols="30">
+                        {{ form_widget(form.message) }}
+                        {{ form_errors(form.message) }}
+                    </div>
+                    <br/>
+                </div>
+                <div>
+                    {{ form_widget(form) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="telefono">
+            <div id="datos-cont">
+                <div class="datos-contacto"><img src="{{ asset('public/img/home/telefono-c.png') }}"></div>
+                <div class="datos-contacto" style="padding: 10px 10px;">
+                    <p class="extrabold">Llámanos</p>
+                    <p class="light">350 856 7864</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 {% endblock %}
 {% block javascripts %}
 
-	<script>
-		var state = "/old";
-		jQuery(document).ready(function () {
-			if (!jsLoader(location.href)) {
-				$("#main").find("a").not(".notAjax").on("click", function (e) {
-					e.preventDefault();
-					var href = $(this).attr('href');
-					history.pushState({}, '', href);
-					sendAjax(href);
-				});
-			} else {
-				{#$(".body-container a:not(#main a)").not(".notAjax").on("click", function (e) {
+    <script>
+        var state = "/old";
+        jQuery(document).ready(function () {
+            if (!jsLoader(location.href)) {
+                $("#main").find("a").not(".notAjax").on("click", function (e) {
+                    e.preventDefault();
+                    var href = $(this).attr('href');
+                    history.pushState({}, '', href);
+                    sendAjax(href);
+                });
+            } else {
+                {#$(".body-container a:not(#main a)").not(".notAjax").on("click", function (e) {
                     e.preventDefault();
                     var href = $(this).attr('href');
                     history.pushState({}, '', href);
                     sendAjax(href);
                 });
                 #}
-			}
+            }
 //                  ajax que maneja los requests
-			$(window).on("popstate", function (e) {
-				sendAjax(location.href);
-			});
-			$(window).keydown(function(event){
-				if(event.keyCode == 13) {
-					event.preventDefault();
-					return false;
-				}
-			});
-			// Simple ajax url manager
-			var redirector = getParameterByName('redirector');
-			//console.log(redirector);
-			if (redirector) {
-				sendAjax(redirector);
-			}
+            $(window).on("popstate", function (e) {
+                sendAjax(location.href);
+            });
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+            // Simple ajax url manager
+            var redirector = getParameterByName('redirector');
+            //console.log(redirector);
+            if (redirector) {
+                sendAjax(redirector);
+            }
 //                  addNoClick();
-		});
+        });
 
-		function sendAjax(url, form) {
-			if (url == "") {
-				return false;
-			}
-			$.ajax({
-				url: url,
-				type: $(form).attr('method'),
-				data: $(form).serializeArray(),
-				statusCode: {
-					500: function () {
-						$("#errorModal").modal("show");
-					}
-				}
-			}).done(function (data) {
-				window.scrollTo(0, 0);
-				if (data["url"] != null) {
-					console.log(data["url"]);
-					sendAjax(data["url"]);
-				} else {
-					$('#main').replaceWith(
-							// ... with the returned one from the AJAX response.
-							$(data).find('#main'));
-					addClick();
-					if (!jsLoader(url)) {
-						addSumbit();
-					}
-					// This thing is not working, we should check this later
-					//var currentPage = document.location;
-					//document.location = currentPage + "?redirector=" + url;
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR == errorHandleTry(jqXHR)) {
-					$("#errorModal").modal("show");
-				}
-			});
-		}
+        function sendAjax(url, form) {
+            if (url == "") {
+                return false;
+            }
+            $.ajax({
+                url: url,
+                type: $(form).attr('method'),
+                data: $(form).serializeArray(),
+                statusCode: {
+                    500: function () {
+                        $("#errorModal").modal("show");
+                    }
+                }
+            }).done(function (data) {
+                window.scrollTo(0, 0);
+                if (data["url"] != null) {
+                    console.log(data["url"]);
+                    sendAjax(data["url"]);
+                } else {
+                    $('#main').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(data).find('#main'));
+                    addClick();
+                    if (!jsLoader(url)) {
+                        addSumbit();
+                    }
+                    // This thing is not working, we should check this later
+                    //var currentPage = document.location;
+                    //document.location = currentPage + "?redirector=" + url;
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR == errorHandleTry(jqXHR)) {
+                    $("#errorModal").modal("show");
+                }
+            });
+        }
 
-		function jsLoader(url) {
-			if (typeof url !== 'undefined') {
-				if (url.lastIndexOf("/contactenos") !== -1) {
-					$.getScript("{{ asset('public/js/contact.js') }}").done(function () {
-						startContact();
-					});
-					return true;
-				}
-				return false;
-			}
-			return false;
-		}
-	</script>
+        function jsLoader(url) {
+            if (typeof url !== 'undefined') {
+                if (url.lastIndexOf("/contactenos") !== -1) {
+                    $.getScript("{{ asset('public/js/contact.js') }}").done(function () {
+                        startContact();
+                    });
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+    </script>
 {% endblock %}
