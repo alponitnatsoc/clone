@@ -48,7 +48,7 @@ class LoadPayMethodDataData extends AbstractFixture implements OrderedFixtureInt
         $payMethodFields=new PayMethodFields();
         $payMethodFields->setColumnName("cellphone");
         $payMethodFields->setDataType("number");
-        $payMethodFields->setLabel('Celular inscrito en Daviplata');
+        $payMethodFields->setLabel('Celular del empleado que usará para Daviplata');
         $payMethodFields->setPayTypePayType($PayTypeRetiro);
         $manager->persist($payMethodFields);
 
