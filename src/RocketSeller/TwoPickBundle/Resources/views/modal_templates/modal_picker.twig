@@ -286,10 +286,12 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos {% if name is defined %} de {{ name }}{% endif %}!<br>
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos de tu empleado {{ name }} !<br>
             En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
             de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
+
+        {% set name = '' %}
 
         {% set modal_style_button %}
             style="width: 30%; font-size:20px"
