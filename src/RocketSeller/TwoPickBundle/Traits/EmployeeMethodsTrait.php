@@ -167,7 +167,7 @@ trait EmployeeMethodsTrait
      * 2 - estado desconocido
      *
      * @param User $user Usuario del empleado del que se consulta el estado de validacion de documentos
-     * @param EmployerHasEmployee $eHE employerHasEmployee del empleado del que se consulta el estado de validacion de documetos 
+     * @param EmployerHasEmployee $eHE employerHasEmployee del empleado del que se consulta el estado de validacion de documetos
      * @return int
      */
     protected function employeeDocumentsValidated(User $user, EmployerHasEmployee $eHE)
@@ -486,7 +486,7 @@ trait EmployeeMethodsTrait
 
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $documentType = 'Carta autorización Symplifica';
-                    $msj = "Subir copia de la Carta autorización Symplifica de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $dAction="Bajar";
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                 }
