@@ -275,6 +275,24 @@ background: #FD9224;box-shadow: none;border: 1px solid #FD9224;color: #FFF;outli
     font-weight:lighter;
 }
 
+.cajasd {
+    font-style: normal !important;
+    color: #1fcecb !important;
+    width: 75% !important;
+    margin: 0 auto;
+}
+
+.cantidadEmpleados {
+  width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    color: #1fcecb;
+}
+
+.cantidadEmpleados h1 {
+  font-size: 20px;
+  font-weight: 600
+}
 
 /*forms */
 

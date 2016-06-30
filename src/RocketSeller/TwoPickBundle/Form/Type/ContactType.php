@@ -37,7 +37,7 @@ class ContactType extends AbstractType
                         'label'    => 'Nombre:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu nombre'
+                            'placeholder' => 'digita tu nombre'
                         )
                     )
                 );
@@ -59,7 +59,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'Digita un correo electrónico de contacto'
+                            'placeholder' => 'digita un correo electrónico de contacto'
                         )
                     )
                 );
@@ -81,17 +81,36 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu telefono o numero celular'
+                            'placeholder' => 'digita tu telefono o numero celular'
                         )
                     )
                 );
         }else{
             $builder
+<<<<<<< HEAD
+                ->add('name', 'text',array(
+                        'label'    => 'Nombre:',
+                        'required' => true,
+                        'attr' => array(
+                            'placeholder' => 'digita tu nombre'
+                        )
+                    )
+                )
+                ->add('email', 'email',array(
+                        'label'   => 'Email:',
+                        'required'=> true,
+                        'attr' => array(
+                            'placeholder' => 'digita un correo electrónico de contacto'
+                        )
+                    )
+                )
+=======
+>>>>>>> 98ef92d89dff1b55000a3522385aa1aedbaf56b4
                 ->add('phone', 'number',array(
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu telefono o numero celular'
+                            'placeholder' => 'digita tu telefono o numero celular'
                         )
                     )
                 );
@@ -142,7 +161,7 @@ class ContactType extends AbstractType
             ->add('message', 'textarea', array(
                     'label' => 'Escribir mensaje',
                 'attr' => array(
-                    'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+                    'placeholder' => 'escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
                 )
             ))
             ->add('enviar', 'submit', array(
