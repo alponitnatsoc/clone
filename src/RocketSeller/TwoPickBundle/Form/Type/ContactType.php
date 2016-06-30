@@ -37,7 +37,7 @@ class ContactType extends AbstractType
                         'label'    => 'Nombre:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'digita tu nombre'
+                            'placeholder' => 'Digita tu nombre'
                         )
                     )
                 );
@@ -59,7 +59,7 @@ class ContactType extends AbstractType
                         'label'   => 'Email:',
                         'required'=> true,
                         'attr' => array(
-                            'placeholder' => 'digita un correo electrónico de contacto'
+                            'placeholder' => 'Digita un correo electrónico de contacto'
                         )
                     )
                 );
@@ -81,7 +81,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'digita tu telefono o numero celular'
+                            'placeholder' => 'Digita tu teléfono o número celular'
                         )
                     )
                 );
@@ -91,7 +91,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'digita tu telefono o numero celular'
+                            'placeholder' => 'Digita tu teléfono o número celular'
                         )
                     )
                 );
@@ -107,7 +107,6 @@ class ContactType extends AbstractType
                           2 => 'Calculadora salarial',
                           3 => 'Consulta jurídica',
                           4 => 'Planes y precios',
-                          5 => 'Alternativas de registro',
                           6 => 'Otro'
                       ),
                       'multiple' => false,
@@ -121,7 +120,7 @@ class ContactType extends AbstractType
                 $builder
                     ->add('subject', 'text', array(
                             'label' => 'Asunto:',
-                            'data' =>'Alternativas de registro',
+                            'data' =>'Asistencia Symplifica',
                             'required' => true,
                             'disabled' => true,
                         )
@@ -142,7 +141,7 @@ class ContactType extends AbstractType
             ->add('message', 'textarea', array(
                     'label' => 'Escribir mensaje',
                 'attr' => array(
-                    'placeholder' => 'escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
+                    'placeholder' => 'Escribe tu mensaje aquí, recibiras respuesta del equipo de symplifica lo antes posible'
                 )
             ))
             ->add('enviar', 'submit', array(

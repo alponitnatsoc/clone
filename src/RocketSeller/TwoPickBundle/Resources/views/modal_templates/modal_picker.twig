@@ -286,7 +286,7 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos de tu empleado {{ name }} !<br>
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos de tu empleado {% if name is defined %}{{ name }}{% endif %} !<br>
             En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
             de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
@@ -481,15 +481,8 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
        {% endset %}
 
        {% set modal_content %}
-           <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Se cobra el 4 por mil del total de la transacción</br>
-            +</br>
-            7500 por la transacción por empleado si la transacciòn involucra el pago de nómina de 1 empleado</br>
-            o</br>
-            5500 por la transacción por la transacción por empleado si la transacciòn involucra el pago de nómina de 2 a 5 empleados</br>
-            o</br>
-            3500 por la transacción por la transacción por empleado si la transacciòn involucra el pago de nómina de más de 5 empleados</br>
-            o</br>
-            3500 si es sólo un pago de la PILA y el pago no involucra el pago de nómina de ningún empleado</p>
+           <p style="color: #888888;padding: 20px;font-size: 17px;font-weight: 100;text-align:center">
+             *Los pagos electrónicos tienen un costo por transacción bancaria de 5.500 pesos por transacción por empleado.</p>
        {% endset %}
 
        {% set modal_style_button %}
