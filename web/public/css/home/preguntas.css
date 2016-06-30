@@ -80,6 +80,16 @@ h1 {margin: 0}
 	padding: 25px 0 0 0;	}
 
 .callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
+.callto4 {
+		width: 215px;
+    height: 45px;
+    margin: 0 auto;
+    border-radius: 3px;
+    border-bottom: #D3731C 3px solid;
+    color: #FFFFFF;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
 #callregistro {color: #6d6d71; margin: 50px 0 90px 0;text-align:center}
 a .contenido-cat:hover {
 	background: none !important}

@@ -179,11 +179,11 @@ function startSubscriptionChoise() {
 
         $("#divSubtotal").html(getPrice(subtotal));
 
-        if (subtotal == 0) {
+        /*if (subtotal == 0) {
             $("input[type=submit]").attr('disabled', true);
         } else {
             $("input[type=submit]").attr('disabled', false);
-        }
+        }*/
 
         $(".suscriptionInd").each(function( index ) {
           if (employee[$(this).data("id")]['state'] > 0) {
@@ -396,16 +396,16 @@ function fillTable(){
           $("#cuatroXmil").html(getPrice(cuatro_x_mil));
 
           if(num_empleados_pago_nomina == 0){
-            totalCPila = 3500;
+            totalCPila = 5500;
           }
           else if (num_empleados_pago_nomina == 1) {
-            totalCTransaccion = (7500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+            totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
           else if (num_empleados_pago_nomina >= 2 && num_empleados_pago_nomina <= 5) {
             totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
           else {
-            totalCTransaccion = (3500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+            totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
 
           $("#totalCostoTransaccionSalarial").html(getPrice(totalCTransaccion));
@@ -428,11 +428,11 @@ function fillTable(){
 
   $("#divSubtotal").html(getPrice(subtotal));
 
-  if (subtotal == 0) {
+  /*if (subtotal == 0) {
       $("input[type=submit]").attr('disabled', true);
   } else {
       $("input[type=submit]").attr('disabled', false);
-  }
+  }*/
 
   $(".suscriptionInd").each(function( index ) {
 
@@ -514,14 +514,16 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport) {
             salaryD = (salaryD - transportAidDaily)/(1-(PensEmployee));
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
                 PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
-                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+                ((taxCes + ces) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             PensEmployerCal = PensEmployer * base;
             PensEmployeeCal = PensEmployee * base;
             arlCal = arl * base;
-            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
-            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             cajaCal = caja * base;
             vacationsCal = vacations30D * numberOfDays * salaryD;
             dotationCal = dotationDaily * numberOfDays;
@@ -538,7 +540,7 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport) {
             if (numberOfDays <= 7) {
                 PensEmployerCal = PensEmployer * base / 4;
                 PensEmployeeCal = PensEmployee * base / 4;
-                cajaCal = caja * base;
+                cajaCal = caja * base / 4;
                 salaryD = (salaryD - transportAidDaily)+(PensEmployeeCal/numberOfDays);
 
             } else if (numberOfDays <= 14) {
@@ -560,12 +562,14 @@ function calculatorL(type, numberOfDays, salaryM, salaryD, sisben, transport) {
             //then calculate arl ces and the rest
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployee2 + arl
                 + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
-                * numberOfDays * 30 / 28) + transportAid)) + PensEmployeeCal + cajaCal + PensEmployerCal;
+                * numberOfDays) + transportAidDaily*numberOfDays)) + PensEmployeeCal + cajaCal + PensEmployerCal;
             EPSEmployerCal = EPSEmployer2 * base;
             EPSEmployeeCal = EPSEmployer2 * base;
             arlCal = arl * base;
-            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
-            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
+            //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
+            taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             vacationsCal = vacations30D * numberOfDays * salaryD;
             dotationCal = dotationDaily * numberOfDays;
             senaCal = sena * base;

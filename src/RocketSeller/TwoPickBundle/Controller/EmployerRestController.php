@@ -2,11 +2,13 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -222,7 +224,9 @@ class EmployerRestController extends FOSRestController
             $data = $this->allDocumentsReady($user);
             $response = array();
             foreach ($data as $dat){
-                if($dat['docStatus']==-1){
+                if ($dat['docStatus']==-2){
+                    $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee is not payed');
+                }elseif($dat['docStatus']==-1){
                     $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'all docs are pending');
                 }elseif($dat['docStatus']==0){
                     $response[] = array('idEmployerHasEmployee'=>$dat['idEHE'],'idDocStatus'=>$dat['docStatus'],'docStatus'=>'employee docs are pending');
@@ -518,6 +522,8 @@ class EmployerRestController extends FOSRestController
         }
 
     }
+
+
 
 
 }

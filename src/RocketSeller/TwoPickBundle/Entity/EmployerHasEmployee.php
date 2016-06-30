@@ -87,6 +87,7 @@ class EmployerHasEmployee
 
     /**
      * Columna para los mensajes que se muestran al usuario en dashboard
+     * -2 - employee is not payed
      * -1 - all docs are pending
      * 0 - employee docs are pending
      * 1 - employer docs are pending
@@ -110,7 +111,7 @@ class EmployerHasEmployee
      * 19 - backoffice finished
      * @ORM\Column(type="integer", length=1, nullable=TRUE)
      */
-    private $documentStatus = -1;
+    private $documentStatus = -2;
     
     /**
      * Set idEmployerHasEmployee

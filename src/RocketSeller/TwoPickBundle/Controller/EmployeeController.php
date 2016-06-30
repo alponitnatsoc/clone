@@ -350,13 +350,56 @@ class EmployeeController extends Controller
         }
         $userWorkplaces = $user->getPersonPerson()->getEmployer()->getWorkplaces();
         $tempPerson = $employee->getPersonPerson();
+        $existsEmployee = true;
         if ($tempPerson == null) {
             $tempPerson = new Person();
             $employee->setPersonPerson($tempPerson);
+            $existsEmployee = false;
         }
         if ($tempPerson->getPhones()->count() == 0) {
             $tempPerson->addPhone(new Phone());
         }
+
+        //start legal status
+        $legalStatusArr = array(
+          "1" => 0,
+          "2" => 0,
+          "3" => 0,
+          "4" => 0,
+          "5" => 0,
+          "6" => 0
+        );
+
+        if($existsEmployee == false){
+          $configurationArr = $user->getPersonPerson()->getConfigurations();
+        }
+        else {
+          $configurationArr = $employee->getPersonPerson()->getConfigurations();
+        }
+
+        foreach($configurationArr as $cr){
+          if( $cr->getValue() == "PreLegal-NaturalPerson") {
+            $legalStatusArr["1"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SocialSecurity") {
+            $legalStatusArr["2"] = 1;
+          }
+          elseif( $cr->getValue() == "PreLegal-DaysMinimalWage") {
+            $legalStatusArr["3"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SocialSecurityEmployer") {
+            $legalStatusArr["4"] = 1;
+          }
+          elseif( $cr->getValue() == "PreLegal-SocialSecurityPayment") {
+            $legalStatusArr["5"] = 1;
+          }
+          elseif ($cr->getValue() == "PreLegal-SignedContract") {
+            $legalStatusArr["6"] = 1;
+          }
+        }
+
+        $employee->getPersonPerson()->setConfiguration($configurationArr);
+        //end legalStatusData
 
         $entityTypeRepo = $this->getDoctrine()->getRepository("RocketSellerTwoPickBundle:EntityType");
         $entityTypes = $entityTypeRepo->findAll();
@@ -478,6 +521,7 @@ class EmployeeController extends Controller
                         'm'=>$permittedDate->format("m"),
                         'd'=>$permittedDate->format("d")),
                     'coverageCodes' => $positions,
+                    'legalOptions' => $legalStatusArr,
         ));
     }
 

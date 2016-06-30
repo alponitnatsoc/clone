@@ -8,21 +8,28 @@ function startContact() {
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='contact']").validate({
             rules: {
-                "contact[name]": "required",
+                "contact[name]": {required:true, minlength:3},
                 "contact[email]": {required:true, email:true, minlength:5 },
-                "contact[phone]": {required:true, number:true, minlength:7 },
+                "contact[phone]": {required:true, number:true, minlength:7 , maxlength:13 },
                 "contact[subject]":"required",
                 "contact[message]":"required"
             },
             messages: {
-                "contact[name]": "Por favor digita tu nombre",
+                "contact[name]": {required: "Por favor digita tu nombre",minlength: "El nombre es muy corto" },
                 "contact[email]": {minlength: "El E-mail es muy corto.", required: "Por favor digita tu email", email: "No es un E-mail valido" },
-                "contact[phone]": {minlength: "El numero digitado es muy corto, debe tener al menos 7 digitos.", required: "Por favor Digita un numero de contacto", number: "Este campo solo admite numeros" },
+                "contact[phone]": {minlength: "El numero digitado es muy corto, debe tener al menos 7 digitos.", maxlength:"El numero de celular que ingresaste no es valido", required: "Por favor Digita un numero de contacto", number: "Este campo solo admite numeros" },
                 "contact[message]":"Por favor escribe el mensaje"
             }
         });
     });
-    
+
+    $("#contact_form").onclick(function (e) {
+        if(!form.validate()){
+            e.preventDefault();
+        }
+    });
+
+
     $("form").on("submit", function (e) {
         var form = $("form");
         var flagValid = true;
@@ -49,11 +56,12 @@ function startContact() {
                 flagValid = false;
             }
         });
+
         if(!flagValid){
             e.preventDefault();
             return;
         }
-        
+
         // $.ajax({
         //     url: form.attr('action'),
         //     type: $(form).attr('method'),
@@ -65,8 +73,9 @@ function startContact() {
         //         message: $(form).find("input[name='contact[message]']:checked").val()
         //     }
         // }).done(function (data) {
-        //     $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        //     alert('yay');
         // }).fail(function (jqXHR, textStatus, errorThrown) {
+        //     alert('nay');
         //     if(jqXHR==errorHandleTry(jqXHR)){
         //         alert(jqXHR + "Server might not handle That yet" + textStatus + " " + errorThrown);
         //     }
