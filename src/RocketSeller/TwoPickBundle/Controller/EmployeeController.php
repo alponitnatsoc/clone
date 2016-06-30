@@ -65,7 +65,7 @@ class EmployeeController extends Controller
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
-        
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('RocketSellerTwoPickBundle:Employee')->find($id);
@@ -562,7 +562,7 @@ class EmployeeController extends Controller
     }
 
     public function showEmployeeAction($id)
-    {
+    { 
         $this->dateToday= new \DateTime();
         $user = $this->getUser();
         $person = $user->getPersonPerson();
