@@ -172,6 +172,9 @@ trait EmployeeMethodsTrait
      */
     protected function employeeDocumentsValidated(User $user, EmployerHasEmployee $eHE)
     {
+        if($eHE->getState()<3){
+            return 2;
+        }
         $employer = $user->getPersonPerson()->getEmployer();
         $employee = $eHE->getEmployeeEmployee();
         $person = $employee->getPersonPerson();
@@ -213,167 +216,198 @@ trait EmployeeMethodsTrait
         $eHEs = $person->getEmployer()->getEmployerHasEmployees();
         /** @var EmployerHasEmployee $eHE */
         foreach($eHEs as $eHE){
-            switch ($eHE->getDocumentStatus()){
-                case -1:
-                    $pend = $this->employerDocumentsReady($person);
-                    $ePend = $this->employeeDocumentsReady($eHE);
-                    if($ePend['pending']!=0 and $pend !=0){
-                        $eHE->setDocumentStatus(-1);
-                    }elseif($ePend['pending']!=0 and $pend ==0){
-                        $eHE->setDocumentStatus(0);
-                    }elseif($ePend['pending']==0 and $pend !=0){
-                        $eHE->setDocumentStatus(1);
-                    }elseif($pend==0 and $ePend['pending']==0){
-                        $eHE->setDocumentStatus(2);
-                    }
-                    break;
-                case 0:
-                    $ePend = $this->employeeDocumentsReady($eHE);
-                    if($ePend['pending']==0){
-                        $eHE->setDocumentStatus(2);
-                    }else{
-                        $eHE->setDocumentStatus(0);
-                    }
-                    break;
-                case 1:
-                    $pend = $this->employerDocumentsReady($person);
-                    if($pend==0){
-                        $eHE->setDocumentStatus(2);
-                    }else{
-                        $eHE->setDocumentStatus(1);
-                    }
-                    break;
-                case 2:
-                    $eHE->setDocumentStatus(3);
-                    break;
-                case 3:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($docValid == 0 and $eDocsValid == 0){
+            if($eHE->getDocumentStatus()!= null and $eHE->getState()>=3){
+                if($eHE->getDocumentStatus() == -2){
+                    $eHE->setDocumentStatus(-1);
+                }
+                switch ($eHE->getDocumentStatus()){
+                    case -1:
+                        $pend = $this->employerDocumentsReady($person);
+                        $ePend = $this->employeeDocumentsReady($eHE);
+                        if($ePend['pending']!=0 and $pend !=0){
+                            $eHE->setDocumentStatus(-1);
+                        }elseif($ePend['pending']!=0 and $pend ==0){
+                            $eHE->setDocumentStatus(0);
+                        }elseif($ePend['pending']==0 and $pend !=0){
+                            $eHE->setDocumentStatus(1);
+                        }elseif($pend==0 and $ePend['pending']==0){
+                            $eHE->setDocumentStatus(2);
+                        }
+                        break;
+                    case 0:
+                        $ePend = $this->employeeDocumentsReady($eHE);
+                        if($ePend['pending']==0){
+                            $eHE->setDocumentStatus(2);
+                        }else{
+                            $eHE->setDocumentStatus(0);
+                        }
+                        break;
+                    case 1:
+                        $pend = $this->employerDocumentsReady($person);
+                        if($pend==0){
+                            $eHE->setDocumentStatus(2);
+                        }else{
+                            $eHE->setDocumentStatus(1);
+                        }
+                        break;
+                    case 2:
                         $eHE->setDocumentStatus(3);
-                    }elseif($docValid == 1 and $eDocsValid == 0){
-                        $eHE->setDocumentStatus(4);
-                    }elseif($docValid == 0 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(5);
-                    }elseif($docValid == -1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(6);
-                    }elseif($docValid == 1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }elseif($docValid == -1 and $eDocsValid == 0){
-                        $eHE->setDocumentStatus(8);
-                    }elseif($docValid == 0 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(9);
-                    }elseif($docValid == -1 and $eDocsValid == -1){
+                        break;
+                    case 3:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($docValid == 2 or $eDocsValid == 2 ){
+                            break;
+                        }
+                        if($docValid == 0 and $eDocsValid == 0){
+                            $eHE->setDocumentStatus(3);
+                        }elseif($docValid == 1 and $eDocsValid == 0){
+                            $eHE->setDocumentStatus(4);
+                        }elseif($docValid == 0 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(5);
+                        }elseif($docValid == -1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(6);
+                        }elseif($docValid == 1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }elseif($docValid == -1 and $eDocsValid == 0){
+                            $eHE->setDocumentStatus(8);
+                        }elseif($docValid == 0 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(9);
+                        }elseif($docValid == -1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(10);
+                        }elseif($docValid == 1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }
+                        break;
+                    case 4:
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($eDocsValid == 2 ){
+                            break;
+                        }
+                        if($eDocsValid == 0){
+                            $eHE->setDocumentStatus(4);
+                        }elseif($eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }elseif($eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }
+                        break;
+                    case 5:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        if($docValid == 2 ){
+                            break;
+                        }
+                        if($docValid == 0 ){
+                            $eHE->setDocumentStatus(5);
+                        }elseif($docValid == 1 ){
+                            $eHE->setDocumentStatus(11);
+                        }elseif($docValid == -1 ){
+                            $eHE->setDocumentStatus(6);
+                        }
+                        break;
+                    case 6:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        if($docValid == 2 ){
+                            break;
+                        }
+                        if($docValid == 1 ){
+                            $eHE->setDocumentStatus(11);
+                        }elseif($docValid == -1 ){
+                            $eHE->setDocumentStatus(6);
+                        }
+                        break;
+                    case 7:
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($eDocsValid == 2 ){
+                            break;
+                        }
+                        if($eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }elseif($eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }
+                        break;
+                    case 8:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($docValid == 2 or $eDocsValid == 2 ){
+                            break;
+                        }
+                        if($docValid == 1 and $eDocsValid == 0){
+                            $eHE->setDocumentStatus(4);
+                        }elseif($docValid == -1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(6);
+                        }elseif($docValid == 1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }elseif($docValid == -1 and $eDocsValid == 0){
+                            $eHE->setDocumentStatus(8);
+                        }elseif($docValid == -1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(10);
+                        }elseif($docValid == 1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }
+                        break;
+                    case 9:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($docValid == 2 or $eDocsValid == 2 ){
+                            break;
+                        }
+                        if($docValid == 0 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(5);
+                        }elseif($docValid == -1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(6);
+                        }elseif($docValid == 1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }elseif($docValid == 0 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(9);
+                        }elseif($docValid == -1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(10);
+                        }elseif($docValid == 1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }
+                        break;
+                    case 10:
+                        $docValid = $this->employerDocumentsValidated($user);
+                        $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
+                        if($docValid == 2 or $eDocsValid == 2 ){
+                            break;
+                        }
+                        if($docValid == -1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(6);
+                        }elseif($docValid == 1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(7);
+                        }elseif($docValid == -1 and $eDocsValid == -1){
+                            $eHE->setDocumentStatus(10);
+                        }elseif($docValid == 1 and $eDocsValid == 1){
+                            $eHE->setDocumentStatus(11);
+                        }
+                        break;
+                    case 11:
+                        $eHE->setDocumentStatus(13);
+                        break;
+                    case 12:
                         $eHE->setDocumentStatus(10);
-                    }elseif($docValid == 1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }
-                    break;
-                case 4:
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($eDocsValid == 0){
-                        $eHE->setDocumentStatus(4);
-                    }elseif($eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }elseif($eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }
-                    break;
-                case 5:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    if($docValid == 0 ){
-                        $eHE->setDocumentStatus(5);
-                    }elseif($docValid == 1 ){
-                        $eHE->setDocumentStatus(11);
-                    }elseif($docValid == -1 ){
-                        $eHE->setDocumentStatus(6);
-                    }
-                    break;
-                case 6:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    if($docValid == 1 ){
-                        $eHE->setDocumentStatus(11);
-                    }elseif($docValid == -1 ){
-                        $eHE->setDocumentStatus(6);
-                    }
-                    break;
-                case 7:
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }elseif($eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }
-                    break;
-                case 8:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($docValid == 1 and $eDocsValid == 0){
-                        $eHE->setDocumentStatus(4);
-                    }elseif($docValid == -1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(6);
-                    }elseif($docValid == 1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }elseif($docValid == -1 and $eDocsValid == 0){
-                        $eHE->setDocumentStatus(8);
-                    }elseif($docValid == -1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(10);
-                    }elseif($docValid == 1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }
-                    break;
-                case 9:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($docValid == 0 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(5);
-                    }elseif($docValid == -1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(6);
-                    }elseif($docValid == 1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }elseif($docValid == 0 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(9);
-                    }elseif($docValid == -1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(10);
-                    }elseif($docValid == 1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }
-                    break;
-                case 10:
-                    $docValid = $this->employerDocumentsValidated($user);
-                    $eDocsValid = $this->employeeDocumentsValidated($user,$eHE);
-                    if($docValid == -1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(6);
-                    }elseif($docValid == 1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(7);
-                    }elseif($docValid == -1 and $eDocsValid == -1){
-                        $eHE->setDocumentStatus(10);
-                    }elseif($docValid == 1 and $eDocsValid == 1){
-                        $eHE->setDocumentStatus(11);
-                    }
-                    break;
-                case 11:
-                    $eHE->setDocumentStatus(13);
-                    break;
-                case 12:
-                    $eHE->setDocumentStatus(10);
-                    break;
-                case 13:
-                    $eHE->setDocumentStatus(14);
-                    break;
-                case 14:
-                    $ePend = $this->employeeDocumentsReady($eHE);
-                    if($ePend['contract']==0){
+                        break;
+                    case 13:
                         $eHE->setDocumentStatus(14);
-                    }else{
-                        $eHE->setDocumentStatus(15);
-                    }
-                    break;
-                case 15:
-                    $eHE->setDocumentStatus(16);
-                    break;
-                case 16:
-                    break;
+                        break;
+                    case 14:
+                        $ePend = $this->employeeDocumentsReady($eHE);
+                        if($ePend['contract']==0){
+                            $eHE->setDocumentStatus(14);
+                        }else{
+                            $eHE->setDocumentStatus(15);
+                        }
+                        break;
+                    case 15:
+                        $eHE->setDocumentStatus(16);
+                        break;
+                    case 16:
+                        break;
+                }
+            }else{
+                $eHE->setDocumentStatus(-2);
             }
             $response[] = ['idEHE'=>$eHE->getIdEmployerHasEmployee(),'docStatus'=>$eHE->getDocumentStatus()];
             $em = $this->getDoctrine()->getManager();

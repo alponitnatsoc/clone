@@ -8,6 +8,8 @@
     {{ modal(12) }}
     {{ modal(13) }}
     {{ modal(14) }}
+    {{ modal(21) }}
+    {{ modal(22) }}
 {% endblock %}
 
 {% block fos_user_content %}
@@ -553,7 +555,7 @@
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                            <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="La forma en que contratarás a tu empleado"></i>
+                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" data-delay="10" title="4 días o menos semanalmente elige “trabajador por días" style="float:left"></div>
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
@@ -563,26 +565,25 @@
 
                                     <div class="col-sm-12 col-xs-12 days">
                                         <div class="col-sm-6 label-group">
-                                            <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title=""></i>
+                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" data-delay="{ show: 1, hide: 1}" title="prueba" style="float:left" ></div>
                                             {{ form_label(form.employeeHasEmployers.sisben) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
+                                          </br>
+                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">Si no sabes, ingresa acá y consulta con la cédula de tu empleado</a>
                                         </div>
-                                        <div id="sisbenUnknown" class="col-sm-6 col-sm-offset-6 text-left">
-                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">> Consultar aquí</a>
-                                            {{ form_widget(form.employeeHasEmployers.sisben) }}
-                                        </div>
+
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                            <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" title="El lugar principal donde se desempeñará"></i>
+                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" title="El lugar principal donde se desempeñará" style="float:left"></div>
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.workplaces) }}
-                                            <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px">Agregar lugar de trabajo</span></a>
+                                            <a id="addWorplace" class="add_phone_link" style="padding-top:2px !important;color:#00cdcc;text-decoration: none;"><i class="fa fa-plus-circle fa-2x" style="vertical-align: middle; color:#00cdcc;font-size:18px;"></i> <span style="display: inline;font-size:13px;cursor:pointer">Agregar lugar de trabajo</span></a>
                                         </div>
 
                                     </div>
@@ -1662,7 +1663,7 @@ $(document).ready(function(){
                       <ul style="text-align:left; color:#807f7f; font-weight:100">
                           <li>Activación inmediata sin tramites ni documentos.</li>
                           <li>Sin cuotas de manejos.</li>
-                          <li>Sin cuenta de banco o tarjeta de débito.</li>
+                          <li>Sin cuenta de banco o tarjeta débito.</li>
                           <li>No consume saldo ni minutos.</li>
                       </ul>
                     </div>

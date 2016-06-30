@@ -396,16 +396,16 @@ function fillTable(){
           $("#cuatroXmil").html(getPrice(cuatro_x_mil));
 
           if(num_empleados_pago_nomina == 0){
-            totalCPila = 3500;
+            totalCPila = 5500;
           }
           else if (num_empleados_pago_nomina == 1) {
-            totalCTransaccion = (7500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+            totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
           else if (num_empleados_pago_nomina >= 2 && num_empleados_pago_nomina <= 5) {
             totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
           else {
-            totalCTransaccion = (3500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
+            totalCTransaccion = (5500 * (num_empleados_pago_nomina + num_empleados_pago_nomina_quincenal));
           }
 
           $("#totalCostoTransaccionSalarial").html(getPrice(totalCTransaccion));

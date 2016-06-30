@@ -81,7 +81,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu telefono o numero celular'
+                            'placeholder' => 'Digita tu teléfono o número celular'
                         )
                     )
                 );
@@ -91,7 +91,7 @@ class ContactType extends AbstractType
                         'label' => 'Telefono / Celular:',
                         'required' => true,
                         'attr' => array(
-                            'placeholder' => 'Digita tu telefono o numero celular'
+                            'placeholder' => 'Digita tu teléfono o número celular'
                         )
                     )
                 );
@@ -107,7 +107,6 @@ class ContactType extends AbstractType
                           2 => 'Calculadora salarial',
                           3 => 'Consulta jurídica',
                           4 => 'Planes y precios',
-                          5 => 'Alternativas de registro',
                           6 => 'Otro'
                       ),
                       'multiple' => false,
@@ -121,7 +120,7 @@ class ContactType extends AbstractType
                 $builder
                     ->add('subject', 'text', array(
                             'label' => 'Asunto:',
-                            'data' =>'Alternativas de registro',
+                            'data' =>'Asistencia Symplifica',
                             'required' => true,
                             'disabled' => true,
                         )

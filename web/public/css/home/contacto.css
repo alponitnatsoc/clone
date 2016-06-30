@@ -46,6 +46,11 @@ p{
 
 /*---------------empieza seccion formulario-------------------*/
 
+.error {
+	font-weight: 400;
+	color: #e02f2f;
+}
+
 #texto-descript {margin: 60px 0 70px 0; text-align: center}
 #texto-descript h4 {width: 750px; text-align: center; margin: 0 auto;}
 

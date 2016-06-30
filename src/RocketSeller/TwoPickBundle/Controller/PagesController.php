@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 class PagesController extends Controller
@@ -13,7 +14,7 @@ class PagesController extends Controller
 		/** @var User $user */
 		$user=$this->getUser();
     	if ($user) {
-    		$response = $user->getStatus()>=2 ? $this->forward('RocketSellerTwoPickBundle:DashBoardEmployer:showDashBoard') :$this->forward('RocketSellerTwoPickBundle:DashBoard:showDashBoard');
+    		return $this->redirectToRoute('show_dashboard');
     	}else{
     		return $this->render('RocketSellerTwoPickBundle:General:landing_new.html.twig');    		
     	} 

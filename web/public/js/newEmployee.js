@@ -271,9 +271,14 @@ function startEmployee() {
 
     var sisbenBut = $("input[name='register_employee[employeeHasEmployers][sisben]']");
     sisbenBut.change(function () {
+      var selectedVal = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").parent().text();
+
+      if(selectedVal == " No"){
+        showModal(21);
+      }
       calculator();
     });
-    
+
     $("#register_employee_employeeHasEmployers_position").on("change", function () {
       calculator();
     });
@@ -1485,6 +1490,10 @@ function loadConstrains() {
 }
 
 function calculator() {
+
+    $("#arsNotAplicable").hide();
+    $("#arsNotAplicable").hide();
+
     var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
     var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
     var salaryD = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salaryD").val()));
