@@ -341,6 +341,11 @@ function startEmployerEdit() {
         sendAjax(redirUri);
         history.pushState({}, '', redirUri);
     });
+
+    $("#edit_employer_person_documentType").prop("disabled", true);
+
+    $("#edit_employer_person_document").prop("readonly", true);
+
 }
 
 
