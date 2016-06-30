@@ -87,25 +87,6 @@ class ContactType extends AbstractType
                 );
         }else{
             $builder
-<<<<<<< HEAD
-                ->add('name', 'text',array(
-                        'label'    => 'Nombre:',
-                        'required' => true,
-                        'attr' => array(
-                            'placeholder' => 'digita tu nombre'
-                        )
-                    )
-                )
-                ->add('email', 'email',array(
-                        'label'   => 'Email:',
-                        'required'=> true,
-                        'attr' => array(
-                            'placeholder' => 'digita un correo electrónico de contacto'
-                        )
-                    )
-                )
-=======
->>>>>>> 98ef92d89dff1b55000a3522385aa1aedbaf56b4
                 ->add('phone', 'number',array(
                         'label' => 'Telefono / Celular:',
                         'required' => true,
