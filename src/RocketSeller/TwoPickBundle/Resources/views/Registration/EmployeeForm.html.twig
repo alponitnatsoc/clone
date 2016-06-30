@@ -396,9 +396,12 @@
                             <div id="contractTypeTab" class="tab-pane fade in active">
                                 <div class="row">
                                     <h2 class="text-center" style="font-size: 24px;margin-top: 10px;border-bottom: 1px solid #E6E7E8;padding-bottom: 30px;">Bienvenido a nuestro<br /><span style="font-weight:100;font-size: 21px;">asistente de contratación de empleado</span></h2>
-                                    <p class="text-center typeQuestion" style="font-size: 16px;">Elige el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales.</p>
+                                    {% if changeBehaviorFlag == 1 and hOp6 == 0 %}
+                                      <p class="text-center typeQuestion" style="font-size: 16px;">Debido a que ya cuentas con un contrato verbal con tu empleado y este equivale a un contrato a término indefinido, debes seleccionar esta opción.</p>
+                                    {% else %}
+                                      <p class="text-center typeQuestion" style="font-size: 16px;">Elige el tipo de contrato que más se ajusta a este empleado de acuerdo a las condiciones laborales.</p>
+                                    {% endif %}
                                 </div>
-
                                 <!--cambio de eleccion de tipo de contrato-->
                                 <div id="contratotypes">
                                     <div id="radio-contrato">
@@ -555,7 +558,7 @@
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" data-delay="10" title="4 días o menos semanalmente elige “trabajador por días" style="float:left"></div>
+
                                             {{ form_label(form.employeeHasEmployers.timeCommitment) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
@@ -565,20 +568,20 @@
 
                                     <div class="col-sm-12 col-xs-12 days">
                                         <div class="col-sm-6 label-group">
-                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" data-delay="{ show: 1, hide: 1}" title="prueba" style="float:left" ></div>
-                                            {{ form_label(form.employeeHasEmployers.sisben) }}
+                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" data-delay="{ show: 1, hide: 1}" title="Da clic en “consultar aquí” e ingresa la cédula si aparece “subsidiado” si pertenece al SISBEN" style="float:left"></div>
+                                            {{ form_label(form.employeeHasEmployers.sisben,null,{'label_attr':{'style':'width:90%'}}) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
-                                          </br>
-                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">Si no sabes, ingresa acá y consulta con la cédula de tu empleado</a>
+                                            <a target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario"><div class="btn btn-grey" style="margin: 0 auto 35px auto;clear: both;width: 90%;white-space: inherit;text-align: left;">
+                                              Si no sabes, ingresa acá y consulta con la cédula de tu empleado
+                                            </div></a>
                                         </div>
 
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
-                                            <div class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="left" data-container = "body" title="El lugar principal donde se desempeñará" style="float:left"></div>
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
@@ -1838,7 +1841,7 @@ $(document).ready(function(){
                         <div class="col-md-8 col-md-push-2" style="text-align: center">
                             <img src="{{ asset('public/img/home/daviplata.png') }}" alt=""><br><br>
                             <p style="font-weight: 300; font-style: italic">No te preocupes, al finalizar el proceso de registro, encontrarás en el tablero
-                              de tareas pendientes una notificación con un instructivo de como abrir una
+                              de tareas pendientes una notificación con un instructivo de cómo abrir una
                               cuenta en Daviplata para tu empleado y podrás ingresar el teléfono de tu empleado donde quedó habilitado el Daviplata.</p>
                         </div>
                     </div>
