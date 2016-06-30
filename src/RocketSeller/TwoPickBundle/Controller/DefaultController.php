@@ -53,7 +53,7 @@ class DefaultController extends Controller
                 $sub = $form->get('subject')->getData();
                 switch ($sub.'') {
                     case '0':
-                        $sub='Consulta Jurídica';
+                        $sub='Registro';
                         break;
                     case '1':
                         $sub = 'Pago de nómina y aportes';
@@ -68,9 +68,13 @@ class DefaultController extends Controller
                         $sub = 'Planes y precios';
                         break;
                     case '5':
+                        $sub = 'Alternativas de registro';
+                        break;
+                    case '6':
                         $sub = 'Otros';
                         break;
                 }
+                dump($sub);
                 $send = $this->get('symplifica.mailer.twig_swift')->sendHelpEmailMessage($form->get('name')->getData(),$form->get('email')->getData(), $sub, $form->get('message')->getData(), $request->getClientIp(), $form->get('phone')->getData());
 
                 if ($send) {
