@@ -8,6 +8,8 @@
     {{ modal(12) }}
     {{ modal(13) }}
     {{ modal(14) }}
+    {{ modal(21) }}
+    {{ modal(22) }}
 {% endblock %}
 
 {% block fos_user_content %}
@@ -568,11 +570,10 @@
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             {{ form_widget(form.employeeHasEmployers.sisben) }}
+                                          </br>
+                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">Si no sabes, ingresa acá y consulta con la cédula de tu empleado</a>
                                         </div>
-                                        <div id="sisbenUnknown" class="col-sm-6 col-sm-offset-6 text-left">
-                                            <a  target="_blank"  href="http://www.tramitesyconsultas.info/consulta-fosyga-afiliados/#formulario" style="display: block; margin: -16px 0px 20px 28px;">> Consultar aquí</a>
-                                            {{ form_widget(form.employeeHasEmployers.sisben) }}
-                                        </div>
+
                                     </div>
 
                                     <div class="col-sm-12 col-xs-12">

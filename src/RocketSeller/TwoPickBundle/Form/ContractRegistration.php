@@ -69,8 +69,7 @@ class ContractRegistration extends AbstractType
                 'choices' => array(
                     1=> 'Si',
                     -1=> 'No',
-                    0=> 'No Se',
-
+                    //0=> 'No Se',
                 ),
                 'multiple' => false,
                 'expanded' => true,
