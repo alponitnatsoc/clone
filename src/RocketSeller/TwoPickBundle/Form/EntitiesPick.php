@@ -42,7 +42,7 @@ class EntitiesPick extends AbstractType
             ->add('wealthExists', 'choice', array(
                 'choices' => array(
                     0 => 'Si',
-                    1 => 'No, afílieme'
+                    1 => 'No, afiliar'
                 ),
                 'multiple' => false,
                 'expanded' => true,
@@ -70,7 +70,7 @@ class EntitiesPick extends AbstractType
             ->add('pensionExists', 'choice', array(
                 'choices' => array(
                     0 => 'Si',
-                    1 => 'No, afílieme'
+                    1 => 'No, afiliar'
                 ),
                 'multiple' => false,
                 'expanded' => true,
