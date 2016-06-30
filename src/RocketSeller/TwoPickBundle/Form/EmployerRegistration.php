@@ -77,7 +77,7 @@ class EmployerRegistration extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'property_path' => 'entities',
-                'label'=>'Caja de compensación Familiar',
+                'label'=>'Caja de Compensación Familiar',
             ))
             ->add('arl', 'entity', array(
                 'class' => 'RocketSellerTwoPickBundle:Entity',

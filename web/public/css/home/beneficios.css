@@ -54,6 +54,16 @@ border-bottom: 3px solid #794815}
 .espacio {margin: 30px 0}
 .callto2 {width: 200px; height: 35px; margin: 60px auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
 .callto {width: 200px; height: 35px; margin: 0 auto; border-radius: 3px; border-bottom:#D3731C 3px solid; color: #FFFFFF; padding: 6px 12px; box-sizing: border-box}
+.callto4 {
+		width: 215px;
+    height: 45px;
+    margin: 0 auto;
+    border-radius: 3px;
+    border-bottom: #D3731C 3px solid;
+    color: #FFFFFF;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
 #cont-beneficios-list {width: 1100px; margin: 0 auto;}
 #beneficios-title {margin: 80px 0 90px 0}
 .centrar {text-align: center}
