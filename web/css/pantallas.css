@@ -23,12 +23,24 @@ a {text-decoration: none}
 .bold {font-family: 'Open Sans', sans-serif;font-weight: 700}
 .extrabold {font-family: 'Open Sans', sans-serif;font-weight: 800}
 
+.casiValidado {
+	width: 100%;
+	border: 1px #CCC dashed;
+	padding:10px 0;
+	border-radius:5px}
+
+.casiValidado p {
+	width: 80%;
+	text-align:center;
+	margin: 0 auto;
+	padding: 10px 20px}
+
 .h2 {
 	font-size: 20px;
     width: 80%;
     margin: 0 auto;}
 
-#cont-succesdocs {
+	#cont-succesdocs {
 	width: 800px;
 	margin: 0 auto}
 
