@@ -98,7 +98,7 @@ class EmployeeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($employerEmployee);
         $em->flush();
-        return new JsonResponse(array('state' => ($employerEmployee->getState() ? 'x' : 'Inactivo')));
+        return $this->redirectToRoute("manage_employees");
     }
 
     /**
