@@ -2141,15 +2141,8 @@ function reverseCalculator(){
     pensL = 0;
   }
 
-  console.log("reverse");
-  console.log(plainSalary);
-  console.log(transportAidDaily);
-  console.log(pensL);
-  console.log(saluL);
-
   if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
     salaryD = plainSalary + transportAidDaily - pensL - saluL;
-    console.log(salaryD);
   }
   else {
     base = smmlv;
