@@ -23,11 +23,7 @@ function startContact() {
         });
     });
 
-    $("#contact_form").onclick(function (e) {
-        if(!form.validate()){
-            e.preventDefault();
-        }
-    });
+
 
 
     $("form").on("submit", function (e) {
@@ -62,6 +58,7 @@ function startContact() {
             return;
         }
 
+
         // $.ajax({
         //     url: form.attr('action'),
         //     type: $(form).attr('method'),
@@ -81,8 +78,7 @@ function startContact() {
         //     }
         // });
 
-        
+
     });
 
 }
-

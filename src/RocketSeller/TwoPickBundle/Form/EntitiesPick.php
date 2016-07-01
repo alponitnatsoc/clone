@@ -58,15 +58,6 @@ class EntitiesPick extends AbstractType
                 'mapped' => false,
                 'label'=>'Pension'
             ))
-            ->add('pensionAC', 'text', array(
-                'mapped' => false,
-                'label'=>'Administradora de Fondo de Pensiones (AFP)',
-                'required' => true,
-                'attr'=>array(
-                    "class"=>'autocomP',
-                    "placeholder" => "Escribe el nombre de la entidad"
-                )
-            ))
             ->add('pensionExists', 'choice', array(
                 'choices' => array(
                     0 => 'Si',
@@ -97,15 +88,6 @@ class EntitiesPick extends AbstractType
                 'choice_label' =>'name',
                 'mapped' => false,
                 'label'=>'Cesantias'
-            ))
-            ->add('severancesAC', 'text', array(
-                'mapped' => false,
-                'label'=>'Fondo de Cesantías',
-                'required' => false,
-                'attr'=>array(
-                    "class"=>'autocomCes',
-                    "placeholder" => "Escribe el nombre de la entidad"
-                )
             ))
             ->add('severancesExists', 'choice', array(
                 'choices' => array(

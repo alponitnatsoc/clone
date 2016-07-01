@@ -580,6 +580,15 @@
 
                                     </div>
 
+                                    <div id="hidePensOpt" class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.paysPens) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.paysPens) }}
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
@@ -1174,13 +1183,13 @@ $(document).ready(function(){
                             </div>
                             <div id="paymentMethod" class="tab-pane fade in">
                                 <div class="formulario" style="border-bottom:0px">
-                                    <div class="formulario row">
+                                    <div class="formulario row" style="margin:0;padding:0">
                                         <div class="col-sm-12 col-xs-12">
                                             <div class="text-center" style="padding: 0 0 30px 0;font-size: 19px;font-weight: 100;color: #00858C;">
                                                 ¿Cuál será el metodo de pago para tu empleado?
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-xs-12">
+                                        <!--<div class="col-sm-12 col-xs-12">
                                             <div class="introPayment" style="padding-bottom: 20px;">
                                                 <table>
                                                     <tr>
@@ -1239,7 +1248,7 @@ $(document).ready(function(){
                                                     </tr>
                                                 </table>
                                             </div>
-                                        </div>
+                                        </div>-->
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-10">
@@ -1282,7 +1291,11 @@ $(document).ready(function(){
 
                                             </div>
                                             <br />
-
+                                            <div class="textoFinalPaymeth">
+                                                *Por tu seguridad y la de tus empleados te recomendamos los métodos de pago electrónicos ya que te
+                                                permiten tener todas las evidencias de pagos de salario de manera automática y evitas manejar efectivo.
+                                                 Las transferencias a través de nuestra plataforma generan costos transaccionales.
+                                            </div>
                                             <div class="col-sm-12 col-xs-12 center" style="border-top: 1px solid #e6e7e8; padding-top: 20px;">
                                                 <a class="btn btn-grey btnPrevious-contract btnPrevious" >Volver atrás</a>
                                                 <button id="register_employee_save" type="submit" name="register_employee[save]" class="btn btn-orange">Procesar información de contrato</button>
@@ -1471,16 +1484,7 @@ $(document).ready(function(){
                             {% else %}
                                 {% set wname = "" %}
                             {% endif %}
-                            {% if form.entities.pension.vars.data.name is defined %}
-                                {% set pname = form.entities.pension.vars.data.name %}
-                            {% else %}
-                                {% set pname = "" %}
-                            {% endif %}
-                            {% if form.entities.severances.vars.data.name is defined %}
-                                {% set sname = form.entities.severances.vars.data.name %}
-                            {% else %}
-                                {% set sname = "" %}
-                            {% endif %}
+
                             <div class="col-sm-10 col-xs-12 blockUpData">
                                 <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                                     <div class="hidden">
@@ -1492,6 +1496,7 @@ $(document).ready(function(){
                                     <div class="col-sm-6 form-group">
                                         {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
                                     </div>
+                                    <p id="errorWealth" style="color:red;">Entidad no encontrada en la base de datos, por favor revisa lo escrito</p>
                                     {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
@@ -1503,14 +1508,11 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div  class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.severances) }}
-                                    </div>
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.severancesAC) }}
+                                        {{ form_label(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                                        {{ form_widget(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-12 col-xs-12 hidden">
                                         <div class="col-sm-6 label-group">
@@ -1521,20 +1523,14 @@ $(document).ready(function(){
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.pension) }}
-                                    </div>
+
+                                <div id="pensionHide"  class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.pensionAC) }}
+                                        {{ form_label(form.entities.pension) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
+                                        {{ form_widget(form.entities.pension) }}
                                     </div>
-                                    {#                             <div class="col-sm-12 col-xs-12">#}
-                                    {#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
-                                    {#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
-                                    {#                             </div>#}
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(form.entities.pensionExists) }}
@@ -1569,7 +1565,7 @@ $(document).ready(function(){
 
                             <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                 <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
-                                <span id="textPorque">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a la cuál quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
+                                <span id="textPorque">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a las cuales quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
 </span>
                             </div>
 

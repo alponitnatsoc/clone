@@ -98,7 +98,7 @@ class EmployeeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($employerEmployee);
         $em->flush();
-        return new JsonResponse(array('state' => ($employerEmployee->getState() ? 'x' : 'Inactivo')));
+        return $this->redirectToRoute("manage_employees");
     }
 
     /**
@@ -444,6 +444,7 @@ class EmployeeController extends Controller
         } else {
             $employeeForm->get('beneficiaries')->setData('-1');
         }
+
         if ($eHEEntities && $eHEEntities->count() != 0) {
             /** @var EmployeeHasEntity $enti */
             foreach ($eHEEntities as $enti) {
@@ -482,6 +483,14 @@ class EmployeeController extends Controller
         $todayPlus->setDate(intval($todayPlus->format("Y")) + 1, $todayPlus->format("m"), $todayPlus->format("d"));
         $form->get('employeeHasEmployers')->get("startDate")->setData($permittedDate);
         $form->get('employeeHasEmployers')->get("endDate")->setData($localEndDate);
+
+        /*if($paysPensFlag){
+            $form->get('employeeHasEmployers')->get("paysPens")->setData(1);
+        }
+        else {
+            $form->get('employeeHasEmployers')->get("paysPens")->setData(-1);
+        }*/
+
         if ($employerHasEmployee != null) {
             $contracts = $employerHasEmployee->getContracts();
             if ($contracts->count() != 0) {
@@ -562,7 +571,7 @@ class EmployeeController extends Controller
     }
 
     public function showEmployeeAction($id)
-    { 
+    {
         $this->dateToday= new \DateTime();
         $user = $this->getUser();
         $person = $user->getPersonPerson();

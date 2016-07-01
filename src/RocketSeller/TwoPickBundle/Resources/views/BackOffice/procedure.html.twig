@@ -70,7 +70,9 @@
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-							{% endif %}
+                            {% elseif action.ActionTypeActionType.name|lower == "validar Mandato" %}
+                                <td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
+                            {% endif %}
 						{% else %}
 							{% if action.ActionTypeActionType.name|lower == "validar informacion del empleador" %}
 								<td><a class="notAjax" href="{{ path('show_info',{'idAction':action.idAction})}}">Consultar Información</a></td>
@@ -156,6 +158,8 @@
 									{% elseif action.ActionTypeActionType.name|lower == "inscripcion" %}
 										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
 									{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
+										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
+									{% elseif action.ActionTypeActionType.name|lower == "validar Contrato" %}
 										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
 									{% endif %}
 								{% else %}

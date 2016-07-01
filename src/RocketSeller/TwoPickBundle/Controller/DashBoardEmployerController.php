@@ -2,8 +2,10 @@
 
 namespace RocketSeller\TwoPickBundle\Controller;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\User;
 use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,11 +35,37 @@ class DashBoardEmployerController extends Controller {
         }
         try {
             $orderBy = ($request->query->get('orderBy')) ? $request->query->get('orderBy') : 'deadline';
+            /** @var Collection $notifications */
             $notifications = $this->getNotifications($user->getPersonPerson(), $orderBy);
+            $tareas=false;
+            /** @var Notification $notification */
+            foreach ($notifications as $notification){
+                if($notification->getStatus()==1){
+                    $tareas=true;
+                    break;
+                }
+            }
             /** @var User $user */
             $user = $this->getUser();
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
+                if($tareas and $docStat['docStatus']>14){
+                        return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
+                }
+
+                /** Se envia el Email diahabil*/
+                if($tareas and $docStat['docStatus']==2){
+                    $em = $this->getDoctrine()->getManager();
+                    $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
+                    $smailer = $this->get('symplifica.mailer.twig_swift');
+                    $smailer->sendOneDayMessage($this->getUser(),$eHE);
+                }
+                if($tareas and $docStat['docStatus']==11){
+                    return $this->redirectToRoute('employer_completion_documents');
+                }
+                if(!$tareas){
+                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig');
+                }
             }
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => $notifications,
@@ -45,6 +73,7 @@ class DashBoardEmployerController extends Controller {
                         'contractType' => $contractType,
                         'ready'=>$ready,
             ));
+            
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,

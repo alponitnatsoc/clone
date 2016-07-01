@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -26,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class ProcedureController extends Controller
 {
+	use EmployeeMethodsTrait;
 	/**
 	 * Funcion que carga la pagina de tramites para el backoffice
 	 * Muestra un acceso directo a tramites pendientes de:
@@ -103,6 +105,9 @@ class ProcedureController extends Controller
 			$em->persist($employerHasEmployee);
 			$em->flush();
 
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+
 			$this->addFlash('success', 'Exito al terminar los tramites del empleado');
 			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
 		}else{
@@ -163,6 +168,17 @@ class ProcedureController extends Controller
 				$action->setStatus('Nuevo');
 				$action->setRealProcedureRealProcedure($procedure);
 				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+				$action->setPersonPerson($employerSearch->getPersonPerson());
+				$action->setUserUser($userSearch);
+				$em->persist($action);
+				$em->flush();
+				//se agrega la accion al procedimiento
+				$procedure->addAction($action);
+
+				$action = new Action();
+				$action->setStatus('Nuevo');
+				$action->setRealProcedureRealProcedure($procedure);
+				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VM'),"ActionType"));
 				$action->setPersonPerson($employerSearch->getPersonPerson());
 				$action->setUserUser($userSearch);
 				$em->persist($action);
@@ -424,12 +440,13 @@ class ProcedureController extends Controller
         
     }
     public function changeVueltaStateAction($procedureId,$actionId,$status)
-    {	
+    {
+
     	$em = $this->getDoctrine()->getManager();
 		/** @var Action $action */
 		$action = $this->loadClassById($actionId,"Action");
 		//adding verification to check if the actions is validate documents employee
-		if($action->getActionTypeActionType()->getCode()=="VDC"){
+		if($action->getActionTypeActionType()->getCode()=="VDC" and $status!='Error'){
 			$employee=$action->getPersonPerson()->getEmployee();
 			if($employee!=null){
 				/** @var User $user */
@@ -486,6 +503,20 @@ class ProcedureController extends Controller
 						$notification->setDownloadAction($dAction);
 						$notification->setDownloadLink($dUrl);
 						$em->persist($notification);
+                        $smailer = $this->get('symplifica.mailer.twig_swift');
+                        $smailer->sendDiasHabilesMessage($user,$realEhe);
+
+						$actionV = new Action();
+						$actionV->setStatus('Nuevo');
+						$actionV->setRealProcedureRealProcedure($action->getRealProcedureRealProcedure());
+						$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+						$actionV->setPersonPerson($realEhe->getEmployeeEmployee()->getPersonPerson());
+						$actionV->setUserUser($user);
+						$em->persist($actionV);
+						$em->flush();
+						//se agrega la accion al procedimiento
+						$action->getRealProcedureRealProcedure()->addAction($actionV);
+
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
 							$todayPlus = new DateTime();

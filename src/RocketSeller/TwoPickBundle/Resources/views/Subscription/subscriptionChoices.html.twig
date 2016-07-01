@@ -1,5 +1,10 @@
 {% extends "::base.html.twig" %}
 {% block title %}Symplifica - Medio de pago{% endblock %}
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(11) }}
+{% endblock %}
+
 
 {% block fos_user_content %}
     <style>
@@ -219,8 +224,9 @@
                 <b style="color:#00858C;font-size: 25px;" class="x-large">Estimación de Cargos Mensuales</b>
             </div>
             <div class="col-md-12">
-                <div class="center padding-top-botton-20">
-                  A continuación, encontrarás una estimación de los cargos que haremos al medio de pago que registres.
+                <div class="center padding-top-botton-20" style="width:80%">
+                  A continuación encontrarás una estimación de los cargos. Estos valores son estimados,
+                  pueden variar según las novedades registradas cada mes,el número de empleados y el número de pagos que haga a través de la plataforma cada mes.
                 </div>
             </div>
         </div>
@@ -474,13 +480,13 @@
         </div>
     </form>
 
-    <div class="row">
+    <!--<div class="row">
         <br/>
         <div class="col-sm-12 remember text-center" style="opacity: 0.7;width:">
             <h4 style="font-size: 14px;">* Estos valores son estimado, pueden variar según las novedades registradas
               cada mes,<br> el número de empleados y el número de pagos que haga a través de la plataforma cada mes.</h4>
         </div>
-    </div>
+    </div>-->
 
 
 

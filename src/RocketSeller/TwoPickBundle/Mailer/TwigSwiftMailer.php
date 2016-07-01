@@ -12,7 +12,9 @@
 namespace RocketSeller\TwoPickBundle\Mailer;
 
 use FOS\UserBundle\Model\UserInterface;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -122,6 +124,42 @@ class TwigSwiftMailer implements MailerInterface
             'toEmail' => $user->getEmail(),
             'user' => $user,
             'subject'=> "Informacion Daviplata"
+        );
+        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+    }
+
+    public function sendOneDayMessage(UserInterface $user,EmployerHasEmployee $eHE){
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['oneday'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Inicio de proceso de validación",
+            'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
+        );
+        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+    }
+    public function sendDiasHabilesMessage(User $user,EmployerHasEmployee $eHE){
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['diashabiles'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'userName'=> $user->getPersonPerson()->getFullName(),
+            'subject'=> "Inicio de proceso de afiliación",
+            'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
+        );
+        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+    }
+
+    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE){
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['backval'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Fin del proceso de validación de tu empleado",
+            'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );
         $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }

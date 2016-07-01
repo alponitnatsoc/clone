@@ -643,6 +643,7 @@ trait SubscriptionMethodsTrait
                 $employer->setIdHighTech($idHighTech);
                 $em->persist($employer);
                 $em->flush();
+
             }
             $eHEes = $employer->getEmployerHasEmployees();
             //dump($eHEes);
@@ -974,13 +975,15 @@ trait SubscriptionMethodsTrait
         $this->addToSQL($user);
         $davPlataMail=false;
         /** @var EmployerHasEmployee $eHE */
-        foreach ($user->getPersonPerson()->getEmployer()->addEmployerHasEmployee() as $eHE){
+        foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE){
+            if($davPlataMail)break;
             /** @var Contract $contract */
-            if($davPlataMail) break;
             foreach ($eHE->getContracts() as $contract){
-                if($contract->getPayMethodPayMethod()->getPayTypePayType()==1){
-                    $davPlataMail=true;
-                    break;
+                if($contract->getState()==1){
+                    if($contract->getPayMethodPayMethod()->getPayTypePayType()->getImage()=="/img/icon_daviplata.png"){
+                        $davPlataMail=true;
+                        break;
+                    }
                 }
             }
         }
