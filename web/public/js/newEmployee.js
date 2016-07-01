@@ -1003,12 +1003,12 @@ function startEmployee() {
 
     $( "label[for='register_employee_person_phones_0_phoneNumber']").text("Número de teléfono");
 
-    if( $("#register_employee_entities_pension").val() == 50){
-      $("#register_employee_employeeHasEmployers_paysPens_1").attr('checked', 'checked');
+    if( $("#register_employee_entities_pension").val() == 50 && $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").val() == "2"){
+      $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
       $("#pensionHide").hide();
     }
     else {
-      $("#register_employee_employeeHasEmployers_paysPens_0").attr('checked', 'checked');
+      $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
       $("#pensionHide").show();
     }
     calculator();
@@ -1835,11 +1835,20 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
     $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
+    $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', false);
+    $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
+    $("#hidePensOpt").hide();
+    $("#pensionHide").show();
   }
   else {
     $('#radio_diario').prop('checked', true);
     $('#radio_mensual').prop('checked', false);
     $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
+    $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', false);
+    $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
+    $("#hidePensOpt").show();
+    $("#pensionHide").hide();
+    $("#register_employee_entities_pension").val(50);
   }
 });
 
