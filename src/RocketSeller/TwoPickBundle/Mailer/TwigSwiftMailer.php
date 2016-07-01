@@ -14,6 +14,7 @@ namespace RocketSeller\TwoPickBundle\Mailer;
 use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -138,12 +139,13 @@ class TwigSwiftMailer implements MailerInterface
         );
         $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
-    public function sendDiasHabilesMessage(UserInterface $user,EmployerHasEmployee $eHE){
+    public function sendDiasHabilesMessage(User $user,EmployerHasEmployee $eHE){
         $to = $user->getEmail();
         $template = $this->parameters['template']['diashabiles'];
         $context = array(
             'toEmail' => $user->getEmail(),
             'user' => $user,
+            'userName'=> $user->getPersonPerson()->getFullName(),
             'subject'=> "Inicio de proceso de afiliación",
             'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );

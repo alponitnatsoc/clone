@@ -50,7 +50,7 @@
                             {% endif %}
                         </div>
                         <div class="col-sm-2">
-                            {% if  not employerHasEmployee.state %}
+                            {% if  not employerHasEmployee.state > 0 %}
                                 <a class="btn  btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Activar</a>
                             {% else %}
                                 <a class="btn btn-top-red btn-sm btn-primary notAjax" href="{{ path('change_state_employer_employee', { 'id': employerHasEmployee.idEmployerHasEmployee }) }}">Inactivar</a>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-sm-12 middle-box" style="border: 1px solid #E6E6E6;border-radius: 5px;margin-top: 15px;">
                     <div class="col-sm-4 left" style="border:0">
-                        {% if employerHasEmployee.state %}
+                        {% if employerHasEmployee.state >0 %}
                             <p><i class="fa fa-check-circle" style="color:#FD9224;font-size: 20px;padding-top: 10px;"></i>Activo</p>
                         {% else %}
                             <p><i class="fa fa-check-cross"></i>Inactivo</p>

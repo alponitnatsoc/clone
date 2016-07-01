@@ -50,7 +50,7 @@ class LoadPositionData extends AbstractFixture implements OrderedFixtureInterfac
         $manager->persist($enfermera);*/
 
         $mayordomo = new Position();
-        $mayordomo->setName('Mayordomo');
+        $mayordomo->setName('Mayordomo de Finca de Recreo');
         $mayordomo->setPayrollCoverageCode('2'); // Code 1.044
         $mayordomo->setObligations("1. Cuidado y mantenimiento general del bien e inmueble tanto de forma interna como externa ; 2. pago de servicios y demas facturas; 3. Atender a los visitantes del empleador ; 4. Notificar inmendiatamente al empleador, de cualquier eventualidad que se presente en el inmueble.");
         $mayordomo->setIdentBy("m");
