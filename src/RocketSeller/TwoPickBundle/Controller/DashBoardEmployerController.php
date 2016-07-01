@@ -64,7 +64,12 @@ class DashBoardEmployerController extends Controller {
                     return $this->redirectToRoute('employer_completion_documents');
                 }
                 if(!$tareas){
-                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig');
+                    $em = $this->getDoctrine()->getManager();
+                    $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
+                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
+                        'userName' => $user->getPersonPerson()->getFullName(),
+                        'employeeName'=> $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                    ));
                 }
             }
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
