@@ -575,10 +575,16 @@
             contrato[{{ employee.idEmployerHasEmployee }}]['sisben'] ={{ contrato.sisben?contrato.sisben:0 }} ;
             contrato[{{ employee.idEmployerHasEmployee }}]['wayToPay'] = {{ contrato.payMethodPayMethod.payTypePayType.idPayType }} ;
             contrato[{{ employee.idEmployerHasEmployee }}]['frecuencia'] = {{ contrato.frequencyFrequency.idFrequency }} ;
+            contrato[{{ employee.idEmployerHasEmployee }}]['riesgoARL'] = {{ contrato.positionPosition.payrollCoverageCode }} ;
             producto[{{ employee.idEmployerHasEmployee }}]['price'] ={{ producto['price'] }} ;
             producto[{{ employee.idEmployerHasEmployee }}]['tax'] ={{ producto['object'].taxTax.value?producto['object'].taxTax.value:0 }} ;
             producto['{{ producto['object'].simpleName }}'] = {{ producto['price'] }};
-
+            employee[{{ employee.idEmployerHasEmployee }}]['aportaPension'] = 0;
+            {% for entityInd in employee.employeeEmployee.entities %}
+               {% if  entityInd.entityEntity.name == "NO APORTA" %}
+                  employee[{{ employee.idEmployerHasEmployee }}]['aportaPension'] = 1;
+               {% endif %}
+            {% endfor %}
         {% endif %}
 
         {% endfor %}
