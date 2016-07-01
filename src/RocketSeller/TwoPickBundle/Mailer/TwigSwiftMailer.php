@@ -14,6 +14,7 @@ namespace RocketSeller\TwoPickBundle\Mailer;
 use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Phone;
+use RocketSeller\TwoPickBundle\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**

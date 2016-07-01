@@ -13,6 +13,7 @@ namespace RocketSeller\TwoPickBundle\Mailer;
 
 use FOS\UserBundle\Model\UserInterface;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
+use RocketSeller\TwoPickBundle\Entity\User;
 
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
