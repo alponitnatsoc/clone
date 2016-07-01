@@ -42,8 +42,6 @@ class ExpressRegistrationController extends Controller
             //return $this->render('RocketSellerTwoPickBundle:Registration:expressPayment.html.twig',array('user'=>$user));
             return $this->redirectToRoute('express_payment_add');
         } else {
-            dump($response);
-            exit();
         }
     }
 
@@ -124,11 +122,7 @@ class ExpressRegistrationController extends Controller
         if ($insertionAnswer->getStatusCode() == 200) {
             return $this->redirectToRoute('express_success');
         } elseif ($insertionAnswer->getStatusCode() == 404) {
-            dump("Procesando");
-            exit();
         } else {
-            dump($insertionAnswer);
-            exit();
         }
     }
 

@@ -104,7 +104,6 @@ class SendEmailRestController extends FOSRestController
                     )
                 )
             );
-            var_dump($message);
             $send = $mandrill->messages->sendTemplate($template_name, null, $message);
             $view->setData($send)->setStatusCode(200);
         } catch(Mandrill_Error $e) {
