@@ -540,7 +540,7 @@ class PersonRestController extends FOSRestController
                 'email' => $person->getEmail(),
                 'city' => array('id_city'=>$person->getCity()->getIdCity()),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
-                'idEmployee' => $person->getEmployee() ? $person->getEmployee()->getIdEmployee() : "-2"
+                'idEmployee' => $person->getEmployee()!=null ? $person->getEmployee()->getIdEmployee() : "-2"
             ))->setStatusCode(200);
             return $view;
         } else {
@@ -557,11 +557,14 @@ class PersonRestController extends FOSRestController
                 $view->setStatusCode(404)->setHeader("error", "The person does not exist in data Credit");
                 return $view;
             }
+            /** @var UtilsController $utils */
+            $utils = $this->get('app.symplifica_utils');
+
             $answer = json_decode($insertionAnswer->getContent(), true);
 
             $view->setData(array(
-                'names' => isset($answer['nombres']) ? $answer['nombres'] : "",
-                'lastName2' => isset($answer['segundoApellido']) ? $answer['segundoApellido'] : "",
+                'names' => isset($answer['nombres']) ? $utils->mb_capitalize($answer['nombres']) : "",
+                'lastName2' => isset($answer['segundoApellido']) ? $utils->mb_capitalize($answer['segundoApellido']) : "",
                 'civilStatus' => "",
                 'gender' => $answer['genero']=='F' ? "FEM" : "MAS",
                 'documentExpeditionDate' => isset($answer['fechaExpedicionAno']) ? array(

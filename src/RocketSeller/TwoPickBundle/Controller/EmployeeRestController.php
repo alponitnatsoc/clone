@@ -463,9 +463,13 @@ class EmployeeRestController extends FOSRestController {
 
             /** @var Person $person */
             $person = $employee->getPersonPerson();
-            $person->setNames($paramFetcher->get('names'));
-            $person->setLastName1($paramFetcher->get('lastName1'));
-            $person->setLastName2($paramFetcher->get('lastName2'));
+
+            /** @var UtilsController $utils */
+            $utils = $this->get('app.symplifica_utils');
+
+            $person->setNames($utils->mb_capitalize($paramFetcher->get('names')));
+            $person->setLastName1($utils->mb_capitalize($paramFetcher->get('lastName1')));
+            $person->setLastName2($utils->mb_capitalize($paramFetcher->get('lastName2')));
             $person->setDocument($paramFetcher->get('document'));
             $person->setDocumentType($paramFetcher->get('documentType'));
             $person->setCivilStatus($paramFetcher->get('civilStatus'));

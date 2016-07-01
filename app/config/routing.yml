@@ -341,6 +341,10 @@ media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
 
+export_document_byDocType:
+    path:     /Document/export/Person/{idPerson}/{idDocType}
+    defaults: { _controller: RocketSellerTwoPickBundle:Export:exportDocumentByPersonDocType }
+
 home_products:
     path:     /productos
     defaults: { _controller: RocketSellerTwoPickBundle:Home:products }

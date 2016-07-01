@@ -56,7 +56,6 @@ class SymplificaVoter extends AbstractVoter {
     		return false;
     	}
     	
-    	dump($user->getRoles());
     	$repository = $this->em->getRepository('RocketSellerTwoPickBundle:Role');
     	$query = $repository->createQueryBuilder('r');
                 $query->andWhere('r.name in (:roles)')
@@ -65,7 +64,6 @@ class SymplificaVoter extends AbstractVoter {
         $roles = $query->getQuery()->getResult();
         
         foreach($roles as $role) {
-        	dump($role);
         	foreach($role->getRoleHasTask() as $roleHasTask){
         		if($roleHasTask->getTaskTask()->getName()==$attribute)
         			return true;

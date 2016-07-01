@@ -4,6 +4,7 @@ namespace RocketSeller\TwoPickBundle\Traits;
 
 use RocketSeller\TwoPickBundle\Controller\UtilsController;
 use RocketSeller\TwoPickBundle\Entity\Action;
+use RocketSeller\TwoPickBundle\Entity\Configuration;
 use RocketSeller\TwoPickBundle\Entity\Contract;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Person;
@@ -167,7 +168,7 @@ trait EmployeeMethodsTrait
      * 2 - estado desconocido
      *
      * @param User $user Usuario del empleado del que se consulta el estado de validacion de documentos
-     * @param EmployerHasEmployee $eHE employerHasEmployee del empleado del que se consulta el estado de validacion de documetos 
+     * @param EmployerHasEmployee $eHE employerHasEmployee del empleado del que se consulta el estado de validacion de documetos
      * @return int
      */
     protected function employeeDocumentsValidated(User $user, EmployerHasEmployee $eHE)
@@ -478,6 +479,19 @@ trait EmployeeMethodsTrait
                 } elseif ($type == 'Contrato') {
                     $documentType = 'Contrato';
                     if($employerHasEmployee->getLegalFF()==1){
+                        $configurations=$employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getConfigurations();
+                        $flag=false;
+                        /** @var Configuration $config */
+                        foreach ($configurations as $config) {
+                            if($config->getValue()=="PreLegal-SignedContract"){
+                                $flag=true;
+                                break;
+                            }
+                        }
+                        if(!$flag){
+                            $dAction="Bajar";
+                            $dUrl = $this->generateUrl("download_documents", array('id' => $contract->getIdContract(), 'ref' => "contrato", 'type' => 'pdf'));
+                        }
                         $msj = "Subir copia del contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     }else{
                         $msj = "Aviso sobre el contrato de ". $utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
@@ -486,7 +500,7 @@ trait EmployeeMethodsTrait
 
                 } elseif ($type == 'Carta autorización Symplifica') {
                     $documentType = 'Carta autorización Symplifica';
-                    $msj = "Subir copia de la Carta autorización Symplifica de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
+                    $msj = "Subir autorización firmada de manejo de datos y afiliación de " .$utils->mb_capitalize(explode(" ",$person->getNames())[0]." ". $person->getLastName1());
                     $dAction="Bajar";
                     $dUrl = $this->generateUrl("download_documents", array('id' => $employerHasEmployee->getIdEmployerHasEmployee(), 'ref' => "aut-afiliacion-ss", 'type' => 'pdf'));
                 }

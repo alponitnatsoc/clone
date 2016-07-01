@@ -250,9 +250,9 @@
                                 <div class="{% if app.request.get('_route') == 'show_certificates' %}activeMenu{% endif %} well well-lg">
                                     <a {% if status < 2 %} class="noClick" href="javascript:void(0)" data-toggle="tooltip" data-placement="right" title="Debes completar el ingreso a Symplifica para poder usar esta funcionalidad" {% else %} href="{{ path('show_certificates') }}"{% endif %}>Certificados</a>
                                 </div>
-                                <div class="{% if app.request.get('_route') == 'legal_payment' %}activeMenu{% endif %} well well-lg">
-                                    <a href="{{ path('legal_payment') }}">Asistencia Legal</a>
-                                </div>
+                                {#<div class="{% if app.request.get('_route') == 'legal_payment' %}activeMenu{% endif %} well well-lg">
+                                    <a href="{{ path('legal_payment') }}">Asistencia legal</a>
+                                </div>#}
                                 <div class="{% if app.request.get('_route') == 'contact' %}activeMenu{% endif %} well well-lg">
                                     <a href="{{ path('contact') }}">Ayuda</a>
                                 </div>
@@ -814,14 +814,12 @@
                             style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span
                                 aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
-                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">Error</div>
+                        <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 26px;">¡Oops!</div>
                     </div>
                     <div class="row-fluid clearfix" style="padding: 30px 15px;">
                         <div class="row">
                             <div class="col-md-8 col-md-push-2">
-                                Perdón, algo salió mal. Un equipo de monos altamente capacitados ha sido enviado para
-                                hacer
-                                frente a esta situación
+                                Perdón, algo salió mal. Nuestro equipo esta buscando una solución, dale cerrar para continuar.
                             </div>
                         </div>
                         <div class="row" style="margin-top: 30px;">

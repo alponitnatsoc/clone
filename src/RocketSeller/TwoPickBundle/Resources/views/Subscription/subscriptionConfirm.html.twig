@@ -204,6 +204,18 @@
             -ms-appearance: checkbox;     /* not currently supported */
         }
 
+        .porTusec {
+          padding: 10px 15px;
+          font-size: 12px;
+          width: 50%;
+          margin: 15px auto;
+          border: #1fcecb dashed 1px;
+          border-radius: 5px;
+          background: #ffefef;
+          font-weight: 600;
+          color: #5f5f5f;
+        }
+
         #infoDebito label, #infoTarjeta label {
             font-style: italic;
         }
@@ -248,18 +260,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-11 col-sm-12 col-xs-12" style="border-bottom: none;">
-            <div class="col-sm-11 col-sm-offset-1 remember">
-                            <span><i class="fa fa-info-circle"></i> Recuerda que los campos marcados con * son obligatorios</span>
-            </div>
-        </div>
+
     </div>
     {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2 text-center" style="padding: 20px; font-weight: bold; color: #848484; border-radius:5px;border:1px solid #D8D8D8">
+        <div class="col-sm-8 col-sm-offset-2 text-center" style="margin-top:20px;padding: 20px; font-weight: bold; color: #848484; border-radius:5px;border:1px solid #D8D8D8">
             Para que puedas realizar los pagos de nómina, aportes y nuestro servicio, necesitamos que registres un medio de pago. Para el pago de nómina y aportes
-            de seguridad social se te pedirá confirmación cada periodo antes de efectuarlo. El servicio Symplifica será debitado de manera automática.
+            de seguridad social se te pedirá confirmación cada periodo antes de efectuarlo. La suscripción a Symplifica será debitado de manera automática.
         </div>
     </div>
 
@@ -273,6 +281,7 @@
         <div class="col-md-6 text-center" style="padding: 5px 5px 5px 5px; text-align:center">
             <input type="radio" id="creditCard_radio" name="typeMethod" value="creditCard" class="disabled" disabled />
             <label for="creditCard_radio" style="font-weight: normal;"><em style="color:#ccc">Tarjeta de Crédito</em></label>
+            <label for="creditCard_radio" style="font-weight: normal;"><em style="color:#ccc">proximamente</em></label>
         </div>
         <div class="col-md-6" style="padding: 5px 5px 5px 5px; text-align:center">
             <input type="radio" id="debito_radio" name="typeMethod" value="debito" checked="true"/>
@@ -280,7 +289,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 text-center text-muted" style="padding: 5px 5px 5px 5px;font-size:12px">
+        <div class="text-center text-muted porTusec">
             Por su seguridad el medio de pago debe estar a nombre del empleador
         </div>
     </div>

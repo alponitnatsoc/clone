@@ -225,7 +225,6 @@ class LegalAssistanceController extends Controller
             ->getForm();
 
         $form->handleRequest($request);
-        dump($form->getData());
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
@@ -306,7 +305,6 @@ class LegalAssistanceController extends Controller
                         'errno' => "Not a valid Credit Card check the data again"
                     ));
                 }
-                dump("se quiere pagar con credito");
                 //return $this->payLegalAssistance($methodId);
             } else if ($methodType == "deb") {
 
@@ -392,14 +390,9 @@ class LegalAssistanceController extends Controller
             //$flag = $this->changeFlagAction();
             //$user->setLegalFlag(0);
             return $this->redirectToRoute('legal_payment_success');
-            exit();
             //return $this->redirectToRoute('DashBoard');
         } elseif ($insertionAnswer->getStatusCode() == 404) {
-            dump("Procesando");
-            exit();
         } else {
-            dump($insertionAnswer);
-            exit();
         }
     }
 

@@ -421,6 +421,59 @@ function startEmployee() {
             idsWorkpl[i++] = $(this).val();
         });
 
+        $(form).find("input[name='method_type_fields[cellphone]']").each(function () {
+          $(this).rules("add", {
+              maxlength: 10,
+              required: true,
+              number: true,
+              pattern: /3[\d]{9}/,
+              messages: {
+                  required: "Por favor ingresa un número de teléfono de celular en el siguiente formato, ejemplo 3508330000",
+                  number: "Por favor ingresa solo digitos",
+                  pattern: "El número no tiene la estructura de un celular colombiano",
+                  maxlength: "No es un número de celular válido; ejemplo 3508330000"
+              }
+          });
+        });
+
+        $(form).find("select[name='method_type_fields[hasIt]']").each(function () {
+          $(this).rules("add", {
+              required: true,
+              messages: {
+                  required: "Necesitamos saber si tiene cuenta Daviplata"
+              }
+          });
+        });
+
+        $(form).find("input[name='method_type_fields[accountNumber]']").each(function () {
+          $(this).rules("add", {
+              required: true,
+              number: true,
+              messages: {
+                  required: "Por favor ingresa el número de cuenta",
+                  number: "Por favor ingresa solo digitos"
+              }
+          });
+        });
+
+        $(form).find("select[name='method_type_fields[accountTypeAccountType]']").each(function () {
+          $(this).rules("add", {
+              required: true,
+              messages: {
+                  required: "Escoge el tipo de cuenta"
+              }
+          });
+        });
+
+        $(form).find("select[name='method_type_fields[bankBank]']").each(function () {
+          $(this).rules("add", {
+              required: true,
+              messages: {
+                  required: "Selecciona el banco"
+              }
+          });
+        });
+
         if (!form.valid()) {
             return;
         }

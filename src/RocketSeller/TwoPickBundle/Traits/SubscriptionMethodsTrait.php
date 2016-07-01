@@ -972,6 +972,23 @@ trait SubscriptionMethodsTrait
         $this->crearTramites($user);
         $this->validateDocuments($user);
         $this->addToSQL($user);
+        $davPlataMail=false;
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($user->getPersonPerson()->getEmployer()->addEmployerHasEmployee() as $eHE){
+            /** @var Contract $contract */
+            if($davPlataMail) break;
+            foreach ($eHE->getContracts() as $contract){
+                if($contract->getPayMethodPayMethod()->getPayTypePayType()==1){
+                    $davPlataMail=true;
+                    break;
+                }
+            }
+        }
+        if($davPlataMail){
+            /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $smailer->sendDaviplataMessage($user);
+        }
         $em->persist($user);
         $em->flush();
         return true;

@@ -65,4 +65,13 @@ interface MailerInterface
      * @return void
      */
     public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone);
+
+    /**
+     * Send an reminder email
+     *
+     * @param UserInterface $user
+     *
+     * @return void
+     */
+    public function sendDaviplataMessage(UserInterface $user);
 }
