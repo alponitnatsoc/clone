@@ -20,16 +20,15 @@
             }
         }
     </style>
-    <div id="registrationContainer" class="row-fluid clearfix"
-         style="background-color: #3c4b5a; padding: 105px 0 30px 0;">
+    <div id="registrationContainer" class="row-fluid clearfix" style="background-color: #3c4b5a; padding: 105px 0 30px 0;">
         <div class="smallOrangeBox">
-            <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle"/></div>
+            <div class="smallOrangeBoxTitle"><img src="/img/logo-white.png" class="boxImagetitle" /></div>
             <div class="smallOrangeBoxContent">
                 <!--<h3>¿Empezamos?</h3>-->
-                <span>Estamos listos para facilitarte la <br/>gestión de tus empleados domésticos</span>
+                <span>Estamos listos para facilitarte la <br />gestión de tus empleados domésticos</span>
                 <span class="light-text">El primer mes es gratis</span>
                 <!--<span class="light-text">Puedes registrarte gratis de dos maneras</span>-->
-                <hr class="smallDivider"/>
+                <hr class="smallDivider" />
                 <div id="errorss" style="color: red;">
                     {% if errorss is defined %}
                         {{ errorss }}
@@ -48,7 +47,7 @@
 
 {% block styles %}
     <style type="text/css">
-        .btn.disabled {
+        .btn.disabled{
             cursor: not-allowed;
         }
     </style>
@@ -64,7 +63,7 @@
         //                 $("#btnSubmit").prop('disabled', true);
         //             }
         //         });
-        $('.fos_user_registration_register input[id=chktyc]').on('change invalid', function () {
+        $('.fos_user_registration_register input[id=chktyc]').on('change invalid', function() {
             var textfield = $(this).get(0);
 
             // 'setCustomValidity not only sets the message, but also marks
@@ -107,13 +106,13 @@
             var completo = 0;
             var pass = $("#app_user_registration_form_plainPassword").val();
             // Check for size.
-            if (pass.length >= 8) {
+            if(pass.length >= 8) {
                 $("#carac8").hide();
                 completo++;
             }
 
             // Check for a capital letter.
-            for (var i = 0; i < pass.length; i++) {
+            for(var i = 0; i < pass.length; i++){
                 character = pass.charAt(i);
                 if (character != character.toLowerCase()) {
                     // The character is uppercase.
@@ -123,7 +122,7 @@
                 }
             }
             // Check for a lowercase letter.
-            for (var i = 0; i < pass.length; i++) {
+            for(var i = 0; i < pass.length; i++){
                 character = pass.charAt(i);
                 if (character == character.toLowerCase()) {
                     // The character is lowercase.
@@ -138,19 +137,19 @@
                 $("#num").hide();
                 completo++;
             }
-            if (completo == 4) {
+            if(completo == 4) {
                 $("#req_pass").hide();
             }
         }
 
 
         // We show it on focus.
-        $("#app_user_registration_form_plainPassword").focus(function () {
+        $("#app_user_registration_form_plainPassword").focus(function(){
             checkReq();
         });
 
 
-        $("#app_user_registration_form_plainPassword").keyup(function (event) {
+        $("#app_user_registration_form_plainPassword").keyup(function(event) {
             // We check each of the conditions.
             checkReq();
         });
@@ -158,44 +157,3 @@
 
     </script>
 {% endblock %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,600italic,700" rel="stylesheet"
-          type="text/css">
-    <title>Responsive email</title>
-    <style type="text/css">
-        body {
-            margin: 10px 0;
-            padding: 0 10px;
-            background: #F9F2E7;
-            font-size: 13px;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        td {
-            font-family: arial, sans-serif;
-            color: #333333;
-        }
-
-        @media only screen and (max-width: 580px) {
-            body, table, td, p, a, li, blockquote {
-                -webkit-text-size-adjust: none !important;
-            }
-
-            table {
-                width: 100% !important
-            }
-
-            .responsive-image img {
-                height: auto !important;
-                max-width: 50% !important;
-                width: 50% !important;
-            }
-        }
-    </style>
