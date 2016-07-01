@@ -149,6 +149,18 @@ class TwigSwiftMailer implements MailerInterface
         );
         $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
     }
+
+    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE){
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['backval'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Fin del proceso de validación de tu empleado",
+            'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
+        );
+        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+    }
     
     /**
      * @param string $templateName

@@ -94,4 +94,14 @@ interface MailerInterface
      * @return void
      */
     public function sendDiasHabilesMessage(UserInterface $user,EmployerHasEmployee $eHE);
+
+    /**
+     * Send an reminder Backoffice validation
+     *
+     * @param UserInterface $user
+     * @param EmployerHasEmployee $eHE
+     *
+     * @return void
+     */
+    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE);
 }

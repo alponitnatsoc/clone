@@ -105,6 +105,9 @@ class ProcedureController extends Controller
 			$em->persist($employerHasEmployee);
 			$em->flush();
 
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
+
 			$this->addFlash('success', 'Exito al terminar los tramites del empleado');
 			return $this->redirectToRoute('show_procedure',array('procedureId'=>$procedureId));
 		}else{

@@ -72,6 +72,7 @@ services:
                     daviplata: 'FOSUserBundle:Registration:crearDaviplata.txt.twig'
                     oneday: 'FOSUserBundle:Registration:diahabil.txt.twig'
                     diashabiles: 'FOSUserBundle:Registration:3diashabiles.txt.twig'
+                    backval: 'FOSUserBundle:Registration:validation-user.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

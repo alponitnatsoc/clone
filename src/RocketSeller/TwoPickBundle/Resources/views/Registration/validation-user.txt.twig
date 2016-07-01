@@ -1,3 +1,6 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}{% autoescape false %}En validación de documentos {% endautoescape %}{% endblock %}
+{% block body_html %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
@@ -40,7 +43,7 @@
                 <div style="color:#5D5D5D;font-size: 35px; font-family: 'Open Sans', sans-serif; font-weight: 700;">¡Ya eres un miembro oficial de Symplifica!</div>
                 <br /><br />
                 <div style="font-size: 20px; font-family: 'Open Sans', sans-serif; font-weight: 300 ; color: #858688; width: 70%; margin: 0 auto">
-                  Hemos revisado tus documentos y realizado con éxito las afiliaciones correspondientes, es momento de hacer tu vida más fácil. Recuerda que cuentas con tres meses de prueba gratuito en dónde podrás gestionar todos los aspectos de tu empleado.
+                  Hemos revisado tus documentos y realizado con éxito las afiliaciones de tu empleado {{ employeeName }}, es momento de hacer tu vida más fácil. Recuerda que cuentas con un meses de prueba gratuito en dónde podrás gestionar todos los aspectos de tu empleado.
                 </div>
                 <br /><br /><br />
                 <div style="text-align: center;font-size: 20px;font-family: 'Open Sans', sans-serif;font-weight: bold;color: #00cccb;padding: 0 60px;">
@@ -218,3 +221,4 @@ Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer
     </table>
   </body>
 </html>
+{% endblock %}
