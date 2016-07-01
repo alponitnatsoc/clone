@@ -45,35 +45,35 @@ class DashBoardEmployerController extends Controller {
                     break;
                 }
             }
-
             /** @var User $user */
             $user = $this->getUser();
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                if(!$tareas and $docStat['docStatus']>14){
+                if($tareas and $docStat['docStatus']>14){
                         return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
                 }
 
                 /** Se envia el Email diahabil*/
-                if($docStat['docStatus']==2){
+                if($tareas and $docStat['docStatus']==2){
                     $em = $this->getDoctrine()->getManager();
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     $smailer = $this->get('symplifica.mailer.twig_swift');
                     $smailer->sendOneDayMessage($this->getUser(),$eHE);
                 }
-                if($docStat['docStatus']==11){
+                if($tareas and $docStat['docStatus']==11){
                     return $this->redirectToRoute('employer_completion_documents');
                 }
+                if(!$tareas){
+                    return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig');
+                }
             }
-            
-
-            
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => $notifications,
                         'user' => $user->getPersonPerson(),
                         'contractType' => $contractType,
                         'ready'=>$ready,
             ));
+            
         } catch (Exception $ex) {
             return $this->render('RocketSellerTwoPickBundle:Employer:dashBoard.html.twig', array(
                         'notifications' => false,
