@@ -45,6 +45,10 @@ p{
 .bread-style a {color: #87868a}
 
 /*---------------empieza seccion formulario-------------------*/
+.ayudap {
+	width: 400px;
+	margin: 0 auto;
+}
 .exito {
 	width: 570px;
 margin: 0 auto 20px auto;
@@ -137,9 +141,17 @@ text-align: center;
 
 /*responsive*/
 
+@media only screen and (max-width: 1100px) {
+	.OptContent {
+		width: 90%
+	}
+	}
+
 @media only screen and (max-width: 768px) {
 	#banner-beneficios {height: 300px;padding: 155px 0 0 0;}
 	#texto-descript h4 {width: 90%;}
+	.OptCon, .contactOpt, .nuevop, .tellCont {width: 90%;}
+	.OptCon {margin-bottom: 5px;}
 	}
 
 @media only screen and (max-width: 640px) {
@@ -155,6 +167,8 @@ text-align: center;
 			#banner-beneficios-cont h1 {font-size: 34px;}
 			#banner-beneficios {
 	    	height: 330px;}
+				.ayudap {
+					width: 90%;}
 		}
 
 @media only screen and (max-width: 375px) {
