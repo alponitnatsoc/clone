@@ -162,11 +162,9 @@ use EmployerMethodsTrait;
         $document->setStatus(1);
         $document->setName('Diferente');
         $document->setDocumentTypeDocumentType($documentType);
-        if($bdDoc){
-            $form = $this->createForm(new DocumentRegistration(), $bdDoc);
-        }else{
-            $form = $this->createForm(new DocumentRegistration(), $document);
-        }
+        $form = $this->createForm(new DocumentRegistration(), $document);
+
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
