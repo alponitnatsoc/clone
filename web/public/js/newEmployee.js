@@ -706,6 +706,21 @@ function startEmployee() {
           }
         });
 
+        if( $("#register_employee_entities_wealthAC").is(":visible") == true){
+          var wealthL = $(form).find("#register_employee_entities_wealth");
+          var wealthACL = $(form).find("#register_employee_entities_wealthAC");
+          $(wealthL).val($("#register_employee_entities_wealth option").filter(function () { return $.trim($(this).html()) == $.trim($(wealthACL).val()); }).val());
+          if($(wealthL).val() == undefined || $(wealthL).val() == ""){
+            $("#errorWealth").show();
+            return;
+          }
+          else {
+            $("#errorWealth").hide();
+          }
+        }
+
+
+
 
         $.ajax({
             url: $(this).attr('href'),
@@ -1022,6 +1037,8 @@ function startEmployee() {
         }
         calculator();
     });
+
+    $("#errorWealth").hide();
 
 }
 function addPhoneForm($collectionHolderB, $newLinkLi) {
@@ -2075,30 +2092,38 @@ function initEntitiesFields(){
     });
     $(".autocomW").each(function () {
         var autoTo=$(this);
-        $(this).autocomplete({
+        $(autoTo).autocomplete({
             source: function(request, response) {
-              var results;
-              if(request.term.length != 0){
-                results = $.ui.autocomplete.filter(dataWe, request.term);
-              }
-              else {
-                results = $.ui.autocomplete.filter("", request.term);
-              }
-              response(results.slice(0, 5));
+                var results;
+                if(request.term.length != 0){
+                  results = $.ui.autocomplete.filter(dataWe, request.term);
+                }
+                else {
+                  results = $.ui.autocomplete.filter("", request.term);
+                }
+                response(results.slice(0, 5));
             },                minLength: 0,
             select: function(event, ui) {
                 event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
+                $(this).val(ui.item.label);
+                $($(this).parent()).parent().find("select").each(function() {
+                  if($(this).parent().parent().attr("class") == "hidden"){
+                    $(this).val(ui.item.value);
+                  }
+                });
             },
             focus: function(event, ui) {
                 event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_wealth").val(ui.item.value);
-
+                $(this).val(ui.item.label);
+                $($(this).parent()).parent().find("select").each(function() {
+                  if($(this).parent().parent().attr("class") == "hidden"){
+                    $(this).val(ui.item.value);
+                  }
+                });
             }
+
         });
-        $(this).on("focus",function () {
+        $(autoTo).on("focus",function () {
             $(autoTo).autocomplete("search", $(autoTo).val());
         });
 
