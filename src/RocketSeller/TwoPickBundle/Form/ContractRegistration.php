@@ -225,6 +225,17 @@ class ContractRegistration extends AbstractType
                 'required'=> true,
                 'placeholder'=>'Seleccione una opción'
             ))
+            ->add('paysPens', 'choice', array(
+                'choices' => array(
+                    1=> 'Si',
+                    -1=> 'No',
+                ),
+                'multiple' => false,
+                'expanded' => true,
+                'label'=>'¿Aporta a pensión?',
+                'required' => true,
+                'mapped' => false
+            ))
             ->add('workplace', new WorkPlaceRegistration(), array(
                 'mapped' => false));
         if($this->legalFlag=='1'){

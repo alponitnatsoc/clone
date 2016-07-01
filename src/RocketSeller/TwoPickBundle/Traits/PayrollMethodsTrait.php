@@ -84,7 +84,6 @@ trait PayrollMethodsTrait
         }else{
             $todayPeriod = $dateToday->format("d") >= 16 ? 4 : 2;
         }
-        dump("todayPeriod".$todayPeriod);
         if ($dateToday->format("Y") == $payroll->getYear() && $dateToday->format("m") == $payroll->getMonth() && $payroll->getPeriod() == $todayPeriod) {
             return true;
         }
@@ -100,15 +99,12 @@ trait PayrollMethodsTrait
     private function getInfoEmployee(EmployerHasEmployee $employerHasEmployee, PurchaseOrdersDescription &$podPila)
     {
         if ($employerHasEmployee->getState() >= 4) {
-            dump($employerHasEmployee->getEmployeeEmployee()->getPersonPerson()->getNames());
             $contracts = $employerHasEmployee->getContracts();
             /* @var $contract Contract */
             foreach ($contracts as $contract) {
                 if ($contract->getState() > 0) {
                     /* @var Payroll $payroll */
                     $payroll = $contract->getActivePayroll();
-                    dump("Active P?".$this->checkActivePayroll($payroll));
-                    dump($payroll->getYear()." ".$payroll->getMonth()." ".$payroll->getPeriod());
                     if (!$this->checkActivePayroll($payroll))
                         break;
                     if(count($payroll->getPurchaseOrdersDescription())>0){
@@ -162,16 +158,10 @@ trait PayrollMethodsTrait
 
                     if ($payroll->getPeriod() == 4) {
                         $pila=$payroll->getPila();
-                        dump("Pila: ");
-                        dump($pila);
-                        dump("PODPila: ");
-                        dump($podPila);
                         //this is for the first case
                         if($pila!=null&&$podPila->getIdPurchaseOrdersDescription()==null){
-                            dump("Entré POD");
                             $podPila=$pila;
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total']);
-                            dump($podPila);
 
                         }else{
                             $podPila->setValue($this->getTotalPILA($employerHasEmployee)['total'] + $podPila->getValue());

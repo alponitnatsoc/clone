@@ -582,6 +582,15 @@
 
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
+                                            {{ form_label(form.employeeHasEmployers.paysPens) }}
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            {{ form_widget(form.employeeHasEmployers.paysPens) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="col-sm-6 label-group">
                                             {{ form_label(form.employeeHasEmployers.workplaces) }}
                                         </div>
                                         <div class="col-sm-6 form-group">
@@ -1475,16 +1484,7 @@ $(document).ready(function(){
                             {% else %}
                                 {% set wname = "" %}
                             {% endif %}
-                            {% if form.entities.pension.vars.data.name is defined %}
-                                {% set pname = form.entities.pension.vars.data.name %}
-                            {% else %}
-                                {% set pname = "" %}
-                            {% endif %}
-                            {% if form.entities.severances.vars.data.name is defined %}
-                                {% set sname = form.entities.severances.vars.data.name %}
-                            {% else %}
-                                {% set sname = "" %}
-                            {% endif %}
+
                             <div class="col-sm-10 col-xs-12 blockUpData">
                                 <div id="wealthBlock" class="col-sm-12 col-xs-12 complete">
                                     <div class="hidden">
@@ -1507,14 +1507,11 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div  class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.severances) }}
-                                    </div>
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.severancesAC) }}
+                                        {{ form_label(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                                        {{ form_widget(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-12 col-xs-12 hidden">
                                         <div class="col-sm-6 label-group">
@@ -1525,20 +1522,14 @@ $(document).ready(function(){
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.pension) }}
-                                    </div>
+
+                                <div id="pensionHide"  class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.pensionAC) }}
+                                        {{ form_label(form.entities.pension) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
+                                        {{ form_widget(form.entities.pension) }}
                                     </div>
-                                    {#                             <div class="col-sm-12 col-xs-12">#}
-                                    {#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
-                                    {#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
-                                    {#                             </div>#}
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
                                             {{ form_label(form.entities.pensionExists) }}
@@ -1837,7 +1828,7 @@ $(document).ready(function(){
     <div class="modal fade" id="noDaviplata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content"><div class="modal-body" style="padding: 0">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
+                    <button id="davivienda_close" type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 15px; top: 15px;z-index: 100; color: #fff;"><span aria-hidden="true">&times;</span></button>
                     <div class="row-fluid block-Intro-green clearfix" id="msgSinVerificar1" style="margin-top: 0;">
                         <div class="col-sm-12 col-xs-12 up-Intro" style="font-size: 20px; padding-left: 50px">¿Tu empleado no tiene cuenta en Daviplata?</div>
                     </div>

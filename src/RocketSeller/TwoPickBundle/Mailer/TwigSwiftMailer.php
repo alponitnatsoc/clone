@@ -115,6 +115,17 @@ class TwigSwiftMailer implements MailerInterface
         return $this->sendMessage($templateName, $context, $fromEmail, $toEmail, $path);
     }
     
+    public function sendDaviplataMessage(UserInterface $user){
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['daviplata'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Informacion Daviplata"
+        );
+        $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);
+    }
+    
     /**
      * @param string $templateName
      * @param array  $context
