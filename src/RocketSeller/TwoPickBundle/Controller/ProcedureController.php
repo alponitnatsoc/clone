@@ -175,6 +175,17 @@ class ProcedureController extends Controller
 				//se agrega la accion al procedimiento
 				$procedure->addAction($action);
 
+				$action = new Action();
+				$action->setStatus('Nuevo');
+				$action->setRealProcedureRealProcedure($procedure);
+				$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VM'),"ActionType"));
+				$action->setPersonPerson($employerSearch->getPersonPerson());
+				$action->setUserUser($userSearch);
+				$em->persist($action);
+				$em->flush();
+				//se agrega la accion al procedimiento
+				$procedure->addAction($action);
+
 				// se obtienen las entidades del empleador
 				/** @var EmployerHasEntity $entities */
 				foreach ($employerSearch->getEntities() as $entities) {
