@@ -975,7 +975,7 @@ trait SubscriptionMethodsTrait
         $this->addToSQL($user);
         $davPlataMail=false;
         /** @var EmployerHasEmployee $eHE */
-        foreach ($user->getPersonPerson()->getEmployer()->addEmployerHasEmployee() as $eHE){
+        foreach ($user->getPersonPerson()->getEmployer()->getEmployerHasEmployees() as $eHE){
             /** @var Contract $contract */
             if($davPlataMail) break;
             foreach ($eHE->getContracts() as $contract){
