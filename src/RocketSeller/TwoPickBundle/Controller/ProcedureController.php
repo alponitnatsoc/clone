@@ -104,7 +104,6 @@ class ProcedureController extends Controller
 			$employerHasEmployee->setState(4);
 			$em->persist($employerHasEmployee);
 			$em->flush();
-
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
 
@@ -236,7 +235,7 @@ class ProcedureController extends Controller
 							$action = new Action();
 							$action->setStatus('Nuevo');
 							$action->setRealProcedureRealProcedure($procedure);
-							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VDC'),"ActionType"));
+							$action->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
 							$action->setPersonPerson($employerHasEmployee->getEmployeeEmployee()->getPersonPerson());
 							$action->setUserUser($userSearch);
 							$em->persist($action);
