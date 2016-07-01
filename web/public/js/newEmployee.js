@@ -1003,7 +1003,7 @@ function startEmployee() {
 
     $( "label[for='register_employee_person_phones_0_phoneNumber']").text("Número de teléfono");
 
-    if( $("#register_employee_entities_pension").val() == 50 && $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked").val() == "2"){
+    if( $("#register_employee_entities_pension").val() == 50 ){
       $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
       $("#pensionHide").hide();
     }
@@ -1090,7 +1090,6 @@ function changeValues(data) {
     }
   // Plain salary is what the employee should recieve.
   var salario_bruto = Math.round((data.plainSalary - data.transportCal)/0.92);
-
   var total_modal = data.plainSalary + data.transportCal + data.EPSEmployerCal + data.PensEmployerCal + data.cajaCal + data.arlCal;
   var pagos_netos = (Math.round(data.plainSalary) + Math.round(data.transportCal)) - (Math.round(data.EPSEmployeeCal) + Math.round(data.PensEmployeeCal));
   var total_prestaciones = Math.round(data.cesCal + data.taxCesCal + data.vacationsCal);
@@ -1115,7 +1114,7 @@ function changeValues(data) {
   document.getElementById('prima').innerHTML = "Próximamente entra en vigencia decreto para su pago";
   document.getElementById('total_prestaciones').innerHTML = getPrice(total_prestaciones/division);
 
-  sueldo_plano = data.plainSalary/data.numberOfDays;
+  sueldo_plano = Math.round(data.plainSalary/data.numberOfDays);
 
   if( radioChange == false ){
     $("#totalExpensesVal").val(getPrice(Math.round(pagos_netos/division)));
@@ -1552,7 +1551,7 @@ function loadConstrains() {
 function calculator() {
 
     $("#arsNotAplicable").hide();
-    $("#arsNotAplicable").hide();
+    $("#dontHaveSisben").hide();
 
     var type = $("input[name='register_employee[employeeHasEmployers][timeCommitment]']:checked");
     var salaryM = parseFloat(accounting.unformat($("#register_employee_employeeHasEmployers_salary").val()));
@@ -1654,14 +1653,23 @@ function calculator() {
                 base = smmlv;
             }
             transportCal = transportAidDaily * numberOfDays;
-            salaryD = (salaryD - transportAidDaily)/(1-(lPensEmployee));
+            var localEPS = smmlv / 30 / numberOfDays;;
+            var localPens =smmlv / 30 / numberOfDays;
+            if(aportaPens == "-1"){
+              localPens = 0;
+            }
+            salaryD = salaryD - transportAidDaily + localEPS + localPens;
+            //salaryD = (salaryD - transportAidDaily)/(1-(lPensEmployee + EPSEmployee));
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
                 lPensEmployer + arlProf + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
                 ((taxCes + ces) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             EPSEmployerCal = EPSEmployer * base;
-            EPSEmployeeCal = EPSEmployee * base;
+            EPSEmployeeCal = smmlv / 30;
             PensEmployerCal = lPensEmployer * base;
-            PensEmployeeCal = lPensEmployee * base;
+            PensEmployeeCal = smmlv / 30;
+            if(aportaPens == "-1"){
+              PensEmployeeCal = 0;
+            }
             arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
@@ -1674,6 +1682,7 @@ function calculator() {
             icbfCal = icbf * base;
             totalIncome = (salaryD * numberOfDays) - EPSEmployerCal - PensEmployerCal;
             plainSalary = salaryD * numberOfDays;
+
         } else {
             transportCal = transportAidDaily * numberOfDays;
             var EPSEmployee2 = 0;
@@ -1792,6 +1801,7 @@ function calculator() {
         resposne['plainSalary'] = plainSalary;
         resposne['numberOfDays'] = numberOfDays;
         resposne['salaryM2'] = salaryM2;
+
         if(type=="days"&& EPSEmployerCal>0 && sisben==1){
             $("#arsNotAplicable").show();
         }else{
@@ -1835,20 +1845,11 @@ $("input[name='register_employee[employeeHasEmployers][timeCommitment]']").on("c
     $('#radio_diario').prop('checked', false);
     $('#radio_mensual').prop('checked', true);
     $("#labelCosto").html("Costo del empleado +</br> seguridad social (sin prestaciones)");
-    $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', false);
-    $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', true);
-    $("#hidePensOpt").hide();
-    $("#pensionHide").show();
   }
   else {
     $('#radio_diario').prop('checked', true);
     $('#radio_mensual').prop('checked', false);
     $("#labelCosto").html("Costo diario </br> del empleado (sin prestaciones)");
-    $("#register_employee_employeeHasEmployers_paysPens_0").prop('checked', false);
-    $("#register_employee_employeeHasEmployers_paysPens_1").prop('checked', true);
-    $("#hidePensOpt").show();
-    $("#pensionHide").hide();
-    $("#register_employee_entities_pension").val(50);
   }
 });
 
@@ -1900,42 +1901,26 @@ function validateSalary() {
             showModal(12);
             return false;
         }
-        salarioMinimoDiario = $("#salarioMinimoDiario").val();
-        if (!salarioMinimoDiario) {
-            salarioMinimoDiario = 24653;
-            salarioMinimoContractual=22982;
-        }
-        salarioDias = sueldo_plano;
 
-        if(!salarioDias){
-            if($("#register_employee_employeeHasEmployers_salaryD").val()!=0) {
-                $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $' + getPrice(salarioMinimoDiario) + ' pesos para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salarioMinimoContractual) + ').');
+        var salMinDiario = Math.round(smmlv / 30);
+        var numberToCmp = parseFloat(accounting.unformat($("#totalExpensesValD").val()));
+
+        if(numberToCmp < salMinDiario)
+        {
+            if(numberToCmp !=0) {
+                $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser más alto para que el salario contractual sea del mínimo legal vigente ($' + getPrice(salMinDiario) + ').');
                 $("#salarioMinimo").modal('show');
-                $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
-                calculator("d");
-                formatMoney($("#totalExpensesValD"));
-                formatMoney($(this));
+                $("#register_employee_employeeHasEmployers_salaryD").val(salMinDiario);
+                reverseCalculator();
             }else{
                 showModal(3);
             }
             return false;
         }
 
-        if (salarioDias < salarioMinimoContractual) {
-            $("#salarioMinimo").find('.modal-body').html('El salario diario debe ser mínimo $'+ getPrice(salarioMinimoDiario)+ ' pesos para que el salario contractual sea del mínimo legal vigente ($'+getPrice(salarioMinimoContractual)+').');
-            $("#salarioMinimo").modal('show');
-            $("#register_employee_employeeHasEmployers_salaryD").val((salarioMinimoDiario));
-            calculator();
-            formatMoney($("#totalExpensesValD"));
-            formatMoney($("#register_employee_employeeHasEmployers_salaryD"));
-            $("#ex6").bootstrapSlider("setValue", salarioMinimoDiario);
-            return false;
-        }
     } else {
-        salarioMinimo = $("#salarioMinimo").val();
-        if (!salarioMinimo) {
-            salarioMinimo = 689455;
-        }
+        var salarioMinimo = 689455;
+
         salarioMes = sueldo_plano;
         if(!salarioMes){
             if(salarioMes!= 0){
@@ -2148,14 +2133,23 @@ function reverseCalculator(){
   var aportaPens = $("#register_employee_employeeHasEmployers_paysPens").find("input:checked").val();
   var lPensEmployee = PensEmployee;
 
+  var pensL = smmlv / 30 / numberOfDays;
+  var saluL = smmlv / 30 / numberOfDays;
+
   if(aportaPens == "-1"){
     lPensEmployee = 0;
+    pensL = 0;
   }
 
-  //var hasPens =
+  console.log("reverse");
+  console.log(plainSalary);
+  console.log(transportAidDaily);
+  console.log(pensL);
+  console.log(saluL);
 
   if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
-    salaryD = plainSalary;
+    salaryD = plainSalary + transportAidDaily - pensL - saluL;
+    console.log(salaryD);
   }
   else {
     base = smmlv;
@@ -2176,7 +2170,7 @@ function reverseCalculator(){
     }
   }
 
-  $("#register_employee_employeeHasEmployers_salaryD").val(Math.floor(salaryD));
+  $("#register_employee_employeeHasEmployers_salaryD").val(Math.round(salaryD));
   calculator();
 
 }
