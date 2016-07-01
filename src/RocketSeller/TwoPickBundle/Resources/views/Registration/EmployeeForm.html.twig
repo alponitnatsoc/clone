@@ -1292,7 +1292,7 @@ $(document).ready(function(){
                                             </div>
                                             <br />
                                             <div class="textoFinalPaymeth">
-                                                *Por tu seguridad y la de tus empleados te recomendamos estos métodos de pago electrónicos ya que te
+                                                *Por tu seguridad y la de tus empleados te recomendamos los métodos de pago electrónicos ya que te
                                                 permiten tener todas las evidencias de pagos de salario de manera automática y evitas manejar efectivo.
                                                  Las transferencias a través de nuestra plataforma generan costos transaccionales.
                                             </div>
@@ -1496,6 +1496,7 @@ $(document).ready(function(){
                                     <div class="col-sm-6 form-group">
                                         {{ form_widget(form.entities.wealthAC, { 'value' : wname}) }}
                                     </div>
+                                    <p id="errorWealth" style="color:red;">Entidad no encontrada en la base de datos, por favor revisa lo escrito</p>
                                     {#                             {{ form_row(form.entities.wealthAC,{'value' : wname}) }}#}
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">
@@ -1564,7 +1565,7 @@ $(document).ready(function(){
 
                             <div style="opacity: 0.7;" class="col-sm-12 remember text-center">
                                 <h4 onclick="$(this).next().slideToggle()" style="font-size: 14px;cursor: pointer"><i class="glyphicon glyphicon-exclamation-sign"></i> ¿Por qué le estamos preguntando esto?</h4>
-                                <span id="textPorque">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a la cuál quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
+                                <span id="textPorque">Porque los empleados tienen el derecho de seleccionar las entidades de<br>salud y pensión a las cuales quieren estar afiliados. Si ya están afiliados deben continuar<br>con la entidad actual porque Symplifica no gestiona cambios de entidad.
 </span>
                             </div>
 
