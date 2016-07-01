@@ -199,6 +199,12 @@
       <script src="/js/public/main.js"></script>
 
       <script>
+      function getParameterByName(name) {
+          name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+          var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                  results = regex.exec(location.search);
+          return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
       $(document).ready(function () {
 
         $("#btnLogin").click(function(){
@@ -215,6 +221,10 @@
               e.preventDefault();
               $('#forgotModal').modal('show');
           })
+
+          $("#hamburguesa").click(function(){
+            $("#menu-resp").slideToggle("slow");
+          });
       })
       </script>
 
@@ -268,14 +278,6 @@
             }("//assets.zendesk.com/embeddable_framework/main.js", "symplificasupport.zendesk.com");
             /*]]>*/</script>
         <!-- End of symplificasupport Zendesk Widget script -->
-        <script type="text/javascript">
 
-          	$(document).ready(function(){
-          		$("#hamburguesa").click(function(){
-          			$("#menu-resp").slideToggle("slow");
-          		});
-          	});
-
-        </script>
     </body>
 </html>

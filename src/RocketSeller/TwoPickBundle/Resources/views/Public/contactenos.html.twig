@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block body %}
+
     <link rel="stylesheet" href="{{ asset('public/css/home/contacto.css') }}">
 
 
@@ -20,8 +21,44 @@
         </div>
     </header>
 
-    <section>
-        <div id="formulario">
+    <section class="section">
+        <div class="OptContent">
+            <div class="nuevoContact">
+              <h2 class="bold azulclarofont">Estamos contigo siempre</h2>
+              <p class="nuevop">Recuerda que en symplifica siempre estamos para hacer que tu vida mas sencilla,
+               puedes llamarnos o escribirnos si deseas</p>
+            </div>
+            <div class="row">
+                {% for label, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                        <div class="exito alert alert-{{ label }} semi-italic" for="alert">
+                            {{ flash }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="contactOpt">
+                <div class="OptCon" id="llamanos">
+                    <img width="80" src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
+                    <div class="bold azulmediofont optText">Llamanos</div>
+                </div>
+                <div class="OptCon" id="escribenos">
+                  <img width="80" src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
+                  <div class="bold azulmediofont optText">Escríbenos</div>
+                </div>
+            </div>
+        </div>
+        <div class="tellCont" id="llamanosc">
+            <p>
+            <span class="light azulclarofont">LLamanos al 350 833 0000</span><br>
+            <span class="bold azulmediofont">Horario de atención</span><br>
+            <span class="light azulmediofont">Lunes a viernes</span><br>
+            <span class="light azulmediofont">8:00 AM - 5:00 PM</span>
+          </p>
+        </div>
+
+        <div id="formulario" class="escribenosc tellCont1">
+            <h1 style="padding: 0 0 40px 0;">Escríbenos tus dudas</h1>
             <div id="contact_form" enctype="multipart/form-data">
                 {{ form_errors(form) }}
                 {{ form_start(form) }}
@@ -95,22 +132,9 @@
             </div>
         </div>
     </section>
-    <section>
-        <div id="telefono">
-            <div id="datos-cont">
-                <div class="datos-contacto"><img src="{{ asset('public/img/home/telefono-c.png') }}"></div>
-                <div class="datos-contacto" style="padding: 10px 10px;">
-                    <p class="extrabold">Llámanos</p>
-                    <p class="light">350 856 7864</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
 
 {% endblock %}
 {% block javascripts %}
-
     <script>
         var state = "/old";
         jQuery(document).ready(function () {
@@ -149,42 +173,7 @@
 //                  addNoClick();
         });
 
-        function sendAjax(url, form) {
-            if (url == "") {
-                return false;
-            }
-            $.ajax({
-                url: url,
-                type: $(form).attr('method'),
-                data: $(form).serializeArray(),
-                statusCode: {
-                    500: function () {
-                        $("#errorModal").modal("show");
-                    }
-                }
-            }).done(function (data) {
-                window.scrollTo(0, 0);
-                if (data["url"] != null) {
-                    console.log(data["url"]);
-                    sendAjax(data["url"]);
-                } else {
-                    $('#main').replaceWith(
-                            // ... with the returned one from the AJAX response.
-                            $(data).find('#main'));
-                    addClick();
-                    if (!jsLoader(url)) {
-                        addSumbit();
-                    }
-                    // This thing is not working, we should check this later
-                    //var currentPage = document.location;
-                    //document.location = currentPage + "?redirector=" + url;
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR == errorHandleTry(jqXHR)) {
-                    $("#errorModal").modal("show");
-                }
-            });
-        }
+
 
         function jsLoader(url) {
             if (typeof url !== 'undefined') {
@@ -198,5 +187,6 @@
             }
             return false;
         }
+
     </script>
 {% endblock %}
