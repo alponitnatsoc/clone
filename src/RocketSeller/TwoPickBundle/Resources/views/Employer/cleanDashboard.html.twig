@@ -12,10 +12,13 @@
                 </div>
 
                 <div id="texto-succesdocs">
+                    {% if validated is defined and validated >= 13 %}
                 	<div class="casiValidado">
                     	<h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
                         <p class="light grisclarofont">Ya etas cerca de poder Gestinar tus empleados, te notificaremos cuando estes listo.</p>
                     </div>
+                    {% endif %}
+                    {% if validated is defined and validated<13 %}
                     <div>
                         <h1 class="azulclarofont light centrar">Pagos futuros</h1>
                         <div id="posibilidades">
@@ -24,6 +27,7 @@
                             </div>
                         </div>
                      </div>
+                    {% endif %}
 
                     <div id="fechas">
                         <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>

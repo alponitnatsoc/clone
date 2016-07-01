@@ -49,7 +49,7 @@ class DashBoardEmployerController extends Controller {
             $user = $this->getUser();
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                if($tareas and $docStat['docStatus']>14){
+                if(!$tareas and $docStat['docStatus']=13){
                         return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
                 }
 
@@ -69,6 +69,7 @@ class DashBoardEmployerController extends Controller {
                     return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
                         'userName' => $user->getPersonPerson()->getFullName(),
                         'employeeName'=> $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                        'validated'=>$docStat['idEHE'],
                     ));
                 }
             }
