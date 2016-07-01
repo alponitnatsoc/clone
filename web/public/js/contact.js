@@ -4,7 +4,12 @@
  */
 function startContact() {
     var validator;
-    
+    $("#llamanos").click(function(){
+        $("#llamanosc").slideToggle("slow");
+    });
+    $("#escribenos").click(function(){
+        $(".escribenosc").slideToggle("slow");
+    });
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
         validator = $("form[name='contact']").validate({
             rules: {
@@ -23,11 +28,7 @@ function startContact() {
         });
     });
 
-    $("#contact_form").onclick(function (e) {
-        if(!form.validate()){
-            e.preventDefault();
-        }
-    });
+
 
 
     $("form").on("submit", function (e) {
@@ -62,6 +63,7 @@ function startContact() {
             return;
         }
 
+
         // $.ajax({
         //     url: form.attr('action'),
         //     type: $(form).attr('method'),
@@ -81,8 +83,7 @@ function startContact() {
         //     }
         // });
 
-        
+
     });
 
 }
-
