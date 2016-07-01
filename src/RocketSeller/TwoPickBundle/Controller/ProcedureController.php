@@ -504,7 +504,7 @@ class ProcedureController extends Controller
 						$notification->setDownloadLink($dUrl);
 						$em->persist($notification);
                         $smailer = $this->get('symplifica.mailer.twig_swift');
-                        $smailer->sendDiasHabilesMessage($this->getUser(),$realEhe);
+                        $smailer->sendDiasHabilesMessage($user,$realEhe);
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
 							$todayPlus = new DateTime();
