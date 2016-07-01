@@ -972,16 +972,23 @@ trait SubscriptionMethodsTrait
         $this->crearTramites($user);
         $this->validateDocuments($user);
         $this->addToSQL($user);
-        /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
-        $smailer = $this->get('symplifica.mailer.twig_swift');
-        $to = $user->getEmail();
-        $template = $this->parameters['template']['daviplata'];
-        $context = array(
-            'toEmail' => $user->getEmail(),
-            'user' => $user,
-            'subject'=> "Informacion Daviplata"
-        );
-        $smailer->sendEmail($template,$context,$this->parameters['from_email']['confirmation'], $to);
+        $davPlataMail=false;
+        /** @var EmployerHasEmployee $eHE */
+        foreach ($user->getPersonPerson()->getEmployer()->addEmployerHasEmployee() as $eHE){
+            /** @var Contract $contract */
+            if($davPlataMail) break;
+            foreach ($eHE->getContracts() as $contract){
+                if($contract->getPayMethodPayMethod()->getPayTypePayType()==1){
+                    $davPlataMail=true;
+                    break;
+                }
+            }
+        }
+        if($davPlataMail){
+            /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
+            $smailer = $this->get('symplifica.mailer.twig_swift');
+            $smailer->sendDaviplataMessage($user);
+        }
         $em->persist($user);
         $em->flush();
         return true;
