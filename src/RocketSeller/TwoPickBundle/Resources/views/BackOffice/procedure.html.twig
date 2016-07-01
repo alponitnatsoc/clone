@@ -70,7 +70,7 @@
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 								<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-                            {% elseif action.ActionTypeActionType.name|lower == "Validar Mandato" %}
+                            {% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
                                 <td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
                             {% endif %}
 						{% else %}
@@ -85,7 +85,7 @@
 								<td>Inscrito</td>
 							{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 								<td>Validado</td>
-                            {% elseif action.ActionTypeActionType.name|lower == "validar Mandato" %}
+                            {% elseif action.ActionTypeActionType.name|lower == "validar mandato" %}
                                 <td>Validado</td>
                             {% else %}
 								<td>Terminado</td>
@@ -161,7 +161,7 @@
 										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Inscrito</a></td>
 									{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
-									{% elseif action.ActionTypeActionType.name|lower == "Validar Contrato" %}
+									{% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
 										<td><a class="btn btn-orange notAjax" href="{{ path('change_action_status',{'procedureId':action.realProcedureRealProcedure.idProcedure , 'actionId':action.idAction ,'status':'Completado'})}}">Validado</a></td>
 									{% endif %}
 								{% else %}
@@ -177,7 +177,7 @@
 										<td>Inscrito</td>
 									{% elseif action.ActionTypeActionType.name|lower == "validar entidad" %}
 										<td>Validado</td>
-                                    {% elseif action.ActionTypeActionType.name|lower == "validar Contrato" %}
+                                    {% elseif action.ActionTypeActionType.name|lower == "validar contrato" %}
                                         <td>Validado</td>
                                     {% else %}
 										<td>Terminado</td>
