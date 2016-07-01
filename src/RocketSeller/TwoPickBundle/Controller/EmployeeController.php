@@ -1097,6 +1097,19 @@ filename = "certificadoLaboral.pdf"'
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
+        /** @var User $user */
+        $user=$this->getUser();
+        $notifications=$user->getPersonPerson()->getNotifications();
+        $flag=false;
+        /** @var Notification $notifi */
+        foreach ( $notifications as $notifi ) {
+            if($notifi->getId()==$idNotification){
+                $flag=true;
+            }
+        }
+        if(!$flag){
+            return $this->redirectToRoute("show_dashboard");
+        }
         $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder()
                 ->setAction($this->generateUrl('daviplata_guide', array("payMethodId" => $payMethodId, "idNotification" => $idNotification), array('format' => 'json')))
@@ -1123,6 +1136,12 @@ filename = "certificadoLaboral.pdf"'
                 $methodRepo = $em->getRepository("RocketSellerTwoPickBundle:PayMethod");
                 /** @var \RocketSeller\TwoPickBundle\Entity\PayMethod $paym */
                 $paym = $methodRepo->find($payMethodId);
+                if($paym==null){
+                    return $this->redirectToRoute("show_dashboard");
+                }
+                if($paym->getUserUser()->getId()!=$user->getId()){
+                    return $this->redirectToRoute("show_dashboard");
+                }
                 $paym->setCellPhone($form->get("cellphone")->getData());
                 $em->persist($paym);
                 $em->flush();

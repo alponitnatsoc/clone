@@ -3,6 +3,7 @@
 namespace RocketSeller\TwoPickBundle\Controller;
 
 use RocketSeller\TwoPickBundle\Entity\Document;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\Notification;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\PurchaseOrdersDescription;
@@ -29,6 +30,7 @@ use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use RocketSeller\TwoPickBundle\Traits\EmployerMethodsTrait;
 use RocketSeller\TwoPickBundle\Entity\Novelty;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use ZipArchive;
 
 class DocumentController extends Controller
 {
@@ -291,13 +293,60 @@ use EmployerMethodsTrait;
         return $this->render('RocketSellerTwoPickBundle:Default:index.html.twig');
     }
 
-    public function downloadDocAction($idDocument)
+    public function downloadDocAction($id,$idDocument)
     {
-        $em = $this->getDoctrine()->getManager();
-        $document = $this->getDoctrine()
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+        /** @var Person $user */
+        $user = $this->getUser()->getPersonPerson();
+        /** @var EmployerHasEmployee $eHE */
+        $valid = false;
+        foreach ($user->getEmployer()->getEmployerHasEmployees() as $eHE){
+            if ($eHE->getEmployeeEmployee()->getPersonPerson()->getIdPerson()==$id){
+                $valid=true;
+            }
+        }
+        if($valid) {
+            $person = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Person')
+                ->find($id);
+            $document = $this->getDoctrine()
                 ->getRepository('RocketSellerTwoPickBundle:Document')
                 ->find($idDocument);
-        return $this->redirect('/media/download/' . $document->getMediaMedia()->getId());
+            
+            $media = $document->getMediaMedia();
+            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+            }
+            $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+            # create new zip opbject
+            $zip = new ZipArchive();
+            # create a temp file & open it
+            $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
+            if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+                # loop through each file
+                $zip->addFile($docUrl,$docName);
+                # close zip
+                if($zip->close()!==TRUE)
+                    echo "no permisos";
+                # send the file to the browser as a download
+                header("Content-disposition: attachment; filename=$tmp_file");
+                header('Content-type: application/zip');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: '.filesize($tmp_file));
+                ob_clean();
+                flush();
+                readfile($tmp_file);
+                ignore_user_abort(true);
+                unlink($tmp_file);
+            }
+            return $this->redirectToRoute('ajax', array(), 301);
+        }else{
+            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+        }
     }
 
     public function downloadDocumentPDFAction($document)

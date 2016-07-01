@@ -39,7 +39,7 @@
                         <div class="col-xxs-5 col-xs-5 col-sm-4 employeeInfo"
                             style="{% if employeeStatus != 1 %} border-left:3px solid #41D0CB {% endif %}">
                             <b>{{ employee.fullName }}</b>
-                            {% if employeeStatus > 2 and status >= 2 %}
+                            {% if employeeStatus > 3 and status >= 2 %}
                                 <br />
                                 <a class="notAjax addNovelty btn-xs btn-lightBlue" href="/novelty/select/{{ employee.idPayroll }}">Agregar novedad</a>
                             {% endif %}

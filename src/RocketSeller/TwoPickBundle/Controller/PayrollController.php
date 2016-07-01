@@ -179,13 +179,22 @@ class PayrollController extends Controller
 //                }
 //            }
 //        }
-        dump($pods);
-        dump($owePurchaseOrders);
+        $ehes=$user->getPersonPerson()->getEmployer()->getEmployerHasEmployees();
+        $flagAtLeastOne="false";
+        /** @var EmployerHasEmployee $ehe */
+        foreach ($ehes as $ehe) {
+            if($ehe->getState()>=4){
+                $flagAtLeastOne="true";
+                break;
+            }
+        }
+
         return $this->render('RocketSellerTwoPickBundle:Payroll:pay.html.twig', array(
             'dataNomina' => $pods,
             //'novelties' => $novelties
             'debt' => $owePurchaseOrders,
-            'name' => $user->getPersonPerson()->getNames()
+            'name' => $user->getPersonPerson()->getNames(),
+            'flagAtLeastOne'=>$flagAtLeastOne
         ));
     }
 

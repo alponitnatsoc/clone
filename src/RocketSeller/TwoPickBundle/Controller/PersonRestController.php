@@ -540,7 +540,7 @@ class PersonRestController extends FOSRestController
                 'email' => $person->getEmail(),
                 'city' => array('id_city'=>$person->getCity()->getIdCity()),
                 'phones' => $person->getPhones()->get(0)->getPhoneNumber(),
-                'idEmployee' => $person->getEmployee() ? $person->getEmployee()->getIdEmployee() : "-2"
+                'idEmployee' => $person->getEmployee()!=null ? $person->getEmployee()->getIdEmployee() : "-2"
             ))->setStatusCode(200);
             return $view;
         } else {
