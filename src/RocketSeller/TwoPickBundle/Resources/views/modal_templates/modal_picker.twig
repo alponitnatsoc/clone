@@ -288,11 +288,9 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos de tu
-                empleado {% if param is defined %}{{ param }}{% endif %} !<br>
-                En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad
-                social
-                de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
+            <p style="color: #8a8a8a;padding: 20px 35px;font-size: 20px;text-align: center;font-weight: 100;">¡Haz subido todos los documentos de tu empleado {% if param is defined %}{{ param }}{% endif %} !<br>
+            En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
+            de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
 
         {% set param = '' %}
@@ -601,7 +599,7 @@
         {% set primary_modal_footer %}
         {% endset %}
 
-        {% set modal_style %}style="width: 70%;"{% endset %}
+        {% set modal_style %}style="width: 90%;"{% endset %}
         {% set modal_header_style %}
             style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
@@ -618,18 +616,21 @@
         {% endset %}
 
         {% set modal_content %}
-            <div>
-                <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">
-                    El archivo que intentaste subir no tiene un formato permitido. Los formatos permitidos son:</p>
-                <ul>.jpg</ul>
-                <ul>.png</ul>
-                <ul>.jpeg</ul>
-                <ul>.pdf</ul>
+            <div style="width: 80%;margin: 0 auto;text-align: center;padding-top: 15px;">
+                <p style="color: #808080;font-weight: 100;padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">El archivo que intentaste subir no tiene un formato permitido. Los formatos permitidos son:</p>
+                <div style="width: 80%;margin: 0 auto;text-align: center;">
+                  <ul style="padding:0">
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin: 5px 0">.jpg</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;margin: 5px 10px;font-weight: 600;">.png</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin: 5px 0">.jpeg</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin:5px 0 5px 10px;">.pdf</li>
+                  </ul>
+                </div>
             </div>
         {% endset %}
 
         {% set modal_style_button %}
-            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
+            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;margin-bottom: 20px;"
         {% endset %}
 
         {% set modal_button %}
@@ -647,64 +648,90 @@
     {% elseif template_parameter == 21 %}
 
         <!--modal para sisben-->
-        {% set modal_id = 'modalSiben' %}
+
         {% set primary_modal_header %}
         {% endset %}
 
         {% set primary_modal_footer %}
         {% endset %}
 
-        {% set primary_modal_header %}
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Recuerde qué</h4>
-            </div>
-        {% endset %}
+        {% set modal_id = 'modalSiben' %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
-        {% set primary_modal_body %}
-            <p style="padding: 15px 10px 5px 15px;">Un empleado por días que no está en el
-                régimen subsidiado debe aportar a seguridad social sobre 30 días y cotizar a salud" si tiene
-                dudas escríbanos al chat o llámenos 350 833 0000.</p>
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
 
-        {% set primary_modal_footer %}
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-            </div>
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Recuerde que</h1>
         {% endset %}
-    {% elseif template_parameter == 22 %}
+
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
+
+        {% set modal_content %}
+        <p style="padding: 15px 10px 5px 15px;text-align: center;font-size: 17px;font-weight: 100;color: #808080;line-height: 20px;">Un empleado por días que no está en el
+          régimen subsidiado debe aportar a seguridad social sobre 30 días y cotizar a salud" si tiene
+          dudas escríbanos al chat o llámenos 350 833 0000.</p>
+        {% endset %}
+
+        {% set name = '' %}
+
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
+
+{% elseif template_parameter == 22 %}
 
         <!--modal transacciones-->
-        {% set modal_id = 'modalTransaccionesInfo' %}
+
         {% set primary_modal_header %}
         {% endset %}
 
         {% set primary_modal_footer %}
         {% endset %}
 
-        {% set primary_modal_header %}
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Información costo de transacciones</h4>
-            </div>
-        {% endset %}
+        {% set modal_id = 'modalTransaccionesInfo' %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
-        {% set primary_modal_body %}
-            <p style="padding: 15px 10px 5px 15px;">
-                1 empleado: $7.500 + 4x1.000 de la transacción<br>
-                2-5 empleados: $5.500 por empleado + 4x1.000 de la transacción<br>
-                +5 empleados: $3.500 por empleado + 4x1.000 de la transacción<br>
-                Sólo pago de Pila: $3.500</p>
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
 
-        {% set primary_modal_footer %}
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-            </div>
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Información costo de transacciones</h1>
         {% endset %}
-    {% elseif template_parameter == 23 %}
+
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
+
+        {% set modal_content %}
+        <p style="padding: 15px 40px 5px;text-align:left;font-size: 17px;font-weight: 100;color: #808080;line-height: 20px;">
+        &#10095; 1 empleado: $7.500 + 4x1.000 de la transacción<br>
+        &#10095; 2-5 empleados: $5.500 por empleado + 4x1.000 de la transacción<br>
+        &#10095; +5 empleados: $3.500 por empleado + 4x1.000 de la transacción<br>
+        &#10095; Sólo pago de Pila: $3.500</p>
+        {% endset %}
+
+        {% set name = '' %}
+
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
+
+ {% elseif template_parameter == 23 %}
 
         <!--modal éxito validacion usuario sin contrato-->
         {% set modal_id = 'modalContractPending' %}
