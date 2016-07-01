@@ -1,5 +1,4 @@
-{% macro modal(template_parameter,modal_id) %}
-
+{% macro modal(template_parameter,modal_id,param) %}
     {% if template_parameter is not defined %}
 
         {% set modal_id = 'default_modal' %}
@@ -60,10 +59,10 @@
         {% endset %}
         {% set modal_style %}style="width: 70%;"{% endset %}
         {% set modal_header_style %}
-             style="background-color:#3c4b5a;
-                    padding: 0px 0px;
-                    border-top-left-radius: 5px;
-                    border-top-right-radius: 5px;"
+            style="background-color:#3c4b5a;
+            padding: 0px 0px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;"
         {% endset %}
 
         {% set modal_header %}
@@ -78,7 +77,8 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">¡Tu correo se envió de manera exitosa!</p>
+            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">
+                ¡Tu correo se envió de manera exitosa!</p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -129,7 +129,8 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">¡Ocurrió un error enviando el correo!</p>
+            <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">
+                ¡Ocurrió un error enviando el correo!</p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -222,7 +223,7 @@
         {% endset %}
 
     {% elseif  template_parameter == 5 %}
-      <!--pago fallido-->
+        <!--pago fallido-->
         {% set primary_modal_header %}
         {% endset %}
 
@@ -234,11 +235,12 @@
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set modal_header_style %}
-           style="background-color: #fd5c5c; padding: 0px 0px"
+            style="background-color: #fd5c5c; padding: 0px 0px"
         {% endset %}
 
         {% set modal_header %}
-        <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Error confirmación de pago</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Error confirmación de
+                pago</h1>
         {% endset %}
 
         {% set modal_content_class %}
@@ -250,7 +252,8 @@
 
         {% set modal_content %}
             <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago no pudo ser efectuado!<br>
-            Por favor intente nuevamente más tarde, si el problema persiste pongase en contacto con nosotros <strong>350 833 0000</strong></p>
+                Por favor intente nuevamente más tarde, si el problema persiste pongase en contacto con nosotros
+                <strong>350 833 0000</strong></p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -261,8 +264,7 @@
             style="display:none"
         {% endset %}
 
-  {% elseif  template_parameter == 6 %}
-
+    {% elseif  template_parameter == 6 %}
         {% set primary_modal_header %}
         {% endset %}
 
@@ -286,12 +288,12 @@
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡Haz subido todos los documentos de tu empleado {% if name is defined %}{{ name }}{% endif %} !<br>
+            <p style="color: #8a8a8a;padding: 20px 35px;font-size: 20px;text-align: center;font-weight: 100;">¡Haz subido todos los documentos de tu empleado {% if param is defined %}{{ param }}{% endif %} !<br>
             En un máximo de 1 día hábil iniciaremos a validar tu proceso y radicarlo ante las entidades de seguridad social
             de ser necesario. Si tienes tareas pendientes puedes seguir con ellas.</p>
         {% endset %}
 
-        {% set name = '' %}
+        {% set param = '' %}
 
         {% set modal_style_button %}
             style="width: 30%; font-size:20px"
@@ -301,7 +303,7 @@
             style="display:none"
         {% endset %}
 
-  {% elseif  template_parameter == 7 %}
+    {% elseif  template_parameter == 7 %}
 
         <!--modal de abogado-->
         {% set modal_id = 'modal_abogado' %}
@@ -330,9 +332,12 @@
         {% endset %}
 
         {% set modal_content %}
-          <p style="color: #969696; padding: 20px 45px 0 45px; font-size: 17px;font-weight: 100;text-align: center;">Para darte la mejor solución a tu situación actual, nos gustaría conocer más detalles de la relación laboral con tu empleado.
-Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empieces a usar Symplifica lo antes posible.
-          </p>
+            <p style="color: #969696; padding: 20px 45px 0 45px; font-size: 17px;font-weight: 100;text-align: center;">
+                Para darte la mejor solución a tu situación actual, nos gustaría conocer más detalles de la relación
+                laboral con tu empleado.
+                Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empieces a usar Symplifica lo
+                antes posible.
+            </p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -347,7 +352,7 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
 
         {% set modal_button2 = 'Atrás' %}
 
-  {% elseif  template_parameter == 8 %}
+    {% elseif  template_parameter == 8 %}
 
 
         <!--modal salir consulte legal-->
@@ -362,26 +367,29 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
 
         {% set modal_header_style %}
-                 style="background-color: #3c4b5a; padding: 0px 0px"
+            style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
         {% set modal_header %}
-                 <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Salir del proceso de registro</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Salir del proceso de
+                registro</h1>
         {% endset %}
         {% set modal_content %}
-                 <p style="color: #7b7b7b;padding: 20px 55px;font-size: 18px;text-align: center;font-weight: 100;">Has decidido no continuar con el registro de tu empleado.
-                   <br>Nos estaremos contactando contigo para entender cómo podemos ayudarte. Recuerda que puedes volver a ingresar en
-                   cualquier momento y continuar con el registro usando tu usuario y contraseña.</p>
+            <p style="color: #7b7b7b;padding: 20px 55px;font-size: 18px;text-align: center;font-weight: 100;">Has
+                decidido no continuar con el registro de tu empleado.
+                <br>Nos estaremos contactando contigo para entender cómo podemos ayudarte. Recuerda que puedes volver a
+                ingresar en
+                cualquier momento y continuar con el registro usando tu usuario y contraseña.</p>
         {% endset %}
         {% set modal_style_button %}
-                 style="width: 30%; font-size:20px" id="atrasConsultoria"
+            style="width: 30%; font-size:20px" id="atrasConsultoria"
         {% endset %}
         {% set modal_button = 'Atras' %}
         {% set modal_style_button2 %}
-                 style="width: 30%; font-size:20px" id="salirConsultoria"
+            style="width: 30%; font-size:20px" id="salirConsultoria"
         {% endset %}
         {% set modal_button2 = 'Salir' %}
 
-  {% elseif  template_parameter == 9 %}
+    {% elseif  template_parameter == 9 %}
 
         {% set modal_id = 'default_modal_9' %}
 
@@ -399,15 +407,18 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
 
         {% set modal_header %}
-            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Notificación de Cambio</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Notificación de
+                Cambio</h1>
         {% endset %}
 
         {% set modal_content_style %}
         {% endset %}
 
         {% set modal_content %}
-            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Cambiaste la situación actual desde la última vez que evaluamos tu caso,
-            esta opción ya no es valida para ti, vuelve a evaluar tu situación para observar tus nuevas opciones.</p>
+            <p style="color: #5D5D5D; padding: 20px; font-size: 20px">Cambiaste la situación actual desde la última vez
+                que evaluamos tu caso,
+                esta opción ya no es valida para ti, vuelve a evaluar tu situación para observar tus nuevas
+                opciones.</p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -448,7 +459,8 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
 
         {% set modal_content %}
             <p style="color: #5D5D5D; padding: 20px; font-size: 20px">¡El pago fue exitoso!<br>
-                En las siguientes 24 horas uno de nuestros representantes se estará comunicando contigo para agendar tu cita</p>
+                En las siguientes 24 horas uno de nuestros representantes se estará comunicando contigo para agendar tu
+                cita</p>
         {% endset %}
 
         {% set modal_style_button %}
@@ -460,38 +472,39 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
     {% elseif template_parameter == 11 %}
 
-       {% set primary_modal_header %}
-       {% endset %}
+        {% set primary_modal_header %}
+        {% endset %}
 
-       {% set primary_modal_footer %}
-       {% endset %}
+        {% set primary_modal_footer %}
+        {% endset %}
 
-       {% set modal_id = 'detalle_costo_trans_modal' %}
+        {% set modal_id = 'detalle_costo_trans_modal' %}
 
-       {% set modal_header_style %}
-           style="background-color: #3c4b5a; padding: 0px 0px"
-       {% endset %}
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
 
-       {% set modal_header %}
-           <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Costo Transaccional</h1>
-       {% endset %}
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Costo Transaccional</h1>
+        {% endset %}
 
-       {% set modal_content_style %}
-           style="padding: 10px 20px"
-       {% endset %}
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
 
-       {% set modal_content %}
-           <p style="color: #888888;padding: 20px;font-size: 17px;font-weight: 100;text-align:center">
-             *Los pagos electrónicos tienen un costo por transacción bancaria de 5.500 pesos por transacción por empleado.</p>
-       {% endset %}
+        {% set modal_content %}
+            <p style="color: #888888;padding: 20px;font-size: 17px;font-weight: 100;text-align:center">
+                *Los pagos electrónicos tienen un costo por transacción bancaria de 5.500 pesos por transacción por
+                empleado + 4x1.000.</p>
+        {% endset %}
 
-       {% set modal_style_button %}
-           style="width: 30%; font-size:20px"
-       {% endset %}
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
 
-       {% set modal_style_button2 %}
-           style="display:none"
-       {% endset %}
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
 
     {% elseif template_parameter == 12 %}
 
@@ -540,7 +553,8 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set primary_modal_body %}
-            <p style="padding: 15px 10px 5px 15px;">Por favor selecciona una opción sobre donde residira el trabajador.</p>
+            <p style="padding: 15px 10px 5px 15px;">Por favor selecciona una opción sobre donde residira el
+                trabajador.</p>
         {% endset %}
 
         {% set primary_modal_footer %}
@@ -585,13 +599,14 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% set primary_modal_footer %}
         {% endset %}
 
-        {% set modal_style %}style="width: 70%;"{% endset %}
+        {% set modal_style %}style="width: 90%;"{% endset %}
         {% set modal_header_style %}
             style="background-color: #3c4b5a; padding: 0px 0px"
         {% endset %}
 
         {% set modal_header %}
-            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px;  ">Error en el formato del documento</h1>
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0;padding: 10px 0 10px 15px;  ">Error en el formato del
+                documento</h1>
         {% endset %}
 
         {% set modal_content_class %}
@@ -601,17 +616,21 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
 
         {% set modal_content %}
-            <div>
-                <p style="color: #5D5D5D; padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">El archivo que intentaste subir no tiene un formato permitido. Los formatos permitidos son:</p>
-                <ul>.jpg</ul>
-                <ul>.png</ul>
-                <ul>.jpeg</ul>
-                <ul>.pdf</ul>
+            <div style="width: 80%;margin: 0 auto;text-align: center;padding-top: 15px;">
+                <p style="color: #808080;font-weight: 100;padding: 4%;font-size: 17px;margin-bottom: 1%;margin-left: 10px; margin-right: 10px">El archivo que intentaste subir no tiene un formato permitido. Los formatos permitidos son:</p>
+                <div style="width: 80%;margin: 0 auto;text-align: center;">
+                  <ul style="padding:0">
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin: 5px 0">.jpg</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;margin: 5px 10px;font-weight: 600;">.png</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin: 5px 0">.jpeg</li>
+                    <li style="display: inline-block;width: 55px;background:#e0e0e0;border-radius: 5px;padding: 6px 0;font-weight: 600;margin:5px 0 5px 10px;">.pdf</li>
+                  </ul>
+                </div>
             </div>
         {% endset %}
 
         {% set modal_style_button %}
-            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;"
+            style="width: 110px; font-size:18px;font-weight: 500;padding: 5px 12px;margin-bottom: 20px;"
         {% endset %}
 
         {% set modal_button %}
@@ -626,10 +645,96 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
             cerrar2
         {% endset %}
 
-{% elseif template_parameter == 21 %}
+    {% elseif template_parameter == 21 %}
 
         <!--modal para sisben-->
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
         {% set modal_id = 'modalSiben' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Recuerde que</h1>
+        {% endset %}
+
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
+
+        {% set modal_content %}
+        <p style="padding: 15px 10px 5px 15px;text-align: center;font-size: 17px;font-weight: 100;color: #808080;line-height: 20px;">Un empleado por días
+          que no está en el régimen subsidiado (SISBEN) debe aportar a seguridad social sobre 30 días y cotizar salud. Si tuenes dudas sobre esto escríbenos
+           al Chat o llámanos al 350 833 0000.</p>
+        {% endset %}
+
+        {% set name = '' %}
+
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
+
+{% elseif template_parameter == 22 %}
+
+        <!--modal transacciones-->
+
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set modal_id = 'modalTransaccionesInfo' %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set modal_header_style %}
+            style="background-color: #3c4b5a; padding: 0px 0px"
+        {% endset %}
+
+        {% set modal_header %}
+            <h1 style="font-weight: 700;font-size: 100%;margin: 0; padding: 10px 0 10px 15px">Información costo de transacciones</h1>
+        {% endset %}
+
+        {% set modal_content_style %}
+            style="padding: 10px 20px"
+        {% endset %}
+
+        {% set modal_content %}
+        <p style="padding: 15px 40px 5px;text-align:left;font-size: 17px;font-weight: 100;color: #808080;line-height: 20px;">
+        &#10095; 1 empleado: $7.500 + 4x1.000 de la transacción<br>
+        &#10095; 2-5 empleados: $5.500 por empleado + 4x1.000 de la transacción<br>
+        &#10095; +5 empleados: $3.500 por empleado + 4x1.000 de la transacción<br>
+        &#10095; Sólo pago de Pila: $3.500</p>
+        {% endset %}
+
+        {% set name = '' %}
+
+        {% set modal_style_button %}
+            style="width: 30%; font-size:20px"
+        {% endset %}
+
+        {% set modal_style_button2 %}
+            style="display:none"
+        {% endset %}
+
+ {% elseif template_parameter == 23 %}
+
+        <!--modal éxito validacion usuario sin contrato-->
+        {% set modal_id = 'modalContractPending' %}
         {% set primary_modal_header %}
         {% endset %}
 
@@ -638,16 +743,53 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
 
         {% set primary_modal_header %}
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Recuerde qué</h4>
+                <h4 class="modal-title" id="myModalLabel">¡Proceso de validación exitoso!</h4>
             </div>
         {% endset %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set primary_modal_body %}
-            <p style="padding: 15px 10px 5px 15px;">Un empleado por días que no está en el
-              régimen subsidiado debe aportar a seguridad social sobre 30 días y cotizar a salud" si tiene
-              dudas escríbanos al chat o llámenos 350 833 0000.</p>
+            <p style="padding: 15px 10px 5px 15px;">
+                El proceso de validación de {% if param is defined %}{{ param }}{% endif %} fue éxitoso, realizaremos la
+                afiliación a
+                las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
+                nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera. Ya puedes descargar el
+                contrato y subirlo.</p>
+        {% endset %}
+
+        {% set param = '' %}
+
+
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
+        {% endset %}
+
+    {% elseif template_parameter == 24 %}
+
+        <!--modal éxito validacion usuario con contrato-->
+        {% set modal_id = 'modalContractUpdate' %}
+        {% set primary_modal_header %}
+        {% endset %}
+
+        {% set primary_modal_footer %}
+        {% endset %}
+
+        {% set primary_modal_header %}
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">¡Proceso de validación exitoso!</h4>
+            </div>
+        {% endset %}
+
+        {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
+
+        {% set primary_modal_body %}
+            <p style="padding: 15px 10px 5px 15px;">
+                El proceso de validación fue éxitoso, realizaremos la afiliación a
+                las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
+                nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera.</p>
         {% endset %}
 
         {% set primary_modal_footer %}
@@ -655,10 +797,11 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
                 <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
             </div>
         {% endset %}
-{% elseif template_parameter == 22 %}
 
-        <!--modal transacciones-->
-        {% set modal_id = 'modalTransaccionesInfo' %}
+    {% elseif template_parameter == 25 %}
+
+        <!--modal validacion contrato-->
+
         {% set primary_modal_header %}
         {% endset %}
 
@@ -666,117 +809,24 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
 
         {% set primary_modal_header %}
-              <div class="modal-header">
-                  <h4 class="modal-title" id="myModalLabel">Información costo de transacciones</h4>
-              </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">¡Tu contrato fue validado con exito!</h4>
+            </div>
         {% endset %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
         {% set primary_modal_body %}
-              <p style="padding: 15px 10px 5px 15px;">
-                1 empleado: $7.500 + 4x1.000 de la transacción<br>
-                2-5 empleados: $5.500 por empleado + 4x1.000 de la transacción<br>
-                +5 empleados: $3.500 por empleado + 4x1.000 de la transacción<br>
-                Sólo pago de Pila: $3.500</p>
+            <p style="padding: 15px 10px 5px 15px;">
+                El contrato se ha validado con exito</p>
         {% endset %}
 
-                {% set primary_modal_footer %}
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-                    </div>
+        {% set primary_modal_footer %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+            </div>
         {% endset %}
- {% elseif template_parameter == 23 %}
-
-              <!--modal éxito validacion usuario sin contrato-->
-              {% set modal_id = 'modalContractPending' %}
-              {% set primary_modal_header %}
-              {% endset %}
-
-              {% set primary_modal_footer %}
-              {% endset %}
-
-              {% set primary_modal_header %}
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">¡Proceso de validación esitoso!</h4>
-                    </div>
-              {% endset %}
-
-              {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
-
-              {% set primary_modal_body %}
-                    <p style="padding: 15px 10px 5px 15px;">
-                      El proceso de validación fue éxitoso, realizaremos la afiliación a
-                      las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
-                      nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera. Ya puedes descargar el contrato y subirlo.</p>
-              {% endset %}
-
-                      {% set primary_modal_footer %}
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-                          </div>
-              {% endset %}
-
-              {% elseif template_parameter == 24 %}
-
-                           <!--modal éxito validacion usuario con contrato-->
-                           {% set modal_id = 'modalContractUpdate' %}
-                           {% set primary_modal_header %}
-                           {% endset %}
-
-                           {% set primary_modal_footer %}
-                           {% endset %}
-
-                           {% set primary_modal_header %}
-                                 <div class="modal-header">
-                                     <h4 class="modal-title" id="myModalLabel">¡Proceso de validación esitoso!</h4>
-                                 </div>
-                           {% endset %}
-
-                           {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
-
-                           {% set primary_modal_body %}
-                                 <p style="padding: 15px 10px 5px 15px;">
-                                   El proceso de validación fue éxitoso, realizaremos la afiliación a
-                                   las diferentes entidades de seguridad social, en un máximo de 3 días hábiles podrás usar
-                                   nuestra plataforma y comenzar a gestionar a tus empleados de la mejor manera.</p>
-                           {% endset %}
-
-                                   {% set primary_modal_footer %}
-                                       <div class="modal-footer">
-                                           <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-                                       </div>
-                           {% endset %}
-
-  {% elseif template_parameter == 25 %}
-
-              <!--modal validacion contrato-->
-
-             {% set primary_modal_header %}
-             {% endset %}
-
-             {% set primary_modal_footer %}
-             {% endset %}
-
-             {% set primary_modal_header %}
-                    <div class="modal-header">
-                         <h4 class="modal-title" id="myModalLabel">¡Tu contrato fue validado con exito!</h4>
-                   </div>
-             {% endset %}
-
-             {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
-
-             {% set primary_modal_body %}
-                   <p style="padding: 15px 10px 5px 15px;">
-                        El contrato se ha validado con exito</p>
-             {% endset %}
-
-             {% set primary_modal_footer %}
-                 <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
-                 </div>
-             {% endset %}
-  {% else %}
+    {% else %}
 
         {% set modal_style %}style="padding: 0;line-height: 1;"{% endset %}
 
@@ -797,7 +847,7 @@ Déjanos tus datos de contacto y realizaremos una pre-evaluación para que empie
         {% endset %}
         {% set modal_button = 'cerrar' %}
 
-  {% endif %}
+    {% endif %}
 
     {{ include('@RocketSellerTwoPick/modal_templates/modal.twig') }}
 

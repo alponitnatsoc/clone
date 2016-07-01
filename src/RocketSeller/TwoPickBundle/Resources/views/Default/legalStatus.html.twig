@@ -1,4 +1,12 @@
 {% extends "::base.html.twig" %}
+
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(7) }}
+    {{ modal(8) }}
+    {{ modal(9) }}
+{% endblock %}
+
 {% block fos_user_content %}
     {# 	{% include 'RocketSellerTwoPickBundle:Default:welcome-inicio-registro.html.twig' %}#}
     {% block stylesheets %}

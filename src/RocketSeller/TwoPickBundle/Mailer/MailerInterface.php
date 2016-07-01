@@ -12,6 +12,7 @@
 namespace RocketSeller\TwoPickBundle\Mailer;
 
 use FOS\UserBundle\Model\UserInterface;
+use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
@@ -67,11 +68,40 @@ interface MailerInterface
     public function sendHelpEmailMessage($name, $fromEmail,$subject,$message,$ip,$phone);
 
     /**
-     * Send an reminder email
+     * Send an reminder DaviPlata email
      *
      * @param UserInterface $user
      *
      * @return void
      */
     public function sendDaviplataMessage(UserInterface $user);
+
+    /**
+     * Send an reminder OneDay email
+     *
+     * @param UserInterface $user
+     * @param EmployerHasEmployee $eHE 
+     *
+     * @return void
+     */
+    public function sendOneDayMessage(UserInterface $user,EmployerHasEmployee $eHE);
+    /**
+     * Send an reminder DiasHabilesemail
+     *
+     * @param UserInterface $user
+     * @param EmployerHasEmployee $eHE
+     *
+     * @return void
+     */
+    public function sendDiasHabilesMessage(UserInterface $user,EmployerHasEmployee $eHE);
+
+    /**
+     * Send an reminder Backoffice validation
+     *
+     * @param UserInterface $user
+     * @param EmployerHasEmployee $eHE
+     *
+     * @return void
+     */
+    public function sendBackValidatedMessage(UserInterface $user,EmployerHasEmployee $eHE);
 }

@@ -1,5 +1,10 @@
 {% extends "::base.html.twig" %}
 {% block title %}Symplifica - Medio de pago{% endblock %}
+{%  from '@RocketSellerTwoPick/modal_templates/modal_picker.twig' import modal %}
+{% block modales %}
+    {{ modal(11) }}
+{% endblock %}
+
 
 {% block fos_user_content %}
     <style>

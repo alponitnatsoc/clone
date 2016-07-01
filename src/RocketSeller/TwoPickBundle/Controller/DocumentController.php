@@ -162,11 +162,9 @@ use EmployerMethodsTrait;
         $document->setStatus(1);
         $document->setName('Diferente');
         $document->setDocumentTypeDocumentType($documentType);
-        if($bdDoc){
-            $form = $this->createForm(new DocumentRegistration(), $bdDoc);
-        }else{
-            $form = $this->createForm(new DocumentRegistration(), $document);
-        }
+        $form = $this->createForm(new DocumentRegistration(), $document);
+
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -196,22 +194,6 @@ use EmployerMethodsTrait;
                     $request->setMethod("GET");
                     $insertionAnswer = $this->forward('RocketSellerTwoPickBundle:EmployerRest:getEmployerDocumentsState', array('idUser' => $this->getUser()->getId()), array('_format' => 'json'));
                     $responsePaymentsMethods = json_decode($insertionAnswer->getContent(), true);
-                    if($responsePaymentsMethods["state"]==true) {
-                        /** @var Person $person */
-                        $person = $this->getUser()->getPersonPerson();
-                        $notifications = $person->getNotifications();
-                        /** @var Notification $not */
-                        foreach ($notifications as $not) {
-                            if ($not->getAccion() == "Bajar") {
-                                $not->setStatus(0);
-                                $em->persist($not);
-                            }
-                        }
-                        $em->flush();
-
-                        return $this->redirectToRoute('employer_completion_documents');
-                    }
-
                     return $this->redirectToRoute('show_dashboard');
 
                 } else {
