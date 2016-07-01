@@ -70,6 +70,8 @@ services:
                     reminder: 'FOSUserBundle:Registration:recuerdatos.txt.twig'
                     help:     'FOSUserBundle:Registration:email-contact.txt.twig'
                     daviplata: 'FOSUserBundle:Registration:crearDaviplata.txt.twig'
+                    oneday: 'FOSUserBundle:Registration:diahabil.txt.twig'
+                    diashabiles: 'FOSUserBundle:Registration:3diashabiles.txt.twig'
 
                 from_email:
                   confirmation: '%fos_user.registration.confirmation.from_email%'

@@ -9,6 +9,7 @@ use RocketSeller\TwoPickBundle\Entity\EmployeeHasEntity;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEmployee;
 use RocketSeller\TwoPickBundle\Entity\EmployerHasEntity;
 use RocketSeller\TwoPickBundle\Entity\Notification;
+use RocketSeller\TwoPickBundle\Traits\EmployeeMethodsTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use RocketSeller\TwoPickBundle\Entity\Person;
 use RocketSeller\TwoPickBundle\Entity\User;
@@ -26,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class ProcedureController extends Controller
 {
+	use EmployeeMethodsTrait;
 	/**
 	 * Funcion que carga la pagina de tramites para el backoffice
 	 * Muestra un acceso directo a tramites pendientes de:
@@ -424,12 +426,13 @@ class ProcedureController extends Controller
         
     }
     public function changeVueltaStateAction($procedureId,$actionId,$status)
-    {	
+    {
+
     	$em = $this->getDoctrine()->getManager();
 		/** @var Action $action */
 		$action = $this->loadClassById($actionId,"Action");
 		//adding verification to check if the actions is validate documents employee
-		if($action->getActionTypeActionType()->getCode()=="VDC"){
+		if($action->getActionTypeActionType()->getCode()=="VDC" and $status!='Error'){
 			$employee=$action->getPersonPerson()->getEmployee();
 			if($employee!=null){
 				/** @var User $user */
@@ -486,6 +489,8 @@ class ProcedureController extends Controller
 						$notification->setDownloadAction($dAction);
 						$notification->setDownloadLink($dUrl);
 						$em->persist($notification);
+                        $smailer = $this->get('symplifica.mailer.twig_swift');
+                        $smailer->sendDiasHabilesMessage($this->getUser(),$realEhe);
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
 							$todayPlus = new DateTime();
