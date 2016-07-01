@@ -649,7 +649,7 @@
                                             <p>{{employee.personPerson.names}} {{ employee.personPerson.lastName1}}</p>
                                         </div>
                                         <div class="panel_btn_action">
-                                            <a class="btn btn-docs notAjax " value="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
+                                            <a class="btn btn-docs notAjax " href="{{ path('download_document', {'id': employee.personPerson.idPerson , 'idDocument':doc.idDocument}) }}">Ver documento</a>
                                         </div>
                                     </div>
                                 {% endif %}

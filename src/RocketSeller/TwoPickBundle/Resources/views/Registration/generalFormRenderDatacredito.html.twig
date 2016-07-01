@@ -18,21 +18,31 @@
     		padding-top: 20px;
 		    text-align: center;
 		}
+    .ultimo {
+      clear: both;
+    border: dashed 1px #CCC;
+    width: 80%;
+    border-radius: 5px;
+    margin: 62px auto 0 auto;
+    padding: 20px 40px;
+    }
 
     </style>
 {% endblock stylesheet %}
 {% block fos_user_content %}
 	<br />
 	<div class="row">
-		<div class="col-sm-12" >
-			<div class="roundContainer">
+		<div class="ultimo" >
+			<div>
 				<div class="media" >
 					<div class="media-left">
 						<i class="glyphicon glyphicon glyphicon-user bigIcon"></i>
 					</div>
 					<div class="media-body legalInCorrect">
-						<h4 class="media-heading" style="font-weight: bold;">Último paso, tenemos que validar tu identidad</h4>
-						Para garantizar tu seguridad, tenemos que confirmar tus datos, tienes dos intentos para contestar correctamente estas preguntas y validar tu identidad. En caso de que falles las dos veces te contactaremos para ayudarte a continuar con el registro.
+						<h4 class="media-heading" style="font-weight: bold;">¡Último paso!</h4>
+            Por tu seguridad validaremos tu identidad:<br>
+            &#10148; Tienes dos intentos para responder correctamente las preguntas<br>
+            &#10148; En caso de que falles da clic en la la pestaña “ayuda” a tu izquierda y te contactaremos
 					</div>
 				</div>
 			</div>

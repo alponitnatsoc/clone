@@ -14,6 +14,14 @@
   padding: 55px 0 0 0;
 }
 
+.spanRecuerda {
+  color: #00858c;
+  text-align: center;
+  background: #ffffff;
+  padding: 15px 30px;
+  border-radius: 5px;
+}
+
 .textoda p {
     color: #929292;
     font-size: 17px;
