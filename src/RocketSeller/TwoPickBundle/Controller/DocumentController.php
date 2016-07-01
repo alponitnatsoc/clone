@@ -117,8 +117,6 @@ use EmployerMethodsTrait;
             $medias = $document->getMediaMedia();
             /** @var Media $media */
             foreach ($medias as $media) {
-                dump($media->getContentType());
-                exit();
                 $media->setBinaryContent($media);
                 $media->setName('documento');
                 $media->setProviderStatus(Media::STATUS_OK);

@@ -662,8 +662,6 @@ class PayrollController extends Controller
 
     public function createNewPayroll(Payroll $payroll)
     {
-        dump('createNewPayroll');
-        dump($payroll);
         $this->addFlash('success', 'createNewPayroll');
         $this->addFlash('success', json_encode($payroll));
     }

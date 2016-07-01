@@ -84,7 +84,6 @@ class BackOfficeController extends Controller
         }
         if($autentication==$user->getSalt()) {
             $this->addToSQL($user);
-            dump("Se agregó a sql");
         }
         return $this->redirectToRoute("pages");
 
