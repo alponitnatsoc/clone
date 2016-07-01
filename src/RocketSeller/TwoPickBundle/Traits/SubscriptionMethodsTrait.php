@@ -643,6 +643,7 @@ trait SubscriptionMethodsTrait
                 $employer->setIdHighTech($idHighTech);
                 $em->persist($employer);
                 $em->flush();
+
             }
             $eHEes = $employer->getEmployerHasEmployees();
             //dump($eHEes);
