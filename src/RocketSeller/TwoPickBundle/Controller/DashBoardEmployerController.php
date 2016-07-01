@@ -63,7 +63,7 @@ class DashBoardEmployerController extends Controller {
                 if($tareas and $docStat['docStatus']==11){
                     return $this->redirectToRoute('employer_completion_documents');
                 }
-                if(!$tareas){
+                if(!$tareas and $docStat['docStatus']>13){
                     $em = $this->getDoctrine()->getManager();
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
