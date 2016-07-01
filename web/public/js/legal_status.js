@@ -16,7 +16,9 @@ function prepareLegal() {
 
     if(!notGo){
       var send = prepareUrlString();
-      window.location.href = "/store_config/" + send +"/change-flag/1";
+      if($("#checkboxContinueContinuar").is(':checked')){
+        window.location.href = "/store_config/" + send +"/change-flag/1";
+      }
     }
   });
   // END CONTINUAR
@@ -35,7 +37,9 @@ function prepareLegal() {
 
     if(!notGo){
       var send = prepareUrlString();
-      window.location.href = "/store_config/" + send +"/change-flag/0";
+      if($("#checkboxContinueNuevo").is(':checked')){
+        window.location.href = "/store_config/" + send +"/change-flag/0";
+      }
     }
 
   });
