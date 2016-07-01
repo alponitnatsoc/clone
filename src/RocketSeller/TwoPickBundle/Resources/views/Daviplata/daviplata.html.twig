@@ -13,7 +13,8 @@
                     <br/>
                     <p style="text-align:left">Para crear la cuenta Daviplata te ofrecemos dos opciones:<br><br>
                     &#10148; Da clic en el botón del video y sigue las instrucciones<br>
-                    &#10148; Da clic en Ir a Daviplata y sigue el paso a paso</p>
+                    &#10148; Da clic en Ir a Daviplata y sigue el paso a paso<br><br>
+                    <span class="spanRecuerda"><strong>Recuerda que:</strong><br> Es importante registrar el número para hacer la transferencia a tu empleado.</span></p><br><br>
                 </div>
                   <div style="text-align: center;margin: 30px auto;width: 70%;">
                     <div>
@@ -37,10 +38,10 @@
                       {% endif %}
                   </div>
                   <div>
-                    <button style="width:100%" class="btn btn-default buttond">
-                      <span id="davimoda">Ver video<span/>
+                    <button id="btn-video" style="width:100%" class="btn btn-default buttond">
+                      <span id="davimoda">Ver video</span>
                     </button>
-                    <a href="/dashboard/employer"><button style="margin: 55px 0 0 0;" class="btn btn-orange buttond">
+                    <a href="{{ path('show_dashboard') }}" class="notAjax"><button style="margin: 55px 0 0 0;" class="btn btn-orange buttond">
                       <span id="davimoda">Hacerlo más tarde<span/>
                     </button></a>
                   </div>
@@ -66,7 +67,7 @@
             var moda = document.getElementById('triggermoda');
 
             // Get the button that opens the modal
-            var btn1 = document.getElementById('davimoda');
+            var btn1 = document.getElementById('btn-video');
 
             // Get the <span> element that closes the modal
             var span1 = document.getElementsByClassName("close1")[0];
