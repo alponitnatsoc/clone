@@ -972,6 +972,16 @@ trait SubscriptionMethodsTrait
         $this->crearTramites($user);
         $this->validateDocuments($user);
         $this->addToSQL($user);
+        /** @var \RocketSeller\TwoPickBundle\Mailer\TwigSwiftMailer $smailer */
+        $smailer = $this->get('symplifica.mailer.twig_swift');
+        $to = $user->getEmail();
+        $template = $this->parameters['template']['daviplata'];
+        $context = array(
+            'toEmail' => $user->getEmail(),
+            'user' => $user,
+            'subject'=> "Informacion Daviplata"
+        );
+        $smailer->sendEmail($template,$context,$this->parameters['from_email']['confirmation'], $to);
         $em->persist($user);
         $em->flush();
         return true;
