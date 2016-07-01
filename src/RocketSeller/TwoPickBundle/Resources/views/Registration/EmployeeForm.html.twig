@@ -1503,14 +1503,11 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div  class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.severances) }}
-                                    </div>
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.severancesAC) }}
+                                        {{ form_label(form.entities.severances) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.severancesAC, { 'value' : sname}) }}
+                                        {{ form_widget(form.entities.severances, { 'value' : sname}) }}
                                     </div>
                                     <div class="col-sm-12 col-xs-12 hidden">
                                         <div class="col-sm-6 label-group">
@@ -1522,18 +1519,15 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-xs-12">
-                                    <div class="hidden">
-                                        {{ form_row(form.entities.pension) }}
-                                    </div>
                                     <div class="col-sm-6 label-group">
-                                        {{ form_label(form.entities.pensionAC) }}
+                                        {{ form_label(form.entities.pension) }}
                                     </div>
                                     <div class="col-sm-6 form-group">
-                                        {{ form_widget(form.entities.pensionAC,{'value' : pname}) }}
+                                        {{ form_widget(form.entities.pension,{'value' : pname}) }}
                                     </div>
                                     {#                             <div class="col-sm-12 col-xs-12">#}
                                     {#                                 <div class="title text-center col-sm-6 label-group">Pensión</div>#}
-                                    {#                                 {{ form_row(form.entities.pensionAC,{'value' : pname}) }}#}
+                                    {#                                 {{ form_row(form.entities.pension,{'value' : pname}) }}#}
                                     {#                             </div>#}
                                     <div class="col-sm-12 col-xs-12">
                                         <div class="col-sm-6 label-group">

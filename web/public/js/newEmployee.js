@@ -633,6 +633,12 @@ function startEmployee() {
                     return;
                 }
             });
+
+            if (!validator.element($("[name='register_employee[entities][wealthExists]']"))) {
+                flagValid = false;
+                return;
+            }
+
         }
 
         $(form).find("select[name*='[pension]']").each(function () {
@@ -641,13 +647,6 @@ function startEmployee() {
                 return;
             }
         });
-        $(form).find("input[name*='[pensionAC]']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
-
 
         $(form).find("select[name*='[severances]']").each(function () {
             if (!validator.element($(this))) {
@@ -655,12 +654,9 @@ function startEmployee() {
                 return;
             }
         });
-        $(form).find("input[name*='[severancesAC]']").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
+
+
+
         $(form).find("input[name*='[beneficiaries]']:checked").each(function () {
             if (!validator.element($(this))) {
                 flagValid = false;
@@ -668,26 +664,15 @@ function startEmployee() {
             }
         });
 
-        $(form).find("input[name*='[severancesExists]']:checked").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
+        if (!validator.element($("[name='register_employee[entities][pensionExists]']"))) {
+            flagValid = false;
+            return;
+        }
 
-        $(form).find("input[name*='[wealthExists]']:checked").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
-
-        $(form).find("input[name*='[pensionExists]']:checked").each(function () {
-            if (!validator.element($(this))) {
-                flagValid = false;
-                return;
-            }
-        });
+        if (!validator.element($("[name='register_employee[entities][severancesExists]']"))) {
+            flagValid = false;
+            return;
+        }
 
         if (!flagValid) {
             return;
@@ -1572,7 +1557,6 @@ function calculator() {
       arlProf = 0.01044;
     }
 
-    arl =  arlProf;
     $("#diasTrabajadosMod").text("");
     var aid = 0;
     var aidD = 0;
@@ -1641,13 +1625,13 @@ function calculator() {
             transportCal = transportAidDaily * numberOfDays;
             salaryD = (salaryD - transportAidDaily)/(1-(PensEmployee));
             totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployer +
-                PensEmployer + arl + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
+                PensEmployer + arlProf + caja + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) +
                 ((taxCes + ces) * (((salaryD + aidD) * numberOfDays) + transportAidDaily*numberOfDays));
             EPSEmployerCal = EPSEmployer * base;
             EPSEmployeeCal = EPSEmployee * base;
             PensEmployerCal = PensEmployer * base;
             PensEmployeeCal = PensEmployee * base;
-            arlCal = arl * base;
+            arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
             //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
@@ -1688,12 +1672,12 @@ function calculator() {
                 salaryD = (salaryD - transportAidDaily)+(PensEmployeeCal/numberOfDays);
             }
             //then calculate arl ces and the rest
-            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployee2 + arl
+            totalExpenses = ((salaryD + aidD + transportAidDaily + dotationDaily) * numberOfDays) + ((EPSEmployee2 + arlProf
                 + sena + icbf) * base) + (vacations30D * numberOfDays * salaryD) + ((taxCes + ces) * (((salaryD + aidD)
                 * numberOfDays) + transportAidDaily*numberOfDays)) + PensEmployeeCal + cajaCal + PensEmployerCal;
             EPSEmployerCal = EPSEmployer2 * base;
             EPSEmployeeCal = EPSEmployer2 * base;
-            arlCal = arl * base;
+            arlCal = arlProf * base;
             //cesCal = ((ces) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
             cesCal = ((ces) * (((salaryD + aidD) * numberOfDays ) + transportAidDaily*numberOfDays));
             //taxCesCal = ((taxCes) * (((salaryD + aidD) * numberOfDays * 30 / 28) + transportAid));
@@ -1717,13 +1701,13 @@ function calculator() {
         }
 
         salaryM2 = (salaryM - transportAid2)/(1-(EPSEmployee+PensEmployee));
-        totalExpenses = salaryM + aidD + transportAid2 + dotation + ((EPSEmployer + PensEmployer + arl + caja +
+        totalExpenses = salaryM + aidD + transportAid2 + dotation + ((EPSEmployer + PensEmployer + arlProf + caja +
             vacations30D + sena + icbf) * (salaryM + aidD)) + ((taxCes + ces) * (salaryM + aidD + transportAid2));
         EPSEmployerCal = EPSEmployer * (salaryM + aidD);
         EPSEmployeeCal = EPSEmployee * (salaryM + aidD);
         PensEmployerCal = PensEmployer * (salaryM + aidD);
         PensEmployeeCal = PensEmployee * (salaryM + aidD);
-        arlCal = arl * (salaryM + aidD);
+        arlCal = arlProf * (salaryM + aidD);
         cesCal = ces * (salaryM + aidD + transportAid2);
         taxCesCal = taxCes * (salaryM + aidD + transportAid2);
         cajaCal = caja * (salaryM + aidD);
@@ -2059,39 +2043,7 @@ function initEntitiesFields(){
             $("#wealthBlock").hide();
         }
     });
-    var dataPen=[];
-    $("#register_employee_entities_pension").find("> option").each(function() {
-        dataPen.push({'label':this.text,'value':this.value});
-    });
-    $(".autocomP").each(function () {
-        var autoTo=$(this);
-        $(this).autocomplete({
-            source: function(request, response) {
-              var results;
-              if(request.term.length != 0){
-                results = $.ui.autocomplete.filter(dataPen, request.term);
-              }
-              else {
-                results = $.ui.autocomplete.filter("", request.term);
-              }
-              response(results.slice(0, 5));
-            },
-            minLength: 0,
-            select: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
-            },
-            focus: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_pension").val(ui.item.value);
-            }
-        });
-        $(this).on("focus",function () {
-            $(autoTo).autocomplete("search", $(autoTo).val());
-        });
-    });
+
     var dataWe=[];
     $("#register_employee_entities_wealth").find("> option").each(function() {
         dataWe.push({'label':this.text,'value':this.value});
@@ -2126,71 +2078,6 @@ function initEntitiesFields(){
         });
 
     });
-    var dataArs=[];
-    $("#register_employee_entities_ars").find("> option").each(function() {
-        dataArs.push({'label':this.text,'value':this.value});
-    });
-    $(".autocomArs").each(function () {
-        var autoTo=$(this);
-        $(this).autocomplete({
-            source: function(request, response) {
-              var results;
-              if(request.term.length != 0){
-                results = $.ui.autocomplete.filter(dataArs, request.term);
-              }
-              else {
-                results = $.ui.autocomplete.filter("", request.term);
-              }
-              response(results.slice(0, 5));
-            },                minLength: 0,
-            select: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
-            },
-            focus: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("select").val(ui.item.value);
-            }
-        });
-        $(this).on("focus",function () {
-            $(autoTo).autocomplete("search", $(autoTo).val());
-        });
-
-    });
-    var dataSeverances=[];
-    $("#register_employee_entities_severances").find("> option").each(function() {
-        dataSeverances.push({'label':this.text,'value':this.value});
-    });
-    $(".autocomCes").each(function () {
-        var autoTo=$(this);
-        $(this).autocomplete({
-            source: function(request, response) {
-              var results;
-              if(request.term.length != 0){
-                var results = $.ui.autocomplete.filter(dataSeverances, request.term);
-              }
-              else {
-                results = $.ui.autocomplete.filter("", request.term);
-              }
-              response(results.slice(0, 5));
-            },                minLength: 0,
-            select: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
-            },
-            focus: function(event, ui) {
-                event.preventDefault();
-                autoTo.val(ui.item.label);
-                $(autoTo.parent()).parent().find("#register_employee_entities_severances").val(ui.item.value);
-            }
-        });
-        $(this).on("focus",function () {
-            $(autoTo).autocomplete("search", $(autoTo).val());
-        });
-    });
 
 }
 
@@ -2213,10 +2100,12 @@ function reverseCalculator(){
   var aidD = 0;
   var sisben = $("input[name='register_employee[employeeHasEmployers][sisben]']:checked").val();
   var transport = $("input[name='register_employee[employeeHasEmployers][transportAid]']:checked").val();
-  var numberOfDays=$("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
+  var numberOfDays= $("#register_employee_employeeHasEmployers_weekWorkableDays").val() * 4.345;
 
   var PensEmployeeCal = 0;
   var base = 0;
+
+  //var hasPens =
 
   if( sisben == -1 || (plainSalary + transportAidDaily + aidD) * numberOfDays > smmlv){
     salaryD = plainSalary;
