@@ -84,6 +84,57 @@ class ExportController extends Controller
 		}
     }
 
+    /**
+     * Funcion que crea el archivo zip con el documento que se desea descargar.
+     * @param $idPerson id de la persona de la que se quieren descargar documentos
+     * @param $idDocType id del documento que se desea descargar
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function exportDocumentByPersonDocTypeAction($idPerson,$idDocType)
+    {
+        if($this->isGranted('EXPORT_DOCUMENTS_PERSON', $this->getUser())) {
+
+            $person = $this->getdoctrine()
+                ->getRepository('RocketSellerTwoPickBundle:Person')
+                ->find($idPerson);
+            $docType = $this->getDoctrine()->getRepository('RocketSellerTwoPickBundle:DocumentType')->find($idDocType);
+            /** @var Document $document */
+            $document = $person->getDocByType($docType->getName());
+            /** @var Media $media */
+            $media = $document->getMediaMedia();
+            if(file_exists(getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference'))){
+                $docUrl = getcwd().$this->container->get('sonata.media.twig.extension')->path($document->getMediaMedia(), 'reference');
+            }
+            $docName = $document->getDocumentTypeDocumentType()->getName().' '.$person->getFullName().'.'.$media->getExtension();
+            # create new zip opbject
+            $zip = new ZipArchive();
+            # create a temp file & open it
+            $tmp_file =$person->getNames()."_".$document->getDocumentTypeDocumentType()->getName().".zip";
+            if ($zip->open($tmp_file,ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE )=== TRUE) {
+                # loop through each file
+                $zip->addFile($docUrl,$docName);
+                # close zip
+                if($zip->close()!==TRUE)
+                    echo "no permisos";
+                # send the file to the browser as a download
+                header("Content-disposition: attachment; filename=$tmp_file");
+                header('Content-type: application/zip');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: '.filesize($tmp_file));
+                ob_clean();
+                flush();
+                readfile($tmp_file);
+                ignore_user_abort(true);
+                unlink($tmp_file);
+            }
+            return $this->redirectToRoute('ajax', array(), 301);
+        }else{
+            throw $this->createAccessDeniedException("No tiene suficientes permisos");
+        }
+    }
+
 
     /**
      * Funcion para exporar todos los documentos relacionados a la acción
