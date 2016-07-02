@@ -45,11 +45,12 @@ class DashBoardEmployerController extends Controller {
                     break;
                 }
             }
+
             /** @var User $user */
             $user = $this->getUser();
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                if(!$tareas and $docStat['docStatus']=13){
+                if(!$tareas and $docStat['docStatus']==13){
                         return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
                 }
 
