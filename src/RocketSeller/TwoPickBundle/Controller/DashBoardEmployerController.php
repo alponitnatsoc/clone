@@ -45,11 +45,12 @@ class DashBoardEmployerController extends Controller {
                     break;
                 }
             }
+
             /** @var User $user */
             $user = $this->getUser();
             foreach ($this->allDocumentsReady($user) as $docStat ){
                 $ready[$docStat['idEHE']]=$docStat['docStatus'];
-                if($tareas and $docStat['docStatus']>14){
+                if(!$tareas and $docStat['docStatus']==13){
                         return $this->render('@RocketSellerTwoPick/Employer/endvalidation.html.twig');
                 }
 
@@ -63,12 +64,13 @@ class DashBoardEmployerController extends Controller {
                 if($tareas and $docStat['docStatus']==11){
                     return $this->redirectToRoute('employer_completion_documents');
                 }
-                if(!$tareas){
+                if(!$tareas and $docStat['docStatus']>13){
                     $em = $this->getDoctrine()->getManager();
                     $eHE = $em->getRepository('RocketSellerTwoPickBundle:EmployerHasEmployee')->find($docStat['idEHE']);
                     return $this->render('@RocketSellerTwoPick/Employer/cleanDashboard.html.twig',array(
                         'userName' => $user->getPersonPerson()->getFullName(),
                         'employeeName'=> $eHE->getEmployeeEmployee()->getPersonPerson()->getFullName(),
+                        'validated'=>$docStat['idEHE'],
                     ));
                 }
             }

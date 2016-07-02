@@ -12,18 +12,22 @@
                 </div>
 
                 <div id="texto-succesdocs">
+                    {% if validated is defined and validated < 14 %}
                 	<div class="casiValidado">
                     	<h1 class="azulclarofont light centrar">Estas en proceso de validación</h1>
                         <p class="light grisclarofont">Ya etas cerca de poder Gestinar tus empleados, te notificaremos cuando estes listo.</p>
                     </div>
-                    <div>
-                        <h1 class="azulclarofont light centrar">Pagos futuros</h1>
-                        <div id="posibilidades">
-                            <div class="pagospendientesdash">
-                                <p class="light"><strong>20 de Julio</strong> pago de nómina de tus empleados</p>
-                            </div>
-                        </div>
-                     </div>
+                    {% endif %}
+                    {% if validated is defined and validated > 13 %}
+                    {#<div>#}
+                        {#<h1 class="azulclarofont light centrar">Pagos futuros</h1>#}
+                        {#<div id="posibilidades">#}
+                            {#<div class="pagospendientesdash">#}
+                                {#<p class="light"><strong>20 de Julio</strong> pago de nómina de tus empleados</p>#}
+                            {#</div>#}
+                        {#</div>#}
+                     {#</div>div#}
+                    {% endif %}
 
                     <div id="fechas">
                         <h1 class="grisclarofont light centrar">Ten en cuenta las siguientes fechas :</h1><br>
@@ -34,12 +38,13 @@
                         </div>
                         <div class="fechasclave">
                             <p class="bold azulclarofont">Día 12 de cada mes</p>
-                            <p class="grisclarofont light">Cierre de nómina</p>
-                            <p class="light-italic grisclarofont">(para modalidad quincenal)</p>
+                            <p class="grisclarofont light">Ultimo día para</p>
+                            <p class="light-italic grisclarofont">reportar novedades</p>
                         </div>
                         <div class="fechasclave">
                             <p class="bold azulclarofont">Día 15 de cada mes</p>
-                            <p class="grisclarofont light">Pago de nómina</p>
+                            <p class="grisclarofont light">Pago oportuno</p>
+                            <p class="grisclarofont light">de la quincena</p>
                         </div>
                         <div class="fechasclave">
                             <p class="bold azulclarofont">Día 23 de cada mes</p>
@@ -48,18 +53,19 @@
                         </div>
                         <div class="fechasclave">
                             <p class="bold azulclarofont">Día 25 de cada mes</p>
-                            <p class="grisclarofont light">Cierre de nómina</p>
+                            <p class="grisclarofont light">Ultimo día para</p>
+                            <p class="light-italic grisclarofont">reportar novedades</p>
                         </div>
                         <div class="fechasclave">
                             <p class="bold azulclarofont">Día 30 de cada mes</p>
                             <p class="grisclarofont light">Pago de nómina</p>
-                            <p class="light-italic grisclarofont">pago de aportes a seguridad</p>
+                            <p class="light-italic grisclarofont">y de aportes a seguridad</p>
                         </div>
                     </div>
                     <div class="border">
                         <p class="semi-italic azulmediofont">Puedes reportar novedades en cualquier momento.<br>
 
-                        Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento si no tienes novedades por reportar.</p>
+                        Sugerimos los días 15 y 30 de cada mes, pero el pago de nómina lo puedes hacer en cualquier momento después del cierre.</p>
                     </div>
                 </div>
 	</div>
