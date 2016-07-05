@@ -348,11 +348,6 @@
                                 {% else %}
                                     {% set sname = "" %}
                                 {% endif %}
-                                {% if employee.arl.vars.data.name is defined %}
-                                    {% set aname = employee.arl.vars.data.name %}
-                                {% else %}
-                                    {% set aname = "" %}
-                                {% endif %}
                                 <div class="col-sm-12 form-group">
                                     <ul class="severances" data-prototype="
                         {% filter escape %}
@@ -388,18 +383,11 @@
                                 </div>
                             </div>
                             <div class="col-sm-12 col-xs-12">
-                                <div class="col-sm-12">
-                                    {{ form_label(form.arl,null,{'label_attr': {'class': ''}})}}
-                                </div>
                                 <div class="wrapper">
-                                    <div class="hidden">
+                                    <div style="margin-top:10px;padding:0 15px;" class="form-group">
                                         {{ form_row(form.arl) }}
                                     </div>
-                                    <div style="margin-top:10px;padding:0 15px;" class="form-group">
-                                        {{ form_widget(form.arlAC,{'value' : aname}) }}
-                                    </div>
                                 </div>
-                                <p id="errorARL" style="color:red;">Entidad no encontrada en la base de datos, por favor revisa lo escrito</p>
                                 <p id="msgARL" class="col-sm-12" style="font-weight:100 !important; color:red;">Temporalmente solo podemos gestionar su afiliación a Sura</p>
                                 <div class="col-sm-12 col-xs-12">
                                     <div class="col-sm-6 label-group">
