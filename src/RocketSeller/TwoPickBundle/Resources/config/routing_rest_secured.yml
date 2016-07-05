@@ -6,3 +6,7 @@ employers :
     type: rest
     resource:     "RocketSellerTwoPickBundle:EmployerRestSecured"
     name_prefix:  api_secured_
+payrolls :
+    type: rest
+    resource:     "RocketSellerTwoPickBundle:PayrollRestSecured"
+    name_prefix:  api_secured_

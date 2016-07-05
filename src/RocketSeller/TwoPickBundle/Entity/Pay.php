@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Pay
@@ -35,6 +37,7 @@ class Pay
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
      * })
+     * @Exclude
      */
     private $payMethodPayMethod;
 
@@ -44,6 +47,7 @@ class Pay
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id_user", referencedColumnName="id")
      * })
+     * @Exclude
      */
     private $userIdUser;
 

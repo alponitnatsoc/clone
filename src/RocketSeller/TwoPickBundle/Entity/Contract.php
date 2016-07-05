@@ -4,6 +4,8 @@ namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use RocketSeller\TwoPickBundle\RocketSellerTwoPickBundle;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Contract
@@ -61,6 +63,7 @@ class Contract
 
     /**
      * @ORM\OneToMany(targetEntity="Payroll", mappedBy="contractContract", cascade={"persist"})
+     * @Exclude
      */
     private $payrolls;
 
@@ -68,11 +71,13 @@ class Contract
      * @var \RocketSeller\TwoPickBundle\Entity\Payroll
      * @ORM\OneToOne(targetEntity="RocketSeller\TwoPickBundle\Entity\Payroll", cascade={"persist"})
      * @ORM\JoinColumn(name="active_payroll", referencedColumnName="id_payroll")
+     * @Exclude
      */
     private $activePayroll;
 
     /**
      * @ORM\OneToMany(targetEntity="ContractHasBenefits", mappedBy="contractContract", cascade={"persist"})
+     * @Exclude
      */
     private $benefits;
 
@@ -145,6 +150,7 @@ class Contract
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pay_method_id_pay_method", referencedColumnName="id_pay_method")
      * })
+     * @Exclude
      */
     private $payMethodPayMethod;
 
@@ -154,12 +160,14 @@ class Contract
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="document_id_document", referencedColumnName="id_document")
      * })
+     * @Exclude
      */
     private $documentDocument;
 
     /**
      * @var \RocketSeller\TwoPickBundle\Entity\Liquidation
      * @ORM\OneToMany(targetEntity="Liquidation", mappedBy="contract", cascade={"persist", "remove"})
+     * @Exclude
      */
     private $liquidations;
 
