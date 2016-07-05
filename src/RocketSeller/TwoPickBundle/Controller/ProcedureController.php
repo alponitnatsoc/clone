@@ -508,7 +508,7 @@ class ProcedureController extends Controller
 						$actionV = new Action();
 						$actionV->setStatus('Nuevo');
 						$actionV->setRealProcedureRealProcedure($action->getRealProcedureRealProcedure());
-						$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+						$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VC'),"ActionType"));
 						$actionV->setPersonPerson($realEhe->getEmployeeEmployee()->getPersonPerson());
 						$actionV->setUserUser($user);
 						$em->persist($actionV);
