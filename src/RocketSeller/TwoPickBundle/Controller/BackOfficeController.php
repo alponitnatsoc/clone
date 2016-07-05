@@ -140,7 +140,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -249,7 +249,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -262,7 +262,7 @@ class BackOfficeController extends Controller
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }else{
-                $pathRut = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $pathRut = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }
         }else{
@@ -291,7 +291,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -304,7 +304,7 @@ class BackOfficeController extends Controller
                 $pathRut = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }else{
-                $pathRut = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
+                $pathRut = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($rut->getMediaMedia(), 'reference');
                 $nameRut = $rut->getMediaMedia()->getName();
             }
         }else{
@@ -338,7 +338,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -351,7 +351,7 @@ class BackOfficeController extends Controller
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }else{
-                $pathCarta = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $pathCarta = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }
         }else{
@@ -380,7 +380,7 @@ class BackOfficeController extends Controller
                 $pathCedula = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }else{
-                $pathCedula = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
+                $pathCedula = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($cedula->getMediaMedia(), 'reference');
                 $nameCedula = $cedula->getMediaMedia()->getName();
             }
         }else{
@@ -393,7 +393,7 @@ class BackOfficeController extends Controller
                 $pathCarta = 'http://'.'127.0.0.1:8000' . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }else{
-                $pathCarta = 'http://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
+                $pathCarta = 'https://' . $actual_link = $_SERVER['HTTP_HOST'] . $this->container->get('sonata.media.twig.extension')->path($carta->getMediaMedia(), 'reference');
                 $nameCarta = $carta->getMediaMedia()->getName();
             }
         }else{
