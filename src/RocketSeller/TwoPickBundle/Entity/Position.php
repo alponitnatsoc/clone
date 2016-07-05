@@ -3,6 +3,8 @@
 namespace RocketSeller\TwoPickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Position
@@ -37,6 +39,7 @@ class Position
 
     /**
      * @ORM\Column(type="text", length=500, nullable=TRUE)
+     * @Exclude
      */
     private $obligations;
 
