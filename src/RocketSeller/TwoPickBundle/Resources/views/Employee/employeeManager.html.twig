@@ -34,7 +34,7 @@
 
                 {% for employee in employees %}
                     {% set employeeStatus= employee.state %}
-                    <div class="row employeeListItem">
+                    <div class="row employeeListItem ajusteListEmpl">
 
                         <div class="col-xxs-5 col-xs-5 col-sm-4 employeeInfo"
                             style="{% if employeeStatus != 1 %} border-left:3px solid #41D0CB {% endif %}">
@@ -46,13 +46,11 @@
                         </div>
                         <div class="col-xxs-3 col-xs-3 col-sm-4 employeeStatus">
                             {% if employeeStatus < 1 %}
-                                <i class="glyphicon glyphicon-remove-circle"></i> Inactivo
-                                <a class="removeEmployee" href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover</a>
+                              <p style="text-align:center;margin:0">
+                                <span class="Empleados"><i class="glyphicon glyphicon-remove-circle"></i> Inactivo</span></p>
                             {% else %}
-                                <p class="estado-empleado"><span class="glyphicon glyphicon-ok-sign"></span> Activo<br>
-                                {% if  employee.stateRegister != 100 %}
-                                    <a class="removeEmployee"  href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover</a></p>
-                                {% endif %}
+                                <p style="text-align:center;margin:0">
+                                  <span class="Empleados"><i class="glyphicon glyphicon-ok-sign"></i>Activo</span></p>
                             {% endif %}
 
                         </div>
@@ -65,6 +63,13 @@
                                 <a href="/manage/employee/{{employee.idEmployee}}">Ver detalles <span class="fa fa-angle-right"></span></a>
                             {% endif %}
                         </div>
+                        {% if employeeStatus < 1 %}
+                              <a class="removeEmployee EmpleadosRe"  href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover empleado</a>
+                        {% else %}
+                              {% if  employee.stateRegister != 100 %}
+                                  <a class="removeEmployee EmpleadosRe"  href="{{ path('remove_employee', {'idEhe':employee.idEmployerHasEmployee  }) }}"><i class="glyphicon glyphicon-trash"></i> Remover empleado</a>
+                              {% endif %}
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

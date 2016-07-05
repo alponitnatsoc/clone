@@ -60,8 +60,9 @@
         <section class="fondo-calculadora">
         	<div id="calculadora">
             	<h2 class="light grisclarofont">LA TRANQUILIDAD DE HACER LAS COSAS BIEN POR MUY POCO</h2>
-                <h4 class="bold grisclarofont">Desliza para calcular el valor mensual de nuestro servicio de acuerdo al número y tipo
+                <h4 class="bold grisclarofont textocal1">Desliza para calcular el valor mensual de nuestro servicio de acuerdo al número y tipo
 de empleados que quieras administrar</h4>
+								<h4 class="bold grisclarofont textocal2">Introduce el número de empleados que vas a contratar para poder calcular el valor mensual de nuestro servicio.</h4>
                 <div class="calculadora-espacios section group"> <!--calculadora numero 1-->
                 	<div class="no-colorcont col span_1_of_5">
                     	<span class="light-italic">Empleados</span><br>
@@ -110,11 +111,27 @@ de empleados que quieras administrar</h4>
                     </div>
                 </div>
 
+								<!--Calculadora para medidas de menos de 800px-->
+
+                <div id="selectores-calcu">
+                	<h4 class="semi-italic azulmediofont">¿Cuantos empleados de cada tipo de contrato vas a registrar?</h4>
+                	<div id="calc">
+                    	<form action="demo_form.asp">
+                            <span class="spanForm light">Tiempo completo:<br><span class="spandescript">(mes completo)</span></span><input class="tipoContrato" type="text" name="TiempoCompleto" placeholder="Introduce el número de empleados"><br>
+                            <span class="spanForm light">Tiempo parcial:<br><span class="spandescript">(1 - 2 días a la semana)</span></span><input class="tipoContrato" type="text" name="2dias" placeholder="Introduce el número de empleados"><br>
+                            <span class="spanForm light">Tiempo parcial:<br><span class="spandescript">(3 - 4 días a la semana)</span></span><input class="tipoContrato" type="text" name="4dias" placeholder="Introduce el número de empleados"><br>
+                        </form>
+                    </div>
+
+                </div>
+
+								<!--Fin calculadora para medidas de menos de 800px-->
+
                 <div id="texto-finalcalculadora">
-                	<p class="light pcalculadora">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p><br>
+                	<p class="light pcalculadora">El valor mensual de nuestro servicio<br><span class="semi-italic">para tu caso es:</span></p>
                     <div id="resultado-calculadora" class="azulmedio">
                         <p><span class="extrabold"><span  id="total-empleados" >0</span><span class="light-italic"> <span id="palabra-empleados">empleados</span> <span class="extrabold"  id="precio">= $0 mensuales</span></p>
-                    </div><br>
+                    </div>
                     <p class="pcalculadora light-italic">Después del tercer empleado obtén el 10% de descuento.</p><br>
              </div>
 
