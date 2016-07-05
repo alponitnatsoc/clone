@@ -6,7 +6,6 @@ function startEmployer() {
     var validator;
 
     $("#errorSeverance").hide();
-    $("#errorARL").hide();
     $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js").done(function () {
       $.getScript("//ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/additional-methods.min.js").done(function() {
 
@@ -20,7 +19,8 @@ function startEmployer() {
                 "register_employer[sameWorkHouse]": "required",
                 "register_employer[person][department]": "required",
                 "register_employer[person][city]": "required",
-                "register_employer[workplaces]": "required"
+                "register_employer[workplaces]": "required",
+                "register_employer[arl]" : "required"
             },
             messages: {
                 "register_employer[person][documentType]": "Por favor selecciona el tipo de documento",
@@ -31,7 +31,8 @@ function startEmployer() {
                 "register_employer[sameWorkHouse]": "Por favor selecciona una opción",
                 "register_employer[person][department]": "Por favor selecciona un departamento",
                 "register_employer[person][city]": "Por favor selecciona una ciudad",
-                "register_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo"
+                "register_employer[workplaces]": "Por favor ingresa un nombre para tu lugar de trabajo",
+                "register_employer[arl]" : "Por favor selecciona una opción"
             }
         });
 
@@ -145,7 +146,6 @@ function startEmployer() {
         var severances = [];
         var severancesExist = [];
         var arl = $(form).find("#register_employer_arl");
-        var arlAC = $(form).find("#register_employer_arlAC");
         var arlEx = $(form).find("#register_employer_arlExists");
         var i = 0;
         var flagValid = true;
@@ -191,17 +191,8 @@ function startEmployer() {
         if (!flagValid) {
             return;
         }
-        if (!( validator.element(arl)  && validator.element(arlAC))) {
+        if (!( validator.element(arl) )) {
             return;
-        }
-
-        $(arl).val($("#register_employer_arl option").filter(function () { return $.trim($(this).html()) == $.trim($(arlAC).val()); }).val());
-        if($(arl).val() == undefined || $(arl).val() == ""){
-          $("#errorARL").show();
-          return;
-        }
-        else {
-          $("#errorARL").hide();
         }
 
         var arlExists;
@@ -224,7 +215,6 @@ function startEmployer() {
             }
         }).done(function (data) {
             if (data["url"] != null) {
-                console.log(data["url"]);
                 history.pushState("","",data["url"]);
                 redirUri = data["url"];
             } else {
@@ -626,7 +616,6 @@ function addSeveranceForm($collectionHolderB, $newLinkLi) {
         dataSev.push({'label':this.text,'value':this.value});
     });
     var $actualInsertion=$newLinkLi.prev().find("input[name*='register_employer[severances]']").not("[type='hidden']").not("[name*='severancesExists']");
-    console.log($actualInsertion);
     addAutoComplete($actualInsertion, dataSev);
     $actualInsertion.rules("add", {
         required: true,
@@ -713,16 +702,6 @@ function initEntitiesEmployerFields(){
     $(".autocomS").each(function () {
         addAutoComplete($(this), dataSev);
     });
-    var dataArl=[];
-    $("#register_employer_arl").find("> option").each(function() {
-        dataArl.push({'label':this.text,'value':this.value});
-    });
-    $(".autocomA").each(function () {
-        addAutoComplete($(this),dataArl);
-    });
-    var arl = $("#register_employer_arl");
-    $("#register_employer_arlAC").val($(arl).children("option:selected").text());
-
 }
 
 function restrictARL(firstTime){
@@ -734,19 +713,15 @@ function restrictARL(firstTime){
     }
   });
 
-
   if(arlSelection==0){
       $("#msgARL").hide();
       if(!firstTime){
-          $('#register_employer_arlAC').attr("disabled",false);
-          $('#register_employer_arlAC').val("");
+          $('#register_employer_arl').attr("disabled",false);
           $('#register_employer_arl').val('').change();
       }
   }else {
         $("#msgARL").show();
-        $('#register_employer_arlAC').attr("disabled",true);
-        $('#register_employer_arlAC').val("ARL SURA - SURATEP");
+        $('#register_employer_arl').attr("disabled",true);
         $('#register_employer_arl').val('48').change();
-
   }
 }

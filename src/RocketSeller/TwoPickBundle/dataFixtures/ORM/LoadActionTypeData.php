@@ -53,6 +53,16 @@ class LoadActionTypeData extends AbstractFixture implements OrderedFixtureInterf
         $actionTypeLlamarCliente->setCode('CCL');
         $manager->persist($actionTypeLlamarCliente);
 
+        $actionTypeValidarMandato = new ActionType();
+        $actionTypeValidarMandato->setName('Validar Mandato');
+        $actionTypeValidarMandato->setCode('VM');
+        $manager->persist($actionTypeValidarMandato);
+
+        $actionTypeValidarContrato = new ActionType();
+        $actionTypeValidarContrato->setName('Validar Contrato');
+        $actionTypeValidarContrato->setCode('VC');
+        $manager->persist($actionTypeValidarContrato);
+
         
         $manager->flush();
         $this->addReference('actionType-validarEmpleador', $actionTypeValidarRegistroEmpleador);

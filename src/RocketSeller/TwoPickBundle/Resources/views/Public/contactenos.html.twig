@@ -25,7 +25,7 @@
         <div class="OptContent">
             <div class="nuevoContact">
               <h2 class="bold azulclarofont">Estamos contigo siempre</h2>
-              <p class="nuevop">Recuerda que en symplifica siempre estamos para hacer que tu vida más sencilla,
+              <p class="nuevop">Recuerda que en symplifica siempre estamos para hacer que tu vida sea más sencilla,
                puedes llamarnos o escribirnos si deseas</p>
             </div>
             <div class="row">
@@ -38,17 +38,17 @@
                 {% endfor %}
             </div>
             <div class="contactOpt">
-                <div class="OptCon" id="llamanos">
+                <a href="#llamanosc" onclick = "controles(this)" data-form="1"><div class="OptCon" id="llamanos">
                     <img width="80" src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
                     <div class="bold azulmediofont optText">Llamanos</div>
-                </div>
-                <div class="OptCon" id="escribenos">
+                </div></a>
+                <a href="#scrollescribenos" onclick = "controles(this)" data-form="2"><div class="OptCon" id="escribenos">
                   <img width="80" src="{{ asset('public/img/landing/benefit1.png') }}" alt="">
                   <div class="bold azulmediofont optText">Escríbenos</div>
-                </div>
+                </div></a>
             </div>
         </div>
-        <div class="tellCont" id="llamanosc">
+        <div class="tellCont form-provider1" id="llamanosc">
             <p>
             <span class="light azulclarofont">Llamanos al 350 833 0000</span><br>
             <span class="bold azulmediofont">Horario de atención</span><br>
@@ -57,7 +57,7 @@
           </p>
         </div>
 
-        <div id="formulario" class="escribenosc tellCont1">
+        <div id="formulario" class="escribenosc tellCont1 form-provider2">
             <h1 style="padding: 0 0 40px 0;">Escríbenos tus dudas</h1>
             <div id="contact_form" enctype="multipart/form-data">
                 {{ form_errors(form) }}
@@ -105,7 +105,7 @@
                     </div>
                     <br/>
                 </div>
-                <div class="row">
+                <div class="row" id="scrollescribenos">
                     <div class="semi-italic grisclarofont" for="email">
                         {{ form_label(form.subject) }}
                     </div>
@@ -136,8 +136,63 @@
 {% endblock %}
 {% block javascripts %}
     <script>
+      //ajuste nata
+
+
+function controles(elemento)
+{
+    var form = elemento.getAttribute("data-form");
+    var data = elemento.getAttribute("data-active");
+
+    if(data == undefined || data == null)
+    {
+        data = 0;
+
+    }
+
+    if(data == 0)
+    {
+        var sForm = document.querySelector(".form-provider" + form);
+        $(sForm).slideDown();
+
+        data = 1;
+        elemento.setAttribute("data-active", data);
+
+        if(form == 1)
+        {
+
+            var sOtForm = document.querySelector('[data-form ="'  + 2 + '"]');
+            sOtForm.setAttribute("data-active", 0);
+            var formAx = sOtForm.getAttribute("data-form");
+            var sAForm = document.querySelector(".form-provider" + formAx);
+            $(sAForm).slideUp();
+        }
+        else
+        {
+            var sOtForm = document.querySelector('[data-form ="'  + 1 + '"]');
+            sOtForm.setAttribute("data-active", 0);
+            var formAx = sOtForm.getAttribute("data-form");
+            var sAForm = document.querySelector(".form-provider" + formAx);
+            $(sAForm).slideUp();
+        }
+    }
+    else if(data == 1)
+    {
+        var sForm = document.querySelector(".form-provider" + form);
+        $(sForm).slideUp();
+        data = 0;
+        elemento.setAttribute("data-active", data);
+
+    }
+
+
+
+}
+
+      //ajuste nata
         var state = "/old";
         jQuery(document).ready(function () {
+
             if (!jsLoader(location.href)) {
                 $("#main").find("a").not(".notAjax").on("click", function (e) {
                     e.preventDefault();

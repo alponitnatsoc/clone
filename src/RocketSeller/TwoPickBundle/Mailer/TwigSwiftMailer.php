@@ -158,7 +158,7 @@ class TwigSwiftMailer implements MailerInterface
         $context = array(
             'toEmail' => $user->getEmail(),
             'user' => $user,
-            'subject'=> "Fin del proceso de validación de tu empleado",
+            'subject'=> "Confirmacíon de afiliación",
             'employeeName'=>$eHE->getEmployeeEmployee()->getPersonPerson()->getNames(),
         );
         $this->sendMessage($template,$context,$this->parameters['from_email']['confirmation'], $to);

@@ -104,7 +104,6 @@ class ProcedureController extends Controller
 			$employerHasEmployee->setState(4);
 			$em->persist($employerHasEmployee);
 			$em->flush();
-
             $smailer = $this->get('symplifica.mailer.twig_swift');
             $smailer->sendBackValidatedMessage($this->getUser(),$employerHasEmployee);
 
@@ -505,6 +504,18 @@ class ProcedureController extends Controller
 						$em->persist($notification);
                         $smailer = $this->get('symplifica.mailer.twig_swift');
                         $smailer->sendDiasHabilesMessage($user,$realEhe);
+
+						$actionV = new Action();
+						$actionV->setStatus('Nuevo');
+						$actionV->setRealProcedureRealProcedure($action->getRealProcedureRealProcedure());
+						$actionV->setActionTypeActionType($this->loadClassByArray(array('code'=>'VEE'),"ActionType"));
+						$actionV->setPersonPerson($realEhe->getEmployeeEmployee()->getPersonPerson());
+						$actionV->setUserUser($user);
+						$em->persist($actionV);
+						$em->flush();
+						//se agrega la accion al procedimiento
+						$action->getRealProcedureRealProcedure()->addAction($actionV);
+
 						//then check if changing the start date is necessary
 						if($realEhe->getLegalFF()==0){
 							$todayPlus = new DateTime();
