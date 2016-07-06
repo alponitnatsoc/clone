@@ -62,7 +62,7 @@ class PayrollMethodRestController extends FOSRestController
        $request = $this->container->get('request');
        $actContract=$actPayrroll->getContractContract();
        if($actPayrroll->getDaysSent()==0&&$actContract->getTimeCommitmentTimeCommitment()->getCode()=="XD"){
-           $dayStart=$actPayrroll->getPeriod()==2?"16":"1";
+           $dayStart=$actPayrroll->getPeriod()!=2?"16":"1";
            $dateStartPeriod= new DateTime($actPayrroll->getYear()."-".$actPayrroll->getMonth()."-".$dayStart);
            $dayEnd=$actPayrroll->getPeriod()==2?"15":$dateStartPeriod->format("t");
            $dateEndPeriod= new DateTime($actPayrroll->getYear()."-".$actPayrroll->getMonth()."-".$dayEnd);
