@@ -14,21 +14,25 @@
 		  				<div class="error" id="errorLogin">Error</div>
 		  			</div>
 		  		</div>
-		  		<div class="spacing">
+		  				<div class="spacing padding">
                     <input type="checkbox" name="_remember_me" id="remember_me" value="on" />
-                    <small>Recordar mi usuario Symplifica.com</small>
+                    <small style="font-weight:600;color:#13878e">Recordar mi usuario Symplifica.com</small>
                 </div>
-		  		<div class="spacing"><a href="#" id="forgotBtn" data-toggle="modal"><small>¿Olvidó su contraseña?</small></a><br/></div>
-		  		<div class="row">
-		  			<div class="col-xs-4">
-		  				<label>Ingresar con:</label>
-		  			</div>
-			  		<div class="col-xs-8 redes">
-			  			{% include "RocketSellerTwoPickBundle:General:new/redes-login.html.twig" %}
-			  		</div>
-			  	</div>
+				  		<div id="logCont">
+								<a href="#" id="forgotBtn" data-toggle="modal"><div class="spacing width">
+									<small>¿Olvidó su contraseña?</small>
+								</div></a>
+				  		<!--<div class="row">
+				  			<div class="width">
+				  				<label>Ingresar con:</label>
+				  			</div>
+					  		<div class="width">
+					  			{% include "RocketSellerTwoPickBundle:General:new/redes-login.html.twig" %}
+					  		</div>
+					  	</div>-->
+						</div>
 		  		<div style="text-align: center">
-		  			<button id="_submit" name="_submit" type="submit" class="btn register-AS1 btn-symplifica" style="width: 50%;margin-bottom: 30px; margin-top: 15px;" data-loading-text="Cargando..." data-complete-text="Cerrar">{{ 'security.login.submit'|trans }}</button>
+		  			<button id="_submit" name="_submit" type="submit" class="btn register-AS1 btn-symplifica" style="width: 50%;margin-bottom: 0px; margin-top: 15px;" data-loading-text="Cargando..." data-complete-text="Cerrar">{{ 'security.login.submit'|trans }}</button>
 		  		</div>
 			</fieldset>
 		</form>
